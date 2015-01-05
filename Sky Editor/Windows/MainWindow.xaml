@@ -1,0 +1,17 @@
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Sky Editor" Height="447.627" Width="526.552" Icon="/Sky Editor;component/favicon.ico">
+    <Grid Margin="0,0,0,0">
+        <Menu IsMainMenu="True" Height="21" Margin="0,0,0,0" VerticalAlignment="Top">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem x:Name="menuFileOpen" Header="_Open"/>
+                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..."/>
+            </MenuItem>
+            <MenuItem x:Name="menuCheats" Header="_Cheats"/>
+            <MenuItem x:Name="menuCredits" Header="Cre_dits"/>
+        </Menu>
+        <TabControl x:Name="tcTabs" Margin="0,26,0,0.4">
+        </TabControl>
+    </Grid>
+</Window>

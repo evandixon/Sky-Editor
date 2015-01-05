@@ -1,0 +1,10 @@
+Language=English
+
+#Recommended for developers and ROM hackers
+DebugMode=True
+
+#DebugMode must also be enabled
+ShowConsoleOnStart=True
+
+# 0=Left, 1=Top, 2=Right, 3=Bottom
+TabStripPlacement=1

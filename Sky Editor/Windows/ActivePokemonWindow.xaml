@@ -1,0 +1,93 @@
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="ActivePkmWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Active Pokemon" Height="447.568" Width="399.333">
+    <Grid>
+        <Menu IsMainMenu="True" Height="21" Margin="0,0,0,0" VerticalAlignment="Top" Visibility="Collapsed">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem x:Name="menuFileOpen" Header="_Open"/>
+                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..."/>
+            </MenuItem>
+        </Menu>
+        <TabControl Margin="0,0,0,0">
+            <TabItem x:Name="tiMain" Header="Main">
+                <UniformGrid Columns="2" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label x:Name="lblPkm">Pokemon</Label>
+                    <!--<xctk:IntegerUpDown x:Name="numPkmID" />-->
+                    <ComboBox x:Name="cbPokemon" />
+                    <Label x:Name="lblIsFemale">Is Female</Label>
+                    <CheckBox x:Name="chbIsFemale"></CheckBox>
+                    <Label x:Name="lblName">Name</Label>
+                    <TextBox x:Name="txtName"></TextBox>
+                    <Label x:Name="lblLevel">Level</Label>
+                    <xctk:IntegerUpDown x:Name="numLevel" />
+                    <Label x:Name="lblExp">Exp</Label>
+                    <xctk:IntegerUpDown x:Name="numExp" />
+                    <Label x:Name="lblMetAt">Met At</Label>
+                    <ComboBox x:Name="cbMetAt"></ComboBox>
+                    <!--<xctk:IntegerUpDown x:Name="numMetAt" />-->
+                    <Label x:Name="lblMetFloor">MetFloor</Label>
+                    <xctk:IntegerUpDown x:Name="numMetFloor" />
+                    <Label x:Name="lblIQ">IQ</Label>
+                    <xctk:IntegerUpDown x:Name="numIQ" />
+                    <Label x:Name="lblHP1">Current HP</Label>
+                    <xctk:IntegerUpDown x:Name="numHP1" />
+                    <Label x:Name="lblHP2">Max HP</Label>
+                    <xctk:IntegerUpDown x:Name="numHP2" />
+                    <Label x:Name="lblAttack">Attack</Label>
+                    <xctk:IntegerUpDown x:Name="numAttack" />
+                    <Label x:Name="lblSpAttack">Sp Attack</Label>
+                    <xctk:IntegerUpDown x:Name="numSpAttack" />
+                    <Label x:Name="lblDefense">Defense</Label>
+                    <xctk:IntegerUpDown x:Name="numDefense" />
+                    <Label x:Name="lblSpDefense">Sp Defense</Label>
+                    <xctk:IntegerUpDown x:Name="numSpDefence" />
+                </UniformGrid>
+            </TabItem>
+            <TabItem x:Name="tiMoves" Header="Moves">
+                <UniformGrid Columns="7" Height="124" VerticalAlignment="Top" >
+                    <Label/>
+                    <Label x:Name="lblMove">Move</Label>
+                    <Label x:Name="lblGinseng">Ginseng</Label>
+                    <Label x:Name="lblSet">Set</Label>
+                    <Label x:Name="lblSwitched">Switched</Label>
+                    <Label x:Name="lblLinked">Linked</Label>
+                    <Label x:Name="lblSealed">Sealed?</Label>
+
+                    <Label x:Name="lblMove1">Move 1</Label>
+                    <ComboBox x:Name="cbMove1" />
+                    <xctk:IntegerUpDown x:Name="numGinseng1"/>
+                    <CheckBox x:Name="chbSet1"/>
+                    <CheckBox x:Name="chbSwitched1"/>
+                    <CheckBox x:Name="chbLinked1" />
+                    <CheckBox x:Name="chbSealed1"/>
+
+                    <Label x:Name="lblMove2">Move 2</Label>
+                    <ComboBox x:Name="cbMove2" />
+                    <xctk:IntegerUpDown x:Name="numGinseng2"/>
+                    <CheckBox x:Name="chbSet2"/>
+                    <CheckBox x:Name="chbSwitched2"/>
+                    <CheckBox x:Name="chbLinked2" />
+                    <CheckBox x:Name="chbSealed2"/>
+
+                    <Label x:Name="lblMove3">Move 3</Label>
+                    <ComboBox x:Name="cbMove3" />
+                    <xctk:IntegerUpDown x:Name="numGinseng3"/>
+                    <CheckBox x:Name="chbSet3"/>
+                    <CheckBox x:Name="chbSwitched3"/>
+                    <CheckBox x:Name="chbLinked3" />
+                    <CheckBox x:Name="chbSealed3"/>
+
+                    <Label x:Name="lblMove4">Move 4</Label>
+                    <ComboBox x:Name="cbMove4" />
+                    <xctk:IntegerUpDown x:Name="numGinseng4"/>
+                    <CheckBox x:Name="chbSet4"/>
+                    <CheckBox x:Name="chbSwitched4"/>
+                    <CheckBox x:Name="chbLinked4" />
+                    <CheckBox x:Name="chbSealed4"/>
+                </UniformGrid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

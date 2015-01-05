@@ -1,0 +1,233 @@
+﻿Beauty Scarf
+Def. Scarf
+Dodge Scarf
+Mobile Scarf
+Pass Scarf
+Pecha Scarf
+Sneak Scarf
+Trap Scarf
+Warp Scarf
+Bounce Scarf
+Diet Ribbon
+Friend Bow
+Gold Ribbon
+Heal Ribbon
+Joy Ribbon
+Lunar Ribbon
+Plain Ribbon
+Special Band
+Stamina Band
+Sun Ribbon
+Curve Band
+Pierce Band
+Power Band
+Weather Band
+Zinc Band
+Detect Band
+Munch Belt
+Patsy Band
+Persim Band
+Racket Band
+Tight Belt
+Twist Band
+No-Stick Cap
+Ring D
+Ring E
+Ring F
+Insomniscope
+No-Aim Scope
+Alert Specs
+Goggle Specs
+Lockon Specs
+Scope Lens
+Whiff Specs
+X-Ray Specs
+Cacnea Spike
+Corsola Twig
+Gold Fang
+Iron Thorn
+Silver Spike
+Stick
+Geo Pebble
+Gravelrock
+Apple
+Banana
+Big Apple
+Chesnut
+Grimy Food
+Huge Apple
+Black Gummi
+Blue Gummi
+Brown Gummi
+Clear Gummi
+Gold Gummi
+Grass Gummi
+Gray Gummi
+Green Gummi
+Orange Gummi
+Pink Gummi
+Purple Gummi
+Red Gummi
+Royal Gummi
+Silver Gummi
+Sky Gummi
+White GUmmi
+Yellow Gummi
+Cheri Berry
+Chesto Berry
+Oran Berry
+Pecha Berry
+Rawst Berry
+Sitrus Berry
+Allure Seed
+Blast Seed
+Blinker Seed
+Doom Seed
+Heal Seed
+Hunger Seed
+Joy Seed
+Life Seed
+Plain Seed
+Quick Seed
+Reviver Seed
+Sleep Seed
+Stun Seed
+Totter Seed
+Warp Seed
+Calcium
+Ginseng
+Iron
+Max Elixer Protein
+Zinc
+Fire Stone
+Leaf Stone
+Moon Stone
+Sun Stone
+Thunderstone
+Water Stone
+Wish Stone
+Deepseascale
+Dragon Scale
+Deepseatooth
+King's Rock
+Link Cable
+Metal Coat
+Upgrade
+Ice Part
+Key
+Music Box
+Rock Part
+Steel Part
+Aerial Ace
+Attract
+Blizzard
+Brick Break
+Bulk Up
+Bullet Seed
+Calm Mind
+Cut
+Dig
+Dive
+Dragon Claw
+Earthquake
+Excavate
+Facade
+Fire Blast
+Flamethrower
+Flash
+Fly
+Focus Punch
+Frustration
+Giga Drain
+Hidden Power
+Hyper Beam
+Ice Beam
+Iron Tail
+Light Screen
+Overheat
+Protect
+Psychic
+Reflect
+Rest
+Return
+Roar
+Rock Smash
+Safeguard
+Secret Power
+Shadow Ball
+Shock Wave
+Skill Swap
+Sludge Bomb
+Solar Beam
+Spin Spash
+Steel Wing
+Strength
+Surf
+Taunt
+Thief
+Thunder
+Thunderbold
+Torment
+Toxic
+Vacuum-Cut
+Water Pulse
+Waterfall
+Wide Slash
+Blowback Orb
+Cleanse Orb
+Decoy Orb
+Drought Orb
+Escape Orb
+Evasion Orb
+Fill-In Orb
+Hail Orb
+Hurl Orb
+Identify Orb
+Invisify Orb
+Itemizer Orb
+Lob Orb
+Longtoss Orb
+Luminous Orb
+Mobile Orb
+Mug Orb
+Observer Orb
+One-Room Orb
+One-Shot Orb
+Petrify Orb
+Pierce Orb
+Possess Orb
+Pounce Orb
+Quick Orb
+Radar Orb
+Rainy Orb
+Rebound Orb
+Reviver Orb
+Rocky Orb
+Rollcall Orb
+Sandy Orb
+Scanner Orb
+See-Trap Orb
+Shocker Orb
+Silence Orb
+Sizebust Orb
+Slumber Orb
+Snatch Orb
+Stairs Orb
+Stayaway Orb
+Sunny Orb
+Switcher Orb
+Toss Orb
+Transfer Orb
+Trapbust Orb
+Trapper Orb 
+Trawl Orb
+Two-Edge Orb
+Warp Orb
+Beatup Orb
+G Machine 6
+G Machine 7
+G Machine 8
+Link Box
+Mime Jr. Fig
+Switch Box
+Weavile Fig

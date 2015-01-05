@@ -1,0 +1,343 @@
+﻿<local:EditorTab x:Class="PersonalityTest"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+             mc:Ignorable="d">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Pokemon">
+                <UniformGrid Columns="2">
+                    <UniformGrid Columns="3" Rows="22" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <Label    x:Name="lblPartner01" Content="Partner 01:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner01" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner01" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner02" Content="Partner 02:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner02" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner02" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner03" Content="Partner 03:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner03" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner03" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner04" Content="Partner 04:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner04" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner04" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner05" Content="Partner 05:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner05" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner05" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner06" Content="Partner 06:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner06" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner06" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner07" Content="Partner 07:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner07" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner07" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner08" Content="Partner 08:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner08" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner08" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner09" Content="Partner 09:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner09" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner09" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner10" Content="Partner 10:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner10" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner10" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner11" Content="Partner 11:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner11" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner11" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner12" Content="Partner 12:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner12" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner12" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner13" Content="Partner 13:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner13" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner13" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner14" Content="Partner 14:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner14" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner14" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner15" Content="Partner 15:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner15" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner15" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner16" Content="Partner 16:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner16" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner16" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner17" Content="Partner 17:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner17" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner17" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner18" Content="Partner 18:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner18" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner18" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner19" Content="Partner 19:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner19" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner19" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner20" Content="Partner 20:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner20" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner20" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+
+                        <Label    x:Name="lblPartner21" Content="Partner 21:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbPartner21" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbPartner21" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                    </UniformGrid>
+                    <UniformGrid Columns="3" Rows="22" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <Label    x:Name="lblHardyMale" Content="Hardy Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbHardyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbHardyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblHardyFemale" Content="Hardy Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbHardyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbHardyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblDocileMale" Content="Docile Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbDocileMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbDocileMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblDocileFemale" Content="Docile Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbDocileFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbDocileFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblBraveMale" Content="Brave Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbBraveMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbBraveMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblBraveFemale" Content="Brave Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbBraveFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbBraveFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblJollyMale" Content="Jolly Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbJollyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbJollyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblJollyFemale" Content="Jolly Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbJollyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbJollyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblImpishMale" Content="Impish Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbImpishMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbImpishMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblImpishFemale" Content="Impish Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbImpishFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbImpishFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblNaiveMale" Content="Naive Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbNaiveMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbNaiveMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblNaiveFemale" Content="Naive Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbNaiveFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbNaiveFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblTimidMale" Content="Timid Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbTimidMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbTimidMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblTimidFemale" Content="Timid Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbTimidFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbTimidFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblHastyMale" Content="Hasty Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbHastyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbHastyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblHastyFemale" Content="Hasty Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbHastyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbHastyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblSassyMale" Content="Sassy Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbSassyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbSassyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblSassyFemale" Content="Sassy Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbSassyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbSassyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblCalmMale" Content="Calm Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbCalmMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbCalmMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblCalmFemale" Content="Calm Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbCalmFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbCalmFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblRelaxedMale" Content="Relaxed Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbRelaxedMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbRelaxedMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblRelaxedFemale" Content="Rash Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbRelaxedFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbRelaxedFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblLonelyMale" Content="Lonely Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbLonelyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbLonelyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblLonelyFemale" Content="Lonely Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbLonelyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbLonelyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblQuirkyMale" Content="Quirky Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbQuirkyMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbQuirkyMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblQuirkyFemale" Content="Quirky Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbQuirkyFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbQuirkyFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblQuietMale" Content="Quiet Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbQuietMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbQuietMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblQuietFemale" Content="Quiet Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbQuietFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbQuietFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblRashMale" Content="Rash Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbRashMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbRashMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblRashFemale" Content="Rash Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbRashFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbRashFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblBoldMale" Content="Bold Male:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbBoldMale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbBoldMale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                        <Label    x:Name="lblBoldFemale" Content="Bold Female:" Height="23" VerticalContentAlignment="Center"></Label>
+                        <ComboBox  x:Name="cbBoldFemale" Height="21" Width="100"></ComboBox>
+                        <CheckBox x:Name="chbBoldFemale" Content="Female" Height="21" VerticalContentAlignment="Center"/>
+                    </UniformGrid>
+                </UniformGrid>
+            </TabItem>
+            <TabItem Header="Text">
+                <ScrollViewer>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="157*"/>
+                            <ColumnDefinition Width="364*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Content="Hardy Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Hardy Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Hardy Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Docile Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Docile Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Docile Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Brave Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Brave Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Brave Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Jolly Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Jolly Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Jolly Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Impish Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Impish Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Impish Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Naive Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Naive Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Naive Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Timid Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Timid Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Timid Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Hasty Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Hasty Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Hasty Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Sassy Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Sassy Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Sassy Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Calm Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Calm Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Calm Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Relaxed Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Relaxed Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Relaxed Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Lonely Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Lonely Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Lonely Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Quirky Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Quirky Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Quirky Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Quiet Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Quiet Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Quiet Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Rash Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Rash Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Rash Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+
+                            <Label Content="Bold Description" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Bold Male Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                            <Label Content="Bold Female Pokemon" VerticalContentAlignment="Top" Grid.ColumnSpan="2" Height="75"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBox x:Name="txtHardyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtHardyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtHardyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtDocileDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtDocileMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtDocileFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtBraveDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtBraveMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtBraveFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtJollyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtJollyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtJollyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtImpishDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtImpishMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtImpishFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtNaiveDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtNaiveMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtNaiveFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtTimidDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtTimidMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtTimidFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtHastyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtHastyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtHastyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtSassyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtSassyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtSassyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtCalmDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtCalmMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtCalmFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtRelaxedDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtRelaxedMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtRelaxedFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtLonelyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtLonelyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtLonelyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtQuirkyDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtQuirkyMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtQuirkyFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtQuietDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtQuietMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtQuietFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtRashDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtRashMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtRashFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                            <TextBox x:Name="txtBoldDe"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtBoldMP"  TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+                            <TextBox x:Name="txtBoldFP" TextWrapping="Wrap" AcceptsReturn="True" Height="75" VerticalScrollBarVisibility="Auto"></TextBox>
+
+                        </StackPanel>
+                        
+                        
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</local:EditorTab>
