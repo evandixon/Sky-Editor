@@ -11,14 +11,14 @@ Public Class DesmumeMenuItem
         End If
     End Sub
 
-    Private Async Sub menuRunRom_Click(sender As Object, e As Windows.RoutedEventArgs) Handles menuRunRom.Click
+    Private Async Sub menuRunRom_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles menuRunRom.Click
         Await RunRom()
     End Sub
 
     Async Function RunRom(Optional SuppressErrorMessage As Boolean = False) As Task
         Dim w As Window = Window.GetWindow(Me)
-        If TypeOf w Is SkyEditorBase.MainWindow Then
-            Dim m As SkyEditorBase.MainWindow = DirectCast(w, SkyEditorBase.MainWindow)
+        If TypeOf w Is SkyEditorBase.Windows.MainWindow Then
+            Dim m As SkyEditorBase.Windows.MainWindow = DirectCast(w, SkyEditorBase.Windows.MainWindow)
             m.UpdateFromTabs()
             If TypeOf m.Save Is ROMEditor.GenericNDSRom Then
                 DeveloperConsole.Writeline("Beginning to run ROM...")

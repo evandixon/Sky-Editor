@@ -1,6 +1,6 @@
 ﻿Imports SkyEditorBase
 
-Public Class WelcomeTab
+Friend Class WelcomeTab
     Inherits EditorTab
 
 

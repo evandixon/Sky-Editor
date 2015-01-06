@@ -30,17 +30,17 @@ Namespace skyjed.save
         Public Const BYTE_LENGTH As Integer = 429
         Public Const MIME_TYPE As String = "application/x-sky-pokemon-q"
 
-        Public Overridable ReadOnly Property ByteLength As Integer
+        Public ReadOnly Property ByteLength As Integer
             Get
                 Return BYTE_LENGTH
             End Get
         End Property
-        Public Overridable ReadOnly Property Length As Integer
+        Public ReadOnly Property Length As Integer
             Get
                 Return 8 * BYTE_LENGTH
             End Get
         End Property
-        Public Overridable ReadOnly Property MimeType As String
+        Public ReadOnly Property MimeType As String
             Get
                 Return MIME_TYPE
             End Get
@@ -78,7 +78,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             buf.seek(10 * 8)
             If True Then
                 Dim mfno As Integer = buf.getInt(16)
@@ -105,7 +105,7 @@ Namespace skyjed.save
             Next i
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.seek(10 * 8)
             If True Then
                 Dim mfno As Integer = no1 + (If(isfemale1, FEMALE_ADD, 0))

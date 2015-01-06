@@ -4,7 +4,7 @@ Public Class EpisodeHeldItems
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         lbSpEpisodeHeldItems.Items.Clear()
-        For Each i In SkySave.FromBase(Save).SpEpisode_HeldItems
+        For Each i In DirectCast(Save, SkySave).SpEpisode_HeldItems
             lbSpEpisodeHeldItems.Items.Add(i)
         Next
         Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_SpEpisodeHeldItems"), lbSpEpisodeHeldItems.Items.Count)
@@ -17,13 +17,13 @@ Public Class EpisodeHeldItems
     End Property
 
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
-        Dim sky = SkySave.FromBase(Save)
+        Dim sky = DirectCast(Save, SkySave)
         Dim SpEpisodeHeldItems As New List(Of SkySave.SkyItem)
         For Each item In lbSpEpisodeHeldItems.Items
             SpEpisodeHeldItems.Add(item)
         Next
         Sky.SpEpisode_HeldItems = SpEpisodeHeldItems.ToArray
-        Return sky.ToBase
+        Return sky
     End Function
 
     Private Sub EpisodeHeldItems_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

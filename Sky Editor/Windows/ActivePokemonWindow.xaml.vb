@@ -2,11 +2,12 @@
 Imports SkyEditor.skyjed.buffer
 Imports SkyEditorBase
 Imports SkyEditor.skyjed.save
+Imports SkyEditorBase.Utilities
 
 Public Class ActivePkmWindow
     Public Property JSkyPokemonEx As skyjed.save.iPkmnEx
-    Private WithEvents OpenFileDialog1 As Windows.Forms.OpenFileDialog
-    Private WithEvents SaveFileDialog1 As Windows.Forms.SaveFileDialog
+    Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
 
     Private Sub ActivePkmWindow_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
         UpdatePKM()

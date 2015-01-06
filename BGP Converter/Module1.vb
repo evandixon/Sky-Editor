@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports SkyEditorBase.Utilities
 
 Module Module1
 
@@ -56,7 +57,7 @@ Module Module1
             For x As Integer = 0 To 31
                 Dim index As Integer = BitConverter.ToUInt16({Data(dataIndex * 2), (Data(dataIndex * 2 + 1) Or &HFC) - &HFC}, 0) 'Data(dataIndex * 2)
                 'If Chunks.Count >= index - 1 AndAlso index > 0 Then
-                Dim b8 = New SkyEditorBase.Bits8(Data(dataIndex * 2 + 1))
+                Dim b8 = New Bits8(Data(dataIndex * 2 + 1))
                 Dim palette As Integer = ((Data(dataIndex * 2 + 1) >> 4 Or &HF0) - &HF0)
                 If dataIndex > 300 And dataIndex < 400 Then
                     Console.WriteLine(dataIndex & " " & palette)

@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.skyjed.util
 Imports SkyEditorBase
+Imports SkyEditorBase.Utilities
 
 Namespace skyjed.save
 
@@ -30,7 +31,7 @@ Namespace skyjed.save
 
         End Sub
 
-        Public Overridable Function toByteA() As Byte()
+        Public Function toByteA() As Byte()
             ArrayUtils.copyInto(data, slot1.toByteA(), 0)
             ArrayUtils.copyInto(data, slot1.toByteA(), SLOT2_OFFSET) 'TODO split slots
             'ArrayUtils.copyInto(data, slot2.toByteA(), SLOT2_OFFSET); //TODO split slots

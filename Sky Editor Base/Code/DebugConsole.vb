@@ -1,8 +1,21 @@
 ﻿Imports System.Threading.Tasks
+Imports System.Runtime.CompilerServices
+Imports SkyEditorBase.Windows
 
 Public Class DeveloperConsole
-    Public Shared Event OnWriteLine(Line As String)
-    'Friend Shared Property MainWindow As MainWindow
+    Public Shared Event OnWriteLine(sender As Object, e As WritelineEventArgs)
+    Public Class WritelineEventArgs
+        Inherits EventArgs
+        Dim _line As String
+        Public ReadOnly Property Line As String
+            Get
+                Return _line
+            End Get
+        End Property
+        Public Sub New(Line As String)
+            _line = Line
+        End Sub
+    End Class
 
     Public Shared Sub DoCommands(TargetSave As GenericSave, ConsoleCommands As Dictionary(Of String, iMainWindow.ConsoleCommand))
         DeveloperConsole.Writeline("Type ""exit"" to return to Sky Editor.")
@@ -25,10 +38,9 @@ Public Class DeveloperConsole
             End If
         End While
     End Sub
-    Public Shared Sub Writeline(Line As String)
-        RaiseEvent OnWriteLine(Line)
-        'MainWindow.OnWriteLine(Line) 'Run here to ensure timely UI update
-        Console.WriteLine(Line)
+    Public Shared Sub Writeline(Line As String, <CallerMemberName> Optional CallerName As String = Nothing)
+        RaiseEvent OnWriteLine(CallerName, New WritelineEventArgs(Line))
+        Console.WriteLine(String.Format("{0}: {1}", CallerName, Line))
     End Sub
 
     Private Shared loadingWindow As BackgroundTaskWait
@@ -41,8 +53,8 @@ Public Class DeveloperConsole
     Private Shared Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
         ' Collect the sort command output.
         If Not String.IsNullOrEmpty(outLine.Data) Then
-            ' Add the text to the collected output.
-            'Don't write to debug console, this is a different thread.
+            'Add the text to the collected output.
+            'Don't write to dev console, this is a different thread.
             'The only difference is that this output will be shown in the Real console, while DebugConsole.Writeline may be shown in the window
             Console.WriteLine(outLine.Data)
         End If

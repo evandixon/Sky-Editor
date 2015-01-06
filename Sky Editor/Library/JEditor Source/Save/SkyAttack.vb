@@ -1,37 +1,37 @@
 ﻿Imports SkyEditor.skyjed.buffer
 
 Namespace skyjed.save
-    Public MustInherit Class Attack
-        MustOverride Sub load(ByVal buf As BooleanBuffer)
-        MustOverride Sub store(ByVal buf As BooleanBuffer)
-        MustOverride Property isvalid As Boolean
-        MustOverride Property islinked As Boolean
-        MustOverride Property isswitched As Boolean
-        MustOverride Property isset As Boolean
-        MustOverride Property no As Integer
-        MustOverride Property ginseng As Integer
-    End Class
-	Public Class SkyAttack
-        Inherits Attack
-		Private Const LEN_NO As Integer = 10
-		Private Const LEN_GINSENG As Integer = 7
+    Public Interface Attack
+        Sub load(ByVal buf As BooleanBuffer)
+        Sub store(ByVal buf As BooleanBuffer)
+        Property isvalid As Boolean
+        Property islinked As Boolean
+        Property isswitched As Boolean
+        Property isset As Boolean
+        Property no As Integer
+        Property ginseng As Integer
+    End Interface
+    Public Class SkyAttack
+        Implements Attack
+        Private Const LEN_NO As Integer = 10
+        Private Const LEN_GINSENG As Integer = 7
 
-        Public Overrides Property isvalid As Boolean
-        Public Overrides Property islinked As Boolean
-        Public Overrides Property isswitched As Boolean
-        Public Overrides Property isset As Boolean
-        Public Overrides Property no As Integer
-        Public Overrides Property ginseng As Integer
+        Public Property isvalid As Boolean Implements Attack.isvalid
+        Public Property islinked As Boolean Implements Attack.islinked
+        Public Property isswitched As Boolean Implements Attack.isswitched
+        Public Property isset As Boolean Implements Attack.isset
+        Public Property no As Integer Implements Attack.no
+        Public Property ginseng As Integer Implements Attack.ginseng
 
-		Public Sub New()
-		End Sub
+        Public Sub New()
+        End Sub
 
-		Public Sub New(ByVal buf As BooleanBuffer)
-			Me.New()
-			load(buf)
-		End Sub
+        Public Sub New(ByVal buf As BooleanBuffer)
+            Me.New()
+            load(buf)
+        End Sub
 
-        Public Overrides Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer) Implements Attack.load
             isvalid = buf.get()
             islinked = buf.get()
             isswitched = buf.get()
@@ -40,7 +40,7 @@ Namespace skyjed.save
             ginseng = buf.getInt(LEN_GINSENG)
         End Sub
 
-        Public Overrides Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer) Implements Attack.store
             buf.put(isvalid)
             buf.put(islinked)
             buf.put(isswitched)
@@ -51,16 +51,16 @@ Namespace skyjed.save
 
     End Class
     Public Class RBAttack
-        Inherits Attack
+        Implements Attack
         Private Const LEN_NO As Integer = 9
         Private Const LEN_GINSENG As Integer = 7
 
-        Public Overrides Property isvalid As Boolean
-        Public Overrides Property islinked As Boolean
-        Public Overrides Property isswitched As Boolean
-        Public Overrides Property isset As Boolean
-        Public Overrides Property no As Integer
-        Public Overrides Property ginseng As Integer
+        Public Property isvalid As Boolean Implements Attack.isvalid
+        Public Property islinked As Boolean Implements Attack.islinked
+        Public Property isswitched As Boolean Implements Attack.isswitched
+        Public Property isset As Boolean Implements Attack.isset
+        Public Property no As Integer Implements Attack.no
+        Public Property ginseng As Integer Implements Attack.ginseng
 
         Public Sub New()
         End Sub
@@ -70,7 +70,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overrides Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer) Implements Attack.load
             isvalid = buf.get()
             islinked = buf.get()
             isswitched = buf.get()
@@ -79,7 +79,7 @@ Namespace skyjed.save
             ginseng = buf.getInt(LEN_GINSENG)
         End Sub
 
-        Public Overrides Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer) Implements Attack.store
             buf.put(isvalid)
             buf.put(islinked)
             buf.put(isswitched)

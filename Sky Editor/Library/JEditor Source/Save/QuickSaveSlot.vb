@@ -2,6 +2,7 @@
 Imports SkyEditor.skyjed.buffer
 Imports SkyEditor.skyjed.util
 Imports SkyEditorBase
+Imports SkyEditorBase.Utilities
 
 Namespace skyjed.save
 
@@ -41,7 +42,7 @@ Namespace skyjed.save
             pkmnQStorage = New PkmnQStorage(buf.seek(POKEMON_Q_STORAGE_OFFSET).view(POKEMON_Q_STORAGE_LENGTH))
         End Sub
 
-        Public Overridable Function toByteA() As Byte()
+        Public Function toByteA() As Byte()
             buf.seek(MAGIC_OFFSET).putBytes(MAGIC_DATA)
 
             pkmnQStorage.store(buf.seek(POKEMON_Q_STORAGE_OFFSET).view(POKEMON_Q_STORAGE_LENGTH))

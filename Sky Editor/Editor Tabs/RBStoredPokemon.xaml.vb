@@ -44,7 +44,7 @@ Public Class RBStoredPokemonTab
             isSkySave = False
             'Load Pokemon
             lbPokemon.Items.Clear()
-            Dim pkmns = RBSave.FromBase(Save).StoredPokemon.pkmns
+            Dim pkmns = DirectCast(Save, RBSave).StoredPokemon.pkmns
             For count As Integer = 0 To pkmns.Length - 1
                 'If count < 5 OrElse pkmns(count).isvalid Then
                 lbPokemon.Items.Add(pkmns(count))
@@ -70,7 +70,7 @@ Public Class RBStoredPokemonTab
             isSkySave = False
             'Load Pokemon
             lbPokemon.Items.Clear()
-            Dim pkmns = TDSave.FromBase(Save).StoredPokemon.pkmns
+            Dim pkmns = DirectCast(Save, TDSave).StoredPokemon.pkmns
             For count As Integer = 0 To pkmns.Length - 1
                 'If count < 5 OrElse pkmns(count).isvalid Then
                 lbPokemon.Items.Add(pkmns(count))
@@ -83,7 +83,7 @@ Public Class RBStoredPokemonTab
             isSkySave = True
             'Load Pokemon
             lbPokemon.Items.Clear()
-            Dim pkmns = SkySave.FromBase(Save).JSave.pkmnStorage.pkmns
+            Dim pkmns = DirectCast(Save, SkySave).JSave.pkmnStorage.pkmns
             For count As Integer = 0 To pkmns.Length - 1
                 'If count < 5 OrElse pkmns(count).isvalid Then
                 lbPokemon.Items.Add(pkmns(count))
@@ -103,7 +103,7 @@ Public Class RBStoredPokemonTab
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is RBSave Then
-            Dim rb = RBSave.FromBase(Save)
+            Dim rb = DirectCast(Save, RBSave)
             Dim pkms As New List(Of skyjed.save.RBPkmn)
             For Each p In Storage
                 pkms.Add(p)
@@ -123,7 +123,7 @@ Public Class RBStoredPokemonTab
             rb.StoredPokemon = temppkm
             out = rb.ToBase
         ElseIf TypeOf Save Is TDSave Then
-            Dim td = TDSave.FromBase(Save)
+            Dim td = DirectCast(Save, TDSave)
             Dim pkms As New List(Of skyjed.save.TDPkmn)
             For Each p In Storage
                 pkms.Add(p)
@@ -131,9 +131,9 @@ Public Class RBStoredPokemonTab
             Dim temppkm = td.StoredPokemon
             temppkm.pkmns = pkms.ToArray
             td.StoredPokemon = temppkm
-            out = td.ToBase
+            out = td
         ElseIf TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             'Update things using code from Sky JEditor
             Dim JSave = sky.JSave
             'update Pokemon
@@ -144,7 +144,7 @@ Public Class RBStoredPokemonTab
             JSave.pkmnStorage.pkmns = pkms.ToArray
             'Update JSave
             sky.JSave = JSave
-            out = sky.ToBase
+            out = sky
         End If
         Return out
     End Function

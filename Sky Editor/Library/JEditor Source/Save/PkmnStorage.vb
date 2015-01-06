@@ -20,13 +20,13 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             For i As Integer = 0 To PKMN_NUM - 1
                 pkmns(i).load(buf.view(PKMN_SIZE))
             Next i
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             For i As Integer = 0 To PKMN_NUM - 1
                 If pkmns.Length > i Then
                     pkmns(i).store(buf.view(PKMN_SIZE))

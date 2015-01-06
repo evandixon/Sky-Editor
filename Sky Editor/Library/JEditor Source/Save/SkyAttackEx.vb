@@ -24,27 +24,27 @@ Namespace skyjed.save
 			load(buf)
 		End Sub
 
-		Public Overridable Sub load(ByVal buf As BooleanBuffer)
-			isvalid = buf.get()
-			islinked = buf.get()
-			isswitched = buf.get()
-			isset = buf.get()
-			unkflag = buf.get()
-			no = buf.getInt(LEN_NO)
-			pp = buf.getInt(LEN_PP)
-			ginseng = buf.getInt(LEN_GINSENG)
-		End Sub
+        Public Sub load(ByVal buf As BooleanBuffer)
+            isvalid = buf.get()
+            islinked = buf.get()
+            isswitched = buf.get()
+            isset = buf.get()
+            unkflag = buf.get()
+            no = buf.getInt(LEN_NO)
+            pp = buf.getInt(LEN_PP)
+            ginseng = buf.getInt(LEN_GINSENG)
+        End Sub
 
-		Public Overridable Sub store(ByVal buf As BooleanBuffer)
-			buf.put(isvalid)
-			buf.put(islinked)
-			buf.put(isswitched)
-			buf.put(isset)
-			buf.put(unkflag)
-			buf.putInt(no, LEN_NO)
-			buf.putInt(pp, LEN_PP)
-			buf.putInt(ginseng, LEN_GINSENG)
-		End Sub
+        Public Sub store(ByVal buf As BooleanBuffer)
+            buf.put(isvalid)
+            buf.put(islinked)
+            buf.put(isswitched)
+            buf.put(isset)
+            buf.put(unkflag)
+            buf.putInt(no, LEN_NO)
+            buf.putInt(pp, LEN_PP)
+            buf.putInt(ginseng, LEN_GINSENG)
+        End Sub
 
 	End Class
 

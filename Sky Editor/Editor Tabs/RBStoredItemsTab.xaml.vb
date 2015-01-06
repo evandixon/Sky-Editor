@@ -4,7 +4,7 @@ Public Class RBStoredItemsTab
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         'debug stored items
-        Dim x = RBSave.FromBase(Save).StoredItemCounts
+        Dim x = DirectCast(Save, RBSave).StoredItemCounts
         For count As Integer = 0 To 238
             If x(count) > 0 Then
                 txtDisplay.Text &= Lists.RBItemNames(count + 1) & ": " & x(count) & vbCrLf

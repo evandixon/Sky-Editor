@@ -15,7 +15,7 @@ Public Class TDSStoredItems
             LoadSkyHeldItemsDropDowns()
             'Load stored items
             lbStoredItems.Items.Clear()
-            For Each item In SkySave.FromBase(Save).JSave.itemStorage.items
+            For Each item In DirectCast(Save, SkySave).JSave.itemStorage.items
                 If item.isvalid Then
                     lbStoredItems.Items.Add(item)
                 End If

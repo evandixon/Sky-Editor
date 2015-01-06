@@ -6,7 +6,7 @@ Public Class EpisodeActivePokemon
         If TypeOf Save Is SkySave Then
             'Load Active Pokemon
             lbActivePokemon.Items.Clear()
-            For Each apkm In SkySave.FromBase(Save).JSave.activePkmnEP.pkmns
+            For Each apkm In DirectCast(Save, SkySave).JSave.activePkmnEP.pkmns
                 If apkm.no > 0 Then
                     lbActivePokemon.Items.Add(apkm)
                 End If
@@ -24,7 +24,7 @@ Public Class EpisodeActivePokemon
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             'Update things using code from Sky JEditor
             Dim JSave = sky.JSave
             'update active pokemon
@@ -35,7 +35,7 @@ Public Class EpisodeActivePokemon
             JSave.activePkmnEP.pkmns = apkms.ToArray
             'Update JSave
             sky.JSave = JSave
-            out = sky.ToBase
+            out = sky
         End If
         Return out
     End Function

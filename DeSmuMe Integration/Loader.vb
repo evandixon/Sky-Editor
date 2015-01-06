@@ -45,7 +45,7 @@
         If IO.Directory.Exists(IO.Path.GetFileNameWithoutExtension(FilePath)) Then
             'Everything's fine then
         Else
-            SkyEditorBase.Zip.UnZip(FilePath, FilePath.Replace(".zip", ""))
+            SkyEditorBase.Utilities.Zip.UnZip(FilePath, FilePath.Replace(".zip", ""))
         End If
     End Sub
     Function GetBestVersionExecutableName() As String

@@ -30,7 +30,7 @@ Namespace skyjed.save
             Me.id = id
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             isvalid = buf.get()
             flags = buf.get(LEN_FLAGS)
             param = buf.getInt(LEN_PARAM)
@@ -38,7 +38,7 @@ Namespace skyjed.save
             heldby = buf.getInt(LEN_HELDBY)
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(isvalid)
             buf.put(flags)
             buf.putInt(param, LEN_PARAM)
@@ -46,7 +46,7 @@ Namespace skyjed.save
             buf.putInt(heldby, LEN_HELDBY)
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)
@@ -134,7 +134,7 @@ Namespace skyjed.save
             buf.putInt(heldby, LEN_HELDBY)
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)
@@ -206,7 +206,7 @@ Namespace skyjed.save
             Me.id = id
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             isvalid = buf.get()
             flags = buf.get(LEN_FLAGS)
             param = buf.getInt(LEN_PARAM)
@@ -214,7 +214,7 @@ Namespace skyjed.save
             'heldby = buf.getInt(LEN_HELDBY)
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(isvalid)
             buf.put(flags)
             buf.putInt(param, LEN_PARAM)
@@ -222,7 +222,7 @@ Namespace skyjed.save
             'buf.putInt(heldby, LEN_HELDBY)
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)

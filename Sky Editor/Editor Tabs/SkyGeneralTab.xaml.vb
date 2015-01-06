@@ -4,7 +4,7 @@ Public Class SkyGeneralTab
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         If TypeOf Save Is SkySave Then
-            With SkySave.FromBase(Save)
+            With DirectCast(Save, SkySave)
                 numGeneral_StoredMoney.Value = .JSave.storedMoney
                 numGeneral_HeldMoney.Value = .HeldMoney
                 numGeneral_SpEpisodeHeldMoney.Value = .SpEpisode_HeldMoney
@@ -23,7 +23,7 @@ Public Class SkyGeneralTab
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             With sky
                 '.StoredMoney = numGeneral_StoredMoney.Value
                 .HeldMoney = numGeneral_HeldMoney.Value
@@ -34,7 +34,7 @@ Public Class SkyGeneralTab
                 j.storedMoney = numGeneral_StoredMoney.Value
                 .JSave = j
             End With
-            out = sky.ToBase
+            out = sky
         End If
         Return out
     End Function

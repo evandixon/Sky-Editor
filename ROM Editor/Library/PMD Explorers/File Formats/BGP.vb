@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports SkyEditorBase
+Imports SkyEditorBase.Utilities
 
 Namespace FileFormats
     Public Class BGP
@@ -297,7 +298,7 @@ Namespace FileFormats
                 For x As Integer = 0 To 31
                     Dim index As Integer = BitConverter.ToUInt16({MapData(dataIndex * 2), (MapData(dataIndex * 2 + 1) Or &HFC) - &HFC}, 0) 'Data(dataIndex * 2)
                     If Chunks.Count >= index - 1 AndAlso index > 0 Then
-                        Dim b8 = New SkyEditorBase.Bits8(MapData(dataIndex * 2 + 1))
+                        Dim b8 = New Bits8(MapData(dataIndex * 2 + 1))
                         Dim palette As Integer = ((MapData(dataIndex * 2 + 1) >> 4 Or &HF0) - &HF0)
                         Dim icopy = ChunkToImage(Chunks(index - 1), PalData, palette) 'Chunks(index - 1).Clone
                         If b8.Bit3 Then

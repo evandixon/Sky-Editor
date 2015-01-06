@@ -44,6 +44,7 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -109,12 +110,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ARDS\Red Rescue Team\BaseType.vb" />
-    <Compile Include="ARDS\Red Rescue Team\Held Money.vb" />
-    <Compile Include="ARDS\Red Rescue Team\Rescue Points.vb" />
-    <Compile Include="ARDS\Red Rescue Team\Stored Money.vb" />
-    <Compile Include="ARDS\Red Rescue Team\Team Name.vb" />
-    <Compile Include="ARDS\Blue Rescue Team\BaseType.vb" />
+    <Compile Include="Library\ARDS\Red BaseType.vb" />
+    <Compile Include="Library\ARDS\Red Held Money.vb" />
+    <Compile Include="Library\ARDS\Red Rescue Points.vb" />
+    <Compile Include="Library\ARDS\Red Stored Money.vb" />
+    <Compile Include="Library\ARDS\Red Team Name.vb" />
+    <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
     <Compile Include="Editor Tabs\QuicksavePokemonTab.xaml.vb">
       <DependentUpon>QuicksavePokemonTab.xaml</DependentUpon>
@@ -149,7 +150,6 @@
     <Compile Include="Editor Tabs\TDSStoredItems.xaml.vb">
       <DependentUpon>TDSStoredItems.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.vb" />
     <Compile Include="Library\GameConstants.vb" />
     <Compile Include="Library\JEditor Source\buffer\BooleanBuffer.vb" />
     <Compile Include="Library\JEditor Source\buffer\BooleanBufferArray.vb" />
@@ -175,21 +175,20 @@
     <Compile Include="Library\JEditor Source\util\ArrayUtils.vb" />
     <Compile Include="Library\JEditor Source\util\BitConverterLE.vb" />
     <Compile Include="Library\JEditor Source\util\SkyCharConv.vb" />
-    <Compile Include="Library\Lists.vb" />
-    <Compile Include="Library\Save Manipulation\GameType.vb" />
-    <Compile Include="Library\Save Manipulation\MDSaveBase.vb" />
-    <Compile Include="Library\Save Manipulation\RBSaveEU.vb" />
-    <Compile Include="Library\Save Manipulation\RBSave.vb" />
-    <Compile Include="Library\Save Manipulation\TDSave.TDPkm.vb" />
-    <Compile Include="Library\Save Manipulation\Offsets.vb" />
-    <Compile Include="Library\Save Manipulation\SkySave.HeldItems.vb" />
-    <Compile Include="Library\Save Manipulation\SkySave.SkyPkm.vb" />
-    <Compile Include="Library\Save Manipulation\SkySave.vb" />
-    <Compile Include="Library\Save Manipulation\TDSave.vb" />
-    <Compile Include="ARDS\Blue Rescue Team\Held Money.vb" />
-    <Compile Include="ARDS\Blue Rescue Team\Rescue Points.vb" />
-    <Compile Include="ARDS\Blue Rescue Team\Stored Money.vb" />
-    <Compile Include="ARDS\Blue Rescue Team\Team Name.vb" />
+    <Compile Include="Lists.vb" />
+    <Compile Include="Library\MDSaveBase.vb" />
+    <Compile Include="Library\RBSaveEU.vb" />
+    <Compile Include="Library\RBSave.vb" />
+    <Compile Include="Library\Offsets.vb" />
+    <Compile Include="Library\SkySave.HeldItems.vb" />
+    <Compile Include="Library\SkySave.vb" />
+    <Compile Include="Library\TDSave.vb" />
+    <Compile Include="Library\ARDS\Blue Held Money.vb" />
+    <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
+    <Compile Include="Library\ARDS\Blue Stored Money.vb" />
+    <Compile Include="Library\ARDS\Blue Team Name.vb" />
+    <Compile Include="Settings.vb" />
+    <Compile Include="Library\StringUtilities.vb" />
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Windows\QPokemonWindow.xaml.vb">
       <DependentUpon>QPokemonWindow.xaml</DependentUpon>
@@ -304,7 +303,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
-    <Compile Include="Library\Save Manipulation\SkySave.StoredItems.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -294,7 +294,7 @@ Public Class PersonalityTest
         Return Save
     End Function
 
-    Private Sub PersonalityTest_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
+    Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Me.Header = "Personality Test"
 
         For Each count In SkyEditor.Lists.SkyPokemon.Keys

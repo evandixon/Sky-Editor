@@ -4,13 +4,13 @@ Public Class RBGeneral
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         If TypeOf Save Is RBSave Then
-            With RBSave.FromBase(Save)
+            With DirectCast(Save, RBSave)
                 txtGeneral_TeamName.Text = .TeamName
                 numGeneral_HeldMoney.Value = .HeldMoney
                 numGeneral_StoredMoney.Value = .StoredMoney
                 numGeneral_RescuePoints.Value = .RescuePoints
+                cbGeneral_Base.SelectedItem = Lists.RBBaseTypesInverse(.BaseType)
             End With
-            cbGeneral_Base.SelectedItem = Lists.RBBaseTypesInverse(RBSave.FromBase(Save).BaseType)
         End If
     End Sub
 
@@ -23,7 +23,7 @@ Public Class RBGeneral
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is RBSave Then
-            Dim rb = RBSave.FromBase(Save)
+            Dim rb = DirectCast(Save, RBSave)
             With rb
                 .TeamName = txtGeneral_TeamName.Text
                 .HeldMoney = numGeneral_HeldMoney.Value

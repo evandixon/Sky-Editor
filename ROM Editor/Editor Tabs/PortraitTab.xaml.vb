@@ -43,11 +43,11 @@ Public Class PortraitTab
     End Property
 
     Public Overrides Function UpdateSave(Save As SkyEditorBase.GenericSave) As GenericSave
-        SkyEditorBase.AsyncHelpers.RunSync(AddressOf kao.Save)
+        SkyEditorBase.Utilities.AsyncHelpers.RunSync(AddressOf kao.Save)
         Return Save
     End Function
 
-    Private Sub tvFiles_SelectedItemChanged(sender As Object, e As Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged
+    Private Sub tvFiles_SelectedItemChanged(sender As Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged
         RefreshPortraits()
     End Sub
     Private Sub RefreshPortraits()
@@ -57,21 +57,21 @@ Public Class PortraitTab
             lvPortraits.Items.Add(New Portrait(IO.Path.GetFileNameWithoutExtension(item), item))
         Next
     End Sub
-    Private Sub PortraitTab_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
+    Private Sub PortraitTab_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Me.Header = "Pokemon Portraits"
     End Sub
 
-    Protected Sub btnExport_Click(sender As Object, e As Windows.RoutedEventArgs)
-        Dim o As New Windows.Forms.SaveFileDialog()
+    Protected Sub btnExport_Click(sender As Object, e As System.Windows.RoutedEventArgs)
+        Dim o As New System.Windows.Forms.SaveFileDialog()
         o.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*"
-        If o.ShowDialog = Windows.Forms.DialogResult.OK Then
+        If o.ShowDialog = System.Windows.Forms.DialogResult.OK Then
             IO.File.Copy(DirectCast(sender, Button).Tag, o.FileName, True)
         End If
     End Sub
-    Protected Sub btnImport_Click(sender As Object, e As Windows.RoutedEventArgs)
-        Dim s As New Windows.Forms.OpenFileDialog
+    Protected Sub btnImport_Click(sender As Object, e As System.Windows.RoutedEventArgs)
+        Dim s As New System.Windows.Forms.OpenFileDialog
         s.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*"
-        If s.ShowDialog = Windows.Forms.DialogResult.OK Then
+        If s.ShowDialog = System.Windows.Forms.DialogResult.OK Then
             IO.File.Copy(s.FileName, DirectCast(sender, Button).Tag, True)
             'Dim input = FreeImageAPI.FreeImage.LoadEx(DirectCast(sender, Button).Tag)
             'input = FreeImageAPI.FreeImage.ConvertColorDepth(input, FreeImageAPI.FREE_IMAGE_COLOR_DEPTH.FICD_04_BPP)

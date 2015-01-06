@@ -15,7 +15,7 @@ Public Class HeldItemsTab
             IsRBSave = False
             'Load held items
             lbHeldItems.Items.Clear()
-            For Each i In SkySave.FromBase(Save).HeldItems
+            For Each i In DirectCast(Save, SkySave).HeldItems
                 lbHeldItems.Items.Add(i)
             Next
         ElseIf TypeOf Save Is TDSave Then
@@ -25,7 +25,7 @@ Public Class HeldItemsTab
             LoadTDHeldItemsDropDowns()
             'Load Items
             lbHeldItems.Items.Clear()
-            For Each i In TDSave.FromBase(Save).HeldItems.items
+            For Each i In DirectCast(Save, TDSave).HeldItems.items
                 If i.isvalid Then lbHeldItems.Items.Add(i)
             Next
         ElseIf TypeOf Save Is RBSave Then
@@ -35,7 +35,7 @@ Public Class HeldItemsTab
             IsRBSave = True
             'Load Items
             lbHeldItems.Items.Clear()
-            For Each i In RBSave.FromBase(Save).HeldItems.items
+            For Each i In DirectCast(Save, RBSave).HeldItems.items
                 If i.isvalid Then lbHeldItems.Items.Add(i)
             Next
         End If
@@ -50,15 +50,15 @@ Public Class HeldItemsTab
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             Dim HeldItems As New List(Of SkySave.SkyItem)
             For Each item In lbHeldItems.Items
                 HeldItems.Add(item)
             Next
             sky.HeldItems = HeldItems.ToArray
-            out = sky.ToBase
+            out = sky
         ElseIf TypeOf Save Is TDSave Then
-            Dim td = TDSave.FromBase(Save)
+            Dim td = DirectCast(Save, TDSave)
             Dim helditems As New Generic.List(Of TDItem)
             For Each item In lbHeldItems.Items
                 helditems.Add(item)
@@ -66,9 +66,9 @@ Public Class HeldItemsTab
             Dim tempHeldItems = td.HeldItems
             tempHeldItems.items = helditems.ToArray
             td.HeldItems = tempHeldItems
-            out = td.ToBase
+            out = td
         ElseIf TypeOf Save Is RBSave Then
-            Dim rb = RBSave.FromBase(Save)
+            Dim rb = DirectCast(Save, RBSave)
             'Held Items
             Dim helditems As New Generic.List(Of RBItem)
             For Each item In lbHeldItems.Items
@@ -77,7 +77,7 @@ Public Class HeldItemsTab
             Dim tempHeldItems = rb.HeldItems
             tempHeldItems.items = helditems.ToArray
             rb.HeldItems = tempHeldItems
-            out = rb.ToBase
+            out = rb
         End If
         Return out
     End Function

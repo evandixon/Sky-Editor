@@ -4,7 +4,7 @@ Public Class TDGeneralTab
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         If TypeOf Save Is TDSave Then
-            With TDSave.FromBase(Save)
+            With DirectCast(Save, TDSave)
                 txtGeneral_TeamName.Text = .TeamName
             End With
         End If
@@ -19,7 +19,7 @@ Public Class TDGeneralTab
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is TDSave Then
-            Dim td = TDSave.FromBase(Save)
+            Dim td = DirectCast(Save, TDSave)
             With td
                 .TeamName = txtGeneral_TeamName.Text
             End With

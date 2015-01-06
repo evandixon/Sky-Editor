@@ -91,7 +91,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             unksp1 = buf.get(LEN_UNKS1)
             lvl = buf.getInt(LEN_LVL)
             metat = buf.getInt(LEN_METAT)
@@ -116,7 +116,7 @@ Namespace skyjed.save
             name = SkyCharConv.decode(buf.getBytes(BLEN_NAME))
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(unksp1)
             buf.putInt(lvl, LEN_LVL)
             buf.putInt(metat, LEN_METAT)
@@ -214,7 +214,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             unksp1 = buf.get(LEN_UNKS1)
             lvl = buf.getInt(LEN_LVL)
             metat = buf.getInt(LEN_METAT)
@@ -239,7 +239,7 @@ Namespace skyjed.save
             name = SkyCharConv.decode(buf.getBytes(BLEN_NAME - 1))
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(unksp1)
             buf.putInt(lvl, LEN_LVL)
             buf.putInt(metat, LEN_METAT)

@@ -1,4 +1,6 @@
-﻿Namespace ARDS
+﻿Imports SkyEditorBase.Utilities
+
+Namespace ARDS
     ''' <summary>
     ''' Manages ARDS plugins using the new GenericSave.GameID
     ''' </summary>

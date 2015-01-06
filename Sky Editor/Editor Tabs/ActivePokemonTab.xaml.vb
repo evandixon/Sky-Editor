@@ -6,7 +6,7 @@ Public Class ActivePokemonTab
         If TypeOf Save Is SkySave Then
             'Load Active Pokemon
             lbActivePokemon.Items.Clear()
-            For Each apkm In SkySave.FromBase(Save).JSave.activePkmn.pkmns
+            For Each apkm In DirectCast(Save, SkySave).JSave.activePkmn.pkmns
                 If apkm.no > 0 Then
                     lbActivePokemon.Items.Add(apkm)
                 End If
@@ -16,7 +16,7 @@ Public Class ActivePokemonTab
         ElseIf TypeOf Save Is TDSave Then
             'Load Active Pokemon
             lbActivePokemon.Items.Clear()
-            For Each apkm In TDSave.FromBase(Save).ActivePokemon.pkmns
+            For Each apkm In DirectCast(Save, TDSave).ActivePokemon.pkmns
                 If apkm.no > 0 Then
                     lbActivePokemon.Items.Add(apkm)
                 End If
@@ -34,7 +34,7 @@ Public Class ActivePokemonTab
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
         Dim out As GenericSave = Nothing
         If TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             'Update things using code from Sky JEditor
             Dim JSave = sky.JSave
             'update active pokemon
@@ -45,9 +45,9 @@ Public Class ActivePokemonTab
             JSave.activePkmn.pkmns = apkms.ToArray
             'Update JSave
             sky.JSave = JSave
-            out = sky.ToBase
+            out = sky
         ElseIf TypeOf Save Is TDSave Then
-            Dim td = TDSave.FromBase(Save)
+            Dim td = DirectCast(Save, TDSave)
             'update active pokemon
             Dim apkms As New List(Of skyjed.save.TDPkmnEx)
             For Each p In lbActivePokemon.Items
@@ -56,7 +56,7 @@ Public Class ActivePokemonTab
             Dim tempActivePokemon = td.ActivePokemon
             tempActivePokemon.pkmns = apkms.ToArray
             td.ActivePokemon = tempActivePokemon
-            out = td.ToBase
+            out = td
         End If
         Return out
     End Function

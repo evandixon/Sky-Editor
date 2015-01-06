@@ -4,7 +4,7 @@ Public Class QuicksavePokemonTab
 
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         If TypeOf Save Is SkySave Then
-            Dim QSave = SkySave.FromBase(Save).QSave
+            Dim QSave = DirectCast(Save, SkySave).QSave
             'If QSave Is Nothing Then
             '    Me.Visibility = Windows.Visibility.Hidden
             '    Exit Sub
@@ -27,12 +27,12 @@ Public Class QuicksavePokemonTab
     End Property
 
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
-        If Me.Visibility = Windows.Visibility.Hidden Then
+        If Me.Visibility = System.Windows.Visibility.Hidden Then
             Return Save
         End If
         Dim out As GenericSave = Nothing
         If TypeOf Save Is SkySave Then
-            Dim sky = SkySave.FromBase(Save)
+            Dim sky = DirectCast(Save, SkySave)
             'Update things using code from Sky JEditor
             Dim QSave = sky.QSave
             'update active pokemon
@@ -43,7 +43,7 @@ Public Class QuicksavePokemonTab
             QSave.pkmnQStorage.pkmns = apkms.ToArray
             'Update JSave
             sky.QSave = QSave
-            out = sky.ToBase
+            out = sky
         End If
         Return out
     End Function

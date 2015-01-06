@@ -75,7 +75,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             isvalid = buf.get()
             lvl = buf.getInt(LEN_LVL)
             Dim mfno As Integer = buf.getInt(LEN_NO)
@@ -95,7 +95,7 @@ Namespace skyjed.save
             name = SkyCharConv.decode(buf.getBytes(BLEN_NAME))
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(isvalid)
             buf.putInt(lvl, LEN_LVL)
             Dim mfno As Integer = no + (If(isfemale, FEMALE_ADD, 0))
@@ -114,7 +114,7 @@ Namespace skyjed.save
             buf.putBytes(SkyCharConv.encode(name))
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)
@@ -225,7 +225,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             isvalid = buf.get()
             lvl = buf.getInt(LEN_LVL)
             Dim mfno As Integer = buf.getInt(LEN_NO)
@@ -245,7 +245,7 @@ Namespace skyjed.save
             name = SkyCharConv.decode(buf.getBytes(BLEN_NAME))
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             buf.put(isvalid)
             buf.putInt(lvl, LEN_LVL)
             Dim mfno As Integer = no + (If(isfemale, FEMALE_ADD, 0))
@@ -264,7 +264,7 @@ Namespace skyjed.save
             buf.putBytes(SkyCharConv.encode(name))
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)
@@ -381,7 +381,7 @@ Namespace skyjed.save
             load(buf)
         End Sub
 
-        Public Overridable Sub load(ByVal buf As BooleanBuffer)
+        Public Sub load(ByVal buf As BooleanBuffer)
             buf.seek(0)
             'isvalid = buf.get()
             lvl = buf.getInt(LEN_LVL)
@@ -402,7 +402,7 @@ Namespace skyjed.save
             name = SkyCharConv.decode(buf.getBytes(BLEN_NAME))
         End Sub
 
-        Public Overridable Sub store(ByVal buf As BooleanBuffer)
+        Public Sub store(ByVal buf As BooleanBuffer)
             'buf.put(isvalid)
             buf.putInt(lvl, LEN_LVL)
             buf.putInt(no, LEN_NO)
@@ -421,7 +421,7 @@ Namespace skyjed.save
             buf.putBytes(SkyCharConv.encode(name))
         End Sub
 
-        Public Overridable Sub clear()
+        Public Sub clear()
             Dim arr(LENGTH - 1) As Boolean
             Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
             load(buf)
