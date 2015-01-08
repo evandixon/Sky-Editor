@@ -20,7 +20,7 @@ Public Class TDSStoredItems
                     lbStoredItems.Items.Add(item)
                 End If
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_StoredItems"), lbStoredItems.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_StoredItems", "Stored Items ({0})"), lbStoredItems.Items.Count)
         End If
     End Sub
     Sub LoadSkyHeldItemsDropDowns()
@@ -90,7 +90,7 @@ Public Class TDSStoredItems
                 End If
                 lbStoredItems.Items.Add(i)
             Else
-                MessageBox.Show("You can only have 1000 items in storage.") 'Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_FullStorage", "You can only have 1000 items in storage.  You must remove one to add another.")) 'Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
             End If
             'ElseIf IsTDSave Then
             '    If lbHeldItems.Items.Count < 48 Then
@@ -110,7 +110,7 @@ Public Class TDSStoredItems
             '        MessageBox.Show(Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
             '    End If
         End If
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbStoredItems.Items.Count)
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_StoredItems", "Stored Items ({0})"), lbStoredItems.Items.Count)
     End Sub
 
     Public Overrides ReadOnly Property SupportedGames As String()
@@ -146,14 +146,14 @@ Public Class TDSStoredItems
             For x As Integer = lbStoredItems.SelectedItems.Count - 1 To 0 Step -1
                 lbStoredItems.Items.Remove(lbStoredItems.SelectedItems(x))
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbStoredItems.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_StoredItems", "Stored Items ({0})"), lbStoredItems.Items.Count)
         End If
     End Sub
 
     Private Sub TDSStoredItems_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        If String.IsNullOrEmpty(Me.Header) Then Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_StoredItems"), "0")
-        btnHeldItemsAdd.Content = Lists.SkyEditorLanguageText("Add")
-        lbHeldItemsDelete.Header = Lists.SkyEditorLanguageText("Delete")
-        gbHeldBoxContent.Header = Lists.SkyEditorLanguageText("BoxContents")
+        If String.IsNullOrEmpty(Me.Header) Then Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_StoredItems", "Stored Items ({0})"), "0")
+        btnHeldItemsAdd.Content = PluginHelper.GetLanguageItem("Add")
+        lbHeldItemsDelete.Header = PluginHelper.GetLanguageItem("Delete")
+        gbHeldBoxContent.Header = PluginHelper.GetLanguageItem("BoxContents")
     End Sub
 End Class

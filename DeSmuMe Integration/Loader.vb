@@ -1,4 +1,5 @@
-﻿Public Module Loader
+﻿Imports SkyEditorBase
+Public Module Loader
     Public Class DeSmuMeVersion
         Implements IComparable(Of DeSmuMeVersion)
         Public Property Path As String
@@ -29,7 +30,7 @@
             searchFilter = "*32.zip"
         End If
         Dim files As New List(Of DeSmuMeVersion)
-        For Each item In (IO.Directory.GetFiles(IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/DeSmuMe"), searchFilter, IO.SearchOption.TopDirectoryOnly))
+        For Each item In (IO.Directory.GetFiles(PluginHelper.GetResourceDirectory, searchFilter, IO.SearchOption.TopDirectoryOnly))
             files.Add(New DeSmuMeVersion(item))
         Next
         If files.Count > 0 Then

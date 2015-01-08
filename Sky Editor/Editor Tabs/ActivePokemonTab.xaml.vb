@@ -11,7 +11,7 @@ Public Class ActivePokemonTab
                     lbActivePokemon.Items.Add(apkm)
                 End If
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_ActivePokemon"), lbActivePokemon.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_ActivePokemon", "Active Pokemon ({0})"), lbActivePokemon.Items.Count)
 
         ElseIf TypeOf Save Is TDSave Then
             'Load Active Pokemon
@@ -21,7 +21,7 @@ Public Class ActivePokemonTab
                     lbActivePokemon.Items.Add(apkm)
                 End If
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_ActivePokemon"), lbActivePokemon.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_ActivePokemon", "Active Pokemon ({0})"), lbActivePokemon.Items.Count)
         End If
     End Sub
 
@@ -92,7 +92,7 @@ Public Class ActivePokemonTab
     End Sub
 
     Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_ActivePokemon"), lbActivePokemon.Items.Count)
-        btnEditActivePokemon.Content = Lists.SkyEditorLanguageText("Edit")
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_ActivePokemon", "Active Pokemon ({0})"), lbActivePokemon.Items.Count)
+        btnEditActivePokemon.Content = PluginHelper.GetLanguageItem("Edit")
     End Sub
 End Class

@@ -11,7 +11,7 @@ Public Class EpisodeActivePokemon
                     lbActivePokemon.Items.Add(apkm)
                 End If
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_EpisodeActivePokemon"), lbActivePokemon.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_EpisodeActivePokemon", "Sp. Episode Active Pokemon ({0})"), lbActivePokemon.Items.Count)
         End If
     End Sub
 
@@ -71,7 +71,7 @@ Public Class EpisodeActivePokemon
     End Sub
 
     Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_EpisodeActivePokemon"), "0")
-        btnEditActivePokemon.Content = Lists.SkyEditorLanguageText("Edit")
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_EpisodeActivePokemon", "Sp. Episode Active Pokemon ({0})"), "0")
+        btnEditActivePokemon.Content = PluginHelper.GetLanguageItem("Edit")
     End Sub
 End Class

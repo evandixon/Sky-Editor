@@ -24,10 +24,10 @@
         End Sub
 
         Private Sub GameTypeSelector_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            btnOK.Content = Lists.LanguageText("OK")
-            lbGame.Content = Lists.LanguageText("Game")
-            lbGameSelectorQuestion.Content = Lists.LanguageText("GameSelectorQuestion")
-            Me.Title = Lists.LanguageText("GameSelectorTitle")
+            btnOK.Content = PluginHelper.GetLanguageItem("OK")
+            lbGame.Content = PluginHelper.GetLanguageItem("Game")
+            lbGameSelectorQuestion.Content = PluginHelper.GetLanguageItem("GameSelectorQuestion", "What game is this save for?")
+            Me.Title = PluginHelper.GetLanguageItem("GameSelectorTitle", "Game Selector")
         End Sub
     End Class
 End Namespace

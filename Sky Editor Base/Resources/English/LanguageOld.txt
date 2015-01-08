@@ -25,5 +25,5 @@ GameSelectorQuestion=What game is this save for?
 Game=Game
 Error_InvalidPlayerChar=The current player name contains unknown characters.  They will be replaced with spaces for now.  Please re-open the original save file and report the number inside the brackets (will look like ""[59]"") to http://projectpokemon.org/forums/showthread.php?29465
 Error_TooManyHeldItems=You have too many items.  You can only hold 50 items.  To add another, one must be deleted first.
-Error_NoCheats=You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ARDS/ and restart the program.
+Error_NoCheats=You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ and restart the program.
 Error_NoGames=In order to generate codes, you need to have a save file loaded.  Use File -> New if you don't have one, otherwise, use File-> Open.

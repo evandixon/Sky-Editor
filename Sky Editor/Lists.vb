@@ -1,8 +1,8 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
 Public Class Lists
-    Inherits SkyEditorBase.Lists
     Friend Const SubDirectory As String = "SkyEditor"
+    <Obsolete>
     Public Shared Function SkyEditorLanguageText() As Dictionary(Of String, String)
         Static _dictionaryCache As New ResourceDictionary("&L;/" & SubDirectory & "/Language.txt")
         Return _dictionaryCache

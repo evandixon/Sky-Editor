@@ -115,10 +115,10 @@ Namespace Windows
         End Sub
         Private Sub menuCredits_Click(sender As Object, e As RoutedEventArgs) Handles menuCredits.Click
             Dim credits As String = ""
-            credits = Lists.LanguageText("Credits")
+            credits = PluginHelper.GetLanguageItem("Credits", "Credits:\n     evandixon (lead developer)\n     Demonic722 (help with GBA cheat format)")
             For Each item In Plugins
                 If Not String.IsNullOrWhiteSpace(item.Credits) Then
-                    credits &= vbCrLf & Lists.LanguageText("CreditsSeparator") & vbCrLf
+                    credits &= vbCrLf & PluginHelper.GetLanguageItem("CreditsSeparator", "----------") & vbCrLf
                     credits &= item.Credits & vbCrLf
                 End If
             Next
@@ -230,6 +230,16 @@ NextTab:
             If Settings.DebugMode AndAlso Settings.ShowConsoleOnStart Then
                 ConsoleManager.Show()
             End If
+            If Environment.Is64BitProcess Then
+                DeveloperConsole.Writeline("x64 Process")
+            Else
+                DeveloperConsole.Writeline("x86 Process")
+            End If
+            If Environment.Is64BitOperatingSystem Then
+                DeveloperConsole.Writeline("x64 OS")
+            Else
+                DeveloperConsole.Writeline("x86 OS")
+            End If
 
             'Load Plugins
             Const PluginFolder = "Resources/Plugins" '"Editors"
@@ -277,7 +287,7 @@ NextTab:
             End If
 
             'Make sure there's actually a plugin loaded.
-            If Plugins.Count = 0 Then
+            If False AndAlso Plugins.Count = 0 Then
                 MessageBox.Show("This version of Sky Editor requires at least one compatible extension in the Plugins folder to be loaded.  Sky Editor will now shut down.")
                 Me.Close()
             End If
@@ -312,41 +322,16 @@ NextTab:
             End If
 
             'Load Language
-            Try
-                SetValue(MainWindow.TitleProperty, String.Format(Lists.LanguageText("Title"), My.Application.Info.Version.ToString(2)))
-                menuFile.Header = Lists.LanguageText("File")
-                menuNew.Header = Lists.LanguageText("New")
-                menuFileOpen.Header = Lists.LanguageText("Open")
-                menuFileOpenAuto.Header = Lists.LanguageText("OpenAutoDetect")
-                menuFileOpenNoDetect.Header = Lists.LanguageText("OpenNoAuto")
-                menuFileSaveAs.Header = Lists.LanguageText("SaveAs")
 
-
-                'lblGeneral_TeamName.Content = Lists.LanguageText("General_TeamName")
-                'lblGeneral_HeldMoney.Content = Lists.LanguageText("General_HeldMoney")
-                'lblGeneral_SpEpisodeHeldMoney.Content = Lists.LanguageText("General_SpEpisodeHeldMoney")
-                'lblGeneral_StoredMoney.Content = Lists.LanguageText("General_StoredMoney")
-                ''lblGeneral_PlayerName.Content = Lists.LanguageText("General_PlayerName")
-                'lblGeneral_Adventures.Content = Lists.LanguageText("Adventures")
-
-                'gbStoredItems.Header = String.Format(Lists.LanguageText("Category_StoredItems"), "0")
-                'gbHeldItems.Header = String.Format(Lists.LanguageText("Category_HeldItems"), "0")
-                'gbSpEpisodeHeldItems.Header = String.Format(Lists.LanguageText("Category_SpEpisodeHeldItems"), "0")
-                'gbActivePokemon.Header = String.Format(Lists.LanguageText("Category_ActivePokemon"), "0")
-
-                menuCredits.Header = Lists.LanguageText("CreditsLabel")
-                'gbHeldBoxContent.Header = Lists.LanguageText("BoxContents")
-            Catch ex As Exception
-                Try
-                    If Settings.DebugMode Then
-                        MessageBox.Show(ex.ToString)
-                    Else
-                        MessageBox.Show("Loading language failed.  Remaining text will be loaded as English.")
-                    End If
-                Catch ex2 As Exception
-                    MessageBox.Show("Loading language and settings failed.  Remaining text will be loaded as English.")
-                End Try
-            End Try
+            SetValue(MainWindow.TitleProperty, String.Format(PluginHelper.GetLanguageItem("Title", "Sky Editor v{0}"), My.Application.Info.Version.ToString(2)))
+            menuFile.Header = PluginHelper.GetLanguageItem("File")
+            menuNew.Header = PluginHelper.GetLanguageItem("New")
+            menuFileOpen.Header = PluginHelper.GetLanguageItem("Open")
+            menuFileOpenAuto.Header = PluginHelper.GetLanguageItem("OpenAutoDetect", "Open (Auto-Detect Game)")
+            menuFileOpenNoDetect.Header = PluginHelper.GetLanguageItem("OpenNoAuto", "Open (Let me choose the Game)")
+            menuFileSaveAs.Header = PluginHelper.GetLanguageItem("SaveAs", "Save As...")
+            menuCredits.Header = PluginHelper.GetLanguageItem("CreditsLabel", "Credits")
+            menuCheats.Header = PluginHelper.GetLanguageItem("Cheats")
 
             tcTabs.TabStripPlacement = Settings.TabStripPlacement
 

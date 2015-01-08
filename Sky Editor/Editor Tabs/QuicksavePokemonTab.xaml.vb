@@ -16,7 +16,7 @@ Public Class QuicksavePokemonTab
                 lbActivePokemon.Items.Add(apkm)
                 'End If
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_QuicksavePokemon"), lbActivePokemon.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_QuicksavePokemon", "Quicksave Pokemon ({0})"), lbActivePokemon.Items.Count)
         End If
     End Sub
 
@@ -77,7 +77,7 @@ Public Class QuicksavePokemonTab
     End Sub
 
     Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_QuicksavePokemon"), lbActivePokemon.Items.Count)
-        btnEditActivePokemon.Content = Lists.SkyEditorLanguageText("Edit")
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_QuicksavePokemon", "Quicksave Pokemon ({0})"), lbActivePokemon.Items.Count)
+        btnEditActivePokemon.Content = PluginHelper.GetLanguageItem("Edit")
     End Sub
 End Class

@@ -39,7 +39,7 @@ Public Class HeldItemsTab
                 If i.isvalid Then lbHeldItems.Items.Add(i)
             Next
         End If
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbHeldItems.Items.Count)
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items ({0})"), lbHeldItems.Items.Count)
     End Sub
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
@@ -148,7 +148,7 @@ Public Class HeldItemsTab
                 End If
                 lbHeldItems.Items.Add(i)
             Else
-                MessageBox.Show(Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_TooManyHeldItems", "You have too many items.  You can only hold 50 items.  To add another, one must be deleted first."))
             End If
         ElseIf IsTDSave Then
             If lbHeldItems.Items.Count < 48 Then
@@ -158,17 +158,17 @@ Public Class HeldItemsTab
                 'End If
                 lbHeldItems.Items.Add(i)
             Else
-                MessageBox.Show(Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_TooManyHeldItems", "You have too many items.  You can only hold 50 items.  To add another, one must be deleted first."))
             End If
         ElseIf IsRBSave Then
             If lbHeldItems.Items.Count < 24 Then
                 Dim i As RBItem = New RBItem(cbHeldItems.SelectedItem.id, numHeldItemsAddCount.Value)
                 lbHeldItems.Items.Add(i)
             Else
-                MessageBox.Show(Lists.SkyEditorLanguageText("Error_TooManyHeldItems"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_TooManyHeldItems", "You have too many items.  You can only hold 50 items.  To add another, one must be deleted first."))
             End If
         End If
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbHeldItems.Items.Count)
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items {0}"), lbHeldItems.Items.Count)
     End Sub
 
     Private Sub cbHeldItems_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbHeldItems.SelectionChanged
@@ -182,16 +182,16 @@ Public Class HeldItemsTab
             For x As Integer = lbHeldItems.SelectedItems.Count - 1 To 0 Step -1
                 lbHeldItems.Items.Remove(lbHeldItems.SelectedItems(x))
             Next
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbHeldItems.Items.Count)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items ({0})"), lbHeldItems.Items.Count)
         End If
     End Sub
 
 
 
     Private Sub HeldItemsTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = String.Format(Lists.SkyEditorLanguageText("Category_HeldItems"), lbHeldItems.Items.Count)
-        btnHeldItemsAdd.Content = Lists.SkyEditorLanguageText("Add")
-        lbHeldItemsDelete.Header = Lists.SkyEditorLanguageText("Delete")
-        gbHeldBoxContent.Header = Lists.SkyEditorLanguageText("BoxContents")
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items ({0})"), lbHeldItems.Items.Count)
+        btnHeldItemsAdd.Content = PluginHelper.GetLanguageItem("Add")
+        lbHeldItemsDelete.Header = PluginHelper.GetLanguageItem("Delete")
+        gbHeldBoxContent.Header = PluginHelper.GetLanguageItem("BoxContents")
     End Sub
 End Class

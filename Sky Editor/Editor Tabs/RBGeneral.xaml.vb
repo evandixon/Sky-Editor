@@ -37,12 +37,12 @@ Public Class RBGeneral
     End Function
 
     Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = Lists.SkyEditorLanguageText("Category_General")
-        lblGeneral_Adventures.Content = Lists.SkyEditorLanguageText("Adventures")
-        lblGeneral_HeldMoney.Content = Lists.SkyEditorLanguageText("General_HeldMoney")
-        lblGeneral_RescuePoints.Content = Lists.SkyEditorLanguageText("RescuePoints")
-        lblGeneral_StoredMoney.Content = Lists.SkyEditorLanguageText("General_StoredMoney")
-        lblGeneral_TeamName.Content = Lists.SkyEditorLanguageText("General_TeamName")
+        Me.Header = PluginHelper.GetLanguageItem("Category_General", "General")
+        lblGeneral_Adventures.Content = PluginHelper.GetLanguageItem("Adventures")
+        lblGeneral_HeldMoney.Content = PluginHelper.GetLanguageItem("General_HeldMoney", "Held Money:")
+        lblGeneral_RescuePoints.Content = PluginHelper.GetLanguageItem("RescuePoints", "Rescue Points:")
+        lblGeneral_StoredMoney.Content = PluginHelper.GetLanguageItem("General_StoredMoney", "Stored Money:")
+        lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("General_TeamName", "Team Name:")
 
         numGeneral_Adventures.Maximum = Integer.MaxValue
         numGeneral_Adventures.Minimum = Integer.MinValue

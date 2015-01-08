@@ -36,6 +36,7 @@ Public Class PluginDefinition
     End Sub
 
     Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
+        DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         Window.RegisterConsoleCommand("header", AddressOf ConsoleCommands.ROMHeader)
         Window.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
         Window.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)

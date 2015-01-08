@@ -3,17 +3,19 @@
         Dim s As GenericSave
         Private Sub CodeGenerator_Loaded(sender As Object, e As EventArgs) Handles Me.ContentRendered
             'Load Language
-            lbActivator.Content = Lists.LanguageText("Activator")
-            lbRegion.Content = Lists.LanguageText("Region")
-            lbCategory.Content = Lists.LanguageText("Category")
-            lbProperty.Content = Lists.LanguageText("Property")
-            lbAuthor.Content = Lists.LanguageText("Author")
-            Me.Title = Lists.LanguageText("CodeGeneratorTitle")
-            btnGenerate.Content = Lists.LanguageText("Generate")
+            lbActivator.Content = PluginHelper.GetLanguageItem("Activator")
+            lbRegion.Content = PluginHelper.GetLanguageItem("Region")
+            lbCategory.Content = PluginHelper.GetLanguageItem("Category")
+            lbProperty.Content = PluginHelper.GetLanguageItem("Property")
+            lbAuthor.Content = PluginHelper.GetLanguageItem("Author")
+            lblCodeType.Content = PluginHelper.GetLanguageItem("CodeType", "Code Type")
+            lblGame.Content = PluginHelper.GetLanguageItem("Game")
+            Me.Title = PluginHelper.GetLanguageItem("CodeGeneratorTitle", "Cheat Code Generator")
+            btnGenerate.Content = PluginHelper.GetLanguageItem("Generate")
             If ARDS.ManagerV3.CodeDefinitions.Count > 0 Then
                 LoadCodeTypes()
             Else
-                MessageBox.Show(Lists.LanguageText("Error_NoCheats"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoCheats", "You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ and restart the program."))
                 Me.Close()
             End If
         End Sub
@@ -25,7 +27,7 @@
                 Next
                 If cbCodeType.Items.Count > 0 Then cbCodeType.SelectedIndex = 0
             Else
-                MessageBox.Show(Lists.LanguageText("Error_NoGames"))
+                MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoGames", "In order to generate codes, you need to have a save file loaded.  Use File -> New if you don't have one, otherwise, use File-> Open."))
             End If
         End Sub
         Private Sub cbCodeType_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCodeType.SelectionChanged

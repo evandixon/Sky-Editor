@@ -28,8 +28,8 @@ Public Class MyPlugin
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            'In credits, you can use <br/> for a line break
-            Return "My Plugin<br/>Made by me."
+            'In credits, you can use \n for a line break
+            Return "My Plugin\nMade by me."
         End Get
     End Property
 

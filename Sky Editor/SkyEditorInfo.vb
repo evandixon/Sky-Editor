@@ -15,11 +15,13 @@ Public Class SkyEditorInfo
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return Lists.SkyEditorLanguageText("Credits")
+            Return PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267(Pokemon Stucture, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
         End Get
     End Property
 
     Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
+        DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
+
         Window.RegisterEditorTab(GetType(SkyGeneralTab))
         Window.RegisterEditorTab(GetType(TDGeneralTab))
         Window.RegisterEditorTab(GetType(RBGeneral))

@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.Serialization
+Imports System.Reflection
 
 Namespace Utilities
     <Serializable()>
@@ -6,11 +7,23 @@ Namespace Utilities
         Inherits Dictionary(Of String, String)
         Public Sub New(ResourceName As String)
             MyBase.New()
+            Dim newResourceName As String
             If ResourceName.Contains("&L;") Then
-                ResourceName = ResourceName.Replace("&L;", Lists.CurrentLanguage)
+                newResourceName = ResourceName.Replace("&L;", Settings.CurrentLanguage)
+            Else
+                newResourceName = ResourceName
             End If
-            If IO.File.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & ResourceName)) Then
-                Dim lines As String() = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & ResourceName))
+
+            Dim lines As String() = Nothing
+            If IO.File.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
+                lines = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
+            Else 'Fall back to English
+                newResourceName = ResourceName.Replace("&L;", "English")
+                If IO.File.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
+                    lines = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
+                End If
+            End If
+            If lines IsNot Nothing Then
                 For Each line In lines
                     If Not String.IsNullOrEmpty(line) AndAlso Not line.StartsWith("#") Then
                         Dim p As String() = line.Split("=".ToCharArray, 2)

@@ -150,12 +150,12 @@ Public Class RBStoredPokemonTab
     End Function
 
     Private Sub StoredPokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-
+        Me.Header = String.Format(PluginHelper.GetLanguageItem("RBStoredPokemon", "Stored Pokemon ({0})"), "All")
     End Sub
     Sub ChangeHeader(Optional RefreshFriendArea As Boolean = True)
         'load language
-        btnEditPokemon.Content = Lists.SkyEditorLanguageText("Edit")
-        btnShowAll.Content = Lists.SkyEditorLanguageText("ShowAll")
+        btnEditPokemon.Content = PluginHelper.GetLanguageItem("Edit")
+        btnShowAll.Content = PluginHelper.GetLanguageItem("ShowAll")
 
         If RefreshFriendArea Then
             Dim selectedFriendArea As Integer = lbFriendArea.SelectedIndex
@@ -168,13 +168,13 @@ Public Class RBStoredPokemonTab
             lbFriendArea.Items.Clear()
             Dim friendAreas As List(Of RBSave.RBFriendAreaOffsetDefinition)
             If isSkySave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Lists.CurrentLanguage & "\" & Lists.SubDirectory & "\SkyFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\SkyFriendAreaOffsets.txt")))
             ElseIf isTDSave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Lists.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
             ElseIf isRBSave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Lists.CurrentLanguage & "\" & Lists.SubDirectory & "\RBFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\RBFriendAreaOffsets.txt")))
             Else
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Lists.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
             End If
             For Each item In friendAreas
                 Dim pkm As Integer = 0
@@ -187,9 +187,9 @@ Public Class RBStoredPokemonTab
             lbFriendArea.SelectedIndex = selectedFriendArea
         End If
         If lbFriendArea.SelectedIndex > -1 Then
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("RBStoredPokemon"), lbFriendArea.SelectedItem)
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("RBStoredPokemon", "Stored Pokemon ({0})"), lbFriendArea.SelectedItem)
         Else
-            Me.Header = String.Format(Lists.SkyEditorLanguageText("RBStoredPokemon"), "All")
+            Me.Header = String.Format(PluginHelper.GetLanguageItem("RBStoredPokemon", "Stored Pokemon ({0})"), "All")
         End If
     End Sub
 

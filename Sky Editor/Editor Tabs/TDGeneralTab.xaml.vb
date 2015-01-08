@@ -29,8 +29,8 @@ Public Class TDGeneralTab
     End Function
 
     Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = Lists.SkyEditorLanguageText("Category_General")
-        lblGeneral_TeamName.Content = Lists.SkyEditorLanguageText("General_TeamName")
+        Me.Header = PluginHelper.GetLanguageItem("Category_General", "General")
+        lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("General_TeamName", "Team Name:")
         'numGeneral_Adventures.Maximum = Integer.MaxValue
         'numGeneral_Adventures.Minimum = Integer.MinValue
         'numGeneral_StoredMoney.Maximum = 9999999 'Integer.MaxValue '16580607
