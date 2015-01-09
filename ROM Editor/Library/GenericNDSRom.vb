@@ -122,6 +122,10 @@ Public Class GenericNDSRom
         End Get
     End Property
 
+    Public Overrides Function DefaultExtension() As String
+        Return "*.nds"
+    End Function
+
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 

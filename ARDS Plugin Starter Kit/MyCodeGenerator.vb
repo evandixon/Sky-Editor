@@ -2,7 +2,7 @@
 Imports SkyEditor
 
 Public Class MyCodeGenerator
-    Implements SkyEditorBase.ARDS.CodeDefinitionV3
+    Implements SkyEditorBase.ARDS.CodeDefinition
 
     ''' <summary>
     ''' The name you want mentioned in the code generator
@@ -10,7 +10,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Author As String Implements SkyEditorBase.ARDS.CodeDefinitionV3.Author
+    Public ReadOnly Property Author As String Implements SkyEditorBase.ARDS.CodeDefinition.Author
         Get
             Return "CodeJunkies"
         End Get
@@ -22,7 +22,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Category As String Implements SkyEditorBase.ARDS.CodeDefinitionV3.Category
+    Public ReadOnly Property Category As String Implements SkyEditorBase.ARDS.CodeDefinition.Category
         Get
             Return "Money"
         End Get
@@ -34,7 +34,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Name As String Implements SkyEditorBase.ARDS.CodeDefinitionV3.Name
+    Public ReadOnly Property Name As String Implements SkyEditorBase.ARDS.CodeDefinition.Name
         Get
             Return "Held Money"
         End Get
@@ -48,7 +48,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinitionV3.SupportedGames
+    Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
         Get
             Return {SkyEditor.GameConstants.RBSave}
         End Get
@@ -59,7 +59,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property SupportedRegions As UShort Implements SkyEditorBase.ARDS.CodeDefinitionV3.SupportedRegions
+    Public ReadOnly Property SupportedRegions As UShort Implements SkyEditorBase.ARDS.CodeDefinition.SupportedRegions
         Get
             'If you wanted to support multiple regions, use an OR combination
             'The following line will list your plugin in both the Japan and US regions.
@@ -71,7 +71,7 @@ Public Class MyCodeGenerator
         End Get
     End Property
 
-    Public Overrides Function ToString() As String Implements SkyEditorBase.ARDS.CodeDefinitionV3.ToString
+    Public Overrides Function ToString() As String Implements SkyEditorBase.ARDS.CodeDefinition.ToString
         'This class is going to be added directly to a dropdownlist, and will be displayed as whatever this function returns.
         'Change what it's shown as in Name, not here.
         'I see no need for you to change this function.
@@ -85,7 +85,7 @@ Public Class MyCodeGenerator
     ''' <param name="ButtonActivator">Bit field containing which buttons to be pressed.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinitionV3.GenerateCode
+    Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
         'If you're making a code for Sky Editor, and not another plugin, you'll need to convert the GenericSave into one that contains the property you want
         'This line is for Blue Rescue Team
         Dim s As RBSave = DirectCast(Save, RBSave)
@@ -140,7 +140,7 @@ Public Class MyCodeGenerator
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinitionV3.SupportedCheatFormats
+    Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats
         Get
             Return {CheatFormat.ARDS, CheatFormat.CBA}
         End Get

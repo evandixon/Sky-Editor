@@ -1,6 +1,6 @@
 ﻿Namespace Windows
     Public Class CodeGenerator
-        Dim s As GenericSave
+        Dim m As PluginManager
         Private Sub CodeGenerator_Loaded(sender As Object, e As EventArgs) Handles Me.ContentRendered
             'Load Language
             lbActivator.Content = PluginHelper.GetLanguageItem("Activator")
@@ -12,7 +12,7 @@
             lblGame.Content = PluginHelper.GetLanguageItem("Game")
             Me.Title = PluginHelper.GetLanguageItem("CodeGeneratorTitle", "Cheat Code Generator")
             btnGenerate.Content = PluginHelper.GetLanguageItem("Generate")
-            If ARDS.ManagerV3.CodeDefinitions.Count > 0 Then
+            If m.CheatManager.CodeDefinitions.Count > 0 Then
                 LoadCodeTypes()
             Else
                 MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoCheats", "You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ and restart the program."))
@@ -20,9 +20,9 @@
             End If
         End Sub
         Sub LoadCodeTypes()
-            If s IsNot Nothing Then
+            If m.Save IsNot Nothing Then
                 cbCodeType.Items.Clear()
-                For Each t In ARDS.ManagerV3.GetCodeTypes
+                For Each t In m.CheatManager.GetCodeTypes
                     cbCodeType.Items.Add(t)
                 Next
                 If cbCodeType.Items.Count > 0 Then cbCodeType.SelectedIndex = 0
@@ -32,7 +32,7 @@
         End Sub
         Private Sub cbCodeType_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCodeType.SelectionChanged
             cbRegion.Items.Clear()
-            For Each r In ARDS.ManagerV3.GetRegions(cbCodeType.SelectedItem)
+            For Each r In m.CheatManager.GetRegions(cbCodeType.SelectedItem)
                 cbRegion.Items.Add(r)
             Next
             If cbRegion.Items.Count > 0 Then cbRegion.SelectedIndex = 0
@@ -46,21 +46,21 @@
         End Sub
         Private Sub cbRegion_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbRegion.SelectionChanged
             cbGame.Items.Clear()
-            For Each g In ARDS.ManagerV3.GetGames(cbCodeType.SelectedItem, cbRegion.SelectedItem, s.SaveID)
+            For Each g In m.CheatManager.GetGames(cbCodeType.SelectedItem, cbRegion.SelectedItem, m.Save.SaveID)
                 cbGame.Items.Add(IO.Path.GetFileNameWithoutExtension(g))
             Next
             If cbGame.Items.Count > 0 Then cbGame.SelectedIndex = 0
         End Sub
         Private Sub cbGame_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbGame.SelectionChanged
             cbCategory.Items.Clear()
-            For Each c In ARDS.ManagerV3.GetCategories(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem)
+            For Each c In m.CheatManager.GetCategories(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem)
                 cbCategory.Items.Add(c)
             Next
             If cbCategory.Items.Count > 0 Then cbCategory.SelectedIndex = 0
         End Sub
         Private Sub cbCategory_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCategory.SelectionChanged
             cbProperty.Items.Clear()
-            For Each p In ARDS.ManagerV3.GetCode(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem, cbCategory.SelectedItem)
+            For Each p In m.CheatManager.GetCode(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem, cbCategory.SelectedItem)
                 cbProperty.Items.Add(p)
             Next
             If cbProperty.Items.Count > 0 Then cbProperty.SelectedIndex = 0
@@ -82,7 +82,7 @@
                         End If
                     Next
                 End If
-                txtOut.Text = DirectCast(cbProperty.SelectedItem, ARDS.CodeDefinitionV3).GenerateCode(s, cbRegion.SelectedItem, activator, cbCodeType.SelectedItem).ToString
+                txtOut.Text = DirectCast(cbProperty.SelectedItem, ARDS.CodeDefinition).GenerateCode(m.Save, cbRegion.SelectedItem, activator, cbCodeType.SelectedItem).ToString
             End If
         End Sub
 
@@ -91,11 +91,14 @@
                 lbAuthorDynamic.Content = cbProperty.SelectedItem.Author
             End If
         End Sub
-        Public Overloads Sub Show(ByRef SaveFile As GenericSave)
+        Public Overloads Sub Show()
             MyBase.Show()
-            'ARDS.ManagerV3.ResetCodeDefinitions() 'Guarentees that every time this is shown, the code definitions will be new.
-            s = SaveFile
             cbGame.Items.Clear()
+        End Sub
+        Public Sub New(Manager As PluginManager)
+            MyBase.New()
+            InitializeComponent()
+            m = Manager
         End Sub
     End Class
 End Namespace

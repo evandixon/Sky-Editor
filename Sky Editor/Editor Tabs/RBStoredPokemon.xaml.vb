@@ -168,13 +168,13 @@ Public Class RBStoredPokemonTab
             lbFriendArea.Items.Clear()
             Dim friendAreas As List(Of RBSave.RBFriendAreaOffsetDefinition)
             If isSkySave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\SkyFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\SkyFriendAreaOffsets.txt")))
             ElseIf isTDSave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\TDFriendAreaOffsets.txt")))
             ElseIf isRBSave Then
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\RBFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\RBFriendAreaOffsets.txt")))
             Else
-                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\" & Settings.CurrentLanguage & "\" & Lists.SubDirectory & "\TDFriendAreaOffsets.txt")))
+                friendAreas = RBSave.RBFriendAreaOffsetDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\TDFriendAreaOffsets.txt")))
             End If
             For Each item In friendAreas
                 Dim pkm As Integer = 0

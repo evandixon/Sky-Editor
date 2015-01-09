@@ -19,36 +19,34 @@ Public Class SkyEditorInfo
         End Get
     End Property
 
-    Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
+    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
         DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
-        Window.RegisterEditorTab(GetType(SkyGeneralTab))
-        Window.RegisterEditorTab(GetType(TDGeneralTab))
-        Window.RegisterEditorTab(GetType(RBGeneral))
-        Window.RegisterEditorTab(GetType(HeldItemsTab))
-        Window.RegisterEditorTab(GetType(EpisodeHeldItems))
-        Window.RegisterEditorTab(GetType(TDSStoredItems))
-        Window.RegisterEditorTab(GetType(RBStoredItemsTab))
-        Window.RegisterEditorTab(GetType(ActivePokemonTab))
-        Window.RegisterEditorTab(GetType(EpisodeActivePokemon))
-        Window.RegisterEditorTab(GetType(RBStoredPokemonTab))
-        Window.RegisterEditorTab(GetType(QuicksavePokemonTab))
+        Manager.RegisterEditorTab(GetType(SkyGeneralTab))
+        Manager.RegisterEditorTab(GetType(TDGeneralTab))
+        Manager.RegisterEditorTab(GetType(RBGeneral))
+        Manager.RegisterEditorTab(GetType(HeldItemsTab))
+        Manager.RegisterEditorTab(GetType(EpisodeHeldItems))
+        Manager.RegisterEditorTab(GetType(TDSStoredItems))
+        Manager.RegisterEditorTab(GetType(RBStoredItemsTab))
+        Manager.RegisterEditorTab(GetType(ActivePokemonTab))
+        Manager.RegisterEditorTab(GetType(EpisodeActivePokemon))
+        Manager.RegisterEditorTab(GetType(RBStoredPokemonTab))
+        Manager.RegisterEditorTab(GetType(QuicksavePokemonTab))
 
-        Window.RegisterSaveTypeDetector(AddressOf DetectSaveType)
+        Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
+        Manager.RegisterIOFilter("sav", "Raw Save File")
+        Manager.RegisterIOFilter("dsv", "DeSmuMe Save File")
 
-        Window.RegisterIOFilter("sav", "Raw Save File")
-        Window.RegisterIOFilter("dsv", "DeSmuMe Save File")
-
-        Window.RegisterSaveType(GameConstants.RBSave, GetType(RBSave))
-        Window.RegisterSaveType(GameConstants.TDSave, GetType(TDSave))
-        Window.RegisterSaveType(GameConstants.SkySave, GetType(SkySave))
-        Window.RegisterSaveType(GameConstants.RBSaveEU, GetType(RBSaveEU))
-
-        Window.RegisterGameType(GameConstants.RedGame, GameConstants.RBSave)
-        Window.RegisterGameType(GameConstants.BlueGame, GameConstants.RBSave)
-        Window.RegisterGameType(GameConstants.TimeGame, GameConstants.TDSave)
-        Window.RegisterGameType(GameConstants.DarknessGame, GameConstants.TDSave)
-        Window.RegisterGameType(GameConstants.SkyGame, GameConstants.SkySave)
+        Manager.RegisterSaveType(GameConstants.RBSave, GetType(RBSave))
+        Manager.RegisterSaveType(GameConstants.TDSave, GetType(TDSave))
+        Manager.RegisterSaveType(GameConstants.SkySave, GetType(SkySave))
+        Manager.RegisterSaveType(GameConstants.RBSaveEU, GetType(RBSaveEU))
+        Manager.RegisterGameType(GameConstants.RedGame, GameConstants.RBSave)
+        Manager.RegisterGameType(GameConstants.BlueGame, GameConstants.RBSave)
+        Manager.RegisterGameType(GameConstants.TimeGame, GameConstants.TDSave)
+        Manager.RegisterGameType(GameConstants.DarknessGame, GameConstants.TDSave)
+        Manager.RegisterGameType(GameConstants.SkyGame, GameConstants.SkySave)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
@@ -66,7 +64,7 @@ Public Class SkyEditorInfo
         End Select
     End Function
 
-    Public Sub UnLoad(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 
     End Sub
 

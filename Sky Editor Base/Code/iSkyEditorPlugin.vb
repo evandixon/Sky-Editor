@@ -7,13 +7,13 @@
     ''' </summary>
     ''' <param name="Window"></param>
     ''' <remarks></remarks>
-    Sub Load(ByRef Window As iMainWindow)
+    Sub Load(ByRef Manager As PluginManager)
     ''' <summary>
     ''' Called on form close.  Use this to free any resources in need of disposal or delete temporary files, if applicable.
     ''' </summary>
     ''' <param name="Window"></param>
     ''' <remarks></remarks>
-    Sub UnLoad(ByRef Window As iMainWindow)
+    Sub UnLoad(ByRef Manager As PluginManager)
     ''' <summary>
     ''' This should delete all temporary and user-specific files that are not required to distribute Sky Editor.
     ''' Should delete any copyrighted data such as ROMs.

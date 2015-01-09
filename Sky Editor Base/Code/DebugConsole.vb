@@ -17,7 +17,7 @@ Public Class DeveloperConsole
         End Sub
     End Class
 
-    Public Shared Sub DoCommands(TargetSave As GenericSave, ConsoleCommands As Dictionary(Of String, iMainWindow.ConsoleCommand))
+    Public Shared Sub DoCommands(Manager As PluginManager, ConsoleCommands As Dictionary(Of String, PluginManager.ConsoleCommand))
         DeveloperConsole.Writeline("Type ""exit"" to return to Sky Editor.")
         While True
             Console.Write("> ")
@@ -32,7 +32,7 @@ Public Class DeveloperConsole
                 DeveloperConsole.Writeline("You may now use Sky Editor again.")
                 Exit While
             ElseIf ConsoleCommands.Keys.Contains(cmd) Then
-                ConsoleCommands(cmd).Invoke(TargetSave, arg)
+                ConsoleCommands(cmd).Invoke(Manager, arg)
             Else
                 DeveloperConsole.Writeline(String.Format("""{0}"" is not a recognisable command.", cmd))
             End If

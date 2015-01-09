@@ -1,15 +1,11 @@
 ﻿Imports SkyEditorBase.Utilities
 
 Namespace ARDS
-    ''' <summary>
-    ''' Manages ARDS plugins using the new GenericSave.GameID
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Class ManagerV3
-        Friend Shared Property CodeDefinitions As List(Of CodeDefinitionV3)
-        Friend Shared Property GameIDs As Dictionary(Of String, String)
+    Public Class Manager
+        Public Property CodeDefinitions As List(Of CodeDefinition)
+        Public Property GameIDs As Dictionary(Of String, String)
 
-        Public Shared Function GetCodeTypes() As List(Of CheatFormat)
+        Public Function GetCodeTypes() As List(Of CheatFormat)
             Dim _codetypes As New List(Of CheatFormat)
             For Each item In CodeDefinitions
                 For Each code In item.SupportedCheatFormats
@@ -20,7 +16,7 @@ Namespace ARDS
             Next
             Return _codetypes
         End Function
-        Public Shared Function GetRegions(CodeType As CheatFormat) As List(Of Region)
+        Public Function GetRegions(CodeType As CheatFormat) As List(Of Region)
             Dim out As New List(Of Region)
             For Each item In CodeDefinitions
                 If item.SupportedCheatFormats.Contains(CodeType) Then
@@ -84,7 +80,7 @@ Namespace ARDS
             Next
             Return out
         End Function
-        Public Shared Function GetGames(CodeType As CheatFormat, Region As Region) As List(Of String)
+        Public Function GetGames(CodeType As CheatFormat, Region As Region) As List(Of String)
             Dim out As New List(Of String)
             For Each item In CodeDefinitions
                 '(after the AndAlso) If adding the region doesn't yield any change, it must have already been there
@@ -98,7 +94,7 @@ Namespace ARDS
             Next
             Return out
         End Function
-        Public Shared Function GetGames(CodeType As CheatFormat, Region As Region, SaveFormatID As String) As List(Of String)
+        Public Function GetGames(CodeType As CheatFormat, Region As Region, SaveFormatID As String) As List(Of String)
             Dim out As New List(Of String)
             Dim games As List(Of String) = GetGames(CodeType, Region)
             For Each item In games
@@ -110,7 +106,7 @@ Namespace ARDS
             Next
             Return out
         End Function
-        Public Shared Function GetCategories(CodeType As CheatFormat, Region As Region, GameID As String) As List(Of String)
+        Public Function GetCategories(CodeType As CheatFormat, Region As Region, GameID As String) As List(Of String)
             Dim out As New List(Of String)
             For Each item In CodeDefinitions
                 '(after the AndAlso) If adding the region doesn't yield any change, it must have already been there
@@ -123,8 +119,8 @@ Namespace ARDS
             Return out
         End Function
 
-        Public Shared Function GetCode(CodeType As CheatFormat, Region As Region, GameID As String, Category As String) As List(Of CodeDefinitionV3)
-            Dim out As New List(Of CodeDefinitionV3)
+        Public Function GetCode(CodeType As CheatFormat, Region As Region, GameID As String, Category As String) As List(Of CodeDefinition)
+            Dim out As New List(Of CodeDefinition)
             For Each item In CodeDefinitions
                 '(after the AndAlso) If adding the region doesn't yield any change, it must have already been there
                 If item.SupportedCheatFormats.Contains(CodeType) AndAlso (item.SupportedRegions Or Region = item.SupportedRegions) AndAlso item.Category = Category AndAlso item.SupportedGames.Contains(GameID) Then
@@ -135,5 +131,14 @@ Namespace ARDS
             Next
             Return out
         End Function
+        Public Sub New(Definitions As List(Of CodeDefinition))
+            MyBase.New()
+            Me.CodeDefinitions = Definitions
+        End Sub
+        Public Sub New()
+            MyBase.New()
+            Me.CodeDefinitions = New List(Of CodeDefinition)
+            Me.GameIDs = New Dictionary(Of String, String)
+        End Sub
     End Class
 End Namespace

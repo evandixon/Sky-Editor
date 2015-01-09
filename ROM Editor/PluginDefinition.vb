@@ -35,34 +35,34 @@ Public Class PluginDefinition
         ROMFileTypes.Add("bgp", New BGPControl)
     End Sub
 
-    Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
+    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
         DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
-        Window.RegisterConsoleCommand("header", AddressOf ConsoleCommands.ROMHeader)
-        Window.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
-        Window.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)
-        Window.RegisterConsoleCommand("explorersextractbgp", AddressOf ConsoleCommands.ExplorersExtractBGP)
+        Manager.RegisterConsoleCommand("header", AddressOf ConsoleCommands.ROMHeader)
+        Manager.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
+        Manager.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)
+        Manager.RegisterConsoleCommand("explorersextractbgp", AddressOf ConsoleCommands.ExplorersExtractBGP)
         'Window.RegisterConsoleCommand("kaomadopatch", AddressOf ConsoleCommands.KaomadoPatch)
-        Window.RegisterConsoleCommand("pmdlanguage", AddressOf ConsoleCommands.PmdLanguage)
-        Window.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
+        Manager.RegisterConsoleCommand("pmdlanguage", AddressOf ConsoleCommands.PmdLanguage)
+        Manager.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
 
-        Window.RegisterIOFilter("nds", "Nintendo DS ROM")
+        Manager.RegisterIOFilter("nds", "Nintendo DS ROM")
 
         'Window.RegisterMenuItem(New RomEditorMenuItem(Window))
 
-        Window.RegisterSaveType(Constants.GenericNDSRom, GetType(GenericNDSRom))
-        Window.RegisterSaveType(Constants.SkyNDSRom, GetType(SkyNDSRom))
+        Manager.RegisterSaveType(Constants.GenericNDSRom, GetType(GenericNDSRom))
+        Manager.RegisterSaveType(Constants.SkyNDSRom, GetType(SkyNDSRom))
 
-        Window.RegisterGameType(Constants.GenericNDSRom, Constants.GenericNDSRom)
-        Window.RegisterGameType(Constants.SkyNDSRom, Constants.SkyNDSRom)
+        Manager.RegisterGameType(Constants.GenericNDSRom, Constants.GenericNDSRom)
+        Manager.RegisterGameType(Constants.SkyNDSRom, Constants.SkyNDSRom)
 
-        Window.RegisterEditorTab(GetType(PortraitTab))
-        Window.RegisterEditorTab(GetType(PersonalityTest))
-        Window.RegisterEditorTab(GetType(FilesTab))
+        Manager.RegisterEditorTab(GetType(PortraitTab))
+        Manager.RegisterEditorTab(GetType(PersonalityTest))
+        Manager.RegisterEditorTab(GetType(FilesTab))
 
-        Window.RegisterSaveTypeDetector(AddressOf AutoDetectSaveType)
+        Manager.RegisterSaveTypeDetector(AddressOf AutoDetectSaveType)
     End Sub
 
-    Public Sub UnLoad(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
         DeveloperConsole.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Temp")
         If IO.Directory.Exists(directory) Then

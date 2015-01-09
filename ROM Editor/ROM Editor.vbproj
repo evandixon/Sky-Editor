@@ -113,9 +113,6 @@
     <Compile Include="Library\PMD Explorers\File Formats\LanguageString.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\Overlay13.vb" />
     <Compile Include="Library\PMD Explorers\SkyNDSRom.vb" />
-    <Compile Include="MenuItem\RomEditorMenuItem.xaml.vb">
-      <DependentUpon>RomEditorMenuItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -200,10 +197,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="File Format Controls\BGPControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MenuItem\RomEditorMenuItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

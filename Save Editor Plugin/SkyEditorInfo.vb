@@ -33,19 +33,19 @@ Public Class MyPlugin
         End Get
     End Property
 
-    Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
+    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
         'Register any custom Editor Tabs you've made.  Be sure to pass the TYPE of the tab, not an instance of the tab.
-        Window.RegisterEditorTab(GetType(MyTab))
+        Manager.RegisterEditorTab(GetType(MyTab))
 
         'Register any save file types
-        Window.RegisterSaveType(GameConstants.MySaveGameID, GetType(MySave))
+        Manager.RegisterSaveType(GameConstants.MySaveGameID, GetType(MySave))
 
         'Register game types for each save type, because some games share the same save type, while having different cheat codes.
         'If you only have one game per save structure, make the key and value of each entry be the same.
         'If you two or more games with different cheat code addresses, sharing the same save file structure,
         'The key (first argument) should be the specific game, and the value (second argument) should be the save file structure ID.
         'Both should be human-readable.
-        Window.RegisterGameType(GameConstants.MySaveGameID, GameConstants.MySaveGameID)
+        Manager.RegisterGameType(GameConstants.MySaveGameID, GameConstants.MySaveGameID)
     End Sub
 
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
@@ -60,7 +60,7 @@ Public Class MyPlugin
         End Get
     End Property
 
-    Public Sub UnLoad(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
         'Delete any temporary files
     End Sub
 

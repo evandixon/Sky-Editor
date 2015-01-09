@@ -2,14 +2,14 @@
 Imports ROMEditor.PMD_Explorers
 
 Public Class ConsoleCommands
-    Public Shared Sub ROMHeader(Target As GenericSave, Argument As String)
-        DeveloperConsole.Writeline(DirectCast(Target, GenericNDSRom).ROMHeader)
+    Public Shared Sub ROMHeader(Manager As PluginManager, Argument As String)
+        DeveloperConsole.Writeline(DirectCast(Manager.Save, GenericNDSRom).ROMHeader)
     End Sub
-    Public Shared Async Sub UnPack(Target As GenericSave, Argument As String)
-        Await DirectCast(Target, GenericNDSRom).Unpack()
+    Public Shared Async Sub UnPack(Manager As PluginManager, Argument As String)
+        Await DirectCast(Manager.Save, GenericNDSRom).Unpack()
     End Sub
-    Public Shared Async Sub RePack(Target As GenericSave, Argument As String)
-        Await DirectCast(Target, GenericNDSRom).RePack(Argument)
+    Public Shared Async Sub RePack(Manager As PluginManager, Argument As String)
+        Await DirectCast(Manager.Save, GenericNDSRom).RePack(Argument)
     End Sub
     ''' <summary>
     ''' Makes lots of test ROMs each with only one kind of BGM.
@@ -18,7 +18,7 @@ Public Class ConsoleCommands
     ''' <param name="Target"></param>
     ''' <param name="Argument"></param>
     ''' <remarks></remarks>
-    Public Shared Sub EoSTestMusic(Target As GenericSave, Argument As String)
+    Public Shared Sub EoSTestMusic(Manager As PluginManager, Argument As String)
         Dim e As New System.Text.ASCIIEncoding
         Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Test EoS Music Locations")
         Dim soundDir As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current\data\SOUND\BGM\")
@@ -27,7 +27,7 @@ Public Class ConsoleCommands
             IO.Directory.CreateDirectory(romDirectory)
         End If
         For count As Integer = 1 To 201
-            UnPack(Target, Argument)
+            UnPack(Manager, Argument)
             Dim b = IO.File.ReadAllBytes(soundDir & String.Format("bgm{0}.smd", count.ToString.PadLeft(4, "0")))
             report &= count & ": " & e.GetString(b, &H20, 15) & vbCrLf
             IO.File.WriteAllText(romDirectory & "/eos.txt", report)
@@ -38,11 +38,11 @@ Public Class ConsoleCommands
                     IO.File.Copy(soundDir & String.Format("bgm{0}.swd", count.ToString.PadLeft(4, "0")), soundDir & String.Format("bgm{0}.swd", count2.ToString.PadLeft(4, "0")), True)
                 End If
             Next
-            RePack(Target, romDirectory & "\" & count.ToString.PadLeft(4, "0") & ".nds")
+            RePack(Manager, romDirectory & "\" & count.ToString.PadLeft(4, "0") & ".nds")
         Next
     End Sub
-    Public Shared Async Sub ExplorersExtractBGP(Target As GenericSave, Argument As String)
-        If Not TypeOf Target Is SkyNDSRom Then
+    Public Shared Async Sub ExplorersExtractBGP(Manager As PluginManager, Argument As String)
+        If Not TypeOf Manager.Save Is SkyNDSRom Then
             DeveloperConsole.Writeline("Save should be of type 'SkyNDSRom'")
             Exit Sub
         End If
@@ -54,8 +54,8 @@ Public Class ConsoleCommands
             i.Save(file.Replace(".bgp", ".png"))
         Next
     End Sub
-    Public Shared Async Function KaomadoPatch(Target As GenericSave, Argument As String) As Task
-        Dim s = DirectCast(Target, SkyNDSRom)
+    Public Shared Async Function KaomadoPatch(Manager As PluginManager, Argument As String) As Task
+        Dim s = DirectCast(Manager.Save, SkyNDSRom)
         Dim x = Await s.GetPortraitsFile
         For Each directory In IO.Directory.GetDirectories(x.UnpackDirectory)
             Dim faces = {"0000_STANDARD.png",
@@ -84,7 +84,7 @@ Public Class ConsoleCommands
         Next
         Await x.Save()
     End Function
-    Public Shared Sub PmdLanguage(Target As GenericSave, Argument As String)
+    Public Shared Sub PmdLanguage(Manager As PluginManager, Argument As String)
         DeveloperConsole.Writeline((New FileFormats.LanguageString)(CUInt(Argument)))
     End Sub
 End Class

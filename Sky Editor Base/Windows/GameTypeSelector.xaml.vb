@@ -1,12 +1,12 @@
 ﻿Namespace Windows
     Public Class GameTypeSelector
-
+        Implements iGameTypeSelector
         Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
             DialogResult = True
             Me.Close()
         End Sub
 
-        Public Property SelectedGame As String
+        Public Property SelectedGame As String Implements iGameTypeSelector.SelectedGame
             Get
                 Return cbGame.SelectedItem
             End Get
@@ -17,7 +17,7 @@
         Public Sub ResetGames()
             cbGame.Items.Clear()
         End Sub
-        Public Sub AddGames(Games As Dictionary(Of String, Type).KeyCollection)
+        Public Sub AddGames(Games As Dictionary(Of String, Type).KeyCollection) Implements iGameTypeSelector.AddGames
             For Each item In Games
                 cbGame.Items.Add(item)
             Next
@@ -29,6 +29,9 @@
             lbGameSelectorQuestion.Content = PluginHelper.GetLanguageItem("GameSelectorQuestion", "What game is this save for?")
             Me.Title = PluginHelper.GetLanguageItem("GameSelectorTitle", "Game Selector")
         End Sub
+        Public Shadows Function ShowDialog() As Boolean Implements iGameTypeSelector.ShowDialog
+            Return MyBase.ShowDialog
+        End Function
     End Class
 End Namespace
 

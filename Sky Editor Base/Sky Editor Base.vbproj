@@ -133,11 +133,14 @@
     <Compile Include="Code\ARDS\CodeGeneratorHelper.vb" />
     <Compile Include="Code\ARDS\Manager.vb" />
     <Compile Include="Code\ARDS\Region.vb" />
+    <Compile Include="Code\iGameTypeSelector.vb" />
+    <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\PluginHelper.vb" />
     <Compile Include="Code\PluginManager.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
+    <Compile Include="Code\Utilities\RedistributionHelpers.vb" />
     <Compile Include="Code\Utilities\ResourceDictionary.vb" />
     <Compile Include="Code\Settings.vb" />
     <Compile Include="Code\Utilities\BitOperations.vb" />
@@ -148,7 +151,6 @@
     <Compile Include="Code\Utilities\GenericArrayOperations.vb" />
     <Compile Include="Code\GenericFile.vb" />
     <Compile Include="Code\Utilities\Zip.vb" />
-    <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\iSkyEditorPlugin.vb" />
     <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>

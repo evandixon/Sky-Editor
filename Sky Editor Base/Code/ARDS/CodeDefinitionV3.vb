@@ -3,7 +3,7 @@
     ''' Interface a class must implement in order to be loaded as an ARDS plugin.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Interface CodeDefinitionV3
+    Public Interface CodeDefinition
         ''' <summary>
         ''' Generates an Action Replay DS code for the given save and region.
         ''' </summary>

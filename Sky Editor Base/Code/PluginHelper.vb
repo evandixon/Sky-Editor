@@ -56,4 +56,5 @@ Public Class PluginHelper
             Return Internal.LanguageManager.GetLanguageItem(Key, Assembly.GetCallingAssembly.GetName.Name, DefaultValue)
         End If
     End Function
+
 End Class

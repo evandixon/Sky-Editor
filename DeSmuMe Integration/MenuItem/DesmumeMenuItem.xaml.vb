@@ -5,6 +5,7 @@ Imports SkyEditorBase
 
 Public Class DesmumeMenuItem
     Inherits MenuItem
+    Dim m As PluginManager
     Async Sub OnKeyPress(sender As Object, e As KeyEventArgs)
         If e.Key = Key.F5 Then
             Await RunRom(True)
@@ -18,8 +19,7 @@ Public Class DesmumeMenuItem
     Async Function RunRom(Optional SuppressErrorMessage As Boolean = False) As Task
         Dim w As Window = Window.GetWindow(Me)
         If TypeOf w Is SkyEditorBase.Windows.MainWindow Then
-            Dim m As SkyEditorBase.Windows.MainWindow = DirectCast(w, SkyEditorBase.Windows.MainWindow)
-            m.UpdateFromTabs()
+            m.UpdateSave()
             If TypeOf m.Save Is ROMEditor.GenericNDSRom Then
                 DeveloperConsole.Writeline("Beginning to run ROM...")
 
@@ -63,8 +63,9 @@ Public Class DesmumeMenuItem
         End If
     End Function
 
-    Public Sub New(Window As iMainWindow)
+    Public Sub New(Manager As PluginManager)
         InitializeComponent()
-        AddHandler Window.OnKeyUp, AddressOf OnKeyPress
+        AddHandler Manager.Window.OnKeyPress, AddressOf OnKeyPress
+        m = Manager
     End Sub
 End Class

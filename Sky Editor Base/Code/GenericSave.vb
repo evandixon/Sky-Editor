@@ -31,6 +31,7 @@ Partial Public MustInherit Class GenericSave
         Return RawData
     End Function
 #End Region
+
     ''' <summary>
     ''' A unique string that identifies the save format this is a save for.  Will be used to open appropriate editor tabs for the game.
     ''' Make it something easily recognizable be normal humans, because it will appear in a drop-down box.
@@ -39,14 +40,8 @@ Partial Public MustInherit Class GenericSave
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public MustOverride ReadOnly Property SaveID As String
-
-    'Public MustOverride Function IsSaveOfType(GameID As String, SaveBytes As Byte()) As Boolean
-
+    
     Public Property CurrentSaveID As String
-
-    'Public Function IsSaveOfCurrentType(SaveBytes As Byte()) As Boolean
-    '    Return IsSaveOfType(GameID, SaveBytes)
-    'End Function
 
     ''' <summary>
     ''' Code to be run when a save is loaded, only if the program is in debug mode.
@@ -57,6 +52,14 @@ Partial Public MustInherit Class GenericSave
         DeveloperConsole.Writeline("[Debug " & CurrentSaveID & "]")
     End Sub
 
-
+    ''' <summary>
+    ''' Gets the default file extension used by a particular save format.  Defaults to *.sav if not overriden.
+    ''' Should be in the format "*.sav", not ".sav" or "sav". (Because "sav" will mean the file must be called sav without an extension.)
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Overridable Function DefaultExtension() As String
+        Return "*.sav"
+    End Function
 
 End Class

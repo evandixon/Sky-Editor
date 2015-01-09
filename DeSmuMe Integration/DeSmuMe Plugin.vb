@@ -7,8 +7,8 @@ Public Class DeSmuMePlugin
         End Get
     End Property
 
-    Public Sub Load(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.Load
-        Window.RegisterMenuItem(New DesmumeMenuItem(Window))
+    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
+        Manager.RegisterMenuItem(New DesmumeMenuItem(Manager))
     End Sub
 
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
@@ -23,7 +23,7 @@ Public Class DeSmuMePlugin
         End Get
     End Property
 
-    Public Sub UnLoad(ByRef Window As iMainWindow) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 
     End Sub
 
