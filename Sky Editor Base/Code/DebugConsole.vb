@@ -59,9 +59,6 @@ Public Class DeveloperConsole
             Console.WriteLine(outLine.Data)
         End If
     End Sub
-    Private Shared Sub ProgramFinished(ByVal sender As Object, ByVal e As System.EventArgs)
-
-    End Sub
     ''' <summary>
     ''' Runs the specified program synchronously, capturing console output
     ''' </summary>
@@ -73,9 +70,10 @@ Public Class DeveloperConsole
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         p.StartInfo.RedirectStandardOutput = True
         p.StartInfo.UseShellExecute = False
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        p.StartInfo.CreateNoWindow = True
         AddHandler p.OutputDataReceived, AddressOf OutputHandler
         p.Start()
         p.BeginOutputReadLine()
