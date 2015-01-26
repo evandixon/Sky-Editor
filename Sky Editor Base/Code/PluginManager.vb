@@ -46,7 +46,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function IOFiltersString(Optional Filters As Dictionary(Of String, String) = Nothing) As String
+    Public Function IOFiltersString(Optional Filters As Dictionary(Of String, String) = Nothing, Optional IsSaveAs As Boolean = False) As String
         If Filters Is Nothing Then
             Filters = IOFilters
         End If
@@ -55,11 +55,16 @@ Public Class PluginManager
         Dim supportedFilterExt As String = ""
         If Filters IsNot Nothing Then
             For Each item In Filters
-                listFilter.Append(String.Format("{0} (*.{1})|*.{1}|", item.Value, item.Key))
+                listFilter.Append(String.Format("{0} ({1})|{1}|", item.Value, item.Key))
                 supportedFilterName &= item.Value & ", "
-                supportedFilterExt &= "*." & item.Key & ";"
+                supportedFilterExt &= "" & item.Key & ";"
             Next
-            Return String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";")) & "|" & listFilter.ToString & "All Files (*.*)|*.*"
+            Dim out = ""
+            If Not IsSaveAs Then
+                out &= String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";"))
+            End If
+            out &= "|" & listFilter.ToString & "All Files (*.*)|*.*"
+            Return out.Trim("|")
         Else
             Return "All Files (*.*)|*.*"
         End If
@@ -80,7 +85,7 @@ Public Class PluginManager
                         filters.Add(item.Key, item.Value)
                     End If
                 Next
-                Return IOFiltersString(filters)
+                Return IOFiltersString(filters, True)
             Else
                 Return IOFiltersString()
             End If
