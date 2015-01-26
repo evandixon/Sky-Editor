@@ -268,6 +268,7 @@ NextTab:
     ''' <param name="Detector"></param>
     ''' <remarks></remarks>
     Public Sub LoadSave(Filename As String, Detector As iGameTypeSelector)
+        'DeveloperConsole.StartLoading()
         Dim d As New GenericFile(IO.File.ReadAllBytes(Filename))
 
         Dim saveID As String = ""
@@ -290,6 +291,7 @@ NextTab:
             End If
         Next
         If Not found Then LoadSaveNoAutodetect(Filename, Detector)
+        'DeveloperConsole.StopLoading()
     End Sub
     ''' <summary>
     ''' Loads the save from the given Filename, showing the built-in save type selector to determine the save format.

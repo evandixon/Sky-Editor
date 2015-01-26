@@ -16,6 +16,37 @@ Public Class DeveloperConsole
             _line = Line
         End Sub
     End Class
+    Private Shared _loadingShown As Boolean = False
+    Private Shared _loadingWindow As BackgroundTaskWait
+    Private Shared _loadingDefinitions As New List(Of String)
+    Public Shared Sub StartLoading(<CallerMemberName> Optional CallerName As String = Nothing)
+        If Not _loadingDefinitions.Contains(CallerName) Then
+            _loadingDefinitions.Add(CallerName)
+            MakeLoadingVisibleorNot()
+        End If
+    End Sub
+    Public Shared Sub StopLoading(<CallerMemberName> Optional CallerName As String = Nothing)
+        If _loadingDefinitions.Contains(CallerName) Then
+            _loadingDefinitions.Remove(CallerName)
+            MakeLoadingVisibleorNot()
+        End If
+    End Sub
+    Private Shared Sub MakeLoadingVisibleorNot()
+        If _loadingWindow Is Nothing Then
+            _loadingWindow = New BackgroundTaskWait()
+        End If
+        Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
+        Dim isShowing As Boolean = _loadingShown
+
+        If shouldShow AndAlso Not isShowing Then
+            _loadingWindow.Show("Loading...")
+            _loadingShown = True
+        ElseIf isShowing AndAlso Not shouldShow Then
+            _loadingWindow.Close()
+            _loadingWindow = Nothing
+            _loadingShown = False
+        End If
+    End Sub
 
     Public Shared Sub DoCommands(Manager As PluginManager, ConsoleCommands As Dictionary(Of String, PluginManager.ConsoleCommand))
         DeveloperConsole.Writeline("Type ""exit"" to return to Sky Editor.")
