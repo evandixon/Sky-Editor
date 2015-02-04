@@ -26,6 +26,8 @@ Namespace Windows
                 Manager.RefreshDisplay()
             End If
             menuMain.IsEnabled = True
+            'Task.WaitAll()
+            'PluginHelper.TranslateForm(Me, 10)
         End Sub
         Private Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
             menuMain.IsEnabled = False
@@ -174,7 +176,7 @@ Namespace Windows
                 tcTabs.Items.Add(New WelcomeTab)
                 tcTabs.SelectedIndex = 0
             End If
-        End Sub
+            End Sub
 
         
         

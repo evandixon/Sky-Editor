@@ -49,12 +49,39 @@ Public Class PluginHelper
     ''' If Nothing (or not provided), will be set to Key in the event it's needed.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function GetLanguageItem(Key As String, Optional DefaultValue As String = Nothing) As String
+    Public Shared Function GetLanguageItem(Key As String, Optional DefaultValue As String = Nothing, Optional CallingAssembly As String = Nothing) As String
+        If CallingAssembly Is Nothing Then
+            CallingAssembly = Assembly.GetCallingAssembly.GetName.Name
+        End If
         If SkyEditorBase.Settings.GetSettings.Setting("DebugLangaugePlaceholders") = "True" Then
             Return String.Format("[{0}]", Key)
         Else
-            Return Internal.LanguageManager.GetLanguageItem(Key, Assembly.GetCallingAssembly.GetName.Name, DefaultValue)
+            Return Internal.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
         End If
     End Function
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <param name="SearchLevel">The depth to search for controls.</param>
+    ''' <remarks></remarks>
+    Public Shared Sub TranslateForm(ByRef v As Visual, Optional SearchLevel As Integer = 5)
+        Dim controls = (New ChildControls).GetChildren(v, 10)
+        For Each item In controls
+            If TypeOf item Is Label Then
+                Dim t As String = DirectCast(item, Label).Content
+                DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+            ElseIf TypeOf item Is Controls.Button Then
+                Dim t As String = DirectCast(item, Button).Content
+                DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+            ElseIf TypeOf item Is Controls.MenuItem Then
+                Dim t As String = DirectCast(item, MenuItem).Header
+                DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+            ElseIf TypeOf item Is Controls.TabItem Then
+                Dim t As String = DirectCast(item, TabItem).Header
+                DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+            End If
+        Next
+    End Sub
 
 End Class

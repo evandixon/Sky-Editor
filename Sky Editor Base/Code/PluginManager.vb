@@ -47,28 +47,33 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function IOFiltersString() As String
-        Dim listFilter As String = ""
-        Dim supportedFilterName As String = ""
-        Dim supportedFilterExt As String = ""
-        For Each item In IOFilters
-            listFilter &= String.Format("{0} (*.{1})|*.{1}|", item.Value, item.Key)
-            supportedFilterName &= item.Value & ", "
-            supportedFilterExt &= "*." & item.Key & ";"
-        Next
-        Return String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";")) & "|" & listFilter & "All Files (*.*)|*.*"
+        If IOFilters IsNot Nothing Then
+            Dim listFilter As String = ""
+            Dim supportedFilterName As String = ""
+            Dim supportedFilterExt As String = ""
+            For Each item In IOFilters
+                listFilter &= String.Format("{0} (*.{1})|*.{1}|", item.Value, item.Key)
+                supportedFilterName &= item.Value & ", "
+                supportedFilterExt &= "*." & item.Key & ";"
+            Next
+            Return String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";")) & "|" & listFilter & "All Files (*.*)|*.*"
+        Else
+            Return "All Files (*.*)|*.*"
+        End If
     End Function
-    ' ''' <summary>
-    ' ''' Gets the IO filters in a form the Open and Save file dialogs can use, optimized for the Save file dialog.
-    ' ''' </summary>
-    ' ''' <returns></returns>
-    ' ''' <remarks></remarks>
-    'Public Function IOFiltersStringSaveAs() As String
-    '    If Save IsNot Nothing Then
+    ''' <summary>
+    ''' In the future, Gets the IO filters in a form the Open and Save file dialogs can use, optimized for the Save file dialog.
+    ''' For now, returns IOFiltersString
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function IOFiltersStringSaveAs() As String
+        'If Save IsNot Nothing Then
 
-    '    Else
-    '        Return IOFiltersString()
-    '    End If
-    'End Function
+        'Else
+        Return IOFiltersString()
+        'End If
+    End Function
     ''' <summary>
     ''' The currently loaded save.
     ''' </summary>

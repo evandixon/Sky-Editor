@@ -9,4 +9,4 @@ ShowConsoleOnStart=True
 # 0=Left, 1=Top, 2=Right, 3=Bottom
 TabStripPlacement=1
 
-DebugLangaugePlaceholders=False
+DebugLangaugePlaceholders=True

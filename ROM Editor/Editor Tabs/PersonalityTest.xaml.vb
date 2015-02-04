@@ -296,7 +296,7 @@ Public Class PersonalityTest
 
     Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Me.Header = "Personality Test"
-
+        PluginHelper.TranslateForm(Me.tc1)
         For Each count In SkyEditor.Lists.SkyPokemon.Keys
             Dim item As String = SkyEditor.Lists.SkyPokemon(count)
             cbPartner01.Items.Add(item)
