@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports System.Text
 
 Public Class PluginManager
     Implements IDisposable
@@ -26,7 +27,6 @@ Public Class PluginManager
         End Get
     End Property
     Private _IOFilters As Dictionary(Of String, String)
-
     ''' <summary>
     ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
     ''' </summary>
@@ -46,33 +46,52 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function IOFiltersString() As String
-        If IOFilters IsNot Nothing Then
-            Dim listFilter As String = ""
-            Dim supportedFilterName As String = ""
-            Dim supportedFilterExt As String = ""
-            For Each item In IOFilters
-                listFilter &= String.Format("{0} (*.{1})|*.{1}|", item.Value, item.Key)
+    Public Function IOFiltersString(Optional Filters As Dictionary(Of String, String) = Nothing, Optional IsSaveAs As Boolean = False) As String
+        If Filters Is Nothing Then
+            Filters = IOFilters
+        End If
+        Dim listFilter As New StringBuilder
+        Dim supportedFilterName As String = ""
+        Dim supportedFilterExt As String = ""
+        If Filters IsNot Nothing Then
+            For Each item In Filters
+                listFilter.Append(String.Format("{0} ({1})|{1}|", item.Value, item.Key))
                 supportedFilterName &= item.Value & ", "
-                supportedFilterExt &= "*." & item.Key & ";"
+                supportedFilterExt &= "" & item.Key & ";"
             Next
-            Return String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";")) & "|" & listFilter & "All Files (*.*)|*.*"
+            Dim out = ""
+            If Not IsSaveAs Then
+                out &= String.Format("{0} ({1})|{1}", supportedFilterName.Trim(";"), supportedFilterExt.Trim(";"))
+            End If
+            out &= "|" & listFilter.ToString & "All Files (*.*)|*.*"
+            Return out.Trim("|")
         Else
             Return "All Files (*.*)|*.*"
         End If
     End Function
     ''' <summary>
-    ''' In the future, Gets the IO filters in a form the Open and Save file dialogs can use, optimized for the Save file dialog.
-    ''' For now, returns IOFiltersString
+    ''' Gets the IO filters in a form the Open and Save file dialogs can use, optimized for the Save file dialog.
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function IOFiltersStringSaveAs() As String
-        'If Save IsNot Nothing Then
-
-        'Else
-        Return IOFiltersString()
-        'End If
+        If Save IsNot Nothing Then
+            Dim ext As String = Save.DefaultExtension
+            If IOFilters.ContainsKey(ext) Then
+                Dim filters As New Dictionary(Of String, String)
+                filters.Add(ext, IOFilters(ext))
+                For Each item In IOFilters
+                    If Not filters.ContainsKey(item.Key) Then
+                        filters.Add(item.Key, item.Value)
+                    End If
+                Next
+                Return IOFiltersString(filters, True)
+            Else
+                Return IOFiltersString()
+            End If
+        Else
+            Return IOFiltersString()
+        End If
     End Function
     ''' <summary>
     ''' The currently loaded save.

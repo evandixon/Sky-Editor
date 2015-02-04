@@ -35,8 +35,8 @@ Public Class SkyEditorInfo
         Manager.RegisterEditorTab(GetType(QuicksavePokemonTab))
 
         Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
-        Manager.RegisterIOFilter("sav", "Raw Save File")
-        Manager.RegisterIOFilter("dsv", "DeSmuMe Save File")
+        Manager.RegisterIOFilter("*.sav", "Raw Save File")
+        Manager.RegisterIOFilter("*.dsv", "DeSmuMe Save File")
 
         Manager.RegisterSaveType(GameConstants.RBSave, GetType(RBSave))
         Manager.RegisterSaveType(GameConstants.TDSave, GetType(TDSave))

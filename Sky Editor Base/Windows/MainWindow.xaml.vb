@@ -26,11 +26,10 @@ Namespace Windows
                 Manager.RefreshDisplay()
             End If
             menuMain.IsEnabled = True
-            'Task.WaitAll()
-            'PluginHelper.TranslateForm(Me, 10)
         End Sub
         Private Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
             menuMain.IsEnabled = False
+            OpenFileDialog1.Filter = Manager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Manager.LoadSave(OpenFileDialog1.FileName)
             End If
@@ -38,6 +37,7 @@ Namespace Windows
         End Sub
         Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
             menuMain.IsEnabled = False
+            OpenFileDialog1.Filter = Manager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Manager.LoadSaveNoAutodetect(OpenFileDialog1.FileName)
             End If
@@ -45,6 +45,7 @@ Namespace Windows
         End Sub
         Private Async Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
             menuMain.IsEnabled = False
+            SaveFileDialog1.Filter = Manager.IOFiltersStringSaveAs()
             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Manager.UpdateSave()
                 'Writes the updated save, and fixes the checksum at the same time
@@ -80,8 +81,6 @@ Namespace Windows
             ConsoleManager.Show()
         End Sub
 #End Region
-
-       
 
         Private Sub MainWindow_Closed(sender As Object, e As EventArgs) Handles Me.Closed
             For Each item In Manager.Plugins
@@ -176,7 +175,7 @@ Namespace Windows
                 tcTabs.Items.Add(New WelcomeTab)
                 tcTabs.SelectedIndex = 0
             End If
-            End Sub
+        End Sub
 
         
         
