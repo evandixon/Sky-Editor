@@ -39,7 +39,7 @@ Public Class DeveloperConsole
         Dim isShowing As Boolean = _loadingShown
 
         If shouldShow AndAlso Not isShowing Then
-            _loadingWindow.Show("Loading...")
+            _loadingWindow.Show(PluginHelper.GetLanguageItem("Loading", "Loading..."))
             _loadingShown = True
         ElseIf isShowing AndAlso Not shouldShow Then
             _loadingWindow.Close()
@@ -109,7 +109,7 @@ Public Class DeveloperConsole
         p.Start()
         p.BeginOutputReadLine()
         loadingWindow = New BackgroundTaskWait
-        loadingWindow.Show("Waiting on " & IO.Path.GetFileName(Filename))
+        loadingWindow.Show(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), "Waiting on " & IO.Path.GetFileName(Filename)))
 
         'p.WaitForExit()
         Await WaitForProcess(p)

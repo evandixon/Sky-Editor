@@ -67,5 +67,7 @@ Public Class DesmumeMenuItem
         InitializeComponent()
         AddHandler Manager.Window.OnKeyPress, AddressOf OnKeyPress
         m = Manager
+        Me.Header = PluginHelper.GetLanguageItem("DeSmuMe")
+        menuRunRom.Header = PluginHelper.GetLanguageItem("RunRom", "Run Game")
     End Sub
 End Class
