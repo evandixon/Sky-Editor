@@ -16,7 +16,7 @@ Public Class RBGeneral
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.RBSave}
+            Return {GameStrings.RBSave}
         End Get
     End Property
 

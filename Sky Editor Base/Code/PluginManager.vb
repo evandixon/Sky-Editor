@@ -258,7 +258,7 @@ Public Class PluginManager
     ''' <param name="Filename"></param>
     ''' <remarks></remarks>
     Public Sub LoadSave(Filename As String)
-        LoadSave(Filename, New Windows.GameTypeSelector)
+        LoadSave(Filename, New SkyEditorWindows.GameTypeSelector)
     End Sub
     ''' <summary>
     ''' Loads the save from the given Filename.  If the save format cannot be determined, the given Detector will be used to determine the save format.
@@ -296,7 +296,7 @@ Public Class PluginManager
     ''' <param name="Filename"></param>
     ''' <remarks></remarks>
     Public Sub LoadSaveNoAutodetect(Filename As String)
-        LoadSaveNoAutodetect(Filename, New Windows.GameTypeSelector)
+        LoadSaveNoAutodetect(Filename, New SkyEditorWindows.GameTypeSelector)
     End Sub
     ''' <summary>
     ''' Loads the save from the given Filename, showing the given Detector to determine the save format.

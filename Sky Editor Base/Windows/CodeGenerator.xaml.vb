@@ -1,4 +1,4 @@
-﻿Namespace Windows
+﻿Namespace SkyEditorWindows
     Public Class CodeGenerator
         Dim m As PluginManager
         Private Sub CodeGenerator_Loaded(sender As Object, e As EventArgs) Handles Me.ContentRendered

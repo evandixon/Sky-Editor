@@ -1,5 +1,5 @@
 ﻿Imports System.Windows.Media.Imaging
-
+Imports SkyEditorBase
 Public Class BGPControl
     Inherits FileFormatControl
     Dim _bgp As FileFormats.BGP
@@ -33,8 +33,12 @@ Public Class BGPControl
                 img.Source = New BitmapImage(New Uri(Await _bgp.GetTempImageURI(IO.Path.GetFileNameWithoutExtension(_filename))))
 
             Catch ex As BadImageFormatException
-                Windows.Forms.MessageBox.Show("There was not enough room in the palette for all the colors in this image." & vbCrLf & "Each 8x8 tile can only use one of 16 palettes, each with 16 colors." & vbCrLf & "Try to avoid lots of different colors in the same area.")
+                Windows.Forms.MessageBox.Show(PluginHelper.GetLanguageItem("BGPFormatError", "There was not enough room in the palette for all the colors in this image.\nEach 8x8 tile can only use one of 16 palettes, each with 16 colors.\nTry to avoid lots of different colors in the same area."))
             End Try
         End If
+    End Sub
+
+    Private Sub BGPControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
+        PluginHelper.TranslateForm(Me)
     End Sub
 End Class

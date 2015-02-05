@@ -306,7 +306,7 @@ Public Class SkySave
 
     Public Overrides ReadOnly Property SaveID As String
         Get
-            Return GameConstants.SkySave
+            Return GameStrings.SkySave
         End Get
     End Property
 End Class

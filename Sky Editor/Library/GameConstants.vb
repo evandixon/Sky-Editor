@@ -1,14 +1,36 @@
-﻿Public Class GameConstants
-    Public Const RBSave As String = "Pokemon Mystery Dungeon: Red/Blue Rescue Team (North America)"
-    Public Const RBSaveEU As String = "Pokemon Mystery Dungeon: Red/Blue Rescue Team (Europe)"
-    Public Const TDSave As String = "Pokemon Mystery Dungeon: Explorers of Time/Darkness"
-    Public Const SkySave As String = "Pokemon Mystery Dungeon: Explorers of Sky"
-
-    Public Const SkyGame As String = "Pokemon Mystery Dungeon: Explorers of Sky.nds"
-    Public Const RedGame As String = "Pokemon Mystery Dungeon: Red Rescue Team (U).gba"
-    Public Const BlueGame As String = "Pokemon Mystery Dungeon: Blue Rescue Team (U).nds"
-    Public Const RedGameEU As String = "Pokemon Mystery Dungeon: Red Rescue Team (E).gba"
-    Public Const BlueGameEU As String = "Pokemon Mystery Dungeon: Blue Rescue Team (E).nds"
-    Public Const TimeGame As String = "Pokemon Mystery Dungeon: Explorers of Time.nds"
-    Public Const DarknessGame As String = "Pokemon Mystery Dungeon: Explorers of Darkness.nds"
+﻿Imports SkyEditorBase
+Public Class GameStrings
+    Public Shared Function RBSave() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Red/Blue Rescue Team (North America)")
+    End Function
+    Public Shared Function RBSaveEU() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Red/Blue Rescue Team (Europe)")
+    End Function
+    Public Shared Function TDSave() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Time/Darkness")
+    End Function
+    Public Shared Function SkySave() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Sky")
+    End Function
+    Public Shared Function SkyGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Sky.nds")
+    End Function
+    Public Shared Function RedGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Red Rescue Team (U).gba")
+    End Function
+    Public Shared Function BlueGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Blue Rescue Team (U).nds")
+    End Function
+    Public Shared Function RedGameEU() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Red Rescue Team (E).gba")
+    End Function
+    Public Shared Function BlueGameEU() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Blue Rescue Team (E).nds")
+    End Function
+    Public Shared Function TimeGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Time.nds")
+    End Function
+    Public Shared Function DarknessGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Darkness.nds")
+    End Function
 End Class

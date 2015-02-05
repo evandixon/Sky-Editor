@@ -18,7 +18,7 @@ Public Class DesmumeMenuItem
 
     Async Function RunRom(Optional SuppressErrorMessage As Boolean = False) As Task
         Dim w As Window = Window.GetWindow(Me)
-        If TypeOf w Is SkyEditorBase.Windows.MainWindow Then
+        If TypeOf w Is SkyEditorBase.SkyEditorWindows.MainWindow Then
             m.UpdateSave()
             If TypeOf m.Save Is ROMEditor.GenericNDSRom Then
                 DeveloperConsole.Writeline("Beginning to run ROM...")

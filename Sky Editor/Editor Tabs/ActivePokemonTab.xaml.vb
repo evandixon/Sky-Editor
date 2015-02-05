@@ -27,7 +27,7 @@ Public Class ActivePokemonTab
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.SkySave, GameConstants.TDSave}
+            Return {GameStrings.SkySave, GameStrings.TDSave}
         End Get
     End Property
 

@@ -50,7 +50,7 @@ Public Class MyCodeGenerator
     ''' <remarks></remarks>
     Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
         Get
-            Return {SkyEditor.GameConstants.RBSave}
+            Return {SkyEditor.GameStrings.RBSave}
         End Get
     End Property
     ''' <summary>

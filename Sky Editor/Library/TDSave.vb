@@ -146,7 +146,7 @@ Partial Class TDSave
 
     Public Overrides ReadOnly Property SaveID As String
         Get
-            Return GameConstants.TDSave
+            Return GameStrings.TDSave
         End Get
     End Property
 End Class

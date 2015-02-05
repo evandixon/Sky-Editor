@@ -12,7 +12,7 @@ Public Class TDGeneralTab
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.TDSave}
+            Return {GameStrings.TDSave}
         End Get
     End Property
 

@@ -3,7 +3,7 @@ Imports ICSharpCode.SharpZipLib.Zip
 Imports ICSharpCode.SharpZipLib.Core
 Imports System.Threading.Tasks
 Imports System.Windows
-Namespace Windows
+Namespace SkyEditorWindows
     Class MainWindow
         Implements iMainWindow
         Dim Manager As PluginManager
@@ -62,14 +62,14 @@ Namespace Windows
         End Sub
         Private Sub menuCredits_Click(sender As Object, e As RoutedEventArgs) Handles menuCredits.Click
             Dim credits As String = ""
-            credits = PluginHelper.GetLanguageItem("Credits", "Credits:\n     evandixon (lead developer)\n     Demonic722 (help with GBA cheat format)")
+            credits = PluginHelper.GetLanguageItem("BaseCredits", "Credits:\n     evandixon (lead developer)\n     Demonic722 (help with GBA cheat format)")
             For Each item In Manager.Plugins
                 If Not String.IsNullOrWhiteSpace(item.Credits) Then
                     credits &= vbCrLf & PluginHelper.GetLanguageItem("CreditsSeparator", "----------") & vbCrLf
-                    credits &= item.Credits & vbCrLf
+                    credits &= item.Credits
                 End If
             Next
-            MessageBox.Show(credits.Trim)
+            MessageBox.Show(credits.Trim, PluginHelper.GetLanguageItem("CreditsTitle"))
         End Sub
 
         Private Sub menuDebugConsole_Click(sender As Object, e As RoutedEventArgs) Handles menuDebugConsole.Click
@@ -180,8 +180,8 @@ Namespace Windows
             End If
         End Sub
 
-        
-        
+
+
 
 #Region "iMainWindow Support"
         Public Sub AddMenuItem(Menu As MenuItem) Implements iMainWindow.AddMenuItem

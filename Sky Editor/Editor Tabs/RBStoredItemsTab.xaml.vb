@@ -14,7 +14,7 @@ Public Class RBStoredItemsTab
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.RBSave}
+            Return {GameStrings.RBSave}
         End Get
     End Property
 
@@ -23,6 +23,6 @@ Public Class RBStoredItemsTab
     End Function
 
     Private Sub RBStoredItemsTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = "Stored Items"
+        Me.Header = PluginHelper.GetLanguageItem("Stored Items")
     End Sub
 End Class

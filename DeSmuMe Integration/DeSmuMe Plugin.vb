@@ -3,7 +3,7 @@ Public Class DeSmuMePlugin
     Implements iSkyEditorPlugin
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return ""
+            Return PluginHelper.GetLanguageItem("DeSmuMeIntegrationCredits", "DeSmuMe Integration Credits:\n     Cracker (DS Icon Tool)\n     The DeSmuMe Developers\n     evandixon (Integration)")
         End Get
     End Property
 

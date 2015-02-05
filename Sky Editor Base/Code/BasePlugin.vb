@@ -1,4 +1,4 @@
-﻿Imports SkyEditorBase.Windows
+﻿Imports SkyEditorBase.SkyEditorWindows
 
 Public MustInherit Class BasePlugin
     Dim _assemblyname As String

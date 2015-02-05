@@ -1,6 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
-Imports SkyEditorBase.Windows
+Imports SkyEditorBase.SkyEditorWindows
 
 Public Class DeveloperConsole
     Public Shared Event OnWriteLine(sender As Object, e As WritelineEventArgs)

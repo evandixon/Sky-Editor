@@ -21,7 +21,7 @@ Namespace PMD_Explorers
         End Sub
         Public Overrides ReadOnly Property SaveID As String
             Get
-                Return Constants.SkyNDSRom
+                Return GameStrings.SkyNDSRom
             End Get
         End Property
 

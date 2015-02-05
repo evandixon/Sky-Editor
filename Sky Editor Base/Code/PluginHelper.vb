@@ -67,19 +67,20 @@ Public Class PluginHelper
     ''' <remarks></remarks>
     Public Shared Sub TranslateForm(ByRef v As Visual, Optional SearchLevel As Integer = 5)
         Dim controls = (New ChildControls).GetChildren(v, 10)
+        If Not controls.Contains(v) Then controls.Add(v)
         For Each item In controls
             If TypeOf item Is Label Then
                 Dim t As String = DirectCast(item, Label).Content
-                DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing Then DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             ElseIf TypeOf item Is Controls.Button Then
                 Dim t As String = DirectCast(item, Button).Content
-                DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing Then DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             ElseIf TypeOf item Is Controls.MenuItem Then
                 Dim t As String = DirectCast(item, MenuItem).Header
-                DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing Then DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             ElseIf TypeOf item Is Controls.TabItem Then
                 Dim t As String = DirectCast(item, TabItem).Header
-                DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing Then DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             End If
         Next
     End Sub

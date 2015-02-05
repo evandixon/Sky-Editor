@@ -66,6 +66,7 @@
     End Sub
 
     Private Sub RomSelector_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
+        SkyEditorBase.PluginHelper.TranslateForm(Me)
         If lvRoms.Items.Count = 1 Then
             lvRoms.SelectedIndex = 0
             OnOK()

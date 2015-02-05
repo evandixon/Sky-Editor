@@ -6,13 +6,13 @@ Public Class PluginDefinition
     Implements iSkyEditorPlugin
     Public Function AutoDetectSaveType(File As GenericFile) As String
         Dim out As String = ""
-        If New GenericNDSRom(File.RawData).ROMHeader = Constants.SkyROMHeader Then out = Constants.SkyNDSRom
+        If New GenericNDSRom(File.RawData).ROMHeader = GameStrings.SkyROMHeader Then out = GameStrings.SkyNDSRom
         Return out
     End Function
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return ""
+            Return PluginHelper.GetLanguageItem("RomEditorCredits", "Rom Editor Credits:\n     psy_commando (Pokemon portraits, misc file formats)\n     Grovyle91 (Language strings)\n     evandixon (Personality test, bgp files)")
         End Get
     End Property
 
@@ -49,11 +49,11 @@ Public Class PluginDefinition
 
         'Window.RegisterMenuItem(New RomEditorMenuItem(Window))
 
-        Manager.RegisterSaveType(Constants.GenericNDSRom, GetType(GenericNDSRom))
-        Manager.RegisterSaveType(Constants.SkyNDSRom, GetType(SkyNDSRom))
+        Manager.RegisterSaveType(GameStrings.GenericNDSRom, GetType(GenericNDSRom))
+        Manager.RegisterSaveType(GameStrings.SkyNDSRom, GetType(SkyNDSRom))
 
-        Manager.RegisterGameType(Constants.GenericNDSRom, Constants.GenericNDSRom)
-        Manager.RegisterGameType(Constants.SkyNDSRom, Constants.SkyNDSRom)
+        Manager.RegisterGameType(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom)
+        Manager.RegisterGameType(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom)
 
         Manager.RegisterEditorTab(GetType(PortraitTab))
         Manager.RegisterEditorTab(GetType(PersonalityTest))

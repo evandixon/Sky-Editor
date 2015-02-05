@@ -22,7 +22,7 @@ Public Class RedTeamName
 
     Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
         Get
-            Return {SkyEditor.GameConstants.RedGame}
+            Return {SkyEditor.GameStrings.RedGame}
         End Get
     End Property
 

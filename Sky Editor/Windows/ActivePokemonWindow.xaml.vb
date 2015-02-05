@@ -14,32 +14,7 @@ Public Class ActivePkmWindow
     End Sub
     Private Sub PkmWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Load Language
-        lblPkm.Content = PluginHelper.GetLanguageItem("Pokemon")
-        lblIsFemale.Content = PluginHelper.GetLanguageItem("IsFemale")
-        lblName.Content = PluginHelper.GetLanguageItem("Name")
-        lblLevel.Content = PluginHelper.GetLanguageItem("Level")
-        lblExp.Content = PluginHelper.GetLanguageItem("Exp")
-        lblMetAt.Content = PluginHelper.GetLanguageItem("Met At")
-        lblMetFloor.Content = PluginHelper.GetLanguageItem("Met Floor")
-        lblIQ.Content = PluginHelper.GetLanguageItem("IQ")
-        lblHP1.Content = PluginHelper.GetLanguageItem("Current HP")
-        lblHP2.Content = PluginHelper.GetLanguageItem("Max HP")
-        lblAttack.Content = PluginHelper.GetLanguageItem("Attack")
-        lblSpAttack.Content = PluginHelper.GetLanguageItem("Sp. Attack")
-        lblDefense.Content = PluginHelper.GetLanguageItem("Defense")
-        lblSpDefense.Content = PluginHelper.GetLanguageItem("Sp. Defense")
-
-        lblMove.Content = PluginHelper.GetLanguageItem("Move")
-        lblGinseng.Content = PluginHelper.GetLanguageItem("Ginseng")
-        lblSet.Content = PluginHelper.GetLanguageItem("Set")
-        lblSwitched.Content = PluginHelper.GetLanguageItem("Switched")
-        lblLinked.Content = PluginHelper.GetLanguageItem("Linked")
-        lblSealed.Content = PluginHelper.GetLanguageItem("Sealed")
-
-        lblMove1.Content = PluginHelper.GetLanguageItem("Move 1")
-        lblMove2.Content = PluginHelper.GetLanguageItem("Move 2")
-        lblMove3.Content = PluginHelper.GetLanguageItem("Move 3")
-        lblMove4.Content = PluginHelper.GetLanguageItem("Move 4")
+        PluginHelper.TranslateForm(Me)
 
 
         'Initialize Dialogs

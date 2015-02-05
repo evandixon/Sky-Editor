@@ -25,7 +25,7 @@ Public Class GenericNDSRom
 
     Public Overrides ReadOnly Property SaveID As String
         Get
-            Return Constants.GenericNDSRom
+            Return GameStrings.GenericNDSRom
         End Get
     End Property
     Public ReadOnly Property IsUnpacked

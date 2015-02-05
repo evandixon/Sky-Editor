@@ -22,7 +22,7 @@ Public Class BlueRescuePoints
 
     Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
         Get
-            Return {SkyEditor.GameConstants.BlueGame}
+            Return {SkyEditor.GameStrings.BlueGame}
         End Get
     End Property
 

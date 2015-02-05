@@ -15,7 +15,7 @@ Public Class SkyEditorInfo
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267(Pokemon Stucture, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
+            Return PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267 (Pokemon Stucture, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
         End Get
     End Property
 
@@ -38,26 +38,28 @@ Public Class SkyEditorInfo
         Manager.RegisterIOFilter("*.sav", "Raw Save File")
         Manager.RegisterIOFilter("*.dsv", "DeSmuMe Save File")
 
-        Manager.RegisterSaveType(GameConstants.RBSave, GetType(RBSave))
-        Manager.RegisterSaveType(GameConstants.TDSave, GetType(TDSave))
-        Manager.RegisterSaveType(GameConstants.SkySave, GetType(SkySave))
-        Manager.RegisterSaveType(GameConstants.RBSaveEU, GetType(RBSaveEU))
-        Manager.RegisterGameType(GameConstants.RedGame, GameConstants.RBSave)
-        Manager.RegisterGameType(GameConstants.BlueGame, GameConstants.RBSave)
-        Manager.RegisterGameType(GameConstants.TimeGame, GameConstants.TDSave)
-        Manager.RegisterGameType(GameConstants.DarknessGame, GameConstants.TDSave)
-        Manager.RegisterGameType(GameConstants.SkyGame, GameConstants.SkySave)
+        Manager.RegisterSaveType(GameStrings.RBSave, GetType(RBSave))
+        Manager.RegisterSaveType(GameStrings.TDSave, GetType(TDSave))
+        Manager.RegisterSaveType(GameStrings.SkySave, GetType(SkySave))
+        Manager.RegisterSaveType(GameStrings.RBSaveEU, GetType(RBSaveEU))
+        Manager.RegisterGameType(GameStrings.RedGame, GameStrings.RBSave)
+        Manager.RegisterGameType(GameStrings.BlueGame, GameStrings.RBSave)
+        Manager.RegisterGameType(GameStrings.TimeGame, GameStrings.TDSave)
+        Manager.RegisterGameType(GameStrings.DarknessGame, GameStrings.TDSave)
+        Manager.RegisterGameType(GameStrings.SkyGame, GameStrings.SkySave)
+        Manager.RegisterGameType(GameStrings.BlueGameEU, GameStrings.RBSaveEU)
+        Manager.RegisterGameType(GameStrings.RedGameEU, GameStrings.RBSaveEU)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
         Select Case File.RawData(&HD)
             Case &H54
-                Return GameConstants.TDSave
+                Return GameStrings.TDSave
             Case &H53
-                Return GameConstants.SkySave
+                Return GameStrings.SkySave
             Case Else
                 If (File.RawData(&H404) = &H50 AndAlso File.RawData(&H405) = &H4F AndAlso File.RawData(&H406) = &H4B AndAlso File.RawData(&H407) = &H45) Then
-                    Return GameConstants.RBSave
+                    Return GameStrings.RBSave
                 Else
                     Return Nothing
                 End If

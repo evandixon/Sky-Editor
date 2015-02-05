@@ -1,4 +1,4 @@
-﻿Namespace Windows
+﻿Namespace SkyEditorWindows
     Public Class BackgroundTaskWait
         Public Overloads Sub Show(Message As String)
             Me.lblMessage.Content = Message

@@ -44,7 +44,7 @@ Public Class FilesTab
     End Function
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {Constants.GenericNDSRom, Constants.SkyNDSRom}
+            Return {GameStrings.GenericNDSRom, GameStrings.SkyNDSRom}
         End Get
     End Property
 
@@ -53,7 +53,7 @@ Public Class FilesTab
     End Function
 
     Private Sub FilesTab_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.Header = "Files"
+        Me.Header = SkyEditorBase.PluginHelper.GetLanguageItem("Files")
     End Sub
 
     Private Sub tvFiles_SelectedItemChanged(sender As Object, e As Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged

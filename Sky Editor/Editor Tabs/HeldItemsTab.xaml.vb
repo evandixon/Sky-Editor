@@ -43,7 +43,7 @@ Public Class HeldItemsTab
     End Sub
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.SkySave, GameConstants.TDSave, GameConstants.RBSave}
+            Return {GameStrings.SkySave, GameStrings.TDSave, GameStrings.RBSave}
         End Get
     End Property
 

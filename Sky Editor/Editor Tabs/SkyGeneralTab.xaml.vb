@@ -16,7 +16,7 @@ Public Class SkyGeneralTab
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.SkySave}
+            Return {GameStrings.SkySave}
         End Get
     End Property
 

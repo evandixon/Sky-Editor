@@ -27,8 +27,8 @@ Namespace Internal
                 Dim language As String = Settings.CurrentLanguage
                 Dim files As New Dictionary(Of String, String)
                 files.Add(IO.Path.Combine(Environment.CurrentDirectory, String.Format("Resources/{0}/Language.txt", language)), "{Default}")
-                For Each directory In IO.Directory.GetDirectories(IO.Path.Combine(Environment.CurrentDirectory, "Resources"), "*", IO.SearchOption.TopDirectoryOnly)
-                    files.Add(IO.Path.Combine(directory, language, "Language.txt"), IO.Path.GetDirectoryName(directory))
+                For Each directory In IO.Directory.GetDirectories(IO.Path.Combine(Environment.CurrentDirectory, "Resources", language), "*", IO.SearchOption.TopDirectoryOnly)
+                    files.Add(IO.Path.Combine(directory, "Language.txt"), IO.Path.GetDirectoryName(directory))
                 Next
                 For Each file In files
                     If IO.File.Exists(file.Key) Then

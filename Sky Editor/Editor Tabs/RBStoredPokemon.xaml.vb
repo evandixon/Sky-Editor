@@ -96,7 +96,7 @@ Public Class RBStoredPokemonTab
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {GameConstants.SkySave, GameConstants.TDSave, GameConstants.RBSave, GameConstants.RBSaveEU}
+            Return {GameStrings.SkySave, GameStrings.TDSave, GameStrings.RBSave, GameStrings.RBSaveEU}
         End Get
     End Property
 

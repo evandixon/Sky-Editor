@@ -174,7 +174,7 @@ Public Class PersonalityTest
 
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
-            Return {Constants.SkyNDSRom}
+            Return {GameStrings.SkyNDSRom}
         End Get
     End Property
 

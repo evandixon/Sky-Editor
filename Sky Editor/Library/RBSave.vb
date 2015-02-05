@@ -204,7 +204,7 @@ Public Class RBSave
 
     Public Overrides ReadOnly Property SaveID As String
         Get
-            Return GameConstants.RBSave
+            Return GameStrings.RBSave
         End Get
     End Property
 End Class
