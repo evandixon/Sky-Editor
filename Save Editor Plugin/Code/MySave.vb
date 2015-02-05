@@ -14,7 +14,7 @@ Public Class MySave
             'each save format has its own ID, which is also the friendly name for the game (one that the user can select from a list)
 
             'It is recommended to keep these in constants in a separate file, to avoid typos
-            Return GameConstants.MySaveGameID
+            Return GameStrings.MySaveGameID
         End Get
     End Property
 
@@ -25,19 +25,10 @@ Public Class MySave
     End Sub
 
     ''If you'd prefer, you can use a filename constructor instead.
+    ''If you provide one, it will be called before the one giving a Byte array.
     'Public Sub New(Filename As String)
     '    
     'End Sub
-
-    'Although not absolutely required, it will make life easier, because .Net won't let you directcast or ctype from Parent to Child.
-    'These functions let you quickly convert a GenericSave to a MySave and back, as long as you don't make major changes to the constructor.
-    'If you do make major changes to the constructor, you will need to change this accordingly.
-    Public Shared Function FromBase(Save As SkyEditorBase.GenericSave) As MySave
-        Return New MySave(Save.RawData)
-    End Function
-    Public Function ToBase() As GenericSave
-        Return DirectCast(Me, GenericSave)
-    End Function
 
     '
     'In order to do anything in the future, you will need to make some properties (or functions if you prefer) that interact with the save.

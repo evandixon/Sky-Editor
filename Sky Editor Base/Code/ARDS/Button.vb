@@ -4,8 +4,7 @@
         Public Property Name As String
         Public Property ButtonValue As Integer
         Public Overrides Function ToString() As String
-            'In the future, allow translation
-            Return Name
+            Return PluginHelper.GetLanguageItem(Name)
         End Function
         Public Overrides Function Equals(obj As Object) As Boolean
             If TypeOf obj Is Button Then
@@ -73,6 +72,9 @@
         End Function
         Public Shared Function GBAButtons() As Button()
             Return {Button.A, Button.B, Button.Up, Button.Down, Button.Left, Button.Right, Button.L, Button.R, Button.Start, Button.Select}
+        End Function
+        Public Shared Function NoButtons() As Button()
+            Return {}
         End Function
     End Class
 End Namespace

@@ -45,7 +45,7 @@ Public Class PluginDefinition
         Manager.RegisterConsoleCommand("pmdlanguage", AddressOf ConsoleCommands.PmdLanguage)
         Manager.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
 
-        Manager.RegisterIOFilter("*.nds", "Nintendo DS ROM")
+        Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
         'Window.RegisterMenuItem(New RomEditorMenuItem(Window))
 

@@ -135,23 +135,15 @@ Public Class PluginManager
                 Dim a As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom(plugin)
                 Dim types As Type() = a.GetTypes
                 For Each item In types
-                    Dim IsDefinition As Boolean = False
                     Dim IsPlugin As Boolean = False
                     For Each intface As Type In item.GetInterfaces
                         If intface Is GetType(iSkyEditorPlugin) Then
                             IsPlugin = True
                         End If
-                        If intface Is GetType(ARDS.CodeDefinition) Then
-                            IsDefinition = True
-                        End If
                     Next
                     If IsPlugin Then
                         Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
                         Plugins.Add(Plg)
-                    End If
-                    If IsDefinition Then
-                        Dim CodeDef As ARDS.CodeDefinition = a.CreateInstance(item.ToString)
-                        Me.CheatManager.CodeDefinitions.Add(CodeDef)
                     End If
                 Next
             Next
@@ -214,6 +206,13 @@ Public Class PluginManager
 
     Public Sub RegisterSaveTypeDetector(Detector As SaveTypeDetector)
         SaveTypeDetectors.Add(Detector)
+    End Sub
+
+    Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
+        Me.CheatManager.CodeDefinitions.Add(Generator)
+    End Sub
+    Public Sub RegisterCodeType(Type As ARDS.CheatFormat)
+
     End Sub
 #End Region
 

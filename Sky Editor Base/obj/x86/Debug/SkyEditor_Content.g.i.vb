@@ -8,6 +8,10 @@
 ' </auto-generated>
 '------------------------------------------------------------------------------
 
-Option Strict On
+Option Strict Off
 Option Explicit On
+
+<Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icsharpcode.sharpziplib.dll"),  _
+ Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/settings.txt"),  _
+ Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/english/languageold.txt")> 
 

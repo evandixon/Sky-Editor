@@ -30,7 +30,6 @@ Public Class PluginHelper
     ''' Returns your plugin's resource directory as managed by Sky Editor.
     ''' It will be created if it does not exist.
     ''' </summary>
-    ''' <param name="Path"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceDirectory() As String

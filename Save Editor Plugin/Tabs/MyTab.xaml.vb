@@ -5,9 +5,8 @@ Public Class MyTab
     Inherits EditorTab
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
         'Here you need to assign values from your save to all of your controls
-        If Save.CurrentSaveID = GameConstants.MySaveGameID Then
-            Dim m As MySave = MySave.FromBase(Save)
-            With m
+        If Save.CurrentSaveID = GameStrings.MySaveGameID Then
+            With DirectCast(Save, MySave)
                 'MyControl.Text = .MyProperty
             End With
         End If
@@ -16,7 +15,7 @@ Public Class MyTab
     Public Overrides ReadOnly Property SupportedGames As String()
         Get
             'An array of GameIDs that this tab can edit.  Because there is only one example save in this project, only one example save is shown below.
-            Return {GameConstants.MySaveGameID}
+            Return {GameStrings.MySaveGameID}
         End Get
     End Property
 
@@ -27,6 +26,7 @@ Public Class MyTab
             With DirectCast(output, MySave) 'Update its properties
                 '.MyProperty = MyControl.Text
             End With
+            'ElseIf Typeof Save is MyOtherSave Then  'If you have more than one supported save type.
         End If
 
         Return output 'Return it.  If you don't change it, return the original save instead of Nothing
@@ -34,5 +34,10 @@ Public Class MyTab
 
     Private Sub FormLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'If any of your controls need initialization with code, do it here.
+
+        'You should also add translation your form.
+        'Each label, button, menu, and tab item will be translated with this statement.
+        'Anything else, you'll have to use PluginHelper.GetLanguageItem
+        PluginHelper.TranslateForm(Me)
     End Sub
 End Class

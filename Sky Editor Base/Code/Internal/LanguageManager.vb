@@ -69,6 +69,7 @@ Namespace Internal
             End If
         End Sub
         Public Shared Function GetLanguageItem(Key As String, AssemblyName As String, Optional DefaultValue As String = Nothing) As String
+            If Key.Contains("=") Then Key = Key.Replace("=", "_")
             Instance.EnsureLanguageLoaded()
             If Instance._LanguageDictionary.ContainsKey(Key) Then
                 Instance._LanguageDictionary(Key).Accessed = True

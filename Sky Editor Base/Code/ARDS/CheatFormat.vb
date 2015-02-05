@@ -3,8 +3,7 @@
         Public Property Name As String
         Public Property SupportedButtons As Button()
         Public Overrides Function ToString() As String
-            'In the future, allow translation
-            Return Name
+            Return PluginHelper.GetLanguageItem(Name)
         End Function
         Public Overrides Function Equals(obj As Object) As Boolean
             If TypeOf obj Is CheatFormat Then
@@ -27,7 +26,7 @@
                 Return False
             End If
         End Operator
-        Private Sub New(Name As String, SupportedButtons As Button())
+        Public Sub New(Name As String, SupportedButtons As Button())
             Me.Name = Name
             Me.SupportedButtons = SupportedButtons
         End Sub

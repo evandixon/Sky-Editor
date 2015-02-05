@@ -7,7 +7,7 @@
     <ProjectGuid>{844B88DC-9905-479F-94DD-4F6A7CD2067A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Save_Editor_Plugin</RootNamespace>
-    <AssemblyName>Save Editor Plugin</AssemblyName>
+    <AssemblyName>Save Editor Plugin_plg</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -23,7 +23,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Save Editor Plugin.xml</DocumentationFile>
+    <DocumentationFile>Save Editor Plugin_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <PlatformTarget>x86</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -35,7 +35,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Save Editor Plugin.xml</DocumentationFile>
+    <DocumentationFile>Save Editor Plugin_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -66,10 +66,12 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -82,7 +84,9 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Commands.vb" />
     <Compile Include="Code\GameConstants.vb" />
+    <Compile Include="Generators\MyCodeGenerator.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -99,7 +103,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Code\MySave.vb" />
-    <Compile Include="SkyEditorInfo.vb" />
+    <Compile Include="MyMenuItem.xaml.vb">
+      <DependentUpon>MyMenuItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyPlugin.vb" />
     <Compile Include="Tabs\MyTab.xaml.vb">
       <DependentUpon>MyTab.xaml</DependentUpon>
     </Compile>
@@ -137,6 +144,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MyMenuItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

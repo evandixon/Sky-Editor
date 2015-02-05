@@ -15,7 +15,7 @@ Public Class ConsoleCommands
     ''' Makes lots of test ROMs each with only one kind of BGM.
     ''' Do not actually run, this doesn't know how to handle skipping 109 and 194 to 198 yet.
     ''' </summary>
-    ''' <param name="Target"></param>
+    ''' <param name="Manager"></param>
     ''' <param name="Argument"></param>
     ''' <remarks></remarks>
     Public Shared Sub EoSTestMusic(Manager As PluginManager, Argument As String)
