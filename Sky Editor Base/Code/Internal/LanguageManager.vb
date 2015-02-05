@@ -90,7 +90,7 @@ Namespace Internal
                         'It's not a plugin, it's this assembly (or something external that's not a plugin, which means something is using Sky Editor Base itself), so don't put it in the Plugin Directory
                         filename = String.Format("Resources/{0}/Language.txt", "English")
                     Else
-                        filename = String.Format("Resources/Plugins/{0}/{1}/language.txt", AssemblyName.Replace("_plg", ""), "English")
+                        filename = String.Format("Resources/{1}/{0}/language.txt", AssemblyName.Replace("_plg", ""), "English")
                     End If
 
                     Dim fileContents As String

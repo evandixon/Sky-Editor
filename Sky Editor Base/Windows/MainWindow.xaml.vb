@@ -152,6 +152,9 @@ Namespace Windows
             menuFileSaveAs.Header = PluginHelper.GetLanguageItem("SaveAs", "Save As...")
             menuCredits.Header = PluginHelper.GetLanguageItem("CreditsLabel", "Credits")
             menuCheats.Header = PluginHelper.GetLanguageItem("Cheats")
+            menuDebug.Header = PluginHelper.GetLanguageItem("Debug")
+            menuShowConsole.Header = PluginHelper.GetLanguageItem("DebugConsole", "Show Console")
+            menuDebugConsole.Header = PluginHelper.GetLanguageItem("RunCommand", "Run Command...")
 
             tcTabs.TabStripPlacement = Settings.TabStripPlacement
 

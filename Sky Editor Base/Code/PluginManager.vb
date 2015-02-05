@@ -223,7 +223,7 @@ Public Class PluginManager
         For Each item In EditorTabs
             Dim etab As EditorTab = item.GetConstructor({}).Invoke({})
             For Each game In etab.SupportedGames
-                If game IsNot Nothing AndAlso Save.CurrentSaveID = game Then
+                If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso Save.CurrentSaveID = game Then
                     'add the tab because this save is one of the supported games
                     Dim t As TabItem = etab
                     Dim x As New Task(Sub()
@@ -231,10 +231,9 @@ Public Class PluginManager
                                       End Sub)
                     x.RunSynchronously()
                     Window.AddTabItem(t)
-                    GoTo NextTab
+                    Exit For
                 End If
             Next
-NextTab:
         Next
     End Sub
     Public Sub RefreshDisplay()

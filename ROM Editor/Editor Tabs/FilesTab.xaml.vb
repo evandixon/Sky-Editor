@@ -10,7 +10,7 @@ Public Class FilesTab
     End Sub
     Private Async Function GetDirectoryNode(Directory As String) As Task(Of TreeViewItem)
         Dim Node As New TreeViewItem()
-        Node.Header = GetNodeContents(IO.Path.GetFileName(Directory), "[DIR] ")
+        Node.Header = GetNodeContents(IO.Path.GetFileName(Directory), SkyEditorBase.PluginHelper.GetLanguageItem("DirPrefix", "[DIR] "))
         Node.Tag = Directory
         For Each d In Await Task.Run(Function()
                                          Return IO.Directory.GetDirectories(Directory)
@@ -26,7 +26,7 @@ Public Class FilesTab
     End Function
     Private Function GetFileNode(Filename As String) As TreeViewItem
         Dim Node As New TreeViewItem()
-        Node.Header = GetNodeContents(IO.Path.GetFileName(Filename), "[FILE] ")
+        Node.Header = GetNodeContents(IO.Path.GetFileName(Filename), SkyEditorBase.PluginHelper.GetLanguageItem("FilePrefix", "[FILE] "))
         Node.Tag = Filename
         Return Node
     End Function

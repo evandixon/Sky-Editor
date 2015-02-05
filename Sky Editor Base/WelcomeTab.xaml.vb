@@ -19,6 +19,7 @@ Public Class WelcomeTab
     End Function
 
     Private Sub WelcomeTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = "Sky Editor"
+        Me.Header = PluginHelper.GetLanguageItem("Sky Editor")
+        PluginHelper.TranslateForm(Me)
     End Sub
 End Class

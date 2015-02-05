@@ -1,3 +1,0 @@
-﻿MainWindow
--Add language support to welcome tab
--Impliment File > Import/Export, integrating with the NDS Save Converter.
