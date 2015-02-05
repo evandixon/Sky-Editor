@@ -109,7 +109,7 @@ Public Class DeveloperConsole
         p.Start()
         p.BeginOutputReadLine()
         loadingWindow = New BackgroundTaskWait
-        loadingWindow.Show(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), "Waiting on " & IO.Path.GetFileName(Filename)))
+        loadingWindow.Show(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
         'p.WaitForExit()
         Await WaitForProcess(p)
