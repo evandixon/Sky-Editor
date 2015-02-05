@@ -58,7 +58,7 @@ Public Class PortraitTab
         Next
     End Sub
     Private Sub PortraitTab_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.Header = "Pokemon Portraits"
+        Me.Header = PluginHelper.GetLanguageItem("PokemonPortraits", "Pokemon Portraits")
     End Sub
 
     Protected Sub btnExport_Click(sender As Object, e As System.Windows.RoutedEventArgs)
