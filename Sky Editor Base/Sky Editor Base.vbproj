@@ -101,6 +101,9 @@
     <OutputPath>bin\x86\Release\</OutputPath>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -133,6 +136,7 @@
     <Compile Include="Code\ARDS\CodeGeneratorHelper.vb" />
     <Compile Include="Code\ARDS\Manager.vb" />
     <Compile Include="Code\ARDS\Region.vb" />
+    <Compile Include="Code\ChildControls.vb" />
     <Compile Include="Code\iGameTypeSelector.vb" />
     <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\PluginHelper.vb" />
@@ -237,6 +241,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="My Project\app.manifest" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>

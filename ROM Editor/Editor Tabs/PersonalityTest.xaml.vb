@@ -1,9 +1,6 @@
 ﻿Imports SkyEditorBase
 Imports ROMEditor.FileFormats
 Imports ROMEditor.PMD_Explorers
-Imports System.Windows.Controls
-Imports System.Windows
-Imports System.Windows.Media
 
 Public Class PersonalityTest
     Inherits EditorTab
@@ -298,53 +295,8 @@ Public Class PersonalityTest
     End Function
 
     Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("PersonalityTest", "Personality Test")
-        lblPartner01.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "01")
-        lblPartner02.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "02")
-        lblPartner03.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "03")
-        lblPartner04.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "04")
-        lblPartner05.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "05")
-        lblPartner06.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "06")
-        lblPartner07.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "07")
-        lblPartner08.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "08")
-        lblPartner09.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "09")
-        lblPartner10.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "10")
-        lblPartner11.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "11")
-        lblPartner12.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "12")
-        lblPartner13.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "13")
-        lblPartner14.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "14")
-        lblPartner15.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "15")
-        lblPartner16.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "16")
-        lblPartner17.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "17")
-        lblPartner18.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "18")
-        lblPartner19.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "19")
-        lblPartner20.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "20")
-        lblPartner21.Content = String.Format(PluginHelper.GetLanguageItem("PartnerNum", "Partner {0}:"), "21")
-
-        chbPartner01.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner02.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner03.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner04.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner05.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner06.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner07.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner08.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner09.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner10.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner11.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner12.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner13.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner14.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner15.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner16.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner17.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner18.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner19.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner20.Content = PluginHelper.GetLanguageItem("Female", "Female")
-        chbPartner21.Content = PluginHelper.GetLanguageItem("Female", "Female")
-
-
-
+        Me.Header = "Personality Test"
+        PluginHelper.TranslateForm(Me)
         For Each count In SkyEditor.Lists.SkyPokemon.Keys
             Dim item As String = SkyEditor.Lists.SkyPokemon(count)
             cbPartner01.Items.Add(item)
