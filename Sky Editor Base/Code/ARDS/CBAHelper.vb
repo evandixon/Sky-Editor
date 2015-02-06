@@ -51,24 +51,6 @@
                 Return RawData
             End Function
 
-            ' ''' <summary>
-            ' ''' Ends the previous If statement
-            ' ''' </summary>
-            ' ''' <remarks></remarks>
-            'Public Const LocalEndIf As String = "D0000000 00000000"
-
-            ' ''' <summary>
-            ' ''' Ends the previous repeat
-            ' ''' </summary>
-            ' ''' <remarks></remarks>
-            'Public Const LocalEndRepeat As String = "D1000000 00000000"
-
-            ' ''' <summary>
-            ' ''' Ends all previous If statements and repeats
-            ' ''' </summary>
-            ' ''' <remarks></remarks>
-            'Public Const MasterEnd As String = "D2000000 00000000"
-
             ''' <summary>
             ''' Gets the If Button Down line of an ARDS code.
             ''' </summary>

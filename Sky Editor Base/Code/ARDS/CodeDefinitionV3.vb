@@ -13,7 +13,7 @@
         ''' <param name="CodeType">Single CheatFormat that the user wants to be generated.</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function GenerateCode(ByVal Save As GenericSave, TargetRegion As Region, ButtonActivator As UInt16, CodeType As CheatFormat) As String 'CodeGeneratorHelper.Code
+        Function GenerateCode(ByVal Save As GenericSave, TargetRegion As Region, ButtonActivator As UInt16, CodeType As CheatFormat) As String
 
         ''' <summary>
         ''' Category this code definition belongs to.  CodeDefinitions of the same category will be grouped together.
