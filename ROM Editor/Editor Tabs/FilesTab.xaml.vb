@@ -1,11 +1,13 @@
 ﻿Imports System.Windows.Controls
-
+Imports SkyEditorBase
 Public Class FilesTab
     Inherits SkyEditorBase.EditorTab
     Public Overrides Async Sub RefreshDisplay(Save As SkyEditorBase.GenericSave)
         If TypeOf Save Is GenericNDSRom Or TypeOf Save Is PMD_Explorers.SkyNDSRom Then
             Await (DirectCast(Save, GenericNDSRom).EnsureUnpacked)
+            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Reading files..."))
             tvFiles.Items.Add(Await GetDirectoryNode(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current\")))
+            PluginHelper.StopLoading()
         End If
     End Sub
     Private Async Function GetDirectoryNode(Directory As String) As Task(Of TreeViewItem)

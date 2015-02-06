@@ -88,9 +88,9 @@ Public Class MDSaveBase
         Dim checksum As UInt32 = BitConverter.ToUInt32(buffer, 0)
         Dim checksumActual As UInt32 = BitConverter.ToUInt32(RawData, 0)
         If checksum = checksumActual Then
-            DeveloperConsole.Writeline("Checksum valid!")
+            PluginHelper.Writeline("Checksum valid!")
         Else
-            DeveloperConsole.Writeline("Invalid checksum.")
+            PluginHelper.Writeline("Invalid checksum.")
         End If
     End Sub
 End Class

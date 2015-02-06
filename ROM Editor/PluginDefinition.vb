@@ -36,7 +36,7 @@ Public Class PluginDefinition
     End Sub
 
     Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
+        PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         Manager.RegisterConsoleCommand("header", AddressOf ConsoleCommands.ROMHeader)
         Manager.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
         Manager.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)
@@ -46,8 +46,6 @@ Public Class PluginDefinition
         Manager.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
 
         Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
-
-        'Window.RegisterMenuItem(New RomEditorMenuItem(Window))
 
         Manager.RegisterSaveType(GameStrings.GenericNDSRom, GetType(GenericNDSRom))
         Manager.RegisterSaveType(GameStrings.SkyNDSRom, GetType(SkyNDSRom))
@@ -63,7 +61,7 @@ Public Class PluginDefinition
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
-        DeveloperConsole.Writeline("Deleting ROM Editor's temp directory")
+        PluginHelper.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Temp")
         If IO.Directory.Exists(directory) Then
             IO.Directory.Delete(directory, True)

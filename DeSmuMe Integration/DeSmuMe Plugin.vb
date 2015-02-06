@@ -31,11 +31,11 @@ Public Class DeSmuMePlugin
         Try
             Dim folder = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/DeSmuMe/")
             For Each d In IO.Directory.GetDirectories(folder)
-                DeveloperConsole.Writeline("Deleting directory " & d)
+                PluginHelper.Writeline("Deleting directory " & d)
                 IO.Directory.Delete(d, True)
             Next
         Catch ex As Exception
-            DeveloperConsole.Writeline(ex.ToString)
+            PluginHelper.Writeline(ex.ToString)
         End Try
     End Sub
 End Class

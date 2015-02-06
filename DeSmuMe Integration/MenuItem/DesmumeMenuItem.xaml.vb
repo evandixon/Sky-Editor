@@ -21,14 +21,14 @@ Public Class DesmumeMenuItem
         If TypeOf w Is SkyEditorBase.SkyEditorWindows.MainWindow Then
             m.UpdateSave()
             If TypeOf m.Save Is ROMEditor.GenericNDSRom Then
-                DeveloperConsole.Writeline("Beginning to run ROM...")
+                PluginHelper.Writeline("Beginning to run ROM...")
 
                 Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
                 Await DirectCast(m.Save, ROMEditor.GenericNDSRom).RePack(romDirectory & "\current.nds")
-                DeveloperConsole.Writeline("Running ROM...")
+                PluginHelper.Writeline("Running ROM...")
                 Loader.RunDeSmuMe(romDirectory & "\current.nds")
 
-                DeveloperConsole.Writeline("ROM Launched.")
+                PluginHelper.Writeline("ROM Launched.")
             Else
                 Dim SupportedGames As New List(Of String)
                 For Each item In m.GameTypes
@@ -39,7 +39,6 @@ Public Class DesmumeMenuItem
                 If SupportedGames.Count >= 1 Then
                     Dim x As New RomSelector
                     If x.ShowDialog(SupportedGames) Then
-                        DeveloperConsole.Writeline("TODO: Copy save into desmume")
                         If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Loader.GetBestVersionExecutableName), "Battery/")) Then
                             IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Loader.GetBestVersionExecutableName), "Battery/"))
                         End If

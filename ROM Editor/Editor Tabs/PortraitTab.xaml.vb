@@ -26,6 +26,7 @@ Public Class PortraitTab
     Public Overrides Async Sub RefreshDisplay(Save As SkyEditorBase.GenericSave)
         If TypeOf Save Is SkyNDSRom Then
             kao = Await DirectCast(Save, SkyNDSRom).GetPortraitsFile
+            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Filling Pokemon Portraits..."))
             tvFiles.Items.Clear()
             For Each item In IO.Directory.GetDirectories(kao.UnpackDirectory, "*", IO.SearchOption.TopDirectoryOnly)
                 Dim Node As New TreeViewItem()
@@ -33,6 +34,7 @@ Public Class PortraitTab
                 Node.Tag = item
                 tvFiles.Items.Add(Node)
             Next
+            PluginHelper.StopLoading()
         End If
     End Sub
 

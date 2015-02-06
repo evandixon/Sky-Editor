@@ -3,6 +3,7 @@ Imports System.Text
 
 Public Class PluginManager
     Implements IDisposable
+    Private Const ShowLoadingWindow As Boolean = True
 
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
     Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
@@ -131,7 +132,7 @@ Public Class PluginManager
             assemblies.AddRange(IO.Directory.GetFiles(PluginFolder, "*_plg.dll"))
             assemblies.AddRange(IO.Directory.GetFiles(PluginFolder, "*_plg.exe"))
             For Each plugin In assemblies
-                DeveloperConsole.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
+                PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
                 Dim a As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom(plugin)
                 Dim types As Type() = a.GetTypes
                 For Each item In types
@@ -218,7 +219,17 @@ Public Class PluginManager
 
 #Region "Refresh and Update"
     Private Sub RefreshTabs()
+        If ShowLoadingWindow Then PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Refreshing tabs..."))
         Window.ClearTabItems()
+        Dim tabs = GetRefreshedTabs()
+        For Each item In tabs
+            Window.AddTabItem(item)
+        Next
+        PluginHelper.StopLoading()
+    End Sub
+    Private Function GetRefreshedTabs() As List(Of TabItem)
+        Dispose()
+        Dim out As New List(Of TabItem)
         For Each item In EditorTabs
             Dim etab As EditorTab = item.GetConstructor({}).Invoke({})
             For Each game In etab.SupportedGames
@@ -229,12 +240,13 @@ Public Class PluginManager
                                           etab.RefreshDisplay(Save)
                                       End Sub)
                     x.RunSynchronously()
-                    Window.AddTabItem(t)
+                    out.Add(t)
                     Exit For
                 End If
             Next
         Next
-    End Sub
+        Return out
+    End Function
     Public Sub RefreshDisplay()
         RefreshTabs()
         If Settings.DebugMode Then Save.DebugInfo()

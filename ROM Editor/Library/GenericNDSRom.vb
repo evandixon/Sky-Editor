@@ -54,7 +54,7 @@ Public Class GenericNDSRom
     End Function
     Public Async Function Unpack() As Task(Of Boolean)
         If IsUnpacking Then
-            DeveloperConsole.Writeline("Something failed, unpack called when currently unpacking.")
+            PluginHelper.Writeline("Something failed, unpack called when currently unpacking.")
         End If
         Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
         'If Not IO.Directory.Exists(romDirectory) Then
@@ -65,12 +65,12 @@ Public Class GenericNDSRom
             Try
                 IO.Directory.Delete(IO.Path.Combine(romDirectory, "Current"), True)
             Catch ex As IOException
-                DeveloperConsole.Writeline(ex.ToString)
+                PluginHelper.Writeline(ex.ToString)
             End Try
         End If
 
         IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, "Current"))
-        Return Await SkyEditorBase.DeveloperConsole.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
+        Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                               String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, IO.Path.Combine(romDirectory, "Current")))
 
         'DeveloperConsole.Writeline("Unpack complete.")
@@ -83,8 +83,8 @@ Public Class GenericNDSRom
         If Not IO.Directory.Exists(IO.Path.Combine(romDirectory, "Current")) Then
             IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, "Current"))
         End If
-        DeveloperConsole.Writeline("Repacking ROM...")
-        Return Await SkyEditorBase.DeveloperConsole.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
+        PluginHelper.Writeline("Repacking ROM...")
+        Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                               String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, "Current")))
         'DeveloperConsole.Writeline("Repack complete.")
     End Function
@@ -95,7 +95,7 @@ Public Class GenericNDSRom
     Public Async Function RunRom() As Task
         Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
         Await RePack(romDirectory & "\current.nds")
-        DeveloperConsole.Writeline("Running ROM...")
+        PluginHelper.Writeline("Running ROM...")
         Process.Start(romDirectory & "\current.nds")
     End Function
     Public Overrides Async Function GetBytes() As Task(Of Byte())

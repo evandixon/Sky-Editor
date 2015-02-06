@@ -6,12 +6,12 @@
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename) & "\Decompressed")
             End If
-            Return Await SkyEditorBase.DeveloperConsole.RunProgram(IO.Path.Combine(romDirectory, "ppmd_unpx.exe"),
+            Return Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_unpx.exe"),
                                                   String.Format("""{0}"" ""{1}""", Filename, IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileNameWithoutExtension(Filename) & ".decompressed"))
         End Function
         Public Shared Sub RunCompress(Filename As String)
             Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
-            SkyEditorBase.DeveloperConsole.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
+            SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
                                                   String.Format("""{0}"" ""{1}""", IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename), Filename))
             'If Not IO.File.Exists(Filename) AndAlso IO.File.Exists(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx")) Then
             IO.File.Delete(Filename)

@@ -1,4 +1,7 @@
 ﻿Imports System.Reflection
+Imports SkyEditorBase.SkyEditorWindows
+Imports System.Threading.Tasks
+Imports System.Runtime.CompilerServices
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -83,5 +86,156 @@ Public Class PluginHelper
             End If
         Next
     End Sub
+    ''' <summary>
+    ''' Posted by brendan at http://stackoverflow.com/questions/9996709/read-console-process-output
+    ''' </summary>
+    ''' <param name="sendingProcess"></param>
+    ''' <param name="outLine"></param>
+    ''' <remarks></remarks>
+    Private Shared Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
+        ' Collect the sort command output.
+        If Not String.IsNullOrEmpty(outLine.Data) Then
+            'Add the text to the collected output.
+            'Don't write to dev console, this is a different thread.
+            'The only difference is that this output will be shown in the Real console, while DebugConsole.Writeline may be shown in the window
+            Console.WriteLine(outLine.Data)
+        End If
+    End Sub
+    ''' <summary>
+    ''' Runs the specified program, capturing console output.
+    ''' Returns true when the program exits.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    ''' <param name="Arguments"></param>
+    ''' <remarks></remarks>
+    Public Shared Async Function RunProgram(Filename As String, Arguments As String) As Task(Of Boolean)
+        WriteLine(String.Format("Executing {0} {1}", Filename, Arguments))
+        Dim p As New Process()
+        p.StartInfo.FileName = Filename
+        p.StartInfo.Arguments = Arguments
+        p.StartInfo.RedirectStandardOutput = True
+        p.StartInfo.UseShellExecute = False
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        p.StartInfo.CreateNoWindow = True
+        AddHandler p.OutputDataReceived, AddressOf OutputHandler
+        p.Start()
+        p.BeginOutputReadLine()
+        StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
+        Await WaitForProcess(p)
+
+        StopLoading()
+        RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+        p.Dispose()
+        WriteLine(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        Return True
+    End Function
+    Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
+        Return Await Task.Run(Function()
+                                  p.WaitForExit()
+                                  Return True
+                              End Function)
+    End Function
+    ''' <summary>                    
+    ''' Runs the specified program without waiting for it to complete.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    ''' <param name="Arguments"></param>
+    ''' <remarks></remarks>
+    Public Shared Sub RunProgramInBackground(Filename As String, Arguments As String)
+        Writeline(String.Format("(Async) Executing ""{0}"" ""{1}""", Filename, Arguments))
+        Dim p As New Process()
+        p.StartInfo.FileName = Filename
+        p.StartInfo.Arguments = Arguments
+        p.Start()
+    End Sub
+
+    Private Shared _loadingShown As Boolean = False
+    Private Shared _loadingWindow As BackgroundTaskWait
+    Private Shared _loadingDefinitions As New Dictionary(Of String, String)
+
+    ''' <summary>
+    ''' Shows a loading window until the same function calls StopLoading.
+    ''' </summary>
+    ''' <param name="Message">The message to be displayed while loading.  This message will not be translated so you should translate it on your end.</param>
+    ''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
+    ''' <remarks></remarks>
+    Public Shared Sub StartLoading(Message As String, <CallerMemberName> Optional CallerName As String = Nothing)
+        If Not _loadingDefinitions.ContainsKey(CallerName) Then
+            _loadingDefinitions.Add(CallerName, Message)
+            MakeLoadingVisibleorNot()
+        End If
+    End Sub
+    ''' <summary>
+    ''' Closes the loading window shown from StartLoading
+    ''' </summary>
+    ''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
+    ''' <remarks></remarks>
+    Public Shared Sub StopLoading(<CallerMemberName> Optional CallerName As String = Nothing)
+        If _loadingDefinitions.ContainsKey(CallerName) Then
+            _loadingDefinitions.Remove(CallerName)
+            MakeLoadingVisibleorNot()
+        End If
+    End Sub
+    Private Shared Sub MakeLoadingVisibleorNot()
+        If _loadingWindow Is Nothing Then
+            _loadingWindow = New BackgroundTaskWait()
+        End If
+        Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
+        Dim isShowing As Boolean = _loadingShown
+
+        If shouldShow AndAlso Not isShowing Then
+            If _loadingDefinitions.Count > 1 Then
+                _loadingWindow.Show(PluginHelper.GetLanguageItem("Loading", "Loading..."))
+            ElseIf _loadingDefinitions.Count = 1 Then
+                _loadingWindow.Show(_loadingDefinitions.Values(0))
+            End If
+            _loadingShown = True
+        ElseIf shouldShow AndAlso isShowing Then
+            If _loadingDefinitions.Count > 1 Then
+                _loadingWindow.ChangeMessage(PluginHelper.GetLanguageItem("Loading", "Loading..."))
+            ElseIf _loadingDefinitions.Count = 1 Then
+                _loadingWindow.ChangeMessage(_loadingDefinitions.Values(0))
+            End If
+        ElseIf isShowing AndAlso Not shouldShow Then
+            _loadingWindow.Close()
+            _loadingWindow = Nothing
+            _loadingShown = False
+        End If
+    End Sub
+    Public Enum LineType
+        Message = 1
+        Warning = 2
+        [Error] = 3
+    End Enum
+    Public Shared Sub Writeline(Line As String, Optional type As LineType = LineType.Message, <CallerMemberName> Optional CallerName As String = Nothing)
+        Console.WriteLine(String.Format("{0}: {1}", CallerName, Line))
+    End Sub
+    ''' <summary>
+    ''' Starts accepting commands from the console.
+    ''' </summary>
+    ''' <param name="Manager"></param>
+    ''' <param name="ConsoleCommands"></param>
+    ''' <remarks></remarks>
+    Friend Shared Sub DoCommands(Manager As PluginManager, ConsoleCommands As Dictionary(Of String, PluginManager.ConsoleCommand))
+        Writeline("Type ""exit"" to return to Sky Editor.")
+        While True
+            Console.Write("> ")
+            Dim line = Console.ReadLine()
+            Dim cmdParts = line.Split(" ".ToCharArray, 2)
+            Dim cmd = cmdParts(0).ToLower
+            Dim arg = ""
+            If cmdParts.Length > 1 Then
+                arg = cmdParts(1)
+            End If
+            If cmd = "exit" Then
+                Writeline("You may now use Sky Editor again.")
+                Exit While
+            ElseIf ConsoleCommands.Keys.Contains(cmd) Then
+                ConsoleCommands(cmd).Invoke(Manager, arg)
+            Else
+                Writeline(String.Format("""{0}"" is not a recognisable command.", cmd))
+            End If
+        End While
+    End Sub
 End Class

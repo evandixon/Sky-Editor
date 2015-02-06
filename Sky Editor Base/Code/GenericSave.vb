@@ -49,7 +49,7 @@ Partial Public MustInherit Class GenericSave
     ''' </summary>
     ''' <remarks></remarks>
     Public Overridable Sub DebugInfo()
-        DeveloperConsole.Writeline("[Debug " & CurrentSaveID & "]")
+        PluginHelper.Writeline("[Debug " & CurrentSaveID & "]")
     End Sub
 
     ''' <summary>

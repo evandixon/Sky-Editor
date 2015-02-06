@@ -3,11 +3,11 @@ Imports ICSharpCode.SharpZipLib.Zip
 
 Public Class RedistributionHelpers
     Public Shared Sub PrepareForDistribution(Manager As PluginManager, Argument As String)
-        DeveloperConsole.Writeline("Preparing for distribution...")
+        PluginHelper.Writeline("Preparing for distribution...")
         For Each item In Manager.Plugins
             item.PrepareForDistribution()
         Next
-        DeveloperConsole.Writeline("Distribution preparation complete.")
+        PluginHelper.Writeline("Distribution preparation complete.")
     End Sub
     Public Shared Sub PackProgram(Manager As PluginManager, ArchiveName As String)
         Dim blacklist As String() = {"DeSmuMe Integration_plg.pdb",

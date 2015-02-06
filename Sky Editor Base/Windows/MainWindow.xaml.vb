@@ -73,12 +73,12 @@ Namespace SkyEditorWindows
         End Sub
 
         Private Sub menuDebugConsole_Click(sender As Object, e As RoutedEventArgs) Handles menuDebugConsole.Click
-            ConsoleManager.Show()
-            DeveloperConsole.DoCommands(Manager, Manager.ConsoleCommandList)
+            Internal.ConsoleManager.Show()
+            PluginHelper.DoCommands(Manager, Manager.ConsoleCommandList)
         End Sub
 
         Private Sub menuShowConsole_Click(sender As Object, e As RoutedEventArgs) Handles menuShowConsole.Click
-            ConsoleManager.Show()
+            Internal.ConsoleManager.Show()
         End Sub
 #End Region
 
@@ -98,17 +98,17 @@ Namespace SkyEditorWindows
 
         Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             If Settings.DebugMode AndAlso Settings.ShowConsoleOnStart Then
-                ConsoleManager.Show()
+                Internal.ConsoleManager.Show()
             End If
             If Environment.Is64BitProcess Then
-                DeveloperConsole.Writeline("x64 Process")
+                PluginHelper.Writeline("x64 Process")
             Else
-                DeveloperConsole.Writeline("x86 Process")
+                PluginHelper.Writeline("x86 Process")
             End If
             If Environment.Is64BitOperatingSystem Then
-                DeveloperConsole.Writeline("x64 OS")
+                PluginHelper.Writeline("x64 OS")
             Else
-                DeveloperConsole.Writeline("x86 OS")
+                PluginHelper.Writeline("x86 OS")
             End If
 
             Manager = New PluginManager(Me)

@@ -3,7 +3,7 @@ Imports ROMEditor.PMD_Explorers
 
 Public Class ConsoleCommands
     Public Shared Sub ROMHeader(Manager As PluginManager, Argument As String)
-        DeveloperConsole.Writeline(DirectCast(Manager.Save, GenericNDSRom).ROMHeader)
+        PluginHelper.Writeline(DirectCast(Manager.Save, GenericNDSRom).ROMHeader)
     End Sub
     Public Shared Async Sub UnPack(Manager As PluginManager, Argument As String)
         Await DirectCast(Manager.Save, GenericNDSRom).Unpack()
@@ -33,7 +33,7 @@ Public Class ConsoleCommands
             IO.File.WriteAllText(romDirectory & "/eos.txt", report)
             For count2 As Integer = 0 To 201
                 If Not count = count2 Then
-                    DeveloperConsole.Writeline(String.Format("Copying {0} to {1}", count, count2))
+                    PluginHelper.Writeline(String.Format("Copying {0} to {1}", count, count2))
                     IO.File.Copy(soundDir & String.Format("bgm{0}.smd", count.ToString.PadLeft(4, "0")), soundDir & String.Format("bgm{0}.smd", count2.ToString.PadLeft(4, "0")), True)
                     IO.File.Copy(soundDir & String.Format("bgm{0}.swd", count.ToString.PadLeft(4, "0")), soundDir & String.Format("bgm{0}.swd", count2.ToString.PadLeft(4, "0")), True)
                 End If
@@ -43,12 +43,12 @@ Public Class ConsoleCommands
     End Sub
     Public Shared Async Sub ExplorersExtractBGP(Manager As PluginManager, Argument As String)
         If Not TypeOf Manager.Save Is SkyNDSRom Then
-            DeveloperConsole.Writeline("Save should be of type 'SkyNDSRom'")
+            PluginHelper.Writeline("Save should be of type 'SkyNDSRom'")
             Exit Sub
         End If
         Dim dir As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current\data\BACK")
         For Each file In IO.Directory.GetFiles(dir, "*.bgp")
-            DeveloperConsole.Writeline("Converting " & file)
+            PluginHelper.Writeline("Converting " & file)
             Dim img = Await FileFormats.BGP.FromFilename(file)
             Dim i = Await img.GetImage
             i.Save(file.Replace(".bgp", ".png"))
@@ -77,7 +77,7 @@ Public Class ConsoleCommands
 
             For count As Integer = 1 To faces.Length - 1
                 If Not IO.File.Exists(IO.Path.Combine(directory, faces(count))) Then
-                    DeveloperConsole.Writeline(String.Format("Copying {0} to {1}", IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(count))))
+                    PluginHelper.Writeline(String.Format("Copying {0} to {1}", IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(count))))
                     IO.File.Copy(IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(count)))
                 End If
             Next
@@ -85,6 +85,6 @@ Public Class ConsoleCommands
         Await x.Save()
     End Function
     Public Shared Sub PmdLanguage(Manager As PluginManager, Argument As String)
-        DeveloperConsole.Writeline((New FileFormats.LanguageString)(CUInt(Argument)))
+        PluginHelper.Writeline((New FileFormats.LanguageString)(CUInt(Argument)))
     End Sub
 End Class

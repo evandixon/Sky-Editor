@@ -20,7 +20,7 @@ Public Class SkyEditorInfo
     End Property
 
     Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        DeveloperConsole.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
+        PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
         Manager.RegisterEditorTab(GetType(SkyGeneralTab))
         Manager.RegisterEditorTab(GetType(TDGeneralTab))

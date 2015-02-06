@@ -77,14 +77,14 @@ Namespace Internal
             Else
                 Instance.EnsureEnglishLanguageLoaded()
                 If Instance._LanguageDictionaryEnglish.ContainsKey(Key) Then
-                    DeveloperConsole.Writeline(String.Format("Could not find key ""{0}"" in language ""{1}"" in assembly ""{2}""", Key, Settings.CurrentLanguage, AssemblyName))
-                    DeveloperConsole.Writeline("English value substituted.")
+                    PluginHelper.Writeline(String.Format("Could not find key ""{0}"" in language ""{1}"" in assembly ""{2}""", Key, Settings.CurrentLanguage, AssemblyName))
+                    PluginHelper.Writeline("English value substituted.")
                     Instance._LanguageDictionaryEnglish(Key).Accessed = True
                     Return FormatString(Instance._LanguageDictionaryEnglish(Key).Value)
                 Else
                     If DefaultValue Is Nothing Then DefaultValue = Key
-                    DeveloperConsole.Writeline(String.Format("Could not find key ""{0}"" in language ""{1}"" in assembly ""{2}""", Key, Settings.CurrentLanguage, AssemblyName))
-                    DeveloperConsole.Writeline("Default value used.")
+                    PluginHelper.Writeline(String.Format("Could not find key ""{0}"" in language ""{1}"" in assembly ""{2}""", Key, Settings.CurrentLanguage, AssemblyName))
+                    PluginHelper.Writeline("Default value used.")
                     Instance._LanguageDictionaryEnglish.Add(Key, New LanguageItem(Key, DefaultValue, AssemblyName, True))
                     Dim filename As String
                     If AssemblyName = IO.Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs(0)).Replace(".vshost", "") Then
@@ -107,7 +107,7 @@ Namespace Internal
                         IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(filename))
                     End If
                     IO.File.WriteAllText(filename, fileContents.Trim)
-                    DeveloperConsole.Writeline("Default value written to language file " & filename)
+                    PluginHelper.Writeline("Default value written to language file " & filename)
                     Return FormatString(DefaultValue)
                 End If
             End If

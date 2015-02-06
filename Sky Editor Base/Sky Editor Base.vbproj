@@ -150,8 +150,7 @@
     <Compile Include="Code\Utilities\BitOperations.vb" />
     <Compile Include="Code\Utilities\Bits8.vb" />
     <Compile Include="Code\Utilities\ByteExtensions.vb" />
-    <Compile Include="ConsoleManager.vb" />
-    <Compile Include="Code\DebugConsole.vb" />
+    <Compile Include="Code\Internal\ConsoleManager.vb" />
     <Compile Include="Code\Utilities\GenericArrayOperations.vb" />
     <Compile Include="Code\GenericFile.vb" />
     <Compile Include="Code\Utilities\Zip.vb" />

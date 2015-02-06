@@ -59,6 +59,6 @@ Public Module Loader
         End If
     End Function
     Sub RunDeSmuMe(romPath As String)
-        SkyEditorBase.DeveloperConsole.RunProgramAsync(GetBestVersionExecutableName, String.Format("""{0}""", romPath))
+        SkyEditorBase.PluginHelper.RunProgramInBackground(GetBestVersionExecutableName, String.Format("""{0}""", romPath))
     End Sub
 End Module
