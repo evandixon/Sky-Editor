@@ -5,13 +5,13 @@
     ''' <summary>
     ''' Called when the form is loaded.  Use this to register save types and other resources your plugin may add to the form.
     ''' </summary>
-    ''' <param name="Window"></param>
+    ''' <param name="Manager"></param>
     ''' <remarks></remarks>
     Sub Load(ByRef Manager As PluginManager)
     ''' <summary>
     ''' Called on form close.  Use this to free any resources in need of disposal or delete temporary files, if applicable.
     ''' </summary>
-    ''' <param name="Window"></param>
+    ''' <param name="Manager"></param>
     ''' <remarks></remarks>
     Sub UnLoad(ByRef Manager As PluginManager)
     ''' <summary>
