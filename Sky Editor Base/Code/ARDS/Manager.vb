@@ -80,6 +80,16 @@ Namespace ARDS
             Next
             Return out
         End Function
+        Private Function ValidGameType(SupportedGames As String(), GameType As String) As Boolean
+            Dim out As Boolean = False
+            For Each item In SupportedGames
+                If item = GameType OrElse IO.Path.GetFileNameWithoutExtension(item) = IO.Path.GetFileNameWithoutExtension(GameType) Then
+                    out = True
+                    Exit For
+                End If
+            Next
+            Return out
+        End Function
         Public Function GetGames(CodeType As CheatFormat, Region As Region) As List(Of String)
             Dim out As New List(Of String)
             For Each item In CodeDefinitions
@@ -110,7 +120,7 @@ Namespace ARDS
             Dim out As New List(Of String)
             For Each item In CodeDefinitions
                 '(after the AndAlso) If adding the region doesn't yield any change, it must have already been there
-                If item.SupportedCheatFormats.Contains(CodeType) AndAlso (item.SupportedRegions Or Region = item.SupportedRegions) AndAlso item.SupportedGames.Contains(GameID) Then
+                If item.SupportedCheatFormats.Contains(CodeType) AndAlso (item.SupportedRegions Or Region = item.SupportedRegions) AndAlso ValidGameType(item.SupportedGames, GameID) Then
                     If Not out.Contains(item.Category) Then
                         out.Add(item.Category)
                     End If
@@ -123,7 +133,7 @@ Namespace ARDS
             Dim out As New List(Of CodeDefinition)
             For Each item In CodeDefinitions
                 '(after the AndAlso) If adding the region doesn't yield any change, it must have already been there
-                If item.SupportedCheatFormats.Contains(CodeType) AndAlso (item.SupportedRegions Or Region = item.SupportedRegions) AndAlso item.Category = Category AndAlso item.SupportedGames.Contains(GameID) Then
+                If item.SupportedCheatFormats.Contains(CodeType) AndAlso (item.SupportedRegions Or Region = item.SupportedRegions) AndAlso item.Category = Category AndAlso ValidGameType(item.SupportedGames, GameID) Then
                     If Not out.Contains(item) Then
                         out.Add(item)
                     End If

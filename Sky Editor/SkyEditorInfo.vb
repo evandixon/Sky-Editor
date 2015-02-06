@@ -49,6 +49,18 @@ Public Class SkyEditorInfo
         Manager.RegisterGameType(GameStrings.SkyGame, GameStrings.SkySave)
         Manager.RegisterGameType(GameStrings.BlueGameEU, GameStrings.RBSaveEU)
         Manager.RegisterGameType(GameStrings.RedGameEU, GameStrings.RBSaveEU)
+
+        Manager.RegisterCodeGenerator(New BlueBaseType)
+        Manager.RegisterCodeGenerator(New BlueHeldMoney)
+        Manager.RegisterCodeGenerator(New BlueRescuePoints)
+        Manager.RegisterCodeGenerator(New BlueStoredMoney)
+        Manager.RegisterCodeGenerator(New BlueTeamName)
+
+        Manager.RegisterCodeGenerator(New RedBaseType)
+        Manager.RegisterCodeGenerator(New RedHeldMoney)
+        Manager.RegisterCodeGenerator(New RedRescuePoints)
+        Manager.RegisterCodeGenerator(New RedStoredMoney)
+        Manager.RegisterCodeGenerator(New RedTeamName)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String

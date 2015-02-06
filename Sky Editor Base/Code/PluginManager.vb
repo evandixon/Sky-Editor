@@ -212,9 +212,6 @@ Public Class PluginManager
     Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
         Me.CheatManager.CodeDefinitions.Add(Generator)
     End Sub
-    Public Sub RegisterCodeType(Type As ARDS.CheatFormat)
-
-    End Sub
 #End Region
 
 #Region "Refresh and Update"

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Sky Editor Base\bin\Debug\Resources\Plugins\</OutputPath>
     <DocumentationFile>Save Editor Plugin_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <PlatformTarget>x86</PlatformTarget>
@@ -34,7 +34,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Sky Editor Base\bin\Release\Resources\Plugins\</OutputPath>
     <DocumentationFile>Save Editor Plugin_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Commands.vb" />
-    <Compile Include="Code\GameConstants.vb" />
+    <Compile Include="Code\GameStrings.vb" />
     <Compile Include="Generators\MyCodeGenerator.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -103,7 +103,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Code\MySave.vb" />
-    <Compile Include="MyMenuItem.xaml.vb">
+    <Compile Include="Menu Items\MyMenuItem.xaml.vb">
       <DependentUpon>MyMenuItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyPlugin.vb" />
@@ -146,7 +146,7 @@
     </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MyMenuItem.xaml">
+    <Page Include="Menu Items\MyMenuItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

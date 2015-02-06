@@ -166,6 +166,8 @@ Namespace SkyEditorWindows
 
             If Settings.DebugMode Then
                 menuDebug.Visibility = System.Windows.Visibility.Visible
+            Else
+                menuDebug.Visibility = Windows.Visibility.Collapsed
             End If
 
             Manager.RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)

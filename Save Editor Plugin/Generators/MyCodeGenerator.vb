@@ -83,6 +83,8 @@ Public Class MyCodeGenerator
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+        'Note: ButtonActivator will be nothing if you're using a custom code format.  This may be fixed in future versions.
+
         'Ensure the save is of the typewe're expecting
         If TypeOf Save Is MySave Then
             Dim s As MySave = DirectCast(Save, MySave)
@@ -142,7 +144,15 @@ Public Class MyCodeGenerator
     ''' <remarks></remarks>
     Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats
         Get
-            Return {CheatFormat.ARDS, CheatFormat.CBA, MyPlugin.GetCheatFormat}
+            'If you wanted to define your own, just make a new instance of it.  See below for
+            'Return {Me.GetCheatFormat}
+            Return {CheatFormat.ARDS, CheatFormat.CBA}
         End Get
     End Property
+    'Public Shared Function GetCheatFormat() As SkyEditorBase.ARDS.CheatFormat
+    '    'Example of defining a new cheat format.
+    '    'No translation required, as it will be translated for you.
+    '    'The second parameter is the supported buttons.  It is not fully supported for cheat formats that aren't built in, so for now, provide an empty array.
+    '    Return New SkyEditorBase.ARDS.CheatFormat("MyFormat", {})
+    'End Function
 End Class

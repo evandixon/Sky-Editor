@@ -14,9 +14,20 @@ Public Class MySave
             'each save format has its own ID, which is also the friendly name for the game (one that the user can select from a list)
 
             'It is recommended to keep these in constants in a separate file, to avoid typos
-            Return GameStrings.MySaveGameID
+            Return GameStrings.MySaveSaveID
         End Get
     End Property
+    Public Overrides Function DefaultExtension() As String
+        'If you override this, then when you save a file, this filter will automatically be selected.
+        'In order for this filter to function, it must be registered in your plugin definition.
+        Return "*.ext"
+    End Function
+
+    Public Overrides Sub DebugInfo()
+        'Need to get some information from the save, but don't want to add a UI just yet?
+        'If you're in debug mode (settable in the settings file of Sky Editor), this code will run.  It's perfect for using to PluginHelper.WriteLine!
+        MyBase.DebugInfo()
+    End Sub
 
     Public Sub New(Save As Byte())
         'For some reason the parent constructor is not inherited.

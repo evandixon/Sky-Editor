@@ -54,10 +54,6 @@ Public Class MyPlugin
 
         'If you want to create cheat codes, you can register your code generator here.
         Manager.RegisterCodeGenerator(New MyCodeGenerator)
-
-        'Some games might not be supported by Sky Editor.
-        'In this case, you can create your own code type.
-        Manager.RegisterCodeType(New ARDS.CheatFormat("MyFormat", {}))
     End Sub
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
         'Delete any temporary files.  Will be run on form close.
@@ -79,11 +75,5 @@ Public Class MyPlugin
         'Return GameStrings.MySaveSaveID
         'If you don't:
         Return Nothing
-    End Function
-
-    Public Shared Function GetCheatFormat() As ARDS.CheatFormat
-        'Example of defining a new cheat format.
-        'No translation required, as it will be translated for you.
-        Return New ARDS.CheatFormat("MyFormat", {})
     End Function
 End Class
