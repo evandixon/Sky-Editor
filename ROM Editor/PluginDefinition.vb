@@ -62,16 +62,17 @@ Public Class PluginDefinition
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
-        Dim directory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Temp")
+        Dim directory As String = PluginHelper.GetResourceName("Temp")
         If IO.Directory.Exists(directory) Then
+            On Error Resume Next
             IO.Directory.Delete(directory, True)
             IO.Directory.CreateDirectory(directory)
         End If
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
-        EnsureDirDeleted(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current"))
-        EnsureFileDeleted(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current.nds"))
+        EnsureDirDeleted(PluginHelper.GetResourceName("Current"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("Current.nds"))
     End Sub
 
     Private Sub EnsureDirDeleted(Dir As String)
@@ -84,7 +85,4 @@ Public Class PluginDefinition
             IO.File.Delete(Dir)
         End If
     End Sub
-    Public Shared Function GetResourceDirectory() As String
-        Return IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/ROMEditor/")
-    End Function
 End Class

@@ -23,7 +23,7 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceName(Path As String) As String
-        Dim baseDir = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
+        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
         If Not IO.Directory.Exists(baseDir) Then
             IO.Directory.CreateDirectory(baseDir)
         End If
@@ -36,7 +36,14 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceDirectory() As String
-        Dim baseDir = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
+        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
+        If Not IO.Directory.Exists(baseDir) Then
+            IO.Directory.CreateDirectory(baseDir)
+        End If
+        Return baseDir
+    End Function
+    Public Shared Function GetResourceDirectory(AssemblyName As String) As String
+        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", AssemblyName.Replace("_plg", ""))
         If Not IO.Directory.Exists(baseDir) Then
             IO.Directory.CreateDirectory(baseDir)
         End If
@@ -238,4 +245,8 @@ Public Class PluginHelper
             End If
         End While
     End Sub
+
+    Public Shared Function RootResourceDirectory() As String
+        Return IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
+    End Function
 End Class

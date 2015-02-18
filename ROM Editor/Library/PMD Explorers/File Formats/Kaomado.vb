@@ -1,13 +1,15 @@
-﻿Namespace FileFormats
+﻿Imports SkyEditorBase
+
+Namespace FileFormats
     Public Class Kaomado
         Public Property Filename As String
         Public ReadOnly Property UnpackDirectory As String
             Get
-                Return IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\current\data\font\kaomado_unpack").Replace("\current\", "\temp\")
+                Return PluginHelper.GetResourceName("current\data\font\kaomado_unpack").Replace("\current\", "\temp\")
             End Get
         End Property
         Public Shared Async Function RunUnpack(Filename As String) As Task(Of Boolean)
-            Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+            Dim romDirectory As String = PluginHelper.GetResourceDirectory
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack")
             End If
@@ -15,7 +17,7 @@
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack"))
         End Function
         Public Shared Async Function RunPack(Filename As String) As Task(Of Boolean)
-            Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+            Dim romDirectory As String = PluginHelper.GetResourceDirectory
             Return Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack", Filename))
         End Function
@@ -50,8 +52,5 @@
                 Return True
             End If
         End Function
-        'Public Sub New()
-        '    Me.New(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\current\data\font\kaomado.kao"))
-        'End Sub
     End Class
 End Namespace

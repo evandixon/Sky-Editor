@@ -136,8 +136,6 @@ Namespace SkyEditorWindows
                 '    'TODO: use clickonce classes to get FileToLoad
                 'Else
                 fileToLoad = args(1)
-                'Reset Current Directory. Without doing this, resources might not be read properly
-                Environment.CurrentDirectory = args(0).Replace(IO.Path.GetFileName(args(0)), "")
                 'End If
             End If
 

@@ -1,16 +1,18 @@
-﻿Public Class RomSelector
+﻿Imports SkyEditorBase
+
+Public Class RomSelector
     Public Class ROM
         Public Property Name As String
         Public ReadOnly Property Filename As String
             Get
-                Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/Desmume/Roms/NDS/")
+                Dim romDirectory As String = PluginHelper.GetResourceName("Roms/NDS/")
                 Return IO.Path.Combine(romDirectory, Name.Replace(":", ""))
             End Get
         End Property
         Public ReadOnly Property ImageUri As Uri
             Get
                 If IO.File.Exists(Filename) Then
-                    Dim newpath = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/Desmume/Temp/", IO.Path.GetFileNameWithoutExtension(Name.Replace(":", "")) & ".bmp")
+                    Dim newpath = IO.Path.Combine(PluginHelper.GetResourceName("Temp"), IO.Path.GetFileNameWithoutExtension(Name.Replace(":", "")) & ".bmp")
                     If Not IO.File.Exists(newpath) Then
                         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newpath)) Then
                             IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newpath))
@@ -35,7 +37,7 @@
     End Function
     Public Property RomName As String
     Sub OnOK()
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/Desmume/Roms/NDS/")
+        Dim romDirectory As String = PluginHelper.GetResourceName("Roms/NDS/")
         If Not IO.Directory.Exists(romDirectory) Then
             IO.Directory.CreateDirectory(romDirectory)
         End If

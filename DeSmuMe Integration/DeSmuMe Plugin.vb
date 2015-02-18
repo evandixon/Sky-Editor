@@ -29,7 +29,7 @@ Public Class DeSmuMePlugin
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
         Try
-            Dim folder = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/DeSmuMe/")
+            Dim folder = PluginHelper.GetResourceDirectory
             For Each d In IO.Directory.GetDirectories(folder)
                 PluginHelper.Writeline("Deleting directory " & d)
                 IO.Directory.Delete(d, True)

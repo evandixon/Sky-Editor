@@ -15,12 +15,12 @@ Namespace Utilities
             End If
 
             Dim lines As String() = Nothing
-            If IO.File.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
-                lines = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
+            If IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
+                lines = IO.File.ReadAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
             Else 'Fall back to English
                 newResourceName = ResourceName.Replace("&L;", "English")
-                If IO.File.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
-                    lines = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
+                If IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName)) Then
+                    lines = IO.File.ReadAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins\", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""), newResourceName))
                 End If
             End If
             If lines IsNot Nothing Then

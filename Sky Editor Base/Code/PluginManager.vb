@@ -115,7 +115,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New(Window As iMainWindow)
-        Me.New(Window, IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins"))
+        Me.New(Window, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
     End Sub
 
     ''' <summary>

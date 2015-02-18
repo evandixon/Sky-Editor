@@ -56,10 +56,7 @@ Public Class GenericNDSRom
         If IsUnpacking Then
             PluginHelper.Writeline("Something failed, unpack called when currently unpacking.")
         End If
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
-        'If Not IO.Directory.Exists(romDirectory) Then
-        '    IO.Directory.CreateDirectory(romDirectory)
-        'End If
+        Dim romDirectory As String = PluginHelper.GetResourceDirectory
 
         If IO.Directory.Exists(IO.Path.Combine(romDirectory, "Current")) Then
             Try
@@ -72,11 +69,9 @@ Public Class GenericNDSRom
         IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, "Current"))
         Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                               String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, IO.Path.Combine(romDirectory, "Current")))
-
-        'DeveloperConsole.Writeline("Unpack complete.")
     End Function
     Public Async Function RePack(NewFileName As String) As Task(Of Boolean)
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+        Dim romDirectory As String = PluginHelper.GetResourceDirectory
         If Not IO.Directory.Exists(romDirectory) Then
             IO.Directory.CreateDirectory(romDirectory)
         End If
@@ -93,13 +88,13 @@ Public Class GenericNDSRom
     ''' </summary>
     ''' <remarks></remarks>
     Public Async Function RunRom() As Task
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+        Dim romDirectory As String = PluginHelper.GetResourceDirectory
         Await RePack(romDirectory & "\current.nds")
         PluginHelper.Writeline("Running ROM...")
         Process.Start(romDirectory & "\current.nds")
     End Function
     Public Overrides Async Function GetBytes() As Task(Of Byte())
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+        Dim romDirectory As String = PluginHelper.GetResourceDirectory
         Await RePack(romDirectory & "\current.nds")
         Return IO.File.ReadAllBytes(romDirectory & "\current.nds")
     End Function

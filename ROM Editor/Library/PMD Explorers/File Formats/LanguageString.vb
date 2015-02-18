@@ -1,11 +1,12 @@
 ﻿Imports System.Text
+Imports SkyEditorBase
 
 Namespace FileFormats
     Public Class LanguageString
         Inherits SkyEditorBase.GenericFile
         Public Property Items As List(Of String)
         Public Sub New()
-            MyBase.New(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\current\data\message\text_e.str"))
+            MyBase.New(PluginHelper.GetResourceName("current\data\message\text_e.str"))
             Items = New List(Of String)
             RawData = IO.File.ReadAllBytes(Filename)
             Dim offset1 As UInt32 = BitConverter.ToUInt32(RawData, 0)

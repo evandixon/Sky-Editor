@@ -20,7 +20,7 @@
         Get
             If _settingsCache Is Nothing Then
                 _settingsCache = New Dictionary(Of String, String)
-                Dim lines = IO.File.ReadAllLines(IO.Path.Combine(Environment.CurrentDirectory, "Resources/Settings.txt"))
+                Dim lines = IO.File.ReadAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"))
                 For Each line In lines
                     If Not String.IsNullOrEmpty(line) AndAlso Not line.StartsWith("#") Then
                         Dim p As String() = line.Split("=".ToCharArray, 2)
@@ -37,7 +37,7 @@
             For Each item In value
                 settingsText &= item.Key & "=" & item.Value & vbCrLf
             Next
-            IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "Resources\Settings.txt"), settingsText.Trim)
+            IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"), settingsText.Trim)
         End Set
     End Property
     Default Public Property Setting(Key As String) As String

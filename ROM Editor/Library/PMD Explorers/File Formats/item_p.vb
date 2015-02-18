@@ -9,6 +9,6 @@ Public Class item_p
         End Sub
     End Class
     Public Sub New()
-        MyBase.New(IO.File.ReadAllBytes(IO.Path.Combine(PluginDefinition.GetResourceDirectory, "current/data/balance/item_p.bin")))
+        MyBase.New(IO.File.ReadAllBytes(PluginHelper.GetResourceName("current/data/balance/item_p.bin")))
     End Sub
 End Class

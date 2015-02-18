@@ -20,8 +20,8 @@ Public Class ConsoleCommands
     ''' <remarks></remarks>
     Public Shared Sub EoSTestMusic(Manager As PluginManager, Argument As String)
         Dim e As New System.Text.ASCIIEncoding
-        Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Test EoS Music Locations")
-        Dim soundDir As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current\data\SOUND\BGM\")
+        Dim romDirectory As String = IO.Path.Combine(PluginHelper.GetResourceName("Test EoS Music Locations"))
+        Dim soundDir As String = IO.Path.Combine(PluginHelper.GetResourceName("Current\data\SOUND\BGM\"))
         Dim report As String = ""
         If Not IO.Directory.Exists(romDirectory) Then
             IO.Directory.CreateDirectory(romDirectory)
@@ -46,7 +46,7 @@ Public Class ConsoleCommands
             PluginHelper.Writeline("Save should be of type 'SkyNDSRom'")
             Exit Sub
         End If
-        Dim dir As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Current\data\BACK")
+        Dim dir As String = IO.Path.Combine(PluginHelper.GetResourceName("Current\data\BACK"))
         For Each file In IO.Directory.GetFiles(dir, "*.bgp")
             PluginHelper.Writeline("Converting " & file)
             Dim img = Await FileFormats.BGP.FromFilename(file)

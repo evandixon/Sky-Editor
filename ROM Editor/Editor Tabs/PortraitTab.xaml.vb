@@ -10,7 +10,7 @@ Public Class PortraitTab
         Public Property Filename As String
         Public ReadOnly Property ImageUri As Uri
             Get
-                Dim newPath As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources/Plugins/ROMEditor/Temp/", Guid.NewGuid.ToString & ".png")
+                Dim newPath As String = IO.Path.Combine(PluginHelper.GetResourceName("Temp"), Guid.NewGuid.ToString & ".png")
                 IO.File.Copy(Filename, newPath, True)
                 Return New Uri(newPath)
             End Get

@@ -278,7 +278,7 @@ Namespace FileFormats
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Async Function GetTempImageURI(Filename As String) As Task(Of String)
-            Dim directory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor\Temp")
+            Dim directory As String = PluginHelper.GetResourceName("Temp")
             If Not IO.Directory.Exists(directory) Then
                 IO.Directory.CreateDirectory(directory)
             End If

@@ -23,7 +23,7 @@ Public Class DesmumeMenuItem
             If TypeOf m.Save Is ROMEditor.GenericNDSRom Then
                 PluginHelper.Writeline("Beginning to run ROM...")
 
-                Dim romDirectory As String = IO.Path.Combine(Environment.CurrentDirectory, "Resources\Plugins\ROMEditor")
+                Dim romDirectory As String = PluginHelper.GetResourceDirectory("ROMEditor_plg")
                 Await DirectCast(m.Save, ROMEditor.GenericNDSRom).RePack(romDirectory & "\current.nds")
                 PluginHelper.Writeline("Running ROM...")
                 Loader.RunDeSmuMe(romDirectory & "\current.nds")

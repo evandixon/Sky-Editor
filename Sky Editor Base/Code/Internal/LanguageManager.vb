@@ -26,8 +26,11 @@ Namespace Internal
                 _LanguageDictionary = New Dictionary(Of String, LanguageItem)
                 Dim language As String = Settings.CurrentLanguage
                 Dim files As New Dictionary(Of String, String)
-                files.Add(IO.Path.Combine(Environment.CurrentDirectory, String.Format("Resources/{0}/Language.txt", language)), "{Default}")
-                For Each directory In IO.Directory.GetDirectories(IO.Path.Combine(Environment.CurrentDirectory, "Resources", language), "*", IO.SearchOption.TopDirectoryOnly)
+                files.Add(IO.Path.Combine(PluginHelper.RootResourceDirectory, String.Format("{0}/Language.txt", language)), "{Default}")
+                If Not IO.Directory.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, language)) Then
+                    IO.Directory.CreateDirectory(IO.Path.Combine(PluginHelper.RootResourceDirectory, language))
+                End If
+                For Each directory In IO.Directory.GetDirectories(IO.Path.Combine(PluginHelper.RootResourceDirectory, language), "*", IO.SearchOption.TopDirectoryOnly)
                     files.Add(IO.Path.Combine(directory, "Language.txt"), IO.Path.GetDirectoryName(directory))
                 Next
                 For Each file In files
@@ -49,8 +52,8 @@ Namespace Internal
             If _LanguageDictionaryEnglish Is Nothing Then
                 _LanguageDictionaryEnglish = New Dictionary(Of String, LanguageItem)
                 Dim files As New Dictionary(Of String, String)
-                files.Add(IO.Path.Combine(Environment.CurrentDirectory, String.Format("Resources/{0}/Language.txt", "English")), "{Default}")
-                For Each directory In IO.Directory.GetDirectories(IO.Path.Combine(Environment.CurrentDirectory, "Resources"), "*", IO.SearchOption.TopDirectoryOnly)
+                files.Add(IO.Path.Combine(PluginHelper.RootResourceDirectory, String.Format("{0}/Language.txt", "English")), "{Default}")
+                For Each directory In IO.Directory.GetDirectories(PluginHelper.RootResourceDirectory, "*", IO.SearchOption.TopDirectoryOnly)
                     files.Add(IO.Path.Combine(directory, "English/Language.txt"), IO.Path.GetDirectoryName(directory))
                 Next
                 For Each file In files
