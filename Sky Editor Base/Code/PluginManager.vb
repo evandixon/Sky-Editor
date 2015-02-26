@@ -1,5 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports System.Text
+Imports System.Reflection
 
 Public Class PluginManager
     Implements IDisposable
@@ -101,14 +102,33 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Save As GenericSave
+    ''' <summary>
+    ''' List of all the plugins' assembly names.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property Assemblies As New List(Of String)
     Public Property Plugins As New List(Of iSkyEditorPlugin)
+    ''' <summary>
+    ''' Dictionary containing all files needed by each plugin.
+    ''' Excludes Assembly_plg.dll and /Assembly/, as these can be inferred by the assembly name of the plugin.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property PluginFiles As New Dictionary(Of String, List(Of String))
     Public Property CheatManager As ARDS.Manager
     Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property EditorTabs As New List(Of Type)
     Public Property Window As iMainWindow
+    Protected Property PluginFolder As String
 
 #Region "Constructors"
+    Public Sub New()
+        Me.New(Nothing, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
+    End Sub
     ''' <summary>
     ''' Creates a new PluginManager, using the default storage location for plugins, which is Resources/Plugins, stored in the current working directory.
     ''' Plugins should end in _plg.dll or _plg.exe,  Ex. MyPlugin_plg.dll
@@ -127,6 +147,9 @@ Public Class PluginManager
     Public Sub New(Window As iMainWindow, PluginFolder As String)
         Me.Window = Window
         Me.CheatManager = New ARDS.Manager
+        LoadPlugins(PluginFolder)
+    End Sub
+    Public Sub LoadPlugins(PluginFolder As String)
         If IO.Directory.Exists(PluginFolder) Then
             Dim assemblies As New List(Of String)
             assemblies.AddRange(IO.Directory.GetFiles(PluginFolder, "*_plg.dll"))
@@ -145,14 +168,49 @@ Public Class PluginManager
                     If IsPlugin Then
                         Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
                         Plugins.Add(Plg)
+                        Me.Assemblies.Add(plugin)
                     End If
                 Next
+
+            Next
+            Me.CheatManager.GameIDs = Me.GameTypes
+            If Window IsNot Nothing Then
+                For Each item In Plugins
+                    item.Load(Me)
+                Next
+            End If
+            Me.PluginFolder = PluginFolder
+        End If
+    End Sub
+    Public Sub ReloadPlugins()
+        LoadPlugins(Me.PluginFolder)
+    End Sub
+    Public Sub UnloadPlugins()
+        For Each item In Plugins
+            item.UnLoad(Me)
+        Next
+        If Window IsNot Nothing Then Window.ClearTabItems()
+        Me.CheatManager.GameIDs = New Dictionary(Of String, String)
+        _consoleCommands = New Dictionary(Of String, ConsoleCommand)
+        EditorTabs = New List(Of Type)
+        IOFilters = New Dictionary(Of String, String)
+        Dim toRemove As New List(Of MenuItem)
+        If Window IsNot Nothing Then
+            For Each item In Window.GetMenuItems
+                If item.Tag = True Then
+                    toRemove.Add(item)
+                End If
+            Next
+            For Each item In toRemove
+                Window.RemoveMenuItem(item)
             Next
         End If
-        Me.CheatManager.GameIDs = Me.GameTypes
-        For Each item In Plugins
-            item.Load(Me)
-        Next
+        SaveTypes = New Dictionary(Of String, Type)
+        SaveTypeDetectors = New List(Of SaveTypeDetector)
+        _GameTypes = New Dictionary(Of String, String)
+        Me.CheatManager.CodeDefinitions = New List(Of ARDS.CodeDefinition)
+        PluginFiles = New Dictionary(Of String, List(Of String))
+        Plugins = New List(Of iSkyEditorPlugin)
     End Sub
 #End Region
 
@@ -197,6 +255,7 @@ Public Class PluginManager
 
     Public Sub RegisterMenuItem(Item As MenuItem)
         If Item IsNot Nothing Then
+            Item.Tag = True
             Window.AddMenuItem(Item)
         End If
     End Sub
@@ -212,15 +271,29 @@ Public Class PluginManager
     Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
         Me.CheatManager.CodeDefinitions.Add(Generator)
     End Sub
+    ''' <summary>
+    ''' Registers the given File Path as being a resource used by the calling plugin.
+    ''' This should be used for files in the same directory as the plugin, that are a strict requirement of functionality for your plugin.
+    ''' Example: IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll")
+    ''' </summary>
+    ''' <param name="FilePath">If the file is in the same directory as your plugin, use something like IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll")</param>
+    ''' <remarks></remarks>
+    Public Sub RegisterResourceFile(FilePath As String)
+        Dim plugin As String = Assembly.GetCallingAssembly.GetName.Name
+        If Not PluginFiles.ContainsKey(plugin) Then
+            PluginFiles.Add(plugin, New List(Of String))
+        End If
+        PluginFiles(plugin).Add(FilePath)
+    End Sub
 #End Region
 
 #Region "Refresh and Update"
     Private Sub RefreshTabs()
         If ShowLoadingWindow Then PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Refreshing tabs..."))
-        Window.ClearTabItems()
+        If Window IsNot Nothing Then Window.ClearTabItems()
         Dim tabs = GetRefreshedTabs()
         For Each item In tabs
-            Window.AddTabItem(item)
+            If Window IsNot Nothing Then Window.AddTabItem(item)
         Next
         PluginHelper.StopLoading()
     End Sub
@@ -253,9 +326,11 @@ Public Class PluginManager
     End Sub
 
     Private Sub UpdateFromTabs()
-        For Each item In Window.GetTabItems
-            Save = DirectCast(item, EditorTab).UpdateSave(Save)
-        Next
+        If Window IsNot Nothing Then
+            For Each item In Window.GetTabItems
+                Save = DirectCast(item, EditorTab).UpdateSave(Save)
+            Next
+        End If
     End Sub
 #End Region
 

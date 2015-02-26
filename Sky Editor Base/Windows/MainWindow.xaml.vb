@@ -97,6 +97,9 @@ Namespace SkyEditorWindows
         End Sub
 
         Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+            If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.txt")) Then
+                IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.txt"), My.Resources.Settings)
+            End If
             If Settings.DebugMode AndAlso Settings.ShowConsoleOnStart Then
                 Internal.ConsoleManager.Show()
             End If
@@ -170,6 +173,10 @@ Namespace SkyEditorWindows
 
             Manager.RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)
             Manager.RegisterConsoleCommand("zip", AddressOf RedistributionHelpers.PackProgram)
+            Manager.RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
+            Manager.RegisterConsoleCommand("unplug", AddressOf RedistributionHelpers.UnpackPlugins)
+            Manager.RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
+            Manager.RegisterConsoleCommand("updateplug", AddressOf RedistributionHelpers.InstallUnknownPlugins)
 
             If fileToLoad.Length > 0 Then
                 Manager.LoadSave(fileToLoad)
@@ -201,5 +208,12 @@ Namespace SkyEditorWindows
         End Function
 #End Region
 
+        Public Function GetMenuItems() As ItemCollection Implements iMainWindow.GetMenuItems
+            Return menuMain.Items
+        End Function
+
+        Public Sub RemoveMenuItem(Menu As MenuItem) Implements iMainWindow.RemoveMenuItem
+            menuMain.Items.Remove(Menu)
+        End Sub
     End Class
 End Namespace

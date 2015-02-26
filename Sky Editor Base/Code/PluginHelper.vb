@@ -247,6 +247,10 @@ Public Class PluginHelper
     End Sub
 
     Public Shared Function RootResourceDirectory() As String
-        Return IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
+        Dim d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
+        If Not IO.Directory.Exists(d) Then
+            IO.Directory.CreateDirectory(D)
+        End If
+        Return d
     End Function
 End Class

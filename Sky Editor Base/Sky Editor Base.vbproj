@@ -253,9 +253,9 @@
   <ItemGroup>
     <Resource Include="Build Instructions.txt" />
     <Content Include="ICSharpCode.SharpZipLib.dll" />
-    <Content Include="Resources\Settings.txt">
+    <Resource Include="Resources\Settings.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

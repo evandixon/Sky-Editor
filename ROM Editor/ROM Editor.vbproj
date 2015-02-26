@@ -105,7 +105,10 @@
     <Compile Include="File Format Controls\FileFormatControl.vb" />
     <Compile Include="Library\ConsoleCommands.vb" />
     <Compile Include="Library\GenericNDSRom.vb" />
+    <Compile Include="Library\PMD Explorers\File Formats\Animations\AnimatedSprite.vb" />
+    <Compile Include="Library\PMD Explorers\File Formats\Animations\Frame.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\BGP.vb" />
+    <Compile Include="Library\PMD Explorers\File Formats\Animations\AnimData.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\DecompressedFile.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\File Formats.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\item_p.vb" />

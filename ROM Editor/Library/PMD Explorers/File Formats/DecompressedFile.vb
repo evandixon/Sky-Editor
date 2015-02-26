@@ -47,7 +47,7 @@ Namespace FileFormats
         ''' <param name="OriginalFilename"></param>
         ''' <remarks></remarks>
         Protected Sub New(OriginalFilename As String)
-            Me.RawData = IO.File.ReadAllBytes(OriginalFilename.Replace(".bgp", ".decompressed").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed"))
+            Me.RawData = IO.File.ReadAllBytes(OriginalFilename.Replace("/", "\").Replace(".bgp", ".decompressed").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed"))
         End Sub
         ''' <summary>
         ''' Creates a new instance of the decompressed file, but it must already be decompressed

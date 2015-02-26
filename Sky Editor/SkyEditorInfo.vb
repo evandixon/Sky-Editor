@@ -61,6 +61,8 @@ Public Class SkyEditorInfo
         Manager.RegisterCodeGenerator(New RedRescuePoints)
         Manager.RegisterCodeGenerator(New RedStoredMoney)
         Manager.RegisterCodeGenerator(New RedTeamName)
+
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
