@@ -4,6 +4,26 @@ Imports System.Reflection
 
 Public Class PluginManager
     Implements IDisposable
+    'Private Shared _domain As AppDomain
+    'Private Shared Property PluginDomain As AppDomain
+    '    Get
+    '        If _domain Is Nothing Then
+    '            Dim p = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins")
+    '            Dim s = AppDomain.CurrentDomain.SetupInformation
+    '            s.ApplicationName = "SkyEditorPlugins"
+    '            s.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory
+    '            s.PrivateBinPath = IO.Path.GetDirectoryName(p).Substring(IO.Path.GetDirectoryName(p).LastIndexOf(IO.Path.DirectorySeparatorChar) + 1)
+    '            s.CachePath = IO.Path.Combine(p, "cache" & IO.Path.DirectorySeparatorChar)
+    '            s.ShadowCopyFiles = "true"
+    '            s.ShadowCopyDirectories = p
+    '            _domain = AppDomain.CreateDomain("SkyEditorPlugins", Nothing, s)
+    '        End If
+    '        Return _domain
+    '    End Get
+    '    Set(value As AppDomain)
+    '        _domain = value
+    '    End Set
+    'End Property
     Private Const ShowLoadingWindow As Boolean = True
 
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
@@ -123,7 +143,7 @@ Public Class PluginManager
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property EditorTabs As New List(Of Type)
     Public Property Window As iMainWindow
-    Protected Property PluginFolder As String
+    Public Property PluginFolder As String
 
 #Region "Constructors"
     Public Sub New()
@@ -156,7 +176,7 @@ Public Class PluginManager
             assemblies.AddRange(IO.Directory.GetFiles(PluginFolder, "*_plg.exe"))
             For Each plugin In assemblies
                 PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
-                Dim a As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom(plugin)
+                Dim a As Assembly = Assembly.LoadFrom(plugin)
                 Dim types As Type() = a.GetTypes
                 For Each item In types
                     Dim IsPlugin As Boolean = False
@@ -211,6 +231,8 @@ Public Class PluginManager
         Me.CheatManager.CodeDefinitions = New List(Of ARDS.CodeDefinition)
         PluginFiles = New Dictionary(Of String, List(Of String))
         Plugins = New List(Of iSkyEditorPlugin)
+        'AppDomain.Unload(PluginDomain)
+        'PluginDomain = Nothing
     End Sub
 #End Region
 

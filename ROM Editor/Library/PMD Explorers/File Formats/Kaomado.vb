@@ -52,5 +52,32 @@ Namespace FileFormats
                 Return True
             End If
         End Function
+        Public Sub ApplyMissingPortraitFix()
+            For Each directory In IO.Directory.GetDirectories(UnpackDirectory)
+                Dim faces = {"0000_STANDARD.png",
+                             "0002_GRIN.png",
+                             "0004_PAINED.png",
+                             "0006_ANGRY.png",
+                             "0008_WORRIED.png",
+                             "0010_SAD.png",
+                             "0012_CRYING.png",
+                             "0014_SHOUTING.png",
+                             "0016_TEARY_EYED.png",
+                             "0018_DETERMINED.png",
+                             "0020_JOYOUS.png",
+                             "0022_INSPIRED.png",
+                             "0024_SURPRISED.png",
+                             "0026_DIZZY.png",
+                             "0032_SIGH.png",
+                             "0034_STUNNED.png"}
+
+                For count As Integer = 1 To faces.Length - 1
+                    If Not IO.File.Exists(IO.Path.Combine(directory, faces(count))) Then
+                        PluginHelper.Writeline(String.Format("Copying {0} to {1}", IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(count))))
+                        IO.File.Copy(IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(count)))
+                    End If
+                Next
+            Next
+        End Sub
     End Class
 End Namespace

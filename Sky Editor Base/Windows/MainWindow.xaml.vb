@@ -174,7 +174,7 @@ Namespace SkyEditorWindows
             Manager.RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)
             Manager.RegisterConsoleCommand("zip", AddressOf RedistributionHelpers.PackProgram)
             Manager.RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
-            Manager.RegisterConsoleCommand("unplug", AddressOf RedistributionHelpers.UnpackPlugins)
+            'Manager.RegisterConsoleCommand("unplug", AddressOf RedistributionHelpers.UnpackPlugins)
             Manager.RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
             Manager.RegisterConsoleCommand("updateplug", AddressOf RedistributionHelpers.InstallUnknownPlugins)
 

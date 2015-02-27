@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
              mc:Ignorable="d">
     <Grid>
-        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213"/>
+        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213" Margin="0,0,0,29"/>
         <ListView x:Name="lvPortraits" Margin="213,0,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -25,5 +25,13 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button x:Name="btnPortraitFix" Content="Fix Missing Portraits" Height="21" Width="125" Margin="10,0,0,3" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Button.ToolTip>
+                When there's an empty portrait in-game, it's simply not displayed.
+                Using this fix, missing portraits will be filled with the default portrait.
+                Unfortunately, the file size will also increase, so it is only recommended to use this if you or your partner will be a Pokemon that's not normally offered.
+                For the time being, this cannot be reversed, so don't use this unless you're sure.
+            </Button.ToolTip>
+        </Button>
     </Grid>
 </local:EditorTab>

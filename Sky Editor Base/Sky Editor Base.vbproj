@@ -141,6 +141,7 @@
     <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\PluginHelper.vb" />
     <Compile Include="Code\PluginManager.vb" />
+    <Compile Include="Code\SearchableDropDown.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
