@@ -144,7 +144,7 @@ Namespace SkyEditorWindows
 
             'Load Language
 
-            Me.Title = String.Format(PluginHelper.GetLanguageItem("Title", "Sky Editor v{0}"), My.Application.Info.Version.ToString(2))
+            Me.Title = String.Format(PluginHelper.GetLanguageItem("Title", "Sky Editor Beta v{0}"), My.Application.Info.Version.ToString(2))
             menuFile.Header = PluginHelper.GetLanguageItem("File")
             menuNew.Header = PluginHelper.GetLanguageItem("New")
             menuFileOpen.Header = PluginHelper.GetLanguageItem("Open")

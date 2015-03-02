@@ -71,8 +71,8 @@ Public Class RedistributionHelpers
             Dim ToCopy As New List(Of String)
             ToCopy.Add(PluginHelper.GetResourceDirectory(item.Replace(".dll", "").Replace(".exe", "")))
             ToCopy.Add(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", item))
-            If Manager.PluginFiles.ContainsKey(item) Then
-                ToCopy.AddRange(Manager.PluginFiles(item))
+            If Manager.PluginFiles.ContainsKey(item.Replace(".dll", "").Replace(".exe", "")) Then
+                ToCopy.AddRange(Manager.PluginFiles(item.Replace(".dll", "").Replace(".exe", "")))
             End If
             If IO.Directory.Exists(tempDir) Then
                 IO.Directory.Delete(tempDir, True)
@@ -85,6 +85,8 @@ Public Class RedistributionHelpers
                     'It's probably a directory.
                     If IO.Directory.Exists(file) Then
                         My.Computer.FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+                        'Else
+                        'Guess not.
                     End If
                 End If
             Next

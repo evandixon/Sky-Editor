@@ -1,7 +1,7 @@
 Language=English
 
 #Recommended for developers and ROM hackers
-DebugMode=True
+DebugMode=False
 
 #DebugMode must also be enabled
 ShowConsoleOnStart=False

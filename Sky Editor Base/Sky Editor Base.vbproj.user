@@ -5,13 +5,14 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup>
-    <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory />
+    <PublishUrlHistory>ftp://dl.uniquegeeks.net/SkyEditorBeta/|publish\</PublishUrlHistory>
+    <InstallUrlHistory>http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

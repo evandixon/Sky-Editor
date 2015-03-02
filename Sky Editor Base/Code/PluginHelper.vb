@@ -247,10 +247,13 @@ Public Class PluginHelper
     End Sub
 
     Public Shared Function RootResourceDirectory() As String
+#If DEBUG Then
         Dim d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
-        'Dim d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
+#Else
+        Dim d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
+#End If
         If Not IO.Directory.Exists(d) Then
-            IO.Directory.CreateDirectory(D)
+            IO.Directory.CreateDirectory(d)
         End If
         Return d
     End Function

@@ -15,22 +15,26 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>ftp://dl.uniquegeeks.net/SkyEditorBeta/</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <InstallUrl>http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationVersion>3.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,6 +107,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>52F1055F179EF6C161A307D1C95351E21DAE42A5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Sky Editor Base_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
@@ -241,12 +257,16 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="app.config" />
+    <Content Include="DeSmuMe_plg.zip" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
+    <Content Include="ROMEditor_plg.zip" />
+    <None Include="Sky Editor Base_TemporaryKey.pfx" />
+    <Content Include="SkyEditor_plg.zip" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="favicon.ico" />
@@ -279,6 +299,18 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="ICSharpCode.SharpZipLib">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
