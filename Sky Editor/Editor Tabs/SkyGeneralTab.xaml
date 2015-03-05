@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" Height="120" VerticalAlignment="Top">
+        <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
             <Label x:Name="lblGeneral_TeamName" HorizontalAlignment="Left" Width="170">Team Name:</Label>
             <TextBox x:Name="txtGeneral_TeamName" HorizontalContentAlignment="Right"/>
             <!--
@@ -23,6 +23,8 @@
             <xctk:IntegerUpDown x:Name="numGeneral_StoredMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
             <Label x:Name="lblGeneral_Adventures" HorizontalAlignment="Left" Width="170">Adventures:</Label>
             <xctk:IntegerUpDown x:Name="numGeneral_Adventures" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <Label x:Name="lblGeneral_RankPoints" HorizontalAlignment="Left" Width="170">Rank Points:</Label>
+            <xctk:IntegerUpDown x:Name="numGeneral_RankPoints" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
         </UniformGrid>
     </Grid>
 </local:EditorTab>

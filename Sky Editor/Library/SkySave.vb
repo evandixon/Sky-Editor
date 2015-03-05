@@ -25,6 +25,17 @@ Public Class SkySave
             Next
         End Set
     End Property
+    Public Property RankPoints As Integer
+        Get
+            Return BitConverter.ToInt32(RawData, &H9958)
+        End Get
+        Set(value As Integer)
+            Dim bytes = BitConverter.GetBytes(value)
+            For i As Byte = 0 To 3
+                RawData(&H9958 + i) = bytes(i)
+            Next
+        End Set
+    End Property
 
     Public Property JSave As skyjed.save.SaveSlot
         Get

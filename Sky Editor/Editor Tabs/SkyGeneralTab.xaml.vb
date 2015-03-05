@@ -10,6 +10,7 @@ Public Class SkyGeneralTab
                 numGeneral_SpEpisodeHeldMoney.Value = .SpEpisode_HeldMoney
                 numGeneral_Adventures.Value = .AdventuresHad
                 txtGeneral_TeamName.Text = .TeamName
+                numGeneral_RankPoints.Value = .RankPoints
             End With
         End If
     End Sub
@@ -30,6 +31,8 @@ Public Class SkyGeneralTab
                 .SpEpisode_HeldMoney = numGeneral_SpEpisodeHeldMoney.Value
                 .AdventuresHad = numGeneral_Adventures.Value
                 .TeamName = txtGeneral_TeamName.Text
+                .RankPoints = numGeneral_RankPoints.Value
+
                 Dim j = .JSave
                 j.storedMoney = numGeneral_StoredMoney.Value
                 .JSave = j
@@ -46,6 +49,7 @@ Public Class SkyGeneralTab
         lblGeneral_SpEpisodeHeldMoney.Content = PluginHelper.GetLanguageItem("General_SpEpisodeHeldMoney", "Sp. Episode Held Money:")
         lblGeneral_StoredMoney.Content = PluginHelper.GetLanguageItem("General_StoredMoney", "Stored Money:")
         lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("General_TeamName", "Team Name:")
+        lblGeneral_RankPoints.Content = PluginHelper.GetLanguageItem("Rank Points", "Rank Points:")
 
         numGeneral_Adventures.Maximum = Integer.MaxValue
         numGeneral_Adventures.Minimum = Integer.MinValue
