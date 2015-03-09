@@ -10,7 +10,7 @@ Namespace FileFormats
             Items = New List(Of String)
             RawData = IO.File.ReadAllBytes(Filename)
             Dim offset1 As UInt32 = BitConverter.ToUInt32(RawData, 0)
-            Dim e As New Text.UTF7Encoding
+            Dim e = Encoding.GetEncoding("shift_jis")
             For count As Integer = 0 To offset1 - 5 Step 4
                 Dim startOffset As UInteger = BitConverter.ToUInt32(RawData, count)
                 Items.Add("")
@@ -23,7 +23,7 @@ Namespace FileFormats
         End Sub
 
         Public Sub Save()
-            Dim e = Text.Encoding.GetEncoding(932)
+            Dim e = Encoding.GetEncoding("shift_jis")
             Dim offsets As New List(Of UInt32)
             For i As UInt32 = 0 To Items.Count - 1
                 offsets.Add(0)

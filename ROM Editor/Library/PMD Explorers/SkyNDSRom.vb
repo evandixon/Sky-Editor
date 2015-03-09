@@ -25,8 +25,10 @@ Namespace PMD_Explorers
             End Get
         End Property
 
-        Public Overrides Sub DebugInfo()
+        Public Overrides Async Sub DebugInfo()
             MyBase.DebugInfo()
+            Await EnsureUnpacked()
+            Dim l As New LanguageString
             'Dim m = MonsterMDFile.FromBytes(IO.File.ReadAllBytes(IO.Path.Combine(PluginDefinition.GetResourceDirectory, "current\data\balance\monster.md")))
         End Sub
 
