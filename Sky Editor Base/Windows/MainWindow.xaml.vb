@@ -84,11 +84,12 @@ Namespace SkyEditorWindows
         End Sub
 #End Region
 
-        Private Sub MainWindow_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-            For Each item In Manager.Plugins
-                item.UnLoad(Manager)
-            Next
-        End Sub
+        'Todo: Figure out why this causes freesing on closing
+        'Private Sub MainWindow_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        '    For Each item In Manager.Plugins
+        '        item.UnLoad(Manager)
+        '    Next
+        'End Sub
 
         Private Sub MainWindow_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
             tcTabs.Items.Clear()
