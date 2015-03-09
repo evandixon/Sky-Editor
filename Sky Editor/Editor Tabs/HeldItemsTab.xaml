@@ -15,7 +15,7 @@
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
-            <ComboBox x:Name="cbHeldItems" Margin="0,0,96,52" Height="20" VerticalAlignment="Bottom" />
+        <local:SearchableDropDown x:Name="cbHeldItems" Margin="0,0,96,52" Height="20" VerticalAlignment="Bottom" />
             <xctk:IntegerUpDown x:Name="numHeldItemsAddCount" HorizontalAlignment="Right" Margin="0,0,50,52" VerticalAlignment="Bottom" Minimum="0" Maximum="99" Value="0"/>
             <Button x:Name="btnHeldItemsAdd" Content="Add" Margin="0,0,0,52" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="45"/>
             <GroupBox x:Name="gbHeldBoxContent" Header="Box Contents" Height="47" VerticalAlignment="Bottom" Focusable="True">
