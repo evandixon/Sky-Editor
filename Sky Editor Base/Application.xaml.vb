@@ -1,4 +1,8 @@
-﻿Class Application
+﻿Imports System.Deployment
+Imports System.Deployment.Application
+Imports SkyEditorBase.Redistribution
+
+Class Application
 
     Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.Exit
         If e.ApplicationExitCode = 1 Then
@@ -19,8 +23,11 @@
     ' can be handled in this file.
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+        'If ApplicationDeployment.IsNetworkDeployed AndAlso Not ApplicationDeployment.CurrentDeployment.IsFileGroupDownloaded("Plugins") Then
+        '    ApplicationDeployment.CurrentDeployment.DownloadFileGroup("Plugins")
+        'End If
         RedistributionHelpers.DeleteScheduledFiles()
-        RedistributionHelpers.InstallUnknownPlugins()
+        RedistributionHelpers.InstallPendingPlugins()
         'RedistributionHelpers.InstallUnknownPlugins()
     End Sub
 End Class

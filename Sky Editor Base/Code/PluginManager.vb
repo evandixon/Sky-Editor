@@ -128,7 +128,7 @@ Public Class PluginManager
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property Assemblies As New List(Of String)
+    Public Property Assemblies As New List(Of Assembly)
     Public Property Plugins As New List(Of iSkyEditorPlugin)
     ''' <summary>
     ''' Dictionary containing all files needed by each plugin.
@@ -144,6 +144,19 @@ Public Class PluginManager
     Public Property EditorTabs As New List(Of Type)
     Public Property Window As iMainWindow
     Public Property PluginFolder As String
+    <Obsolete> Public Function GetAssemblyVersion(Assembly As Assembly) As Version
+        Return Assembly.GetName.Version
+    End Function
+    <Obsolete> Public Function GetAssemblyFileName(Assembly As Assembly) As String
+        Dim n = Assembly.GetName.Name
+        If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
+            Return n & ".dll"
+        ElseIf IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".exe")) Then
+            Return n & ".exe"
+        Else
+            Return n & ".dll"
+        End If
+    End Function
 
 #Region "Constructors"
     Public Sub New()
@@ -188,7 +201,7 @@ Public Class PluginManager
                     If IsPlugin Then
                         Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
                         Plugins.Add(Plg)
-                        Me.Assemblies.Add(plugin)
+                        Me.Assemblies.Add(a)
                     End If
                 Next
 

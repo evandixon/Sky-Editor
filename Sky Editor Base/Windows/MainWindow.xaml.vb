@@ -3,6 +3,8 @@ Imports ICSharpCode.SharpZipLib.Zip
 Imports ICSharpCode.SharpZipLib.Core
 Imports System.Threading.Tasks
 Imports System.Windows
+Imports SkyEditorBase.Redistribution
+
 Namespace SkyEditorWindows
     Class MainWindow
         Implements iMainWindow
@@ -176,7 +178,9 @@ Namespace SkyEditorWindows
             Manager.RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
             'Manager.RegisterConsoleCommand("unplug", AddressOf RedistributionHelpers.UnpackPlugins)
             Manager.RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
-            Manager.RegisterConsoleCommand("updateplug", AddressOf RedistributionHelpers.InstallUnknownPlugins)
+            'Manager.RegisterConsoleCommand("updateplug", AddressOf RedistributionHelpers.InstallUnknownPlugins)
+            Manager.RegisterConsoleCommand("generateinfo", AddressOf RedistributionHelpers.GeneratePluginDownloadDir)
+            Manager.RegisterConsoleCommand("updateall", AddressOf RedistributionHelpers.DownloadAllPlugins)
 
             If fileToLoad.Length > 0 Then
                 Manager.LoadSave(fileToLoad)

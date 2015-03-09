@@ -126,6 +126,8 @@
       <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -157,11 +159,12 @@
     <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\PluginHelper.vb" />
     <Compile Include="Code\PluginManager.vb" />
+    <Compile Include="Code\Redistribution\PluginInfo.vb" />
     <Compile Include="Code\SearchableDropDown.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
-    <Compile Include="Code\Utilities\RedistributionHelpers.vb" />
+    <Compile Include="Code\Redistribution\RedistributionHelpers.vb" />
     <Compile Include="Code\Utilities\ResourceDictionary.vb" />
     <Compile Include="Code\Settings.vb" />
     <Compile Include="Code\Utilities\BitOperations.vb" />
@@ -180,6 +183,9 @@
     </Compile>
     <Compile Include="WelcomeTab.xaml.vb">
       <DependentUpon>WelcomeTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PluginWindow.xaml.vb">
+      <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Windows\BackgroundTaskWait.xaml">
       <SubType>Designer</SubType>
@@ -213,6 +219,10 @@
     <Page Include="WelcomeTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\PluginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -257,16 +267,13 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="app.config" />
-    <Content Include="DeSmuMe_plg.zip" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
-    <Content Include="ROMEditor_plg.zip" />
     <None Include="Sky Editor Base_TemporaryKey.pfx" />
-    <Content Include="SkyEditor_plg.zip" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="favicon.ico" />
@@ -301,6 +308,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PublishFile Include="DeSmuMe_plg.zip">
+      <Visible>False</Visible>
+      <Group>Plugins</Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Auto</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
     <PublishFile Include="ICSharpCode.SharpZipLib">
       <Visible>False</Visible>
       <Group>
@@ -310,6 +326,24 @@
       <PublishState>Exclude</PublishState>
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="ROMEditor_plg.zip">
+      <Visible>False</Visible>
+      <Group>Plugins</Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Auto</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="SkyEditor_plg.zip">
+      <Visible>False</Visible>
+      <Group>Plugins</Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Auto</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

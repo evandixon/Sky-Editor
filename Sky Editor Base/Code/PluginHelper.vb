@@ -2,6 +2,7 @@
 Imports SkyEditorBase.SkyEditorWindows
 Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
+Imports System.Deployment.Application
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -116,7 +117,7 @@ Public Class PluginHelper
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
     Public Shared Async Function RunProgram(Filename As String, Arguments As String) As Task(Of Boolean)
-        WriteLine(String.Format("Executing {0} {1}", Filename, Arguments))
+        Writeline(String.Format("Executing {0} {1}", Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -134,7 +135,7 @@ Public Class PluginHelper
         StopLoading()
         RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
         p.Dispose()
-        WriteLine(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
         Return True
     End Function
     Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
@@ -247,11 +248,19 @@ Public Class PluginHelper
     End Sub
 
     Public Shared Function RootResourceDirectory() As String
-#If DEBUG Then
-        Dim d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
-#Else
-        Dim d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
-#End If
+        Dim d As String
+        If ApplicationDeployment.IsNetworkDeployed Then
+            d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
+        Else
+            d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
+        End If
+        If Not IO.Directory.Exists(d) Then
+            IO.Directory.CreateDirectory(d)
+        End If
+        Return d
+    End Function
+    Public Shared Function PluginsToInstallDirectory() As String
+        Dim d = IO.Path.Combine(RootResourceDirectory, "ToInstall")
         If Not IO.Directory.Exists(d) Then
             IO.Directory.CreateDirectory(d)
         End If
