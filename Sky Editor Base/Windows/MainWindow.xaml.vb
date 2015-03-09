@@ -98,7 +98,7 @@ Namespace SkyEditorWindows
             RaiseEvent OnKeyPress(sender, e)
         End Sub
 
-        Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        Private Async Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.txt")) Then
                 IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.txt"), My.Resources.Settings)
             End If
@@ -117,6 +117,21 @@ Namespace SkyEditorWindows
             End If
 
             Manager = New PluginManager(Me)
+
+            Try
+                PluginHelper.StartLoading("Updating plugins...")
+                If Await Task.Run(Function() As Boolean
+                                      Return RedistributionHelpers.DownloadAllPlugins(Manager, "http://dl.uniquegeeks.net/SkyEditorPluginsBeta/plugins.json")
+                                  End Function) Then
+                    PluginHelper.StopLoading()
+                    RedistributionHelpers.RestartProgram()
+                End If
+                PluginHelper.StopLoading()
+            Catch ex As Exception
+                PluginHelper.StopLoading()
+                PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
+            End Try
+
 
             'Make sure there's actually a plugin loaded.
             If False AndAlso Manager.Plugins.Count = 0 Then

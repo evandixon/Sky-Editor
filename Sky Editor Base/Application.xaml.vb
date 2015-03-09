@@ -23,11 +23,7 @@ Class Application
     ' can be handled in this file.
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        'If ApplicationDeployment.IsNetworkDeployed AndAlso Not ApplicationDeployment.CurrentDeployment.IsFileGroupDownloaded("Plugins") Then
-        '    ApplicationDeployment.CurrentDeployment.DownloadFileGroup("Plugins")
-        'End If
         RedistributionHelpers.DeleteScheduledFiles()
         RedistributionHelpers.InstallPendingPlugins()
-        'RedistributionHelpers.InstallUnknownPlugins()
     End Sub
 End Class

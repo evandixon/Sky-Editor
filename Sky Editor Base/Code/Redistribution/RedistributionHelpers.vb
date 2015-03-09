@@ -203,8 +203,9 @@ Namespace Redistribution
             Next
             Return pending
         End Function
-        Public Shared Sub UpdatePlugins(Manager As PluginManager, Plugins As List(Of PluginInfo))
+        Public Shared Function UpdatePlugins(Manager As PluginManager, Plugins As List(Of PluginInfo)) As Boolean
             Dim c As New Net.WebClient
+            Dim restart As Boolean = False
             For Each p In RequiredPlugins(Plugins)
                 Dim assemblyName As String = Nothing
                 Dim exists As Boolean = False
@@ -225,10 +226,11 @@ Namespace Redistribution
                     End If
                     PluginHelper.Writeline("Downloading plugin " & p.Name)
                     c.DownloadFile(p.DownloadUrl, IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, IO.Path.GetFileName(p.DownloadUrl)))
+                    restart = True
                 End If
             Next
-            RestartProgram()
-        End Sub
+            Return restart
+        End Function
         Public Shared Function ParsePluginInfo(PluginInfoText As String) As List(Of PluginInfo)
             Dim j As New JavaScriptSerializer
             Return j.Deserialize(Of List(Of PluginInfo))(PluginInfoText)
@@ -257,9 +259,9 @@ Namespace Redistribution
             PackPlugins(Manager, Nothing)
             IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "plugins.json"), GeneratePluginInfoString(Manager, "http://dl.uniquegeeks.net/SkyEditorPluginsBeta"))
         End Sub
-        Public Shared Sub DownloadAllPlugins(Manager As PluginManager, Url As String)
-            UpdatePlugins(Manager, GetPluginInfo(Url))
-        End Sub
+        Public Shared Function DownloadAllPlugins(Manager As PluginManager, Url As String) As Boolean
+            Return UpdatePlugins(Manager, GetPluginInfo(Url))
+        End Function
     End Class
 
 End Namespace

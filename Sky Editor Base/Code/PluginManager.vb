@@ -144,10 +144,10 @@ Public Class PluginManager
     Public Property EditorTabs As New List(Of Type)
     Public Property Window As iMainWindow
     Public Property PluginFolder As String
-    <Obsolete> Public Function GetAssemblyVersion(Assembly As Assembly) As Version
+    Public Function GetAssemblyVersion(Assembly As Assembly) As Version
         Return Assembly.GetName.Version
     End Function
-    <Obsolete> Public Function GetAssemblyFileName(Assembly As Assembly) As String
+    Public Function GetAssemblyFileName(Assembly As Assembly) As String
         Dim n = Assembly.GetName.Name
         If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
             Return n & ".dll"

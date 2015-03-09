@@ -280,7 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Build Instructions.txt" />
-    <Content Include="ICSharpCode.SharpZipLib.dll" />
+    <None Include="ICSharpCode.SharpZipLib.dll" />
     <Resource Include="Resources\Settings.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -307,44 +307,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="DeSmuMe_plg.zip">
-      <Visible>False</Visible>
-      <Group>Plugins</Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Auto</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="ICSharpCode.SharpZipLib">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="ROMEditor_plg.zip">
-      <Visible>False</Visible>
-      <Group>Plugins</Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Auto</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="SkyEditor_plg.zip">
-      <Visible>False</Visible>
-      <Group>Plugins</Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Auto</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
