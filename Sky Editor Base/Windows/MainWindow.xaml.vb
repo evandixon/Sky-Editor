@@ -23,7 +23,6 @@ Namespace SkyEditorWindows
                 Dim gameID As String = x.SelectedGame
                 If Not String.IsNullOrEmpty(gameID) Then
                     Manager.Save = Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d})
-                    Manager.Save.CurrentSaveID = gameID
                 End If
                 Manager.RefreshDisplay()
             End If

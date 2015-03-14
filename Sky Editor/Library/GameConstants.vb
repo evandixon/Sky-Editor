@@ -33,4 +33,10 @@ Public Class GameStrings
     Public Shared Function DarknessGame() As String
         Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Explorers of Darkness.nds")
     End Function
+    Public Shared Function GateGame() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Gates to Infinity.3ds")
+    End Function
+    Public Shared Function GateSave() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Gates to Infinity")
+    End Function
 End Class

@@ -41,17 +41,13 @@ Public Class PluginDefinition
         Manager.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
         Manager.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)
         Manager.RegisterConsoleCommand("explorersextractbgp", AddressOf ConsoleCommands.ExplorersExtractBGP)
-        'Window.RegisterConsoleCommand("kaomadopatch", AddressOf ConsoleCommands.KaomadoPatch)
         Manager.RegisterConsoleCommand("pmdlanguage", AddressOf ConsoleCommands.PmdLanguage)
         Manager.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
 
         Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
-        Manager.RegisterSaveType(GameStrings.GenericNDSRom, GetType(GenericNDSRom))
-        Manager.RegisterSaveType(GameStrings.SkyNDSRom, GetType(SkyNDSRom))
-
-        Manager.RegisterGameType(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom)
-        Manager.RegisterGameType(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom)
+        Manager.RegisterSaveGameFormat(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom, GetType(GenericNDSRom))
+        Manager.RegisterSaveGameFormat(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom, GetType(SkyNDSRom))
 
         Manager.RegisterEditorTab(GetType(PortraitTab))
         Manager.RegisterEditorTab(GetType(PersonalityTest))

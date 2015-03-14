@@ -120,6 +120,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor Tabs\GateGeneral.xaml.vb">
+      <DependentUpon>GateGeneral.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Library\ARDS\Red BaseType.vb" />
     <Compile Include="Library\ARDS\Red Held Money.vb" />
     <Compile Include="Library\ARDS\Red Rescue Points.vb" />
@@ -161,6 +164,7 @@
       <DependentUpon>TDSStoredItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Library\GameConstants.vb" />
+    <Compile Include="Library\GateSave.vb" />
     <Compile Include="Library\JEditor Source\buffer\BooleanBuffer.vb" />
     <Compile Include="Library\JEditor Source\buffer\BooleanBufferArray.vb" />
     <Compile Include="Library\JEditor Source\buffer\BooleanBufferView.vb" />
@@ -209,6 +213,10 @@
     <Compile Include="Windows\PkmWindow.xaml.vb">
       <DependentUpon>PkmWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Editor Tabs\GateGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Editor Tabs\QuicksavePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -398,6 +406,9 @@
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

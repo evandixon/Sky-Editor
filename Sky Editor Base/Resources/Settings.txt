@@ -1,12 +1,16 @@
 Language=English
 
+# 0=Left, 1=Top, 2=Right, 3=Bottom
+TabStripPlacement=1
+
+UpdatePlugins=True
+
+PluginUpdateUrl=http://dl.uniquegeeks.net/SkyEditorPluginsBeta/plugins.json
+
 #Recommended for developers and ROM hackers
 DebugMode=False
 
 #DebugMode must also be enabled
 ShowConsoleOnStart=False
-
-# 0=Left, 1=Top, 2=Right, 3=Bottom
-TabStripPlacement=1
 
 DebugLangaugePlaceholders=False

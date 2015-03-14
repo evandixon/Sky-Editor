@@ -4,33 +4,40 @@ Imports System.Reflection
 
 Public Class PluginManager
     Implements IDisposable
-    'Private Shared _domain As AppDomain
-    'Private Shared Property PluginDomain As AppDomain
-    '    Get
-    '        If _domain Is Nothing Then
-    '            Dim p = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins")
-    '            Dim s = AppDomain.CurrentDomain.SetupInformation
-    '            s.ApplicationName = "SkyEditorPlugins"
-    '            s.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory
-    '            s.PrivateBinPath = IO.Path.GetDirectoryName(p).Substring(IO.Path.GetDirectoryName(p).LastIndexOf(IO.Path.DirectorySeparatorChar) + 1)
-    '            s.CachePath = IO.Path.Combine(p, "cache" & IO.Path.DirectorySeparatorChar)
-    '            s.ShadowCopyFiles = "true"
-    '            s.ShadowCopyDirectories = p
-    '            _domain = AppDomain.CreateDomain("SkyEditorPlugins", Nothing, s)
-    '        End If
-    '        Return _domain
-    '    End Get
-    '    Set(value As AppDomain)
-    '        _domain = value
-    '    End Set
-    'End Property
-    Private Const ShowLoadingWindow As Boolean = True
 
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
     Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
 
+    Public Function GetAssemblyVersion(Assembly As Assembly) As Version
+        Return Assembly.GetName.Version
+    End Function
+
+    Public Function GetAssemblyFileName(Assembly As Assembly) As String
+        Dim n = Assembly.GetName.Name
+        If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
+            Return n & ".dll"
+        ElseIf IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".exe")) Then
+            Return n & ".exe"
+        Else
+            Return n & ".dll"
+        End If
+    End Function
+
+#Region "Properties"
+    ''' <summary>
+    ''' Gets or sets whether or not to show the loading window when applicable.
+    ''' Defaults to True, useful when using PluginManager to load plugins without a GUI.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property ShowLoadingWindow As Boolean = True
+
+
     Dim _GameTypes As New Dictionary(Of String, String)
     ''' <summary>
+    ''' Matches the save ID using the given game name.
+    ''' 
     ''' Key: Game Type
     ''' Value: Save Type
     ''' </summary>
@@ -42,12 +49,20 @@ Public Class PluginManager
             Return _GameTypes
         End Get
     End Property
+
     Private _consoleCommands As Dictionary(Of String, ConsoleCommand)
+    ''' <summary>
+    ''' Dicitonary matching console commands to the relevant PluginManager.ConsoleCommand delegate.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property ConsoleCommandList As Dictionary(Of String, ConsoleCommand)
         Get
             Return _consoleCommands
         End Get
     End Property
+
     Private _IOFilters As Dictionary(Of String, String)
     ''' <summary>
     ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
@@ -63,6 +78,7 @@ Public Class PluginManager
             _IOFilters = value
         End Set
     End Property
+
     ''' <summary>
     ''' Gets the IO filters in a form Open and Save file dialogs can use.
     ''' </summary>
@@ -91,6 +107,7 @@ Public Class PluginManager
             Return "All Files (*.*)|*.*"
         End If
     End Function
+
     ''' <summary>
     ''' Gets the IO filters in a form the Open and Save file dialogs can use, optimized for the Save file dialog.
     ''' </summary>
@@ -115,6 +132,7 @@ Public Class PluginManager
             Return IOFiltersString()
         End If
     End Function
+
     ''' <summary>
     ''' The currently loaded save.
     ''' </summary>
@@ -122,6 +140,7 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Save As GenericSave
+
     ''' <summary>
     ''' List of all the plugins' assembly names.
     ''' </summary>
@@ -129,7 +148,15 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Assemblies As New List(Of Assembly)
+
+    ''' <summary>
+    ''' List of all loaded iSkyEditorPlugins that are loaded.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Plugins As New List(Of iSkyEditorPlugin)
+
     ''' <summary>
     ''' Dictionary containing all files needed by each plugin.
     ''' Excludes Assembly_plg.dll and /Assembly/, as these can be inferred by the assembly name of the plugin.
@@ -144,21 +171,9 @@ Public Class PluginManager
     Public Property EditorTabs As New List(Of Type)
     Public Property Window As iMainWindow
     Public Property PluginFolder As String
-    Public Function GetAssemblyVersion(Assembly As Assembly) As Version
-        Return Assembly.GetName.Version
-    End Function
-    Public Function GetAssemblyFileName(Assembly As Assembly) As String
-        Dim n = Assembly.GetName.Name
-        If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
-            Return n & ".dll"
-        ElseIf IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".exe")) Then
-            Return n & ".exe"
-        Else
-            Return n & ".dll"
-        End If
-    End Function
+#End Region
 
-#Region "Constructors"
+#Region "Constructors and Plugin Loading"
     Public Sub New()
         Me.New(Nothing, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
     End Sub
@@ -275,10 +290,6 @@ Public Class PluginManager
         End If
     End Sub
 
-    Public Sub RegisterGameType(GameID As String, SaveID As String)
-        _GameTypes.Add(GameID, SaveID)
-    End Sub
-
     Public Sub RegisterIOFilter(FileExtension As String, FileFormatName As String)
         Dim TempIOFilters As Dictionary(Of String, String) = IOFilters
         If TempIOFilters Is Nothing Then
@@ -294,8 +305,25 @@ Public Class PluginManager
             Window.AddMenuItem(Item)
         End If
     End Sub
-
-    Public Sub RegisterSaveType(SaveID As String, SaveType As Type)
+    ''' <summary>
+    ''' Registers a save game format using the given information.
+    ''' </summary>
+    ''' <param name="GameName">Name of the specific game this format is for.  Include a relevant extension if applicable (Ex: "Pokemon X.nds", "My Game.gba", "Something Else.exe", etc).  Should be human readable, in English.</param>
+    ''' <param name="SaveName">Human readable English identifier for the kind of save format this game uses.  If the given SaveFormat is used for another game, this should be the same for both games.  Do not include an extension.  (Ex: "Pokemon X/Y", "My Game", "Something Else")</param>
+    ''' <param name="SaveFormat">Type that represents the save file format.  Given Type should inherit SkyEditorBase.GenericSave</param>
+    ''' <remarks></remarks>
+    Public Sub RegisterSaveGameFormat(GameName As String, SaveName As String, SaveFormat As Type)
+        If Not GameTypes.ContainsKey(GameName) Then
+            GameTypes.Add(GameName, SaveName)
+        End If
+        If Not SaveTypes.ContainsKey(SaveName) Then
+            SaveTypes.Add(SaveName, SaveFormat)
+        End If
+    End Sub
+    <Obsolete> Public Sub RegisterGameType(GameID As String, SaveID As String)
+        GameTypes.Add(GameID, SaveID)
+    End Sub
+    <Obsolete> Public Sub RegisterSaveType(SaveID As String, SaveType As Type)
         SaveTypes.Add(SaveID, SaveType)
     End Sub
 
@@ -338,7 +366,7 @@ Public Class PluginManager
         For Each item In EditorTabs
             Dim etab As EditorTab = item.GetConstructor({}).Invoke({})
             For Each game In etab.SupportedGames
-                If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso Save.CurrentSaveID = game Then
+                If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso Save.SaveID = game Then
                     'add the tab because this save is one of the supported games
                     Dim t As TabItem = etab
                     Dim x As New Task(Sub()
@@ -400,7 +428,6 @@ Public Class PluginManager
                     constructor = SaveType.GetConstructor({GetType(Byte())}) 'Sub New(Bytes as Byte())
                     Save = constructor.Invoke({d.RawData})
                 End If
-                Save.CurrentSaveID = saveID
                 RefreshDisplay()
                 found = True
                 Exit For
@@ -435,7 +462,6 @@ Public Class PluginManager
                     constructor = SaveTypes(gameID).GetConstructor({GetType(Byte())}) 'Sub New (Bytes as Byte())
                     Save = constructor.Invoke({d})
                 End If
-                Save.CurrentSaveID = gameID
             End If
             RefreshDisplay()
         End If

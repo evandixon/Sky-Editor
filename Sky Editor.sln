@@ -5,11 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor", "Sky Editor\Sky Editor.vbproj", "{01813D1E-F5C5-417C-8E1E-10BF1F4C073A}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PMDRomStringFormater", "PMDRomStringFormater\PMDRomStringFormater.vbproj", "{691C975D-8087-4419-9E83-1008235B5160}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Base", "Sky Editor Base\Sky Editor Base.vbproj", "{F3E6313C-4337-4D20-B4E2-ED41420C9D05}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Plugin", "Save Editor Plugin\Sky Editor Plugin.vbproj", "{844B88DC-9905-479F-94DD-4F6A7CD2067A}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ROM Editor", "ROM Editor\ROM Editor.vbproj", "{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}"
 EndProject
@@ -19,7 +15,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DeSmuMe Integration", "DeSmuMe Integration\DeSmuMe Integration.vbproj", "{410BC560-C2F9-4732-839F-29A65B9F2C12}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wan Animation Tester", "WindowsApplication1\Wan Animation Tester.vbproj", "{4C2D5545-A5F9-4131-9379-24B5E890A832}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0579E35C-35D6-49B7-BC67-C143F0EB4EA7}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Build Instructions.txt = Documentation\Build Instructions.txt
+		Sky Editor\Gates to Infinity Notable Offsets.txt = Sky Editor\Gates to Infinity Notable Offsets.txt
+	EndProjectSection
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Plugin", "Sky Editor Plugin\Sky Editor Plugin.vbproj", "{844B88DC-9905-479F-94DD-4F6A7CD2067A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wan Animation Tester", "Debug Console Applications\Wan Animation Tester\Wan Animation Tester.vbproj", "{4C2D5545-A5F9-4131-9379-24B5E890A832}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,13 +40,6 @@ Global
 		{01813D1E-F5C5-417C-8E1E-10BF1F4C073A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01813D1E-F5C5-417C-8E1E-10BF1F4C073A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01813D1E-F5C5-417C-8E1E-10BF1F4C073A}.Release|x86.ActiveCfg = Release|Any CPU
-		{691C975D-8087-4419-9E83-1008235B5160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{691C975D-8087-4419-9E83-1008235B5160}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{691C975D-8087-4419-9E83-1008235B5160}.Debug|x86.ActiveCfg = Debug|x86
-		{691C975D-8087-4419-9E83-1008235B5160}.Debug|x86.Build.0 = Debug|x86
-		{691C975D-8087-4419-9E83-1008235B5160}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{691C975D-8087-4419-9E83-1008235B5160}.Release|Any CPU.Build.0 = Release|Any CPU
-		{691C975D-8087-4419-9E83-1008235B5160}.Release|x86.ActiveCfg = Release|Any CPU
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Debug|x86.ActiveCfg = Debug|x86
@@ -50,11 +47,6 @@ Global
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3E6313C-4337-4D20-B4E2-ED41420C9D05}.Release|x86.ActiveCfg = Release|Any CPU
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.ActiveCfg = Debug|x86
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.Build.0 = Debug|x86
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|x86.ActiveCfg = Release|Any CPU
 		{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}.Debug|x86.ActiveCfg = Debug|x86
@@ -69,6 +61,14 @@ Global
 		{410BC560-C2F9-4732-839F-29A65B9F2C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{410BC560-C2F9-4732-839F-29A65B9F2C12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{410BC560-C2F9-4732-839F-29A65B9F2C12}.Release|x86.ActiveCfg = Release|Any CPU
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.ActiveCfg = Debug|x86
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.Build.0 = Debug|x86
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|x86.ActiveCfg = Release|x86
+		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|x86.Build.0 = Release|x86
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -80,7 +80,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{691C975D-8087-4419-9E83-1008235B5160} = {C602A05B-3EC0-4553-B0A4-3715E90FA15D}
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A} = {5858044B-8193-4E15-930A-47E597981F75}
 		{4C2D5545-A5F9-4131-9379-24B5E890A832} = {C602A05B-3EC0-4553-B0A4-3715E90FA15D}
 	EndGlobalSection

@@ -40,16 +40,14 @@ Partial Public MustInherit Class GenericSave
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public MustOverride ReadOnly Property SaveID As String
-    
-    Public Property CurrentSaveID As String
 
     ''' <summary>
     ''' Code to be run when a save is loaded, only if the program is in debug mode.
-    ''' Useful for usingDebugConsole.Writeline()
+    ''' Useful for using PluginHelper.Writeline()
     ''' </summary>
     ''' <remarks></remarks>
     Public Overridable Sub DebugInfo()
-        PluginHelper.Writeline("[Debug " & CurrentSaveID & "]")
+        PluginHelper.Writeline("[Debug " & SaveID & "]")
     End Sub
 
     ''' <summary>

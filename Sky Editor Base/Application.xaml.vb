@@ -25,5 +25,6 @@ Class Application
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         RedistributionHelpers.DeleteScheduledFiles()
         RedistributionHelpers.InstallPendingPlugins()
+
     End Sub
 End Class

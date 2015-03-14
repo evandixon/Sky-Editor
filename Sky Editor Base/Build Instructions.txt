@@ -1,8 +1,0 @@
-﻿In order to run this for the first time, you must build the following projects, prior to running Sky Editor Base:
--Sky Editor
--Sky Editor (Resources)
-
-The reason for this is that they compile into the debug folder of Sky Editor Base and are dynamically loaded.
-
-You may also need to download "Extended WPF Toolkit - 2.1.0" and place xceed.wpf.toolkit.dll into Sky Editor Plugin, as the dll is consistently not added to the source control.
-https://wpftoolkit.codeplex.com/releases/view/106016

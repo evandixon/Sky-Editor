@@ -2,19 +2,14 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Sky Editor Base/bin/Debug
-/ARDS Plugin Starter Kit/obj/Debug
-/BGP Converter/obj/Debug
-/BGP Converter/bin/Debug
-/DeSmuMe Integration/obj/Debug
-/PMDRomStringFormater/bin/Debug
-/PMDRomStringFormater/obj/Debug
-/RawIMG UnConverter/bin/Debug
-/RawIMG UnConverter/obj/Debug
-/ROM Editor/obj/Debug
-/ROM Editor/bin/Debug
-/Save Editor Plugin/obj/Debug
-/Sky Editor/obj/Debug
-/Sky Editor (Resources)/obj/Debug
-/Sky Editor Base/obj/Debug
+/Sky Editor Base/obj
+/Sky Editor Base/bin
+/DeSmuMe Integration/obj
+/DeSmuMe Integration/bin
+/ROM Editor/obj
+/ROM Editor/bin
+/Sky Editor Plugin/obj
+/Sky Editor Plugin/bin
+/Sky Editor/obj
+/Sky Editor/bin
 /Sky Editor.v12.suo
