@@ -8,10 +8,11 @@ Imports SkyEditorBase.Redistribution
 Namespace SkyEditorWindows
     Class MainWindow
         Implements iMainWindow
-        Dim Manager As PluginManager
+        Private WithEvents Manager As PluginManager
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Event OnKeyPress(sender As Object, e As KeyEventArgs) Implements iMainWindow.OnKeyPress
+        Dim tabs As New Dictionary(Of String, List(Of EditorTab))
 
 #Region "Menu Event Handlers"
         Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
@@ -22,9 +23,9 @@ Namespace SkyEditorWindows
                 Dim d(1048576) As Byte
                 Dim gameID As String = x.SelectedGame
                 If Not String.IsNullOrEmpty(gameID) Then
-                    Manager.Save = Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d})
+                    Manager.Saves.Add(Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d}))
                 End If
-                Manager.RefreshDisplay()
+                Manager.RefreshDisplay("New Save")
             End If
             menuMain.IsEnabled = True
         End Sub
@@ -214,8 +215,11 @@ Namespace SkyEditorWindows
             menuMain.Items.Add(Menu)
         End Sub
 
-        Public Sub AddTabItem(Tab As TabItem) Implements iMainWindow.AddTabItem
-            tcTabs.Items.Add(Tab)
+        Public Sub AddTabItem(SaveName As String, Tab As TabItem) Implements iMainWindow.AddTabItem
+            If Not tabs.ContainsKey(SaveName) Then
+                tabs.Add(SaveName, New List(Of EditorTab))
+            End If
+            tabs(SaveName).Add(Tab)
         End Sub
 
         Public Sub ClearTabItems() Implements iMainWindow.ClearTabItems
@@ -233,6 +237,33 @@ Namespace SkyEditorWindows
 
         Public Sub RemoveMenuItem(Menu As MenuItem) Implements iMainWindow.RemoveMenuItem
             menuMain.Items.Remove(Menu)
+        End Sub
+
+        Private Sub lbSaves_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbSaves.SelectionChanged
+            Manager.CurrentSave = DirectCast(lbSaves.SelectedItem, GenericSave).Name
+        End Sub
+        Dim oldSelectedSaveName As String = ""
+        Private Sub Manager_CurrentSaveChanged(sender As Object, e As PluginManager.SaveChangedEventArgs) Handles Manager.CurrentSaveChanged
+            If Not String.IsNullOrEmpty(oldSelectedSaveName) Then
+                tabs(oldSelectedSaveName).Clear()
+                For Each item In tcTabs.Items
+                    tabs(oldSelectedSaveName).Add(item)
+                Next
+            End If
+            tcTabs.Items.Clear()
+            If lbSaves.SelectedItem IsNot Nothing Then
+                oldSelectedSaveName = DirectCast(lbSaves.SelectedItem, GenericSave).Name
+                For Each item In tabs(oldSelectedSaveName)
+                    tcTabs.Items.Add(item)
+                Next
+            End If
+        End Sub
+
+        Private Sub Manager_SaveAdded(sender As Object, e As PluginManager.SaveAddedEventArgs) Handles Manager.SaveAdded
+            lbSaves.Items.Add(e.Save)
+            If lbSaves.SelectedIndex < 0 Then
+                lbSaves.SelectedIndex = 0
+            End If
         End Sub
     End Class
 End Namespace

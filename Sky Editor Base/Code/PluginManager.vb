@@ -23,6 +23,30 @@ Public Class PluginManager
         End If
     End Function
 
+#Region "Events"
+    Public Event CurrentSaveChanged(sender As Object, e As SaveChangedEventArgs)
+    Public Class SaveChangedEventArgs
+        Inherits EventArgs
+        Public Property OldSaveName As String
+        Public Property NewSaveName As String
+        Public Sub New(OldSaveName As String, NewSaveName As String)
+            Me.OldSaveName = OldSaveName
+            Me.NewSaveName = NewSaveName
+        End Sub
+    End Class
+
+    Public Event SaveAdded(sender As Object, e As SaveAddedEventArgs)
+    Public Class SaveAddedEventArgs
+        Inherits EventArgs
+        Public Property SaveName As String
+        Public Property Save As GenericSave
+        Public Sub New(SaveName As String, Save As GenericSave)
+            Me.SaveName = SaveName
+            Me.Save = Save
+        End Sub
+    End Class
+#End Region
+
 #Region "Properties"
     ''' <summary>
     ''' Gets or sets whether or not to show the loading window when applicable.
@@ -133,6 +157,41 @@ Public Class PluginManager
         End If
     End Function
 
+    Public Property Saves As List(Of GenericSave)
+
+    Public Property Saves(Name As String) As GenericSave
+        Get
+            Dim output As GenericSave = Nothing
+            For Each item In Me.Saves
+                If item.Name.ToLower = Name.ToLower Then
+                    output = item
+                    Exit For
+                End If
+            Next
+            Return output
+        End Get
+        Set(value As GenericSave)
+            For count As Integer = 0 To Me.Saves.Count - 1
+                If Me.Saves()(count).Name.ToLower = Name.ToLower Then
+                    Me.Saves()(count) = value
+                    Exit For
+                End If
+            Next
+        End Set
+    End Property
+
+    Dim _currentSave As String
+    Public Property CurrentSave As String
+        Get
+            Return _currentSave
+        End Get
+        Set(value As String)
+            Dim old = _currentSave
+            _currentSave = value
+            RaiseEvent CurrentSaveChanged(Me, New SaveChangedEventArgs(old, value))
+        End Set
+    End Property
+
     ''' <summary>
     ''' The currently loaded save.
     ''' </summary>
@@ -140,6 +199,13 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Save As GenericSave
+        Get
+            Return Saves(CurrentSave)
+        End Get
+        Set(value As GenericSave)
+            Saves(CurrentSave) = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' List of all the plugins' assembly names.
@@ -195,6 +261,7 @@ Public Class PluginManager
     Public Sub New(Window As iMainWindow, PluginFolder As String)
         Me.Window = Window
         Me.CheatManager = New ARDS.Manager
+        Me.Saves = New List(Of GenericSave)
         LoadPlugins(PluginFolder)
     End Sub
     Public Sub LoadPlugins(PluginFolder As String)
@@ -351,26 +418,25 @@ Public Class PluginManager
 #End Region
 
 #Region "Refresh and Update"
-    Private Sub RefreshTabs()
+    Private Sub RefreshTabs(SaveName As String)
         If ShowLoadingWindow Then PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Refreshing tabs..."))
-        If Window IsNot Nothing Then Window.ClearTabItems()
-        Dim tabs = GetRefreshedTabs()
+        'If Window IsNot Nothing Then Window.ClearTabItems()
+        Dim tabs = GetRefreshedTabs(SaveName)
         For Each item In tabs
-            If Window IsNot Nothing Then Window.AddTabItem(item)
+            If Window IsNot Nothing Then Window.AddTabItem(SaveName, item)
         Next
         PluginHelper.StopLoading()
     End Sub
-    Private Function GetRefreshedTabs() As List(Of TabItem)
-        Dispose()
+    Private Function GetRefreshedTabs(SaveName As String) As List(Of TabItem)
         Dim out As New List(Of TabItem)
         For Each item In EditorTabs
             Dim etab As EditorTab = item.GetConstructor({}).Invoke({})
             For Each game In etab.SupportedGames
-                If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso Save.SaveID = game Then
+                If game IsNot Nothing AndAlso Saves(SaveName) IsNot Nothing AndAlso Saves(SaveName).SaveID = game Then
                     'add the tab because this save is one of the supported games
                     Dim t As TabItem = etab
                     Dim x As New Task(Sub()
-                                          etab.RefreshDisplay(Save)
+                                          etab.RefreshDisplay(Saves(SaveName))
                                       End Sub)
                     x.RunSynchronously()
                     out.Add(t)
@@ -380,8 +446,12 @@ Public Class PluginManager
         Next
         Return out
     End Function
-    Public Sub RefreshDisplay()
-        RefreshTabs()
+    '<Obsolete> Public Sub RefreshDisplay()
+    '    RefreshTabs()
+    '    If Settings.DebugMode Then Save.DebugInfo()
+    'End Sub
+    Public Sub RefreshDisplay(SaveName As String)
+        RefreshTabs(SaveName)
         If Settings.DebugMode Then Save.DebugInfo()
     End Sub
     Public Sub UpdateSave()
@@ -418,18 +488,31 @@ Public Class PluginManager
         Dim saveID As String = ""
         Dim found As Boolean = False
         For Each item In SaveTypeDetectors
+            Dim loadingSave As GenericSave
             saveID = item.Invoke(d)
             If Not String.IsNullOrEmpty(saveID) Then
                 Dim SaveType = SaveTypes(saveID)
                 Dim constructor = SaveType.GetConstructor({GetType(String)}) 'Sub New(Filename as String)
                 If constructor IsNot Nothing Then
-                    Save = constructor.Invoke({Filename})
+                    loadingSave = constructor.Invoke({Filename})
                 Else
                     constructor = SaveType.GetConstructor({GetType(Byte())}) 'Sub New(Bytes as Byte())
-                    Save = constructor.Invoke({d.RawData})
+                    loadingSave = constructor.Invoke({d.RawData})
                 End If
-                RefreshDisplay()
+                Dim name As String = IO.Path.GetFileName(Filename)
+                Dim count As Integer = 1
+                While Saves(name) IsNot Nothing
+                    count += 1
+                    name = String.Format("{0} ({1})", IO.Path.GetFileName(Filename), count)
+                End While
+                loadingSave.Name = name
+                Saves.Add(loadingSave)
+                If CurrentSave Is Nothing Then
+                    CurrentSave = name
+                End If
+                RefreshDisplay(name)
                 found = True
+                RaiseEvent SaveAdded(Me, New SaveAddedEventArgs(name, loadingSave))
                 Exit For
             End If
         Next
@@ -452,27 +535,34 @@ Public Class PluginManager
     Public Sub LoadSaveNoAutoDetect(Filename As String, Detector As iGameTypeSelector)
         Detector.AddGames(SaveTypes.Keys)
         If Detector.ShowDialog() Then
+            Dim loadingSave As GenericSave
             Dim d() As Byte = IO.File.ReadAllBytes(Filename)
             Dim gameID As String = Detector.SelectedGame
             If Not String.IsNullOrEmpty(gameID) Then
                 Dim constructor = SaveTypes(gameID).GetConstructor({GetType(String)}) 'Sub New (Filename as String)
                 If constructor IsNot Nothing Then
-                    Save = constructor.Invoke({Filename})
+                    loadingSave = constructor.Invoke({Filename})
                 Else
                     constructor = SaveTypes(gameID).GetConstructor({GetType(Byte())}) 'Sub New (Bytes as Byte())
-                    Save = constructor.Invoke({d})
+                    loadingSave = constructor.Invoke({d})
                 End If
+                Dim name As String = IO.Path.GetFileName(Filename)
+                Dim count As Integer = 1
+                While Saves(name) IsNot Nothing
+                    count += 1
+                    name = String.Format("{0} ({1})", IO.Path.GetFileName(Filename), count)
+                End While
+                loadingSave.Name = name
+                Saves.Add(loadingSave)
+                If CurrentSave Is Nothing Then
+                    CurrentSave = name
+                End If
+                RefreshDisplay(name)
+                RaiseEvent SaveAdded(Me, New SaveAddedEventArgs(name, loadingSave))
             End If
-            RefreshDisplay()
         End If
     End Sub
 #End Region
-
-#Region "New Save"
-
-#End Region
-
-
 
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls

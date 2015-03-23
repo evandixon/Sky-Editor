@@ -2,7 +2,7 @@
     Sub AddMenuItem(Menu As MenuItem)
     Function GetMenuItems() As ItemCollection
     Sub RemoveMenuItem(Menu As MenuItem)
-    Sub AddTabItem(Tab As TabItem)
+    Sub AddTabItem(SaveName As String, Tab As TabItem)
     Sub ClearTabItems()
     Function GetTabItems() As ItemCollection
 
