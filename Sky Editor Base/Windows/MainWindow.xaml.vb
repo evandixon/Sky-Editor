@@ -23,9 +23,12 @@ Namespace SkyEditorWindows
                 Dim d(1048576) As Byte
                 Dim gameID As String = x.SelectedGame
                 If Not String.IsNullOrEmpty(gameID) Then
-                    Manager.Saves.Add(Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d}))
+                    Dim s As GenericSave = Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d})
+                    s.Name = "Pokemon Mystery Dungeon Explorers of Sky - 1.nds"
+                    Manager.Saves.Add(s)
+                    Manager.CurrentSave = s.Name
                 End If
-                Manager.RefreshDisplay("New Save")
+                Manager.RefreshDisplay("Pokemon Mystery Dungeon Explorers of Sky - 1.nds")
             End If
             menuMain.IsEnabled = True
         End Sub

@@ -58,29 +58,29 @@ Public Class GenericNDSRom
         End If
         Dim romDirectory As String = PluginHelper.GetResourceDirectory
 
-        If IO.Directory.Exists(IO.Path.Combine(romDirectory, "Current")) Then
+        If IO.Directory.Exists(IO.Path.Combine(romDirectory, Name)) Then
             Try
-                IO.Directory.Delete(IO.Path.Combine(romDirectory, "Current"), True)
+                IO.Directory.Delete(IO.Path.Combine(romDirectory, Name), True)
             Catch ex As IOException
                 PluginHelper.Writeline(ex.ToString)
             End Try
         End If
 
-        IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, "Current"))
+        IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, Name))
         Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
-                                              String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, IO.Path.Combine(romDirectory, "Current")))
+                                              String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, IO.Path.Combine(romDirectory, Name)))
     End Function
     Public Async Function RePack(NewFileName As String) As Task(Of Boolean)
         Dim romDirectory As String = PluginHelper.GetResourceDirectory
         If Not IO.Directory.Exists(romDirectory) Then
             IO.Directory.CreateDirectory(romDirectory)
         End If
-        If Not IO.Directory.Exists(IO.Path.Combine(romDirectory, "Current")) Then
-            IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, "Current"))
+        If Not IO.Directory.Exists(IO.Path.Combine(romDirectory, Name)) Then
+            IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, Name))
         End If
         PluginHelper.Writeline("Repacking ROM...")
         Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
-                                              String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, "Current")))
+                                              String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, Name)))
         'DeveloperConsole.Writeline("Repack complete.")
     End Function
     ''' <summary>
@@ -89,14 +89,14 @@ Public Class GenericNDSRom
     ''' <remarks></remarks>
     Public Async Function RunRom() As Task
         Dim romDirectory As String = PluginHelper.GetResourceDirectory
-        Await RePack(romDirectory & "\current.nds")
+        Await RePack(romDirectory & "\" & Name & ".nds")
         PluginHelper.Writeline("Running ROM...")
-        Process.Start(romDirectory & "\current.nds")
+        Process.Start(romDirectory & Name & ".nds")
     End Function
     Public Overrides Async Function GetBytes() As Task(Of Byte())
         Dim romDirectory As String = PluginHelper.GetResourceDirectory
-        Await RePack(romDirectory & "\current.nds")
-        Return IO.File.ReadAllBytes(romDirectory & "\current.nds")
+        Await RePack(romDirectory & "\" & Name & ".nds")
+        Return IO.File.ReadAllBytes(romDirectory & "\" & Name & ".nds")
     End Function
 #End Region
 

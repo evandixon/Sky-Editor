@@ -5,21 +5,21 @@ Namespace FileFormats
         Public Property Filename As String
         Public ReadOnly Property UnpackDirectory As String
             Get
-                Return PluginHelper.GetResourceName("current\data\font\kaomado_unpack").Replace("\current\", "\temp\")
+                Return PluginHelper.GetResourceName("temp\" & IO.Path.GetFileName(Filename) & "\data\font\kaomado_unpack")
             End Get
         End Property
-        Public Shared Async Function RunUnpack(Filename As String) As Task(Of Boolean)
+        Public Async Function RunUnpack(Filename As String) As Task(Of Boolean)
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
-            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack") Then
-                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack")
+            If Not IO.Directory.Exists(UnpackDirectory) Then
+                IO.Directory.CreateDirectory(UnpackDirectory)
             End If
             Return Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
-                                                  String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack"))
+                                                  String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, UnpackDirectory))
         End Function
-        Public Shared Async Function RunPack(Filename As String) As Task(Of Boolean)
+        Public Async Function RunPack(Filename As String) As Task(Of Boolean)
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
             Return Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
-                                                  String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), IO.Path.GetDirectoryName(Filename).Replace("\current\", "\temp\") & "\kaomado_unpack", Filename))
+                                                  String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), UnpackDirectory, Filename))
         End Function
         Public Async Function Save(Filename As String) As Task
             Await RunPack(Filename)
@@ -27,10 +27,6 @@ Namespace FileFormats
         Public Async Function Save() As Task(Of Boolean)
             Return Await RunPack(Me.Filename)
         End Function
-        Public Sub New(OriginalFilename As String)
-            Me.Filename = OriginalFilename
-            _unpackTask = Nothing
-        End Sub
         Public ReadOnly Property IsUnpacked
             Get
                 Return _unpackTask IsNot Nothing AndAlso _unpackTask.IsCompleted
@@ -78,6 +74,11 @@ Namespace FileFormats
                     End If
                 Next
             Next
+        End Sub
+
+        Public Sub New(OriginalFilename As String)
+            Me.Filename = OriginalFilename
+            _unpackTask = Nothing
         End Sub
     End Class
 End Namespace

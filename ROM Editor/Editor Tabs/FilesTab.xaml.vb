@@ -6,7 +6,7 @@ Public Class FilesTab
         If TypeOf Save Is GenericNDSRom Or TypeOf Save Is PMD_Explorers.SkyNDSRom Then
             Await (DirectCast(Save, GenericNDSRom).EnsureUnpacked)
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Reading files..."))
-            tvFiles.Items.Add(Await GetDirectoryNode(PluginHelper.GetResourceName("Current\")))
+            tvFiles.Items.Add(Await GetDirectoryNode(PluginHelper.GetResourceName(Save.Name & "\")))
             PluginHelper.StopLoading()
         End If
     End Sub

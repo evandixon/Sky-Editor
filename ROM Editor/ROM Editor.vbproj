@@ -115,6 +115,7 @@
     <Compile Include="Library\PMD Explorers\File Formats\Kaomado.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\LanguageString.vb" />
     <Compile Include="Library\PMD Explorers\File Formats\Overlay13.vb" />
+    <Compile Include="Library\PMD Explorers\File Formats\waza_p.vb" />
     <Compile Include="Library\PMD Explorers\SkyNDSRom.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

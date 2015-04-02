@@ -25,6 +25,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Plugin", "Sky Ed
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wan Animation Tester", "Debug Console Applications\Wan Animation Tester\Wan Animation Tester.vbproj", "{4C2D5545-A5F9-4131-9379-24B5E890A832}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Checksum Bruteforcer", "Checksum Bruteforcer\Checksum Bruteforcer.vbproj", "{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,12 @@ Global
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +90,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A} = {5858044B-8193-4E15-930A-47E597981F75}
 		{4C2D5545-A5F9-4131-9379-24B5E890A832} = {C602A05B-3EC0-4553-B0A4-3715E90FA15D}
+		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0} = {C602A05B-3EC0-4553-B0A4-3715E90FA15D}
 	EndGlobalSection
 EndGlobal
