@@ -5,12 +5,12 @@ Namespace FileFormats
     Public Class LanguageString
         Inherits SkyEditorBase.GenericFile
         Public Property Items As List(Of String)
-        Public Sub New()
-            MyBase.New(PluginHelper.GetResourceName("current\data\message\text_e.str"))
+        Public Sub New(Rom As GenericNDSRom)
+            MyBase.New(PluginHelper.GetResourceName(Rom.Name & "\data\message\text_e.str"))
             Items = New List(Of String)
             RawData = IO.File.ReadAllBytes(Filename)
             Dim offset1 As UInt32 = BitConverter.ToUInt32(RawData, 0)
-            Dim e = Encoding.GetEncoding("shift_jis")
+            Dim e = Encoding.GetEncoding("Windows-1252") '"shift_jis")
             For count As Integer = 0 To offset1 - 5 Step 4
                 Dim startOffset As UInteger = BitConverter.ToUInt32(RawData, count)
                 Items.Add("")
@@ -23,7 +23,7 @@ Namespace FileFormats
         End Sub
 
         Public Sub Save()
-            Dim e = Encoding.GetEncoding("shift_jis")
+            Dim e = Encoding.GetEncoding("Windows-1252")
             Dim offsets As New List(Of UInt32)
             For i As UInt32 = 0 To Items.Count - 1
                 offsets.Add(0)
