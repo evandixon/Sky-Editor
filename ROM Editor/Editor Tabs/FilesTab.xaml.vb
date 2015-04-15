@@ -74,4 +74,13 @@ Public Class FilesTab
             End If
         End If
     End Sub
+
+    Private Sub menuOpenInExplorer_Click(sender As Object, e As Windows.RoutedEventArgs) Handles menuOpenInExplorer.Click
+        Dim filename As String = DirectCast(tvFiles.SelectedItem, TreeViewItem).Tag
+        If IO.Directory.Exists(filename) Then
+            PluginHelper.RunProgramInBackground(filename, "/n/e/root," & filename)
+        ElseIf IO.File.Exists(filename) Then
+            PluginHelper.RunProgramInBackground(filename, "/n/e/select," & filename)
+        End If
+    End Sub
 End Class

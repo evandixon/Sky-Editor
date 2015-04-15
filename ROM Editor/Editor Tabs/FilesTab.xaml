@@ -6,7 +6,13 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor">
     <Grid>
-        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213"/>
+        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="menuOpenInExplorer" Header="Open in File Explorer"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
+        </TreeView>
         <StackPanel x:Name="spPlaceholder" Margin="213,0,0,0"/>
     </Grid>
 </local:EditorTab>
