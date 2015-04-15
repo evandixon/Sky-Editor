@@ -13,7 +13,7 @@
                             <ColumnDefinition Width="36"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding ImageUri}" Grid.Column="0" Width="32" Height="32"/>
+                        <Image Source="{Binding ImageSource}" Grid.Column="0" Width="32" Height="32"/>
                         <Label Content="{Binding Name}" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>

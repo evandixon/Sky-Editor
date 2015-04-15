@@ -1,4 +1,5 @@
 ﻿Imports SkyEditorBase
+Imports System.Windows.Media.Imaging
 
 Public Class RomSelector
     Public Class ROM
@@ -21,7 +22,17 @@ Public Class RomSelector
                     End If
                     Return New Uri(newpath)
                 Else
-                    Return New Uri("")
+                    Return Nothing
+                End If
+            End Get
+        End Property
+        Public ReadOnly Property ImageSource As BitmapImage
+            Get
+                Dim u = ImageUri
+                If u IsNot Nothing Then
+                    Return New BitmapImage(u)
+                Else
+                    Return New BitmapImage
                 End If
             End Get
         End Property
