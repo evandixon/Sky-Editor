@@ -104,8 +104,8 @@ Public Class PkmWindow
                 cbPokemon.Items.Add(item)
             Next
             Dim keys2 As New Generic.List(Of GenericListItem(Of Integer))
-            For Each item In Lists.RBPokemon.Keys
-                keys2.Add(New GenericListItem(Of Integer)(Lists.RBPokemon(item), item))
+            For Each item In Lists.RBMoves.Keys
+                keys2.Add(New GenericListItem(Of Integer)(Lists.RBMoves(item), item))
             Next
             keys2.Sort()
             For Each item In keys2
@@ -128,10 +128,10 @@ Public Class PkmWindow
             cbPokemon.SelectedIndex = cbPokemon.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.no), JSkyPokemon.no))
             'cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyLocations(JSkyPokemon.metat), JSkyPokemon.metat))
             cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)((JSkyPokemon.metat), JSkyPokemon.metat))
-            cbMove1.SelectedIndex = cbMove1.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.attacks(0).no), JSkyPokemon.attacks(0).no))
-            cbMove2.SelectedIndex = cbMove2.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.attacks(1).no), JSkyPokemon.attacks(1).no))
-            cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.attacks(2).no), JSkyPokemon.attacks(2).no))
-            cbMove4.SelectedIndex = cbMove4.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.attacks(3).no), JSkyPokemon.attacks(3).no))
+            cbMove1.SelectedIndex = cbMove1.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(0).no), JSkyPokemon.attacks(0).no))
+            cbMove2.SelectedIndex = cbMove2.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(1).no), JSkyPokemon.attacks(1).no))
+            cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(2).no), JSkyPokemon.attacks(2).no))
+            cbMove4.SelectedIndex = cbMove4.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(3).no), JSkyPokemon.attacks(3).no))
         End If
 
         'Load Values
@@ -177,11 +177,11 @@ Public Class PkmWindow
         chbSwitched4.IsChecked = JSkyPokemon.attacks(3).isswitched
     End Sub
     Sub UpdatePKM()
-        JSkyPokemon.no = DirectCast(cbPokemon.SelectedItem, GenericListItem(Of Integer)).Value 'numPkmID.Value
+        JSkyPokemon.no = cbPokemon.LastSafeValue.Value
         JSkyPokemon.isfemale = chbIsFemale.IsChecked
         JSkyPokemon.name = txtName.Text
         JSkyPokemon.lvl = numLevel.Value
-        JSkyPokemon.metat = DirectCast(cbMetAt.SelectedItem, GenericListItem(Of Integer)).Value
+        JSkyPokemon.metat = cbMetAt.LastSafeValue.Value
         JSkyPokemon.metfl = numMetFloor.Value
         JSkyPokemon.iq = numIQ.Value
         JSkyPokemon.exp = numExp.Value
@@ -191,7 +191,7 @@ Public Class PkmWindow
         JSkyPokemon.stats(2) = numDefense.Value
         JSkyPokemon.stats(3) = numSpDefence.Value
         With JSkyPokemon.attacks(0)
-            .no = cbMove1.SelectedItem.Value
+            .no = cbMove1.LastSafeValue.Value
             .ginseng = numGinseng1.Value
             .islinked = chbLinked1.IsChecked
             .isset = chbSet1.IsChecked
@@ -200,7 +200,7 @@ Public Class PkmWindow
         End With
 
         With JSkyPokemon.attacks(1)
-            .no = cbMove2.SelectedItem.Value
+            .no = cbMove2.LastSafeValue.Value
             .ginseng = numGinseng2.Value
             .islinked = chbLinked2.IsChecked
             .isset = chbSet2.IsChecked
@@ -209,7 +209,7 @@ Public Class PkmWindow
         End With
 
         With JSkyPokemon.attacks(2)
-            .no = cbMove3.SelectedItem.Value
+            .no = cbMove3.LastSafeValue.Value
             .ginseng = numGinseng3.Value
             .islinked = chbLinked3.IsChecked
             .isset = chbSet3.IsChecked
@@ -218,7 +218,7 @@ Public Class PkmWindow
         End With
 
         With JSkyPokemon.attacks(3)
-            .no = cbMove4.SelectedItem.Value
+            .no = cbMove4.LastSafeValue.Value
             .ginseng = numGinseng4.Value
             .islinked = chbLinked4.IsChecked
             .isset = chbSet4.IsChecked

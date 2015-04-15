@@ -128,11 +128,11 @@ Public Class ActivePkmWindow
         chbSealed4.IsChecked = JSkyPokemonEx.attacks(3).unkflag
     End Sub
     Sub UpdatePKM()
-        JSkyPokemonEx.no = DirectCast(cbPokemon.SelectedItem, GenericListItem(Of Integer)).Value 'numPkmID.Value
+        JSkyPokemonEx.no = cbPokemon.LastSafeValue.Value
         JSkyPokemonEx.isfemale = chbIsFemale.IsChecked
         JSkyPokemonEx.name = txtName.Text
         JSkyPokemonEx.lvl = numLevel.Value
-        JSkyPokemonEx.metat = DirectCast(cbMetAt.SelectedValue, GenericListItem(Of Integer)).Value
+        JSkyPokemonEx.metat = cbMetAt.LastSafeValue.Value
         JSkyPokemonEx.metfl = numMetFloor.Value
         JSkyPokemonEx.iq = numIQ.Value
         JSkyPokemonEx.exp = numExp.Value
@@ -143,7 +143,7 @@ Public Class ActivePkmWindow
         JSkyPokemonEx.stats(2) = numDefense.Value
         JSkyPokemonEx.stats(3) = numSpDefence.Value
         With JSkyPokemonEx.attacks(0)
-            .no = cbMove1.SelectedItem.Value
+            .no = cbMove1.LastSafeValue.Value
             .ginseng = numGinseng1.Value
             .islinked = chbLinked1.IsChecked
             .isset = chbSet1.IsChecked
@@ -153,7 +153,7 @@ Public Class ActivePkmWindow
         End With
 
         With JSkyPokemonEx.attacks(1)
-            .no = cbMove2.SelectedItem.Value
+            .no = cbMove2.LastSafeValue.Value
             .ginseng = numGinseng2.Value
             .islinked = chbLinked2.IsChecked
             .isset = chbSet2.IsChecked
@@ -163,7 +163,7 @@ Public Class ActivePkmWindow
         End With
 
         With JSkyPokemonEx.attacks(2)
-            .no = cbMove3.SelectedItem.Value
+            .no = cbMove3.LastSafeValue.Value
             .ginseng = numGinseng3.Value
             .islinked = chbLinked3.IsChecked
             .isset = chbSet3.IsChecked
@@ -173,7 +173,7 @@ Public Class ActivePkmWindow
         End With
 
         With JSkyPokemonEx.attacks(3)
-            .no = cbMove4.SelectedItem.Value
+            .no = cbMove4.LastSafeValue.Value
             .ginseng = numGinseng4.Value
             .islinked = chbLinked4.IsChecked
             .isset = chbSet4.IsChecked
