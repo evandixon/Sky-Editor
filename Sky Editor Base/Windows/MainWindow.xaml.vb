@@ -27,8 +27,9 @@ Namespace SkyEditorWindows
                     s.Name = "Pokemon Mystery Dungeon Explorers of Sky - 1.nds"
                     Manager.Saves.Add(s)
                     Manager.CurrentSave = s.Name
+                    Manager.RefreshDisplay("Pokemon Mystery Dungeon Explorers of Sky - 1.nds")
+                    Manager_SaveAdded(Me, New PluginManager.SaveAddedEventArgs(s.Name, s))
                 End If
-                Manager.RefreshDisplay("Pokemon Mystery Dungeon Explorers of Sky - 1.nds")
             End If
             menuMain.IsEnabled = True
         End Sub
