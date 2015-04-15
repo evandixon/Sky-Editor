@@ -1,10 +1,31 @@
 ﻿Public Class SearchableDropDown
     Inherits ComboBox
-    Private DefaultValue As String
+    Private DefaultValue As Object
     Private DefaultIndex As Integer
 
+    Public Function Contains(ByVal Text As String) As Boolean
+        Dim found As Boolean = False
+        For Each item In Me.Items
+            If item.ToString = Text Then
+                found = True
+                Exit For
+            End If
+        Next
+        Return found
+    End Function
+    Public Function IndexOf(ByVal Text As String) As Object
+        Dim output As Object = Nothing
+        For Each item In Me.Items
+            If item.ToString = Text Then
+                output = item
+                Exit For
+            End If
+        Next
+        Return output
+    End Function
+
     Private Sub SearchableDropDown_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
-        If Me.Items.Contains(Me.Text) Then
+        If Me.Contains(Me.Text) Then
             DefaultValue = Me.SelectedValue
             DefaultIndex = Me.SelectedIndex
             Me.Background = New SolidColorBrush(Windows.Media.Color.FromRgb(229, 229, 229))
@@ -24,21 +45,21 @@
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property LastSafeValue As String
+    Public Property LastSafeValue As Object
         Get
-            If Me.Items.Contains(Me.Text) Then
-                Return Me.Text
+            If Me.Contains(Me.Text) Then
+                Return IndexOf(Me.Text)
             Else
                 Return DefaultValue
             End If
         End Get
-        Set(value As String)
+        Set(value As Object)
             Me.SelectedValue = value
         End Set
     End Property
     Public Property LastSafeIndex As Integer
         Get
-            If Me.Items.Contains(Me.Text) Then
+            If Me.Contains(Me.Text) Then
                 Return Me.SelectedIndex
             Else
                 Return DefaultIndex
