@@ -10,7 +10,8 @@
                     Dim sum2 As Long = 0
                     Dim t As Boolean = True
                     For i As Integer = start To last - 3 Step 2
-                        sum1 += BitConverter.ToUInt16(bytes, i)
+                        ' sum1 += BitConverter.ToUInt16(bytes, i)
+                        sum1 = sum1 Xor BitConverter.ToUInt16(bytes, i)
                         If t Then sum2 += BitConverter.ToUInt32(bytes, i)
                         t = Not t
                     Next
