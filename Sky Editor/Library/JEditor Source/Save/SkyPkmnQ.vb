@@ -26,7 +26,7 @@ Namespace skyjed.save
         Property attacks As SkyAttackQ()
     End Interface
     Public Class SkyPkmnQ
-        Implements ipkmnq
+        Implements iPkmnQ
         Public Const BYTE_LENGTH As Integer = 429
         Public Const MIME_TYPE As String = "application/x-sky-pokemon-q"
 

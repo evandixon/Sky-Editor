@@ -6,7 +6,6 @@ Imports SkyEditorBase.Utilities
 
 Namespace skyjed.save
 
-
     Public Class QuickSaveSlot
 
         Private Const MAGIC_OFFSET As Integer = &H20

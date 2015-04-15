@@ -2,22 +2,22 @@
                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <UniformGrid Columns="2" Rows="1" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
             <Label x:Name="lblGeneral_TeamName" HorizontalAlignment="Left" Width="170">Team Name:</Label>
-            <TextBox x:Name="txtGeneral_TeamName" HorizontalContentAlignment="Right"/>
+            <TextBox x:Name="txtGeneral_TeamName" HorizontalContentAlignment="Right" />
             <!--
                         <Label x:Name="lblGeneral_PlayerName" HorizontalAlignment="Left" Width="118">Player Name:</Label>
-                        <TextBox x:Name="txtGeneral_PlayerName" HorizontalContentAlignment="Right"/>
+                        <TextBox x:Name="txtGeneral_PlayerName" HorizontalContentAlignment="Right" />
                     -->
             <!--<Label x:Name="lblGeneral_HeldMoney" HorizontalAlignment="Left" Width="170">Held Money:</Label>
             <xctk:IntegerUpDown x:Name="numGeneral_HeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
-            <Label x:Name="lblGeneral_SpEpisodeHeldMoney" HorizontalAlignment="Left" Width="170" Content="Sp. Episode Money:"/>
+            <Label x:Name="lblGeneral_SpEpisodeHeldMoney" HorizontalAlignment="Left" Width="170" Content="Sp. Episode Money:" />
             <xctk:IntegerUpDown x:Name="numGeneral_SpEpisodeHeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
             <Label x:Name="lblGeneral_StoredMoney" HorizontalAlignment="Left" Width="170">Stored Money:</Label>
             <xctk:IntegerUpDown x:Name="numGeneral_StoredMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />

@@ -6,7 +6,7 @@ Public Module Loader
         Public Property Version As Version
         Public Property Is64Bit As Boolean
         ''' <summary>
-        ''' 
+        '''
         ''' </summary>
         ''' <param name="Filename">The path of the file.</param>
         ''' <remarks></remarks>

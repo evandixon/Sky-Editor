@@ -1,5 +1,4 @@
-﻿
-' Tamir Khason http://khason.net/
+﻿' Tamir Khason http://khason.net/
 '
 ' Released under MS-PL : 6-Apr-09
 
@@ -9,7 +8,7 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 ''' <summary>Implements a 16-bits cyclic redundancy check (CRC) hash algorithm.</summary>
-''' <remarks>This class is not intended to be used for security purposes. For security applications use MD5, SHA1, SHA256, SHA384, 
+''' <remarks>This class is not intended to be used for security purposes. For security applications use MD5, SHA1, SHA256, SHA384,
 ''' or SHA512 in the System.Security.Cryptography namespace.</remarks>
 Public Class CRC16
     Inherits HashAlgorithm
@@ -135,7 +134,7 @@ Public Class CRC16
 
     ' Builds a crc16 table given a polynomial
     Private Shared Function _buildCRC16Table(polynomial As UShort) As UShort()
-        ' 256 values representing ASCII character codes. 
+        ' 256 values representing ASCII character codes.
         Dim table As UShort() = New UShort(255) {}
         For i As UShort = 0 To table.Length - 1
             Dim value As UShort = 0

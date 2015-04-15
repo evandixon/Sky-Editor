@@ -1,26 +1,26 @@
 ﻿<local:EditorTab x:Class="PortraitTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
              mc:Ignorable="d">
     <Grid>
-        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213" Margin="0,0,0,29"/>
+        <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213" Margin="0,0,0,29" />
         <ListView x:Name="lvPortraits" Margin="213,0,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="150" />
                         </Grid.ColumnDefinitions>
                         <Image Source="{Binding ImageUri}" Grid.Column="0" />
-                        <Label Content="{Binding Name}" Grid.Column="1" VerticalContentAlignment="Center"/>
-                        <Button Grid.Column="2" Height="21" Content="Extract" Click="btnExport_Click" Tag="{Binding Filename}"/>
-                        <Button Grid.Column="3" Height="21" Content="Import" Click="btnImport_Click" Tag="{Binding Filename}"/>
+                        <Label Content="{Binding Name}" Grid.Column="1" VerticalContentAlignment="Center" />
+                        <Button Grid.Column="2" Height="21" Content="Extract" Click="btnExport_Click" Tag="{Binding Filename}" />
+                        <Button Grid.Column="3" Height="21" Content="Import" Click="btnImport_Click" Tag="{Binding Filename}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

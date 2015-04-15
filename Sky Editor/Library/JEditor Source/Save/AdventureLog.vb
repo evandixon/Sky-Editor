@@ -2,40 +2,40 @@
 
 Namespace skyjed.save
 
-	Public Class AdventureLog
+    Public Class AdventureLog
 
-		Private Const LEN_PLAY_TIME As Integer = 32
-		Private Const LEN_DUNGEONS_CLEARED As Integer = 20
-		Private Const LEN_SKIP1 As Integer = 53
-		Private Const LEN_FLAGS As Integer = 59
-		Private Const LEN_SKIP2 As Integer = 56
-		Private Const LEN_POKEMON_JOINED As Integer = 14
-		Private Const LEN_KINDS_OF_POKEMON_BATTLED As Integer = 10
-		Private Const LEN_SKIP3 As Integer = 4
-		Private Const LEN_MOVES_LEARNED As Integer = 9
-		Private Const LEN_RECORD_NUM_OF_ONE_FLOOR_VICTORIES As Integer = 20
-		Private Const LEN_FAINTED_IN_DUNGEONS As Integer = 20
-		Private Const LEN_POKEMON_EGGS_HATCHED As Integer = 20
-		Private Const LEN_WON_BIG_AT_BIG_TREASURE As Integer = 20
-		Private Const LEN_RECYCLED As Integer = 20
-		Private Const LEN_SKY_GIFTS_SENT As Integer = 20
+        Private Const LEN_PLAY_TIME As Integer = 32
+        Private Const LEN_DUNGEONS_CLEARED As Integer = 20
+        Private Const LEN_SKIP1 As Integer = 53
+        Private Const LEN_FLAGS As Integer = 59
+        Private Const LEN_SKIP2 As Integer = 56
+        Private Const LEN_POKEMON_JOINED As Integer = 14
+        Private Const LEN_KINDS_OF_POKEMON_BATTLED As Integer = 10
+        Private Const LEN_SKIP3 As Integer = 4
+        Private Const LEN_MOVES_LEARNED As Integer = 9
+        Private Const LEN_RECORD_NUM_OF_ONE_FLOOR_VICTORIES As Integer = 20
+        Private Const LEN_FAINTED_IN_DUNGEONS As Integer = 20
+        Private Const LEN_POKEMON_EGGS_HATCHED As Integer = 20
+        Private Const LEN_WON_BIG_AT_BIG_TREASURE As Integer = 20
+        Private Const LEN_RECYCLED As Integer = 20
+        Private Const LEN_SKY_GIFTS_SENT As Integer = 20
 
-		Public playTime As Long ' 32bit unsigned int would be sufficient
-		Public dungeonsCleared As Integer
-		Public flags() As Boolean ' 23 read-write & 36 read-only
-		Public pokemonJoined As Integer ' read-only
-		Public kindsOfPokemonBattled As Integer ' read-only
-		Public movesLearned As Integer ' read-only
-		Public recordNumOfOneFloorVictories As Integer
-		Public faintedInDungeons As Integer
-		Public pokemonEggsHatched As Integer
-		Public wonBigAtBigTreasure As Integer
-		Public recycled As Integer
-		Public skyGiftsSent As Integer
+        Public playTime As Long ' 32bit unsigned int would be sufficient
+        Public dungeonsCleared As Integer
+        Public flags() As Boolean ' 23 read-write & 36 read-only
+        Public pokemonJoined As Integer ' read-only
+        Public kindsOfPokemonBattled As Integer ' read-only
+        Public movesLearned As Integer ' read-only
+        Public recordNumOfOneFloorVictories As Integer
+        Public faintedInDungeons As Integer
+        Public pokemonEggsHatched As Integer
+        Public wonBigAtBigTreasure As Integer
+        Public recycled As Integer
+        Public skyGiftsSent As Integer
 
-		Public Sub New()
-			flags = New Boolean(LEN_FLAGS - 1){}
-		End Sub
+        Public Sub New()
+            flags = New Boolean(LEN_FLAGS - 1) {}
+        End Sub
 
         Public Sub New(ByVal buf As buffer.BooleanBuffer)
             Me.New()
@@ -82,6 +82,6 @@ Namespace skyjed.save
             buf.putInt(skyGiftsSent, LEN_SKY_GIFTS_SENT)
         End Sub
 
-	End Class
+    End Class
 
 End Namespace

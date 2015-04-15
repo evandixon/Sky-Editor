@@ -7,15 +7,15 @@
             <StackPanel>
                 <UniformGrid Columns="2" Rows="6" VerticalAlignment="Top">
                     <Label x:Name="lblCodeType" VerticalAlignment="Top">Code Type</Label>
-                    <ComboBox x:Name="cbCodeType" Margin="0,4,0,0" Height="22" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbCodeType" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
                     <Label x:Name="lbRegion" VerticalAlignment="Top">Region</Label>
-                    <ComboBox x:Name="cbRegion" Margin="0,4,0,0" Height="22" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbRegion" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
                     <Label x:Name="lblGame" VerticalAlignment="Top">Game</Label>
-                    <ComboBox x:Name="cbGame" Margin="0,4,0,0" Height="22" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbGame" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
                     <Label x:Name="lbCategory" VerticalAlignment="Top">Category</Label>
-                    <ComboBox x:Name="cbCategory" Margin="0,4,0,0" Height="22" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbCategory" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
                     <Label x:Name="lbProperty" VerticalAlignment="Top">Property</Label>
-                    <ComboBox x:Name="cbProperty" Margin="0,4,0,0" Height="22" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbProperty" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
                     <Label x:Name="lbAuthor" VerticalAlignment="Top">Author</Label>
                     <Label x:Name="lbAuthorDynamic" VerticalAlignment="Top"></Label>
                 </UniformGrid>
@@ -27,6 +27,5 @@
             </StackPanel>
             <TextBox x:Name="txtOut" IsReadOnly="True" FontFamily="Courier New" FontSize="16"></TextBox>
         </UniformGrid>
-
     </Grid>
 </Window>

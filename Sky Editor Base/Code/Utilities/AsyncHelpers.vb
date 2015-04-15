@@ -9,7 +9,6 @@ Namespace Utilities
         ''' </summary>
         ''' <param name="task">Task(Of T) method to execute</param>
 
-
         Public Shared Sub RunSync(task As Func(Of Task))
             Dim oldContext = SynchronizationContext.Current
             Dim synch = New ExclusiveSynchronizationContext()

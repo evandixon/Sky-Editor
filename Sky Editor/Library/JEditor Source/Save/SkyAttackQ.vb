@@ -2,25 +2,25 @@
 
 Namespace skyjed.save
 
-	Public Class SkyAttackQ
+    Public Class SkyAttackQ
 
-		Public isvalid As Boolean
-		Public islinked As Boolean
-		Public isswitched As Boolean
-		Public isset As Boolean
-		Public issealed As Boolean
-		Public unkn As Integer
-		Public no As Integer
-		Public pp As Integer
-		Public ginseng As Integer
+        Public isvalid As Boolean
+        Public islinked As Boolean
+        Public isswitched As Boolean
+        Public isset As Boolean
+        Public issealed As Boolean
+        Public unkn As Integer
+        Public no As Integer
+        Public pp As Integer
+        Public ginseng As Integer
 
-		Public Sub New()
-		End Sub
+        Public Sub New()
+        End Sub
 
-		Public Sub New(ByVal buf As BooleanBuffer)
-			Me.New()
-			load(buf)
-		End Sub
+        Public Sub New(ByVal buf As BooleanBuffer)
+            Me.New()
+            load(buf)
+        End Sub
 
         Public Sub load(ByVal buf As BooleanBuffer)
             isvalid = buf.get()
@@ -48,6 +48,6 @@ Namespace skyjed.save
             buf.putInt(ginseng, 8)
         End Sub
 
-	End Class
+    End Class
 
 End Namespace

@@ -2,7 +2,7 @@
 
 Namespace skyjed.buffer
     <Serializable> _
-       Public Class BufferUnderflowException
+    Public Class BufferUnderflowException
         Inherits Exception
 
         Public Sub New()

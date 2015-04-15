@@ -16,7 +16,6 @@ Public Class ActivePkmWindow
         'Load Language
         PluginHelper.TranslateForm(Me)
 
-
         'Initialize Dialogs
         OpenFileDialog1 = New Forms.OpenFileDialog
         OpenFileDialog1.Filter = "Pokemon Files (*.skypkm)|*.skypkm|All Files (*.*)|*.*"

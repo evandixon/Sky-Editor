@@ -20,7 +20,7 @@ Namespace skyjed.save
         Function GetIsValid() As Boolean
         Function GetBytes() As Byte()
     End Interface
-	Public Class SkyPkmn
+    Public Class SkyPkmn
         Implements iPkmn
 
         Public Const LENGTH As Integer = 362

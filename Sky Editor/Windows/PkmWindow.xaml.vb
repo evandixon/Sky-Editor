@@ -136,12 +136,9 @@ Public Class PkmWindow
 
         'Load Values
 
-
         chbIsFemale.IsChecked = JSkyPokemon.isfemale
         txtName.Text = JSkyPokemon.name
         numLevel.Value = JSkyPokemon.lvl
-
-
 
         numMetFloor.Value = JSkyPokemon.metfl
         numIQ.Value = JSkyPokemon.iq
@@ -152,24 +149,20 @@ Public Class PkmWindow
         numDefense.Value = JSkyPokemon.stats(2)
         numSpDefence.Value = JSkyPokemon.stats(3)
 
-
         numGinseng1.Value = JSkyPokemon.attacks(0).ginseng
         chbLinked1.IsChecked = JSkyPokemon.attacks(0).islinked
         chbSet1.IsChecked = JSkyPokemon.attacks(0).isset
         chbSwitched1.IsChecked = JSkyPokemon.attacks(0).isswitched
-
 
         numGinseng2.Value = JSkyPokemon.attacks(1).ginseng
         chbLinked2.IsChecked = JSkyPokemon.attacks(1).islinked
         chbSet2.IsChecked = JSkyPokemon.attacks(1).isset
         chbSwitched2.IsChecked = JSkyPokemon.attacks(1).isswitched
 
-
         numGinseng3.Value = JSkyPokemon.attacks(2).ginseng
         chbLinked3.IsChecked = JSkyPokemon.attacks(2).islinked
         chbSet3.IsChecked = JSkyPokemon.attacks(2).isset
         chbSwitched3.IsChecked = JSkyPokemon.attacks(2).isswitched
-
 
         numGinseng4.Value = JSkyPokemon.attacks(3).ginseng
         chbLinked4.IsChecked = JSkyPokemon.attacks(3).islinked

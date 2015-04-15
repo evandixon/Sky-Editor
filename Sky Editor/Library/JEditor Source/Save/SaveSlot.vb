@@ -10,14 +10,13 @@ Imports SkyEditor.skyjed.util
 
 Namespace skyjed.save
 
-
     Public Class SaveSlot
 
         Private Const MAGIC_OFFSET As Integer = &H20
         Private Const MAGIC_BYTELENGTH As Integer = 13
         Private Shared ReadOnly Property MAGIC_DATA As Byte()
             Get
-               Return StringUtilities.StringToPMDEncoding("POKE_DUN_SORA")
+                Return StringUtilities.StringToPMDEncoding("POKE_DUN_SORA")
             End Get
         End Property
         Private Shared ReadOnly PKMN_STORAGE_OFFSET As Integer = &H464 * 8

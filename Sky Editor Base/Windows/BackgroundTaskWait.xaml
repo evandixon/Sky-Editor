@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Background Task" Height="122" Width="375" Icon="/SkyEditor;component/favicon.ico" ResizeMode="NoResize">
     <Grid>
-        <Label x:Name="lblMessage" Content="Loading..." HorizontalAlignment="Left" Width="351" Height="29" VerticalAlignment="Top" Margin="0,10,0,0"/>
-        <ProgressBar Margin="10,0,10,10" Height="28" VerticalAlignment="Bottom" IsIndeterminate="True"/>
+        <Label x:Name="lblMessage" Content="Loading..." HorizontalAlignment="Left" Width="351" Height="29" VerticalAlignment="Top" Margin="0,10,0,0" />
+        <ProgressBar Margin="10,0,10,10" Height="28" VerticalAlignment="Bottom" IsIndeterminate="True" />
     </Grid>
 </Window>

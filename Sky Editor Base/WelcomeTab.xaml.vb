@@ -3,7 +3,6 @@
 Public Class WelcomeTab
     Inherits EditorTab
 
-
     Public Overrides Sub RefreshDisplay(Save As GenericSave)
 
     End Sub

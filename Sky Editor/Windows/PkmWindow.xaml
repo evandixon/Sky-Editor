@@ -6,8 +6,8 @@
     <Grid>
         <Menu IsMainMenu="True" Height="21" Margin="0,0,0,0" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
-                <MenuItem x:Name="menuFileOpen" Header="_Open"/>
-                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..."/>
+                <MenuItem x:Name="menuFileOpen" Header="_Open" />
+                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..." />
             </MenuItem>
         </Menu>
         <TabControl Margin="0,26,0,0">
@@ -43,8 +43,8 @@
                 </UniformGrid>
             </TabItem>
             <TabItem x:Name="tiMoves" Header="Moves">
-                <UniformGrid Columns="6" Height="124" VerticalAlignment="Top" >
-                    <Label/>
+                <UniformGrid Columns="6" Height="124" VerticalAlignment="Top">
+                    <Label />
                     <Label x:Name="lblMove">Move</Label>
                     <Label x:Name="lblGinseng">Ginseng</Label>
                     <Label x:Name="lblSet">Set</Label>
@@ -53,35 +53,33 @@
 
                     <Label x:Name="lblMove1">Move 1</Label>
                     <local:SearchableDropDown x:Name="cbMove1" />
-                    <xctk:IntegerUpDown x:Name="numGinseng1"/>
-                    <CheckBox x:Name="chbSet1"/>
-                    <CheckBox x:Name="chbSwitched1"/>
+                    <xctk:IntegerUpDown x:Name="numGinseng1" />
+                    <CheckBox x:Name="chbSet1" />
+                    <CheckBox x:Name="chbSwitched1" />
                     <CheckBox x:Name="chbLinked1" />
-                    
+
                     <Label x:Name="lblMove2">Move 2</Label>
                     <local:SearchableDropDown x:Name="cbMove2" />
-                    <xctk:IntegerUpDown x:Name="numGinseng2"/>
-                    <CheckBox x:Name="chbSet2"/>
-                    <CheckBox x:Name="chbSwitched2"/>
+                    <xctk:IntegerUpDown x:Name="numGinseng2" />
+                    <CheckBox x:Name="chbSet2" />
+                    <CheckBox x:Name="chbSwitched2" />
                     <CheckBox x:Name="chbLinked2" />
-                    
+
                     <Label x:Name="lblMove3">Move 3</Label>
                     <local:SearchableDropDown x:Name="cbMove3" />
-                    <xctk:IntegerUpDown x:Name="numGinseng3"/>
-                    <CheckBox x:Name="chbSet3"/>
-                    <CheckBox x:Name="chbSwitched3"/>
+                    <xctk:IntegerUpDown x:Name="numGinseng3" />
+                    <CheckBox x:Name="chbSet3" />
+                    <CheckBox x:Name="chbSwitched3" />
                     <CheckBox x:Name="chbLinked3" />
-                    
+
                     <Label x:Name="lblMove4">Move 4</Label>
                     <local:SearchableDropDown x:Name="cbMove4" />
-                    <xctk:IntegerUpDown x:Name="numGinseng4"/>
-                    <CheckBox x:Name="chbSet4"/>
-                    <CheckBox x:Name="chbSwitched4"/>
+                    <xctk:IntegerUpDown x:Name="numGinseng4" />
+                    <CheckBox x:Name="chbSet4" />
+                    <CheckBox x:Name="chbSwitched4" />
                     <CheckBox x:Name="chbLinked4" />
                 </UniformGrid>
-                
             </TabItem>
         </TabControl>
-
     </Grid>
 </Window>

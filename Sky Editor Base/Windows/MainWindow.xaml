@@ -5,26 +5,26 @@
     <Grid Margin="0,0,0,0">
         <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
-                <MenuItem x:Name="menuNew" Header="_New"/>
+                <MenuItem x:Name="menuNew" Header="_New" />
                 <MenuItem x:Name="menuFileOpen" Header="_Open">
-                    <MenuItem x:Name="menuFileOpenAuto" Header="Open (_Autodetect Game)"/>
-                    <MenuItem x:Name="menuFileOpenNoDetect" Header="Open (Let me _Choose Game)"/>
+                    <MenuItem x:Name="menuFileOpenAuto" Header="Open (_Autodetect Game)" />
+                    <MenuItem x:Name="menuFileOpenNoDetect" Header="Open (Let me _Choose Game)" />
                 </MenuItem>
-                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..."/>
+                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..." />
             </MenuItem>
-            <MenuItem x:Name="menuCheats" Header="_Cheats"/>
-            <MenuItem x:Name="menuCredits" Header="Cre_dits"/>
+            <MenuItem x:Name="menuCheats" Header="_Cheats" />
+            <MenuItem x:Name="menuCredits" Header="Cre_dits" />
             <MenuItem x:Name="menuDebug" Header="Debug" Visibility="Hidden">
-                <MenuItem x:Name="menuShowConsole" Header="Show Console"/>
-                <MenuItem x:Name="menuDebugConsole" Header="Run Command..."/>
+                <MenuItem x:Name="menuShowConsole" Header="Show Console" />
+                <MenuItem x:Name="menuDebugConsole" Header="Run Command..." />
             </MenuItem>
         </Menu>
-        <TabControl x:Name="tcTabs" Margin="0,21,276,0"/>
+        <TabControl x:Name="tcTabs" Margin="0,21,276,0" />
         <StatusBar x:Name="statusBarMain" Height="26" VerticalAlignment="Bottom" Margin="0,0,0,0" Visibility="Hidden">
             <StatusBarItem>
-                <Label x:Name="statusLblStatus" Content="Ready" Height="26" Width="503"/>
+                <Label x:Name="statusLblStatus" Content="Ready" Height="26" Width="503" />
             </StatusBarItem>
         </StatusBar>
-        <ListBox x:Name="lbSaves" Margin="0,21,0,0" HorizontalAlignment="Right" Width="276"/>
+        <ListBox x:Name="lbSaves" Margin="0,21,0,0" HorizontalAlignment="Right" Width="276" />
     </Grid>
 </Window>

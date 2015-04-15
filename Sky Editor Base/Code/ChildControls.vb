@@ -1,6 +1,5 @@
-﻿
-''' <summary>
-''' 
+﻿''' <summary>
+'''
 ''' </summary>
 ''' <remarks>Provided by http://dirk.schuermans.me/?p=585 </remarks>
 Class ChildControls

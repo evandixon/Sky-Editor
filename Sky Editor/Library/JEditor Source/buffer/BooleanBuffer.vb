@@ -2,49 +2,49 @@
 
 Namespace skyjed.buffer
 
-	Public MustInherit Class BooleanBuffer
+    Public MustInherit Class BooleanBuffer
 
-		Protected Friend __position As Integer
-		Protected Friend __size As Integer
+        Protected Friend __position As Integer
+        Protected Friend __size As Integer
 
-		Protected Friend Sub New(ByVal size As Integer)
-			__position = 0
-			__size = size
-		End Sub
+        Protected Friend Sub New(ByVal size As Integer)
+            __position = 0
+            __size = size
+        End Sub
 
-		Public Overridable Function position() As Integer
-			Return __position
-		End Function
+        Public Overridable Function position() As Integer
+            Return __position
+        End Function
 
-		Public Overridable Function size() As Integer
-			Return __size
-		End Function
+        Public Overridable Function size() As Integer
+            Return __size
+        End Function
 
-		Public Overridable Function remaining() As Integer
-			Return __size - __position
-		End Function
+        Public Overridable Function remaining() As Integer
+            Return __size - __position
+        End Function
 
-		Public Overridable Function reset() As BooleanBuffer
-			__position = 0
-			Return Me
-		End Function
+        Public Overridable Function reset() As BooleanBuffer
+            __position = 0
+            Return Me
+        End Function
 
-		Public Overridable Function seek(ByVal new_position As Integer) As BooleanBuffer
-			__position = new_position
-			Return Me
-		End Function
+        Public Overridable Function seek(ByVal new_position As Integer) As BooleanBuffer
+            __position = new_position
+            Return Me
+        End Function
 
-		Public Overridable Function skip(ByVal length As Integer) As BooleanBuffer
-			__position += length
-			Return Me
-		End Function
+        Public Overridable Function skip(ByVal length As Integer) As BooleanBuffer
+            __position += length
+            Return Me
+        End Function
 
-		'/ returns view of this buffer from current position and advances position
-		Public Overridable Function view(ByVal length As Integer) As BooleanBuffer
-			Dim ret As BooleanBuffer = New BooleanBufferView(Me, __position, length)
-			__position += length
-			Return ret
-		End Function
+        '/ returns view of this buffer from current position and advances position
+        Public Overridable Function view(ByVal length As Integer) As BooleanBuffer
+            Dim ret As BooleanBuffer = New BooleanBufferView(Me, __position, length)
+            __position += length
+            Return ret
+        End Function
 
         Public Overridable Function [get]() As Boolean
             If remaining() = 0 Then
@@ -119,27 +119,25 @@ Namespace skyjed.buffer
             put(BitConverterLE.splitBits(vals))
         End Sub
 
-		Public Overridable Sub putInt(ByVal val As Integer, ByVal num_bits As Integer)
-			put(BitConverterLE.splitBitsInt(val, num_bits))
-		End Sub
+        Public Overridable Sub putInt(ByVal val As Integer, ByVal num_bits As Integer)
+            put(BitConverterLE.splitBitsInt(val, num_bits))
+        End Sub
 
-		Public Overridable Sub putInts(ByVal vals() As Integer, ByVal num_bits As Integer)
-			put(BitConverterLE.splitBitsInt(vals, num_bits))
-		End Sub
+        Public Overridable Sub putInts(ByVal vals() As Integer, ByVal num_bits As Integer)
+            put(BitConverterLE.splitBitsInt(vals, num_bits))
+        End Sub
 
-		Public Overridable Sub putLong(ByVal val As Long, ByVal num_bits As Integer)
-			put(BitConverterLE.splitBitsLong(val, num_bits))
-		End Sub
+        Public Overridable Sub putLong(ByVal val As Long, ByVal num_bits As Integer)
+            put(BitConverterLE.splitBitsLong(val, num_bits))
+        End Sub
 
-		Public Overridable Sub putLongs(ByVal vals() As Long, ByVal num_bits As Integer)
-			put(BitConverterLE.splitBitsLong(vals, num_bits))
-		End Sub
+        Public Overridable Sub putLongs(ByVal vals() As Long, ByVal num_bits As Integer)
+            put(BitConverterLE.splitBitsLong(vals, num_bits))
+        End Sub
 
-		Protected Friend MustOverride Function aget(ByVal index As Integer) As Boolean
-		Protected Friend MustOverride Sub aput(ByVal index As Integer, ByVal b As Boolean)
+        Protected Friend MustOverride Function aget(ByVal index As Integer) As Boolean
+        Protected Friend MustOverride Sub aput(ByVal index As Integer, ByVal b As Boolean)
 
-
-
-	End Class
+    End Class
 
 End Namespace

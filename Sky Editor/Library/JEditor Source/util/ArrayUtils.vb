@@ -2,7 +2,6 @@
 Imports SkyEditorBase.Utilities
 Namespace skyjed.util
 
-
     Public Class ArrayUtils
 
         Public Shared Sub copyInto(ByVal dest() As Integer, ByVal src() As Integer, ByVal [off] As Integer)

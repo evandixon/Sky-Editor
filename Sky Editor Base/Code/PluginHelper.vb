@@ -70,7 +70,7 @@ Public Class PluginHelper
         End If
     End Function
     ''' <summary>
-    ''' 
+    '''
     ''' </summary>
     ''' <param name="v"></param>
     ''' <param name="SearchLevel">The depth to search for controls.</param>
@@ -144,7 +144,7 @@ Public Class PluginHelper
                                   Return True
                               End Function)
     End Function
-    ''' <summary>                    
+    ''' <summary>
     ''' Runs the specified program without waiting for it to complete.
     ''' </summary>
     ''' <param name="Filename"></param>

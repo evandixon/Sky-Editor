@@ -1,18 +1,18 @@
 ﻿<local:EditorTab x:Class="FilesTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor">
     <Grid>
         <TreeView x:Name="tvFiles" HorizontalAlignment="Left" Width="213">
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="menuOpenInExplorer" Header="Open in File Explorer"/>
+                    <MenuItem x:Name="menuOpenInExplorer" Header="Open in File Explorer" />
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <StackPanel x:Name="spPlaceholder" Margin="213,0,0,0"/>
+        <StackPanel x:Name="spPlaceholder" Margin="213,0,0,0" />
     </Grid>
 </local:EditorTab>

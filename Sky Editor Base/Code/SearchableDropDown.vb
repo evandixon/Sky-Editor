@@ -71,6 +71,6 @@
     End Property
 
     Private Sub SearchableDropDown_TextInput(sender As Object, e As TextCompositionEventArgs) Handles Me.TextInput
-    
+
     End Sub
 End Class

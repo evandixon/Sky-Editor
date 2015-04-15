@@ -96,11 +96,11 @@ Public Class HeldItemsTab
                 Dim i As New SkySave.SkyItem(Lists.SkyItemNamesInverse(itemname), 0)
                 cbHeldItems.Items.Add(i)
                 cbHeldItemsBoxContents.Items.Add(i)
-                End If
+            End If
         Next
         cbHeldItems.SelectedIndex = 0
         cbHeldItemsBoxContents.SelectedIndex = 0
-        End Sub
+    End Sub
     Sub LoadTDHeldItemsDropDowns()
         'Load Items
         gbHeldBoxContent.IsEnabled = False
@@ -185,8 +185,6 @@ Public Class HeldItemsTab
             Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items ({0})"), lbHeldItems.Items.Count)
         End If
     End Sub
-
-
 
     Private Sub HeldItemsTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Me.Header = String.Format(PluginHelper.GetLanguageItem("Category_HeldItems", "Held Items ({0})"), lbHeldItems.Items.Count)

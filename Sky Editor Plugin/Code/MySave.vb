@@ -38,7 +38,7 @@ Public Class MySave
     ''If you'd prefer, you can use a filename constructor instead.
     ''If you provide one, it will be called before the one giving a Byte array.
     'Public Sub New(Filename As String)
-    '    
+    '
     'End Sub
 
     '

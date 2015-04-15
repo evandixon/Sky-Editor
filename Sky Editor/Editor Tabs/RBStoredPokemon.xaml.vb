@@ -24,17 +24,17 @@ Public Class RBStoredPokemonTab
         End If
     End Sub
     Sub RefreshPKMDisplay()
-            Dim pkms As New List(Of skyjed.save.iPkmn)
-            For Each p In lbPokemon.Items
-                pkms.Add(p)
-            Next
-            lbPokemon.Items.Clear()
-            For count As Integer = 0 To pkms.Count - 1
-                'If pkms(count).isvalid Then
-                lbPokemon.Items.Add(pkms(count))
-                'End If
-            Next
-            ChangeHeader()
+        Dim pkms As New List(Of skyjed.save.iPkmn)
+        For Each p In lbPokemon.Items
+            pkms.Add(p)
+        Next
+        lbPokemon.Items.Clear()
+        For count As Integer = 0 To pkms.Count - 1
+            'If pkms(count).isvalid Then
+            lbPokemon.Items.Add(pkms(count))
+            'End If
+        Next
+        ChangeHeader()
     End Sub
 
     Public Overrides Sub RefreshDisplay(Save As GenericSave)

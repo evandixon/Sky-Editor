@@ -99,7 +99,7 @@ Namespace FileFormats
 
         ''' <summary>
         ''' Creates a new BGP DecompressedFile when given a System.Drawing.Bitmap object.
-        ''' 
+        '''
         ''' Each 8x8 tile must use 1 of 16 palettes, each with 16 colors.
         ''' Will raise a BadImageFormatException if there is not enough room in the palette for all the colors.
         ''' </summary>

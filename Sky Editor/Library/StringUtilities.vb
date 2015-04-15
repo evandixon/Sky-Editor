@@ -4,7 +4,7 @@ Public Class StringUtilities
     Public Shared Function StringToPMDEncoding(Input As String) As Byte()
         Dim out As New List(Of Byte)
         For Each c As Char In Input
-                out.Add(Lists.StringEncodingInverse(c))
+            out.Add(Lists.StringEncodingInverse(c))
         Next
         Return out.ToArray
     End Function

@@ -2,7 +2,7 @@
 
 Namespace skyjed.util
 
-	Public Class SkyCharConv
+    Public Class SkyCharConv
 
         Private Const NAME_LENGTH As Integer = 10
         Private Const EnableTrash As Boolean = False
@@ -66,6 +66,6 @@ Namespace skyjed.util
             Return buf
         End Function
 
-	End Class
+    End Class
 
 End Namespace

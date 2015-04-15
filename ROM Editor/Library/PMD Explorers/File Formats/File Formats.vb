@@ -3,8 +3,6 @@ Imports SkyEditorBase
 
 Namespace FileFormats
 
-
-
     Enum EvolveType
         BaseForm = 0
         EvolveLevel = 1

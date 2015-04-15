@@ -86,7 +86,6 @@
 
                     w.WriteEndElement()
 
-
                     w.WriteStartElement("Shadow")
 
                     w.WriteStartElement("XOffset")
@@ -116,4 +115,3 @@
         End Class
     End Namespace
 End Namespace
-

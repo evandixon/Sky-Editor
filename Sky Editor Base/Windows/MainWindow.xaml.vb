@@ -137,7 +137,6 @@ Namespace SkyEditorWindows
                 PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
             End Try
 
-
             'Make sure there's actually a plugin loaded.
             If False AndAlso Manager.Plugins.Count = 0 Then
                 MessageBox.Show("This version of Sky Editor requires at least one compatible extension in the Plugins folder to be loaded.  Sky Editor will now shut down.")
@@ -149,7 +148,6 @@ Namespace SkyEditorWindows
             OpenFileDialog1.Filter = Manager.IOFiltersString
             SaveFileDialog1 = New Forms.SaveFileDialog
             SaveFileDialog1.Filter = OpenFileDialog1.Filter
-
 
             'Check command line arguments to see if a file needs to be loaded
             Dim fileToLoad As String = ""
@@ -181,7 +179,6 @@ Namespace SkyEditorWindows
 
             tcTabs.TabStripPlacement = Settings.TabStripPlacement
 
-
             'Add or remove cheats menu if there's plugins
             If Manager.CheatManager.CodeDefinitions.Count = 0 Then
                 menuCheats.Visibility = System.Windows.Visibility.Collapsed
@@ -210,9 +207,6 @@ Namespace SkyEditorWindows
                 tcTabs.SelectedIndex = 0
             End If
         End Sub
-
-
-
 
 #Region "iMainWindow Support"
         Public Sub AddMenuItem(Menu As MenuItem) Implements iMainWindow.AddMenuItem

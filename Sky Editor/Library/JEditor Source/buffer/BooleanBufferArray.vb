@@ -1,14 +1,14 @@
 ﻿Namespace skyjed.buffer
 
-	Public Class BooleanBufferArray
-		Inherits BooleanBuffer
+    Public Class BooleanBufferArray
+        Inherits BooleanBuffer
 
-		Private __array() As Boolean
+        Private __array() As Boolean
 
-		Public Sub New(ByVal array() As Boolean)
-			MyBase.New(array.Length)
-			__array = array
-		End Sub
+        Public Sub New(ByVal array() As Boolean)
+            MyBase.New(array.Length)
+            __array = array
+        End Sub
 
         Protected Friend Overrides Function aget(ByVal index As Integer) As Boolean
             Return __array(index)
@@ -22,6 +22,6 @@
             Return __array
         End Function
 
-	End Class
+    End Class
 
 End Namespace

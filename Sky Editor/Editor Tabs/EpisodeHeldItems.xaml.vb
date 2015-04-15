@@ -22,7 +22,7 @@ Public Class EpisodeHeldItems
         For Each item In lbSpEpisodeHeldItems.Items
             SpEpisodeHeldItems.Add(item)
         Next
-        Sky.SpEpisode_HeldItems = SpEpisodeHeldItems.ToArray
+        sky.SpEpisode_HeldItems = SpEpisodeHeldItems.ToArray
         Return sky
     End Function
 

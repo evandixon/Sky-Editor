@@ -57,11 +57,10 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property ShowLoadingWindow As Boolean = True
 
-
     Dim _GameTypes As New Dictionary(Of String, String)
     ''' <summary>
     ''' Matches the save ID using the given game name.
-    ''' 
+    '''
     ''' Key: Game Type
     ''' Value: Save Type
     ''' </summary>
