@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase
+﻿Imports System.Windows.Forms
+Imports SkyEditor.skyjed.save
+Imports SkyEditorBase
 Public Class SkyEditorInfo
     Implements iSkyEditorPlugin
     Public ReadOnly Property PluginAuthor As String Implements SkyEditorBase.iSkyEditorPlugin.PluginAuthor
@@ -40,8 +42,8 @@ Public Class SkyEditorInfo
 
         Manager.RegisterSaveGameFormat(GameStrings.BlueGame, GameStrings.RBSave, GetType(RBSave))
         Manager.RegisterSaveGameFormat(GameStrings.RedGame, GameStrings.RBSave, GetType(RBSave))
-        Manager.RegisterSaveGameFormat(GameStrings.BlueGameEU, GameStrings.RBSaveEU, GetType(RBSave))
-        Manager.RegisterSaveGameFormat(GameStrings.RedGameEU, GameStrings.RBSave, GetType(RBSave))
+        Manager.RegisterSaveGameFormat(GameStrings.BlueGameEU, GameStrings.RBSaveEU, GetType(RBSaveEU))
+        Manager.RegisterSaveGameFormat(GameStrings.RedGameEU, GameStrings.RBSave, GetType(RBSaveEU))
         Manager.RegisterSaveGameFormat(GameStrings.TimeGame, GameStrings.TDSave, GetType(TDSave))
         Manager.RegisterSaveGameFormat(GameStrings.DarknessGame, GameStrings.TDSave, GetType(TDSave))
         Manager.RegisterSaveGameFormat(GameStrings.SkyGame, GameStrings.SkySave, GetType(SkySave))
@@ -60,6 +62,8 @@ Public Class SkyEditorInfo
         Manager.RegisterCodeGenerator(New RedTeamName)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
+
+        Manager.RegisterConsoleCommand("rbloctest", AddressOf GenerateRBLocationTest)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
@@ -83,5 +87,70 @@ Public Class SkyEditorInfo
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
 
+    End Sub
+    Public Shared Sub GenerateRBLocationTest(Manager As PluginManager, Parameter As String)
+        If TypeOf Manager.Save Is RBSave Then
+            Dim p1 As RBPkmn = Nothing
+            For Each item In DirectCast(Manager.Save, RBSave).StoredPokemon.pkmns
+                If item.GetIsValid() Then
+                    p1 = item
+                    Exit For
+                End If
+            Next
+            If p1 Is Nothing Then
+                PluginHelper.Writeline("No existing Pokemon.")
+            Else
+                Dim pkmns = DirectCast(Manager.Save, RBSave).StoredPokemon.pkmns
+                Dim loc As Integer = 0
+                For count As Integer = 0 To DirectCast(Manager.Save, RBSave).StoredPokemon.pkmns.Count - 1
+                    If loc > 255 Then Exit For
+                    If Not pkmns(count).GetIsValid() Then
+                        p1.name = "MetAt " & loc.ToString()
+                        p1.metat = loc
+                        loc += 1
+                        pkmns(count) = New RBPkmn(p1)
+                    End If
+                Next
+                Dim temppkm = DirectCast(Manager.Save, RBSave).StoredPokemon
+                temppkm.pkmns = pkmns
+                DirectCast(Manager.Save, RBSave).StoredPokemon = temppkm
+                Dim f As New SaveFileDialog
+                f.Filter = "Raw Save Files|*.sav|All Files|*.*"
+                If f.ShowDialog = DialogResult.OK Then
+                    IO.File.WriteAllBytes(f.FileName, Manager.Save.RawData)
+                End If
+            End If
+        ElseIf TypeOf Manager.Save Is RBSaveEU Then
+            Dim p1 As RBPkmn = Nothing
+            For Each item In DirectCast(Manager.Save, RBSaveEU).StoredPokemon.pkmns
+                If item.GetIsValid() Then
+                    p1 = item
+                    Exit For
+                End If
+            Next
+            If p1 Is Nothing Then
+                PluginHelper.Writeline("No existing Pokemon.")
+            Else
+                Dim pkmns = DirectCast(Manager.Save, RBSaveEU).StoredPokemon.pkmns
+                Dim loc As Integer = 0
+                For count As Integer = 0 To DirectCast(Manager.Save, RBSaveEU).StoredPokemon.pkmns.Count - 1
+                    If loc > 255 Then Exit For
+                    If Not pkmns(count).GetIsValid() Then
+                        p1.name = "MetAt " & loc.ToString()
+                        p1.metat = loc
+                        loc += 1
+                        pkmns(count) = New RBPkmn(p1)
+                    End If
+                Next
+                Dim temppkm = DirectCast(Manager.Save, RBSaveEU).StoredPokemon
+                temppkm.pkmns = pkmns
+                DirectCast(Manager.Save, RBSaveEU).StoredPokemon = temppkm
+                Dim f As New SaveFileDialog
+                f.Filter = "Raw Save Files|*.sav|All Files|*.*"
+                If f.ShowDialog = DialogResult.OK Then
+                    IO.File.WriteAllBytes(f.FileName, Manager.Save.RawData)
+                End If
+            End If
+        End If
     End Sub
 End Class

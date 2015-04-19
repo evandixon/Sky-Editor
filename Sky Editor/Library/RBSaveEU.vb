@@ -203,7 +203,7 @@ Public Class RBSaveEU
 
     Public Overrides ReadOnly Property SaveID As String
         Get
-            Return GameStrings.RBSave
+            Return GameStrings.RBSaveEU
         End Get
     End Property
 End Class

@@ -1,11 +1,7 @@
-﻿Imports SkyEditorBase
+﻿Imports System.Reflection
+Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
 Public Class Lists
-    <Obsolete>
-    Public Shared Function SkyEditorLanguageText() As Dictionary(Of String, String)
-        Static _dictionaryCache As New ResourceDictionary("&L;/Language.txt")
-        Return _dictionaryCache
-    End Function
     Public Shared Function SkyLocations() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
@@ -40,12 +36,23 @@ Public Class Lists
         Return _dictionaryConverted
     End Function
     Public Shared Function TDLocationsInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/TDLocations.txt")
+        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
             _dictionaryConverted = New Dictionary(Of String, Integer)
             For Each Key As String In _dictionaryOriginal.Keys
                 If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
+            Next
+        End If
+        Return _dictionaryConverted
+    End Function
+    Public Shared Function RBLocations() As Dictionary(Of Integer, String)
+        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
+        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
+        If _dictionaryConverted Is Nothing Then
+            _dictionaryConverted = New Dictionary(Of Integer, String)
+            For Each Key As String In _dictionaryOriginal.Keys
+                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
             Next
         End If
         Return _dictionaryConverted

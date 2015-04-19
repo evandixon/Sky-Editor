@@ -380,6 +380,23 @@ Namespace skyjed.save
             Me.New()
             load(buf)
         End Sub
+        Public Sub New(Pkm As RBPkmn)
+            Me.isvalid = Pkm.isvalid
+            Me.lvl = Pkm.lvl
+            Me.unknown = Pkm.unknown
+            Me.no = Pkm.no
+            Me.isfemale = Pkm.isfemale
+            Me.metat = Pkm.metat
+            Me.metfl = Pkm.metfl
+            Me.unkdata1 = Pkm.unkdata1
+            Me.iq = Pkm.iq
+            Me.hp = Pkm.hp
+            Me.stats = Pkm.stats
+            Me.exp = Pkm.exp
+            Me.unkdata2 = Pkm.unkdata2
+            Me.attacks = Pkm.attacks
+            Me.name = Pkm.name
+        End Sub
 
         Public Sub load(ByVal buf As BooleanBuffer)
             buf.seek(0)

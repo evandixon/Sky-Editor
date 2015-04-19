@@ -184,6 +184,9 @@
     <Compile Include="WelcomeTab.xaml.vb">
       <DependentUpon>WelcomeTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\NewNameWindow.xaml.vb">
+      <DependentUpon>NewNameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
@@ -219,6 +222,10 @@
     <Page Include="WelcomeTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\NewNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\PluginWindow.xaml">
       <SubType>Designer</SubType>

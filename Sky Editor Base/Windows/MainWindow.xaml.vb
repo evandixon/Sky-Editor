@@ -18,17 +18,20 @@ Namespace SkyEditorWindows
         Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
             menuMain.IsEnabled = False
             Dim x As New GameTypeSelector
+            Dim n As New NewNameWindow
             x.AddGames(Manager.SaveTypes.Keys)
             If x.ShowDialog() Then
-                Dim d(1048576) As Byte
-                Dim gameID As String = x.SelectedGame
-                If Not String.IsNullOrEmpty(gameID) Then
-                    Dim s As GenericSave = Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d})
-                    s.Name = "Pokemon Mystery Dungeon Explorers of Sky - 1.nds"
-                    Manager.Saves.Add(s)
-                    Manager.CurrentSave = s.Name
-                    Manager.RefreshDisplay("Pokemon Mystery Dungeon Explorers of Sky - 1.nds")
-                    Manager_SaveAdded(Me, New PluginManager.SaveAddedEventArgs(s.Name, s))
+                If n.ShowDialog() Then
+                    Dim d(1048576) As Byte
+                    Dim gameID As String = x.SelectedGame
+                    If Not String.IsNullOrEmpty(gameID) Then
+                        Dim s As GenericSave = Manager.SaveTypes(gameID).GetConstructor({GetType(Byte())}).Invoke({d})
+                        s.Name = n.SelectedName
+                        Manager.Saves.Add(s)
+                        Manager.CurrentSave = s.Name
+                        Manager.RefreshDisplay(n.SelectedName)
+                        Manager_SaveAdded(Me, New PluginManager.SaveAddedEventArgs(s.Name, s))
+                    End If
                 End If
             End If
             menuMain.IsEnabled = True

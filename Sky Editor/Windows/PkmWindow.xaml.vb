@@ -119,7 +119,11 @@ Public Class PkmWindow
             '    keys3.Add(New GenericListItem(Of Integer)(Lists.SkyLocations(item), item))
             'Next
             For count As Integer = 0 To 255
-                keys3.Add(New GenericListItem(Of Integer)(count, count))
+                If Lists.RBLocations().ContainsKey(count) Then
+                    keys3.Add(New GenericListItem(Of Integer)(Lists.RBLocations(count), count))
+                Else
+                    keys3.Add(New GenericListItem(Of Integer)(count, count))
+                End If
             Next
             keys3.Sort()
             For Each item In keys3
@@ -127,7 +131,11 @@ Public Class PkmWindow
             Next
             cbPokemon.SelectedIndex = cbPokemon.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBPokemon(JSkyPokemon.no), JSkyPokemon.no))
             'cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyLocations(JSkyPokemon.metat), JSkyPokemon.metat))
-            cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)((JSkyPokemon.metat), JSkyPokemon.metat))
+            If Lists.RBLocations().ContainsKey(JSkyPokemon.metat) Then
+                cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBLocations(JSkyPokemon.metat), JSkyPokemon.metat))
+            Else
+                cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)((JSkyPokemon.metat), JSkyPokemon.metat))
+            End If
             cbMove1.SelectedIndex = cbMove1.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(0).no), JSkyPokemon.attacks(0).no))
             cbMove2.SelectedIndex = cbMove2.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(1).no), JSkyPokemon.attacks(1).no))
             cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.RBMoves(JSkyPokemon.attacks(2).no), JSkyPokemon.attacks(2).no))
