@@ -68,11 +68,9 @@ Public Class MDSaveBase
         End Set
     End Property
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return "Generic Mystery Dungeon Save"
-        End Get
-    End Property
+    Public Overrides Function DefaultSaveID() As String
+        Return "Generic Mystery Dungeon Save"
+    End Function
 
     Public Overrides Sub DebugInfo()
         MyBase.DebugInfo()

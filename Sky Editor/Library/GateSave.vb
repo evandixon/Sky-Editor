@@ -8,9 +8,7 @@
 
     End Sub
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return GameStrings.GateSave
-        End Get
-    End Property
+   Public Overrides Function DefaultSaveID() As String
+        Return GameStrings.GateSave
+    End Function
 End Class

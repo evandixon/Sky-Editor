@@ -136,7 +136,7 @@ Namespace Redistribution
             'Manager.ReloadPlugins()
         End Sub
         Public Shared Sub InstallPendingPlugins()
-            Dim a = GetAssemblies()
+            'Dim a = GetAssemblies()
             Dim PluginNames As New List(Of String)
             For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*_plg.zip")
                 PluginNames.Add(IO.Path.GetFileName(item))

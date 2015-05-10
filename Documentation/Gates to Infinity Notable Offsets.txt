@@ -1,3 +1,2 @@
 ﻿game_data
 0x0009: Held Money
-0x0388: part of stored money or checksum.

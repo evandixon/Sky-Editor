@@ -57,8 +57,9 @@ Namespace SkyEditorWindows
             SaveFileDialog1.Filter = Manager.IOFiltersStringSaveAs()
             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Manager.UpdateSave()
+                Await Manager.Save.Save(SaveFileDialog1.FileName)
                 'Writes the updated save, and fixes the checksum at the same time
-                IO.File.WriteAllBytes(SaveFileDialog1.FileName, Await Manager.Save.GetBytes)
+                'IO.File.WriteAllBytes(SaveFileDialog1.FileName, Await Manager.Save.GetBytes)
             End If
             menuMain.IsEnabled = True
         End Sub
@@ -98,9 +99,9 @@ Namespace SkyEditorWindows
         '    Next
         'End Sub
 
-        Private Sub MainWindow_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
-            tcTabs.Items.Clear()
-        End Sub
+        'Private Sub MainWindow_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
+        '    tcTabs.Items.Clear()
+        'End Sub
 
         Private Sub MainWindow_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
             RaiseEvent OnKeyPress(sender, e)
@@ -241,7 +242,7 @@ Namespace SkyEditorWindows
         End Sub
 
         Private Sub lbSaves_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbSaves.SelectionChanged
-            Manager.CurrentSave = DirectCast(lbSaves.SelectedItem, GenericSave).Name
+            If lbSaves.SelectedItem IsNot Nothing Then Manager.CurrentSave = DirectCast(lbSaves.SelectedItem, GenericSave).Name
         End Sub
         Dim oldSelectedSaveName As String = ""
         Private Sub Manager_CurrentSaveChanged(sender As Object, e As PluginManager.SaveChangedEventArgs) Handles Manager.CurrentSaveChanged
@@ -254,9 +255,11 @@ Namespace SkyEditorWindows
             tcTabs.Items.Clear()
             If lbSaves.SelectedItem IsNot Nothing Then
                 oldSelectedSaveName = DirectCast(lbSaves.SelectedItem, GenericSave).Name
-                For Each item In tabs(oldSelectedSaveName)
-                    tcTabs.Items.Add(item)
-                Next
+                If tabs.ContainsKey(oldSelectedSaveName) Then
+                    For Each item In tabs(oldSelectedSaveName)
+                        tcTabs.Items.Add(item)
+                    Next
+                End If
             End If
         End Sub
 
@@ -264,6 +267,24 @@ Namespace SkyEditorWindows
             lbSaves.Items.Add(e.Save)
             If lbSaves.SelectedIndex < 0 Then
                 lbSaves.SelectedIndex = 0
+            End If
+        End Sub
+
+        Private Sub contextRemoveSave_Click(sender As Object, e As RoutedEventArgs) Handles contextRemoveSave.Click
+            If lbSaves.SelectedItem IsNot Nothing Then
+                If MessageBox.Show(PluginHelper.GetLanguageItem("Dialog_RemoveSave_Confirm", "Are you sure you want to remove this save?  All changes to it will be lost."), PluginHelper.GetLanguageItem("Sky Editor Title", "Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                    tcTabs.Items.Clear()
+                    Manager.CurrentSave = ""
+                    Manager.Saves.Remove(lbSaves.SelectedItem)
+                    oldSelectedSaveName = ""
+                    lbSaves.Items.Clear()
+                    For Each item In Manager.Saves
+                        lbSaves.Items.Add(item)
+                    Next
+                    If lbSaves.Items.Count > 0 Then
+                        lbSaves.SelectedIndex = 0
+                    End If
+                End If
             End If
         End Sub
     End Class

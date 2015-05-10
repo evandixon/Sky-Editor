@@ -242,7 +242,7 @@ Public Class PluginHelper
             ElseIf ConsoleCommands.Keys.Contains(cmd) Then
                 ConsoleCommands(cmd).Invoke(Manager, arg)
             Else
-                Writeline(String.Format("""{0}"" is not a recognisable command.", cmd))
+                Writeline(String.Format("""{0}"" is not a recognizable command.", cmd))
             End If
         End While
     End Sub

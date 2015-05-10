@@ -111,7 +111,7 @@ Public Class RBStoredPokemonTab
             Dim temppkm = rb.StoredPokemon
             temppkm.pkmns = pkms.ToArray
             rb.StoredPokemon = temppkm
-            out = rb.ToBase
+            out = rb
         ElseIf TypeOf Save Is RBSaveEU Then
             Dim rb = RBSaveEU.FromBase(Save)
             Dim pkms As New List(Of skyjed.save.RBPkmn)

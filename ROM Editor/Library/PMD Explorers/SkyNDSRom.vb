@@ -19,19 +19,14 @@ Namespace PMD_Explorers
         Public Sub New(RawData As Byte())
             MyBase.New(RawData)
         End Sub
-        Public Overrides ReadOnly Property SaveID As String
-            Get
-                Return GameStrings.SkyNDSRom
-            End Get
-        End Property
+      
+        Public Overrides Function DefaultSaveID() As String
+            Return GameStrings.SkyNDSRom
+        End Function
 
         Public Overrides Async Sub DebugInfo()
             MyBase.DebugInfo()
             Await EnsureUnpacked()
-            'Dim i As New item_p(Me)
-            'Dim l As New LanguageString(Me)
-            'Dim m = MonsterMDFile.FromBytes(IO.File.ReadAllBytes(IO.Path.Combine(PluginDefinition.GetResourceDirectory, "current\data\balance\monster.md")))
-            Dim w As New waza_p(Me)
         End Sub
 
         Public Async Function GetPortraitsFile() As Task(Of Kaomado)

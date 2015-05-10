@@ -61,14 +61,6 @@ Namespace Utilities
 
             Private done As Boolean
             Public Property InnerException() As Exception
-                Get
-                    Return m_InnerException
-                End Get
-                Set(value As Exception)
-                    m_InnerException = value
-                End Set
-            End Property
-            Private m_InnerException As Exception
             ReadOnly workItemsWaiting As New AutoResetEvent(False)
             ReadOnly items As New Queue(Of Tuple(Of SendOrPostCallback, Object))()
 
@@ -98,7 +90,7 @@ Namespace Utilities
                     If task IsNot Nothing Then
                         task.Item1.Invoke(task.Item2)
                         If InnerException IsNot Nothing Then
-                            ' the method threw an exeption
+                            ' the method threw an exception
                             Throw New AggregateException("AsyncHelpers.Run method threw an exception.", InnerException)
                         End If
                     Else

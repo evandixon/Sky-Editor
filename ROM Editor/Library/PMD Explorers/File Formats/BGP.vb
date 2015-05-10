@@ -93,7 +93,7 @@ Namespace FileFormats
         Private Class NumberOfItemsOrderer
             Implements IComparer(Of List(Of Color))
             Public Function Compare(x As List(Of Color), y As List(Of Color)) As Integer Implements IComparer(Of List(Of Color)).Compare
-                Return DirectCast(y, List(Of Color)).Count - DirectCast(x, List(Of Color)).Count
+                Return y.Count - x.Count
             End Function
         End Class
 
@@ -104,20 +104,20 @@ Namespace FileFormats
         ''' Will raise a BadImageFormatException if there is not enough room in the palette for all the colors.
         ''' </summary>
         ''' <param name="Image">Image to be converted to a BGP.</param>
-        ''' <param name="CheckForTransform">Unimplimented; When set to true, will analyze tiles to determine if one chunk is a transform of another.  Will be much slower, but may save on disk space.</param>
+        ''' <param name="CheckForTransform">Unimplemented; When set to true, will analyze tiles to determine if one chunk is a transform of another.  Will be much slower, but may save on disk space.</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertFromBitmap(Image As Bitmap, Optional CheckForTransform As Boolean = False) As BGP
             Dim mapData(&H820 - 1) As Byte
-            Dim paletteData(&H400 - 1) As Byte
+            'Dim paletteData(&H400 - 1) As Byte
             Dim chunks(&H7FE0 - 1) As Byte
-            Dim blank(31) As Byte
+            'Dim blank(31) As Byte
             Dim paletteMaster As New Palette
             Dim FileOutput As New List(Of Byte)
             Dim localPaletteList As New List(Of List(Of Color))
             For y As Integer = 0 To 23
                 For x As Integer = 0 To 31
-                    Dim chunkIndex = (y * 32) + x
+                    'Dim chunkIndex = (y * 32) + x
                     Dim colors As New Generic.List(Of Color)
                     For y2 As Integer = 0 To 7
                         For x2 As Integer = 0 To 7

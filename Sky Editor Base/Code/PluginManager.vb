@@ -57,7 +57,7 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property ShowLoadingWindow As Boolean = True
 
-    Dim _GameTypes As New Dictionary(Of String, String)
+    Dim _gameTypes As New Dictionary(Of String, String)
     ''' <summary>
     ''' Matches the save ID using the given game name.
     '''
@@ -187,7 +187,9 @@ Public Class PluginManager
         Set(value As String)
             Dim old = _currentSave
             _currentSave = value
-            RaiseEvent CurrentSaveChanged(Me, New SaveChangedEventArgs(old, value))
+            If Not String.IsNullOrEmpty(value) Then
+                RaiseEvent CurrentSaveChanged(Me, New SaveChangedEventArgs(old, value))
+            End If
         End Set
     End Property
 
@@ -264,6 +266,7 @@ Public Class PluginManager
         LoadPlugins(PluginFolder)
     End Sub
     Public Sub LoadPlugins(PluginFolder As String)
+        Me.PluginFolder = PluginFolder
         If IO.Directory.Exists(PluginFolder) Then
             Dim assemblies As New List(Of String)
             assemblies.AddRange(IO.Directory.GetFiles(PluginFolder, "*_plg.dll"))
@@ -271,21 +274,27 @@ Public Class PluginManager
             For Each plugin In assemblies
                 PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
                 Dim a As Assembly = Assembly.LoadFrom(plugin)
-                Dim types As Type() = a.GetTypes
-                For Each item In types
-                    Dim IsPlugin As Boolean = False
-                    For Each intface As Type In item.GetInterfaces
-                        If intface Is GetType(iSkyEditorPlugin) Then
-                            IsPlugin = True
+                Try
+                    Dim types As Type() = a.GetTypes
+                    For Each item In types
+                        Dim IsPlugin As Boolean = False
+                        For Each intface As Type In item.GetInterfaces
+                            If intface Is GetType(iSkyEditorPlugin) Then
+                                IsPlugin = True
+                            End If
+                        Next
+                        If IsPlugin Then
+                            Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
+                            Plugins.Add(Plg)
+                            Me.Assemblies.Add(a)
                         End If
                     Next
-                    If IsPlugin Then
-                        Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
-                        Plugins.Add(Plg)
-                        Me.Assemblies.Add(a)
-                    End If
-                Next
-
+                Catch ex As System.Reflection.ReflectionTypeLoadException
+                    PluginHelper.Writeline("Fatal error: System.Reflection.ReflectionTypeLoadException.", PluginHelper.LineType.Error)
+                    PluginHelper.Writeline("Unable to load.  Deleting plugin and restarting program.", PluginHelper.LineType.Error)
+                    PluginHelper.Writeline("Details: " & ex.ToString, PluginHelper.LineType.Error)
+                    Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
+                End Try
             Next
             Me.CheatManager.GameIDs = Me.GameTypes
             If Window IsNot Nothing Then
@@ -293,7 +302,6 @@ Public Class PluginManager
                     item.Load(Me)
                 Next
             End If
-            Me.PluginFolder = PluginFolder
         End If
     End Sub
     Public Sub ReloadPlugins()
@@ -431,7 +439,7 @@ Public Class PluginManager
         For Each item In EditorTabs
             Dim etab As EditorTab = item.GetConstructor({}).Invoke({})
             For Each game In etab.SupportedGames
-                If game IsNot Nothing AndAlso Saves(SaveName) IsNot Nothing AndAlso Saves(SaveName).SaveID = game Then
+                If game IsNot Nothing AndAlso Saves(SaveName) IsNot Nothing AndAlso Saves(SaveName).IsOfType(game) Then
                     'add the tab because this save is one of the supported games
                     Dim t As TabItem = etab
                     Dim x As New Task(Sub()
@@ -451,7 +459,7 @@ Public Class PluginManager
     'End Sub
     Public Sub RefreshDisplay(SaveName As String)
         RefreshTabs(SaveName)
-        If Settings.DebugMode Then Save.DebugInfo()
+        If Settings.DebugMode Then Saves(SaveName).DebugInfo()
     End Sub
     Public Sub UpdateSave()
         UpdateFromTabs()

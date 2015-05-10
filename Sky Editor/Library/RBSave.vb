@@ -194,17 +194,8 @@ Public Class RBSave
             Return AreaName & " (" & CurrentPokemon & "/" & Length & ")"
         End Function
     End Class
-    <Obsolete("Use Directcast(Save, RBSave) for consistency.")>
-    Public Shared Function FromBase(ByVal Base As MDSaveBase) As RBSave
-        Return DirectCast(Base, RBSave)
-    End Function
-    Public Function ToBase() As GenericSave
-        Return DirectCast(Me, GenericSave)
-    End Function
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return GameStrings.RBSave
-        End Get
-    End Property
+    Public Overrides Function DefaultSaveID() As String
+        Return GameStrings.RBSave
+    End Function
 End Class

@@ -37,8 +37,9 @@ Public Class RedBaseType
     End Function
 
     Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+        Const FF As Byte = &HFF
         Dim s = DirectCast(Save, RBSave)
-        Dim moneyHex As String = Conversion.Hex(Math.Min(s.BaseType, &HFF))
+        Dim moneyHex As String = Conversion.Hex(Math.Min(s.BaseType, FF))
         Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
         code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
         code.Add(New CBAHelper.Line(String.Format("32000AEB {0}", moneyHex.PadLeft(4, "0"))))

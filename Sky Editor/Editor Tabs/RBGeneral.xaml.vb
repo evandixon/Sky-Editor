@@ -31,7 +31,7 @@ Public Class RBGeneral
                 .RescuePoints = numGeneral_RescuePoints.Value
                 .BaseType = Lists.RBBaseTypes(cbGeneral_Base.SelectedItem)
             End With
-            out = rb.ToBase
+            out = rb
         End If
         Return out
     End Function

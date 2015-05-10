@@ -23,11 +23,10 @@ Public Class GenericNDSRom
         _unpackTask = Nothing
     End Sub
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return GameStrings.GenericNDSRom
-        End Get
-    End Property
+    Public Overrides Function DefaultSaveID() As String
+        Return GameStrings.GenericNDSRom
+    End Function
+
     Public ReadOnly Property IsUnpacked
         Get
             Return _unpackTask IsNot Nothing AndAlso _unpackTask.IsCompleted

@@ -17,7 +17,7 @@ Public Class SkyEditorInfo
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267 (Pokemon Stucture, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
+            Return PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267 (Pokemon Structure, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
         End Get
     End Property
 
@@ -64,6 +64,7 @@ Public Class SkyEditorInfo
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
 
         Manager.RegisterConsoleCommand("rbloctest", AddressOf GenerateRBLocationTest)
+        Manager.RegisterConsoleCommand("rbpkmtest", AddressOf BoolBufferTest)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
@@ -87,6 +88,22 @@ Public Class SkyEditorInfo
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
 
+    End Sub
+    Public Shared Sub BoolBufferTest(Manager As PluginManager, Parameter As String)
+        If TypeOf Manager.Save Is RBSave Then
+            Dim p = DirectCast(Manager.Save, RBSave).StoredPokemon.pkmns(CInt(Parameter))
+            Dim b = p.GetBuffer
+            b.seek(0)
+            While b.position < b.size
+                Console.Write("How many bits to read? (type -1 to exit) ")
+                Dim l As Integer = CInt(Console.ReadLine())
+                If l < 0 Then
+                    Exit While
+                End If
+                Dim v = b.getInt(l)
+                Console.WriteLine(String.Format("Value: 0d{0}, 0x{1}", v, Conversion.Hex(v)))
+            End While
+        End If
     End Sub
     Public Shared Sub GenerateRBLocationTest(Manager As PluginManager, Parameter As String)
         If TypeOf Manager.Save Is RBSave Then
@@ -136,7 +153,7 @@ Public Class SkyEditorInfo
                 For count As Integer = 0 To DirectCast(Manager.Save, RBSaveEU).StoredPokemon.pkmns.Count - 1
                     If loc > 255 Then Exit For
                     If Not pkmns(count).GetIsValid() Then
-                        p1.name = "MetAt " & loc.ToString()
+                        p1.name = "MetAt" & loc.ToString()
                         p1.metat = loc
                         loc += 1
                         pkmns(count) = New RBPkmn(p1)

@@ -120,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binary.vb" />
     <Compile Include="Editor Tabs\GateGeneral.xaml.vb">
       <DependentUpon>GateGeneral.xaml</DependentUpon>
     </Compile>
@@ -201,6 +202,7 @@
     <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
     <Compile Include="Library\ARDS\Blue Stored Money.vb" />
     <Compile Include="Library\ARDS\Blue Team Name.vb" />
+    <Compile Include="Saves\SkySave.vb" />
     <Compile Include="Settings.vb" />
     <Compile Include="Library\StringUtilities.vb" />
     <Compile Include="SkyEditorInfo.vb" />

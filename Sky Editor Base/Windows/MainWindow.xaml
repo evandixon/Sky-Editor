@@ -25,6 +25,12 @@
                 <Label x:Name="statusLblStatus" Content="Ready" Height="26" Width="503" />
             </StatusBarItem>
         </StatusBar>
-        <ListBox x:Name="lbSaves" Margin="0,21,0,0" HorizontalAlignment="Right" Width="276" />
+        <ListBox x:Name="lbSaves" Margin="0,21,0,0" HorizontalAlignment="Right" Width="276">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="contextRemoveSave" Header="Remove"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
     </Grid>
 </Window>

@@ -19,7 +19,7 @@ Class ChildControls
     End Function
 
     Private Sub GetChildControls(p_vParent As Visual, p_nLevel As Integer)
-        Dim nChildCount As Integer = VisualTreeHelper.GetChildrenCount(p_vParent)
+        'Dim nChildCount As Integer = VisualTreeHelper.GetChildrenCount(p_vParent)
 
         'For i As Integer = 0 To nChildCount - 1
         '    Dim v As Visual = DirectCast(VisualTreeHelper.GetChild(p_vParent, i), Visual)

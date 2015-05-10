@@ -24,7 +24,7 @@ Namespace skyjed.save
         Implements iPkmn
 
         Public Const LENGTH As Integer = 362
-        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=""[Z"""
+        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=[Z"
 
         Private Const FEMALE_ADD As Integer = 600
 
@@ -121,16 +121,16 @@ Namespace skyjed.save
         End Sub
 
         'Public Overridable Sub copy()
-        '	Dim arr(LENGTH - 1) As Boolean
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	store(buf)
-        '	ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
+        'Dim arr(LENGTH - 1) As Boolean
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'store(buf)
+        'ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
         'End Sub
 
         'Public Overridable Sub paste()
-        '	Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	load(buf)
+        'Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'load(buf)
         'End Sub
 
         Public Overrides Function ToString() As String Implements iPkmn.ToString
@@ -138,7 +138,7 @@ Namespace skyjed.save
                 Return "----------"
             End If
             Return String.Format("{0} (Lvl. {1} {2})", name, lvl, Lists.SkyPokemon(no))
-            ' Return Name & " (Lvl. " & Level & " Pokemon " & ID & ")"
+            ' Return Name &  (Lvl.  & Level &  Pokemon  & ID & )
         End Function
 
         Public Function GetIsValid() As Boolean Implements iPkmn.GetIsValid
@@ -173,7 +173,7 @@ Namespace skyjed.save
         Implements iPkmn
 
         Public Const LENGTH As Integer = 388
-        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=""[Z"""
+        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=[Z"
 
         Private Const FEMALE_ADD As Integer = 600
 
@@ -271,16 +271,16 @@ Namespace skyjed.save
         End Sub
 
         'Public Overridable Sub copy()
-        '	Dim arr(LENGTH - 1) As Boolean
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	store(buf)
-        '	ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
+        'Dim arr(LENGTH - 1) As Boolean
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'store(buf)
+        'ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
         'End Sub
 
         'Public Overridable Sub paste()
-        '	Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	load(buf)
+        'Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'load(buf)
         'End Sub
 
         Public Overrides Function ToString() As String Implements iPkmn.ToString
@@ -288,7 +288,7 @@ Namespace skyjed.save
                 Return "----------"
             End If
             Return String.Format("{0} (Lvl. {1} {2})", name, lvl, Lists.SkyPokemon(no))
-            ' Return Name & " (Lvl. " & Level & " Pokemon " & ID & ")"
+            ' Return Name &  (Lvl.  & Level &  Pokemon  & ID & )
         End Function
 
         Public Function GetIsValid() As Boolean Implements iPkmn.GetIsValid
@@ -322,7 +322,7 @@ Namespace skyjed.save
     Public Class RBPkmn
         Implements iPkmn
         Public Const LENGTH As Integer = 323
-        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=""[Z"""
+        Public Shared ReadOnly MIME_TYPE As String = "application/x-sky-pokemon; class=[Z"
 
         Private Const FEMALE_ADD As Integer = 0 '1536 '600
 
@@ -330,11 +330,12 @@ Namespace skyjed.save
         Private Const NUM_ATTACKS As Integer = 4
 
         Private Const LEN_LVL As Integer = 7
-        Private Const LEN_Unknown As Integer = 2
         Private Const LEN_NO As Integer = 9
-        Private Const LEN_METAT As Integer = 8
+        'Private Const LEN_Unknown As Integer = 1
+        'Private Const LEN_UNK0 As Integer = 2
+        Private Const LEN_METAT As Integer = 7
         'Private Const LEN_METFL As Integer = 7
-        Public Const LEN_UNK1 As Integer = 18
+        Public Const LEN_UNK1 As Integer = 21
         Private Const LEN_IQ As Integer = 10
         Private Const LEN_HP As Integer = 10
         Private Const LEN_STAT As Integer = 8
@@ -342,6 +343,8 @@ Namespace skyjed.save
         Public Const LEN_UNK2 As Integer = 37 + 6 '(73 + 23)
         Private Const LEN_ATTACK As Integer = 20
         Private Const BLEN_NAME As Integer = 10
+
+        Private _originalBuffer As BooleanBuffer
 
         ''' <summary>
         ''' Depricated; use GetIsValid()
@@ -354,6 +357,7 @@ Namespace skyjed.save
         Public Property unknown As Integer
         Public Property no As Integer Implements iPkmn.no
         Public Property isfemale As Boolean Implements iPkmn.isfemale
+        Public Property unk0 As Boolean
         Public Property metat As Integer Implements iPkmn.metat
         Public Property metfl As Integer Implements iPkmn.metfl
         Public Property unkdata1() As Boolean() Implements iPkmn.unkdata1
@@ -387,6 +391,7 @@ Namespace skyjed.save
             Me.no = Pkm.no
             Me.isfemale = Pkm.isfemale
             Me.metat = Pkm.metat
+            Me.unk0 = Pkm.unk0
             Me.metfl = Pkm.metfl
             Me.unkdata1 = Pkm.unkdata1
             Me.iq = Pkm.iq
@@ -399,12 +404,14 @@ Namespace skyjed.save
         End Sub
 
         Public Sub load(ByVal buf As BooleanBuffer)
+            _originalBuffer = buf
             buf.seek(0)
             'isvalid = buf.get()
             lvl = buf.getInt(LEN_LVL)
             no = buf.getInt(LEN_NO)
-            unknown = buf.getInt(LEN_Unknown)
+            'unknown = buf.getInt(LEN_Unknown)
             isfemale = False
+            'unk0 = buf.getInt(LEN_UNK0)
             metat = buf.getInt(LEN_METAT)
             'metfl = buf.getInt(LEN_METFL)
             unkdata1 = buf.get(LEN_UNK1)
@@ -423,7 +430,8 @@ Namespace skyjed.save
             'buf.put(isvalid)
             buf.putInt(lvl, LEN_LVL)
             buf.putInt(no, LEN_NO)
-            buf.putInt(unknown, LEN_Unknown)
+            'buf.putInt(unknown, LEN_Unknown)
+            'buf.putInt(unk0, LEN_UNK0)
             buf.putInt(metat, LEN_METAT)
             'buf.putInt(metfl, LEN_METFL)
             buf.put(unkdata1)
@@ -445,16 +453,16 @@ Namespace skyjed.save
         End Sub
 
         'Public Overridable Sub copy()
-        '	Dim arr(LENGTH - 1) As Boolean
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	store(buf)
-        '	ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
+        'Dim arr(LENGTH - 1) As Boolean
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'store(buf)
+        'ClipboardHelper.setClipboardContents(arr, MIME_TYPE)
         'End Sub
 
         'Public Overridable Sub paste()
-        '	Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
-        '	Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
-        '	load(buf)
+        'Dim arr() As Boolean = CType(ClipboardHelper.getClipboardContents(MIME_TYPE), Boolean())
+        'Dim buf As BooleanBuffer = New BooleanBufferArray(arr)
+        'load(buf)
         'End Sub
 
         Public Overrides Function ToString() As String Implements iPkmn.ToString
@@ -463,7 +471,7 @@ Namespace skyjed.save
                 Return "----------"
             End If
             Return String.Format("{0} (Lvl. {1} {2})", name, lvl, Lists.RBPokemon(no))
-            ' Return Name & " (Lvl. " & Level & " Pokemon " & ID & ")"
+            ' Return Name &  (Lvl.  & Level &  Pokemon  & ID & )
         End Function
         Public Function GetIsValid() As Boolean Implements iPkmn.GetIsValid
             Return Not (lvl = 0)
@@ -485,6 +493,9 @@ Namespace skyjed.save
             Dim lengthBytes As Integer = Math.Ceiling((LENGTH + 6) / 8)
             Dim out As Byte() = BitConverterLE.packBits(x2.GetSplitBytes)
             Return out
+        End Function
+        Public Function GetBuffer() As BooleanBuffer
+            Return _originalBuffer
         End Function
         Public Shared Function FromBytes(Bytes As Byte()) As SkyPkmn
             Dim out As New SkyPkmn

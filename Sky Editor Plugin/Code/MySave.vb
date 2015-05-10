@@ -8,15 +8,14 @@ Public Class MySave
         'If your save doesn't need its checksum fixed, do nothing.  Lucky you.
     End Sub
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            'In order to make detecting the save format for a save easier,
-            'each save format has its own ID, which is also the friendly name for the game (one that the user can select from a list)
+    Public Overrides Function DefaultSaveID() As String
+        'In order to make detecting the save format for a save easier,
+        'each save format has its own ID, which is also the friendly name for the game (one that the user can select from a list)
 
-            'It is recommended to keep these in constants in a separate file, to avoid typos
-            Return GameStrings.MySaveSaveID
-        End Get
-    End Property
+        'It is recommended to keep these in constants in a separate file, to avoid typos
+        Return GameStrings.MySaveSaveID
+    End Function
+
     Public Overrides Function DefaultExtension() As String
         'If you override this, then when you save a file, this filter will automatically be selected.
         'In order for this filter to function, it must be registered in your plugin definition.

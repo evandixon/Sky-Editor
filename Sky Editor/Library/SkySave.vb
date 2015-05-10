@@ -300,24 +300,7 @@ Public Class SkySave
             RawData(&H995F) = RawData(&H995F) - (value - 1 << 5)
         End Set
     End Property
-#Region "Operators"
-    'Public Shared Narrowing Operator CType(ByVal X As GenericSave) As SkySave
-    '    Return New SkySave(X.RawData)
-    'End Operator
-
-#End Region
-    <Obsolete("Use DirectCast(Save, SkySave) for consistency.")>
-    Public Shared Function FromBase(Base As GenericSave) As SkySave
-        Return DirectCast(Base, SkySave)
+    Public Overrides Function DefaultSaveID() As String
+        Return GameStrings.SkySave
     End Function
-    <Obsolete()>
-    Public Function ToBase() As GenericSave
-        Return DirectCast(Me, GenericSave)
-    End Function
-
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return GameStrings.SkySave
-        End Get
-    End Property
 End Class

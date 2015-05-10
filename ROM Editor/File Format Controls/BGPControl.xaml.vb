@@ -29,7 +29,7 @@ Public Class BGPControl
         If s.ShowDialog = Windows.Forms.DialogResult.OK Then
             Try
                 _bgp = FileFormats.BGP.ConvertFromBitmap(New Drawing.Bitmap(s.FileName))
-                _bgp.Save(_filename)
+                Await _bgp.Save(_filename)
                 img.Source = New BitmapImage(New Uri(Await _bgp.GetTempImageURI(IO.Path.GetFileNameWithoutExtension(_filename))))
 
             Catch ex As BadImageFormatException

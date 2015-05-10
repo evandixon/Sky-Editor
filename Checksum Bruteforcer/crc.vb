@@ -41,13 +41,13 @@ Public Class CRC16
 #Region "PROPERTIES"
     ''' <summary>Gets the default polynomial.</summary>
     <CLSCompliant(False)> _
-    Public Shared ReadOnly DefaultPolynomial As UShort = &H8408
+    Public Shared ReadOnly DefaultPolynomial As UShort = &H8408 '&H1021 '&H8408
     ' Bit reversion of 0xA001;
 #End Region
 #Region "METHODS"
     ''' <summary>Initializes an implementation of HashAlgorithm.</summary>
     Public Overrides Sub Initialize()
-        _crc = 0
+        _crc = 0 '&HFFFF '0
     End Sub
 
     ''' <summary>Routes data written to the object into the hash algorithm for computing the hash.</summary>

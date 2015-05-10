@@ -11,15 +11,15 @@ Namespace FileFormats
             Return Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_unpx.exe"),
                                                   String.Format("""{0}"" ""{1}""", Filename, IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileNameWithoutExtension(Filename) & ".decompressed"))
         End Function
-        Public Shared Sub RunCompress(Filename As String)
+        Public Shared Async Function RunCompress(Filename As String) As Task
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
-            SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
+            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
                                                   String.Format("""{0}"" ""{1}""", IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename), Filename))
             'If Not IO.File.Exists(Filename) AndAlso IO.File.Exists(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx")) Then
             IO.File.Delete(Filename)
             IO.File.Move(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx"), Filename)
             'End If
-        End Sub
+        End Function
         ''' <summary>
         ''' Returns a DecompressedFile after decompressing the data.
         ''' </summary>
@@ -34,13 +34,13 @@ Namespace FileFormats
         ''' Saves and compresses the DecompressedFile.
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub Save(Filename As String)
+        Public Async Function Save(Filename As String) As Task
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename) & "\Decompressed")
             End If
             IO.File.WriteAllBytes(Filename.Replace(IO.Path.GetDirectoryName(Filename), IO.Path.GetDirectoryName(Filename) & "\Decompressed"), RawData)
-            RunCompress(Filename)
-        End Sub
+            Await RunCompress(Filename)
+        End Function
         ''' <summary>
         ''' Creates a new instance of the decompressed file, given the decompressed data
         ''' </summary>

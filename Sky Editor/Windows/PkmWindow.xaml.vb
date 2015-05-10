@@ -118,7 +118,7 @@ Public Class PkmWindow
             'For Each item In Lists.SkyLocations.Keys
             '    keys3.Add(New GenericListItem(Of Integer)(Lists.SkyLocations(item), item))
             'Next
-            For count As Integer = 0 To 255
+            For count As Integer = 0 To 98
                 If Lists.RBLocations().ContainsKey(count) Then
                     keys3.Add(New GenericListItem(Of Integer)(Lists.RBLocations(count), count))
                 Else

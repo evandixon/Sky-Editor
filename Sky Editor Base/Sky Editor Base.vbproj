@@ -30,7 +30,7 @@
     <InstallUrl>http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>3.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -146,7 +146,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Code\BasePlugin.vb" />
     <Compile Include="Code\ARDS\Button.vb" />
     <Compile Include="Code\ARDS\CBAHelper.vb" />
     <Compile Include="Code\ARDS\CheatFormat.vb" />

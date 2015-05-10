@@ -18,7 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0579E35C-35D6-49B7-BC67-C143F0EB4EA7}"
 	ProjectSection(SolutionItems) = preProject
 		Documentation\Build Instructions.txt = Documentation\Build Instructions.txt
-		Sky Editor\Gates to Infinity Notable Offsets.txt = Sky Editor\Gates to Infinity Notable Offsets.txt
+		Documentation\Gates to Infinity Notable Offsets.txt = Documentation\Gates to Infinity Notable Offsets.txt
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Plugin", "Sky Editor Plugin\Sky Editor Plugin.vbproj", "{844B88DC-9905-479F-94DD-4F6A7CD2067A}"
@@ -26,6 +26,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wan Animation Tester", "Debug Console Applications\Wan Animation Tester\Wan Animation Tester.vbproj", "{4C2D5545-A5F9-4131-9379-24B5E890A832}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Checksum Bruteforcer", "Checksum Bruteforcer\Checksum Bruteforcer.vbproj", "{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ThreeDS Tools", "3DS Tools\ThreeDS Tools.vbproj", "{0DBE7000-9986-492F-BE45-03BAFFF97739}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,23 +67,24 @@ Global
 		{410BC560-C2F9-4732-839F-29A65B9F2C12}.Release|x86.ActiveCfg = Release|Any CPU
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.ActiveCfg = Debug|x86
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Debug|x86.Build.0 = Debug|x86
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|x86.ActiveCfg = Release|x86
 		{844B88DC-9905-479F-94DD-4F6A7CD2067A}.Release|x86.Build.0 = Release|x86
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C2D5545-A5F9-4131-9379-24B5E890A832}.Release|x86.ActiveCfg = Release|Any CPU
 		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB64DD1A-D3C4-4ED5-8313-1A8E5A7DAAC0}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DBE7000-9986-492F-BE45-03BAFFF97739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DBE7000-9986-492F-BE45-03BAFFF97739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DBE7000-9986-492F-BE45-03BAFFF97739}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DBE7000-9986-492F-BE45-03BAFFF97739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DBE7000-9986-492F-BE45-03BAFFF97739}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

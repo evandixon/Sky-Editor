@@ -201,9 +201,7 @@ Public Class RBSaveEU
         Return DirectCast(Me, GenericSave)
     End Function
 
-    Public Overrides ReadOnly Property SaveID As String
-        Get
-            Return GameStrings.RBSaveEU
-        End Get
-    End Property
+   Public Overrides Function DefaultSaveID() As String
+        Return GameStrings.RBSaveEU
+    End Function
 End Class
