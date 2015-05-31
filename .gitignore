@@ -15,3 +15,9 @@
 /Sky Editor/obj
 /Sky Editor/bin
 /Sky Editor.v12.suo
+/3DS Tools/bin/Release
+/3DS Tools/obj
+/Checksum Bruteforcer/bin
+/Checksum Bruteforcer/obj
+*.suo
+/packages
