@@ -1,11 +1,9 @@
-﻿Imports SkyEditor.skyjed.util
-Imports SkyEditor.skyjed.buffer
-Imports SkyEditorBase
-Imports SkyEditor.skyjed.save
+﻿Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
+Imports SkyEditor.Saves
 
 Public Class QPkmWindow
-    Public Property JSkyPokemonQ As skyjed.save.iPkmnQ
+    Public Property JSkyPokemonQ As Object
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
 
@@ -17,11 +15,11 @@ Public Class QPkmWindow
         PluginHelper.TranslateForm(Me)
 
         'Initialize Dialogs
-        OpenFileDialog1 = New Forms.OpenFileDialog
+        OpenFileDialog1 = New Windows.Forms.OpenFileDialog
         OpenFileDialog1.Filter = "Pokemon Files (*.skypkm)|*.skypkm|All Files (*.*)|*.*"
-        SaveFileDialog1 = New Forms.SaveFileDialog
+        SaveFileDialog1 = New Windows.Forms.SaveFileDialog
         SaveFileDialog1.Filter = "Pokemon Files (*.skypkm)|*.skypkm|All Files (*.*)|*.*"
-        If TypeOf JSkyPokemonQ Is SkyPkmnQ Then
+        If TypeOf JSkyPokemonQ Is SkySave.QuicksavePkm Then
             Dim keys As New Generic.List(Of GenericListItem(Of Integer))
             For Each item In Lists.SkyPokemon.Keys
                 keys.Add(New GenericListItem(Of Integer)(Lists.SkyPokemon(item), item))
@@ -55,40 +53,40 @@ Public Class QPkmWindow
             cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(2).no), JSkyPokemonQ.attacks(2).no))
             cbMove4.SelectedIndex = cbMove4.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(3).no), JSkyPokemonQ.attacks(3).no))
             'cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyLocations(JSkyPokemonQ.metat), JSkyPokemonQ.metat))
-        ElseIf TypeOf JSkyPokemonQ Is TDPkmnEx Then
-            Dim keys As New Generic.List(Of GenericListItem(Of Integer))
-            For Each item In Lists.SkyPokemon.Keys
-                keys.Add(New GenericListItem(Of Integer)(Lists.SkyPokemon(item), item))
-            Next
-            keys.Sort()
-            For Each item In keys
-                cbPokemon.Items.Add(item)
-            Next
-            Dim keys2 As New Generic.List(Of GenericListItem(Of Integer))
-            For Each item In Lists.SkyMoves.Keys
-                keys2.Add(New GenericListItem(Of Integer)(Lists.SkyMoves(item), item))
-            Next
-            keys2.Sort()
-            For Each item In keys2
-                cbMove1.Items.Add(item)
-                cbMove2.Items.Add(item)
-                cbMove3.Items.Add(item)
-                cbMove4.Items.Add(item)
-            Next
-            Dim keys3 As New Generic.List(Of GenericListItem(Of Integer))
-            For Each item In Lists.SkyLocations.Keys
-                keys3.Add(New GenericListItem(Of Integer)(Lists.SkyLocations(item), item))
-            Next
-            'keys3.Sort()
-            'For Each item In keys3
-            '    cbMetAt.Items.Add(item)
-            'Next
-            cbPokemon.SelectedIndex = cbPokemon.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyPokemon(JSkyPokemonQ.no1), JSkyPokemonQ.no1))
-            cbMove1.SelectedIndex = cbMove1.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(0).no), JSkyPokemonQ.attacks(0).no))
-            cbMove2.SelectedIndex = cbMove2.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(1).no), JSkyPokemonQ.attacks(1).no))
-            cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(2).no), JSkyPokemonQ.attacks(2).no))
-            cbMove4.SelectedIndex = cbMove4.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(3).no), JSkyPokemonQ.attacks(3).no))
-            'cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.TDLocations(JSkyPokemonEx.metat), JSkyPokemonEx.metat))
+            'ElseIf TypeOf JSkyPokemonQ Is TDPkmnEx Then
+            '    Dim keys As New Generic.List(Of GenericListItem(Of Integer))
+            '    For Each item In Lists.SkyPokemon.Keys
+            '        keys.Add(New GenericListItem(Of Integer)(Lists.SkyPokemon(item), item))
+            '    Next
+            '    keys.Sort()
+            '    For Each item In keys
+            '        cbPokemon.Items.Add(item)
+            '    Next
+            '    Dim keys2 As New Generic.List(Of GenericListItem(Of Integer))
+            '    For Each item In Lists.SkyMoves.Keys
+            '        keys2.Add(New GenericListItem(Of Integer)(Lists.SkyMoves(item), item))
+            '    Next
+            '    keys2.Sort()
+            '    For Each item In keys2
+            '        cbMove1.Items.Add(item)
+            '        cbMove2.Items.Add(item)
+            '        cbMove3.Items.Add(item)
+            '        cbMove4.Items.Add(item)
+            '    Next
+            '    Dim keys3 As New Generic.List(Of GenericListItem(Of Integer))
+            '    For Each item In Lists.SkyLocations.Keys
+            '        keys3.Add(New GenericListItem(Of Integer)(Lists.SkyLocations(item), item))
+            '    Next
+            '    'keys3.Sort()
+            '    'For Each item In keys3
+            '    '    cbMetAt.Items.Add(item)
+            '    'Next
+            '    cbPokemon.SelectedIndex = cbPokemon.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyPokemon(JSkyPokemonQ.no1), JSkyPokemonQ.no1))
+            '    cbMove1.SelectedIndex = cbMove1.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(0).no), JSkyPokemonQ.attacks(0).no))
+            '    cbMove2.SelectedIndex = cbMove2.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(1).no), JSkyPokemonQ.attacks(1).no))
+            '    cbMove3.SelectedIndex = cbMove3.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(2).no), JSkyPokemonQ.attacks(2).no))
+            '    cbMove4.SelectedIndex = cbMove4.Items.IndexOf(New GenericListItem(Of Integer)(Lists.SkyMoves(JSkyPokemonQ.attacks(3).no), JSkyPokemonQ.attacks(3).no))
+            '    'cbMetAt.SelectedIndex = cbMetAt.Items.IndexOf(New GenericListItem(Of Integer)(Lists.TDLocations(JSkyPokemonEx.metat), JSkyPokemonEx.metat))
         End If
 
         'Load Values

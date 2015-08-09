@@ -1,6 +1,4 @@
-﻿Imports System.Reflection
-Imports SkyEditorBase
-Imports SkyEditorBase.Utilities
+﻿Imports SkyEditorBase.Utilities
 Public Class Lists
     Public Shared Function SkyLocations() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
@@ -239,8 +237,8 @@ Public Class Lists
         If _dictionaryConverted Is Nothing Then
             _dictionaryConverted = New Dictionary(Of Byte, Char)
             For Each Key As String In _dictionaryOriginal.Keys
-                If _dictionaryOriginal(Key).Length = 1 Then
-                    _dictionaryConverted.Add(Convert.ToByte(Key, 16), _dictionaryOriginal(Key)(0))
+                If _dictionaryOriginal(Key).Length <= 1 Then
+                    _dictionaryConverted.Add(Convert.ToByte(Key, 16), _dictionaryOriginal(Key))
                 End If
             Next
         End If

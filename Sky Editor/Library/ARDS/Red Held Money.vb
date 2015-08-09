@@ -37,14 +37,15 @@ Public Class RedHeldMoney
     End Function
 
     Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
-        Dim s = DirectCast(Save, RBSave)
-        Dim moneyHex As String = Conversion.Hex(Math.Min(s.HeldMoney, &HFFFFFF)).PadLeft(8, "0")
-        Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
-        code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        code.Add(New CBAHelper.Line(String.Format("82038C08 {0}", moneyHex.Substring(4, 4))))
-        code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        code.Add(New CBAHelper.Line(String.Format("32038C0A {0}", moneyHex.Substring(0, 4))))
-        Return code.ToString
+        'Dim s = DirectCast(Save, RBSave)
+        'Dim moneyHex As String = Conversion.Hex(Math.Min(s.HeldMoney, &HFFFFFF)).PadLeft(8, "0")
+        'Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
+        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
+        'code.Add(New CBAHelper.Line(String.Format("82038C08 {0}", moneyHex.Substring(4, 4))))
+        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
+        'code.Add(New CBAHelper.Line(String.Format("32038C0A {0}", moneyHex.Substring(0, 4))))
+        'Return code.ToString
+        Return ""
     End Function
 
     Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats

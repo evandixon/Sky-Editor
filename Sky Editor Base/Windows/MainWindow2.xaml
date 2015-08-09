@@ -1,0 +1,47 @@
+﻿<Window x:Class="MainWindow2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+    Title="Sky Editor" Height="700" Width="696.847" Icon="../favicon.ico">
+    <Grid>
+        <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top" Grid.ColumnSpan="3">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem Header="_New">
+                    <MenuItem x:Name="menuNew" Header="_File" />
+                    <MenuItem x:Name="menuNewProject" Header="_Project"/>
+                </MenuItem>
+                <MenuItem x:Name="menuFileOpen" Header="_Open">
+                    <MenuItem x:Name="menuFileOpenAuto" Header="Open (_Autodetect Game)" />
+                    <MenuItem x:Name="menuFileOpenNoDetect" Header="Open (Let me _Choose Game)" />
+                </MenuItem>
+                <MenuItem Header="_Save">
+                    <MenuItem x:Name="menuFileSaveFile" Header="Save _File" />
+                    <MenuItem x:Name="menuFileSaveAs" Header="Save File _As..." />
+                    <MenuItem x:Name="menuFileSaveProject" Header="Save _Project" />
+                    <MenuItem x:Name="menuFileSaveAll" Header="Save _All"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuCheats" Header="_Cheats" />
+            <MenuItem x:Name="menuCredits" Header="Cre_dits" />
+            <MenuItem x:Name="menuDebug" Header="Debug" Visibility="Collapsed">
+                <MenuItem x:Name="menuShowConsole" Header="Show Console" />
+                <MenuItem x:Name="menuDebugConsole" Header="Run Command..." />
+            </MenuItem>
+            <MenuItem x:Name="menuBuild" Header="Build"/>
+        </Menu>
+        <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,0">
+            <ad:LayoutRoot>
+                <ad:LayoutPanel Orientation="Horizontal">
+                    <ad:LayoutDocumentPaneGroup>
+                        <ad:LayoutDocumentPane x:Name="docPane">
+                        </ad:LayoutDocumentPane>
+                    </ad:LayoutDocumentPaneGroup>
+                    <ad:LayoutAnchorablePaneGroup DockWidth="250" Orientation="Vertical">
+                        <ad:LayoutAnchorablePane x:Name="toolbarPaneRight">
+                        </ad:LayoutAnchorablePane>
+                    </ad:LayoutAnchorablePaneGroup>
+                </ad:LayoutPanel>
+            </ad:LayoutRoot>
+        </ad:DockingManager>
+    </Grid>
+</Window>

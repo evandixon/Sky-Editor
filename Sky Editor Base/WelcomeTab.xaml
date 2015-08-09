@@ -1,4 +1,4 @@
-﻿<local:EditorTab x:Class="WelcomeTab"
+﻿<local:ObjectTab x:Class="WelcomeTab"
                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,4 +10,4 @@
     <Grid>
         <Label>Welcome to Sky Editor!  To begin, use File -> Open to open a supported save file.</Label>
     </Grid>
-</local:EditorTab>
+</local:ObjectTab>

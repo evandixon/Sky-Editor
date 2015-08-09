@@ -37,13 +37,14 @@ Public Class BlueBaseType
     End Function
 
     Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
-        Dim s = DirectCast(Save, RBSave)
-        Dim moneyHex As String = Conversion.Hex(s.BaseType)
-        Dim code As New SkyEditorBase.ARDS.CodeGeneratorHelper.Code
-        code.Add(CodeGeneratorHelper.Line.IfButtonDown(ButtonActivator))
-        code.Add(New CodeGeneratorHelper.Line(String.Format("2210fb27 {0}", moneyHex.PadLeft(8, "0"))))
-        code.Add(CodeGeneratorHelper.Line.MasterEnd)
-        Return code.ToString
+        'Dim s = DirectCast(Save, RBSave)
+        'Dim moneyHex As String = Conversion.Hex(s.BaseType)
+        'Dim code As New SkyEditorBase.ARDS.CodeGeneratorHelper.Code
+        'code.Add(CodeGeneratorHelper.Line.IfButtonDown(ButtonActivator))
+        'code.Add(New CodeGeneratorHelper.Line(String.Format("2210fb27 {0}", moneyHex.PadLeft(8, "0"))))
+        'code.Add(CodeGeneratorHelper.Line.MasterEnd)
+        'Return code.ToString
+        Return ""
     End Function
 
     Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats

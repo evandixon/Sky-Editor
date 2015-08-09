@@ -150,7 +150,12 @@ Namespace Redistribution
                 '    End If
                 'Next
                 If install Then
-                    UnpackPlugins(item.Replace(".zip", ".dll").Replace(".exe", ".dll"))
+                    Try
+                        UnpackPlugins(item.Replace(".zip", ".dll").Replace(".exe", ".dll"))
+                    Catch ex As ICSharpCode.SharpZipLib.Zip.ZipException
+                        'Let's assume the zip is bad and delete it.
+                        'Because this will happen anyway, we simply don't extract anything.
+                    End Try
                 End If
                 IO.File.Delete(IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, item))
             Next

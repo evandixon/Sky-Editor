@@ -1,9 +1,10 @@
 ﻿Imports System.Windows.Controls
+Imports ROMEditor.Roms
 Imports SkyEditorBase
 Public Class FilesTab
-    Inherits SkyEditorBase.EditorTab
+    Inherits EditorTab
     Public Overrides Async Sub RefreshDisplay(Save As SkyEditorBase.GenericSave)
-        If TypeOf Save Is GenericNDSRom Or TypeOf Save Is PMD_Explorers.SkyNDSRom Then
+        If TypeOf Save Is GenericNDSRom Or TypeOf Save Is SkyNDSRom Then
             Await (DirectCast(Save, GenericNDSRom).EnsureUnpacked)
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Reading files..."))
             tvFiles.Items.Add(Await GetDirectoryNode(PluginHelper.GetResourceName(Save.Name & "\")))
@@ -61,17 +62,20 @@ Public Class FilesTab
     Private Sub tvFiles_SelectedItemChanged(sender As Object, e As Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged
         Dim filename As String = DirectCast(e.NewValue, TreeViewItem).Tag
         If IO.File.Exists(filename) Then
-            If spPlaceholder.Children.Count > 0 AndAlso TypeOf spPlaceholder.Children(0) Is FileFormatControl Then
-                DirectCast(spPlaceholder.Children(0), FileFormatControl).UpdateFile()
+            If e.OldValue IsNot Nothing Then
+                Dim oldFile As String = DirectCast(e.OldValue, TreeViewItem).Tag
+                If IO.File.Exists(oldFile) Then
+                    DirectCast(spPlaceholder.ObjectToEdit, GenericFile).Save(oldFile)
+                End If
             End If
-            spPlaceholder.Children.Clear()
-            Dim extension = IO.Path.GetExtension(filename).ToLower().Trim(".")
-            Dim pluginInfo As New PluginDefinition
-            If pluginInfo.ROMFileTypes.ContainsKey(extension) Then
-                Dim control = pluginInfo.ROMFileTypes(extension)
-                control.RefreshDisplay(filename)
-                spPlaceholder.Children.Add(control)
-            End If
+            spPlaceholder.ObjectToEdit = PluginHelper.PluginManagerInstance.OpenFile(New GenericFile(filename))
+            'Dim extension = IO.Path.GetExtension(filename).ToLower().Trim(".")
+            'Dim pluginInfo As New PluginDefinition
+            'If pluginInfo.ROMFileTypes.ContainsKey(extension) Then
+            '    Dim control = pluginInfo.ROMFileTypes(extension)
+            '    control.RefreshDisplay(filename)
+            '    spPlaceholder.Children.Add(control)
+            'End If
         End If
     End Sub
 

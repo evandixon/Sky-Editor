@@ -20,7 +20,7 @@ Public Class MyMenuItem
         Me.manager = Manager
 
         'Using the plugin manager, you can handle certain form events.
-        AddHandler Manager.Window.OnKeyPress, AddressOf OnKeyPress
+        'AddHandler Manager.Window.OnKeyPress, AddressOf OnKeyPress
 
         'As always, it's best to add translation support for your plugin.
         PluginHelper.TranslateForm(Me)

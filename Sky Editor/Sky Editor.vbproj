@@ -114,16 +114,55 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="xceed.wpf.toolkit">
-      <HintPath>..\extendedwpftoolkit_binaries\xceed.wpf.toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binary.vb" />
-    <Compile Include="Editor Tabs\GateGeneral.xaml.vb">
-      <DependentUpon>GateGeneral.xaml</DependentUpon>
+    <Compile Include="Controls\iAttack.xaml.vb">
+      <DependentUpon>iAttack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MDActiveAttack.xaml.vb">
+      <DependentUpon>MDActiveAttack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MDAttack.xaml.vb">
+      <DependentUpon>MDAttack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\iItem.vb" />
+    <Compile Include="Interfaces\iItemStorage.vb" />
+    <Compile Include="Interfaces\iAttack.vb" />
+    <Compile Include="Interfaces\iMDActiveAttack.vb" />
+    <Compile Include="Interfaces\iMDAttack.vb" />
+    <Compile Include="Interfaces\iMDPkmCurrentHP.vb" />
+    <Compile Include="Interfaces\iPkmAttack.vb" />
+    <Compile Include="Interfaces\iPokemonStorage.vb" />
+    <Compile Include="Interfaces\iMDPkm.vb" />
+    <Compile Include="Interfaces\iMDPkmGender.vb" />
+    <Compile Include="Interfaces\iMDPkmIQ.vb" />
+    <Compile Include="Interfaces\iMDPkmMetFloor.vb" />
+    <Compile Include="Interfaces\iParty.vb" />
     <Compile Include="Library\ARDS\Red BaseType.vb" />
     <Compile Include="Library\ARDS\Red Held Money.vb" />
     <Compile Include="Library\ARDS\Red Rescue Points.vb" />
@@ -131,149 +170,130 @@
     <Compile Include="Library\ARDS\Red Team Name.vb" />
     <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
-    <Compile Include="Editor Tabs\QuicksavePokemonTab.xaml.vb">
-      <DependentUpon>QuicksavePokemonTab.xaml</DependentUpon>
+    <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
+      <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Editor Tabs\ActivePokemonTab.xaml.vb">
-      <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
+    <Compile Include="Tabs\PkmMovesTab.xaml.vb">
+      <DependentUpon>PkmMovesTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Editor Tabs\EpisodeActivePokemon.xaml.vb">
-      <DependentUpon>EpisodeActivePokemon.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\TDGeneralTab.xaml.vb">
-      <DependentUpon>TDGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\RBGeneral.xaml.vb">
-      <DependentUpon>RBGeneral.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\EpisodeHeldItems.xaml.vb">
-      <DependentUpon>EpisodeHeldItems.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\SkyGeneralTab.xaml.vb">
-      <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\HeldItemsTab.xaml.vb">
-      <DependentUpon>HeldItemsTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\RBStoredItemsTab.xaml.vb">
+    <Compile Include="Tabs\RBStoredItemsTab.xaml.vb">
       <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Editor Tabs\RBStoredPokemon.xaml.vb">
-      <DependentUpon>RBStoredPokemon.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\TDSStoredItems.xaml.vb">
-      <DependentUpon>TDSStoredItems.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Library\GameConstants.vb" />
-    <Compile Include="Library\GateSave.vb" />
-    <Compile Include="Library\JEditor Source\buffer\BooleanBuffer.vb" />
-    <Compile Include="Library\JEditor Source\buffer\BooleanBufferArray.vb" />
-    <Compile Include="Library\JEditor Source\buffer\BooleanBufferView.vb" />
-    <Compile Include="Library\JEditor Source\buffer\BufferUnderflowException.vb" />
-    <Compile Include="Library\JEditor Source\Save\ActivePkmn.vb" />
-    <Compile Include="Library\JEditor Source\Save\AdventureLog.vb" />
-    <Compile Include="Library\JEditor Source\Save\HeldItemStorage.vb" />
-    <Compile Include="Library\JEditor Source\Save\ItemShop.vb" />
-    <Compile Include="Library\JEditor Source\Save\ItemStorage.vb" />
-    <Compile Include="Library\JEditor Source\Save\PkmnQStorage.vb" />
-    <Compile Include="Library\JEditor Source\Save\PkmnStorage.vb" />
-    <Compile Include="Library\JEditor Source\Save\QuickSaveSlot.vb" />
-    <Compile Include="Library\JEditor Source\Save\SaveFile.vb" />
-    <Compile Include="Library\JEditor Source\Save\SaveSlot.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyAttack.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyAttackEx.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyAttackQ.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyItem.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyPkmn.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyPkmnEx.vb" />
-    <Compile Include="Library\JEditor Source\Save\SkyPkmnQ.vb" />
-    <Compile Include="Library\JEditor Source\util\ArrayUtils.vb" />
-    <Compile Include="Library\JEditor Source\util\BitConverterLE.vb" />
-    <Compile Include="Library\JEditor Source\util\SkyCharConv.vb" />
+    <Compile Include="Checksums.vb" />
+    <Compile Include="GameConstants.vb" />
     <Compile Include="Lists.vb" />
-    <Compile Include="Library\MDSaveBase.vb" />
-    <Compile Include="Library\RBSaveEU.vb" />
-    <Compile Include="Library\RBSave.vb" />
-    <Compile Include="Library\Offsets.vb" />
-    <Compile Include="Library\SkySave.HeldItems.vb" />
-    <Compile Include="Library\SkySave.vb" />
-    <Compile Include="Library\TDSave.vb" />
     <Compile Include="Library\ARDS\Blue Held Money.vb" />
     <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
     <Compile Include="Library\ARDS\Blue Stored Money.vb" />
     <Compile Include="Library\ARDS\Blue Team Name.vb" />
+    <Compile Include="Saves\RBSave.HeldItem.vb" />
+    <Compile Include="Saves\RBSave.StoredPokemon.vb" />
+    <Compile Include="Saves\RBSave.vb" />
+    <Compile Include="Saves\RBSaveEU.vb" />
+    <Compile Include="Saves\SkySave.AdventureLog.vb" />
+    <Compile Include="Saves\SkySave.Quicksave.vb" />
+    <Compile Include="Saves\SkySave.ActivePokemon.vb" />
+    <Compile Include="Saves\SkySave.StoredPokemon.vb" />
     <Compile Include="Saves\SkySave.vb" />
+    <Compile Include="Saves\TDSave.ActivePokemon.vb" />
+    <Compile Include="Saves\TDSave.HeldItem.vb" />
+    <Compile Include="Saves\TDSave.StoredPokemon.vb" />
+    <Compile Include="Saves\TDSave.vb" />
     <Compile Include="Settings.vb" />
-    <Compile Include="Library\StringUtilities.vb" />
     <Compile Include="SkyEditorInfo.vb" />
+    <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
+      <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\QuicksavePokemonTab.xaml.vb">
+      <DependentUpon>QuicksavePokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\EpisodeActivePokemonTab.xaml.vb">
+      <DependentUpon>EpisodeActivePokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\HeldItemsTab.xaml.vb">
+      <DependentUpon>HeldItemsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\PkmGeneralTab.xaml.vb">
+      <DependentUpon>PkmGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\RBGeneral.xaml.vb">
+      <DependentUpon>RBGeneral.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\SkyGeneralTab.xaml.vb">
+      <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\StoredPokemonTab.xaml.vb">
+      <DependentUpon>StoredPokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\TDGeneralTab.xaml.vb">
+      <DependentUpon>TDGeneralTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\QPokemonWindow.xaml.vb">
       <DependentUpon>QPokemonWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ActivePokemonWindow.xaml.vb">
-      <DependentUpon>ActivePokemonWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PkmWindow.xaml.vb">
-      <DependentUpon>PkmWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Editor Tabs\GateGeneral.xaml">
+    <Page Include="Controls\iAttack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\QuicksavePokemonTab.xaml">
+    <Page Include="Controls\MDActiveAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Editor Tabs\ActivePokemonTab.xaml">
+    <Page Include="Controls\MDAttack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\EpisodeActivePokemon.xaml">
+    <Page Include="Tabs\PkmQuicksaveTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Editor Tabs\TDGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Editor Tabs\RBGeneral.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Editor Tabs\EpisodeHeldItems.xaml">
+    <Page Include="Tabs\PkmMovesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\SkyGeneralTab.xaml">
+    <Page Include="Tabs\RBStoredItemsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\HeldItemsTab.xaml">
+    <Page Include="Tabs\ActivePokemonTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\RBStoredItemsTab.xaml">
+    <Page Include="Tabs\QuicksavePokemonTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\EpisodeActivePokemonTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\RBStoredPokemon.xaml">
+    <Page Include="Tabs\HeldItemsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Editor Tabs\TDSStoredItems.xaml">
+    <Page Include="Tabs\PkmGeneralTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tabs\RBGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tabs\SkyGeneralTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tabs\StoredPokemonTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tabs\TDGeneralTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\QPokemonWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\ActivePokemonWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\PkmWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +343,8 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
+    <Compile Include="Saves\SkySave.HeldItem.vb" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -382,7 +404,6 @@
     <Content Include="SkyEditor\English\TDLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="xceed.wpf.toolkit.dll" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -415,5 +436,6 @@
   <ItemGroup>
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

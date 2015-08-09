@@ -17,7 +17,7 @@ Public Class ROM
                     If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newpath)) Then
                         IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newpath))
                     End If
-                    DSIconTool.ExtractIcon(Filename, newpath)
+                    ExtractIcon(Filename, newpath)
                 End If
                 Return New Uri(newpath)
             Else
@@ -28,7 +28,7 @@ Public Class ROM
     Public ReadOnly Property ImageSource As BitmapImage
         Get
             Dim u = ImageUri
-            If u IsNot Nothing Then
+            If u IsNot Nothing AndAlso IO.File.Exists(u.AbsolutePath) Then
                 Return New BitmapImage(u)
             Else
                 Return New BitmapImage

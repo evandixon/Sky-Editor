@@ -8,6 +8,10 @@
             Me.Text = Text
             Me.Value = Value
         End Sub
+        Public Sub New()
+            Me.Text = ""
+            Me.Value = Nothing
+        End Sub
         Public Overrides Function ToString() As String
             Return Text
         End Function

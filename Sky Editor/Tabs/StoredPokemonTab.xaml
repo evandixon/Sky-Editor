@@ -1,0 +1,15 @@
+﻿<local:EditorTab x:Class="Tabs.StoredPokemonTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Margin="0,0,0,0">
+        <ListBox x:Name="lbPokemon" Margin="155,0,0,30" SelectionMode="Extended" />
+        <Button x:Name="btnEditPokemon" Content="Edit" Margin="0,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="45" />
+        <ListBox x:Name="lbFriendArea" HorizontalAlignment="Left" Width="150" Margin="0,25,0,30" />
+        <Button x:Name="btnShowAll" Content="Show All" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" />
+    </Grid>
+</local:EditorTab>

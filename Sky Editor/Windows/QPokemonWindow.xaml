@@ -14,10 +14,13 @@
             <TabItem x:Name="tiMain" Header="Main">
                 <UniformGrid Columns="2" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label x:Name="lblPkm">Pokemon</Label>
-                    <!--<xctk:IntegerUpDown x:Name="numPkmID" />-->
                     <local:SearchableDropDown x:Name="cbPokemon" />
                     <Label x:Name="lblIsFemale">Is Female</Label>
                     <CheckBox x:Name="chbIsFemale"></CheckBox>
+                    <Label x:Name="lblPkm2">Pokemon (2)</Label>
+                    <local:SearchableDropDown x:Name="cbPokemon2" />
+                    <Label x:Name="lblIsFemale2">Is Female (2)</Label>
+                    <CheckBox x:Name="chbIsFemale2"></CheckBox>
                     <!--<Label x:Name="lblName">Name</Label>
                     <TextBox x:Name="txtName"></TextBox>-->
                     <Label x:Name="lblLevel">Level</Label>

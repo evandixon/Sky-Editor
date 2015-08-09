@@ -28,11 +28,11 @@ Public Class MySave
         MyBase.DebugInfo()
     End Sub
 
-    Public Sub New(Save As Byte())
-        'For some reason the parent constructor is not inherited.
-        'This takes care of that.
-        MyBase.New(Save)
-    End Sub
+    'Public Sub New(Save As Byte())
+    '    'For some reason the parent constructor is not inherited.
+    '    'This takes care of that.
+    '    MyBase.New(Save)
+    'End Sub
 
     ''If you'd prefer, you can use a filename constructor instead.
     ''If you provide one, it will be called before the one giving a Byte array.

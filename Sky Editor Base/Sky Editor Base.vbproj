@@ -30,7 +30,7 @@
     <InstallUrl>http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>3.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -120,10 +120,15 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Deployment" />
@@ -140,6 +145,30 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Application.xaml">
@@ -154,12 +183,19 @@
     <Compile Include="Code\ARDS\Manager.vb" />
     <Compile Include="Code\ARDS\Region.vb" />
     <Compile Include="Code\ChildControls.vb" />
+    <Compile Include="Code\DocumentTab.vb" />
     <Compile Include="Code\iGameTypeSelector.vb" />
     <Compile Include="Code\iMainWindow.vb" />
+    <Compile Include="Code\ObjectControl.vb" />
+    <Compile Include="Code\ObjectControlPlaceholder.vb" />
+    <Compile Include="Code\ObjectTab.vb" />
     <Compile Include="Code\PluginHelper.vb" />
+    <Compile Include="Code\PluginManagerOld.vb" />
     <Compile Include="Code\PluginManager.vb" />
+    <Compile Include="Code\Project.vb" />
     <Compile Include="Code\Redistribution\PluginInfo.vb" />
     <Compile Include="Code\SearchableDropDown.vb" />
+    <Compile Include="Code\ToolWindow.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
@@ -174,6 +210,9 @@
     <Compile Include="Code\GenericFile.vb" />
     <Compile Include="Code\Utilities\Zip.vb" />
     <Compile Include="Code\iSkyEditorPlugin.vb" />
+    <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
+      <DependentUpon>ProjectExplorer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
     </Compile>
@@ -183,12 +222,28 @@
     <Compile Include="WelcomeTab.xaml.vb">
       <DependentUpon>WelcomeTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MainWindow2.xaml.vb">
+      <DependentUpon>MainWindow2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NewFileWindow.xaml.vb">
+      <DependentUpon>NewFileWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewNameWindow.xaml.vb">
       <DependentUpon>NewNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NewProjectWindow.xaml.vb">
+      <DependentUpon>NewProjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ObjectWindow.xaml.vb">
+      <DependentUpon>ObjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Tool Windows\ProjectExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\BackgroundTaskWait.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,7 +277,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\MainWindow2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\NewFileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\NewNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\NewProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ObjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,6 +350,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
+    <None Include="packages.config" />
     <None Include="Sky Editor Base_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -286,9 +358,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ICSharpCode.SharpZipLib.dll" />
-    <Resource Include="Resources\Settings.txt">
+    <Content Include="Resources\Settings.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

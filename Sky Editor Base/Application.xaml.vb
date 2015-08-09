@@ -5,6 +5,12 @@ Imports SkyEditorBase.Redistribution
 Class Application
 
     Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.Exit
+        'Delete .tmp files
+        For Each item In IO.Directory.GetFiles(PluginHelper.RootResourceDirectory, "*.tmp", IO.SearchOption.AllDirectories)
+            IO.File.Delete(item)
+        Next
+
+        'Restart program if exit code warrants it
         If e.ApplicationExitCode = 1 Then
             Dim args = Environment.GetCommandLineArgs()
             If args.Length = 1 Then
@@ -23,7 +29,12 @@ Class Application
     ' can be handled in this file.
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        RedistributionHelpers.DeleteScheduledFiles()
-        RedistributionHelpers.InstallPendingPlugins()
+        Try
+            RedistributionHelpers.DeleteScheduledFiles()
+            RedistributionHelpers.InstallPendingPlugins()
+        Catch ex As Exception
+            MessageBox.Show("An error has occurred during pre-startup: " & ex.ToString)
+            Application.Current.Shutdown()
+        End Try
     End Sub
 End Class

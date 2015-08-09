@@ -24,6 +24,19 @@
         Public Shadows Function ShowDialog() As Boolean
             Return MyBase.ShowDialog
         End Function
+        Public Sub New()
+
+            ' This call is required by the designer.
+            InitializeComponent()
+
+            ' Add any initialization after the InitializeComponent() call.
+
+        End Sub
+        Public Sub New(Message As String, Title As String)
+            Me.New
+            Me.Title = Title
+            lbGameSelectorQuestion.Content = Message
+        End Sub
     End Class
 
 End Namespace

@@ -3,7 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Sky Editor" Height="700" Width="975.847" Icon="../favicon.ico">
     <Grid Margin="0,0,0,0">
-        <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="275*" />
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <MenuItem x:Name="menuFile" Header="_File">
                 <MenuItem x:Name="menuNew" Header="_New" />
                 <MenuItem x:Name="menuFileOpen" Header="_Open">
@@ -19,16 +24,17 @@
                 <MenuItem x:Name="menuDebugConsole" Header="Run Command..." />
             </MenuItem>
         </Menu>
-        <TabControl x:Name="tcTabs" Margin="0,21,276,0" />
+        <TabControl x:Name="tcTabs" Margin="0,21,0,0" Grid.Column="0" />
         <StatusBar x:Name="statusBarMain" Height="26" VerticalAlignment="Bottom" Margin="0,0,0,0" Visibility="Hidden">
             <StatusBarItem>
                 <Label x:Name="statusLblStatus" Content="Ready" Height="26" Width="503" />
             </StatusBarItem>
         </StatusBar>
-        <ListBox x:Name="lbSaves" Margin="0,21,0,0" HorizontalAlignment="Right" Width="276">
+        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" Margin="0,21,0,0" />
+        <ListBox x:Name="lbSaves" Margin="0,21,0,0" Grid.Column="3">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="contextRemoveSave" Header="Remove"/>
+                    <MenuItem x:Name="contextRemoveSave" Header="Remove" />
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

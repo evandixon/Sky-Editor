@@ -1,13 +1,13 @@
 ﻿Imports SkyEditorBase
 Imports ROMEditor.FileFormats
-Imports ROMEditor.PMD_Explorers
+Imports ROMEditor.Roms
 
 Public Class PersonalityTest
     Inherits EditorTab
 
     Public Overrides Async Sub RefreshDisplay(Save As GenericSave)
-        If TypeOf Save Is PMD_Explorers.SkyNDSRom Then
-            Dim overlay = Await (DirectCast(Save, PMD_Explorers.SkyNDSRom)).GetPersonalityTestOverlay
+        If TypeOf Save Is SkyNDSRom Then
+            Dim overlay = Await (DirectCast(Save, SkyNDSRom)).GetPersonalityTestOverlay
             cbPartner01.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner01)
             cbPartner02.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner02)
             cbPartner03.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner03)
@@ -179,8 +179,8 @@ Public Class PersonalityTest
     End Property
 
     Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
-        If TypeOf Save Is PMD_Explorers.SkyNDSRom Then
-            Dim o = (DirectCast(Save, PMD_Explorers.SkyNDSRom)).GetPersonalityTestOverlay.Result
+        If TypeOf Save Is SkyNDSRom Then
+            Dim o = (DirectCast(Save, SkyNDSRom)).GetPersonalityTestOverlay.Result
             o.Partner01 = Overlay13.SetPokemonIDGender(cbPartner01.LastSafeIndex, chbPartner01.IsChecked)
             o.Partner02 = Overlay13.SetPokemonIDGender(cbPartner02.LastSafeIndex, chbPartner02.IsChecked)
             o.Partner03 = Overlay13.SetPokemonIDGender(cbPartner03.LastSafeIndex, chbPartner03.IsChecked)
@@ -236,7 +236,7 @@ Public Class PersonalityTest
             o.BoldMale = Overlay13.SetPokemonIDGender(cbBoldMale.LastSafeIndex, chbBoldMale.IsChecked)
             o.BoldFemale = Overlay13.SetPokemonIDGender(cbBoldFemale.LastSafeIndex, chbBoldFemale.IsChecked)
 
-            Dim lang = (DirectCast(Save, PMD_Explorers.SkyNDSRom)).GetLanguageString.Result
+            Dim lang = (DirectCast(Save, SkyNDSRom)).GetLanguageString.Result
             Dim offset As Integer = 1660
 
             lang(offset + 0) = txtHardyDe.Text

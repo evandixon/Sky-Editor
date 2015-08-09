@@ -37,12 +37,13 @@ Public Class RedRescuePoints
     End Function
 
     Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
-        Dim s = DirectCast(Save, RBSave)
-        Dim moneyHex As String = Conversion.Hex(Math.Min(s.RescuePoints, &HFFFF))
-        Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
-        code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        code.Add(New CBAHelper.Line(String.Format("82038C1C {0}", moneyHex.PadLeft(4, "0"))))
-        Return code.ToString
+        'Dim s = DirectCast(Save, RBSave)
+        'Dim moneyHex As String = Conversion.Hex(Math.Min(s.RescuePoints, &HFFFF))
+        'Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
+        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
+        'code.Add(New CBAHelper.Line(String.Format("82038C1C {0}", moneyHex.PadLeft(4, "0"))))
+        'Return code.ToString
+        Return ""
     End Function
 
     Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats

@@ -1,5 +1,5 @@
 ﻿Imports System.Windows.Controls
-Imports ROMEditor.PMD_Explorers
+Imports ROMEditor.Roms
 Imports SkyEditorBase
 
 Public Class PortraitTab

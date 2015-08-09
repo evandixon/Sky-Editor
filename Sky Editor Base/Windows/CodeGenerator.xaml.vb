@@ -20,15 +20,15 @@
             End If
         End Sub
         Sub LoadCodeTypes()
-            If m.Save IsNot Nothing Then
-                cbCodeType.Items.Clear()
-                For Each t In m.CheatManager.GetCodeTypes
-                    cbCodeType.Items.Add(t)
-                Next
-                If cbCodeType.Items.Count > 0 Then cbCodeType.SelectedIndex = 0
-            Else
-                MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoGames", "In order to generate codes, you need to have a save file loaded.  Use File -> New if you don't have one, otherwise, use File-> Open."))
-            End If
+            'If m.Save IsNot Nothing Then
+            '    cbCodeType.Items.Clear()
+            '    For Each t In m.CheatManager.GetCodeTypes
+            '        cbCodeType.Items.Add(t)
+            '    Next
+            '    If cbCodeType.Items.Count > 0 Then cbCodeType.SelectedIndex = 0
+            'Else
+            '    MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoGames", "In order to generate codes, you need to have a save file loaded.  Use File -> New if you don't have one, otherwise, use File-> Open."))
+            'End If
         End Sub
         Private Sub cbCodeType_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCodeType.SelectionChanged
             cbRegion.Items.Clear()
@@ -45,11 +45,11 @@
             Next
         End Sub
         Private Sub cbRegion_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbRegion.SelectionChanged
-            cbGame.Items.Clear()
-            For Each g In m.CheatManager.GetGames(cbCodeType.SelectedItem, cbRegion.SelectedItem, m.Save.SaveID)
-                cbGame.Items.Add(IO.Path.GetFileNameWithoutExtension(g))
-            Next
-            If cbGame.Items.Count > 0 Then cbGame.SelectedIndex = 0
+            'cbGame.Items.Clear()
+            'For Each g In m.CheatManager.GetGames(cbCodeType.SelectedItem, cbRegion.SelectedItem, m.Save.SaveID)
+            '    cbGame.Items.Add(IO.Path.GetFileNameWithoutExtension(g))
+            'Next
+            'If cbGame.Items.Count > 0 Then cbGame.SelectedIndex = 0
         End Sub
         Private Sub cbGame_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbGame.SelectionChanged
             cbCategory.Items.Clear()
@@ -82,7 +82,7 @@
                         End If
                     Next
                 End If
-                txtOut.Text = DirectCast(cbProperty.SelectedItem, ARDS.CodeDefinition).GenerateCode(m.Save, cbRegion.SelectedItem, activator, cbCodeType.SelectedItem).ToString
+                'txtOut.Text = DirectCast(cbProperty.SelectedItem, ARDS.CodeDefinition).GenerateCode(m.Save, cbRegion.SelectedItem, activator, cbCodeType.SelectedItem).ToString
             End If
         End Sub
 

@@ -1,14 +1,88 @@
-﻿Imports System.Reflection
+﻿Imports System.Collections.Concurrent
+Imports System.Reflection
 Imports SkyEditorBase.SkyEditorWindows
 Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
+Imports System.Threading
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
 ''' </summary>
 ''' <remarks></remarks>
 Public Class PluginHelper
+    'From http://blogs.msdn.com/b/pfxteam/archive/2010/04/07/9990421.aspx
+    Public NotInheritable Class StaTaskScheduler
+        Inherits TaskScheduler
+        Implements IDisposable
+
+        Private ReadOnly _threads As List(Of Thread)
+
+        Private _tasks As BlockingCollection(Of Task)
+
+        Public Sub New(numberOfThreads As Integer)
+
+            If numberOfThreads < 1 Then
+
+                Throw New ArgumentOutOfRangeException("concurrencyLevel")
+            End If
+
+            _tasks = New BlockingCollection(Of Task)()
+
+            _threads = Enumerable.Range(0, numberOfThreads).[Select](Function(i)
+                                                                         Dim thread = New Thread(New ThreadStart(Sub()
+                                                                                                                     For Each t In _tasks.GetConsumingEnumerable()
+                                                                                                                         TryExecuteTask(t)
+                                                                                                                     Next
+                                                                                                                 End Sub))
+                                                                         thread.IsBackground = True
+                                                                         thread.SetApartmentState(ApartmentState.STA)
+                                                                         Return thread
+                                                                     End Function).ToList()
+
+            _threads.ForEach(Sub(t) t.Start())
+        End Sub
+
+        Protected Overrides Sub QueueTask(task As Task)
+            _tasks.Add(task)
+        End Sub
+
+        Protected Overrides Function GetScheduledTasks() As IEnumerable(Of Task)
+            Return _tasks.ToArray()
+        End Function
+
+        Protected Overrides Function TryExecuteTaskInline(task As Task, taskWasPreviouslyQueued As Boolean) As Boolean
+            Return Thread.CurrentThread.GetApartmentState() = ApartmentState.STA AndAlso TryExecuteTask(task)
+        End Function
+
+        Public Overrides ReadOnly Property MaximumConcurrencyLevel() As Integer
+            Get
+                Return _threads.Count
+            End Get
+        End Property
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            If _tasks IsNot Nothing Then
+                _tasks.CompleteAdding()
+
+                For Each thread In _threads
+                    thread.Join()
+                Next
+
+                _tasks.Dispose()
+
+                _tasks = Nothing
+            End If
+        End Sub
+    End Class
+
+    ''' <summary>
+    ''' Contains a reference to the last PluginManager created.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Property PluginManagerInstance As PluginManager
     ''' <summary>
     ''' Gets the name of the assembly of whatever assembly calls this method.
     ''' </summary>
@@ -110,13 +184,13 @@ Public Class PluginHelper
         End If
     End Sub
     ''' <summary>
-    ''' Runs the specified program, capturing console output.
+    ''' Runs the specified program synchronously, capturing console output.
     ''' Returns true when the program exits.
     ''' </summary>
     ''' <param name="Filename"></param>
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
-    Public Shared Async Function RunProgram(Filename As String, Arguments As String) As Task(Of Boolean)
+    Public Shared Sub RunProgramSync(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True)
         Writeline(String.Format("Executing {0} {1}", Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
@@ -128,14 +202,57 @@ Public Class PluginHelper
         AddHandler p.OutputDataReceived, AddressOf OutputHandler
         p.Start()
         p.BeginOutputReadLine()
-        StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
-        Await WaitForProcess(p)
+        If ShowLoadingWindow Then
+            StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
-        StopLoading()
-        RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-        p.Dispose()
-        Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+            p.WaitForExit()
+
+            StopLoading()
+            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+            p.Dispose()
+            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        Else
+            p.WaitForExit()
+            p.Dispose()
+            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        End If
+    End Sub
+    ''' <summary>
+    ''' Runs the specified program, capturing console output.
+    ''' Returns true when the program exits.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    ''' <param name="Arguments"></param>
+    ''' <remarks></remarks>
+    Public Shared Async Function RunProgram(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True) As Task(Of Boolean)
+        Writeline(String.Format("Executing {0} {1}", Filename, Arguments))
+        Dim p As New Process()
+        p.StartInfo.FileName = Filename
+        p.StartInfo.Arguments = Arguments
+        p.StartInfo.RedirectStandardOutput = True
+        p.StartInfo.UseShellExecute = False
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        p.StartInfo.CreateNoWindow = True
+        AddHandler p.OutputDataReceived, AddressOf OutputHandler
+        p.Start()
+        p.BeginOutputReadLine()
+
+        If ShowLoadingWindow Then
+            StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
+
+            Await WaitForProcess(p)
+
+            StopLoading()
+            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+            p.Dispose()
+            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        Else
+            Await WaitForProcess(p)
+            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+            p.Dispose()
+            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+        End If
         Return True
     End Function
     Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
@@ -187,7 +304,15 @@ Public Class PluginHelper
     End Sub
     Private Shared Sub MakeLoadingVisibleorNot()
         If _loadingWindow Is Nothing Then
-            _loadingWindow = New BackgroundTaskWait()
+            'Dim s As New StaTaskScheduler(1)
+            'Task.Factory.StartNew(New Action(Sub()
+            Try
+                _loadingWindow = New BackgroundTaskWait()
+            Catch ex As Exception
+                PluginHelper.Writeline("Unable to show loading window.  Exception details: " & ex.ToString, LineType.Error)
+                Exit Sub
+            End Try
+            'End Sub), CancellationToken.None, TaskCreationOptions.None, s)
         End If
         Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
         Dim isShowing As Boolean = _loadingShown
@@ -206,7 +331,7 @@ Public Class PluginHelper
                 _loadingWindow.ChangeMessage(_loadingDefinitions.Values(0))
             End If
         ElseIf isShowing AndAlso Not shouldShow Then
-            _loadingWindow.Close()
+            _loadingWindow.DoClose()
             _loadingWindow = Nothing
             _loadingShown = False
         End If

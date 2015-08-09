@@ -6,15 +6,15 @@ Partial Public MustInherit Class GenericSave
     Public Event SaveIDUpdated(sender As Object, NewSaveID As String)
 
 #Region "Constructors"
-    ''' <summary>
-    ''' Creates a new GenericSave using the given Byte Array.
-    ''' Filename will not be initialized if this is used.
-    ''' </summary>
-    ''' <param name="Save"></param>
-    ''' <remarks></remarks>
-    Public Sub New(Save As Byte())
-        MyBase.New(Save)
-    End Sub
+    ' ''' <summary>
+    ' ''' Creates a new GenericSave using the given Byte Array.
+    ' ''' Filename will not be initialized if this is used.
+    ' ''' </summary>
+    ' ''' <param name="Save"></param>
+    ' ''' <remarks></remarks>
+    'Public Sub New(Save As Byte())
+    '    MyBase.New(Save)
+    'End Sub
 
     ''' <summary>
     ''' Creates a new GenericSave from the given file name.
@@ -31,7 +31,7 @@ Partial Public MustInherit Class GenericSave
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New()
-        MyBase.New({})
+        MyBase.New()
     End Sub
 #End Region
 
@@ -73,7 +73,6 @@ Partial Public MustInherit Class GenericSave
     ''' <remarks></remarks>
     Public MustOverride Function DefaultSaveID() As String
 
-
     ''' <summary>
     ''' Fixes the checksum of the file, if applicable.
     ''' If not overridden, nothing will happen.
@@ -83,29 +82,49 @@ Partial Public MustInherit Class GenericSave
 
     End Sub
 
-    ''' <summary>
-    ''' Returns the raw data of the save file, after fixing the checksum.
-    ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Overridable Async Function GetBytes() As Task(Of Byte())
-        Await Task.Run(Sub()
-                           FixChecksum()
-                       End Sub)
-        Return RawData
-    End Function
-
-    ''' <summary>
-    ''' Saves the GenericSave to the given path, after fixing the checksum.
-    ''' </summary>
-    ''' <param name="Path"></param>
-    ''' <remarks></remarks>
-    Public Overridable Async Function Save(Path As String) As Task
-        IO.File.WriteAllBytes(Path, Await GetBytes())
-    End Function
+    Public Overrides Sub PreSave()
+        MyBase.PreSave()
+        FixChecksum()
+    End Sub
 
     Public Overridable Function IsOfType(SaveID As String)
         Return Me.SaveID = SaveID
+    End Function
+    Public Overridable Function IsOfType(TypeToCheck As Type) As Boolean
+        Dim match As Boolean = False
+        Dim g = [GetType]()
+        match = g.IsEquivalentTo(TypeToCheck) OrElse g.BaseType.IsEquivalentTo(TypeToCheck)
+        If Not match Then
+            For Each item In g.GetInterfaces
+                If item.IsEquivalentTo(TypeToCheck) Then
+                    match = True
+                    Exit For
+                End If
+            Next
+        End If
+        Return match
+    End Function
+
+    ''' <summary>
+    ''' Converts the GenericSave to the given type T.
+    ''' If not overridden by the child save type, will cast to the given type T.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <returns></returns>
+    ''' <remarks>Indented to provide a way to get a child file type when applicable, and cast in all other cases.</remarks>
+    Public Overridable Function Convert(Of T)() As T
+        Return CTypeDynamic(Me, GetType(T))
+    End Function
+    ''' <summary>
+    ''' Converts the given save to a generic save.
+    ''' If not overridden by the child save tile, will simply cast to GenericSave
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="Save"></param>
+    ''' <returns></returns>
+    ''' <remarks>Indented to provide a way to put a child file type back into the parent, and cast in all other cases.</remarks>
+    Public Overridable Function Convert(Of T)(Save As T) As GenericSave
+        Return CTypeDynamic(Save, GetType(GenericSave))
     End Function
 
     ''' <summary>
@@ -123,7 +142,7 @@ Partial Public MustInherit Class GenericSave
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Overridable Function DefaultExtension() As String
+    Public Overrides Function DefaultExtension() As String
         Return "*.sav"
     End Function
 

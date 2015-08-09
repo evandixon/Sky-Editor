@@ -11,5 +11,9 @@
             End If
 
         End Sub
+        Public Shared Sub Zip(SourceDirectory As String, OutputFilename As String)
+            Dim x As New ICSharpCode.SharpZipLib.Zip.FastZip
+            x.CreateZip(OutputFilename, SourceDirectory, True, ".*", ".*")
+        End Sub
     End Class
 End Namespace

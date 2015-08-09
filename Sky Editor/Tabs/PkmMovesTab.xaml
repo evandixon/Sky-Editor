@@ -1,0 +1,17 @@
+﻿<local:ObjectTab x:Class="Tabs.PkmMovesTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <UniformGrid Columns="1" Rows="4" Margin="20,20,0,0" VerticalAlignment="Top">
+            <local:ObjectControlPlaceholder x:Name="Attack1" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" />
+            <local:ObjectControlPlaceholder x:Name="Attack2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" />
+            <local:ObjectControlPlaceholder x:Name="Attack3" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" />
+            <local:ObjectControlPlaceholder x:Name="Attack4" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" />
+        </UniformGrid>
+    </Grid>
+</local:ObjectTab>

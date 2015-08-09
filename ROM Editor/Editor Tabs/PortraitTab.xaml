@@ -26,7 +26,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.DataContext>
-                <local1:Portrait/>
+                <local1:Portrait />
             </ListView.DataContext>
         </ListView>
         <Button x:Name="btnPortraitFix" Content="Fix Missing Portraits" Height="21" Width="125" Margin="10,0,0,3" VerticalAlignment="Bottom" HorizontalAlignment="Left">

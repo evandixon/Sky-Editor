@@ -11,7 +11,7 @@ Public Class SkySave
     ''' <remarks></remarks>
     Public Property TeamName As String
         Get
-            Return StringUtilities.PMDEncodingToString(GenericArrayOperations(Of Byte).CopyOfRange(RawData, CurrentOffsets.TeamNameStart, CurrentOffsets.TeamNameStart + 9))
+            Return StringUtilities.PMDEncodingToString(RawData(CurrentOffsets.TeamNameStart, 9))
         End Get
         Set(value As String)
             Dim buffer As Byte() = StringUtilities.StringToPMDEncoding(value)
@@ -27,7 +27,7 @@ Public Class SkySave
     End Property
     Public Property RankPoints As Integer
         Get
-            Return BitConverter.ToInt32(RawData, &H9958)
+            Return BitConverter.ToInt32(RawData(0, 4), &H9958)
         End Get
         Set(value As Integer)
             Dim bytes = BitConverter.GetBytes(value)
@@ -199,14 +199,13 @@ Public Class SkySave
     Public Sub New(Save As Byte())
         MyBase.New(Save)
     End Sub
-    Public Property PlayerName As String
 
     Public Property HeldMoney As UInt32
         Get
-            Return BitConverter.ToUInt16(BitConverter.GetBytes((BitConverter.ToUInt32(GenericArrayOperations(Of Byte).CopyOfRange(RawData, &H990C, &H990F), 0) << 2)), 1)
+            Return BitConverter.ToUInt16(BitConverter.GetBytes((BitConverter.ToUInt32(RawData(&H990C, 4), 0) << 2)), 1)
         End Get
         Set(value As UInt32)
-            Dim b1 = BitConverter.GetBytes(BitConverter.ToUInt32(GenericArrayOperations(Of Byte).CopyOfRange(RawData, &H990C, &H990F), 0) << 2)
+            Dim b1 = BitConverter.GetBytes(BitConverter.ToUInt32(RawData(&H990C, 4), 0) << 2)
             Dim b2 = BitConverter.GetBytes(value)
             b1(1) = b2(0)
             b1(2) = b2(1)
@@ -221,10 +220,10 @@ Public Class SkySave
 
     Public Property SpEpisode_HeldMoney As UInt32
         Get
-            Return BitConverter.ToUInt16(BitConverter.GetBytes((BitConverter.ToUInt32(GenericArrayOperations(Of Byte).CopyOfRange(RawData, &H990F, &H9912), 0) << 2)), 1)
+            Return BitConverter.ToUInt16(BitConverter.GetBytes((BitConverter.ToUInt32(RawData(&H990F, 4), 0) << 2)), 1)
         End Get
         Set(value As UInt32)
-            Dim b1 = BitConverter.GetBytes(BitConverter.ToUInt32(GenericArrayOperations(Of Byte).CopyOfRange(RawData, &H990F, &H9912), 0) << 2)
+            Dim b1 = BitConverter.GetBytes(BitConverter.ToUInt32(RawData(&H990F, 4), 0) << 2)
             Dim b2 = BitConverter.GetBytes(value)
             b1(1) = b2(0)
             b1(2) = b2(1)
@@ -269,7 +268,7 @@ Public Class SkySave
 
     Public Property AdventuresHad As Integer
         Get
-            Return BitConverter.ToInt32(RawData, &H8B70)
+            Return BitConverter.ToInt32(RawData(&H8B70, 4), 0)
         End Get
         Set(value As Integer)
             Dim buffer As Byte() = BitConverter.GetBytes(value)

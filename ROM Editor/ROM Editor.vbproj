@@ -68,6 +68,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xaml" />
@@ -89,7 +90,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.vb" />
+    <Compile Include="GameStrings.vb" />
+    <Compile Include="Editor Tabs\BackgroundsTab.xaml.vb">
+      <DependentUpon>BackgroundsTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Editor Tabs\FilesTab.xaml.vb">
       <DependentUpon>FilesTab.xaml</DependentUpon>
     </Compile>
@@ -103,20 +107,20 @@
       <DependentUpon>BGPControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="File Format Controls\FileFormatControl.vb" />
-    <Compile Include="Library\ConsoleCommands.vb" />
-    <Compile Include="Library\GenericNDSRom.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\Animations\AnimatedSprite.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\Animations\Frame.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\BGP.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\Animations\AnimData.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\DecompressedFile.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\File Formats.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\item_p.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\Kaomado.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\LanguageString.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\Overlay13.vb" />
-    <Compile Include="Library\PMD Explorers\File Formats\waza_p.vb" />
-    <Compile Include="Library\PMD Explorers\SkyNDSRom.vb" />
+    <Compile Include="ConsoleCommands.vb" />
+    <Compile Include="FileFormats\Animations\AnimatedSprite.vb" />
+    <Compile Include="FileFormats\Animations\Frame.vb" />
+    <Compile Include="FileFormats\BGP.vb" />
+    <Compile Include="FileFormats\Animations\AnimData.vb" />
+    <Compile Include="FileFormats\DecompressedFile.vb" />
+    <Compile Include="FileFormats\File Formats.vb" />
+    <Compile Include="FileFormats\item_p.vb" />
+    <Compile Include="FileFormats\Kaomado.vb" />
+    <Compile Include="FileFormats\LanguageString.vb" />
+    <Compile Include="FileFormats\NDSModSource.vb" />
+    <Compile Include="FileFormats\Overlay13.vb" />
+    <Compile Include="FileFormats\waza_p.vb" />
+    <Compile Include="GenericNDSModProject.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -134,6 +138,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Portrait.vb" />
+    <Compile Include="Roms\GenericNDSRom.vb" />
+    <Compile Include="Roms\SkyNDSRom.vb" />
+    <Compile Include="SkyRomProject.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -144,6 +151,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -172,7 +180,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROMEditor\ndstool.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROMEditor\pokenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -182,13 +190,20 @@
     </Content>
     <Content Include="ROMEditor\ppmd_kaoutil.txt" />
     <Content Include="ROMEditor\ppmd_pxcomp.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROMEditor\ppmd_unpx.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\xdelta\xdelta3.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Editor Tabs\BackgroundsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Editor Tabs\FilesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
