@@ -90,6 +90,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="Editor Tabs\BackgroundsTab.xaml.vb">
       <DependentUpon>BackgroundsTab.xaml</DependentUpon>
