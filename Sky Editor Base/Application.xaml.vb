@@ -1,5 +1,6 @@
 ﻿Imports System.Deployment
 Imports System.Deployment.Application
+Imports System.IO
 Imports SkyEditorBase.Redistribution
 
 Class Application
@@ -7,7 +8,11 @@ Class Application
     Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.Exit
         'Delete .tmp files
         For Each item In IO.Directory.GetFiles(PluginHelper.RootResourceDirectory, "*.tmp", IO.SearchOption.AllDirectories)
-            IO.File.Delete(item)
+            Try
+                IO.File.Delete(item)
+            Catch ex As IOException
+                'Something's keeping the file from being deleted.  It's probably still open.  It will get deleted the next time the program exits.
+            End Try
         Next
 
         'Restart program if exit code warrants it
