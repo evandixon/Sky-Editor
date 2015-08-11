@@ -46,11 +46,18 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim args = Environment.GetCommandLineArgs
-        If args.Length >= 2 Then
-            PatchROM(args(1))
+        If args.Length >= 3 Then
+            PatchROM(args(1), args(2))
+        ElseIf args.Length >= 2
+            PatchROM(args(1), Nothing)
         End If
     End Sub
-    Public Async Sub PatchROM(Filename As String)
+    ''' <summary>
+    ''' Patches the NDS ROM at the given SourceFilename and saves it to DestinationFilename.  Opens a SaveFileDialog if DestinationFilename is null.
+    ''' </summary>
+    ''' <param name="SourceFilename">Path of the vanilla ROM to patch.</param>
+    ''' <param name="DestinationFilename">Path to save the patched ROM to.  If null, a SaveFileDialog will be shown.</param>
+    Public Async Sub PatchROM(SourceFilename As String, Optional DestinationFilename As String = Nothing)
         Dim currentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
         Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools/ndstemp")
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
@@ -60,7 +67,7 @@ Public Class Form1
         If Not IO.Directory.Exists(ROMDirectory) Then
             IO.Directory.CreateDirectory(ROMDirectory)
         End If
-        Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, ROMDirectory))
+        Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SourceFilename, ROMDirectory))
 
         'Unpack the mods
         For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod", IO.SearchOption.TopDirectoryOnly)
@@ -129,11 +136,20 @@ Public Class Form1
         Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"),
                                                   String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", IO.Path.Combine(currentDirectory, "PatchedROM.nds"), ROMDirectory))
         'Save the ROM
-        Dim o As New SaveFileDialog
-        o.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
-        If o.ShowDialog = DialogResult.OK Then
-            IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), o.FileName)
+        If String.IsNullOrEmpty(DestinationFilename) Then
+            Dim o As New SaveFileDialog
+            o.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
+ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
+                IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), o.FileName)
+            Else
+                If MessageBox.Show("Are you sure you want to cancel the patching process?", "NDS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.No Then
+                    GoTo ShowSaveDialog
+                End If
+            End If
+        Else
+            IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename)
         End If
+
 
         'Clean Up
         IO.Directory.Delete(modTempDirectory, True)
@@ -173,5 +189,15 @@ Public Class Form1
     Public Sub MoveFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
         IO.File.Copy(OriginalFilename, NewFilename, Overwrite)
         IO.File.Delete(OriginalFilename)
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If OpenFileDialog1.ShowDialog = DialogResult.OK Then
+            txtFilename.Text = OpenFileDialog1.FileName
+        End If
+    End Sub
+
+    Private Sub btnPatch_Click(sender As Object, e As EventArgs) Handles btnPatch.Click
+        PatchROM(txtFilename.Text)
     End Sub
 End Class
