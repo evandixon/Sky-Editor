@@ -66,13 +66,18 @@
             _fileReader.Write(value, 0, Length)
         End Set
     End Property
-    Public ReadOnly Property Length As Long
+    Public Property Length As Long
         Get
             If _fileReader Is Nothing Then
                 _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
             End If
             Return _fileReader.Length
         End Get
+        Set(value As Long)
+            If _fileReader IsNot Nothing Then
+                _fileReader.SetLength(value)
+            End If
+        End Set
     End Property
     ''' <summary>
     ''' Gets or sets a string representation of the file.
