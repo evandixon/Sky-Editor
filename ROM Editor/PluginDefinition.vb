@@ -9,6 +9,8 @@ Public Class PluginDefinition
             out = GameStrings.SkyNDSRom
         ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
             out = GameStrings.BGPFile
+        ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
+            out = GameStrings.NDSModSourceFile
         End If
         Return out
     End Function
