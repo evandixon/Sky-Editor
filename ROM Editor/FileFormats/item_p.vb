@@ -26,14 +26,18 @@ Namespace FileFormats
                     RawData(3) = b(1)
                 End Set
             End Property
-            Public Property Category As Byte
+            Public Property Category As ItemCategory
                 Get
                     Return RawData(4)
                 End Get
-                Set(value As Byte)
+                Set(value As ItemCategory)
                     RawData(4) = value
                 End Set
             End Property
+            ''' <summary>
+            ''' Reference to the item sprite to be used in-game.
+            ''' </summary>
+            ''' <returns></returns>
             Public Property Sprite As Byte
                 Get
                     Return RawData(5)
@@ -42,6 +46,10 @@ Namespace FileFormats
                     RawData(5) = value
                 End Set
             End Property
+            ''' <summary>
+            ''' ID the game refers to the item by.
+            ''' </summary>
+            ''' <returns></returns>
             Public Property ID As UInt16
                 Get
                     Return BitConverter.ToUInt16(RawData, 6)
@@ -52,7 +60,11 @@ Namespace FileFormats
                     RawData(7) = b(1)
                 End Set
             End Property
-            Public Property MoveID As UInt16
+            ''' <summary>
+            ''' If the item is an unused TM/HM or an Orb, this is the ID of the contained Move.
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property ItemParameter1 As UInt16
                 Get
                     Return BitConverter.ToUInt16(RawData, 8)
                 End Get
@@ -110,9 +122,39 @@ Namespace FileFormats
                     RawData(15) = value
                 End Set
             End Property
+            ''' <summary>
+            ''' Unknown, usually is 0.
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property B16 As Byte
+                Get
+                    Return RawData(16)
+                End Get
+                Set(value As Byte)
+                    RawData(16) = value
+                End Set
+            End Property
             Public Sub New(Data As Byte())
                 Me.RawData = RawData
             End Sub
+            Public Enum ItemCategory
+                Projectile = 0
+                Arc = 1
+                Seed_Drink = 2
+                Food_Gummi = 3
+                HoldItem = 4
+                HM_TM = 5
+                Poké_Money = 6
+                NA = 7
+                Evolution_Misc = 8
+                Orb = 9
+                LinkBox = &HA
+                UsedTM = &HB
+                Box1 = &HC
+                Box2 = &HD
+                Box3 = &HE
+                SpecificItems = &HF
+            End Enum
         End Class
         Public Sub New(Filename As String)
             MyBase.New(Filename)
