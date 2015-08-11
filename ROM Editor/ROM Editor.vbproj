@@ -121,6 +121,9 @@
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
     <Compile Include="GenericNDSModProject.vb" />
+    <Compile Include="ObjectControls\NDSModSrcEditor.xaml.vb">
+      <DependentUpon>NDSModSrcEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -217,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="File Format Controls\BGPControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\NDSModSrcEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

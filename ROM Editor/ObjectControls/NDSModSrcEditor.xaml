@@ -1,0 +1,30 @@
+﻿<skyEditorBase:ObjectControl x:Class="ObjectControls.NDSModSrcEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:skyEditorBase="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+             mc:Ignorable="d">
+    <Grid>
+    <UniformGrid Columns="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Label Content="Mod Name" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtModName" Height="25" VerticalAlignment="Top"/>
+
+        <Label Content="Author" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtAuthor" Height="25" VerticalAlignment="Top"/>
+
+        <Label Content="Description" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDescription" Height="25" VerticalAlignment="Top"/>
+
+        <Label Content="Update URL" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtUpdateUrl" Height="25" VerticalAlignment="Top"/>
+
+        <Label Content="Dependencies - Before" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDependenciesBefore" Height="25" VerticalAlignment="Top"/>
+
+        <Label Content="Dependencies - After" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDependenciesAfter" Height="25" VerticalAlignment="Top"/>
+
+    </UniformGrid>
+    </Grid>
+</skyEditorBase:ObjectControl>
