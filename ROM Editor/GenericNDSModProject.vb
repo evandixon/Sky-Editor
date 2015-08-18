@@ -132,7 +132,8 @@ Public Class GenericNDSModProject
         PluginHelper.StartLoading("Building mod pack.")
         MyBase.Build()
         If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files")) Then
-            IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), True)
+            PluginHelper.DeleteDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"))
+            'IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), True)
         End If
         Dim j As New JavaScriptSerializer
         Dim patchers As New List(Of FilePatcher)
@@ -257,7 +258,8 @@ Public Class GenericNDSModProject
                 Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
                 IO.File.Copy(oldFile, oldFileTemp, True)
                 IO.File.Copy(newFile, newFileTemp, True)
-                Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s {0} {1} {2}", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
+                Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
+                Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
                 IO.File.Copy(deltaFileTemp, deltaFile)
                 IO.File.Delete(deltaFileTemp)
                 IO.File.Delete(oldFileTemp)

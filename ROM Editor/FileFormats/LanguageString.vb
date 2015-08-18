@@ -4,25 +4,40 @@ Imports SkyEditorBase
 
 Namespace FileFormats
     Public Class LanguageString
-        Inherits SkyEditorBase.GenericFile
+        Inherits GenericFile
         Public Property Items As List(Of String)
+
+
+        'Public Sub New(Filename As String)
+        '    MyBase.New(Filename)
+        'End Sub
+
         Public Sub New(Filename As String)
             MyBase.New(Filename)
+            Dim bytes = IO.File.ReadAllBytes(Filename)
+
             Items = New List(Of String)
-            Dim offset1 As UInt32 = BitConverter.ToUInt32(RawData(0, 4), 0)
+
+            Dim offset1 As UInt32 = BitConverter.ToUInt32(bytes, 0)
             Dim e = Encoding.GetEncoding("Windows-1252")
+            'Loop through each entry
             For count As Integer = 0 To offset1 - 5 Step 4
-                Dim startOffset As UInteger = BitConverter.ToUInt32(RawData(count, 4), 0)
+                Dim startOffset As UInteger = BitConverter.ToUInt32(bytes, count)
                 Items.Add("")
                 Dim endOffset As UInteger = startOffset
-                While RawData(endOffset) <> 0
-                    Items(count / 4) &= e.GetString({RawData(endOffset)})
+                Dim s As New StringBuilder
+                'Read the null-terminated string
+                While bytes(endOffset) <> 0
+                    s.Append(e.GetString({RawData(endOffset)}))
                     endOffset += 1
                 End While
+                Items(count / 4) = s.ToString
             Next
         End Sub
 
-        Public Overrides Sub Save()
+        Public Overrides Sub PreSave()
+            MyBase.PreSave()
+            'Generate File
             Dim e = Encoding.GetEncoding("Windows-1252")
             Dim offsets As New List(Of UInt32)
             For i As UInt32 = 0 To Items.Count - 1
@@ -54,7 +69,9 @@ Namespace FileFormats
             For Each b In stringdataBytes
                 totalData.Add(b)
             Next
-            IO.File.WriteAllBytes(Filename, totalData.ToArray)
+            'Write buffer to stream
+            Length = totalData.Count
+            RawData(0, totalData.Count) = totalData.ToArray
         End Sub
         Default Public Property Item(Index As UInteger) As String
             Get
@@ -64,6 +81,7 @@ Namespace FileFormats
                 Items(Index) = value
             End Set
         End Property
+        Public Const ItemNameStartUS As Integer = 6773
 
         'Default Public Property Item(Index As UInteger) As String
         '    Get

@@ -206,6 +206,11 @@ Public Class PluginManager
         ObjectControls.Add(T.GetConstructor({}).Invoke({}))
     End Sub
 
+    ''' <summary>
+    ''' Registers a filter for use in open and save file dialogs.
+    ''' </summary>
+    ''' <param name="FileExtension">Filter for the dialog.  If this is by extension, should be *.extension</param>
+    ''' <param name="FileFormatName">Name of the file format</param>
     Public Sub RegisterIOFilter(FileExtension As String, FileFormatName As String)
         Dim TempIOFilters As Dictionary(Of String, String) = IOFilters
         If TempIOFilters Is Nothing Then
@@ -451,7 +456,7 @@ Public Class PluginManager
     Public Function OpenFile(File As GenericFile) As GenericFile
         Dim type = GetFileType(File)
         If type Is Nothing Then
-            Return Nothing
+            Return File
         Else
             Dim out As GenericFile = type.GetConstructor({GetType(String)}).Invoke({File.OriginalFilename})
             If TypeOf out Is GenericSave Then

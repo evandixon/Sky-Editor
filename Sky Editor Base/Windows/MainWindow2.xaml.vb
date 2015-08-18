@@ -13,6 +13,8 @@
 
         toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
 
+        _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
+
         AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
     End Sub
 

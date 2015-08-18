@@ -114,6 +114,11 @@ Namespace FileFormats
                     RawData(14) = value
                 End Set
             End Property
+            ''' <summary>
+            ''' Unknown, usually is set to 0.
+            ''' Probably padding to make the item's length 16 bytes.
+            ''' </summary>
+            ''' <returns></returns>
             Public Property B15 As Byte
                 Get
                     Return RawData(15)
@@ -122,20 +127,11 @@ Namespace FileFormats
                     RawData(15) = value
                 End Set
             End Property
-            ''' <summary>
-            ''' Unknown, usually is 0.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property B16 As Byte
-                Get
-                    Return RawData(16)
-                End Get
-                Set(value As Byte)
-                    RawData(16) = value
-                End Set
-            End Property
             Public Sub New(Data As Byte())
-                Me.RawData = RawData
+                Me.RawData = Data
+            End Sub
+            Public Sub New()
+                Me.New({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
             End Sub
             Public Enum ItemCategory
                 Projectile = 0
@@ -159,13 +155,16 @@ Namespace FileFormats
         Public Sub New(Filename As String)
             MyBase.New(Filename)
             Items = New List(Of Item)
-            For count As Integer = &H20 To Math.Floor(Me.Length / 16 - 1) * 16 Step 16
-                Items.Add(New Item(Me.RawData(count, 15)))
+            For count As Integer = &H20 To Me.Length * 16 - 17 Step 16
+                If BitConverter.ToUInt16(RawData(count, 2), 0) = &H404 Then
+                    Exit For
+                End If
+                Items.Add(New Item(Me.RawData(count, 16)))
             Next
         End Sub
         Public Function GetBytes() As Byte()
             Dim out As New List(Of Byte)
-            For count As Integer = 0 To 15
+            For count As Integer = 0 To 31
                 out.Add(RawData(count))
             Next
             For Each item In Items
@@ -192,5 +191,11 @@ Namespace FileFormats
 
             Return out.ToArray
         End Function
+        Public Overrides Sub PreSave()
+            MyBase.PreSave()
+            Dim buffer = GetBytes()
+            Length = buffer.Length
+            RawData(0, Length) = buffer
+        End Sub
     End Class
 End Namespace

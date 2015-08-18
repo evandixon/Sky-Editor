@@ -77,6 +77,10 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -90,6 +94,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="Editor Tabs\BackgroundsTab.xaml.vb">
@@ -122,6 +127,9 @@
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
     <Compile Include="GenericNDSModProject.vb" />
+    <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
+      <DependentUpon>item_p_Editor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\NDSModSrcEditor.xaml.vb">
       <DependentUpon>NDSModSrcEditor.xaml</DependentUpon>
     </Compile>
@@ -221,6 +229,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="File Format Controls\BGPControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\item_p_Editor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,7 +8,7 @@ Public Class NewProjectWindow
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As RoutedEventArgs) Handles btnCancel.Click
-        DialogResult = True
+        DialogResult = False
         Me.Close()
     End Sub
     Public Sub New(Manager As PluginManager)

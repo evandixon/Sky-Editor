@@ -234,6 +234,7 @@ Public Class PluginHelper
         p.StartInfo.UseShellExecute = False
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         p.StartInfo.CreateNoWindow = True
+        p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(Filename)
         AddHandler p.OutputDataReceived, AddressOf OutputHandler
         p.Start()
         p.BeginOutputReadLine()
@@ -248,12 +249,13 @@ Public Class PluginHelper
             p.Dispose()
             Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
         Else
-            Await WaitForProcess(p)
-            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-            p.Dispose()
-            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+            If Await WaitForProcess(p) Then
+                RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+                p.Dispose()
+                Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+            End If
         End If
-        Return True
+            Return True
     End Function
     Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
         Return Await Task.Run(Function()
@@ -391,4 +393,20 @@ Public Class PluginHelper
         End If
         Return d
     End Function
+    ''' <summary>
+    ''' Deletes the given directory and everything inside it.
+    ''' </summary>
+    ''' <param name="DirectoryPath"></param>
+    Public Shared Sub DeleteDirectory(DirectoryPath As String)
+        'Delete the files
+        For Each item In IO.Directory.GetFiles(DirectoryPath, "*", IO.SearchOption.AllDirectories)
+            IO.File.Delete(item)
+        Next
+        'Delete the directories
+        For Each item In IO.Directory.GetDirectories(DirectoryPath, "*", IO.SearchOption.AllDirectories)
+            IO.Directory.Delete(item, True)
+        Next
+        'Delete the target directory
+        IO.Directory.Delete(DirectoryPath, True)
+    End Sub
 End Class
