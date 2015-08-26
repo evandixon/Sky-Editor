@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.Roms
+Imports SkyEditorBase
 
 Public Class SkyRomProject
     Inherits GenericNDSModProject
@@ -29,9 +30,14 @@ Public Class SkyRomProject
         'Dim itemNames(1351) As String
         'englishLanguage.Items.CopyTo(6775, itemNames, 0, 1351)
 
-        'Copy Language
+        'Convert Language
         CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Languages/")
-        IO.File.Copy(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"), IO.Path.Combine(modDirectory, "Languages", "English"))
+
+        Dim langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
+        Dim langList As New ObjectFile(Of List(Of String))
+        langList.ContainedObject = langString.Items
+        langList.Save(IO.Path.Combine(modDirectory, "Languages", "English"))
+
         OpenFile(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(internalPath, "Languages", "English"), False)
 
         'Copy Items
@@ -139,8 +145,12 @@ Public Class SkyRomProject
 
         Next
 
-        'Copy Language
-        IO.File.Copy(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"), True)
+        'Convert Language
+        'IO.File.Copy(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"), True)
+        Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(modDirectory, "Languages", "English"))
+        Dim langString As New FileFormats.LanguageString 'FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
+        langString.Items = langFile.ContainedObject
+        langString.Save(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
 
         'Copy Items
         Dim item_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_p.bin")

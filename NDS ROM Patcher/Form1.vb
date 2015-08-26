@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports System.Text.RegularExpressions
 Imports System.Web.Script.Serialization
 Imports ICSharpCode.SharpZipLib.Zip
 
@@ -50,6 +51,9 @@ Public Class Form1
             PatchROM(args(1), args(2))
         ElseIf args.Length >= 2
             PatchROM(args(1), Nothing)
+        Else
+            'Show the GUI
+            ListAvailableMods()
         End If
     End Sub
     ''' <summary>
@@ -58,7 +62,7 @@ Public Class Form1
     ''' <param name="SourceFilename">Path of the vanilla ROM to patch.</param>
     ''' <param name="DestinationFilename">Path to save the patched ROM to.  If null, a SaveFileDialog will be shown.</param>
     Public Async Sub PatchROM(SourceFilename As String, Optional DestinationFilename As String = Nothing)
-        Dim currentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
+        Dim currentDirectory = Environment.CurrentDirectory 'IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
         Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools/ndstemp")
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
@@ -92,10 +96,16 @@ Public Class Form1
 
             If currentMod.ToUpdate IsNot Nothing Then
                 For Each file In currentMod.ToUpdate
-                    Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(ROMDirectory, file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
+                    Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(item, "Files", file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
                     'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
                     For Each patchFile In patches
-                        Dim possiblePatchers = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
+                        Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
+                        For Each p As FilePatcher In patchers
+                            If p.PatchExtension = IO.Path.GetExtension(patchFile) Then
+                                possiblePatchers.Add(p)
+                            End If
+                        Next
+                        'Todo: Handle default of xdelta
                         'If possiblePatchers.Count = 0 Then
                         '   Do nothing, we don't have the tools to deal with this patch
                         If possiblePatchers.Count >= 1 Then
@@ -152,7 +162,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
 
 
         'Clean Up
-        IO.Directory.Delete(modTempDirectory, True)
+        If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
         If IO.Directory.Exists(renameTemp) Then IO.Directory.Delete(renameTemp, True)
         IO.Directory.Delete(modTempDirectory, True)
         IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
@@ -199,5 +209,12 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
 
     Private Sub btnPatch_Click(sender As Object, e As EventArgs) Handles btnPatch.Click
         PatchROM(txtFilename.Text)
+    End Sub
+
+    Private Sub ListAvailableMods()
+        Dim currentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
+        For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod*", IO.SearchOption.TopDirectoryOnly)
+            clbMods.Items.Add(IO.Path.GetFileNameWithoutExtension(item), Not item.ToLower.EndsWith(".disabled"))
+        Next
     End Sub
 End Class

@@ -13,10 +13,14 @@ Namespace ObjectControls
                 With DirectCast(Save, item_p)
                     Items = .Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                        Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                        Using englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
                             ReDim ItemNames(1959)
-                            englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)
+                            englishlanguage.ContainedObject.CopyTo(6773, ItemNames, 0, 1959)
                         End Using
+                        'Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                        '    ReDim ItemNames(1959)
+                        '    englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)
+                        'End Using
                     Else
                         ItemNames = SkyEditor.Lists.SkyItemNames.Values.ToArray
                     End If
@@ -38,9 +42,9 @@ Namespace ObjectControls
                 With DirectCast(Obj, item_p)
                     .Items = Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                        Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                        Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
                             For count = 0 To 1351
-                                englishLanguage.Items(count + 6773) = ItemNames(count)
+                                englishLanguage.ContainedObject(count + 6773) = ItemNames(count)
                             Next
                             englishLanguage.Save()
                         End Using

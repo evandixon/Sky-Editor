@@ -8,9 +8,10 @@ Namespace FileFormats
         Public Property Items As List(Of String)
 
 
-        'Public Sub New(Filename As String)
-        '    MyBase.New(Filename)
-        'End Sub
+        Public Sub New()
+            MyBase.New()
+            Items = New List(Of String)
+        End Sub
 
         Public Sub New(Filename As String)
             MyBase.New(Filename)
