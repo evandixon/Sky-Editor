@@ -68,12 +68,16 @@ Public Class Form1
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
 
         'Extract the NDS ROM
+        statusLabel1.Text = "Extracting the NDS ROM"
+        ToolStripProgressBar1.Value = 0
         If Not IO.Directory.Exists(ROMDirectory) Then
             IO.Directory.CreateDirectory(ROMDirectory)
         End If
         Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SourceFilename, ROMDirectory))
 
         'Unpack the mods
+        statusLabel1.Text = "Extracting the mods"
+        ToolStripProgressBar1.Value = 20
         For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod", IO.SearchOption.TopDirectoryOnly)
             Dim z As New FastZip
             If Not IO.Directory.Exists(IO.Path.Combine(modTempDirectory, IO.Path.GetFileNameWithoutExtension(item))) Then
@@ -83,6 +87,8 @@ Public Class Form1
         Next
 
         'Apply the mods
+        statusLabel1.Text = "Applying the mods"
+        ToolStripProgressBar1.Value = 40
         Dim j As New JavaScriptSerializer
         Dim patchers = j.Deserialize(Of List(Of FilePatcher))(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Tools", "patchers.json")))
         For Each item In IO.Directory.GetDirectories(modTempDirectory, "*", IO.SearchOption.TopDirectoryOnly)
@@ -145,9 +151,13 @@ Public Class Form1
 
         Next
         'Repack the ROM
+        statusLabel1.Text = "Repacking the ROM"
+        ToolStripProgressBar1.Value = 80
         Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"),
                                                   String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", IO.Path.Combine(currentDirectory, "PatchedROM.nds"), ROMDirectory))
         'Save the ROM
+        statusLabel1.Text = "Saving the ROM"
+        ToolStripProgressBar1.Value = 100
         If String.IsNullOrEmpty(DestinationFilename) Then
             Dim o As New SaveFileDialog
             o.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
@@ -164,10 +174,15 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
 
 
         'Clean Up
+        statusLabel1.Text = "Cleaning up"
+        ToolStripProgressBar1.Value = 100
         If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
         If IO.Directory.Exists(renameTemp) Then IO.Directory.Delete(renameTemp, True)
         IO.Directory.Delete(ROMDirectory, True)
         IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
+
+        statusLabel1.Text = "Ready"
+        ToolStripProgressBar1.Value = 100
     End Sub
     ''' <summary>
     ''' Runs the specified program, capturing console output.
