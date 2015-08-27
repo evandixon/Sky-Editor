@@ -47,7 +47,7 @@ Public Class GenericNDSModProject
         ''' Regular expression used to identify which file paths this FilePatcher will create and apply patches for.
         ''' </summary>
         ''' <returns></returns>
-        Public Property FilePath As Regex
+        Public Property FilePath As String
         ''' <summary>
         ''' Path of the program to create a patch, relative to ROMEditor's plugin directory.
         ''' </summary>
@@ -232,7 +232,8 @@ Public Class GenericNDSModProject
             For Each item In actions.ToUpdate
                 'Detect and use appropriate patching program
                 For Each patcher In Me.CustomFilePatchers
-                    If patcher.FilePath.IsMatch(item) Then
+                    Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
+                    If reg.IsMatch(item) Then
                         patchers.Add(patcher)
                         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\")))) Then
                             IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\"))))
@@ -288,15 +289,30 @@ Public Class GenericNDSModProject
         '-Copy ndstool
         IO.File.Copy(PluginHelper.GetResourceName("ndstool.exe"), IO.Path.Combine(toolsDir, "ndstool.exe"), True)
         '-Copy xdelta
-        IO.File.Copy(PluginHelper.GetResourceName("xdelta/xdelta3.exe"), IO.Path.Combine(toolsDir, "xdelta3.exe"), True)
+        'IO.File.Copy(PluginHelper.GetResourceName("xdelta/xdelta3.exe"), IO.Path.Combine(toolsDir, "xdelta3.exe"), True)
+        '-Ensure xdelta is registered as a patching program
+        Dim xdelta As New FilePatcher
+        xdelta.ApplyPatchProgram = "xdelta\xdelta3.exe"
+        xdelta.ApplyPatchArguments = "-d -s ""{0}"" ""{1}"" ""{2}"""
+        xdelta.MergeSafe = False
+        xdelta.PatchExtension = "xdelta"
+        patchers.Add(xdelta)
         '-Copy patchers
         IO.File.WriteAllText(IO.Path.Combine(toolsDir, "patchers.json"), j.Serialize(patchers))
         For Each item In patchers
-            If Not IO.Directory.Exists(IO.Path.Combine(toolsDir, "Patchers")) Then
-                IO.Directory.CreateDirectory(IO.Path.Combine(toolsDir, "Patchers"))
+            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram))) Then
+                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram)))
             End If
             IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram), True)
-            'Todo: Copy dependencies
+            '--Copy Dependencies
+            If item.ApplyPatchDependencies IsNot Nothing Then
+                For Each d In item.ApplyPatchDependencies
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", d.Value))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", d.Value)))
+                    End If
+                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, d.Key), IO.Path.Combine(toolsDir, "Patchers", d.Value), True)
+                Next
+            End If
         Next
         '-Copy patching wizard
         IO.File.Copy(PluginHelper.GetResourceName("NDSPatcher.exe"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), True)

@@ -27,7 +27,7 @@ Public Class Form1
     End Class
 
     Public Class FilePatcher
-        Public Property FilePath As Regex
+        Public Property FilePath As String
         Public Property CreatePatchProgram As String
         ''' <summary>
         ''' Arguments for the CreatePatchProgram.
@@ -101,16 +101,18 @@ Public Class Form1
                     For Each patchFile In patches
                         Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
                         For Each p As FilePatcher In patchers
-                            If p.PatchExtension = IO.Path.GetExtension(patchFile) Then
+                            If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
                                 possiblePatchers.Add(p)
                             End If
                         Next
-                        'Todo: Handle default of xdelta
                         'If possiblePatchers.Count = 0 Then
                         '   Do nothing, we don't have the tools to deal with this patch
                         If possiblePatchers.Count >= 1 Then
+                            Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
                             'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
-                            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", possiblePatchers(0).ApplyPatchProgram), possiblePatchers(0).ApplyPatchArguments)
+                            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
+                            IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
+                            IO.File.Delete(tempFilename)
                         End If
                     Next
                 Next
@@ -164,7 +166,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         'Clean Up
         If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
         If IO.Directory.Exists(renameTemp) Then IO.Directory.Delete(renameTemp, True)
-        IO.Directory.Delete(modTempDirectory, True)
+        IO.Directory.Delete(ROMDirectory, True)
         IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
     End Sub
     ''' <summary>
@@ -183,6 +185,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         p.StartInfo.UseShellExecute = False
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         p.StartInfo.CreateNoWindow = True
+        p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(Filename)
         p.Start()
         p.BeginOutputReadLine()
         Await WaitForProcess(p)
