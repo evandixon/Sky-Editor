@@ -400,11 +400,11 @@ Public Class PluginHelper
     Public Shared Sub DeleteDirectory(DirectoryPath As String)
         'Delete the files
         For Each item In IO.Directory.GetFiles(DirectoryPath, "*", IO.SearchOption.AllDirectories)
-            IO.File.Delete(item)
+            If IO.File.Exists(item) Then IO.File.Delete(item)
         Next
         'Delete the directories
         For Each item In IO.Directory.GetDirectories(DirectoryPath, "*", IO.SearchOption.AllDirectories)
-            IO.Directory.Delete(item, True)
+            If IO.Directory.Exists(item) Then DeleteDirectory(item)
         Next
         'Delete the target directory
         IO.Directory.Delete(DirectoryPath, True)

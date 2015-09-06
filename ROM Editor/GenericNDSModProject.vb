@@ -216,7 +216,7 @@ Public Class GenericNDSModProject
 
             '-Copy and write files
             If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles")) Then
-                IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles"), True)
+                PluginHelper.DeleteDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles"))
             End If
             IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles"))
 
@@ -230,6 +230,7 @@ Public Class GenericNDSModProject
             Next
 
             For Each item In actions.ToUpdate
+                Dim patchMade As Boolean = False
                 'Detect and use appropriate patching program
                 For Each patcher In Me.CustomFilePatchers
                     Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
@@ -243,28 +244,31 @@ Public Class GenericNDSModProject
                         Dim newF As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item.Trim("\"))
                         Dim patchFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
 
-                        Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.ApplyPatchArguments, oldF, newF, patchFile), False)
+                        Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
+                        patchMade = True
+                        Exit For
                     End If
                 Next
-
-                'Use xdelta for all other file types
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\")))) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\"))))
+                If Not patchMade Then
+                    'Use xdelta for all other file types
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\")))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\"))))
+                    End If
+                    Dim oldFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", item.Trim("\"))
+                    Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
+                    Dim newFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item.Trim("\"))
+                    Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
+                    Dim deltaFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\") & ".xdelta")
+                    Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
+                    IO.File.Copy(oldFile, oldFileTemp, True)
+                    IO.File.Copy(newFile, newFileTemp, True)
+                    Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
+                    Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
+                    IO.File.Copy(deltaFileTemp, deltaFile)
+                    IO.File.Delete(deltaFileTemp)
+                    IO.File.Delete(oldFileTemp)
+                    IO.File.Delete(newFileTemp)
                 End If
-                Dim oldFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", item.Trim("\"))
-                Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
-                Dim newFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item.Trim("\"))
-                Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
-                Dim deltaFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Files", item.Trim("\") & ".xdelta")
-                Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
-                IO.File.Copy(oldFile, oldFileTemp, True)
-                IO.File.Copy(newFile, newFileTemp, True)
-                Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
-                IO.File.Copy(deltaFileTemp, deltaFile)
-                IO.File.Delete(deltaFileTemp)
-                IO.File.Delete(oldFileTemp)
-                IO.File.Delete(newFileTemp)
             Next
             '-Copy Patcher programs for non-standard file formats
             If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Tools")) Then

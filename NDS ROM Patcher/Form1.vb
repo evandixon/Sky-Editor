@@ -67,6 +67,8 @@ Public Class Form1
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
 
+        btnPatch.Enabled = False
+
         'Extract the NDS ROM
         statusLabel1.Text = "Extracting the NDS ROM"
         ToolStripProgressBar1.Value = 0
@@ -183,6 +185,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
 
         statusLabel1.Text = "Ready"
         ToolStripProgressBar1.Value = 100
+        btnPatch.Enabled = True
     End Sub
     ''' <summary>
     ''' Runs the specified program, capturing console output.

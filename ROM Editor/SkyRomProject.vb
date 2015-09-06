@@ -1,4 +1,5 @@
-﻿Imports ROMEditor.Roms
+﻿Imports ROMEditor
+Imports ROMEditor.Roms
 Imports SkyEditorBase
 
 Public Class SkyRomProject
@@ -165,4 +166,23 @@ Public Class SkyRomProject
             IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", "Decompressed"), True)
         End If
     End Sub
+
+    Public Overrides Function CustomFilePatchers() As List(Of FilePatcher)
+        Dim patchers = MyBase.CustomFilePatchers
+        If patchers Is Nothing Then
+            patchers = New List(Of FilePatcher)
+        End If
+        Dim LSPatcher As New FilePatcher()
+        With LSPatcher
+            .CreatePatchProgram = "LanguageStringPatcher.exe"
+            .CreatePatchArguments = "-c ""{0}"" ""{1}"" ""{2}"""
+            .ApplyPatchProgram = "LanguageStringPatcher.exe"
+            .ApplyPatchArguments = "-a ""{0}"" ""{1}"" ""{2}"""
+            .MergeSafe = True
+            .PatchExtension = "textstrlsp"
+            .FilePath = ".*text_.\.str"
+        End With
+        patchers.Add(LSPatcher)
+        Return patchers
+    End Function
 End Class

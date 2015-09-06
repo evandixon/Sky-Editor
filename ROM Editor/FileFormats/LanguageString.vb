@@ -7,7 +7,6 @@ Namespace FileFormats
         Inherits GenericFile
         Public Property Items As List(Of String)
 
-
         Public Sub New()
             MyBase.New()
             Items = New List(Of String)
