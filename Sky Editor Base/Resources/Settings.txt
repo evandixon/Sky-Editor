@@ -14,3 +14,7 @@ DebugMode=True
 ShowConsoleOnStart=True
 
 DebugLangaugePlaceholders=False
+
+#Hides advanced options like projects; however, this also disables advanced features.
+#If you're using this as a save editor, leave it on.  If you're using this as a ROM editor, you must set to False.
+SimpleMode=True

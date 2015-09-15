@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileFormats\item_s_p.vb" />
+    <Compile Include="FileFormats\Kao.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="Editor Tabs\BackgroundsTab.xaml.vb">

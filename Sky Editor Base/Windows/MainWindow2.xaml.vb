@@ -6,16 +6,27 @@
 
     Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         _manager = PluginManager.GetInstance
-        _projectExplorer = New ProjectExplorer(_manager)
+
 
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
 
-        toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
+        menuFileOpenNoDetect.Visibility = Visibility.Collapsed
+
+        If Settings.GetSettings.Setting("SimpleMode").ToLower = "true" Then
+            menuFileSaveProject.Visibility = Visibility.Collapsed
+            menuNewProject.Visibility = Visibility.Collapsed
+            menuBuild.Visibility = Visibility.Collapsed
+        Else
+            _projectExplorer = New ProjectExplorer(_manager)
+            toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
+        End If
 
         _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
 
         AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
+
+
     End Sub
 
     Private Function IsFileTabOpen(File As GenericFile) As Boolean
@@ -54,8 +65,10 @@
     End Sub
     Private Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
         If docPane.SelectedContent IsNot Nothing Then
+            'Dim tab = DirectCast(docPane.SelectedContent, DocumentTab)
             Dim file = DirectCast(docPane.SelectedContent, DocumentTab).File
             SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
+
             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 file.Save(SaveFileDialog1.FileName)
             End If
@@ -93,5 +106,17 @@
 
     Private Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
         _manager.CurrentProject.Build()
+    End Sub
+
+    Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
+        'OpenFileDialog1.Filter = _manager.IOFiltersString
+        'If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+        '    If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
+        '        _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
+        '    Else
+        '        'Todo: open auto-detect window
+        '        docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
+        '    End If
+        'End If
     End Sub
 End Class

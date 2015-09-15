@@ -1,6 +1,14 @@
-﻿Public Class PluginInfo
-    Implements SkyEditorBase.iSkyEditorPlugin
+﻿Imports SkyEditorBase
 
+Public Class PluginInfo
+    Implements SkyEditorBase.iSkyEditorPlugin
+    Public Function DetectSaveType(File As GenericFile) As String
+        If File.OriginalFilename.ToLower.EndsWith("00000ba8\game_data") Then
+            Return GameConstants.MDGatesData
+        Else
+            Return Nothing
+        End If
+    End Function
     Public ReadOnly Property Credits As String Implements SkyEditorBase.iSkyEditorPlugin.Credits
         Get
             Return SkyEditorBase.PluginHelper.GetLanguageItem("3DSToolsCredits", "-Developer: evandixon")
@@ -11,6 +19,7 @@
         Manager.RegisterSaveGameFormat(GameConstants.ThreeDSRom, GameConstants.ThreeDSRom, GetType(ThreeDSRom))
         Manager.RegisterSaveGameFormat(GameConstants.MDGatesData, GameConstants.MDGatesData, GetType(Saves.GatesGameData))
         'Manager.RegisterEditorTab(GetType(Tabs.GIGDGeneralTab))
+        Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
     End Sub
 
     Public ReadOnly Property PluginAuthor As String Implements SkyEditorBase.iSkyEditorPlugin.PluginAuthor
