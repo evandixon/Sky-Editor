@@ -3,8 +3,8 @@ Namespace Tabs
     Public Class PkmMovesTab
         Inherits ObjectTab
 
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            With DirectCast(Save, Interfaces.iPkmAttack)
+        Public Overrides Sub RefreshDisplay()
+            With DirectCast(Me.ContainedObject, Interfaces.iPkmAttack)
                 Attack1.ObjectToEdit = .Attack1
                 Attack2.ObjectToEdit = .Attack2
                 Attack3.ObjectToEdit = .Attack3
@@ -12,15 +12,14 @@ Namespace Tabs
             End With
         End Sub
 
-        Public Overrides Function UpdateObject(Obj As Object) As Object
-            With DirectCast(Obj, Interfaces.iPkmAttack)
+        Public Overrides Sub UpdateObject()
+            With DirectCast(Me.ContainedObject, Interfaces.iPkmAttack)
                 .Attack1 = Attack1.ObjectToEdit
                 .Attack2 = Attack2.ObjectToEdit
                 .Attack3 = Attack3.ObjectToEdit
                 .Attack4 = Attack4.ObjectToEdit
             End With
-            Return Obj
-        End Function
+        End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
                 Return {GetType(Interfaces.iPkmAttack)}

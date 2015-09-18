@@ -1,4 +1,4 @@
-﻿<local:EditorTab x:Class="Tabs.QuicksavePokemonTab"
+﻿<local:ObjectTab x:Class="Tabs.QuicksavePokemonTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,4 +10,4 @@
         <ListBox x:Name="lbActivePokemon" Margin="0,0,0.4,30" SelectionMode="Extended" />
         <Button x:Name="btnEditActivePokemon" Content="Edit" Margin="0,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="45" />
     </Grid>
-</local:EditorTab>
+</local:ObjectTab>

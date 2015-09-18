@@ -2,8 +2,9 @@
 Imports SkyEditor.Saves
 Namespace Tabs
     Public Class SkyGeneralTab
-        Inherits EditorTab
-        Public Overrides Sub RefreshDisplay(Save As GenericSave)
+        Inherits ObjectTab
+        Public Overrides Sub RefreshDisplay()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 With Save.Convert(Of SkySave)()
                     numGeneral_StoredMoney.Value = .StoredMoney
@@ -16,13 +17,14 @@ Namespace Tabs
             End If
         End Sub
 
-        Public Overrides ReadOnly Property SupportedGames As String()
+        Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
-                Return {GameStrings.SkySave}
+                Return {GetType(Saves.SkySave)}
             End Get
         End Property
 
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
+        Public Overrides Sub UpdateObject()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             Dim out As GenericSave = Nothing
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim sky = Save.Convert(Of SkySave)()
@@ -34,10 +36,9 @@ Namespace Tabs
                     .TeamName = txtGeneral_TeamName.Text
                     .ExplorerRank = numGeneral_RankPoints.Value
                 End With
-                out = Save.Convert(sky)
+                Me.ContainedObject = Save.Convert(sky)
             End If
-            Return out
-        End Function
+        End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Category_General", "General")

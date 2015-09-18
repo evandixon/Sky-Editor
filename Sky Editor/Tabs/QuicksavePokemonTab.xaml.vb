@@ -1,8 +1,9 @@
 ﻿Imports SkyEditorBase
 Namespace Tabs
     Public Class QuicksavePokemonTab
-        Inherits EditorTab
-        Public Overloads Overrides Sub RefreshDisplay(Save As GenericSave)
+        Inherits ObjectTab
+        Public Overrides Sub RefreshDisplay()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim p = Save.Convert(Of Saves.SkySave)()
                 lbActivePokemon.Items.Clear()
@@ -13,7 +14,8 @@ Namespace Tabs
                 Next
             End If
         End Sub
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
+        Public Overrides Sub UpdateObject()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim p = Save.Convert(Of Saves.SkySave)()
                 Dim apkms As New List(Of Saves.SkySave.QuicksavePkm)
@@ -21,10 +23,9 @@ Namespace Tabs
                     apkms.Add(item)
                 Next
                 p.QuicksavePokemon = apkms.ToArray
-                Save = Save.Convert(Of Saves.SkySave)(p)
+                Save = Save.Convert(p)
             End If
-            Return Save
-        End Function
+        End Sub
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Quicksave Pokemon")
         End Sub
@@ -55,9 +56,9 @@ Namespace Tabs
         Private Sub lbActivePokemon_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles lbActivePokemon.MouseDoubleClick
             ShowActivePkmEditDialog()
         End Sub
-        Public Overrides ReadOnly Property SupportedGames As String()
+        Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
-                Return {GameStrings.SkySave}
+                Return {GetType(Saves.SkySave)}
             End Get
         End Property
         Public Overrides ReadOnly Property SortOrder As Integer

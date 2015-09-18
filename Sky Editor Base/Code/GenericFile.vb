@@ -2,6 +2,7 @@
     Implements IDisposable
     Protected _tempname As String
     Dim _fileReader As IO.FileStream
+#Region "Constructors"
     Public Sub New(Filename As String)
         _tempname = Guid.NewGuid.ToString()
         Me.OriginalFilename = Filename
@@ -24,6 +25,9 @@
         Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
         Me.OriginalFilename = Filename
     End Sub
+#End Region
+
+#Region "Properties"
     Public Property Filename As String
     Public Property OriginalFilename As String
     Public Property RawData(Index As Long) As Byte
@@ -98,6 +102,18 @@
             _fileReader.Write(buffer, 0, buffer.Count)
         End Set
     End Property
+#End Region
+
+#Region "Events"
+    Public Event FileModified(sender As Object, e As EventArgs)
+    Public Event FileSaved(sender As Object, e As EventArgs)
+
+    Protected Sub RaiseFileModified(sender As Object, e As EventArgs)
+        RaiseEvent FileModified(sender, e)
+    End Sub
+#End Region
+
+#Region "Methods"
     Public Overridable Function DefaultExtension() As String
         Return ""
     End Function
@@ -125,6 +141,7 @@
         _fileReader.Flush()
         If Not Filename = OriginalFilename Then IO.File.Copy(Filename, OriginalFilename, True)
     End Sub
+#End Region
 
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls

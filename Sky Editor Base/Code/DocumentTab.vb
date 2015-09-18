@@ -3,17 +3,17 @@
 Public Class DocumentTab
     Inherits LayoutDocument
     Private _manager As PluginManager
-    Private _file As GenericFile
+    Private WithEvents _file As GenericFile
+
+#Region "Properties"
     Public Property File As GenericFile
         Get
             If TypeOf Me.Content Is ObjectControl Then
-                _file = DirectCast(Me.Content, ObjectControl).UpdateObject(_file)
+                DirectCast(Me.Content, ObjectControl).UpdateObject
             ElseIf TypeOf Me.Content Is TabControl Then
                 For Each item In DirectCast(Me.Content, TabControl).Items
-                    If TypeOf item.Content Is EditorTab Then
-                        _file = DirectCast(item.Content, EditorTab).UpdateSave(_file)
-                    ElseIf TypeOf item.Content Is ObjectTab Then
-                        _file = DirectCast(item.Content, ObjectTab).UpdateObject(_file)
+                    If TypeOf item.Content Is ObjectTab Then
+                        DirectCast(item.Content, ObjectTab).UpdateObject()
                     End If
                 Next
             End If
@@ -39,7 +39,8 @@ Public Class DocumentTab
                 Else
                     Dim control = _manager.GetObjectControl(value)
                     If control IsNot Nothing Then
-                        control.RefreshDisplay(value)
+                        control.ContainedObject = value
+                        control.RefreshDisplay()
                         Me.Content = control
                     End If
                 End If
@@ -47,8 +48,58 @@ Public Class DocumentTab
             _file = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Gets whether or not the file has been modified since it was last opened or saved.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsModified As Boolean
+        Get
+            Return _ismodified
+        End Get
+        Private Set(value As Boolean)
+            _ismodified = value
+        End Set
+    End Property
+    Dim _isModified As Boolean
+#End Region
+
+#Region "Events"
+    Public Event FileModified(sender As Object, e As EventArgs)
+    Public Event FileSaved(sender As Object, e As EventArgs)
+#End Region
+
+#Region "Event Handlers"
+    Private Sub DocumentTab_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
+        If IsModified Then
+            If MessageBox.Show("Are you sure you want to close this file?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
+                e.Cancel = True
+            End If
+        End If
+    End Sub
+    Private Sub File_FileModified(sender As Object, e As EventArgs) Handles _file.FileModified
+        IsModified = True
+        RaiseEvent FileModified(sender, e)
+    End Sub
+    Private Sub _file_FileSaved(sender As Object, e As EventArgs) Handles _file.FileSaved
+        IsModified = False
+        RaiseEvent FileSaved(sender, e)
+    End Sub
+#End Region
+
+#Region "Methods"
+    Public Sub SaveFile(Filename As String)
+        File.Save(Filename)
+    End Sub
+    Public Sub SaveFile()
+        File.Save()
+    End Sub
+#End Region
+
+#Region "Constructors"
     Public Sub New()
         Me.CanClose = True
+        Me.IsModified = False
     End Sub
     Public Sub New(File As GenericFile, Manager As PluginManager)
         Me.New()
@@ -56,10 +107,6 @@ Public Class DocumentTab
         Me.File = File
         Me.Title = IO.Path.GetFileName(File.OriginalFilename)
     End Sub
+#End Region
 
-    Private Sub DocumentTab_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
-        If MessageBox.Show("Are you sure you want to close this file?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
-            e.Cancel = True
-        End If
-    End Sub
 End Class

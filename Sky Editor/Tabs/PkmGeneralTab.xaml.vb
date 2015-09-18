@@ -43,8 +43,8 @@ Namespace Tabs
                 Next
             End Set
         End Property
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            Dim _pokemon = DirectCast(Save, Interfaces.iMDPkm)
+        Public Overrides Sub RefreshDisplay()
+            Dim _pokemon = DirectCast(Me.ContainedObject, Interfaces.iMDPkm)
             With _pokemon
                 PokemonDictionary = .GetPokemonDictionary
                 MetAtDictionary = .GetMetAtDictionary
@@ -110,8 +110,8 @@ Namespace Tabs
             End With
         End Sub
 
-        Public Overrides Function UpdateObject(Save As Object) As Object
-            Dim _pokemon = DirectCast(Save, Interfaces.iMDPkm)
+        Public Overrides Sub UpdateObject()
+            Dim _pokemon = DirectCast(Me.ContainedObject, Interfaces.iMDPkm)
             With _pokemon
                 .ID = SelectedPokemonID
 
@@ -142,8 +142,8 @@ Namespace Tabs
                 .StatSpAttack = numSpAttack.Value
                 .StatSpDefense = numSpDefense.Value
             End With
-            Return Save
-        End Function
+            Me.ContainedObject = _pokemon
+        End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
                 Return {GetType(Interfaces.iMDPkm)}

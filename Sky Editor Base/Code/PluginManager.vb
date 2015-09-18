@@ -76,7 +76,7 @@ Public Class PluginManager
             For Each item In Assemblies
                 Dim types As Type() = item.GetTypes
                 For Each type In types
-                    If IsOfType(type, GetType(ObjectTab)) OrElse IsOfType(type, GetType(EditorTab)) Then
+                    If IsOfType(type, GetType(ObjectTab)) Then
                         RegisterEditorTab(type)
                     ElseIf IsOfType(type, GetType(ObjectControl)) Then
                         RegisterObjectControl(type)
@@ -381,22 +381,21 @@ Public Class PluginManager
     ''' <summary>
     ''' Gets tabs that can edit the specified object.
     ''' </summary>
-    ''' <param name="Save"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetRefreshedTabs(Save As Object) As List(Of TabItem)
         Dim tabs As New List(Of ObjectTab)
         For Each etab In (From e In EditorTabs Order By e.SortOrder Descending)
             Dim isMatch = False
-            If TypeOf etab Is EditorTab Then
-                For Each game In DirectCast(etab, EditorTab).SupportedGames
-                    If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso (TypeOf Save Is GenericSave AndAlso Save.IsOfType(game)) Then
-                        'add the tab because this save is one of the supported games
-                        isMatch = True
-                        Exit For
-                    End If
-                Next
-            End If
+            'If TypeOf etab Is EditorTab Then
+            '    For Each game In DirectCast(etab, EditorTab).SupportedGames
+            '        If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso (TypeOf Save Is GenericSave AndAlso Save.IsOfType(game)) Then
+            '            'add the tab because this save is one of the supported games
+            '            isMatch = True
+            '            Exit For
+            '        End If
+            '    Next
+            'End If
             If Not isMatch Then
                 For Each t In etab.SupportedTypes
                     If Save IsNot Nothing AndAlso ((TypeOf Save Is GenericSave AndAlso Save.IsOfType(t)) OrElse IsOfType(Save, t)) Then
@@ -405,16 +404,17 @@ Public Class PluginManager
                     End If
                 Next
             End If
-            If isMatch Then
-                'If the tab is an EditorTab, only proceed if the save is a GenericSave
-                If TypeOf etab Is EditorTab Then
-                    isMatch = (TypeOf Save Is GenericSave)
-                End If
-            End If
+            'If isMatch Then
+            '    'If the tab is an EditorTab, only proceed if the save is a GenericSave
+            '    If TypeOf etab Is EditorTab Then
+            '        isMatch = (TypeOf Save Is GenericSave)
+            '    End If
+            'End If
             If isMatch Then
                 Dim t As ObjectTab = etab.GetType.GetConstructor({}).Invoke({})
-                Dim a As New action(Sub()
-                                        t.RefreshDisplay(Save)
+                Dim a As New Action(Sub()
+                                        t.ContainedObject = Save
+                                        t.RefreshDisplay()
                                     End Sub)
                 'Await Task.Run(x)
                 Dim x As New Task(a)

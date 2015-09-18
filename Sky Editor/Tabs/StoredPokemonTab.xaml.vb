@@ -3,7 +3,7 @@ Imports SkyEditor.Interfaces
 
 Namespace Tabs
     Public Class StoredPokemonTab
-        Inherits EditorTab
+        Inherits ObjectTab
         Dim storage As iPokemonStorage
         Dim pokemon As iMDPkm()
         Dim slots As StoredPokemonSlotDefinition()
@@ -36,7 +36,8 @@ Namespace Tabs
             'ChangeHeader()
         End Sub
 
-        Public Overrides Sub RefreshDisplay(Save As GenericSave)
+        Public Overrides Sub RefreshDisplay()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GetType(iPokemonStorage)) Then
                 storage = Save.Convert(Of iPokemonStorage)()
                 pokemon = storage.GetPokemon
@@ -111,16 +112,15 @@ Namespace Tabs
             End Get
         End Property
 
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
+        Public Overrides Sub UpdateObject()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GetType(iPokemonStorage)) Then
                 SaveSlot(lbFriendArea.SelectedIndex)
                 Dim s = Save.Convert(Of iPokemonStorage)()
                 s.SetPokemon(pokemon)
-                Return Save.Convert(Of iPokemonStorage)(s)
-            Else
-                Return Save
+                Me.ContainedObject = Save.Convert(s)
             End If
-        End Function
+        End Sub
 
         Private Sub StoredPokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Stored Pokemon")

@@ -37,8 +37,8 @@ Namespace Tabs
                 Next
             End Set
         End Property
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            Dim _pokemon = DirectCast(Save, Saves.SkySave.QuicksavePkm)
+        Public Overrides Sub RefreshDisplay()
+            Dim _pokemon = DirectCast(Me.ContainedObject, Saves.SkySave.QuicksavePkm)
             With _pokemon
                 PokemonDictionary = Lists.SkyPokemon
 
@@ -60,8 +60,8 @@ Namespace Tabs
             End With
         End Sub
 
-        Public Overrides Function UpdateObject(Save As Object) As Object
-            Dim _pokemon = DirectCast(Save, Saves.SkySave.QuicksavePkm)
+        Public Overrides Sub UpdateObject()
+            Dim _pokemon = DirectCast(Me.ContainedObject, Saves.SkySave.QuicksavePkm)
             With _pokemon
                 .ID = SelectedPokemonID
                 _pokemon.IsFemale = chbIsFemale.IsChecked
@@ -80,8 +80,7 @@ Namespace Tabs
                 .StatSpAttack = numSpAttack.Value
                 .StatSpDefense = numSpDefense.Value
             End With
-            Return Save
-        End Function
+        End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
                 Return {GetType(Saves.SkySave.QuicksavePkm)}

@@ -21,7 +21,7 @@ Public Class ObjectWindow
     End Sub
     Public Sub UpdateSave()
         For Each item In (From t In tcTabs.Items Order By DirectCast(t.Content, ObjectTab).UpdatePriority Descending)
-            _objectToEdit = DirectCast(item.Content, ObjectTab).UpdateObject(_objectToEdit)
+            DirectCast(item.Content, ObjectTab).UpdateObject()
         Next
     End Sub
     Public Sub New(Manager As PluginManager)

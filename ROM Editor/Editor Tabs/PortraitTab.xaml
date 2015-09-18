@@ -1,4 +1,4 @@
-﻿<local:EditorTab
+﻿<local:ObjectTab
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -33,4 +33,4 @@
             <Button.ToolTip>When there's an empty portrait in-game, it's simply not displayed. Using this fix, missing portraits will be filled with the default portrait. Unfortunately, the file size will also increase, so it is only recommended to use this if you or your partner will be a Pokemon that's not normally offered. For the time being, this cannot be reversed, so don't use this unless you're sure.</Button.ToolTip>
         </Button>
     </Grid>
-</local:EditorTab>
+</local:ObjectTab>

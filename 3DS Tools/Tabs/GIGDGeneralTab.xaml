@@ -1,4 +1,4 @@
-﻿<local:EditorTab x:Class="Tabs.GIGDGeneralTab"
+﻿<local:ObjectTab x:Class="Tabs.GIGDGeneralTab"
                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,4 +13,4 @@
             <xctk:IntegerUpDown x:Name="numGeneral_HeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
         </UniformGrid>
     </Grid>
-</local:EditorTab>
+</local:ObjectTab>

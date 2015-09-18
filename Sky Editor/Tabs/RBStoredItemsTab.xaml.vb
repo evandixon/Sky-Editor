@@ -1,8 +1,9 @@
 ﻿Imports SkyEditorBase
 Namespace Tabs
     Public Class RBStoredItemsTab
-        Inherits EditorTab
-        Public Overrides Sub RefreshDisplay(Save As GenericSave)
+        Inherits ObjectTab
+        Public Overrides Sub RefreshDisplay()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             'debug stored items
             If Save.IsOfType(GameStrings.RBSave) Then
                 Dim x = Save.Convert(Of Saves.RBSave).StoredItemCounts
@@ -14,15 +15,11 @@ Namespace Tabs
             End If
         End Sub
 
-        Public Overrides ReadOnly Property SupportedGames As String()
+        Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
-                Return {GameStrings.RBSave}
+                Return {GetType(Saves.RBSave)}
             End Get
         End Property
-
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
-            Return Save
-        End Function
 
         Private Sub RBStoredItemsTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Stored Items")

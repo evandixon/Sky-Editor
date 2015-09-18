@@ -7,12 +7,4 @@ Public Class WelcomeTab
         Me.Header = PluginHelper.GetLanguageItem("Sky Editor")
         PluginHelper.TranslateForm(Me)
     End Sub
-
-    Public Overrides Sub RefreshDisplay(Save As Object)
-
-    End Sub
-
-    Public Overrides Function UpdateObject(Save As Object) As Object
-        Return Save
-    End Function
 End Class

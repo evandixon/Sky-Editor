@@ -268,7 +268,6 @@
     <Compile Include="Windows\CodeGenerator.xaml.vb">
       <DependentUpon>CodeGenerator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\EditorTab.vb" />
     <Compile Include="Code\GenericSave.vb" />
     <Compile Include="Windows\MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>

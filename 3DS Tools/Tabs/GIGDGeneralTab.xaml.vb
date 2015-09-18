@@ -3,8 +3,9 @@ Imports System.Windows
 
 Namespace Tabs
     Public Class GIGDGeneralTab
-        Inherits EditorTab
-        Public Overrides Sub RefreshDisplay(Save As GenericSave)
+        Inherits ObjectTab
+        Public Overrides Sub RefreshDisplay()
+            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
             If Save.IsOfType(GameConstants.MDGatesData) Then
                 With Save.Convert(Of Saves.GatesGameData)()
                     numGeneral_HeldMoney.Value = .HeldMoney
@@ -12,22 +13,21 @@ Namespace Tabs
             End If
         End Sub
 
-        Public Overrides ReadOnly Property SupportedGames As String()
+        Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
-                Return {GameConstants.MDGatesData}
+                Return {GetType(Saves.GatesGameData)}
             End Get
         End Property
 
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
-            If Save.IsOfType(GameConstants.MDGatesData) Then
-                Dim td = Save.Convert(Of Saves.GatesGameData)()
+        Public Overrides Sub UpdateObject()
+            If Me.ContainedObject.IsOfType(GameConstants.MDGatesData) Then
+                Dim td = DirectCast(Me.ContainedObject, GenericSave).Convert(Of Saves.GatesGameData)()
                 With td
                     .HeldMoney = numGeneral_HeldMoney.Value
                 End With
-                Save = Save.Convert(Of Saves.GatesGameData)(td)
+                Me.ContainedObject = DirectCast(Me.ContainedObject, GenericSave).Convert(td)
             End If
-            Return Save
-        End Function
+        End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("General", "General")

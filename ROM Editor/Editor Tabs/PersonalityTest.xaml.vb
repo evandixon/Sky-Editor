@@ -3,9 +3,10 @@ Imports ROMEditor.FileFormats
 Imports ROMEditor.Roms
 
 Public Class PersonalityTest
-    Inherits EditorTab
+    Inherits ObjectTab
 
-    Public Overrides Async Sub RefreshDisplay(Save As GenericSave)
+    Public Overrides Async Sub RefreshDisplay()
+        Dim save = ContainedObject
         If TypeOf Save Is SkyNDSRom Then
             Dim overlay = Await (DirectCast(Save, SkyNDSRom)).GetPersonalityTestOverlay
             cbPartner01.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner01)
@@ -172,13 +173,14 @@ Public Class PersonalityTest
         End If
     End Sub
 
-    Public Overrides ReadOnly Property SupportedGames As String()
+    Public Overrides ReadOnly Property SupportedTypes As Type()
         Get
-            Return {GameStrings.SkyNDSRom}
+            Return {GetType(SkyNDSRom)}
         End Get
     End Property
 
-    Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
+    Public Overrides Sub UpdateObject()
+        Dim Save = ContainedObject
         If TypeOf Save Is SkyNDSRom Then
             Dim o = (DirectCast(Save, SkyNDSRom)).GetPersonalityTestOverlay.Result
             o.Partner01 = Overlay13.SetPokemonIDGender(cbPartner01.LastSafeIndex, chbPartner01.IsChecked)
@@ -291,8 +293,8 @@ Public Class PersonalityTest
 
             o.Save()
         End If
-        Return Save
-    End Function
+        ContainedObject = Save
+    End Sub
 
     Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Me.Header = "Personality Test"

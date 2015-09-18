@@ -34,13 +34,13 @@ Namespace Controls
             End Set
         End Property
 
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            Attack = Save
+        Public Overrides Sub RefreshDisplay()
+            Attack = ContainedObject
         End Sub
 
-        Public Overrides Function UpdateObject(Obj As Object) As Object
-            Return Attack
-        End Function
+        Public Overrides Sub UpdateObject()
+            ContainedObject = Attack
+        End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
                 Return {GetType(Interfaces.iAttack)}

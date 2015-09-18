@@ -4,7 +4,7 @@ Imports SkyEditorBase.Utilities
 
 Namespace Tabs
     Public Class HeldItemsTab
-        Inherits EditorTab
+        Inherits ObjectTab
         Dim slots As ItemSlot()
         Dim storage As iItemStorage
 
@@ -14,7 +14,8 @@ Namespace Tabs
             End Get
         End Property
 
-        Public Overrides Sub RefreshDisplay(Save As GenericSave)
+        Public Overrides Sub RefreshDisplay()
+            Dim Save As GenericSave = DirectCast(Me.ContainedObject, GenericSave)
             storage = Save.Convert(Of iItemStorage)()
             slots = storage.HeldItemSlots
             RefreshSlotDisplay()
@@ -47,7 +48,7 @@ Namespace Tabs
             Next
             slots(Index).Setter.Invoke(heldItems.ToArray)
         End Sub
-        Public Overrides Function UpdateSave(Save As GenericSave) As GenericSave
+        Public Overrides Sub UpdateObject()
             SaveSlot(lbInventorySlots.SelectedIndex)
 
             'Dim s = Save.Convert(Of iItemStorage)()
@@ -55,8 +56,7 @@ Namespace Tabs
             '    s.HeldItemSlots(count).Setter.Invoke(slots(count).)
             'Next
 
-            Return Save
-        End Function
+        End Sub
         Sub LoadHeldItemsDropDowns()
             cbHeldItems.Items.Clear()
             cbHeldItemsBoxContents.Items.Clear()

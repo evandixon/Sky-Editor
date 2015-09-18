@@ -8,9 +8,9 @@ Namespace ObjectControls
     Public Class item_p_Editor
         Inherits ObjectControl
 
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            If TypeOf Save Is item_p Then
-                With DirectCast(Save, item_p)
+        Public Overrides Sub RefreshDisplay()
+            If TypeOf Me.ContainedObject() Is item_p Then
+                With DirectCast(Me.ContainedObject(), item_p)
                     Items = .Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
                         Using englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
@@ -25,7 +25,7 @@ Namespace ObjectControls
                         ItemNames = SkyEditor.Lists.SkyItemNames.Values.ToArray
                     End If
                 End With
-                refreshItems
+                RefreshItems()
             End If
         End Sub
         Private Sub RefreshItems()
@@ -37,9 +37,9 @@ Namespace ObjectControls
             Next
         End Sub
 
-        Public Overrides Function UpdateObject(Obj As Object) As Object
-            If TypeOf Obj Is item_p Then
-                With DirectCast(Obj, item_p)
+        Public Overrides Sub UpdateObject()
+            If TypeOf Me.ContainedObject() Is item_p Then
+                With DirectCast(Me.ContainedObject(), item_p)
                     .Items = Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
                         Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
@@ -51,8 +51,7 @@ Namespace ObjectControls
                     End If
                 End With
             End If
-            Return Obj
-        End Function
+        End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get

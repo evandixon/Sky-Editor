@@ -42,16 +42,16 @@ Public Class BGPControl
         PluginHelper.TranslateForm(Me)
     End Sub
 
-    Public Overloads Overrides Async Sub RefreshDisplay(Save As Object)
-        _bgp = Save
-        With DirectCast(Save, FileFormats.BGP)
+    Public Overloads Overrides Async Sub RefreshDisplay()
+        _bgp = Me.ContainedObject
+        With _bgp 'DirectCast(Save, FileFormats.BGP)
             img.Source = New BitmapImage(New Uri(Await _bgp.GetTempImageURI()))
         End With
     End Sub
 
-    Public Overrides Function UpdateObject(Obj As Object) As Object
-        Return _bgp
-    End Function
+    Public Overrides Sub UpdateObject()
+        Me.ContainedObject = _bgp
+    End Sub
     Public Overrides ReadOnly Property SupportedTypes As Type()
         Get
             Return {GetType(FileFormats.BGP)}

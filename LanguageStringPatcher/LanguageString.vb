@@ -31,10 +31,10 @@ Public Class LanguageString
 
         Items = New List(Of String)
 
-        Dim offset1 As UInt32 = BitConverter.ToUInt32(RawData(0, 4), 0)
+        Dim offset1 As UInteger = BitConverter.ToUInt32(RawData(0, 4), 0)
         Dim e = Encoding.GetEncoding("Windows-1252")
         'Loop through each entry
-        For count As Integer = 0 To offset1 - 5 Step 4
+        For count As UInteger = 0 To offset1 - 5 Step 4
             Dim startOffset As UInteger = BitConverter.ToUInt32(RawData(count, 4), 0)
             Items.Add("")
             Dim endOffset As UInteger = startOffset
@@ -44,7 +44,7 @@ Public Class LanguageString
                 s.Append(e.GetString({RawData(endOffset)}))
                 endOffset += 1
             End While
-            Items(count / 4) = s.ToString
+            Items(count \ 4) = s.ToString
         Next
     End Sub
 

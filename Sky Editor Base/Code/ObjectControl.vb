@@ -3,8 +3,16 @@
     Public Sub New()
         MyBase.New()
     End Sub
-    MustOverride Sub RefreshDisplay(ByVal Save As Object)
-    MustOverride Function UpdateObject(ByVal Obj As Object) As Object
+
+    Public Property ContainedObject As Object
+
+    Public Overridable Sub RefreshDisplay()
+
+    End Sub
+
+    Public Overridable Sub UpdateObject()
+
+    End Sub
     Overridable ReadOnly Property SupportedTypes As Type()
         Get
             Return {}
@@ -12,7 +20,7 @@
     End Property
     ''' <summary>
     ''' Priority for this control to be used in relevant circumstances.  Higher values are more likely to be used.
-    ''' Useless for ObjectTabs or EditorTabs.    '''
+    ''' Useless for ObjectTabs or EditorTabs.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>

@@ -3,9 +3,9 @@
 Namespace ObjectControls
     Public Class NDSModSrcEditor
         Inherits ObjectControl
-        Public Overrides Sub RefreshDisplay(Save As Object)
-            If TypeOf Save Is FileFormats.NDSModSource Then
-                With DirectCast(Save, FileFormats.NDSModSource)
+        Public Overrides Sub RefreshDisplay()
+            If TypeOf Me.ContainedObject() Is FileFormats.NDSModSource Then
+                With DirectCast(Me.ContainedObject(), FileFormats.NDSModSource)
                     txtModName.Text = .ModName
                     txtAuthor.Text = .Author
                     txtDescription.Text = .Description
@@ -16,9 +16,9 @@ Namespace ObjectControls
             End If
         End Sub
 
-        Public Overrides Function UpdateObject(Obj As Object) As Object
-            If TypeOf Obj Is FileFormats.NDSModSource Then
-                With DirectCast(Obj, FileFormats.NDSModSource)
+        Public Overrides Sub UpdateObject()
+            If TypeOf Me.ContainedObject() Is FileFormats.NDSModSource Then
+                With DirectCast(Me.ContainedObject(), FileFormats.NDSModSource)
                     .ModName = txtModName.Text
                     .Author = txtAuthor.Text
                     .Description = txtDescription.Text
@@ -27,8 +27,7 @@ Namespace ObjectControls
                     .DependenciesAfter = txtDependenciesAfter.Text
                 End With
             End If
-            Return Obj
-        End Function
+        End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get

@@ -2,8 +2,9 @@
 Imports ROMEditor.Roms
 Imports SkyEditorBase
 Public Class FilesTab
-    Inherits EditorTab
-    Public Overrides Async Sub RefreshDisplay(Save As SkyEditorBase.GenericSave)
+    Inherits ObjectTab
+    Public Overrides Async Sub RefreshDisplay()
+        Dim Save As SkyEditorBase.GenericSave = DirectCast(Me.containedobject, GenericNDSRom)
         If TypeOf Save Is GenericNDSRom Or TypeOf Save Is SkyNDSRom Then
             Await (DirectCast(Save, GenericNDSRom).EnsureUnpacked)
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Reading files..."))
@@ -45,15 +46,11 @@ Public Class FilesTab
         p.Children.Add(l)
         Return p
     End Function
-    Public Overrides ReadOnly Property SupportedGames As String()
+    Public Overrides ReadOnly Property SupportedTypes As Type()
         Get
-            Return {GameStrings.GenericNDSRom, GameStrings.SkyNDSRom}
+            Return {GetType(GenericNDSRom), GetType(SkyNDSRom)}
         End Get
     End Property
-
-    Public Overrides Function UpdateSave(Save As SkyEditorBase.GenericSave) As SkyEditorBase.GenericSave
-        Return Save
-    End Function
 
     Private Sub FilesTab_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
         Me.Header = SkyEditorBase.PluginHelper.GetLanguageItem("Files")

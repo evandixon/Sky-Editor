@@ -3,10 +3,11 @@ Imports ROMEditor.Roms
 Imports SkyEditorBase
 
 Public Class PortraitTab
-    Inherits SkyEditorBase.EditorTab
+    Inherits ObjectTab
     Dim kao As FileFormats.Kaomado
 
-    Public Overrides Async Sub RefreshDisplay(Save As SkyEditorBase.GenericSave)
+    Public Overrides Async Sub RefreshDisplay()
+        Dim Save As GenericSave = DirectCast(Me.ContainedObject, GenericSave)
         If TypeOf Save Is SkyNDSRom Then
             kao = Await DirectCast(Save, SkyNDSRom).GetPortraitsFile
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Filling Pokemon Portraits..."))
@@ -21,16 +22,15 @@ Public Class PortraitTab
         End If
     End Sub
 
-    Public Overrides ReadOnly Property SupportedGames As String()
+    Public Overrides ReadOnly Property SupportedTypes As Type()
         Get
-            Return {GameStrings.SkyNDSRom}
+            Return {GetType(SkyNDSRom)}
         End Get
     End Property
 
-    Public Overrides Function UpdateSave(Save As SkyEditorBase.GenericSave) As GenericSave
+    Public Overrides Sub UpdateObject()
         SkyEditorBase.Utilities.AsyncHelpers.RunSync(AddressOf kao.Save)
-        Return Save
-    End Function
+    End Sub
 
     Private Sub tvFiles_SelectedItemChanged(sender As Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged
         RefreshPortraits()
