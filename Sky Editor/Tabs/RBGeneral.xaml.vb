@@ -4,7 +4,7 @@ Namespace Tabs
     Public Class RBGeneral
         Inherits ObjectTab
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.RBSave) Then
                 With Save.Convert(Of Saves.RBSave)()
                     txtGeneral_TeamName.Text = .TeamName
@@ -17,7 +17,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.RBSave) Then
                 Dim rb = Save.Convert(Of Saves.RBSave)()
                 With rb
@@ -44,5 +44,12 @@ Namespace Tabs
                 Return 26
             End Get
         End Property
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles txtGeneral_TeamName.TextChanged,
+                                                                        numGeneral_HeldMoney.ValueChanged,
+                                                                        numGeneral_StoredMoney.ValueChanged,
+                                                                        numGeneral_RescuePoints.ValueChanged,
+                                                                        cbGeneral_Base.SelectionChanged
+            RaiseModified()
+        End Sub
     End Class
 End Namespace

@@ -1,4 +1,5 @@
-﻿Public MustInherit Class ObjectTab
+﻿
+Public MustInherit Class ObjectTab
     Inherits ObjectControl
 
 #Region "Properties"
@@ -65,10 +66,30 @@
     End Property
 #End Region
 
-
-
     Public Function GetPluginManager() As PluginManager
         Return PluginHelper.PluginManagerInstance
         'Return DirectCast(DirectCast(DirectCast(Me.ParentTabItem.Parent, TabControl).Parent, Grid).Parent, SkyEditorWindows.MainWindow).GetPluginManager
     End Function
+End Class
+Public MustInherit Class ObjectTab(Of T)
+    Inherits ObjectTab
+
+    Public Sub New()
+        MyBase.New()
+    End Sub
+
+    Public Property EditingItem As T
+        Get
+            Return DirectCast(MyBase.EditingObject, T)
+        End Get
+        Set(value As T)
+            MyBase.EditingObject = value
+        End Set
+    End Property
+
+    Public Overrides ReadOnly Property SupportedTypes As Type()
+        Get
+            Return {GetType(T)}
+        End Get
+    End Property
 End Class

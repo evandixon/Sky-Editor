@@ -9,8 +9,8 @@ Namespace ObjectControls
         Inherits ObjectControl
 
         Public Overrides Sub RefreshDisplay()
-            If TypeOf Me.ContainedObject() Is item_p Then
-                With DirectCast(Me.ContainedObject(), item_p)
+            If TypeOf Me.EditingObject() Is item_p Then
+                With DirectCast(Me.EditingObject(), item_p)
                     Items = .Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
                         Using englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
@@ -38,8 +38,8 @@ Namespace ObjectControls
         End Sub
 
         Public Overrides Sub UpdateObject()
-            If TypeOf Me.ContainedObject() Is item_p Then
-                With DirectCast(Me.ContainedObject(), item_p)
+            If TypeOf Me.EditingObject() Is item_p Then
+                With DirectCast(Me.EditingObject(), item_p)
                     .Items = Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
                         Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))

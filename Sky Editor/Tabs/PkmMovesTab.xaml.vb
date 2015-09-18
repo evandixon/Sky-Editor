@@ -4,7 +4,7 @@ Namespace Tabs
         Inherits ObjectTab
 
         Public Overrides Sub RefreshDisplay()
-            With DirectCast(Me.ContainedObject, Interfaces.iPkmAttack)
+            With DirectCast(Me.EditingObject, Interfaces.iPkmAttack)
                 Attack1.ObjectToEdit = .Attack1
                 Attack2.ObjectToEdit = .Attack2
                 Attack3.ObjectToEdit = .Attack3
@@ -13,7 +13,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            With DirectCast(Me.ContainedObject, Interfaces.iPkmAttack)
+            With DirectCast(Me.EditingObject, Interfaces.iPkmAttack)
                 .Attack1 = Attack1.ObjectToEdit
                 .Attack2 = Attack2.ObjectToEdit
                 .Attack3 = Attack3.ObjectToEdit
@@ -34,6 +34,10 @@ Namespace Tabs
                 Return 9
             End Get
         End Property
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles Attack1.Modified, Attack2.Modified, Attack3.Modified, Attack4.Modified
+            RaiseModified()
+        End Sub
     End Class
 
 End Namespace

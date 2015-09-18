@@ -413,7 +413,7 @@ Public Class PluginManager
             If isMatch Then
                 Dim t As ObjectTab = etab.GetType.GetConstructor({}).Invoke({})
                 Dim a As New Action(Sub()
-                                        t.ContainedObject = Save
+                                        t.EditingObject = Save
                                         t.RefreshDisplay()
                                     End Sub)
                 'Await Task.Run(x)
@@ -494,7 +494,7 @@ Public Class PluginManager
             g = Obj.GetType
         End If
         If Not match Then
-            match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso g.BaseType.IsEquivalentTo(TypeToCheck))
+            match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck))
         End If
         If Not match Then
             For Each item In g.GetInterfaces

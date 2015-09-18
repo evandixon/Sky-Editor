@@ -4,7 +4,7 @@ Public Class BackgroundsTab
     Inherits ObjectTab
     Dim _backgrounds As List(Of BGP)
     Public Overrides Async Sub RefreshDisplay()
-        _backgrounds = Await DirectCast(MyBase.ContainedObject, Roms.SkyNDSRom).GetBackgrounds
+        _backgrounds = Await DirectCast(MyBase.EditingObject, Roms.SkyNDSRom).GetBackgrounds
         For Each item In _backgrounds
             lvBackgrounds.Items.Add(item)
         Next

@@ -5,8 +5,8 @@ Public Class MyTab
     Inherits ObjectTab
     Public Overrides Sub RefreshDisplay()
         'Here you need to assign values from your save to all of your controls
-        If TypeOf Me.ContainedObject Is MySave Then
-            With DirectCast(Me.ContainedObject, MySave)
+        If TypeOf Me.EditingObject Is MySave Then
+            With DirectCast(Me.EditingObject, MySave)
                 'MyControl.Text = .MyProperty
             End With
         End If
@@ -21,8 +21,8 @@ Public Class MyTab
 
     Public Overrides Sub UpdateObject()
 
-        If TypeOf Me.containedobject Is MySave Then 'Make sure the save is in the format you're expecting (Supported Games above should ensure this, but in case the tab supports multiple save formats, this is necessary.)
-            With DirectCast(Me.ContainedObject, MySave) 'Update its properties
+        If TypeOf Me.EditingObject Is MySave Then 'Make sure the save is in the format you're expecting (Supported Games above should ensure this, but in case the tab supports multiple save formats, this is necessary.)
+            With DirectCast(Me.EditingObject, MySave) 'Update its properties
                 '.MyProperty = MyControl.Text
             End With
             'ElseIf Typeof Save is MyOtherSave Then  'If you have more than one supported save type.

@@ -7,7 +7,7 @@ Public Class PortraitTab
     Dim kao As FileFormats.Kaomado
 
     Public Overrides Async Sub RefreshDisplay()
-        Dim Save As GenericSave = DirectCast(Me.ContainedObject, GenericSave)
+        Dim Save As GenericSave = DirectCast(Me.EditingObject, GenericSave)
         If TypeOf Save Is SkyNDSRom Then
             kao = Await DirectCast(Save, SkyNDSRom).GetPortraitsFile
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Filling Pokemon Portraits..."))

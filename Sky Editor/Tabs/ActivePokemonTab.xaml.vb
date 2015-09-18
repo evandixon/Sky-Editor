@@ -2,9 +2,9 @@
 Imports SkyEditor.Interfaces
 Namespace Tabs
     Public Class ActivePokemonTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of iParty)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(ContainedObject, GenericSave)
+            Dim Save = DirectCast(EditingObject, GenericSave)
             If Save.IsOfType(GetType(iParty)) Then
                 Dim p = Save.Convert(Of iParty)()
                 lbActivePokemon.Items.Clear()
@@ -17,7 +17,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(ContainedObject, GenericSave)
+            Dim Save = DirectCast(EditingObject, GenericSave)
             If Save.IsOfType(GetType(iParty)) Then
                 Dim p = Save.Convert(Of iParty)()
                 Dim apkms As New List(Of iMDPkm)
@@ -27,13 +27,8 @@ Namespace Tabs
                 p.SetPokemon(apkms.ToArray)
                 Save = Save.Convert(p)
             End If
-            ContainedObject = Save
+            EditingObject = Save
         End Sub
-        Public Overrides ReadOnly Property SupportedTypes As Type()
-            Get
-                Return {GetType(iParty)}
-            End Get
-        End Property
 
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Party")
@@ -56,6 +51,7 @@ Namespace Tabs
                 w.ObjectToEdit = lbActivePokemon.SelectedItem
                 w.ShowDialog()
                 lbActivePokemon.SelectedItem = w.ObjectToEdit
+                RaiseModified
                 RefreshActivePKMDisplay()
             End If
         End Sub

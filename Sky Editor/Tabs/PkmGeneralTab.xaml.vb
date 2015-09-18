@@ -44,7 +44,7 @@ Namespace Tabs
             End Set
         End Property
         Public Overrides Sub RefreshDisplay()
-            Dim _pokemon = DirectCast(Me.ContainedObject, Interfaces.iMDPkm)
+            Dim _pokemon = DirectCast(Me.EditingObject, Interfaces.iMDPkm)
             With _pokemon
                 PokemonDictionary = .GetPokemonDictionary
                 MetAtDictionary = .GetMetAtDictionary
@@ -111,7 +111,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim _pokemon = DirectCast(Me.ContainedObject, Interfaces.iMDPkm)
+            Dim _pokemon = DirectCast(Me.EditingObject, Interfaces.iMDPkm)
             With _pokemon
                 .ID = SelectedPokemonID
 
@@ -142,7 +142,7 @@ Namespace Tabs
                 .StatSpAttack = numSpAttack.Value
                 .StatSpDefense = numSpDefense.Value
             End With
-            Me.ContainedObject = _pokemon
+            Me.EditingObject = _pokemon
         End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
@@ -158,6 +158,25 @@ Namespace Tabs
                 Return 10
             End Get
         End Property
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles cbPokemon.SelectionChanged,
+                                                                           chbIsFemale.Checked,
+                                                                           chbIsFemale.Unchecked,
+                                                                           txtName.TextChanged,
+                                                                           numLevel.ValueChanged,
+                                                                           numExp.ValueChanged,
+                                                                           cbMetAt.SelectionChanged,
+                                                                           numMetFloor.ValueChanged,
+                                                                           numIQ.ValueChanged,
+                                                                           numCurrentHP.ValueChanged,
+                                                                           numMaxHP.ValueChanged,
+                                                                           numAttack.ValueChanged,
+                                                                           numSpAttack.ValueChanged,
+                                                                           numDefense.ValueChanged,
+                                                                           numSpDefense.ValueChanged
+            RaiseModified()
+        End Sub
+
     End Class
 
 End Namespace

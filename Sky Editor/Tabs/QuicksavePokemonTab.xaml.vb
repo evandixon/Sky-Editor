@@ -3,7 +3,7 @@ Namespace Tabs
     Public Class QuicksavePokemonTab
         Inherits ObjectTab
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim p = Save.Convert(Of Saves.SkySave)()
                 lbActivePokemon.Items.Clear()
@@ -15,7 +15,7 @@ Namespace Tabs
             End If
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim p = Save.Convert(Of Saves.SkySave)()
                 Dim apkms As New List(Of Saves.SkySave.QuicksavePkm)
@@ -47,6 +47,7 @@ Namespace Tabs
                 w.ObjectToEdit = lbActivePokemon.SelectedItem
                 w.ShowDialog()
                 lbActivePokemon.SelectedItem = w.ObjectToEdit
+                RaiseModified()
                 RefreshActivePKMDisplay()
             End If
         End Sub

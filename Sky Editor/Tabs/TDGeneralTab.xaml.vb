@@ -4,7 +4,7 @@ Namespace Tabs
     Public Class TDGeneralTab
         Inherits ObjectTab
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.TDSave) Then
                 With Save.Convert(Of Saves.TDSave)()
                     txtGeneral_TeamName.Text = .TeamName
@@ -19,13 +19,13 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.TDSave) Then
                 Dim td = Save.Convert(Of Saves.TDSave)()
                 With td
                     .TeamName = txtGeneral_TeamName.Text
                 End With
-                Me.ContainedObject = Save.Convert(Of Saves.TDSave)(td)
+                Me.EditingObject = Save.Convert(Of Saves.TDSave)(td)
             End If
         End Sub
 
@@ -38,5 +38,9 @@ Namespace Tabs
                 Return 26
             End Get
         End Property
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles txtGeneral_TeamName.TextChanged
+            RaiseModified()
+        End Sub
     End Class
 End Namespace

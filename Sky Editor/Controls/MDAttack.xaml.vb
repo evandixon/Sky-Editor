@@ -45,11 +45,11 @@ Namespace Controls
         End Property
 
         Public Overrides Sub RefreshDisplay()
-            Attack = ContainedObject
+            Attack = EditingObject
         End Sub
 
         Public Overrides Sub UpdateObject()
-            ContainedObject = Attack
+            EditingObject = Attack
         End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
@@ -59,6 +59,16 @@ Namespace Controls
         Public Overrides Function UsagePriority(Type As Type) As Integer
             Return 1
         End Function
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles cbMove.SelectionChanged,
+                                                                    numGinseng.ValueChanged,
+                                                                    chbLinked.Checked,
+                                                                    chbLinked.Unchecked,
+                                                                    chbSet.Checked,
+                                                                    chbSet.Unchecked,
+                                                                    chbSwitched.Checked,
+                                                                    chbSwitched.Unchecked
+            RaiseModified()
+        End Sub
     End Class
 
 End Namespace

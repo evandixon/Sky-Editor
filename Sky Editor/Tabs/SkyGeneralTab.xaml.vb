@@ -2,9 +2,9 @@
 Imports SkyEditor.Saves
 Namespace Tabs
     Public Class SkyGeneralTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of SkySave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GameStrings.SkySave) Then
                 With Save.Convert(Of SkySave)()
                     numGeneral_StoredMoney.Value = .StoredMoney
@@ -17,14 +17,14 @@ Namespace Tabs
             End If
         End Sub
 
-        Public Overrides ReadOnly Property SupportedTypes As Type()
-            Get
-                Return {GetType(Saves.SkySave)}
-            End Get
-        End Property
+        'Public Overrides ReadOnly Property SupportedTypes As Type()
+        '    Get
+        '        Return {GetType(Saves.SkySave)}
+        '    End Get
+        'End Property
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             Dim out As GenericSave = Nothing
             If Save.IsOfType(GameStrings.SkySave) Then
                 Dim sky = Save.Convert(Of SkySave)()
@@ -36,7 +36,7 @@ Namespace Tabs
                     .TeamName = txtGeneral_TeamName.Text
                     .ExplorerRank = numGeneral_RankPoints.Value
                 End With
-                Me.ContainedObject = Save.Convert(sky)
+                Me.EditingObject = Save.Convert(sky)
             End If
         End Sub
 
@@ -54,6 +54,16 @@ Namespace Tabs
             numGeneral_StoredMoney.Maximum = 9999999 'Integer.MaxValue '16580607
             numGeneral_StoredMoney.Minimum = 0
         End Sub
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles txtGeneral_TeamName.TextChanged,
+                                                                         numGeneral_StoredMoney.ValueChanged,
+                                                                         numGeneral_HeldMoney.ValueChanged,
+                                                                         numGeneral_SpEpisodeHeldMoney.ValueChanged,
+                                                                         numGeneral_Adventures.ValueChanged,
+                                                                         numGeneral_RankPoints.ValueChanged
+            RaiseModified()
+        End Sub
+
         Public Overrides ReadOnly Property SortOrder As Integer
             Get
                 Return 26

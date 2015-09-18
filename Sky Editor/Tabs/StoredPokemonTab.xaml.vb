@@ -19,6 +19,7 @@ Namespace Tabs
                 w.ObjectToEdit = lbPokemon.SelectedItem
                 w.ShowDialog()
                 lbPokemon.SelectedItem = w.ObjectToEdit
+                RaiseModified()
                 RefreshPKMDisplay()
             End If
         End Sub
@@ -37,7 +38,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GetType(iPokemonStorage)) Then
                 storage = Save.Convert(Of iPokemonStorage)()
                 pokemon = storage.GetPokemon
@@ -113,12 +114,12 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             If Save.IsOfType(GetType(iPokemonStorage)) Then
                 SaveSlot(lbFriendArea.SelectedIndex)
                 Dim s = Save.Convert(Of iPokemonStorage)()
                 s.SetPokemon(pokemon)
-                Me.ContainedObject = Save.Convert(s)
+                Me.EditingObject = Save.Convert(s)
             End If
         End Sub
 

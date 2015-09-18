@@ -4,7 +4,7 @@ Imports SkyEditorBase
 Public Class FilesTab
     Inherits ObjectTab
     Public Overrides Async Sub RefreshDisplay()
-        Dim Save As SkyEditorBase.GenericSave = DirectCast(Me.containedobject, GenericNDSRom)
+        Dim Save As SkyEditorBase.GenericSave = DirectCast(Me.EditingObject, GenericNDSRom)
         If TypeOf Save Is GenericNDSRom Or TypeOf Save Is SkyNDSRom Then
             Await (DirectCast(Save, GenericNDSRom).EnsureUnpacked)
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Reading files..."))

@@ -3,7 +3,7 @@ Namespace Tabs
     Public Class RBStoredItemsTab
         Inherits ObjectTab
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save = DirectCast(Me.EditingObject, GenericSave)
             'debug stored items
             If Save.IsOfType(GameStrings.RBSave) Then
                 Dim x = Save.Convert(Of Saves.RBSave).StoredItemCounts

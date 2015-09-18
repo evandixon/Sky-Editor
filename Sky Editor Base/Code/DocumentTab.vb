@@ -39,7 +39,7 @@ Public Class DocumentTab
                 Else
                     Dim control = _manager.GetObjectControl(value)
                     If control IsNot Nothing Then
-                        control.ContainedObject = value
+                        control.EditingObject = value
                         control.RefreshDisplay()
                         Me.Content = control
                     End If
@@ -58,7 +58,8 @@ Public Class DocumentTab
             Return _ismodified
         End Get
         Private Set(value As Boolean)
-            _ismodified = value
+            _isModified = value
+            UpdateTitle()
         End Set
     End Property
     Dim _isModified As Boolean
@@ -94,6 +95,15 @@ Public Class DocumentTab
     Public Sub SaveFile()
         File.Save()
     End Sub
+
+    Private Sub UpdateTitle()
+        If File IsNot Nothing Then
+            Me.Title = IO.Path.GetFileName(File.OriginalFilename)
+            If IsModified Then
+                Me.Title = "* " & Me.Title
+            End If
+        End If
+    End Sub
 #End Region
 
 #Region "Constructors"
@@ -105,7 +115,7 @@ Public Class DocumentTab
         Me.New()
         _manager = Manager
         Me.File = File
-        Me.Title = IO.Path.GetFileName(File.OriginalFilename)
+        UpdateTitle
     End Sub
 #End Region
 

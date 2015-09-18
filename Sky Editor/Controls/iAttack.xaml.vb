@@ -35,16 +35,20 @@ Namespace Controls
         End Property
 
         Public Overrides Sub RefreshDisplay()
-            Attack = ContainedObject
+            Attack = EditingObject
         End Sub
 
         Public Overrides Sub UpdateObject()
-            ContainedObject = Attack
+            EditingObject = Attack
         End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
                 Return {GetType(Interfaces.iAttack)}
             End Get
         End Property
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles cbMove.SelectionChanged
+            RaiseModified()
+        End Sub
     End Class
 End Namespace

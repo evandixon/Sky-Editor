@@ -43,14 +43,14 @@ Public Class BGPControl
     End Sub
 
     Public Overloads Overrides Async Sub RefreshDisplay()
-        _bgp = Me.ContainedObject
+        _bgp = Me.EditingObject
         With _bgp 'DirectCast(Save, FileFormats.BGP)
             img.Source = New BitmapImage(New Uri(Await _bgp.GetTempImageURI()))
         End With
     End Sub
 
     Public Overrides Sub UpdateObject()
-        Me.ContainedObject = _bgp
+        Me.EditingObject = _bgp
     End Sub
     Public Overrides ReadOnly Property SupportedTypes As Type()
         Get

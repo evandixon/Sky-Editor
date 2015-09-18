@@ -38,7 +38,7 @@ Namespace Tabs
             End Set
         End Property
         Public Overrides Sub RefreshDisplay()
-            Dim _pokemon = DirectCast(Me.ContainedObject, Saves.SkySave.QuicksavePkm)
+            Dim _pokemon = DirectCast(Me.EditingObject, Saves.SkySave.QuicksavePkm)
             With _pokemon
                 PokemonDictionary = Lists.SkyPokemon
 
@@ -61,7 +61,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim _pokemon = DirectCast(Me.ContainedObject, Saves.SkySave.QuicksavePkm)
+            Dim _pokemon = DirectCast(Me.EditingObject, Saves.SkySave.QuicksavePkm)
             With _pokemon
                 .ID = SelectedPokemonID
                 _pokemon.IsFemale = chbIsFemale.IsChecked
@@ -95,6 +95,21 @@ Namespace Tabs
                 Return 10
             End Get
         End Property
+
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles cbPokemon.SelectionChanged,
+                                                                        cbPokemon2.SelectionChanged,
+                                                                        chbIsFemale.Checked, chbIsFemale.Unchecked,
+                                                                        chbIsFemale2.Checked, chbIsFemale2.Unchecked,
+                                                                        numLevel.ValueChanged,
+                                                                        numExp.ValueChanged,
+                                                                        numCurrentHP.ValueChanged,
+                                                                        numMaxHP.ValueChanged,
+                                                                        numAttack.ValueChanged,
+                                                                        numSpAttack.ValueChanged,
+                                                                        numDefense.ValueChanged,
+                                                                        numSpDefense.ValueChanged
+            RaiseModified()
+        End Sub
     End Class
 
 End Namespace

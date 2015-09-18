@@ -15,7 +15,7 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub RefreshDisplay()
-            Dim Save As GenericSave = DirectCast(Me.ContainedObject, GenericSave)
+            Dim Save As GenericSave = DirectCast(Me.EditingObject, GenericSave)
             storage = Save.Convert(Of iItemStorage)()
             slots = storage.HeldItemSlots
             RefreshSlotDisplay()
@@ -89,6 +89,7 @@ Namespace Tabs
                 '    i.BoxContents = New SkyItem(cbHeldItemsBoxContents.SelectedItem.ItemID, numHeldItemsBoxContentsAddCount.Value)
                 'End If
                 lbHeldItems.Items.Add(i)
+                RaiseModified()
             Else
                 MessageBox.Show(PluginHelper.GetLanguageItem("Error_TooManyHeldItems", "You are holding the maximum number of items.  To add another, one must be deleted first."))
             End If
@@ -105,6 +106,7 @@ Namespace Tabs
             If lbHeldItems.SelectedItems.Count > 0 Then
                 For x As Integer = lbHeldItems.SelectedItems.Count - 1 To 0 Step -1
                     lbHeldItems.Items.Remove(lbHeldItems.SelectedItems(x))
+                    RaiseModified()
                 Next
                 ' Me.Header = PluginHelper.GetLanguageItem("Inventory")
             End If

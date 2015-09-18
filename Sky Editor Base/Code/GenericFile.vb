@@ -1,5 +1,6 @@
 ﻿Public Class GenericFile
     Implements IDisposable
+    Implements iModifiable
     Protected _tempname As String
     Dim _fileReader As IO.FileStream
 #Region "Constructors"
@@ -105,12 +106,21 @@
 #End Region
 
 #Region "Events"
-    Public Event FileModified(sender As Object, e As EventArgs)
+    Public Event FileModified(sender As Object, e As EventArgs) Implements iModifiable.Modified
     Public Event FileSaved(sender As Object, e As EventArgs)
 
+    ''' <summary>
+    ''' Raises the FileModified event, marking the file as having been modified.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Protected Sub RaiseFileModified(sender As Object, e As EventArgs)
         RaiseEvent FileModified(sender, e)
     End Sub
+    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        RaiseFileModified(Me, New EventArgs)
+    End Sub
+
 #End Region
 
 #Region "Methods"

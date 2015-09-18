@@ -186,6 +186,7 @@
     <Compile Include="Code\DocumentTab.vb" />
     <Compile Include="Code\iGameTypeSelector.vb" />
     <Compile Include="Code\iMainWindow.vb" />
+    <Compile Include="Code\iModifiable.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />

@@ -1,4 +1,6 @@
-﻿Public Class MainWindow2
+﻿Imports System.ComponentModel
+
+Public Class MainWindow2
     Private WithEvents _manager As PluginManager
     Private WithEvents _projectExplorer As ProjectExplorer
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
@@ -118,5 +120,16 @@
         '        docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
         '    End If
         'End If
+    End Sub
+
+    Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
+
+        Dim editsMade As Boolean = editedTabs.Any
+        If editsMade Then
+            If MessageBox.Show("Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
+                e.Cancel = True
+            End If
+        End If
     End Sub
 End Class

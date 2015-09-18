@@ -139,7 +139,7 @@
         Public Sub New()
             Me.New({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
         End Sub
-        Public Enum ItemCategory
+        Public Enum ItemCategory As Byte
             Projectile = 0
             Arc = 1
             Seed_Drink = 2
