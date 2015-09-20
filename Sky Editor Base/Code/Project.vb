@@ -12,11 +12,25 @@ Public Class Project
     Dim _manager As PluginManager
     Public Property Filename As String
     Public Property Files As Dictionary(Of String, GenericFile)
+    Public Property IsModified As Boolean
+        Get
+            Return _modified
+        End Get
+        Private Set(value As Boolean)
+            _modified = value
+            If value Then
+                RaiseEvent Modified(Me, New EventArgs)
+            End If
+        End Set
+    End Property
+    Dim _modified As Boolean
+
     Private Property ProjectType As String
 
 #Region "Constructors"
     Public Sub New()
         Files = New Dictionary(Of String, GenericFile)
+        _modified = False
     End Sub
     Public Sub New(Manager As PluginManager)
         Me.New()
@@ -29,6 +43,7 @@ Public Class Project
         End If
         Me.Filename = IO.Path.Combine(Location, Name, Name & ".skyproj")
         Me.ProjectType = ProjectType
+        _modified = True
     End Sub
 #End Region
 
@@ -69,6 +84,7 @@ Public Class Project
             End If
         Next
         p.Opened()
+        p._modified = False
         Return p
     End Function
 
@@ -81,12 +97,14 @@ Public Class Project
         Next
         f.ProjectType = Me.ProjectType
         IO.File.WriteAllText(Filename, j.Serialize(f))
+        IsModified = False
     End Sub
     Public Sub SaveAll()
         For Each item In Files
             item.Value.Save()
         Next
         SaveProject()
+        IsModified = False
     End Sub
 #End Region
 
@@ -95,6 +113,7 @@ Public Class Project
     Public Event FileRemoved(sender As Object, File As String)
     Public Event DirectoryCreated(sender As Object, Directory As String)
     Public Event DirectoryRemoved(sender As Object, Directory As String)
+    Public Event Modified(sender As Object, e As EventArgs)
 #End Region
     Private Function JoinDirs(Dirs As String(), Depth As Integer) As String
         Dim out As New StringBuilder
@@ -172,6 +191,7 @@ Public Class Project
             End If
         End If
         RaiseEvent DirectoryCreated(Me, path)
+        IsModified = True
     End Sub
     Public Sub RemoveDirectory(InternalPath As String)
         Files.Remove(InternalPath)
@@ -180,6 +200,7 @@ Public Class Project
             Files.Remove(item.Key)
         Next
         RaiseEvent DirectoryRemoved(Me, InternalPath)
+        IsModified = True
     End Sub
     Public Sub OpenFile(SourceFilename As String, NewInternalPath As String, Optional Copy As Boolean = True)
         Dim newPath = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), NewInternalPath).Replace("\", "/")
@@ -190,10 +211,12 @@ Public Class Project
         'Files.Add(File.OriginalFilename.Replace(IO.Path.GetDirectoryName(Me.Filename), ""), File)
         Files.Add(InternalPath, File)
         RaiseEvent FileAdded(Me, New KeyValuePair(Of String, GenericFile)(InternalPath, File))
+        IsModified = True
     End Sub
     Public Sub RemoveFile(InternalPath As String)
         Files.Remove(InternalPath)
         RaiseEvent FileRemoved(Me, InternalPath)
+        IsModified = True
     End Sub
 
 
