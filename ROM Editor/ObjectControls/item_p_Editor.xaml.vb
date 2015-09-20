@@ -41,14 +41,14 @@ Namespace ObjectControls
             If TypeOf Me.EditingObject() Is item_p Then
                 With DirectCast(Me.EditingObject(), item_p)
                     .Items = Items
-                    If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                        Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
-                            For count = 0 To 1351
-                                englishLanguage.ContainedObject(count + 6773) = ItemNames(count)
-                            Next
-                            englishLanguage.Save()
-                        End Using
-                    End If
+                    'If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
+                    '    Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                    '        For count = 0 To 1351
+                    '            englishLanguage.ContainedObject(count + 6773) = ItemNames(count)
+                    '        Next
+                    '        englishLanguage.Save()
+                    '    End Using
+                    'End If
                 End With
             End If
         End Sub

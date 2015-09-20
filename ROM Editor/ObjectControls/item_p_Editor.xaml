@@ -20,7 +20,7 @@
             <toolkit:IntegerUpDown x:Name="numID"/>
             
             <Label Content="Name" HorizontalAlignment="Left" Width="84"/>
-            <TextBox x:Name="txtName"/>
+            <TextBox x:Name="txtName" IsReadOnly="True"/>
             
             <Label Content="Buy Price" HorizontalAlignment="Left" Width="84"/>
             <toolkit:IntegerUpDown x:Name="numBuyPrice"/>
