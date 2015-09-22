@@ -14,7 +14,10 @@ Public Class SkyRomProject
         'Convert BACK
         Dim BACKdir As String = IO.Path.Combine(modDirectory, "Backgrounds")
         CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Backgrounds/")
-        For Each item In IO.Directory.GetFiles(IO.Path.Combine(romDirectory, "Data", "BACK"), "*.bgp")
+        Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(romDirectory, "Data", "BACK"), "*.bgp")
+        For count = 0 To backFiles.Count - 1
+            PluginHelper.StartLoading("Converting backgrounds...", count / backFiles.Count)
+            Dim item = backFiles(count)
             Dim b As New FileFormats.BGP(item)
             Dim image = Await b.GetImage
             Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
@@ -32,6 +35,7 @@ Public Class SkyRomProject
         'englishLanguage.Items.CopyTo(6775, itemNames, 0, 1351)
 
         'Convert Language
+        PluginHelper.StartLoading("Converting languages...")
         CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Languages/")
 
         Dim langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
@@ -42,6 +46,7 @@ Public Class SkyRomProject
         OpenFile(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(internalPath, "Languages", "English"), False)
 
         'Copy Items
+        PluginHelper.StartLoading("Converting item definitions...")
         Dim item_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_p.bin")
         Dim item_s_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_s_p.bin")
 
@@ -53,6 +58,7 @@ Public Class SkyRomProject
         OpenFile(IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity"), IO.Path.Combine(internalPath, "Items", "Exclusive Item Rarity"), False)
 
         'Copy Swap Shop Rewards
+        PluginHelper.StartLoading("Copying swap shop rewards...")
         Dim tableDat_00_path As String = IO.Path.Combine(romDirectory, "Data", "TABLEDAT", "item00.dat") 'Unknown ticket, rewards are rare and useful items (Sitrus Berry, Reviver Seed, Life Seed, Ginseng, Joy Seed, Protein, Calcium, Iron, Zinc, Gold Ticket, Prism Ticket, Link Box)
         Dim tableDat_01_path As String = IO.Path.Combine(romDirectory, "Data", "TABLEDAT", "item01.dat") 'Unknown ticket, rewards are orbs
         Dim tableDat_02_path As String = IO.Path.Combine(romDirectory, "Data", "TABLEDAT", "item02.dat") 'Unknown ticket, rewards are tickets + TMs
@@ -110,7 +116,7 @@ Public Class SkyRomProject
 
 
 
-
+        PluginHelper.StopLoading()
     End Sub
 
     Private Sub SkyRomProject_NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs) Handles Me.NDSModBuilding

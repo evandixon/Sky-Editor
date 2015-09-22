@@ -11,70 +11,6 @@ Imports System.Threading
 ''' </summary>
 ''' <remarks></remarks>
 Public Class PluginHelper
-    'From http://blogs.msdn.com/b/pfxteam/archive/2010/04/07/9990421.aspx
-    Public NotInheritable Class StaTaskScheduler
-        Inherits TaskScheduler
-        Implements IDisposable
-
-        Private ReadOnly _threads As List(Of Thread)
-
-        Private _tasks As BlockingCollection(Of Task)
-
-        Public Sub New(numberOfThreads As Integer)
-
-            If numberOfThreads < 1 Then
-
-                Throw New ArgumentOutOfRangeException("concurrencyLevel")
-            End If
-
-            _tasks = New BlockingCollection(Of Task)()
-
-            _threads = Enumerable.Range(0, numberOfThreads).[Select](Function(i)
-                                                                         Dim thread = New Thread(New ThreadStart(Sub()
-                                                                                                                     For Each t In _tasks.GetConsumingEnumerable()
-                                                                                                                         TryExecuteTask(t)
-                                                                                                                     Next
-                                                                                                                 End Sub))
-                                                                         thread.IsBackground = True
-                                                                         thread.SetApartmentState(ApartmentState.STA)
-                                                                         Return thread
-                                                                     End Function).ToList()
-
-            _threads.ForEach(Sub(t) t.Start())
-        End Sub
-
-        Protected Overrides Sub QueueTask(task As Task)
-            _tasks.Add(task)
-        End Sub
-
-        Protected Overrides Function GetScheduledTasks() As IEnumerable(Of Task)
-            Return _tasks.ToArray()
-        End Function
-
-        Protected Overrides Function TryExecuteTaskInline(task As Task, taskWasPreviouslyQueued As Boolean) As Boolean
-            Return Thread.CurrentThread.GetApartmentState() = ApartmentState.STA AndAlso TryExecuteTask(task)
-        End Function
-
-        Public Overrides ReadOnly Property MaximumConcurrencyLevel() As Integer
-            Get
-                Return _threads.Count
-            End Get
-        End Property
-
-        Public Sub Dispose() Implements IDisposable.Dispose
-            If _tasks IsNot Nothing Then
-                _tasks.CompleteAdding()
-
-                For Each thread In _threads
-                    thread.Join()
-                Next
-
-                _tasks.Dispose()
-
-                _tasks = Nothing
-            End If
-        End Sub
-    End Class
 
     ''' <summary>
     ''' Contains a reference to the last PluginManager created.
@@ -168,6 +104,8 @@ Public Class PluginHelper
             End If
         Next
     End Sub
+
+#Region "Program Running"
     ''' <summary>
     ''' Posted by brendan at http://stackoverflow.com/questions/9996709/read-console-process-output
     ''' </summary>
@@ -177,10 +115,7 @@ Public Class PluginHelper
     Private Shared Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
         ' Collect the sort command output.
         If Not String.IsNullOrEmpty(outLine.Data) Then
-            'Add the text to the collected output.
-            'Don't write to dev console, this is a different thread.
-            'The only difference is that this output will be shown in the Real console, while DebugConsole.Writeline may be shown in the window
-            Console.WriteLine(outLine.Data)
+            PluginHelper.Writeline(outLine.Data, LineType.ConsoleOutput)
         End If
     End Sub
     ''' <summary>
@@ -255,7 +190,7 @@ Public Class PluginHelper
                 Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
             End If
         End If
-            Return True
+        Return True
     End Function
     Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
         Return Await Task.Run(Function()
@@ -276,10 +211,32 @@ Public Class PluginHelper
         p.StartInfo.Arguments = Arguments
         p.Start()
     End Sub
+#End Region
 
+#Region "Loading"
+    Public Class LoadingMessageChangedEventArgs
+        Inherits EventArgs
+        Public Property NewMessage As String
+        Public Property Progress As Single
+        Public Property IsIndeterminate As Boolean
+        Public Sub New()
+            MyBase.New()
+            Progress = 1
+            IsIndeterminate = True
+        End Sub
+        Public Sub New(Message As String)
+            Me.New()
+            NewMessage = Message
+        End Sub
+        Public Sub New(Message As String, Progress As Single)
+            Me.New(Message)
+            Me.Progress = Progress
+            Me.IsIndeterminate = False
+        End Sub
+    End Class
     Private Shared _loadingShown As Boolean = False
     Private Shared _loadingWindow As BackgroundTaskWait
-    Private Shared _loadingDefinitions As New Dictionary(Of String, String)
+    Private Shared _loadingDefinitions As New Dictionary(Of String, LoadingMessageChangedEventArgs)
 
     ''' <summary>
     ''' Shows a loading window until the same function calls StopLoading.
@@ -287,11 +244,21 @@ Public Class PluginHelper
     ''' <param name="Message">The message to be displayed while loading.  This message will not be translated so you should translate it on your end.</param>
     ''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
     ''' <remarks></remarks>
-    Public Shared Sub StartLoading(Message As String, <CallerMemberName> Optional CallerName As String = Nothing)
-        If Not _loadingDefinitions.ContainsKey(CallerName) Then
-            _loadingDefinitions.Add(CallerName, Message)
-            MakeLoadingVisibleorNot()
-        End If
+    Public Shared Sub StartLoading(Message As String, Optional Progress As Single? = Nothing, <CallerMemberName> Optional CallerName As String = Nothing)
+        If _loadingDefinitions.ContainsKey(CallerName) Then
+            If Progress.HasValue Then
+                _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message, Progress)
+            Else
+                _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message)
+            End If
+        Else
+            If Progress.HasValue Then
+                    _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
+                Else
+                    _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
+                End If
+            End If
+        MakeLoadingVisibleorNot()
     End Sub
     ''' <summary>
     ''' Closes the loading window shown from StartLoading
@@ -308,44 +275,79 @@ Public Class PluginHelper
         If _loadingWindow Is Nothing Then
             'Dim s As New StaTaskScheduler(1)
             'Task.Factory.StartNew(New Action(Sub()
-            Try
-                _loadingWindow = New BackgroundTaskWait()
-            Catch ex As Exception
-                PluginHelper.Writeline("Unable to show loading window.  Exception details: " & ex.ToString, LineType.Error)
-                Exit Sub
-            End Try
+            'Try
+            '    ' _loadingWindow = New BackgroundTaskWait()
+            'Catch ex As Exception
+            '    PluginHelper.Writeline("Unable to show loading window.  Exception details: " & ex.ToString, LineType.Error)
+            '    Exit Sub
+            'End Try
             'End Sub), CancellationToken.None, TaskCreationOptions.None, s)
         End If
         Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
         Dim isShowing As Boolean = _loadingShown
 
-        If shouldShow AndAlso Not isShowing Then
+        If shouldShow Then
             If _loadingDefinitions.Count > 1 Then
-                _loadingWindow.Show(PluginHelper.GetLanguageItem("Loading", "Loading..."))
+                RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
             ElseIf _loadingDefinitions.Count = 1 Then
-                _loadingWindow.Show(_loadingDefinitions.Values(0))
+                RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
             End If
-            _loadingShown = True
-        ElseIf shouldShow AndAlso isShowing Then
-            If _loadingDefinitions.Count > 1 Then
-                _loadingWindow.ChangeMessage(PluginHelper.GetLanguageItem("Loading", "Loading..."))
-            ElseIf _loadingDefinitions.Count = 1 Then
-                _loadingWindow.ChangeMessage(_loadingDefinitions.Values(0))
-            End If
-        ElseIf isShowing AndAlso Not shouldShow Then
-            _loadingWindow.DoClose()
-            _loadingWindow = Nothing
-            _loadingShown = False
+        Else
+            RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
         End If
+
+        'If shouldShow AndAlso Not isShowing Then
+        '    If _loadingDefinitions.Count > 1 Then
+        '        ' _loadingWindow.Show(PluginHelper.GetLanguageItem("Loading", "Loading..."))
+        '        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
+        '    ElseIf _loadingDefinitions.Count = 1 Then
+        '        ' _loadingWindow.Show(_loadingDefinitions.Values(0))
+        '        RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
+        '    End If
+        '    _loadingShown = True
+        'ElseIf shouldShow AndAlso isShowing Then
+        '    If _loadingDefinitions.Count > 1 Then
+        '        ' _loadingWindow.ChangeMessage(PluginHelper.GetLanguageItem("Loading", "Loading..."))
+        '        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
+        '    ElseIf _loadingDefinitions.Count = 1 Then
+        '        '  _loadingWindow.ChangeMessage(_loadingDefinitions.Values(0))
+        '        RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
+        '    End If
+        'ElseIf isShowing AndAlso Not shouldShow Then
+        '    ' _loadingWindow.DoClose()
+        '    _loadingWindow = Nothing
+        '    _loadingShown = False
+        '    RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
+        'End If
     End Sub
+    Public Shared Event LoadingMessageChanged(sender As Object, e As LoadingMessageChangedEventArgs)
+#End Region
+
+#Region "Console Writeline"
+    Public Class ConsoleLineWrittenEventArgs
+        Inherits EventArgs
+        Public Property Line As String
+        Public Property Type As LineType
+        Public Property CallerName As String
+    End Class
     Public Enum LineType
         Message = 1
         Warning = 2
         [Error] = 3
+        ConsoleOutput = 4
     End Enum
     Public Shared Sub Writeline(Line As String, Optional type As LineType = LineType.Message, <CallerMemberName> Optional CallerName As String = Nothing)
         Console.WriteLine(String.Format("{0}: {1}", CallerName, Line))
+
+        Dim e As New ConsoleLineWrittenEventArgs
+        e.Line = Line
+        e.Type = type
+        e.CallerName = CallerName
+        RaiseEvent ConsoleLineWritten(Nothing, e)
     End Sub
+    Public Shared Event ConsoleLineWritten(sender As Object, e As ConsoleLineWrittenEventArgs)
+#End Region
+
     ''' <summary>
     ''' Starts accepting commands from the console.
     ''' </summary>

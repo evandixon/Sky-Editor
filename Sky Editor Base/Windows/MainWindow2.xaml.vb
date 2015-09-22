@@ -1,13 +1,22 @@
 ﻿Imports System.ComponentModel
+Imports System.Timers
 
 Public Class MainWindow2
+
+#Region "Private Variables"
     Private WithEvents _manager As PluginManager
     Private WithEvents _projectExplorer As ProjectExplorer
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Private _queuedConsoleLines As Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
+    Private WithEvents _timer As Timers.Timer
+#End Region
+
 
     Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         _manager = PluginManager.GetInstance
+        _queuedConsoleLines = New Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
+        _timer = New Timers.Timer(100)
 
 
         OpenFileDialog1 = New Forms.OpenFileDialog
@@ -28,7 +37,10 @@ Public Class MainWindow2
 
         AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
 
+        AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
+        AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
 
+        ' _timer.Start()
     End Sub
 
     Private Function IsFileTabOpen(File As GenericFile) As Boolean
@@ -132,4 +144,35 @@ Public Class MainWindow2
             End If
         End If
     End Sub
+
+    Private Sub OnLoadingMessageChanged(sender As Object, e As PluginHelper.LoadingMessageChangedEventArgs)
+        Dispatcher.Invoke(New Action(Sub()
+                                         lblStatus.Content = e.NewMessage
+                                         progressBar.IsIndeterminate = e.IsIndeterminate
+                                         progressBar.Value = e.Progress ' * 100
+                                     End Sub))
+    End Sub
+
+#Region "Console Output"
+    Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
+        If Not e.Type = PluginHelper.LineType.ConsoleOutput Then
+            '_queuedConsoleLines.Enqueue(e)
+            Dispatcher.InvokeAsync(New Action(Sub()
+                                                  txtOutput.AppendText(e.Line)
+                                                  txtOutput.AppendText(vbCrLf)
+                                                  txtOutput.ScrollToEnd()
+                                              End Sub))
+        End If
+    End Sub
+
+    'Private Sub _timer_Elapsed(sender As Object, e As ElapsedEventArgs) Handles _timer.Elapsed
+    '    _timer.Stop()
+    '    While _queuedConsoleLines.Count > 0
+    '        Dim item = _queuedConsoleLines.Dequeue
+
+    '    End While
+    '    _timer.Start()
+    'End Sub
+#End Region
+
 End Class

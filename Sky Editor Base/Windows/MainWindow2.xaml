@@ -29,7 +29,7 @@
             </MenuItem>
             <MenuItem x:Name="menuBuild" Header="Build"/>
         </Menu>
-        <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,0">
+        <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,39">
             <ad:LayoutRoot>
                 <ad:LayoutPanel Orientation="Horizontal">
                     <ad:LayoutDocumentPaneGroup>
@@ -41,7 +41,21 @@
                         </ad:LayoutAnchorablePane>
                     </ad:LayoutAnchorablePaneGroup>
                 </ad:LayoutPanel>
+
+                <ad:LayoutRoot.BottomSide>
+                    <ad:LayoutAnchorSide>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output">
+                                <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                    </ad:LayoutAnchorSide>
+                </ad:LayoutRoot.BottomSide>
             </ad:LayoutRoot>
         </ad:DockingManager>
+        <StatusBar Height="34" VerticalAlignment="Bottom">
+            <ProgressBar x:Name="progressBar" Height="24" Width="138" Maximum="1" Minimum="0" />
+            <Label x:Name="lblStatus" Content="Ready"/>
+        </StatusBar>
     </Grid>
 </Window>

@@ -1,4 +1,6 @@
-﻿Public Class ProjectExplorer
+﻿Imports System.Threading.Tasks
+
+Public Class ProjectExplorer
     Inherits ToolWindow
     WithEvents _manager As PluginManager
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
@@ -7,8 +9,10 @@
         Me.Title = "Files"
     End Sub
     Sub Refresh()
-        tvFiles.Items.Clear()
-        tvFiles.Items.Add(GetDirectoryNode(""))
+        Dispatcher.Invoke(New Action(Sub()
+                                         tvFiles.Items.Clear()
+                                         tvFiles.Items.Add(GetDirectoryNode(""))
+                                     End Sub))
     End Sub
     Private Function GetDirectoryNode(Directory As String) As TreeViewItem
         Dim Node As New TreeViewItem()
@@ -116,7 +120,7 @@
         End If
     End Sub
 
-    Private Sub menuAddFile_Click(sender As Object, e As RoutedEventArgs) Handles menuAddFile.Click
+    Private Async Sub menuAddFile_Click(sender As Object, e As RoutedEventArgs) Handles menuAddFile.Click
         Dim creatableFiles = _manager.CurrentProject.CreatableFiles(SelectedPath, _manager)
         If creatableFiles IsNot Nothing AndAlso creatableFiles.Count > 0 Then
             Dim w As New SkyEditorWindows.NewFileWindow()
@@ -127,8 +131,12 @@
             w.AddGames(games.Keys)
             If w.ShowDialog Then
                 Dim file As GenericFile = _manager.SaveTypes(w.SelectedGame).GetConstructor({}).Invoke({})
-                file.Save(IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), SelectedPath, w.SelectedName & file.DefaultExtension.Trim("*")))
-                _manager.CurrentProject.AddFile(IO.Path.Combine(SelectedPath, w.SelectedName & file.DefaultExtension.Trim("*")), file)
+                Dim path = SelectedPath()
+                Dim name = w.SelectedName
+                Await Task.Run(New Action(Sub()
+                                              file.Save(IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*")))
+                                              _manager.CurrentProject.AddFile(IO.Path.Combine(path, name & file.DefaultExtension.Trim("*")), file)
+                                          End Sub))
             End If
         End If
     End Sub

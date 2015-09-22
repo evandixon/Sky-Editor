@@ -204,7 +204,7 @@ Public Class Project
     End Sub
     Public Sub OpenFile(SourceFilename As String, NewInternalPath As String, Optional Copy As Boolean = True)
         Dim newPath = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), NewInternalPath).Replace("\", "/")
-        If Copy Then IO.File.Copy(SourceFilename.Replace("\", "/"), newPath.Replace("\", "/"))
+        If Copy Then IO.File.Copy(SourceFilename.Replace("\", "/"), newPath.Replace("\", "/"), True)
         AddFile(NewInternalPath.Replace("\", "/"), _manager.OpenFile(SourceFilename.Replace("\", "/")))
     End Sub
     Public Sub AddFile(InternalPath As String, File As GenericFile)

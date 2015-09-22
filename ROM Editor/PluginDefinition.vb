@@ -5,9 +5,9 @@ Public Class PluginDefinition
     Implements iSkyEditorPlugin
     Public Function AutoDetectSaveType(File As GenericFile) As String
         Dim out As String = Nothing
-        'If SkyNDSRom.IsSkyNDSRom(File) Then
-        '    out = GameStrings.SkyNDSRom
-        If File.OriginalFilename.ToLower.EndsWith(".bgp") Then
+        If SkyNDSRom.IsSkyNDSRom(File) Then
+            out = GameStrings.SkyNDSRom
+        ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
             out = GameStrings.BGPFile
         ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
             out = GameStrings.NDSModSourceFile

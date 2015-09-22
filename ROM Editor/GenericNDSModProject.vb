@@ -112,18 +112,23 @@ Public Class GenericNDSModProject
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(File.Key), "RawFiles")
 
             Dim sourcePath As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
-            For Each item In IO.Directory.GetFiles(sourcePath, "*", IO.SearchOption.AllDirectories)
+            Dim files = IO.Directory.GetFiles(sourcePath, "*", IO.SearchOption.AllDirectories)
+            For count = 0 To files.Count - 1
+                PluginHelper.StartLoading("Copying files...", count / (files.Length - 1))
+                Dim item = files(count)
                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(item.Replace(sourcePath, romDirectory))) Then
                     IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(item.Replace(sourcePath, romDirectory)))
                 End If
                 IO.File.Copy(item, item.Replace(sourcePath, romDirectory))
             Next
 
+            PluginHelper.StartLoading("Creating NDS mod...")
             Dim e As New NDSModAddedEventArgs
             e.InternalName = File.Key
             e.File = File.Value
             RaiseEvent NDSModAdded(Me, e)
 
+            PluginHelper.Writeline("Done!")
             PluginHelper.StopLoading()
         End If
     End Sub
