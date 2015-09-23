@@ -106,7 +106,7 @@ Namespace Saves
         End Sub
 
         Public Overrides Function DefaultSaveID() As String
-            Return GameConstants.MDGatesData
+            Return GameStrings.MDGatesData
         End Function
     End Class
 

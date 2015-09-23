@@ -39,4 +39,7 @@ Public Class GameStrings
     Public Shared Function GateSave() As String
         Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Gates to Infinity")
     End Function
+    Public Shared Function MDGatesData() As String
+        Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Gates to Infinity (game_data)")
+    End Function
 End Class

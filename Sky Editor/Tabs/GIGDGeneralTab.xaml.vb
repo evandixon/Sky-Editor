@@ -6,7 +6,7 @@ Namespace Tabs
         Inherits ObjectTab
         Public Overrides Sub RefreshDisplay()
             Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameConstants.MDGatesData) Then
+            If Save.IsOfType(GameStrings.MDGatesData) Then
                 With Save.Convert(Of Saves.GatesGameData)()
                     numGeneral_HeldMoney.Value = .HeldMoney
                 End With
@@ -20,7 +20,7 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub UpdateObject()
-            If Me.EditingObject.IsOfType(GameConstants.MDGatesData) Then
+            If Me.EditingObject.IsOfType(GameStrings.MDGatesData) Then
                 Dim td = DirectCast(Me.EditingObject, GenericSave).Convert(Of Saves.GatesGameData)()
                 With td
                     .HeldMoney = numGeneral_HeldMoney.Value

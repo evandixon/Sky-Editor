@@ -133,9 +133,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ROM Editor\ROM Editor.vbproj">
+    <ProjectReference Include="..\..\ROM Editor\NDS ROM Editor.vbproj">
       <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
-      <Name>ROM Editor</Name>
+      <Name>NDS ROM Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

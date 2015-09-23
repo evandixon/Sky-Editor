@@ -48,6 +48,7 @@ Public Class SkyEditorInfo
         Manager.RegisterSaveGameFormat(GameStrings.TimeGame, GameStrings.TDSave, GetType(TDSave))
         Manager.RegisterSaveGameFormat(GameStrings.DarknessGame, GameStrings.TDSave, GetType(TDSave))
         Manager.RegisterSaveGameFormat(GameStrings.SkyGame, GameStrings.SkySave, GetType(SkySave))
+        Manager.RegisterSaveGameFormat(GameStrings.MDGatesData, GameStrings.MDGatesData, GetType(GatesGameData))
 
         'Manager.RegisterCodeGenerator(New BlueBaseType)
         'Manager.RegisterCodeGenerator(New BlueHeldMoney)
@@ -75,6 +76,8 @@ Public Class SkyEditorInfo
                     Case Else
                         If (File.RawData(&H404) = &H50 AndAlso File.RawData(&H405) = &H4F AndAlso File.RawData(&H406) = &H4B AndAlso File.RawData(&H407) = &H45) Then
                             Return GameStrings.RBSave
+                        ElseIf File.OriginalFilename.ToLower.EndsWith("00000ba8\game_data") Then
+                            Return GameStrings.MDGatesData
                         Else
                             Return Nothing
                         End If

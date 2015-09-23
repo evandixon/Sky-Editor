@@ -170,6 +170,10 @@
     <Compile Include="Library\ARDS\Red Team Name.vb" />
     <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
+    <Compile Include="Saves\GatesGameData.vb" />
+    <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
+      <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
       <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
     </Compile>
@@ -180,7 +184,7 @@
       <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Checksums.vb" />
-    <Compile Include="GameConstants.vb" />
+    <Compile Include="GameStrings.vb" />
     <Compile Include="Lists.vb" />
     <Compile Include="Library\ARDS\Blue Held Money.vb" />
     <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
@@ -242,6 +246,10 @@
     <Page Include="Controls\MDAttack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tabs\GIGDGeneralTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\PkmQuicksaveTab.xaml">
       <Generator>MSBuild:Compile</Generator>
