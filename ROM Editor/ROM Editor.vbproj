@@ -94,6 +94,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DSIconTool.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\Kao.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
@@ -152,9 +153,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Portrait.vb" />
+    <Compile Include="ROM.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
     <Compile Include="SkyRomProject.vb" />
+    <Compile Include="Windows\RomSelector.xaml.vb">
+      <DependentUpon>RomSelector.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -247,6 +252,10 @@
     <Page Include="ObjectControls\NDSModSrcEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RomSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
