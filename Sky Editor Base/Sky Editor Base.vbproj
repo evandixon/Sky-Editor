@@ -192,7 +192,6 @@
     <Compile Include="Code\ObjectFile.vb" />
     <Compile Include="Code\ObjectTab.vb" />
     <Compile Include="Code\PluginHelper.vb" />
-    <Compile Include="Code\PluginManagerOld.vb" />
     <Compile Include="Code\PluginManager.vb" />
     <Compile Include="Code\Project.vb" />
     <Compile Include="Code\Redistribution\PluginInfo.vb" />
