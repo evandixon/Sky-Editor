@@ -45,12 +45,14 @@ Public Class Form1
         Public Property PatchExtension As String
     End Class
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim args = Environment.GetCommandLineArgs
         If args.Length >= 3 Then
-            PatchROM(args(1), args(2))
+            Await PatchROM(args(1), args(2))
+            Me.Close()
         ElseIf args.Length >= 2
-            PatchROM(args(1), Nothing)
+            Await PatchROM(args(1), Nothing)
+            Me.Close()
         Else
             'Show the GUI
             ListAvailableMods()
@@ -61,7 +63,7 @@ Public Class Form1
     ''' </summary>
     ''' <param name="SourceFilename">Path of the vanilla ROM to patch.</param>
     ''' <param name="DestinationFilename">Path to save the patched ROM to.  If null, a SaveFileDialog will be shown.</param>
-    Public Async Sub PatchROM(SourceFilename As String, Optional DestinationFilename As String = Nothing)
+    Public Async Function PatchROM(SourceFilename As String, Optional DestinationFilename As String = Nothing) As Task
         Dim currentDirectory = Environment.CurrentDirectory 'IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
         Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools/ndstemp")
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
@@ -186,7 +188,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         statusLabel1.Text = "Ready"
         ToolStripProgressBar1.Value = 100
         btnPatch.Enabled = True
-    End Sub
+    End Function
     ''' <summary>
     ''' Runs the specified program, capturing console output.
     ''' Returns true when the program exits.

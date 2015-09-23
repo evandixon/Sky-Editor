@@ -122,6 +122,10 @@ Public Class MainWindow2
         _manager.CurrentProject.Build()
     End Sub
 
+    Private Sub menuRun_Click(sender As Object, e As RoutedEventArgs) Handles menuRun.Click
+        _manager.CurrentProject.Run()
+    End Sub
+
     Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
         'OpenFileDialog1.Filter = _manager.IOFiltersString
         'If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then

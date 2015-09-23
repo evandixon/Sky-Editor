@@ -28,6 +28,7 @@
                 <MenuItem x:Name="menuDebugConsole" Header="Run Command..." />
             </MenuItem>
             <MenuItem x:Name="menuBuild" Header="Build"/>
+            <MenuItem x:Name="menuRun" Header="Run"/>
         </Menu>
         <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,39">
             <ad:LayoutRoot>

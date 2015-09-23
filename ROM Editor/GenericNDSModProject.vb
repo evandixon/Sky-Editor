@@ -142,7 +142,12 @@ Public Class GenericNDSModProject
         End If
         Dim j As New JavaScriptSerializer
         Dim patchers As New List(Of FilePatcher)
-        For Each ndsmod In IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods"), "*.ndsmodsrc")
+
+        'Build mods
+        Dim modFiles = IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods"), "*.ndsmodsrc")
+        For count = 0 To modFiles.Length - 1
+            PluginHelper.StartLoading(String.Format("Building mod {0} of {1}", count + 1, modFiles.Length))
+            Dim ndsmod = modFiles(count)
             Dim modsrc = New FileFormats.NDSModSource(ndsmod)
 
             Dim e As New NDSModBuildingEventArgs
@@ -290,6 +295,7 @@ Public Class GenericNDSModProject
             SkyEditorBase.Utilities.Zip.Zip(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Mods", IO.Path.GetFileNameWithoutExtension(ndsmod) & ".ndsmod"))
         Next
 
+        PluginHelper.StartLoading("Copying files...")
         'Copy Patcher programs for all file formats
         Dim toolsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")
         If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")) Then
@@ -329,7 +335,17 @@ Public Class GenericNDSModProject
         '-Zip it
         Utilities.Zip.Zip(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & ".zip"))
 
+        'Apply patch
+        PluginHelper.StartLoading("Applying patch...")
+        Await PluginHelper.RunProgram(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), String.Format("""{0}"" ""{1}""", IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom.nds"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds")), False)
+
         PluginHelper.StopLoading()
+    End Sub
+    Public Overrides Sub Run()
+        MyBase.Run()
+        If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds")) Then
+            DeSmuMe.RunDeSmuMe(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds"))
+        End If
     End Sub
     Private Function DictionaryContainsValue(Dictionary As Dictionary(Of String, Byte()), Value As Byte()) As Boolean
         Dim out As Boolean = False
