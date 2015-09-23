@@ -6,7 +6,7 @@ Imports SkyEditorBase
 
 Namespace ObjectControls
     Public Class item_p_Editor
-        Inherits ObjectControl
+        Inherits ObjectControl(Of item_p)
 
         Public Overrides Sub RefreshDisplay()
             If TypeOf Me.EditingObject() Is item_p Then
@@ -38,19 +38,13 @@ Namespace ObjectControls
         End Sub
 
         Public Overrides Sub UpdateObject()
-            If TypeOf Me.EditingObject() Is item_p Then
-                With DirectCast(Me.EditingObject(), item_p)
-                    .Items = Items
-                    'If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                    '    Using englishLanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) ' New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
-                    '        For count = 0 To 1351
-                    '            englishLanguage.ContainedObject(count + 6773) = ItemNames(count)
-                    '        Next
-                    '        englishLanguage.Save()
-                    '    End Using
-                    'End If
-                End With
+            If lbItems.SelectedItem IsNot Nothing Then
+                _oldIndex = lbItems.SelectedItem.ItemIndex
+                CurrentItem = Items(lbItems.SelectedItem.ItemIndex)
             End If
+            With Me.EditingItem
+                .Items = Items
+            End With
         End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()

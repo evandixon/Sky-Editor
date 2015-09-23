@@ -230,8 +230,8 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         End If
     End Sub
 
-    Private Sub btnPatch_Click(sender As Object, e As EventArgs) Handles btnPatch.Click
-        PatchROM(txtFilename.Text)
+    Private Async Sub btnPatch_Click(sender As Object, e As EventArgs) Handles btnPatch.Click
+        Await PatchROM(txtFilename.Text)
     End Sub
 
     Private Sub ListAvailableMods()

@@ -9,40 +9,7 @@ Public Class MainWindow2
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Private _queuedConsoleLines As Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
-    Private WithEvents _timer As Timers.Timer
 #End Region
-
-
-    Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        _manager = PluginManager.GetInstance
-        _queuedConsoleLines = New Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
-        _timer = New Timers.Timer(100)
-
-
-        OpenFileDialog1 = New Forms.OpenFileDialog
-        SaveFileDialog1 = New Forms.SaveFileDialog
-
-        menuFileOpenNoDetect.Visibility = Visibility.Collapsed
-
-        If Settings.GetSettings.Setting("SimpleMode").ToLower = "true" Then
-            menuFileSaveProject.Visibility = Visibility.Collapsed
-            menuNewProject.Visibility = Visibility.Collapsed
-            menuBuild.Visibility = Visibility.Collapsed
-        Else
-            _projectExplorer = New ProjectExplorer(_manager)
-            toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
-        End If
-
-        _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
-
-        AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
-
-        AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
-        AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
-
-        ' _timer.Start()
-    End Sub
-
     Private Function IsFileTabOpen(File As GenericFile) As Boolean
         Dim out As Boolean = False
         For Each item In docPane.Children
@@ -54,6 +21,20 @@ Public Class MainWindow2
         Return out
     End Function
 
+
+    Private Sub SaveProject()
+        _manager.CurrentProject.SaveProject()
+    End Sub
+
+
+    Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, GenericFile))
+        docPane.Children.Add(New DocumentTab(File.Value, _manager))
+    End Sub
+
+
+#Region "Event Handlers"
+
+#Region "MenuItems"
     Private Sub menuFileOpenAuto_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
         OpenFileDialog1.Filter = _manager.IOFiltersString
         If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
@@ -88,29 +69,9 @@ Public Class MainWindow2
             End If
         End If
     End Sub
-    Private Sub SaveProject()
-        _manager.CurrentProject.SaveProject()
-    End Sub
     Private Sub menuFileSaveProject_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveProject.Click
         SaveProject()
     End Sub
-
-    Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, GenericFile))
-        docPane.Children.Add(New DocumentTab(File.Value, _manager))
-    End Sub
-
-    Private Sub _manager_MenuItemRegistered(sender As Object, Item As MenuItem) Handles _manager.MenuItemRegistered
-        menuMain.Items.Add(Item)
-    End Sub
-
-    Private Sub _projectExplorer_FileOpen(sender As Object, ProjectFile As String) Handles _projectExplorer.FileOpen
-        If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
-            If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
-                docPane.Children.Add(New DocumentTab(_manager.CurrentProject.Files(ProjectFile), _manager))
-            End If
-        End If
-    End Sub
-
     Private Sub menuNewProject_Click(sender As Object, e As RoutedEventArgs) Handles menuNewProject.Click
         Dim newProj As New NewProjectWindow(_manager)
         If newProj.ShowDialog() Then
@@ -137,6 +98,34 @@ Public Class MainWindow2
         '    End If
         'End If
     End Sub
+#End Region
+
+#Region "Form"
+    Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        _manager = PluginManager.GetInstance
+
+        OpenFileDialog1 = New Forms.OpenFileDialog
+        SaveFileDialog1 = New Forms.SaveFileDialog
+
+        menuFileOpenNoDetect.Visibility = Visibility.Collapsed
+
+        If Settings.GetSettings.Setting("SimpleMode").ToLower = "true" Then
+            menuFileSaveProject.Visibility = Visibility.Collapsed
+            menuNewProject.Visibility = Visibility.Collapsed
+            menuBuild.Visibility = Visibility.Collapsed
+        Else
+            _projectExplorer = New ProjectExplorer(_manager)
+            toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
+        End If
+
+        _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
+
+        AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
+
+        AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
+        AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
+
+    End Sub
 
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
@@ -148,6 +137,20 @@ Public Class MainWindow2
             End If
         End If
     End Sub
+#End Region
+
+
+    Private Sub _manager_MenuItemRegistered(sender As Object, Item As MenuItem) Handles _manager.MenuItemRegistered
+        menuMain.Items.Add(Item)
+    End Sub
+
+    Private Sub _projectExplorer_FileOpen(sender As Object, ProjectFile As String) Handles _projectExplorer.FileOpen
+        If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
+            If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
+                docPane.Children.Add(New DocumentTab(_manager.CurrentProject.Files(ProjectFile), _manager))
+            End If
+        End If
+    End Sub
 
     Private Sub OnLoadingMessageChanged(sender As Object, e As PluginHelper.LoadingMessageChangedEventArgs)
         Dispatcher.Invoke(New Action(Sub()
@@ -156,8 +159,6 @@ Public Class MainWindow2
                                          progressBar.Value = e.Progress ' * 100
                                      End Sub))
     End Sub
-
-#Region "Console Output"
     Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
         If Not e.Type = PluginHelper.LineType.ConsoleOutput Then
             '_queuedConsoleLines.Enqueue(e)
@@ -168,15 +169,6 @@ Public Class MainWindow2
                                               End Sub))
         End If
     End Sub
-
-    'Private Sub _timer_Elapsed(sender As Object, e As ElapsedEventArgs) Handles _timer.Elapsed
-    '    _timer.Stop()
-    '    While _queuedConsoleLines.Count > 0
-    '        Dim item = _queuedConsoleLines.Dequeue
-
-    '    End While
-    '    _timer.Start()
-    'End Sub
 #End Region
 
 End Class

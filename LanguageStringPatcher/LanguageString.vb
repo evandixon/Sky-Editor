@@ -34,7 +34,7 @@ Public Class LanguageString
         Dim offset1 As UInteger = BitConverter.ToUInt32(RawData(0, 4), 0)
         Dim e = Encoding.GetEncoding("Windows-1252")
         'Loop through each entry
-        For count As UInteger = 0 To offset1 - 5 Step 4
+        For count = 0 To offset1 - 5 Step 4
             Dim startOffset As UInteger = BitConverter.ToUInt32(RawData(count, 4), 0)
             Items.Add("")
             Dim endOffset As UInteger = startOffset
@@ -52,7 +52,7 @@ Public Class LanguageString
         'Generate File
         Dim e = Encoding.GetEncoding("Windows-1252")
         Dim offsets As New List(Of UInt32)
-        For i As UInt32 = 0 To Items.Count - 1
+        For i = 0 To Items.Count - 1
             offsets.Add(0)
         Next
         Dim stringdataBytes As New List(Of Byte)
@@ -129,7 +129,7 @@ Public Class LanguageString
             _fileReader.WriteByte(value)
         End Set
     End Property
-    Public Property RawData(Index As Long, Length As Long) As Byte()
+    Public Property RawData(Index As Long, Length As Integer) As Byte()
         Get
             Dim output(Length - 1) As Byte
             If _fileReader Is Nothing Then
