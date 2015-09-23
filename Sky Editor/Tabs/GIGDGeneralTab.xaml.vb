@@ -1,5 +1,4 @@
 ﻿Imports SkyEditorBase
-Imports System.Windows
 
 Namespace Tabs
     Public Class GIGDGeneralTab
