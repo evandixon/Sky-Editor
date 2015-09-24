@@ -285,7 +285,7 @@ Public Class GenericNDSModProject
                 IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Tools"))
             End If
             For Each item In patchers
-                IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Tools", IO.Path.GetFileName(item.ApplyPatchProgram)))
+                IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "Tools", IO.Path.GetFileName(item.ApplyPatchProgram)), True)
             Next
 
             '-Zip Mod

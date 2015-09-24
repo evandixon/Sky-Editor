@@ -29,7 +29,9 @@ Public Class PortraitTab
     End Property
 
     Public Overrides Sub UpdateObject()
-        SkyEditorBase.Utilities.AsyncHelpers.RunSync(AddressOf kao.Save)
+        If kao IsNot Nothing Then
+            SkyEditorBase.Utilities.AsyncHelpers.RunSync(AddressOf kao.Save)
+        End If
     End Sub
 
     Private Sub tvFiles_SelectedItemChanged(sender As Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles tvFiles.SelectedItemChanged
