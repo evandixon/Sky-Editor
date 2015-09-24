@@ -107,10 +107,13 @@ Public Class SkyRomProject
         OpenFile(IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), False)
         OpenFile(IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), False)
 
-
-
-
-
+        'Convert Personality Test
+        PluginHelper.StartLoading("Converting Personality Test")
+        Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
+        Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
+        personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
+        personalityTest.Save(IO.Path.Combine(modDirectory, "Personality Test"))
+        OpenFile(IO.Path.Combine(modDirectory, "Personality Test"), IO.Path.Combine(internalPath, "Personality Test"), False)
 
 
 
@@ -165,6 +168,12 @@ Public Class SkyRomProject
 
         IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Item Definitions"), item_p_path, True)
         IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity"), item_s_p_path, True)
+
+        'Convert Personality Test
+        Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
+        Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)(IO.Path.Combine(modDirectory, "Personality Test"))
+        personalityTest.ContainedObject.UpdateOverlay(overlay13)
+        overlay13.Save()
 
         'Cleanup
         '-Data/Back/Decompressed

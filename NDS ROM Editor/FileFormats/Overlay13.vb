@@ -615,5 +615,179 @@
         End Sub
 
     End Class
+    ''' <summary>
+    ''' Class that can store data from Overlay13.  Used for json serialization.
+    ''' </summary>
+    Public Class PersonalityTestContainer
+        Public Property Partner01 As UInt16
+        Public Property Partner02 As UInt16
+        Public Property Partner03 As UInt16
+        Public Property Partner04 As UInt16
+        Public Property Partner05 As UInt16
+        Public Property Partner06 As UInt16
+        Public Property Partner07 As UInt16
+        Public Property Partner08 As UInt16
+        Public Property Partner09 As UInt16
+        Public Property Partner10 As UInt16
+        Public Property Partner11 As UInt16
+        Public Property Partner12 As UInt16
+        Public Property Partner13 As UInt16
+        Public Property Partner14 As UInt16
+        Public Property Partner15 As UInt16
+        Public Property Partner16 As UInt16
+        Public Property Partner17 As UInt16
+        Public Property Partner18 As UInt16
+        Public Property Partner19 As UInt16
+        Public Property Partner20 As UInt16
+        Public Property Partner21 As UInt16
+        Public Property Partner22 As UInt16
+        Public Property HardyMale As UInt16
+        Public Property HardyFemale As UInt16
+        Public Property DocileMale As UInt16
+        Public Property DocileFemale As UInt16
+        Public Property BraveMale As UInt16
+        Public Property BraveFemale As UInt16
+        Public Property JollyMale As UInt16
+        Public Property JollyFemale As UInt16
+        Public Property ImpishMale As UInt16
+        Public Property ImpishFemale As UInt16
+        Public Property NaiveMale As UInt16
+        Public Property NaiveFemale As UInt16
+        Public Property TimidMale As UInt16
+        Public Property TimidFemale As UInt16
+        Public Property HastyMale As UInt16
+        Public Property HastyFemale As UInt16
+        Public Property SassyMale As UInt16
+        Public Property SassyFemale As UInt16
+        Public Property CalmMale As UInt16
+        Public Property CalmFemale As UInt16
+        Public Property RelaxedMale As UInt16
+        Public Property RelaxedFemale As UInt16
+        Public Property LonelyMale As UInt16
+        Public Property LonelyFemale As UInt16
+        Public Property QuirkyMale As UInt16
+        Public Property QuirkyFemale As UInt16
+        Public Property QuietMale As UInt16
+        Public Property QuietFemale As UInt16
+        Public Property RashMale As UInt16
+        Public Property RashFemale As UInt16
+        Public Property BoldMale As UInt16
+        Public Property BoldFemale As UInt16
+        Public Sub UpdateOverlay(Overlay As Overlay13)
+            Overlay.Partner01 = Me.Partner01
+            Overlay.Partner02 = Me.Partner02
+            Overlay.Partner03 = Me.Partner03
+            Overlay.Partner04 = Me.Partner04
+            Overlay.Partner05 = Me.Partner05
+            Overlay.Partner06 = Me.Partner06
+            Overlay.Partner07 = Me.Partner07
+            Overlay.Partner08 = Me.Partner08
+            Overlay.Partner09 = Me.Partner09
+            Overlay.Partner10 = Me.Partner10
+            Overlay.Partner11 = Me.Partner11
+            Overlay.Partner12 = Me.Partner12
+            Overlay.Partner13 = Me.Partner13
+            Overlay.Partner14 = Me.Partner14
+            Overlay.Partner15 = Me.Partner15
+            Overlay.Partner16 = Me.Partner16
+            Overlay.Partner17 = Me.Partner17
+            Overlay.Partner18 = Me.Partner18
+            Overlay.Partner19 = Me.Partner19
+            Overlay.Partner20 = Me.Partner20
+            Overlay.Partner21 = Me.Partner21
+            Overlay.Partner22 = Me.Partner22
+            Overlay.HardyMale = Me.HardyMale
+            Overlay.HardyFemale = Me.HardyFemale
+            Overlay.DocileMale = Me.DocileMale
+            Overlay.DocileFemale = Me.DocileFemale
+            Overlay.BraveMale = Me.BraveMale
+            Overlay.BraveFemale = Me.BraveFemale
+            Overlay.JollyMale = Me.JollyMale
+            Overlay.JollyFemale = Me.JollyFemale
+            Overlay.ImpishMale = Me.ImpishMale
+            Overlay.ImpishFemale = Me.ImpishFemale
+            Overlay.NaiveMale = Me.NaiveMale
+            Overlay.NaiveFemale = Me.NaiveFemale
+            Overlay.TimidMale = Me.TimidMale
+            Overlay.TimidFemale = Me.TimidFemale
+            Overlay.HastyMale = Me.HastyMale
+            Overlay.HastyFemale = Me.HastyFemale
+            Overlay.SassyMale = Me.SassyMale
+            Overlay.SassyFemale = Me.SassyFemale
+            Overlay.CalmMale = Me.CalmMale
+            Overlay.CalmFemale = Me.CalmFemale
+            Overlay.RelaxedMale = Me.RelaxedMale
+            Overlay.RelaxedFemale = Me.RelaxedFemale
+            Overlay.LonelyMale = Me.LonelyMale
+            Overlay.LonelyFemale = Me.LonelyFemale
+            Overlay.QuirkyMale = Me.QuirkyMale
+            Overlay.QuirkyFemale = Me.QuirkyFemale
+            Overlay.QuietMale = Me.QuietMale
+            Overlay.QuietFemale = Me.QuietFemale
+            Overlay.RashMale = Me.RashMale
+            Overlay.RashFemale = Me.RashFemale
+            Overlay.BoldMale = Me.BoldMale
+            Overlay.BoldFemale = Me.BoldFemale
+        End Sub
+        Public Sub New()
+
+        End Sub
+        Public Sub New(Overlay As Overlay13)
+            Me.Partner01 = Overlay.Partner01
+            Me.Partner02 = Overlay.Partner02
+            Me.Partner03 = Overlay.Partner03
+            Me.Partner04 = Overlay.Partner04
+            Me.Partner05 = Overlay.Partner05
+            Me.Partner06 = Overlay.Partner06
+            Me.Partner07 = Overlay.Partner07
+            Me.Partner08 = Overlay.Partner08
+            Me.Partner09 = Overlay.Partner09
+            Me.Partner10 = Overlay.Partner10
+            Me.Partner11 = Overlay.Partner11
+            Me.Partner12 = Overlay.Partner12
+            Me.Partner13 = Overlay.Partner13
+            Me.Partner14 = Overlay.Partner14
+            Me.Partner15 = Overlay.Partner15
+            Me.Partner16 = Overlay.Partner16
+            Me.Partner17 = Overlay.Partner17
+            Me.Partner18 = Overlay.Partner18
+            Me.Partner19 = Overlay.Partner19
+            Me.Partner20 = Overlay.Partner20
+            Me.Partner21 = Overlay.Partner21
+            Me.Partner22 = Overlay.Partner22
+            Me.HardyMale = Overlay.HardyMale
+            Me.HardyFemale = Overlay.HardyFemale
+            Me.DocileMale = Overlay.DocileMale
+            Me.DocileFemale = Overlay.DocileFemale
+            Me.BraveMale = Overlay.BraveMale
+            Me.BraveFemale = Overlay.BraveFemale
+            Me.JollyMale = Overlay.JollyMale
+            Me.JollyFemale = Overlay.JollyFemale
+            Me.ImpishMale = Overlay.ImpishMale
+            Me.ImpishFemale = Overlay.ImpishFemale
+            Me.NaiveMale = Overlay.NaiveMale
+            Me.NaiveFemale = Overlay.NaiveFemale
+            Me.TimidMale = Overlay.TimidMale
+            Me.TimidFemale = Overlay.TimidFemale
+            Me.HastyMale = Overlay.HastyMale
+            Me.HastyFemale = Overlay.HastyFemale
+            Me.SassyMale = Overlay.SassyMale
+            Me.SassyFemale = Overlay.SassyFemale
+            Me.CalmMale = Overlay.CalmMale
+            Me.CalmFemale = Overlay.CalmFemale
+            Me.RelaxedMale = Overlay.RelaxedMale
+            Me.RelaxedFemale = Overlay.RelaxedFemale
+            Me.LonelyMale = Overlay.LonelyMale
+            Me.LonelyFemale = Overlay.LonelyFemale
+            Me.QuirkyMale = Overlay.QuirkyMale
+            Me.QuirkyFemale = Overlay.QuirkyFemale
+            Me.QuietMale = Overlay.QuietMale
+            Me.QuietFemale = Overlay.QuietFemale
+            Me.RashMale = Overlay.RashMale
+            Me.RashFemale = Overlay.RashFemale
+            Me.BoldMale = Overlay.BoldMale
+            Me.BoldFemale = Overlay.BoldFemale
+        End Sub
+    End Class
 
 End Namespace

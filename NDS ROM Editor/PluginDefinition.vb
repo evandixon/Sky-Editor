@@ -15,6 +15,8 @@ Public Class PluginDefinition
             out = GameStrings.item_p_File
         ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
             out = GameStrings.item_s_p_File
+        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "personality test"
+            out = GameStrings.PersonalityTest
         End If
         Return out
     End Function
@@ -62,6 +64,7 @@ Public Class PluginDefinition
         Manager.RegisterFileFormat(GameStrings.NDSModSourceFile, GetType(FileFormats.NDSModSource))
         Manager.RegisterFileFormat(GameStrings.item_p_File, GetType(FileFormats.item_p))
         Manager.RegisterFileFormat(GameStrings.item_s_p_File, GetType(FileFormats.item_s_p))
+        Manager.RegisterFileFormat(GameStrings.PersonalityTest, GetType(ObjectFile(Of FileFormats.PersonalityTestContainer)))
 
         'Manager.RegisterEditorTab(GetType(PortraitTab))
         'Manager.RegisterEditorTab(GetType(PersonalityTest))

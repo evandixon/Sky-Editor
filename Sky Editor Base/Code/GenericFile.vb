@@ -117,6 +117,9 @@
     Protected Sub RaiseFileModified(sender As Object, e As EventArgs)
         RaiseEvent FileModified(sender, e)
     End Sub
+    Protected Sub RaiseFileSaved(sender As Object, e As EventArgs)
+        RaiseEvent FileSaved(sender, e)
+    End Sub
     Public Sub RaiseModified() Implements iModifiable.RaiseModified
         RaiseFileModified(Me, New EventArgs)
     End Sub

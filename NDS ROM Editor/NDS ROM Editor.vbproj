@@ -180,10 +180,10 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="ROMEditor\desmume-0.9.11-win32.zip">
+    <None Include="NDS ROM Editor\desmume-0.9.11-win32.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ROMEditor\desmume-0.9.11-win64.zip">
+    <None Include="NDS ROM Editor\desmume-0.9.11-win64.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -198,29 +198,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ROMEditor\dsicontool.exe">
+    <Content Include="NDS ROM Editor\dsicontool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\facenames.txt">
+    <Content Include="NDS ROM Editor\facenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\ndstool.exe">
+    <Content Include="NDS ROM Editor\ndstool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\pokenames.txt">
+    <Content Include="NDS ROM Editor\pokenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\ppmd_kaoutil.exe">
+    <Content Include="NDS ROM Editor\ppmd_kaoutil.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\ppmd_kaoutil.txt" />
-    <Content Include="ROMEditor\ppmd_pxcomp.exe">
+    <Content Include="NDS ROM Editor\ppmd_kaoutil.txt" />
+    <Content Include="NDS ROM Editor\ppmd_pxcomp.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\ppmd_unpx.exe">
+    <Content Include="NDS ROM Editor\ppmd_unpx.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROMEditor\xdelta\xdelta3.exe">
+    <Content Include="NDS ROM Editor\xdelta\xdelta3.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

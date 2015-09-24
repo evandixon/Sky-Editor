@@ -20,6 +20,7 @@ Public Class ObjectFile(Of T)
     Public Overrides Sub Save(Filename As String)
         Dim j As New JavaScriptSerializer
         IO.File.WriteAllText(Filename, j.Serialize(ContainedObject))
+        RaiseFileSaved(Me, New EventArgs)
     End Sub
 
     Public Overrides Sub Save()
