@@ -6,15 +6,18 @@ Imports SkyEditorBase
 Public Class SkyRomProject
     Inherits GenericNDSModProject
 
-    Private Async Sub SkyRomProject_NDSModAdded(sender As Object, e As NDSModAddedEventArgs) Handles Me.NDSModAdded
-        Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(e.InternalName), "RawFiles")
-        Dim modDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(e.InternalName))
-        Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName)
-        Dim sky = DirectCast(Files("BaseRom.nds"), SkyNDSRom)
+    Private Async Function LoadKaomadoFixMod(modDirectory As String, romDirectory As String) As Task
+        Dim portraitDir = IO.Path.Combine(modDirectory, "Pokemon", "Portraits")
+        If Not IO.Directory.Exists(portraitDir) Then IO.Directory.CreateDirectory(portraitDir)
+        Dim k As New Kaomado(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"))
+        Await Kaomado.RunUnpack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), portraitDir)
+        Await k.ApplyMissingPortraitFix(portraitDir)
+    End Function
 
+    Private Async Function LoadGeneralMod(modDirectory As String, romDirectory As String, modFilename As String, internalPath As String) As Task
         'Convert BACK
         Dim BACKdir As String = IO.Path.Combine(modDirectory, "Backgrounds")
-        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Backgrounds/")
+        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Backgrounds/")
         Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(romDirectory, "Data", "BACK"), "*.bgp")
         For count = 0 To backFiles.Count - 1
             PluginHelper.StartLoading("Converting backgrounds...", count / backFiles.Count)
@@ -27,7 +30,7 @@ Public Class SkyRomProject
             End If
             image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
             IO.File.Copy(newFilename, newFilename & ".original")
-            OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+            OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
         Next
 
         ''Open Language
@@ -35,23 +38,33 @@ Public Class SkyRomProject
         'Dim itemNames(1351) As String
         'englishLanguage.Items.CopyTo(6775, itemNames, 0, 1351)
 
-        'Convert Language
+        'Convert Languages
         PluginHelper.StartLoading("Converting languages...")
-        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Languages/")
+        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Languages/")
+        Dim languageDictionary As New Dictionary(Of String, String)
+        languageDictionary.Add("text_e.str", "English")
+        languageDictionary.Add("text_f.str", "Frensh")
+        languageDictionary.Add("text_s.str", "Spanish")
+        languageDictionary.Add("text_i.str", "Italian")
+        languageDictionary.Add("text_g.str", "German")
+        languageDictionary.Add("text_j.str", "Japanese")
+        For Each item In languageDictionary
+            If IO.File.Exists(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key)) Then
+                Dim langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
+                Dim langList As New ObjectFile(Of List(Of String))
+                langList.ContainedObject = langString.Items
+                langList.Save(IO.Path.Combine(modDirectory, "Languages", item.Value))
 
-        Dim langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
-        Dim langList As New ObjectFile(Of List(Of String))
-        langList.ContainedObject = langString.Items
-        langList.Save(IO.Path.Combine(modDirectory, "Languages", "English"))
-
-        OpenFile(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(internalPath, "Languages", "English"), False)
+                OpenFile(IO.Path.Combine(modDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
+            End If
+        Next
 
         'Copy Items
         PluginHelper.StartLoading("Converting item definitions...")
         Dim item_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_p.bin")
         Dim item_s_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_s_p.bin")
 
-        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Items/")
+        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Items/")
         IO.File.Copy(item_p_path, IO.Path.Combine(modDirectory, "Items", "Item Definitions"))
         IO.File.Copy(item_s_p_path, IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity"))
 
@@ -77,7 +90,7 @@ Public Class SkyRomProject
         Dim tableDat_14_path As String = IO.Path.Combine(romDirectory, "Data", "TABLEDAT", "item14.dat") 'Prism Ticket - Win
         Dim tableDat_15_path As String = IO.Path.Combine(romDirectory, "Data", "TABLEDAT", "item15.dat") 'Prism Ticket - Big Win
 
-        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName) & "/Items/Swap Shop Rewards/")
+        CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Items/Swap Shop Rewards/")
         'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
         'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
         'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
@@ -113,79 +126,124 @@ Public Class SkyRomProject
         Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
         Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
         personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
-        personalityTest.Save(IO.Path.Combine(modDirectory, "Personality Test"))
-        OpenFile(IO.Path.Combine(modDirectory, "Personality Test"), IO.Path.Combine(internalPath, "Personality Test"), False)
+        personalityTest.Save(IO.Path.Combine(modDirectory, "Starter Pokemon"))
+        OpenFile(IO.Path.Combine(modDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
 
         'Convert Portraits
-        PluginHelper.StartLoading("Unpacking portraits...")
-        If Not IO.Directory.Exists(IO.Path.Combine(modDirectory, "Pokemon", "Portraits")) Then IO.Directory.CreateDirectory(IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
-        Await Kaomado.RunUnpack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
+        'PluginHelper.StartLoading("Unpacking portraits...")
+        'If Not IO.Directory.Exists(IO.Path.Combine(modDirectory, "Pokemon", "Portraits")) Then IO.Directory.CreateDirectory(IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
+        'Await Kaomado.RunUnpack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
 
         PluginHelper.StopLoading()
-    End Sub
+    End Function
 
-    Private Async Sub SkyRomProject_NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs) Handles Me.NDSModBuilding
+    Private Async Sub SkyRomProject_NDSModAdded(sender As Object, e As NDSModAddedEventArgs) Handles Me.NDSModAdded
+        Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(e.InternalName), "RawFiles")
+        Dim modDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(e.InternalName))
+        Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(e.InternalName)
+        Dim sky = DirectCast(Files("BaseRom.nds"), SkyNDSRom)
+
+        If TypeOf e.File Is KaomadoFixNDSMod Then
+            Await LoadKaomadoFixMod(modDirectory, romDirectory)
+        Else
+            Await LoadGeneralMod(modDirectory, romDirectory, e.InternalName, internalPath)
+        End If
+    End Sub
+    Private Async Function BuildModAsync(e As NDSModBuildingEventArgs) As Task
         Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename)), "RawFiles")
         Dim modDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename)))
         'Convert BACK
-        For Each background In IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "Backgrounds"), "*.bmp")
-            Dim includeInPack As Boolean
+        If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "Backgrounds")) Then
+            For Each background In IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "Backgrounds"), "*.bmp")
+                Dim includeInPack As Boolean
 
-            If IO.File.Exists(background & ".original") Then
-                Using bmp As New IO.FileStream(background, IO.FileMode.Open)
-                    Using orig As New IO.FileStream(background & ".original", IO.FileMode.Open)
-                        Dim equal As Boolean = (bmp.Length = orig.Length)
-                        While equal
-                            Dim b = bmp.ReadByte
-                            Dim o = orig.ReadByte
-                            equal = (b = o)
-                            If b = -1 OrElse o = -1 Then
-                                Exit While
-                            End If
-                        End While
-                        includeInPack = Not equal
+                If IO.File.Exists(background & ".original") Then
+                    Using bmp As New IO.FileStream(background, IO.FileMode.Open)
+                        Using orig As New IO.FileStream(background & ".original", IO.FileMode.Open)
+                            Dim equal As Boolean = (bmp.Length = orig.Length)
+                            While equal
+                                Dim b = bmp.ReadByte
+                                Dim o = orig.ReadByte
+                                equal = (b = o)
+                                If b = -1 OrElse o = -1 Then
+                                    Exit While
+                                End If
+                            End While
+                            includeInPack = Not equal
+                        End Using
                     End Using
-                End Using
-            Else
-                includeInPack = True
-            End If
+                Else
+                    includeInPack = True
+                End If
 
-            If includeInPack Then
-                Dim bgp = FileFormats.BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
-                bgp.Save(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
-            End If
+                If includeInPack Then
+                    Dim bgp = FileFormats.BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
+                    bgp.Save(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
+                End If
 
+            Next
+        End If
+
+        'Convert Personality Test
+        Dim personalityTest As ObjectFile(Of PersonalityTestContainer) = Nothing
+        If IO.File.Exists(IO.Path.Combine(modDirectory, "Starter Pokemon")) Then
+            Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
+            personalityTest = New ObjectFile(Of PersonalityTestContainer)(IO.Path.Combine(modDirectory, "Starter Pokemon"))
+            personalityTest.ContainedObject.UpdateOverlay(overlay13)
+            overlay13.Save()
+        End If
+
+        'Convert Languages
+        Dim languageDictionary As New Dictionary(Of String, String)
+        languageDictionary.Add("text_e.str", "English")
+        languageDictionary.Add("text_f.str", "Frensh")
+        languageDictionary.Add("text_s.str", "Spanish")
+        languageDictionary.Add("text_i.str", "Italian")
+        languageDictionary.Add("text_g.str", "German")
+        languageDictionary.Add("text_j.str", "Japanese")
+        For Each item In languageDictionary
+            If IO.File.Exists(IO.Path.Combine(modDirectory, "Languages", item.Value)) Then
+                Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(modDirectory, "Languages", item.Value))
+                Dim langString As New FileFormats.LanguageString
+                langString.Items = langFile.ContainedObject
+
+                If personalityTest IsNot Nothing Then
+                    langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
+                End If
+
+                langString.Save(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
+            End If
         Next
-
-        'Convert Language
-        'IO.File.Copy(IO.Path.Combine(modDirectory, "Languages", "English"), IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"), True)
-        Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(modDirectory, "Languages", "English"))
-        Dim langString As New FileFormats.LanguageString 'FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
-        langString.Items = langFile.ContainedObject
-        langString.Save(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_e.str"))
 
         'Copy Items
         Dim item_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_p.bin")
         Dim item_s_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_s_p.bin")
 
-        IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Item Definitions"), item_p_path, True)
-        IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity"), item_s_p_path, True)
+        If IO.File.Exists(IO.Path.Combine(modDirectory, "Items", "Item Definitions")) Then
+            IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Item Definitions"), item_p_path, True)
+        End If
+        If IO.File.Exists(IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity")) Then
+            IO.File.Copy(IO.Path.Combine(modDirectory, "Items", "Exclusive Item Rarity"), item_s_p_path, True)
+        End If
 
-        'Convert Personality Test
-        Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
-        Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)(IO.Path.Combine(modDirectory, "Personality Test"))
-        personalityTest.ContainedObject.UpdateOverlay(overlay13)
-        overlay13.Save()
+
+
 
         'Convert portraits
-        Await Kaomado.RunPack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
+        If IO.Directory.Exists(IO.Path.Combine(modDirectory, "Pokemon", "Portraits")) Then
+            Await Kaomado.RunPack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
+        End If
 
         'Cleanup
         '-Data/Back/Decompressed
         If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", "Decompressed")) Then
             IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", "Decompressed"), True)
         End If
-    End Sub
+    End Function
+    Protected Overrides Async Function BuildMod(e As NDSModBuildingEventArgs) As Task
+        Await MyBase.BuildMod(e)
+        Await BuildModAsync(e)
+    End Function
 
     Public Overrides Function CustomFilePatchers() As List(Of FilePatcher)
         Dim patchers = MyBase.CustomFilePatchers
@@ -204,5 +262,12 @@ Public Class SkyRomProject
         End With
         patchers.Add(LSPatcher)
         Return patchers
+    End Function
+    Public Overrides Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of String)
+        Dim l = MyBase.CreatableFiles(InternalPath, Manager)
+        If InternalPath.ToLower = "mods/" Then
+            l.Add(GameStrings.KaomadoFixNDSModSourceFile)
+        End If
+        Return l
     End Function
 End Class

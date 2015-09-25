@@ -11,6 +11,7 @@ Public Class GenericNDSModProject
     Public Event NDSModAdded(sender As Object, e As NDSModAddedEventArgs)
     Public Event NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs)
 
+#Region "Child Classes"
     Public Class NDSModAddedEventArgs
         Inherits EventArgs
         Public Property InternalName As String
@@ -90,6 +91,7 @@ Public Class GenericNDSModProject
         ''' <returns></returns>
         Public Property ApplyPatchDependencies As IDictionary(Of String, String)
     End Class
+#End Region
 
     Public Overrides Async Sub Initialize()
         MyBase.Initialize()
@@ -106,23 +108,14 @@ Public Class GenericNDSModProject
         End If
     End Sub
 
-    Private Sub SkyRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, SkyEditorBase.GenericFile)) Handles Me.FileAdded
+    Private Async Sub SkyRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, SkyEditorBase.GenericFile)) Handles Me.FileAdded
         If File.Key.ToLower.EndsWith(".ndsmodsrc") Then
-            PluginHelper.StartLoading("Creating NDS mod...")
+            'PluginHelper.StartLoading("Creating NDS mod...")
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(File.Key), "RawFiles")
 
-            Dim sourcePath As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
-            Dim files = IO.Directory.GetFiles(sourcePath, "*", IO.SearchOption.AllDirectories)
-            For count = 0 To files.Count - 1
-                PluginHelper.StartLoading("Copying files...", count / (files.Length - 1))
-                Dim item = files(count)
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(item.Replace(sourcePath, romDirectory))) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(item.Replace(sourcePath, romDirectory)))
-                End If
-                IO.File.Copy(item, item.Replace(sourcePath, romDirectory))
-            Next
+            Await PluginHelper.CopyDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), romDirectory)
 
-            PluginHelper.StartLoading("Creating NDS mod...")
+            'PluginHelper.StartLoading("Creating NDS mod...")
             Dim e As New NDSModAddedEventArgs
             e.InternalName = File.Key
             e.File = File.Value
@@ -132,6 +125,10 @@ Public Class GenericNDSModProject
             PluginHelper.StopLoading()
         End If
     End Sub
+
+    Protected Overridable Function BuildMod(e As NDSModBuildingEventArgs) As Task
+        Return Task.CompletedTask
+    End Function
 
     Public Overrides Async Sub Build()
         PluginHelper.StartLoading("Building mod pack.")
@@ -153,6 +150,7 @@ Public Class GenericNDSModProject
             Dim e As New NDSModBuildingEventArgs
             e.NDSModSourceFilename = ndsmod
             RaiseEvent NDSModBuilding(Me, e)
+            Await BuildMod(e)
 
             'Create the mod
             '-Analyze files (find out what's changed)
@@ -232,10 +230,13 @@ Public Class GenericNDSModProject
             IO.File.WriteAllText(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", "mod.json"), j.Serialize(actions))
 
             For Each item In actions.ToAdd
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item))) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item)))
+                'Todo: remove item from toAdd if no longer exists
+                If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item)) Then
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item)))
+                    End If
+                    IO.File.Copy(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item), IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item))
                 End If
-                IO.File.Copy(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "RawFiles", item), IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles", item))
             Next
 
             For Each item In actions.ToUpdate
@@ -307,7 +308,7 @@ Public Class GenericNDSModProject
         '-Ensure xdelta is registered as a patching program
         Dim xdelta As New FilePatcher
         xdelta.ApplyPatchProgram = "xdelta\xdelta3.exe"
-        xdelta.ApplyPatchArguments = "-d -s ""{0}"" ""{1}"" ""{2}"""
+        xdelta.ApplyPatchArguments = "-d -n -s ""{0}"" ""{1}"" ""{2}"""
         xdelta.MergeSafe = False
         xdelta.PatchExtension = "xdelta"
         patchers.Add(xdelta)

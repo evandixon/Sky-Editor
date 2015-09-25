@@ -125,6 +125,107 @@ Namespace FileFormats
             End Set
         End Property
         Public Const ItemNameStartUS As Integer = 6773
+        Public Const HardyMessage As Integer = 01660
+        Public Const HardyMale As Integer = 01661
+        Public Const HardyFemale As Integer = 01662
+        Public Const DocileMessage As Integer = 01663
+        Public Const DocileMale As Integer = 01664
+        Public Const DocileFemale As Integer = 01665
+        Public Const BraveMessage As Integer = 01666
+        Public Const BraveMale As Integer = 01667
+        Public Const BraveFemale As Integer = 01668
+        Public Const JollyMessage As Integer = 01669
+        Public Const JollyMale As Integer = 01670
+        Public Const JollyFemale As Integer = 01671
+        Public Const ImpishMessage As Integer = 01672
+        Public Const ImpishMale As Integer = 01673
+        Public Const ImpishFemale As Integer = 01674
+        Public Const NaïveMessage As Integer = 01675
+        Public Const NaïveMale As Integer = 01676
+        Public Const NaïveFemale As Integer = 01677
+        Public Const TimidMessage As Integer = 01678
+        Public Const TimidMale As Integer = 01679
+        Public Const TimidFemale As Integer = 01680
+        Public Const HastyMessage As Integer = 01681
+        Public Const HastyMale As Integer = 01682
+        Public Const HastyFemale As Integer = 01683
+        Public Const SassyMessage As Integer = 01684
+        Public Const SassyMale As Integer = 01685
+        Public Const SassyFemale As Integer = 01686
+        Public Const CalmMessage As Integer = 01687
+        Public Const CalmMale As Integer = 01688
+        Public Const CalmFemale As Integer = 01689
+        Public Const RelaxedMessage As Integer = 01690
+        Public Const RelaxedMale As Integer = 01691
+        Public Const RelaxedFemale As Integer = 01692
+        Public Const LonelyMessage As Integer = 01693
+        Public Const LonelyMale As Integer = 01694
+        Public Const LonelyFemale As Integer = 01695
+        Public Const QuirkyMessage As Integer = 01696
+        Public Const QuirkyMale As Integer = 01697
+        Public Const QuirkyFemale As Integer = 01698
+        Public Const QuietMessage As Integer = 01699
+        Public Const QuietMale As Integer = 01700
+        Public Const QuietFemale As Integer = 01701
+        Public Const RashMessage As Integer = 01702
+        Public Const RashMale As Integer = 01703
+        Public Const RashFemale As Integer = 01704
+        Public Const BoldMessage As Integer = 01705
+        Public Const BoldMale As Integer = 01706
+        Public Const BoldFemale As Integer = 01707
+
+        Public Function GetPokemonName(PokemonID As Integer) As String
+            If FileRegion = Region.Europe Then
+                Return Item(8736 + PokemonID)
+            ElseIf FileRegion = Region.US
+                Return Item(8734 + PokemonID)
+            Else
+                Return Item(8734 + PokemonID)
+            End If
+        End Function
+
+        Public Sub UpdatePersonalityTestResult(ResultIndex As Integer, PokemonID As Integer)
+            Dim r As New Text.RegularExpressions.Regex("(\[CS\:K\])(.*)(\[CR\])")
+            If PokemonID > 600 Then 'In case a female Pokemon was passed in.
+                PokemonID -= 600
+            End If
+            Item(ResultIndex) = r.Replace(Item(ResultIndex), "[CS:K]" & GetPokemonName(PokemonID) & "[CR]")
+        End Sub
+        Public Sub UpdatePersonalityTestResult(Results As PersonalityTestContainer)
+            UpdatePersonalityTestResult(HardyMale, Results.HardyMale)
+            UpdatePersonalityTestResult(HardyFemale, Results.HardyFemale)
+            UpdatePersonalityTestResult(DocileMale, Results.DocileMale)
+            UpdatePersonalityTestResult(DocileFemale, Results.DocileFemale)
+            UpdatePersonalityTestResult(BraveMale, Results.BraveMale)
+            UpdatePersonalityTestResult(BraveFemale, Results.BraveFemale)
+            UpdatePersonalityTestResult(JollyMale, Results.JollyMale)
+            UpdatePersonalityTestResult(JollyFemale, Results.JollyFemale)
+            UpdatePersonalityTestResult(ImpishMale, Results.ImpishMale)
+            UpdatePersonalityTestResult(ImpishFemale, Results.ImpishFemale)
+            UpdatePersonalityTestResult(NaïveMale, Results.NaiveMale)
+            UpdatePersonalityTestResult(NaïveFemale, Results.NaiveFemale)
+            UpdatePersonalityTestResult(TimidMale, Results.TimidMale)
+            UpdatePersonalityTestResult(TimidFemale, Results.TimidFemale)
+            UpdatePersonalityTestResult(HastyMale, Results.HastyMale)
+            UpdatePersonalityTestResult(HastyFemale, Results.HastyFemale)
+            UpdatePersonalityTestResult(SassyMale, Results.SassyMale)
+            UpdatePersonalityTestResult(SassyFemale, Results.SassyFemale)
+            UpdatePersonalityTestResult(CalmMale, Results.CalmMale)
+            UpdatePersonalityTestResult(CalmFemale, Results.CalmFemale)
+            UpdatePersonalityTestResult(RelaxedMale, Results.RelaxedMale)
+            UpdatePersonalityTestResult(RelaxedFemale, Results.RelaxedFemale)
+            UpdatePersonalityTestResult(LonelyMale, Results.LonelyMale)
+            UpdatePersonalityTestResult(LonelyFemale, Results.LonelyFemale)
+            UpdatePersonalityTestResult(QuirkyMale, Results.QuirkyMale)
+            UpdatePersonalityTestResult(QuirkyFemale, Results.QuirkyFemale)
+            UpdatePersonalityTestResult(QuietMale, Results.QuietMale)
+            UpdatePersonalityTestResult(QuietFemale, Results.QuietFemale)
+            UpdatePersonalityTestResult(RashMale, Results.RashMale)
+            UpdatePersonalityTestResult(RashFemale, Results.RashFemale)
+            UpdatePersonalityTestResult(BoldMale, Results.BoldMale)
+            UpdatePersonalityTestResult(BoldFemale, Results.BoldFemale)
+        End Sub
+
 
         'Default Public Property Item(Index As UInteger) As String
         '    Get

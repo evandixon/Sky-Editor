@@ -67,9 +67,9 @@ Public Class PortraitTab
         End If
     End Sub
 
-    Private Sub btnPortraitFix_Click(sender As Object, e As Windows.RoutedEventArgs) Handles btnPortraitFix.Click
+    Private Async Sub btnPortraitFix_Click(sender As Object, e As Windows.RoutedEventArgs) Handles btnPortraitFix.Click
         PluginHelper.StartLoading(PluginHelper.GetLanguageItem("ApplyingKaomadoFix", "Applying the missing portrait fix."))
-        kao.ApplyMissingPortraitFix()
+        Await kao.ApplyMissingPortraitFix()
         PluginHelper.StopLoading()
     End Sub
 End Class

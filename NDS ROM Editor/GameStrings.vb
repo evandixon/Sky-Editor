@@ -27,6 +27,9 @@ Public Class GameStrings
     Public Shared Function NDSModSourceFile() As String
         Return PluginHelper.GetLanguageItem("NDSModSrc", "NDS Mod")
     End Function
+    Public Shared Function KaomadoFixNDSModSourceFile() As String
+        Return PluginHelper.GetLanguageItem("KaomadoFixNDSModSrc", "Insert Missing Pokemon Portraits")
+    End Function
     Public Shared Function PersonalityTest() As String
         Return PluginHelper.GetLanguageItem("PersonalityTest", "Personality Test")
     End Function

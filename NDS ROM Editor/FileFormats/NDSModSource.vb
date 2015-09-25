@@ -143,4 +143,13 @@ Namespace FileFormats
             Save(_filename)
         End Sub
     End Class
+    Public Class KaomadoFixNDSMod
+        Inherits NDSModSource
+        Public Sub New()
+            MyBase.New()
+        End Sub
+        Public Sub New(Filename As String)
+            MyBase.New(Filename)
+        End Sub
+    End Class
 End Namespace

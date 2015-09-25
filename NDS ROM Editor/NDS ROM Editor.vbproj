@@ -115,7 +115,6 @@
       <DependentUpon>BGPControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="File Format Controls\FileFormatControl.vb" />
-    <Compile Include="ConsoleCommands.vb" />
     <Compile Include="FileFormats\Animations\AnimatedSprite.vb" />
     <Compile Include="FileFormats\Animations\Frame.vb" />
     <Compile Include="FileFormats\BGP.vb" />

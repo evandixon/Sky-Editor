@@ -60,25 +60,27 @@ Public Class Form1
 
             If ModDetails.ToUpdate IsNot Nothing Then
                 For Each file In ModDetails.ToUpdate
-                    Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(Filename, "Files", file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
-                    'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
-                    For Each patchFile In patches
-                        Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
-                        For Each p As FilePatcher In patchers
-                            If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
-                                possiblePatchers.Add(p)
-                            End If
+                    If IO.File.Exists(IO.Path.Combine(ROMDirectory, file.TrimStart("\"))) Then
+                        Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Files", file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
+                        'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
+                        For Each patchFile In patches
+                            Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
+                            For Each p As FilePatcher In patchers
+                                If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
+                                    possiblePatchers.Add(p)
+                                End If
+                            Next
+                            'If possiblePatchers.Count = 0 Then
+                            '   Do nothing, we don't have the tools to deal with this patch
+                            If possiblePatchers.Count >= 1 Then
+                                Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
+                                'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
+                                Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
+                                IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
+                                IO.File.Delete(tempFilename)
+                                End If
                         Next
-                        'If possiblePatchers.Count = 0 Then
-                        '   Do nothing, we don't have the tools to deal with this patch
-                        If possiblePatchers.Count >= 1 Then
-                            Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
-                            'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
-                            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
-                            IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
-                            IO.File.Delete(tempFilename)
-                        End If
-                    Next
+                    End If
                 Next
             End If
 
@@ -116,6 +118,7 @@ Public Class Form1
             Me.ModDetails = j.Deserialize(Of ModJson)(IO.File.ReadAllText(Filename))
             Me.Name = Me.ModDetails.Name
             Me.Patched = False
+            Me.Filename = Filename
         End Sub
     End Class
 
@@ -136,7 +139,7 @@ Public Class Form1
         If Not ModFile.Patched Then
             'Patch depencencies
             For Each item In ModFile.ModDetails.DependenciesBefore
-                Dim q = From m In Mods Where m.Name = item
+                Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
 
                 For Each d In q
                     Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
@@ -145,7 +148,7 @@ Public Class Form1
             Await ModFile.ApplyPatch(currentDirectory, ROMDirectory, patchers)
             'Patch dependencies
             For Each item In ModFile.ModDetails.DependenciesAfter
-                Dim q = From m In Mods Where m.Name = item
+                Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
 
                 For Each d In q
                     Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
@@ -192,7 +195,7 @@ Public Class Form1
         Dim patchers = j.Deserialize(Of List(Of FilePatcher))(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Tools", "patchers.json")))
         Dim mods As New List(Of ModFile)
         For Each item In IO.Directory.GetDirectories(modTempDirectory, "*", IO.SearchOption.TopDirectoryOnly)
-            mods.Add(New ModFile(item))
+            mods.Add(New ModFile(item & "\mod.json"))
         Next
 
         For Each item In mods
@@ -257,11 +260,10 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         ' WriteLine(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
         Return True
     End Function
-    Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
-        Return Await Task.Run(Function()
-                                  p.WaitForExit()
-                                  Return True
-                              End Function)
+    Private Shared Async Function WaitForProcess(p As Process) As Task
+        Await Task.Run(Sub()
+                           p.WaitForExit()
+                       End Sub)
     End Function
     Public Shared Sub MoveFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
         IO.File.Copy(OriginalFilename, NewFilename, Overwrite)

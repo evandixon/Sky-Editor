@@ -19,14 +19,8 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Property PluginManagerInstance As PluginManager
-    ''' <summary>
-    ''' Gets the name of the assembly of whatever assembly calls this method.
-    ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Shared Function GetAssemblyName() As String
-        Return Assembly.GetCallingAssembly.GetName.Name
-    End Function
+
+#Region "Resources"
     ''' <summary>
     ''' Combines the given path with your plugin's resource directory.
     ''' </summary>
@@ -60,6 +54,21 @@ Public Class PluginHelper
         End If
         Return baseDir
     End Function
+    Public Shared Function RootResourceDirectory() As String
+        Dim d As String
+        If ApplicationDeployment.IsNetworkDeployed Then
+            d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
+        Else
+            d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
+        End If
+        If Not IO.Directory.Exists(d) Then
+            IO.Directory.CreateDirectory(d)
+        End If
+        Return d
+    End Function
+#End Region
+
+#Region "Translation"
     ''' <summary>
     ''' Gets the text specified by the currently loaded language files.
     ''' </summary>
@@ -104,6 +113,14 @@ Public Class PluginHelper
             End If
         Next
     End Sub
+    Public Shared Function PluginsToInstallDirectory() As String
+        Dim d = IO.Path.Combine(RootResourceDirectory, "ToInstall")
+        If Not IO.Directory.Exists(d) Then
+            IO.Directory.CreateDirectory(d)
+        End If
+        Return d
+    End Function
+#End Region
 
 #Region "Program Running"
     ''' <summary>
@@ -321,6 +338,15 @@ Public Class PluginHelper
         'End If
     End Sub
     Public Shared Event LoadingMessageChanged(sender As Object, e As LoadingMessageChangedEventArgs)
+    Public Shared Sub SetLoadingStatus(Message As String, Progress As Single)
+        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(Message, Progress))
+    End Sub
+    Public Shared Sub SetLoadingStatus(Message As String)
+        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(Message))
+    End Sub
+    Public Shared Sub SetLoadingStatusFinished()
+        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
+    End Sub
 #End Region
 
 #Region "Console Writeline"
@@ -376,25 +402,11 @@ Public Class PluginHelper
         End While
     End Sub
 
-    Public Shared Function RootResourceDirectory() As String
-        Dim d As String
-        If ApplicationDeployment.IsNetworkDeployed Then
-            d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
-        Else
-            d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
-        End If
-        If Not IO.Directory.Exists(d) Then
-            IO.Directory.CreateDirectory(d)
-        End If
-        Return d
+    Public Shared Async Function CopyDirectory(SourceDirectory As String, DestinationDirectory As String) As Task
+        Dim f As New Utilities.AsyncFileCopier
+        Await f.CopyDirectory(SourceDirectory, DestinationDirectory)
     End Function
-    Public Shared Function PluginsToInstallDirectory() As String
-        Dim d = IO.Path.Combine(RootResourceDirectory, "ToInstall")
-        If Not IO.Directory.Exists(d) Then
-            IO.Directory.CreateDirectory(d)
-        End If
-        Return d
-    End Function
+
     ''' <summary>
     ''' Deletes the given directory and everything inside it.
     ''' </summary>

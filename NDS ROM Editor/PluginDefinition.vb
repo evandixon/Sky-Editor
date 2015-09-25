@@ -15,7 +15,7 @@ Public Class PluginDefinition
             out = GameStrings.item_p_File
         ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
             out = GameStrings.item_s_p_File
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "personality test"
+        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
             out = GameStrings.PersonalityTest
         End If
         Return out
@@ -62,6 +62,7 @@ Public Class PluginDefinition
 
         Manager.RegisterFileFormat(GameStrings.BGPFile, GetType(FileFormats.BGP))
         Manager.RegisterFileFormat(GameStrings.NDSModSourceFile, GetType(FileFormats.NDSModSource))
+        Manager.RegisterFileFormat(GameStrings.KaomadoFixNDSModSourceFile, GetType(FileFormats.KaomadoFixNDSMod))
         Manager.RegisterFileFormat(GameStrings.item_p_File, GetType(FileFormats.item_p))
         Manager.RegisterFileFormat(GameStrings.item_s_p_File, GetType(FileFormats.item_s_p))
         Manager.RegisterFileFormat(GameStrings.PersonalityTest, GetType(ObjectFile(Of FileFormats.PersonalityTestContainer)))

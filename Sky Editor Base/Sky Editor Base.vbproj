@@ -187,6 +187,7 @@
     <Compile Include="Code\iGameTypeSelector.vb" />
     <Compile Include="Code\iMainWindow.vb" />
     <Compile Include="Code\iModifiable.vb" />
+    <Compile Include="Code\JsonContainer.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />
@@ -197,6 +198,8 @@
     <Compile Include="Code\Redistribution\PluginInfo.vb" />
     <Compile Include="Code\SearchableDropDown.vb" />
     <Compile Include="Code\ToolWindow.vb" />
+    <Compile Include="Code\Utilities\AsyncFileCopier.vb" />
+    <Compile Include="Code\Utilities\AsyncForEach.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
