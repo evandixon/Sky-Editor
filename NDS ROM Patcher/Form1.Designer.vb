@@ -26,6 +26,7 @@ Partial Class Form1
         Me.txtFilename = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.clbMods = New System.Windows.Forms.CheckedListBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btnPatch = New System.Windows.Forms.Button()
@@ -33,7 +34,7 @@ Partial Class Form1
         Me.statusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.clbMods = New System.Windows.Forms.CheckedListBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -68,28 +69,35 @@ Partial Class Form1
         '
         'GroupBox1
         '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.clbMods)
         Me.GroupBox1.Controls.Add(Me.TextBox2)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Location = New System.Drawing.Point(15, 38)
+        Me.GroupBox1.Location = New System.Drawing.Point(6, 38)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(413, 319)
+        Me.GroupBox1.Size = New System.Drawing.Size(422, 276)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Mods"
+        Me.GroupBox1.Visible = False
+        '
+        'clbMods
+        '
+        Me.clbMods.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.clbMods.FormattingEnabled = True
+        Me.clbMods.Location = New System.Drawing.Point(6, 36)
+        Me.clbMods.Name = "clbMods"
+        Me.clbMods.Size = New System.Drawing.Size(187, 229)
+        Me.clbMods.TabIndex = 5
         '
         'TextBox2
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(190, 36)
+        Me.TextBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox2.Location = New System.Drawing.Point(199, 36)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
-        Me.TextBox2.Size = New System.Drawing.Size(217, 274)
+        Me.TextBox2.Size = New System.Drawing.Size(217, 231)
         Me.TextBox2.TabIndex = 4
         '
         'Label2
@@ -104,7 +112,7 @@ Partial Class Form1
         'btnPatch
         '
         Me.btnPatch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnPatch.Location = New System.Drawing.Point(12, 363)
+        Me.btnPatch.Location = New System.Drawing.Point(12, 35)
         Me.btnPatch.Name = "btnPatch"
         Me.btnPatch.Size = New System.Drawing.Size(75, 23)
         Me.btnPatch.TabIndex = 3
@@ -114,9 +122,10 @@ Partial Class Form1
         'StatusStrip1
         '
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statusLabel1, Me.ToolStripProgressBar1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 389)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 61)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(440, 22)
+        Me.StatusStrip1.SizingGrip = False
         Me.StatusStrip1.TabIndex = 4
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -135,22 +144,23 @@ Partial Class Form1
         '
         Me.OpenFileDialog1.Filter = "NDS ROM Files (*.nds)|*.nds|All Files (*.*)|(*.*)"
         '
-        'clbMods
+        'Button2
         '
-        Me.clbMods.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.clbMods.FormattingEnabled = True
-        Me.clbMods.Location = New System.Drawing.Point(6, 36)
-        Me.clbMods.Name = "clbMods"
-        Me.clbMods.Size = New System.Drawing.Size(178, 274)
-        Me.clbMods.TabIndex = 5
+        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button2.Location = New System.Drawing.Point(353, 35)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Tag = "False"
+        Me.Button2.Text = "Advanced"
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(440, 411)
+        Me.ClientSize = New System.Drawing.Size(440, 83)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.btnPatch)
         Me.Controls.Add(Me.GroupBox1)
@@ -181,4 +191,5 @@ Partial Class Form1
     Friend WithEvents ToolStripProgressBar1 As ToolStripProgressBar
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents clbMods As CheckedListBox
+    Friend WithEvents Button2 As Button
 End Class

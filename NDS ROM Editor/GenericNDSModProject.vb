@@ -223,7 +223,6 @@ Public Class GenericNDSModProject
                 actions.UpdateUrl = ""
             End Try
 
-
             '-Copy and write files
             If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles")) Then
                 PluginHelper.DeleteDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod), IO.Path.GetFileNameWithoutExtension(ndsmod), "ModFiles"))

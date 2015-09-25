@@ -45,6 +45,80 @@ Public Class Form1
         Public Property PatchExtension As String
     End Class
 
+    Public Class ModFile
+        Public Property ModDetails As ModJson
+        Public Property Name As String
+        Public Property Patched As Boolean
+        Public Property Filename As String
+        Public Async Function ApplyPatch(currentDirectory As String, ROMDirectory As String, patchers As List(Of FilePatcher)) As Task
+            Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
+            If ModDetails.ToAdd IsNot Nothing Then
+                For Each file In ModDetails.ToAdd
+                    IO.File.Copy(IO.Path.Combine(Filename, "Files", file.Trim("\")), IO.Path.Combine(ROMDirectory, file.Trim("\")), True)
+                Next
+            End If
+
+            If ModDetails.ToUpdate IsNot Nothing Then
+                For Each file In ModDetails.ToUpdate
+                    Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(Filename, "Files", file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
+                    'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
+                    For Each patchFile In patches
+                        Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
+                        For Each p As FilePatcher In patchers
+                            If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
+                                possiblePatchers.Add(p)
+                            End If
+                        Next
+                        'If possiblePatchers.Count = 0 Then
+                        '   Do nothing, we don't have the tools to deal with this patch
+                        If possiblePatchers.Count >= 1 Then
+                            Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
+                            'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
+                            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
+                            IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
+                            IO.File.Delete(tempFilename)
+                        End If
+                    Next
+                Next
+            End If
+
+            If ModDetails.ToRename IsNot Nothing Then
+                'Create temporary directory
+                If Not IO.Directory.Exists(renameTemp) Then
+                    IO.Directory.CreateDirectory(renameTemp)
+                End If
+
+                'Move to a temporary directory (so swapping files works)
+                For Each file In ModDetails.ToRename
+                    MoveFile(IO.Path.Combine(ROMDirectory, file.Key.Trim("\")), IO.Path.Combine(renameTemp, file.Key.Trim("\")), True)
+                Next
+
+                'Rename the things
+                For Each file In ModDetails.ToRename
+                    MoveFile(IO.Path.Combine(renameTemp, file.Key.Trim("\")), IO.Path.Combine(ROMDirectory, file.Value.Trim("\")), True)
+                Next
+            End If
+
+            If ModDetails.ToDelete IsNot Nothing Then
+                For Each file In ModDetails.ToDelete
+                    If IO.File.Exists(IO.Path.Combine(ROMDirectory, file.Trim("\"))) Then
+                        IO.File.Delete(IO.Path.Combine(ROMDirectory, file.Trim("\")))
+                    End If
+                Next
+            End If
+
+            If IO.Directory.Exists(renameTemp) Then IO.Directory.Delete(renameTemp, True)
+
+            Patched = True
+        End Function
+        Public Sub New(Filename As String)
+            Dim j As New JavaScriptSerializer
+            Me.ModDetails = j.Deserialize(Of ModJson)(IO.File.ReadAllText(Filename))
+            Me.Name = Me.ModDetails.Name
+            Me.Patched = False
+        End Sub
+    End Class
+
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim args = Environment.GetCommandLineArgs
         If args.Length >= 3 Then
@@ -58,6 +132,27 @@ Public Class Form1
             ListAvailableMods()
         End If
     End Sub
+    Private Async Function ApplyPatch(Mods As List(Of ModFile), ModFile As ModFile, currentDirectory As String, ROMDirectory As String, patchers As List(Of FilePatcher)) As Task
+        If Not ModFile.Patched Then
+            'Patch depencencies
+            For Each item In ModFile.ModDetails.DependenciesBefore
+                Dim q = From m In Mods Where m.Name = item
+
+                For Each d In q
+                    Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                Next
+            Next
+            Await ModFile.ApplyPatch(currentDirectory, ROMDirectory, patchers)
+            'Patch dependencies
+            For Each item In ModFile.ModDetails.DependenciesAfter
+                Dim q = From m In Mods Where m.Name = item
+
+                For Each d In q
+                    Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                Next
+            Next
+        End If
+    End Function
     ''' <summary>
     ''' Patches the NDS ROM at the given SourceFilename and saves it to DestinationFilename.  Opens a SaveFileDialog if DestinationFilename is null.
     ''' </summary>
@@ -66,7 +161,7 @@ Public Class Form1
     Public Async Function PatchROM(SourceFilename As String, Optional DestinationFilename As String = Nothing) As Task
         Dim currentDirectory = Environment.CurrentDirectory 'IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
         Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools/ndstemp")
-        Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
+
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
 
         btnPatch.Enabled = False
@@ -95,65 +190,15 @@ Public Class Form1
         ToolStripProgressBar1.Value = 40
         Dim j As New JavaScriptSerializer
         Dim patchers = j.Deserialize(Of List(Of FilePatcher))(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Tools", "patchers.json")))
+        Dim mods As New List(Of ModFile)
         For Each item In IO.Directory.GetDirectories(modTempDirectory, "*", IO.SearchOption.TopDirectoryOnly)
-            Dim currentMod = j.Deserialize(Of ModJson)(IO.File.ReadAllText(IO.Path.Combine(item, "mod.json")))
-
-            If currentMod.ToAdd IsNot Nothing Then
-                For Each file In currentMod.ToAdd
-                    IO.File.Copy(IO.Path.Combine(item, "Files", file.Trim("\")), IO.Path.Combine(ROMDirectory, file.Trim("\")), True)
-                Next
-            End If
-
-            If currentMod.ToUpdate IsNot Nothing Then
-                For Each file In currentMod.ToUpdate
-                    Dim patches = IO.Directory.GetFiles(IO.Path.GetDirectoryName(IO.Path.Combine(item, "Files", file.Trim("\"))), IO.Path.GetFileName(file.Trim("\")) & "*")
-                    'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
-                    For Each patchFile In patches
-                        Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
-                        For Each p As FilePatcher In patchers
-                            If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
-                                possiblePatchers.Add(p)
-                            End If
-                        Next
-                        'If possiblePatchers.Count = 0 Then
-                        '   Do nothing, we don't have the tools to deal with this patch
-                        If possiblePatchers.Count >= 1 Then
-                            Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
-                            'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
-                            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
-                            IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
-                            IO.File.Delete(tempFilename)
-                        End If
-                    Next
-                Next
-            End If
-
-            If currentMod.ToRename IsNot Nothing Then
-                'Create temporary directory
-                If Not IO.Directory.Exists(renameTemp) Then
-                    IO.Directory.CreateDirectory(renameTemp)
-                End If
-
-                'Move to a temporary directory (so swapping files works)
-                For Each file In currentMod.ToRename
-                    MoveFile(IO.Path.Combine(ROMDirectory, file.Key.Trim("\")), IO.Path.Combine(renameTemp, file.Key.Trim("\")), True)
-                Next
-
-                'Rename the things
-                For Each file In currentMod.ToRename
-                    MoveFile(IO.Path.Combine(renameTemp, file.Key.Trim("\")), IO.Path.Combine(ROMDirectory, file.Value.Trim("\")), True)
-                Next
-            End If
-
-            If currentMod.ToDelete IsNot Nothing Then
-                For Each file In currentMod.ToDelete
-                    If IO.File.Exists(IO.Path.Combine(ROMDirectory, file.Trim("\"))) Then
-                        IO.File.Delete(IO.Path.Combine(ROMDirectory, file.Trim("\")))
-                    End If
-                Next
-            End If
-
+            mods.Add(New ModFile(item))
         Next
+
+        For Each item In mods
+            Await ApplyPatch(mods, item, currentDirectory, ROMDirectory, patchers)
+        Next
+
         'Repack the ROM
         statusLabel1.Text = "Repacking the ROM"
         ToolStripProgressBar1.Value = 80
@@ -176,12 +221,11 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
             IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename)
         End If
 
-
         'Clean Up
         statusLabel1.Text = "Cleaning up"
         ToolStripProgressBar1.Value = 100
         If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
-        If IO.Directory.Exists(renameTemp) Then IO.Directory.Delete(renameTemp, True)
+
         IO.Directory.Delete(ROMDirectory, True)
         IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
 
@@ -219,7 +263,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
                                   Return True
                               End Function)
     End Function
-    Public Sub MoveFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
+    Public Shared Sub MoveFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
         IO.File.Copy(OriginalFilename, NewFilename, Overwrite)
         IO.File.Delete(OriginalFilename)
     End Sub
@@ -236,8 +280,24 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
 
     Private Sub ListAvailableMods()
         Dim currentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
-        For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod*", IO.SearchOption.TopDirectoryOnly)
-            clbMods.Items.Add(IO.Path.GetFileNameWithoutExtension(item), Not item.ToLower.EndsWith(".disabled"))
-        Next
+        If IO.Directory.Exists(IO.Path.Combine(currentDirectory, "Mods")) Then
+            For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod*", IO.SearchOption.TopDirectoryOnly)
+                clbMods.Items.Add(IO.Path.GetFileNameWithoutExtension(item), Not item.ToLower.EndsWith(".disabled"))
+            Next
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Button2.Tag = True Then
+            Button2.Tag = False
+            Button2.Text = "Advanced"
+            Me.Size = New Size(456, 130)
+            GroupBox1.Visible = False
+        Else
+            Button2.Tag = True
+            Button2.Text = "Simple"
+            Me.Size = New Size(456, 407)
+            GroupBox1.Visible = True
+        End If
     End Sub
 End Class

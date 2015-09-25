@@ -1,8 +1,11 @@
 ﻿Imports System.Web.Script.Serialization
 
 Module Module1
-    'Because the JSON serializer doesn't like normal KeyValuePairs for some reason.
-    Public Class MyKeyValuePair
+    Public Class Container
+        Public Property Entries As List(Of Entry)
+        Public Property SourceLength As Integer 'Used to determine region of source
+    End Class
+    Public Class Entry
         Public Property Key As Integer
         Public Property Value As String
         Public Sub New()
@@ -29,15 +32,18 @@ Module Module1
 
                     Dim inputLS As New LanguageString(inputFile)
                     Dim editedLS As New LanguageString(editedFile)
-                    Dim edits As New List(Of MyKeyValuePair)
+                    Dim edits As New List(Of Entry)
                     For count As Integer = 0 To Math.Min(inputLS.Items.Count - 1, editedLS.Items.Count - 1)
                         If Not inputLS(count) = editedLS(count) Then
-                            edits.Add(New MyKeyValuePair(count, editedLS(count)))
+                            edits.Add(New Entry(count, editedLS(count)))
                         End If
                     Next
 
                     Dim j As New JavaScriptSerializer
-                    IO.File.WriteAllText(patchFile, j.Serialize(edits))
+                    Dim c As New Container
+                    c.Entries = edits
+                    c.SourceLength = inputLS.Items.Count
+                    IO.File.WriteAllText(patchFile, j.Serialize(c))
 
                     inputLS.Dispose()
                     editedLS.Dispose()
@@ -48,9 +54,18 @@ Module Module1
 
                     Dim j As New JavaScriptSerializer
                     Dim editedLS As New LanguageString(inputFile)
-                    Dim edits = j.Deserialize(Of List(Of MyKeyValuePair))(IO.File.ReadAllText(patchFile))
+                    Dim c = j.Deserialize(Of Container)(IO.File.ReadAllText(patchFile))
+                    Dim edits = c.Entries
+                    Dim inputRegion = editedLS.FileRegion
+                    Dim patchRegion = LanguageString.GetFileRegion(c.SourceLength)
                     For Each item In edits
-                        editedLS(item.Key) = item.Value
+                        If inputRegion = LanguageString.Region.US AndAlso patchRegion = LanguageString.Region.Europe Then
+                            editedLS(LanguageString.ConvertEUToUS(item.Key)) = item.Value
+                        ElseIf inputRegion = LanguageString.Region.Europe AndAlso patchRegion = LanguageString.Region.US
+                            editedLS(LanguageString.ConvertUSToEU(item.Key)) = item.Value
+                        Else
+                            editedLS(item.Key) = item.Value
+                        End If
                     Next
 
                     editedLS.Save(editedFile)

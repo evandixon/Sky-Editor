@@ -6,6 +6,50 @@
 Public Class LanguageString
     Implements IDisposable
     Dim _fileReader As IO.FileStream
+    Public Enum Region
+        US
+        Europe
+    End Enum
+
+    Public Shared Function ConvertEUToUS(Offset As Integer) As Integer
+        If Offset = 3938 OrElse Offset = 3939 Then
+            Throw New IndexOutOfRangeException("Indexes 3938 and 3939 do not have a US equivalent.")
+        ElseIf Offset < 3938
+            Return Offset
+        ElseIf 3938 < Offset AndAlso Offset < 17600
+            Return Offset - 2
+        ElseIf 17600 <= Offset AndAlso Offset < 17812
+            Throw New NotImplementedException("Conversion in the Staff Credits is currently not supported.")
+        Else 'If   17812<=Offset
+            Return Offset - 31
+        End If
+    End Function
+    Public Shared Function ConvertUSToEU(Offset As Integer) As Integer
+        If Offset < 3938 Then
+            Return Offset
+        ElseIf 3938 <= Offset AndAlso Offset < 17598
+            Return Offset + 2
+        ElseIf 17598 <= Offset AndAlso Offset < 17781
+            Throw New NotImplementedException("Conversion in the Staff Credits is currently not supported.")
+        Else ' offset <= 17781
+            Return Offset + 31
+        End If
+    End Function
+
+    Public ReadOnly Property FileRegion As Region
+        Get
+            Return GetFileRegion(Length)
+        End Get
+    End Property
+    Public Shared Function GetFileRegion(Length As Integer) As Region
+        If Length = 18451 Then
+            Return Region.US
+        ElseIf Length = 18482
+            Return Region.Europe
+        Else
+            Return Nothing
+        End If
+    End Function
     Public Property Items As List(Of String)
     Public Property Filename As String
     Public Property OriginalFilename As String

@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor
+Imports ROMEditor.FileFormats
 Imports ROMEditor.Roms
 Imports SkyEditorBase
 
@@ -115,14 +116,15 @@ Public Class SkyRomProject
         personalityTest.Save(IO.Path.Combine(modDirectory, "Personality Test"))
         OpenFile(IO.Path.Combine(modDirectory, "Personality Test"), IO.Path.Combine(internalPath, "Personality Test"), False)
 
-
-
-
+        'Convert Portraits
+        PluginHelper.StartLoading("Unpacking portraits...")
+        If Not IO.Directory.Exists(IO.Path.Combine(modDirectory, "Pokemon", "Portraits")) Then IO.Directory.CreateDirectory(IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
+        Await Kaomado.RunUnpack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
 
         PluginHelper.StopLoading()
     End Sub
 
-    Private Sub SkyRomProject_NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs) Handles Me.NDSModBuilding
+    Private Async Sub SkyRomProject_NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs) Handles Me.NDSModBuilding
         Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename)), "RawFiles")
         Dim modDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods", IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename)))
         'Convert BACK
@@ -174,6 +176,9 @@ Public Class SkyRomProject
         Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)(IO.Path.Combine(modDirectory, "Personality Test"))
         personalityTest.ContainedObject.UpdateOverlay(overlay13)
         overlay13.Save()
+
+        'Convert portraits
+        Await Kaomado.RunPack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
 
         'Cleanup
         '-Data/Back/Decompressed
