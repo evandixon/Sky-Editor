@@ -78,7 +78,7 @@ Namespace FileFormats
             Next
         End Sub
 
-        Public Overrides Sub PreSave()
+        Protected Overrides Sub PreSave()
             MyBase.PreSave()
             'Generate File
             Dim e = Encoding.GetEncoding("Windows-1252")

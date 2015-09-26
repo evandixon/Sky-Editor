@@ -263,10 +263,10 @@ Public Class SkyRomProject
         patchers.Add(LSPatcher)
         Return patchers
     End Function
-    Public Overrides Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of String)
+    Public Overrides Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
         Dim l = MyBase.CreatableFiles(InternalPath, Manager)
         If InternalPath.ToLower = "mods/" Then
-            l.Add(GameStrings.KaomadoFixNDSModSourceFile)
+            l.Add(GetType(KaomadoFixNDSMod))
         End If
         Return l
     End Function

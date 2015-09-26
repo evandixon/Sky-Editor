@@ -82,7 +82,7 @@ Partial Public MustInherit Class GenericSave
 
     End Sub
 
-    Public Overrides Sub PreSave()
+    Protected Overrides Sub PreSave()
         MyBase.PreSave()
         FixChecksum()
     End Sub

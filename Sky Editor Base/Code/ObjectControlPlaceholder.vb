@@ -1,4 +1,5 @@
-﻿Public Class ObjectControlPlaceholder
+﻿Imports SkyEditorBase.Interfaces
+Public Class ObjectControlPlaceholder
     Inherits UserControl
     ''' <summary>
     ''' Raised when the contained object raises its Modified event, if it implements iModifiable

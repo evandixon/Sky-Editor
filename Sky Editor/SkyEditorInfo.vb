@@ -1,14 +1,15 @@
 ﻿Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 Imports SkyEditor.Saves
 Public Class SkyEditorInfo
     Implements iSkyEditorPlugin
-    Public ReadOnly Property PluginAuthor As String Implements SkyEditorBase.iSkyEditorPlugin.PluginAuthor
+    Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
         Get
             Return "evandixon"
         End Get
     End Property
 
-    Public ReadOnly Property PluginName As String Implements SkyEditorBase.iSkyEditorPlugin.PluginName
+    Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
             Return "Sky Editor"
         End Get

@@ -1,8 +1,13 @@
-﻿Public Class GenericFile
+﻿Imports SkyEditorBase.Interfaces
+Public Class GenericFile
     Implements IDisposable
     Implements iModifiable
+    Implements iCreatableFile
+    Implements iOpenableFile
+    Implements iSavable
     Protected _tempname As String
     Dim _fileReader As IO.FileStream
+
 #Region "Constructors"
     Public Sub New(Filename As String)
         _tempname = Guid.NewGuid.ToString()
@@ -31,13 +36,18 @@
 #Region "Properties"
     Public Property Filename As String
     Public Property OriginalFilename As String
-    Public Property RawData(Index As Long) As Byte
+    Protected ReadOnly Property FileReader As IO.FileStream
         Get
             If _fileReader Is Nothing Then
                 _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
             End If
-            _fileReader.Seek(Index, IO.SeekOrigin.Begin)
-            Dim b = _fileReader.ReadByte
+            Return _fileReader
+        End Get
+    End Property
+    Public Property RawData(Index As Long) As Byte
+        Get
+            FileReader.Seek(Index, IO.SeekOrigin.Begin)
+            Dim b = FileReader.ReadByte
             If b > -1 AndAlso b < 256 Then
                 Return b
             Else
@@ -45,64 +55,50 @@
             End If
         End Get
         Set(value As Byte)
-            If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-            End If
-            _fileReader.Seek(Index, IO.SeekOrigin.Begin)
-            _fileReader.WriteByte(value)
+            FileReader.Seek(Index, IO.SeekOrigin.Begin)
+            FileReader.WriteByte(value)
         End Set
     End Property
     Public Property RawData(Index As Long, Length As Long) As Byte()
         Get
             Dim output(Length - 1) As Byte
-            If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-            End If
-            _fileReader.Seek(Index, IO.SeekOrigin.Begin)
-            _fileReader.Read(output, 0, Length)
+            FileReader.Seek(Index, IO.SeekOrigin.Begin)
+            FileReader.Read(output, 0, Length)
             Return output
             'End If
         End Get
         Set(value As Byte())
-            If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-            End If
-            _fileReader.Seek(Index, IO.SeekOrigin.Begin)
-            _fileReader.Write(value, 0, Length)
+            FileReader.Seek(Index, IO.SeekOrigin.Begin)
+            FileReader.Write(value, 0, Length)
         End Set
     End Property
     Public Property Length As Long
         Get
-            If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-            End If
-            Return _fileReader.Length
+            Return FileReader.Length
         End Get
         Set(value As Long)
-            If _fileReader IsNot Nothing Then
-                _fileReader.SetLength(value)
-            End If
+            FileReader.SetLength(value)
         End Set
     End Property
-    ''' <summary>
-    ''' Gets or sets a string representation of the file.
-    ''' When setting, will overwrite all data in the file.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property RawText As String
-        Get
-            Return IO.File.ReadAllText(Filename)
-        End Get
-        Set(value As String)
-            Dim buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(value)
-            If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-            End If
-            _fileReader.SetLength(buffer.Length)
-            _fileReader.Seek(0, IO.SeekOrigin.Begin)
-            _fileReader.Write(buffer, 0, buffer.Count)
-        End Set
-    End Property
+    '''' <summary>
+    '''' Gets or sets a string representation of the file.
+    '''' When setting, will overwrite all data in the file.
+    '''' </summary>
+    '''' <returns></returns>
+    '<Obsolete("Awkward code.  Will drastically change in the future.")> Protected Property RawText As String
+    '    Get
+    '        Return IO.File.ReadAllText(Filename)
+    '    End Get
+    '    Set(value As String)
+    '        Dim buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(value)
+    '        If _fileReader Is Nothing Then
+    '            _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
+    '        End If
+    '        _fileReader.SetLength(buffer.Length)
+    '        _fileReader.Seek(0, IO.SeekOrigin.Begin)
+    '        _fileReader.Write(buffer, 0, buffer.Count)
+    '    End Set
+    'End Property
 #End Region
 
 #Region "Events"
@@ -130,10 +126,10 @@
     Public Overridable Function DefaultExtension() As String
         Return ""
     End Function
-    Public Overridable Sub PreSave()
+    Protected Overridable Sub PreSave()
 
     End Sub
-    Public Overridable Sub Save(Destination As String)
+    Public Overridable Sub Save(Destination As String) Implements iSavable.Save
         PreSave()
         If _fileReader Is Nothing Then
             _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
@@ -148,7 +144,7 @@
             End Using
         End If
     End Sub
-    Public Overridable Sub Save()
+    Public Overridable Sub Save() Implements iSavable.Save
         PreSave()
         _fileReader.Seek(0, IO.SeekOrigin.Begin)
         _fileReader.Flush()

@@ -172,7 +172,7 @@ Public Class Project
     ''' </summary>
     ''' <param name="InternalPath"></param>
     ''' <returns></returns>
-    Public Overridable Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of String)
+    Public Overridable Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
         Return Manager.SaveTypes.Keys.ToList
     End Function
 

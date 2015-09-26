@@ -33,7 +33,7 @@ Namespace Saves
                 Throw New IndexOutOfRangeException
             End If
         End Function
-        Public Overrides Sub PreSave()
+        Protected Overrides Sub PreSave()
             MyBase.PreSave()
             For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
                 RawData(count) = Bits.Int(count, 0, 8)

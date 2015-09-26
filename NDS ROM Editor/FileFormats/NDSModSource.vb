@@ -126,9 +126,6 @@ Namespace FileFormats
                 End If
             Next
         End Sub
-        Public Overrides Sub PreSave()
-
-        End Sub
         Public Overrides Sub Save(Destination As String)
             Dim buffer As New StringBuilder
             For Each item In Settings

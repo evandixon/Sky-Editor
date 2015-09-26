@@ -1,6 +1,7 @@
 ﻿Namespace SkyEditorWindows
     Public Class NewFileWindow
         Inherits Window
+
         Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
             DialogResult = True
             Me.Close()

@@ -35,7 +35,7 @@ Namespace FileFormats
                 Next
             End If
         End Sub
-        Public Overrides Sub PreSave()
+        Protected Overrides Sub PreSave()
             Me.Length = 2 + (Items.Count * 4)
             RawData(0, 2) = BitConverter.GetBytes(Items.Count)
             For count As Integer = 0 To Items.Count - 1

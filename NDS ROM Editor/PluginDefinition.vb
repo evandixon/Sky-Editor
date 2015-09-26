@@ -1,5 +1,6 @@
 ﻿Imports SkyEditorBase
 Imports ROMEditor.Roms
+Imports SkyEditorBase.Interfaces
 
 Public Class PluginDefinition
     Implements iSkyEditorPlugin
@@ -17,6 +18,24 @@ Public Class PluginDefinition
             out = GameStrings.item_s_p_File
         ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
             out = GameStrings.PersonalityTest
+        End If
+        Return out
+    End Function
+
+    Public Function AutoDetectFileType(File As GenericFile) As Type
+        Dim out As Type = Nothing
+        If SkyNDSRom.IsSkyNDSRom(File) Then
+            out = GetType(SkyNDSRom)
+        ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
+            out = GetType(FileFormats.BGP)
+        ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
+            out = GetType(FileFormats.NDSModSource)
+        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Item Definitions".ToLower
+            out = GetType(FileFormats.item_p)
+        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
+            out = GetType(FileFormats.item_s_p)
+        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
+            out = GetType(ObjectFile(Of FileFormats.PersonalityTestContainer))
         End If
         Return out
     End Function
@@ -48,32 +67,24 @@ Public Class PluginDefinition
 
     Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
-        'Manager.RegisterConsoleCommand("header", AddressOf ConsoleCommands.ROMHeader)
-        'Manager.RegisterConsoleCommand("unpack", AddressOf ConsoleCommands.UnPack)
-        'Manager.RegisterConsoleCommand("repack", AddressOf ConsoleCommands.RePack)
-        'Manager.RegisterConsoleCommand("explorersextractbgp", AddressOf ConsoleCommands.ExplorersExtractBGP)
-        'Manager.RegisterConsoleCommand("pmdlanguage", AddressOf ConsoleCommands.PmdLanguage)
-        'Manager.RegisterConsoleCommand("eostestmusic", AddressOf ConsoleCommands.EoSTestMusic)
 
         Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
-        Manager.RegisterSaveGameFormat(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom, GetType(GenericNDSRom))
-        Manager.RegisterSaveGameFormat(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom, GetType(SkyNDSRom))
+        'Manager.RegisterSaveGameFormat(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom, GetType(GenericNDSRom))
+        'Manager.RegisterSaveGameFormat(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom, GetType(SkyNDSRom))
 
-        Manager.RegisterFileFormat(GameStrings.BGPFile, GetType(FileFormats.BGP))
-        Manager.RegisterFileFormat(GameStrings.NDSModSourceFile, GetType(FileFormats.NDSModSource))
-        Manager.RegisterFileFormat(GameStrings.KaomadoFixNDSModSourceFile, GetType(FileFormats.KaomadoFixNDSMod))
-        Manager.RegisterFileFormat(GameStrings.item_p_File, GetType(FileFormats.item_p))
-        Manager.RegisterFileFormat(GameStrings.item_s_p_File, GetType(FileFormats.item_s_p))
-        Manager.RegisterFileFormat(GameStrings.PersonalityTest, GetType(ObjectFile(Of FileFormats.PersonalityTestContainer)))
+        'Manager.RegisterFileFormat(GameStrings.BGPFile, GetType(FileFormats.BGP))
+        'Manager.RegisterFileFormat(GameStrings.NDSModSourceFile, GetType(FileFormats.NDSModSource))
+        'Manager.RegisterFileFormat(GameStrings.KaomadoFixNDSModSourceFile, GetType(FileFormats.KaomadoFixNDSMod))
+        'Manager.RegisterFileFormat(GameStrings.item_p_File, GetType(FileFormats.item_p))
+        'Manager.RegisterFileFormat(GameStrings.item_s_p_File, GetType(FileFormats.item_s_p))
+        'Manager.RegisterFileFormat(GameStrings.PersonalityTest, GetType(ObjectFile(Of FileFormats.PersonalityTestContainer)))
 
-        'Manager.RegisterEditorTab(GetType(PortraitTab))
-        'Manager.RegisterEditorTab(GetType(PersonalityTest))
-        'Manager.RegisterEditorTab(GetType(FilesTab))
+        'Manager.RegisterSaveTypeDetector(AddressOf AutoDetectSaveType)
 
-        Manager.RegisterSaveTypeDetector(AddressOf AutoDetectSaveType)
+        'Manager.RegisterProjectType("Explorers of Sky Rom Mod", GetType(SkyRomProject))
 
-        Manager.RegisterProjectType("Explorers of Sky Rom Mod", GetType(SkyRomProject))
+        Manager.RegisterFileTypeDetector(AddressOf AutoDetectFileType)
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

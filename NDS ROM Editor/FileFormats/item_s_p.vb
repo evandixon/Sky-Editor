@@ -61,7 +61,7 @@ Namespace FileFormats
                 End While
             End If
         End Sub
-        Public Overrides Sub PreSave()
+        Protected Overrides Sub PreSave()
             MyBase.PreSave()
             Length = &HF0F '4 * Items.Count + 32
 

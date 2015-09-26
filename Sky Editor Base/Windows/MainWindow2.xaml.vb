@@ -35,6 +35,9 @@ Public Class MainWindow2
 #Region "Event Handlers"
 
 #Region "MenuItems"
+    Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
+        'Todo: Let user create new file
+    End Sub
     Private Sub menuFileOpenAuto_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
         OpenFileDialog1.Filter = _manager.IOFiltersString
         If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
@@ -72,6 +75,22 @@ Public Class MainWindow2
     Private Sub menuFileSaveProject_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveProject.Click
         SaveProject()
     End Sub
+    Private Sub menuFileSaveAll_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAll.Click
+        SaveProject()
+        For Each item In docPane.Children
+            If TypeOf item Is DocumentTab Then
+                Dim file = DirectCast(item, DocumentTab).File
+                If Not String.IsNullOrEmpty(file.OriginalFilename) Then
+                    file.Save()
+                Else
+                    SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
+                    If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+                        file.Save(SaveFileDialog1.FileName)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
     Private Sub menuNewProject_Click(sender As Object, e As RoutedEventArgs) Handles menuNewProject.Click
         Dim newProj As New NewProjectWindow(_manager)
         If newProj.ShowDialog() Then
@@ -87,17 +106,17 @@ Public Class MainWindow2
         _manager.CurrentProject.Run()
     End Sub
 
-    Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
-        'OpenFileDialog1.Filter = _manager.IOFiltersString
-        'If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-        '    If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
-        '        _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
-        '    Else
-        '        'Todo: open auto-detect window
-        '        docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
-        '    End If
-        'End If
-    End Sub
+    'Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
+    '    'OpenFileDialog1.Filter = _manager.IOFiltersString
+    '    'If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+    '    '    If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
+    '    '        _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
+    '    '    Else
+    '    '        'Todo: open auto-detect window
+    '    '        docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
+    '    '    End If
+    '    'End If
+    'End Sub
 #End Region
 
 #Region "Form"
@@ -107,7 +126,7 @@ Public Class MainWindow2
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
 
-        menuFileOpenNoDetect.Visibility = Visibility.Collapsed
+        'menuFileOpenNoDetect.Visibility = Visibility.Collapsed
 
         If Settings.GetSettings.Setting("SimpleMode").ToLower = "true" Then
             menuFileSaveProject.Visibility = Visibility.Collapsed

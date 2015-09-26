@@ -126,11 +126,11 @@ Public Class ProjectExplorer
             Dim w As New SkyEditorWindows.NewFileWindow()
             Dim games As New Dictionary(Of String, Type)
             For Each item In creatableFiles
-                games.Add(item, Nothing)
+                games.Add(PluginHelper.GetLanguageItem(item.Name), item)
             Next
             w.AddGames(games.Keys)
             If w.ShowDialog Then
-                Dim file As GenericFile = _manager.SaveTypes(w.SelectedGame).GetConstructor({}).Invoke({})
+                Dim file As GenericFile = games(w.SelectedGame).GetConstructor({}).Invoke({})
                 Dim path = SelectedPath()
                 Dim name = w.SelectedName
                 Await Task.Run(New Action(Sub()

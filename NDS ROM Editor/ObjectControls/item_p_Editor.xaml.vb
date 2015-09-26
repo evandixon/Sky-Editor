@@ -3,6 +3,7 @@ Imports System.Windows.Controls
 Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.item_p
 Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Namespace ObjectControls
     Public Class item_p_Editor

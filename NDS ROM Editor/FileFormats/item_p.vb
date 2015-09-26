@@ -191,7 +191,7 @@ Namespace FileFormats
 
             Return out.ToArray
         End Function
-        Public Overrides Sub PreSave()
+        Protected Overrides Sub PreSave()
             MyBase.PreSave()
             Dim buffer = GetBytes()
             Length = buffer.Length

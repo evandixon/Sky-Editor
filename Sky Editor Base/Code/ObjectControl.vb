@@ -1,4 +1,5 @@
-﻿Public MustInherit Class ObjectControl
+﻿Imports SkyEditorBase.Interfaces
+Public MustInherit Class ObjectControl
     Inherits UserControl
     Public Sub New()
         MyBase.New()

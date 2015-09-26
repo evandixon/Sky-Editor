@@ -1,4 +1,5 @@
-﻿Namespace SkyEditorWindows
+﻿Imports SkyEditorBase.Interfaces
+Namespace SkyEditorWindows
     Public Class GameTypeSelector
         Implements iGameTypeSelector
         Private Sub Button_Click(sender As Object, e As RoutedEventArgs)

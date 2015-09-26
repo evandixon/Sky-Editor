@@ -184,10 +184,12 @@
     <Compile Include="Code\ARDS\Region.vb" />
     <Compile Include="Code\ChildControls.vb" />
     <Compile Include="Code\DocumentTab.vb" />
-    <Compile Include="Code\iGameTypeSelector.vb" />
-    <Compile Include="Code\iMainWindow.vb" />
-    <Compile Include="Code\iModifiable.vb" />
-    <Compile Include="Code\JsonContainer.vb" />
+    <Compile Include="Code\Interfaces\iCreatable.vb" />
+    <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
+    <Compile Include="Code\Interfaces\iGenericFile.vb" />
+    <Compile Include="Code\Interfaces\iModifiable.vb" />
+    <Compile Include="Code\Interfaces\iOpenable.vb" />
+    <Compile Include="Code\Interfaces\iSavable.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />
@@ -213,7 +215,7 @@
     <Compile Include="Code\Utilities\GenericArrayOperations.vb" />
     <Compile Include="Code\GenericFile.vb" />
     <Compile Include="Code\Utilities\Zip.vb" />
-    <Compile Include="Code\iSkyEditorPlugin.vb" />
+    <Compile Include="Code\Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>

@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Text
 Imports System.Threading.Tasks
+Imports SkyEditorBase.Interfaces
 
 Public Class PluginManager
 
@@ -77,15 +78,17 @@ Public Class PluginManager
                 Dim types As Type() = item.GetTypes
                 For Each type In types
                     If IsOfType(type, GetType(ObjectTab)) Then
-                        RegisterEditorTab(type)
+                        RegisterObjectTab(type)
                     ElseIf IsOfType(type, GetType(ObjectControl)) Then
                         RegisterObjectControl(type)
+                    ElseIf IsOfType(type, GetType(Project))
+                        RegisterProjectType(PluginHelper.GetLanguageItem(type.Name, CallingAssembly:=item.GetName.Name), type)
                     End If
                 Next
             Next
-                For Each item In Plugins
-                    item.Load(Me)
-                Next
+            For Each item In Plugins
+                item.Load(Me)
+            Next
             'CheatManager.GameIDs = GameTypes
         End If
     End Sub
@@ -152,10 +155,11 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property PluginFiles As New Dictionary(Of String, List(Of String))
     Public Property CheatManager As New ARDS.Manager
-    Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
+    <Obsolete("Depricated.  Use FileTypeDetectors instead.")> Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
+    Public Property FileTypeDetectors As New List(Of FileTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property ProjectTypes As New Dictionary(Of String, Type)
-    Public Property EditorTabs As New List(Of ObjectTab)
+    Public Property ObjectTabs As New List(Of ObjectTab)
     Public Property PluginFolder As String
     Public Property ObjectControls As New List(Of ObjectControl)
     Private WithEvents _currentProject As Project
@@ -172,7 +176,8 @@ Public Class PluginManager
 
 #Region "Delegates"
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
-    Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
+    <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
+    Delegate Function FileTypeDetector(File As GenericFile) As Type
 #End Region
 
 #Region "Registration"
@@ -196,9 +201,9 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Sub RegisterEditorTab(Tab As Type)
+    Private Sub RegisterObjectTab(Tab As Type)
         If IsObjectTab(Tab) Then
-            EditorTabs.Add(Tab.GetConstructor({}).Invoke({}))
+            ObjectTabs.Add(Tab.GetConstructor({}).Invoke({}))
         End If
     End Sub
 
@@ -243,26 +248,30 @@ Public Class PluginManager
         End If
     End Sub
 
-    Public Sub RegisterProjectType(ProjectName As String, ProjectType As Type)
+    Private Sub RegisterProjectType(ProjectName As String, ProjectType As Type)
         ProjectTypes.Add(ProjectName, ProjectType)
     End Sub
 
-    ''' <summary>
-    ''' Registers a file format using the given information.
-    '''
-    ''' This is intended for generic files.  If this is a game save, use RegisterSaveGameFormat.
-    ''' </summary>
-    ''' <param name="FormatName">Human readable English identifier for the kind of save format this game uses.  Do not include an extension.</param>
-    ''' <param name="ContainerType">Type that represents the save file format.  Given Type should inherit SkyEditorBase.GenericFile</param>
-    ''' <remarks></remarks>
-    Public Sub RegisterFileFormat(FormatName As String, ContainerType As Type)
-        If Not SaveTypes.ContainsKey(FormatName) Then
-            SaveTypes.Add(FormatName, ContainerType)
-        End If
+    '''' <summary>
+    '''' Registers a file format using the given information.
+    ''''
+    '''' This is intended for generic files.  If this is a game save, use RegisterSaveGameFormat.
+    '''' </summary>
+    '''' <param name="FormatName">Human readable English identifier for the kind of save format this game uses.  Do not include an extension.</param>
+    '''' <param name="ContainerType">Type that represents the save file format.  Given Type should inherit SkyEditorBase.GenericFile</param>
+    '''' <remarks></remarks>
+    'Public Sub RegisterFileFormat(FormatName As String, ContainerType As Type)
+    '    If Not SaveTypes.ContainsKey(FormatName) Then
+    '        SaveTypes.Add(FormatName, ContainerType)
+    '    End If
+    'End Sub
+
+    <Obsolete("Depricated.  Use RegisterFileTypeDetector instead.")> Public Sub RegisterSaveTypeDetector(Detector As SaveTypeDetector)
+        SaveTypeDetectors.Add(Detector)
     End Sub
 
-    Public Sub RegisterSaveTypeDetector(Detector As SaveTypeDetector)
-        SaveTypeDetectors.Add(Detector)
+    Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
+        FileTypeDetectors.Add(Detector)
     End Sub
 
     Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
@@ -385,17 +394,8 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Function GetRefreshedTabs(Save As Object) As List(Of TabItem)
         Dim tabs As New List(Of ObjectTab)
-        For Each etab In (From e In EditorTabs Order By e.SortOrder Descending)
+        For Each etab In (From e In ObjectTabs Order By e.SortOrder Descending)
             Dim isMatch = False
-            'If TypeOf etab Is EditorTab Then
-            '    For Each game In DirectCast(etab, EditorTab).SupportedGames
-            '        If game IsNot Nothing AndAlso Save IsNot Nothing AndAlso (TypeOf Save Is GenericSave AndAlso Save.IsOfType(game)) Then
-            '            'add the tab because this save is one of the supported games
-            '            isMatch = True
-            '            Exit For
-            '        End If
-            '    Next
-            'End If
             If Not isMatch Then
                 For Each t In etab.SupportedTypes
                     If Save IsNot Nothing AndAlso ((TypeOf Save Is GenericSave AndAlso Save.IsOfType(t)) OrElse IsOfType(Save, t)) Then
@@ -404,29 +404,16 @@ Public Class PluginManager
                     End If
                 Next
             End If
-            'If isMatch Then
-            '    'If the tab is an EditorTab, only proceed if the save is a GenericSave
-            '    If TypeOf etab Is EditorTab Then
-            '        isMatch = (TypeOf Save Is GenericSave)
-            '    End If
-            'End If
             If isMatch Then
                 Dim t As ObjectTab = etab.GetType.GetConstructor({}).Invoke({})
-                Dim a As New Action(Sub()
-                                        t.EditingObject = Save
-                                        t.RefreshDisplay()
-                                    End Sub)
-                'Await Task.Run(x)
-                Dim x As New Task(a)
-                x.RunSynchronously()
+                t.EditingObject = Save
+                t.RefreshDisplay()
                 tabs.Add(t)
             End If
         Next
         Dim out As New List(Of TabItem)
         For Each item In tabs
             Dim t As New TabItem
-            'item.VerticalAlignment = VerticalAlignment.Top
-            'item.HorizontalAlignment = HorizontalAlignment.Left
             item.Margin = New Thickness(0, 0, 0, 0)
             t.Content = item
             item.ParentTabItem = t
@@ -435,20 +422,32 @@ Public Class PluginManager
         Return out
     End Function
     Public Function GetFileType(File As GenericFile) As Type
-        Dim saveID As String = ""
+        Dim out As Type = Nothing
         Dim found As Boolean = False
-        For Each item In SaveTypeDetectors
-            saveID = item.Invoke(File)
-            If Not String.IsNullOrEmpty(saveID) Then
+        For Each item In FileTypeDetectors
+            Dim t = item.Invoke(File)
+            If t IsNot Nothing Then
+                out = t
                 found = True
                 Exit For
             End If
         Next
-        If found Then
-            Return SaveTypes(saveID)
-        Else
-            Return Nothing
+        If Not found Then
+            Dim saveID As String = Nothing
+            For Each item In SaveTypeDetectors
+                saveID = item.Invoke(File)
+                If Not String.IsNullOrEmpty(saveID) Then
+                    found = True
+                    Exit For
+                End If
+            Next
+            If found Then
+                Return SaveTypes(saveID)
+            Else
+                Return Nothing
+            End If
         End If
+        Return out
     End Function
     Public Function OpenFile(Filename As String) As GenericFile
         Return OpenFile(New GenericFile(Filename))
