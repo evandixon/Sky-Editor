@@ -38,7 +38,7 @@ Public Class SkyEditorInfo
         'Manager.RegisterObjectControl(New Controls.MDAttack)
         'Manager.RegisterObjectControl(New Controls.iAttack)
 
-        Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
+        'Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
         Manager.RegisterIOFilter("*.sav", PluginHelper.GetLanguageItem("Raw Save File"))
         Manager.RegisterIOFilter("*.dsv", PluginHelper.GetLanguageItem("DeSmuMe Save File"))
 

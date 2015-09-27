@@ -4,6 +4,7 @@ Imports SkyEditor
 Namespace Saves
     Public Class GatesGameData
         Inherits GenericSave
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Protected Property Bits As Binary
         Dim originalChecksum As Byte
         Public Sub New(Filename As String)

@@ -3,6 +3,7 @@
 Namespace Saves
     Public Class TDSave
         Inherits GenericSave
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Protected Property Bits As Binary
         Public Sub New(Filename As String)
             MyBase.New(Filename)
@@ -88,6 +89,15 @@ Namespace Saves
             Next
         End Sub
 #End Region
+
+        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+            If File.Length > Offsets.ChecksumEnd Then
+                Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd))
+                Return (File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))
+            Else
+                Return False
+            End If
+        End Function
     End Class
 
 End Namespace

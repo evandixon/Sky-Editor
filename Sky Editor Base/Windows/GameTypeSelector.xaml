@@ -1,11 +1,11 @@
 ﻿<Window x:Class="SkyEditorWindows.GameTypeSelector"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Game Selector" Height="143" Width="345">
+        xmlns:local="clr-namespace:SkyEditorBase"
+    Title="File Type Selector" Height="143" Width="345">
     <Grid>
-        <Label x:Name="lbGame" Content="Game" HorizontalAlignment="Left" Margin="10,0,0,47" VerticalAlignment="Bottom" />
-        <ComboBox x:Name="cbGame" Margin="56,0,10,47" Height="22" VerticalAlignment="Bottom" />
-        <Label x:Name="lbGameSelectorQuestion" Content="What game is this save for?" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
+        <local:SearchableDropDown x:Name="cbGame" Margin="10,0,10,47" Height="22" VerticalAlignment="Bottom" />
+        <Label x:Name="lbGameSelectorQuestion" Content="What type of file is this?" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" />
         <Button x:Name="btnOK" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="Button_Click" />
     </Grid>
 </Window>

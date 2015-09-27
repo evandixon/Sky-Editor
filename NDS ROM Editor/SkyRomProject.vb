@@ -22,15 +22,16 @@ Public Class SkyRomProject
         For count = 0 To backFiles.Count - 1
             PluginHelper.StartLoading("Converting backgrounds...", count / backFiles.Count)
             Dim item = backFiles(count)
-            Dim b As New FileFormats.BGP(item)
-            Dim image = Await b.GetImage
-            Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
-            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
-                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
-            End If
-            image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
-            IO.File.Copy(newFilename, newFilename & ".original")
-            OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+            Using b As New FileFormats.BGP(item)
+                Dim image = Await b.GetImage
+                Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
+                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
+                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
+                End If
+                image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
+                IO.File.Copy(newFilename, newFilename & ".original")
+                OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(modFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+            End Using
         Next
 
         ''Open Language
@@ -50,12 +51,14 @@ Public Class SkyRomProject
         languageDictionary.Add("text_j.str", "Japanese")
         For Each item In languageDictionary
             If IO.File.Exists(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key)) Then
-                Dim langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
-                Dim langList As New ObjectFile(Of List(Of String))
-                langList.ContainedObject = langString.Items
-                langList.Save(IO.Path.Combine(modDirectory, "Languages", item.Value))
+                Using langString = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
+                    Using langList As New ObjectFile(Of List(Of String))
+                        langList.ContainedObject = langString.Items
+                        langList.Save(IO.Path.Combine(modDirectory, "Languages", item.Value))
 
-                OpenFile(IO.Path.Combine(modDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
+                        OpenFile(IO.Path.Combine(modDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
+                    End Using
+                End Using
             End If
         Next
 
@@ -124,10 +127,11 @@ Public Class SkyRomProject
         'Convert Personality Test
         PluginHelper.StartLoading("Converting Personality Test")
         Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(romDirectory, "Overlay", "overlay_0013.bin"))
-        Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
-        personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
-        personalityTest.Save(IO.Path.Combine(modDirectory, "Starter Pokemon"))
-        OpenFile(IO.Path.Combine(modDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
+        Using personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
+            personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
+            personalityTest.Save(IO.Path.Combine(modDirectory, "Starter Pokemon"))
+            OpenFile(IO.Path.Combine(modDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
+        End Using
 
         'Convert Portraits
         'PluginHelper.StartLoading("Unpacking portraits...")
@@ -179,6 +183,7 @@ Public Class SkyRomProject
                 If includeInPack Then
                     Dim bgp = FileFormats.BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
                     bgp.Save(IO.Path.Combine(IO.Path.GetDirectoryName(e.NDSModSourceFilename), IO.Path.GetFileNameWithoutExtension(e.NDSModSourceFilename), "RawFiles", "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
+                    bgp.Dispose()
                 End If
 
             Next
@@ -193,6 +198,7 @@ Public Class SkyRomProject
             overlay13.Save()
         End If
 
+
         'Convert Languages
         Dim languageDictionary As New Dictionary(Of String, String)
         languageDictionary.Add("text_e.str", "English")
@@ -203,17 +209,21 @@ Public Class SkyRomProject
         languageDictionary.Add("text_j.str", "Japanese")
         For Each item In languageDictionary
             If IO.File.Exists(IO.Path.Combine(modDirectory, "Languages", item.Value)) Then
-                Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(modDirectory, "Languages", item.Value))
-                Dim langString As New FileFormats.LanguageString
-                langString.Items = langFile.ContainedObject
+                Using langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(modDirectory, "Languages", item.Value))
+                    Using langString As New FileFormats.LanguageString
+                        langString.Items = langFile.ContainedObject
 
-                If personalityTest IsNot Nothing Then
-                    langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
-                End If
+                        If personalityTest IsNot Nothing Then
+                            langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
+                        End If
 
-                langString.Save(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
+                        langString.Save(IO.Path.Combine(romDirectory, "Data", "MESSAGE", item.Key))
+                    End Using
+                End Using
             End If
         Next
+
+        If personalityTest IsNot Nothing Then personalityTest.Dispose()
 
         'Copy Items
         Dim item_p_path As String = IO.Path.Combine(romDirectory, "Data", "BALANCE", "item_p.bin")

@@ -4,6 +4,7 @@ Imports SkyEditorBase
 Namespace FileFormats
     Public Class NDSModSource
         Inherits GenericFile
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Dim _filename As String
         Public Property Settings As Dictionary(Of String, String)
         Public Property ModName As String

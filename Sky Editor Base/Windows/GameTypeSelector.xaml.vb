@@ -25,10 +25,7 @@ Namespace SkyEditorWindows
         End Sub
 
         Private Sub GameTypeSelector_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            btnOK.Content = PluginHelper.GetLanguageItem("OK")
-            lbGame.Content = PluginHelper.GetLanguageItem("Game")
-            lbGameSelectorQuestion.Content = PluginHelper.GetLanguageItem("GameSelectorQuestion", "What game is this save for?")
-            Me.Title = PluginHelper.GetLanguageItem("GameSelectorTitle", "Game Selector")
+            PluginHelper.TranslateForm(Me)
         End Sub
         Public Shadows Function ShowDialog() As Boolean Implements iGameTypeSelector.ShowDialog
             Return MyBase.ShowDialog

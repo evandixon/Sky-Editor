@@ -2,10 +2,11 @@
 Public Class GenericFile
     Implements IDisposable
     Implements iModifiable
-    Implements iCreatableFile
-    Implements iOpenableFile
+    'Implements iCreatableFile 'Excluded because not everything that inherits from this applies
+    'Implements iOpenableFile 'Excluded because not everything that inherits from this applies
     Implements iSavable
     Protected _tempname As String
+    Protected _tempFilename As String
     Dim _fileReader As IO.FileStream
 
 #Region "Constructors"
@@ -17,25 +18,42 @@ Public Class GenericFile
         Else
             IO.File.WriteAllText(PluginHelper.GetResourceName(_tempname & ".tmp"), "")
         End If
+        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
         Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
     End Sub
     Public Sub New(RawData As Byte())
         _tempname = Guid.NewGuid.ToString()
         IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
         Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
+        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
         Me.OriginalFilename = Filename
     End Sub
     Public Sub New()
         _tempname = Guid.NewGuid.ToString()
         IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), {})
         Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        Me.OriginalFilename = Filename
+        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
+        Me.OriginalFilename = String.Empty
     End Sub
 #End Region
 
 #Region "Properties"
     Public Property Filename As String
     Public Property OriginalFilename As String
+    Public Property Name As String
+        Get
+            If _name Is Nothing Then
+                Return IO.Path.GetFileName(OriginalFilename)
+            Else
+                Return _name
+            End If
+        End Get
+        Set(value As String)
+            _name = value
+        End Set
+    End Property
+    Dim _name As String = Nothing
+
     Protected ReadOnly Property FileReader As IO.FileStream
         Get
             If _fileReader Is Nothing Then
@@ -70,6 +88,14 @@ Public Class GenericFile
         Set(value As Byte())
             FileReader.Seek(Index, IO.SeekOrigin.Begin)
             FileReader.Write(value, 0, Length)
+        End Set
+    End Property
+    Public Property RawData() As Byte()
+        Get
+            Return RawData(0, Length)
+        End Get
+        Set(value As Byte())
+            RawData(0, Length) = value
         End Set
     End Property
     Public Property Length As Long
@@ -161,7 +187,7 @@ Public Class GenericFile
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
                 If _fileReader IsNot Nothing Then _fileReader.Dispose()
-                If IO.File.Exists(_tempname) Then IO.File.Delete(_tempname)
+                If IO.File.Exists(_tempFilename) Then IO.File.Delete(_tempFilename)
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

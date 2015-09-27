@@ -7,14 +7,13 @@
         <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <MenuItem x:Name="menuFile" Header="_File">
                 <MenuItem Header="_New">
-                    <MenuItem x:Name="menuNew" Header="_File" Visibility="Collapsed" />
+                    <MenuItem x:Name="menuNew" Header="_File" />
                     <MenuItem x:Name="menuNewProject" Header="_Project"/>
-                </MenuItem>
-                <MenuItem x:Name="menuFileOpenAuto" Header="_Open" /> <!-- (_Auto-Detect Game) -->
-                <!--<MenuItem x:Name="menuFileOpen" Header="_Open">
-                    
+                </MenuItem> 
+                 <MenuItem x:Name="menuFileOpen" Header="_Open">
+                    <MenuItem x:Name="menuFileOpenAuto" Header="Open (_Auto-Detect Game)" />
                     <MenuItem x:Name="menuFileOpenNoDetect" Header="Open (Let me _Choose Game)" />
-                </MenuItem>-->
+                </MenuItem>
                 <MenuItem Header="_Save">
                     <MenuItem x:Name="menuFileSaveFile" Header="Save _File" />
                     <MenuItem x:Name="menuFileSaveAs" Header="Save File _As..." />

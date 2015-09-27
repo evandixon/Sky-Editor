@@ -4,6 +4,7 @@ Imports SkyEditorBase
 Namespace Roms
     Public Class GenericNDSRom
         Inherits GenericSave
+        Implements SkyEditorBase.Interfaces.iOpenableFile
 
 #Region "Constructors"
         Sub New()
@@ -387,7 +388,7 @@ Namespace Roms
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
-                    _unpackTask.Dispose()
+                    If _unpackTask IsNot Nothing Then _unpackTask.Dispose()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

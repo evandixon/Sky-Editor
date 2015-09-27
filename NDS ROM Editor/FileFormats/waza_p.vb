@@ -3,6 +3,7 @@ Imports SkyEditorBase
 Namespace FileFormats
     Public Class waza_p
         Inherits GenericFile
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Public Property Pokemon As List(Of PokemonMoves)
         Public Class PokemonMoves
             Public Property LevelUpMoves As Dictionary(Of Byte, UInt16)

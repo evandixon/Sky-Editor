@@ -4,6 +4,7 @@ Imports SkyEditorBase
 Namespace Roms
     Public Class SkyNDSRom
         Inherits GenericNDSRom
+        Implements SkyEditorBase.Interfaces.iOpenableFile
 
 #Region "Constructors"
         Public Sub New(Filename As String)
@@ -62,9 +63,13 @@ Namespace Roms
         End Function
 #End Region
 
-        Public Shared Function IsSkyNDSRom(File As GenericFile) As Boolean
+        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
             Dim e As New System.Text.ASCIIEncoding
-            Return (e.GetString(File.RawData(0, 12)).Trim) = GameStrings.SkyROMHeader
+            If File.Length > 12 Then
+                Return (e.GetString(File.RawData(0, 12)).Trim) = GameStrings.SkyROMHeader
+            Else
+                Return False
+            End If
         End Function
 
     End Class

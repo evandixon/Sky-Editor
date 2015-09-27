@@ -5,6 +5,7 @@ Imports SkyEditorBase
 Namespace FileFormats
     Public Class LanguageString
         Inherits GenericFile
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Public Enum Region
             US
             Europe

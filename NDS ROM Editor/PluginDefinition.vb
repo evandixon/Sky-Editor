@@ -4,27 +4,10 @@ Imports SkyEditorBase.Interfaces
 
 Public Class PluginDefinition
     Implements iSkyEditorPlugin
-    Public Function AutoDetectSaveType(File As GenericFile) As String
-        Dim out As String = Nothing
-        If SkyNDSRom.IsSkyNDSRom(File) Then
-            out = GameStrings.SkyNDSRom
-        ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
-            out = GameStrings.BGPFile
-        ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
-            out = GameStrings.NDSModSourceFile
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Item Definitions".ToLower
-            out = GameStrings.item_p_File
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
-            out = GameStrings.item_s_p_File
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
-            out = GameStrings.PersonalityTest
-        End If
-        Return out
-    End Function
 
     Public Function AutoDetectFileType(File As GenericFile) As Type
         Dim out As Type = Nothing
-        If SkyNDSRom.IsSkyNDSRom(File) Then
+        If SkyNDSRom.IsFileOfType(File) Then
             out = GetType(SkyNDSRom)
         ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
             out = GetType(FileFormats.BGP)
@@ -84,7 +67,7 @@ Public Class PluginDefinition
 
         'Manager.RegisterProjectType("Explorers of Sky Rom Mod", GetType(SkyRomProject))
 
-        Manager.RegisterFileTypeDetector(AddressOf AutoDetectFileType)
+        'Manager.RegisterFileTypeDetector(AddressOf AutoDetectFileType)
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

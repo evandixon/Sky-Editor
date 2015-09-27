@@ -39,8 +39,18 @@ Public Class MainWindow2
 
 #Region "MenuItems"
     Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
-        'Todo: Let user create new file
-        'RemoveWelcomePage
+        'Get what kind of file to create.
+        Dim w As New SkyEditorWindows.NewFileWindow()
+        Dim games As New Dictionary(Of String, Type)
+        For Each item In _manager.CreatableFiles
+            games.Add(PluginHelper.GetLanguageItem(item.Name), item)
+        Next
+        w.AddGames(games.Keys)
+        If w.ShowDialog Then
+            Dim file As GenericFile = _manager.CreateNewFile(w.SelectedName, games(w.SelectedGame))
+            docPane.Children.Add(New DocumentTab(file, _manager, True))
+            RemoveWelcomePage()
+        End If
     End Sub
     Private Sub menuFileOpenAuto_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
         OpenFileDialog1.Filter = _manager.IOFiltersString
@@ -48,9 +58,25 @@ Public Class MainWindow2
             If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
                 _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
             Else
-                docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
+                docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager, True))
             End If
             RemoveWelcomePage()
+        End If
+    End Sub
+    Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
+        OpenFileDialog1.Filter = _manager.IOFiltersString
+        If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+            Dim w As New SkyEditorWindows.GameTypeSelector()
+            Dim games As New Dictionary(Of String, Type)
+            For Each item In _manager.OpenableFiles
+                games.Add(PluginHelper.GetLanguageItem(item.Name), item)
+            Next
+            w.AddGames(games.Keys)
+            If w.ShowDialog Then
+                Dim file As GenericFile = _manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame))
+                docPane.Children.Add(New DocumentTab(file, _manager, True))
+                RemoveWelcomePage()
+            End If
         End If
     End Sub
     Private Sub menuFileSaveFile_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveFile.Click
@@ -112,17 +138,6 @@ Public Class MainWindow2
         _manager.CurrentProject.Run()
     End Sub
 
-    'Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
-    '    'OpenFileDialog1.Filter = _manager.IOFiltersString
-    '    'If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-    '    '    If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
-    '    '        _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
-    '    '    Else
-    '    '        'Todo: open auto-detect window
-    '    '        docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
-    '    '    End If
-    '    'End If
-    'End Sub
 #End Region
 
 #Region "Form"
@@ -165,6 +180,13 @@ Public Class MainWindow2
                 e.Cancel = True
             End If
         End If
+        For count As Integer = docPane.ChildrenCount - 1 To 0 Step -1
+            Dim item = docPane.Children(count)
+            If TypeOf item Is DocumentTab Then
+                DirectCast(item, DocumentTab).Dispose()
+            End If
+        Next
+        _manager.Dispose()
     End Sub
 #End Region
 

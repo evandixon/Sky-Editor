@@ -4,6 +4,7 @@ Imports System.Threading.Tasks
 Imports SkyEditorBase.Interfaces
 
 Public Class PluginManager
+    Implements IDisposable
 
 #Region "Constructors"
     Private Shared _instance As PluginManager
@@ -83,12 +84,25 @@ Public Class PluginManager
                         RegisterObjectControl(type)
                     ElseIf IsOfType(type, GetType(Project))
                         RegisterProjectType(PluginHelper.GetLanguageItem(type.Name, CallingAssembly:=item.GetName.Name), type)
+                    ElseIf IsOfType(type, GetType(GenericFile))
+                        If type.GetMethod("IsFileOfType") IsNot Nothing Then
+                            GenericFilesWithTypeValidator.Add(type)
+                        End If
                     End If
+                    For Each i In type.GetInterfaces
+                        If i Is GetType(Interfaces.iCreatableFile) AndAlso type.GetConstructor({}) IsNot Nothing Then
+                            CreatableFiles.Add(type)
+                        ElseIf i Is GetType(Interfaces.iOpenableFile) AndAlso type.GetConstructor({GetType(String)}) IsNot Nothing
+                            OpenableFiles.Add(type)
+                        End If
+                    Next
                 Next
             Next
             For Each item In Plugins
                 item.Load(Me)
             Next
+            RegisterFileTypeDetector(AddressOf Me.DetectFileType)
+            RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
             'CheatManager.GameIDs = GameTypes
         End If
     End Sub
@@ -154,6 +168,25 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property PluginFiles As New Dictionary(Of String, List(Of String))
+
+    ''' <summary>
+    ''' List of types of files that support creation (ie. a default constructor for the context of creating a new file).
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property CreatableFiles As New List(Of Type)
+
+    ''' <summary>
+    ''' List of types of files that support opening (ie. a constructor with a filename).
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property OpenableFiles As New List(Of Type)
+
+    ''' <summary>
+    ''' List of all GenericFile classes that have a shared method with signature: IsFileOfType(GenericFile) as Boolean
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property GenericFilesWithTypeValidator As New List(Of Type)
+
     Public Property CheatManager As New ARDS.Manager
     <Obsolete("Depricated.  Use FileTypeDetectors instead.")> Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
@@ -168,6 +201,7 @@ Public Class PluginManager
             Return _currentProject
         End Get
         Set(value As Project)
+            If _currentProject IsNot Nothing Then _currentProject.Dispose()
             _currentProject = value
             RaiseEvent ProjectChanged(Me, value)
         End Set
@@ -177,7 +211,7 @@ Public Class PluginManager
 #Region "Delegates"
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
     <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
-    Delegate Function FileTypeDetector(File As GenericFile) As Type
+    Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
 #End Region
 
 #Region "Registration"
@@ -363,6 +397,7 @@ Public Class PluginManager
     Public Event ProjectChanged(sender As Object, NewProject As Project)
     Public Event ProjectDirectoryCreated(sender As Object, File As String)
 #End Region
+
     ''' <summary>
     ''' Gets an object control that can edit the given object.
     ''' </summary>
@@ -422,45 +457,60 @@ Public Class PluginManager
         Return out
     End Function
     Public Function GetFileType(File As GenericFile) As Type
-        Dim out As Type = Nothing
-        Dim found As Boolean = False
+        Dim matches As New List(Of Type)
         For Each item In FileTypeDetectors
             Dim t = item.Invoke(File)
             If t IsNot Nothing Then
-                out = t
-                found = True
-                Exit For
+                For Each match In t
+                    matches.Add(match)
+                Next
             End If
         Next
-        If Not found Then
+        If matches.Count > 0 Then
             Dim saveID As String = Nothing
             For Each item In SaveTypeDetectors
                 saveID = item.Invoke(File)
                 If Not String.IsNullOrEmpty(saveID) Then
-                    found = True
-                    Exit For
+                    matches.Add(SaveTypes(saveID))
                 End If
             Next
-            If found Then
-                Return SaveTypes(saveID)
+        End If
+        If matches.Count = 0 Then
+            Return Nothing
+        ElseIf matches.Count = 1
+            Return matches(0)
+        Else
+            Dim w As New SkyEditorWindows.GameTypeSelector()
+            Dim games As New Dictionary(Of String, Type)
+            For Each item In matches
+                games.Add(PluginHelper.GetLanguageItem(item.Name), item)
+            Next
+            w.AddGames(games.Keys)
+            If w.ShowDialog Then
+                Return games(w.SelectedGame)
             Else
                 Return Nothing
             End If
         End If
-        Return out
+    End Function
+    Public Function CreateNewFile(NewFileName As String, FileType As Type) As GenericFile
+        Dim file As GenericFile = FileType.GetConstructor({}).Invoke({})
+        file.Name = NewFileName & file.DefaultExtension
+        Return file
+    End Function
+    Public Function OpenFile(Filename As String, FileType As Type) As GenericFile
+        Return FileType.GetConstructor({GetType(String)}).Invoke({Filename})
     End Function
     Public Function OpenFile(Filename As String) As GenericFile
         Return OpenFile(New GenericFile(Filename))
     End Function
     Public Function OpenFile(File As GenericFile) As GenericFile
         Dim type = GetFileType(File)
-        If type Is Nothing Then
+        If type Is Nothing OrElse Not IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
             Return File
         Else
             Dim out As GenericFile = type.GetConstructor({GetType(String)}).Invoke({File.OriginalFilename})
-            If TypeOf out Is GenericSave Then
-                DirectCast(out, GenericSave).Name = IO.Path.GetFileName(File.OriginalFilename)
-            End If
+            File.Dispose()
             Return out
         End If
     End Function
@@ -517,4 +567,83 @@ Public Class PluginManager
     Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
         RaiseEvent ProjectDirectoryCreated(sender, Directory)
     End Sub
+
+    Public Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
+        Dim matches As New List(Of Type)
+        For Each item In GenericFilesWithTypeValidator
+            If item.GetMethod("IsFileOfType").Invoke(Nothing, {File}) Then
+                matches.Add(item)
+            End If
+        Next
+        If matches.Count = 0 Then
+            Return Nothing
+        Else
+            Return matches
+        End If
+    End Function
+
+    ''' <summary>
+    ''' If the given file is of type ObjectFile, returns the contained Type.
+    ''' Otherwise, returns Nothing.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    ''' <returns></returns>
+    Public Shared Function TryGetObjectFileType(Filename As String) As Type
+        Try
+            Dim f As New ObjectFile(Of Object)(Filename)
+            Return Type.GetType(f.ContainedTypeName, False)
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+    ''' <summary>
+    ''' If the given file is of type ObjectFile, returns the contained Type.
+    ''' Otherwise, returns Nothing.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Shared Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of Type)
+        If File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
+            Dim result = TryGetObjectFileType(File.OriginalFilename)
+            If result Is Nothing Then
+                Return Nothing
+            Else
+                Return {result}
+            End If
+        Else
+            Return Nothing
+        End If
+    End Function
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' To detect redundant calls
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+                ' TODO: dispose managed state (managed objects).
+                CurrentProject.Dispose()
+            End If
+
+            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+            ' TODO: set large fields to null.
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        ' GC.SuppressFinalize(Me)
+    End Sub
+#End Region
 End Class

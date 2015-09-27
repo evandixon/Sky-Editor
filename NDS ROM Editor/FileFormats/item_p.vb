@@ -2,6 +2,7 @@
 Namespace FileFormats
     Public Class item_p
         Inherits GenericFile
+        Implements SkyEditorBase.Interfaces.iOpenableFile
         Public Property Items As List(Of Item)
         Public Class Item
             Public Property RawData As Byte()

@@ -40,27 +40,4 @@ Public Class ObjectFile(Of T)
         Save(Me.Filename)
     End Sub
 
-    ''' <summary>
-    ''' If the given file is of type ObjectFile, returns the contained Type.
-    ''' Otherwise, returns Nothing.
-    ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <returns></returns>
-    Public Shared Function TryGetType(Filename As String) As Type
-        Try
-            Dim f As New ObjectFile(Of Object)(Filename)
-            Return Type.GetType(f.ContainedTypeName, False)
-        Catch ex As Exception
-            Return Nothing
-        End Try
-    End Function
-    ''' <summary>
-    ''' If the given file is of type ObjectFile, returns the contained Type.
-    ''' Otherwise, returns Nothing.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Shared Function TryGetType(File As GenericFile) As Type
-        Return TryGetType(File.OriginalFilename)
-    End Function
-
 End Class

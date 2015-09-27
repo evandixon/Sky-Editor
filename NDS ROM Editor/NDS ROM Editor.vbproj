@@ -98,9 +98,6 @@
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
-    <Compile Include="Editor Tabs\BackgroundsTab.xaml.vb">
-      <DependentUpon>BackgroundsTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Editor Tabs\FilesTab.xaml.vb">
       <DependentUpon>FilesTab.xaml</DependentUpon>
     </Compile>
@@ -223,10 +220,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Editor Tabs\BackgroundsTab.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Editor Tabs\FilesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
