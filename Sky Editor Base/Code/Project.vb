@@ -47,6 +47,49 @@ Public Class Project
     End Sub
 #End Region
 
+#Region "Events"
+    Public Event FileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile))
+    Public Event FileRemoved(sender As Object, File As String)
+    Public Event DirectoryCreated(sender As Object, Directory As String)
+    Public Event DirectoryRemoved(sender As Object, Directory As String)
+    Public Event Modified(sender As Object, e As EventArgs)
+#End Region
+
+#Region "Overridable Functions"
+    ''' <summary>
+    ''' Determines whether or not a directory can be created inside the given path.
+    ''' </summary>
+    ''' <param name="InternalPath"></param>
+    ''' <returns></returns>
+    Public Overridable Function CanCreateDirectory(InternalPath As String) As Boolean
+        Return True
+    End Function
+    ''' <summary>
+    ''' Returns File Type IDs of files that can be created inside the given path..
+    ''' </summary>
+    ''' <param name="InternalPath"></param>
+    ''' <returns></returns>
+    Public Overridable Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
+        Return Manager.SaveTypes.Keys.ToList
+    End Function
+
+    ''' <summary>
+    ''' Returns whether or not the current project type supports building.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Overridable Function CanBuild() As Boolean
+        Return PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("Build"))
+    End Function
+
+    ''' <summary>
+    ''' Returns whether or not the current project type supports running.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Overridable Function CanRun() As Boolean
+        Return PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("Run"))
+    End Function
+#End Region
+
     Public Shared Function CreateProject(Name As String, Location As String, ProjectType As String, Manager As PluginManager)
         Dim p As Project
         If Not String.IsNullOrEmpty(ProjectType) Then
@@ -108,13 +151,7 @@ Public Class Project
     End Sub
 #End Region
 
-#Region "Events"
-    Public Event FileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile))
-    Public Event FileRemoved(sender As Object, File As String)
-    Public Event DirectoryCreated(sender As Object, Directory As String)
-    Public Event DirectoryRemoved(sender As Object, Directory As String)
-    Public Event Modified(sender As Object, e As EventArgs)
-#End Region
+
     Private Function JoinDirs(Dirs As String(), Depth As Integer) As String
         Dim out As New StringBuilder
         For count = 0 To Depth
@@ -159,22 +196,7 @@ Public Class Project
         '    Return (From file In Files Where file.Key.Contains("/") OrElse file.Key.Contains("\") AndAlso Not String.IsNullOrEmpty(InternalPath) Select file.Key).ToList
         'End If
     End Function
-    ''' <summary>
-    ''' Determines whether or not a directory can be created inside the given path.
-    ''' </summary>
-    ''' <param name="InternalPath"></param>
-    ''' <returns></returns>
-    Public Overridable Function CanCreateDirectory(InternalPath As String) As Boolean
-        Return True
-    End Function
-    ''' <summary>
-    ''' Returns File Type IDs of files that can be created inside the given path..
-    ''' </summary>
-    ''' <param name="InternalPath"></param>
-    ''' <returns></returns>
-    Public Overridable Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
-        Return Manager.SaveTypes.Keys.ToList
-    End Function
+
 
 
     Public Sub CreateDirectory(InternalPath As String, Optional CreateInFileSystem As Boolean = True)

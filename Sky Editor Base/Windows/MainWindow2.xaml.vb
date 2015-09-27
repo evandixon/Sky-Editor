@@ -1,5 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Timers
+Imports SkyEditorBase
+Imports Xceed.Wpf.AvalonDock.Layout
 
 Public Class MainWindow2
 
@@ -29,6 +31,7 @@ Public Class MainWindow2
 
     Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, GenericFile))
         docPane.Children.Add(New DocumentTab(File.Value, _manager))
+        RemoveWelcomePage()
     End Sub
 
 
@@ -37,6 +40,7 @@ Public Class MainWindow2
 #Region "MenuItems"
     Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
         'Todo: Let user create new file
+        'RemoveWelcomePage
     End Sub
     Private Sub menuFileOpenAuto_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
         OpenFileDialog1.Filter = _manager.IOFiltersString
@@ -46,6 +50,7 @@ Public Class MainWindow2
             Else
                 docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager))
             End If
+            RemoveWelcomePage()
         End If
     End Sub
     Private Sub menuFileSaveFile_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveFile.Click
@@ -95,6 +100,7 @@ Public Class MainWindow2
         Dim newProj As New NewProjectWindow(_manager)
         If newProj.ShowDialog() Then
             _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, newProj.SelectedProjectType, _manager)
+            RemoveWelcomePage()
         End If
     End Sub
 
@@ -139,6 +145,10 @@ Public Class MainWindow2
 
         _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
 
+        RefreshBuildRunVisibility()
+
+        ShowWelcomePage()
+
         AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
@@ -167,6 +177,7 @@ Public Class MainWindow2
         If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
             If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
                 docPane.Children.Add(New DocumentTab(_manager.CurrentProject.Files(ProjectFile), _manager))
+                RemoveWelcomePage()
             End If
         End If
     End Sub
@@ -188,6 +199,38 @@ Public Class MainWindow2
                                               End Sub))
         End If
     End Sub
-#End Region
 
+    Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
+        RefreshBuildRunVisibility()
+    End Sub
+#End Region
+    Private Sub RefreshBuildRunVisibility()
+        If _manager.CurrentProject.CanBuild Then
+            menuBuild.Visibility = Visibility.Visible
+        Else
+            menuBuild.Visibility = Visibility.Collapsed
+        End If
+        If _manager.CurrentProject.CanRun Then
+            menuRun.Visibility = Visibility.Visible
+        Else
+            menuRun.Visibility = Visibility.Collapsed
+        End If
+    End Sub
+    Private Sub ShowWelcomePage()
+        Dim l As New LayoutDocument
+        l.Content = New WelcomeTabContent
+        l.Title = PluginHelper.GetLanguageItem("Welcome")
+        docPane.Children.Add(l)
+    End Sub
+    Private Sub RemoveWelcomePage()
+        Dim tabs As New List(Of LayoutDocument)
+        For Each item In docPane.Children
+            If TypeOf item.Content Is WelcomeTabContent Then
+                tabs.Add(item)
+            End If
+        Next
+        For Each item In tabs
+            docPane.Children.Remove(item)
+        Next
+    End Sub
 End Class

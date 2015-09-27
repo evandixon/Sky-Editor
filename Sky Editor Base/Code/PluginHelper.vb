@@ -423,4 +423,11 @@ Public Class PluginHelper
         'Delete the target directory
         IO.Directory.Delete(DirectoryPath, True)
     End Sub
+
+#Region "Reflection Helpers"
+    Public Shared Function IsMethodOverridden(Method As MethodInfo) As Boolean
+        Return Not (Method.GetBaseDefinition = Method)
+    End Function
+#End Region
+
 End Class

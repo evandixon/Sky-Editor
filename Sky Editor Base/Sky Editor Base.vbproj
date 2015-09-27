@@ -225,8 +225,8 @@
     <Compile Include="Windows\GameTypeSelector.xaml.vb">
       <DependentUpon>GameTypeSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WelcomeTab.xaml.vb">
-      <DependentUpon>WelcomeTab.xaml</DependentUpon>
+    <Compile Include="WelcomeTabContent.xaml.vb">
+      <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow2.xaml.vb">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
@@ -278,7 +278,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WelcomeTab.xaml">
+    <Page Include="WelcomeTabContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
