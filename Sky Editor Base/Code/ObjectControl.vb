@@ -46,10 +46,18 @@ Public MustInherit Class ObjectControl(Of T)
 
     Public Property EditingItem As T
         Get
-            Return DirectCast(MyBase.EditingObject, T)
+            If ObjectFile(Of T).IsObjectFile(Me.EditingObject) Then
+                Return DirectCast(Me.EditingObject, ObjectFile(Of T)).ContainedObject
+            Else
+                Return DirectCast(MyBase.EditingObject, T)
+            End If
         End Get
         Set(value As T)
-            MyBase.EditingObject = value
+            If ObjectFile(Of T).IsObjectFile(Me.EditingObject) Then
+                DirectCast(Me.EditingObject, ObjectFile(Of T)).ContainedObject = value
+            Else
+                Me.EditingObject = value
+            End If
         End Set
     End Property
 

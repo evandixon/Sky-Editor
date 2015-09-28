@@ -538,7 +538,7 @@ Public Class PluginManager
         End If
     End Function
 
-    Private Shared Function IsOfType(Obj As Object, TypeToCheck As Type) As Boolean
+    Private Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
         Dim match = False
         Dim g As Type = Nothing
         If TypeOf Obj Is Type Then
@@ -551,7 +551,7 @@ Public Class PluginManager
             g = Obj.GetType
         End If
         If Not match Then
-            match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck))
+            match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck, CheckObjectFile))
         End If
         If Not match Then
             For Each item In g.GetInterfaces
@@ -560,6 +560,12 @@ Public Class PluginManager
                     Exit For
                 End If
             Next
+        End If
+        If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
+            'Check to see if this is an object file of the type we're looking for
+            If IsOfType(ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), TypeToCheck, False) Then
+                match = True
+            End If
         End If
         Return match
     End Function
@@ -593,7 +599,11 @@ Public Class PluginManager
     Public Shared Function AssemblyResolver(Name As AssemblyName) As Assembly
         Dim results = From a In PluginManager.GetInstance.Assemblies Where a.FullName = Name.FullName
 
-        Return results.First
+        Try
+            Return results.First
+        Catch ex As Exception
+            Return Assembly.GetCallingAssembly
+        End Try
     End Function
     Public Shared Function TypeResolver(A As Assembly, TypeName As String, ignoreCase As Boolean) As Type
         Return A.GetType(TypeName, False, True)
@@ -608,7 +618,8 @@ Public Class PluginManager
     Public Shared Function TryGetObjectFileType(Filename As String) As Type
         Try
             Dim f As New ObjectFile(Of Object)(Filename)
-            Return GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
+            'Doesn't work for ObjectFiles
+            Return Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False) 'GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
         Catch ex As Exception
             Return Nothing
         End Try

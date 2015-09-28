@@ -145,7 +145,7 @@ Public Class GenericNDSModProject
         For count = 0 To modFiles.Length - 1
             PluginHelper.StartLoading(String.Format("Building mod {0} of {1}", count + 1, modFiles.Length))
             Dim ndsmod = modFiles(count)
-            Using modsrc = New FileFormats.NDSModSource(ndsmod)
+            Using modsrc = (New FileFormats.NDSModSource(ndsmod))
 
                 Dim e As New NDSModBuildingEventArgs
                 e.NDSModSourceFilename = ndsmod
@@ -205,12 +205,12 @@ Public Class GenericNDSModProject
                 'End If
 
                 Try
-                    actions.DependenciesBefore.AddRange(modsrc.Settings("DependenciesBefore").Split(";"))
-                    actions.DependenciesAfter.AddRange(modsrc.Settings("DependenciesAfter").Split(";"))
-                    actions.Name = modsrc.Settings("Name")
-                    actions.Author = modsrc.Settings("Author")
-                    actions.Description = modsrc.Settings("Description")
-                    actions.UpdateUrl = modsrc.Settings("UpdateUrl")
+                    actions.DependenciesBefore.AddRange(modsrc.ContainedObject.DependenciesBefore)
+                    actions.DependenciesAfter.AddRange(modsrc.ContainedObject.DependenciesAfter)
+                    actions.Name = modsrc.ContainedObject.ModName
+                    actions.Author = modsrc.ContainedObject.Author
+                    actions.Description = modsrc.ContainedObject.Description
+                    actions.UpdateUrl = modsrc.ContainedObject.UpdateURL
                 Catch ex As Exception
                     MessageBox.Show("The ndsmodsrc file is invalid and will not be used.")
                     actions.DependenciesBefore = Nothing

@@ -21,16 +21,8 @@ Public Class DocumentTab
             Return _file
         End Get
         Set(value As GenericFile)
-            If TypeOf value Is GenericSave Then
-                Dim tabControl As New TabControl
-                tabControl.TabStripPlacement = Controls.Dock.Left
-                For Each item In _manager.GetRefreshedTabs(value)
-                    tabControl.Items.Add(item)
-                Next
-                Me.Content = tabControl
-            Else
-                Dim tabs = _manager.GetRefreshedTabs(value)
-                If tabs.Count > 0 Then
+            Dim tabs = _manager.GetRefreshedTabs(value)
+            If tabs.Count > 0 Then
                     Dim tabControl As New TabControl
                     tabControl.TabStripPlacement = Controls.Dock.Left
                     For Each item In tabs
@@ -45,7 +37,6 @@ Public Class DocumentTab
                         Me.Content = control
                     End If
                 End If
-            End If
             _file = value
         End Set
     End Property
