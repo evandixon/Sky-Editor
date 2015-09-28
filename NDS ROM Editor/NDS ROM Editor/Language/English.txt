@@ -1,0 +1,2 @@
+﻿GenericNDSModProject=Generic NDS Mod Project
+SkyRomProject=Sky ROM Project

@@ -76,6 +76,14 @@ Public Class PluginManager
                 End Try
             Next
             For Each item In Assemblies
+                'Load languages
+                If IO.Directory.Exists(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language")) Then
+                    For Each lang In IO.Directory.GetFiles(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language"), "*.txt")
+                        Internal.LanguageManager.Instance.ImportLanguageFile(lang, item.GetName.Name.Replace("_plg", ""))
+                        IO.File.Delete(lang)
+                    Next
+                End If
+                'Load types
                 Dim types As Type() = item.GetTypes
                 For Each type In types
                     If IsOfType(type, GetType(ObjectTab)) Then

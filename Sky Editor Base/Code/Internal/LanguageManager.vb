@@ -115,6 +115,22 @@ Namespace Internal
                 End If
             End If
         End Function
+        Public Sub ImportLanguageFile(Filename As String, PluginName As String)
+            If IO.Path.GetFileNameWithoutExtension(Filename).ToLower = Settings.CurrentLanguage.ToLower Then
+                Dim lines = IO.File.ReadAllLines(Filename)
+                EnsureLanguageLoaded()
+                For Each Line In lines
+                    Dim parts As String() = Line.Split("=".ToCharArray, 2)
+                    If parts.Count = 2 Then
+                        If Not _LanguageDictionary.Keys.Contains(parts(0)) Then
+                            _LanguageDictionary.Add(parts(0), New LanguageItem(parts(0), parts(1), PluginName, False))
+                        Else
+                            _LanguageDictionary(parts(0)) = New LanguageItem(parts(0), parts(1), PluginName, False)
+                        End If
+                    End If
+                Next
+            End If
+        End Sub
         Private Shared Function FormatString(Input As String) As String
             Dim nl As New Regex("(?<!\\)\\n")
             Input = nl.Replace(Input, vbCrLf)
