@@ -1,2 +1,4 @@
 ﻿GenericNDSModProject=Generic NDS Mod Project
 SkyRomProject=Sky ROM Project
+NDSModSource=NDS Mod
+KaomadoFixNDSMod=Pokemon Portrait Mod

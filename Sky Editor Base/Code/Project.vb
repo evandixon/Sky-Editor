@@ -92,19 +92,15 @@ Public Class Project
     End Function
 #End Region
 
-    Public Shared Function CreateProject(Name As String, Location As String, ProjectType As String, Manager As PluginManager)
+    Public Shared Function CreateProject(Name As String, Location As String, ProjectType As Type, Manager As PluginManager)
         Dim p As Project
-        If Not String.IsNullOrEmpty(ProjectType) Then
-            p = Manager.ProjectTypes(ProjectType).GetConstructor({}).Invoke({})
-        Else
-            p = New Project
-        End If
+        p = ProjectType.GetConstructor({}).Invoke({})
         p.SetManager(Manager)
         If Not IO.Directory.Exists(IO.Path.Combine(Location, Name)) Then
             IO.Directory.CreateDirectory(IO.Path.Combine(Location, Name))
         End If
         p.Filename = IO.Path.Combine(Location, Name, Name & ".skyproj")
-        p.ProjectType = ProjectType
+        p.ProjectType = ProjectType.AssemblyQualifiedName
         p.Initialize()
         Return p
     End Function
@@ -114,7 +110,7 @@ Public Class Project
         Dim f = j.Deserialize(Of ProjectFileFormat)(IO.File.ReadAllText(Filename))
         Dim p As Project
         If Not String.IsNullOrEmpty(f.ProjectType) Then
-            p = Manager.ProjectTypes(f.ProjectType).GetConstructor({}).Invoke({})
+            p = Type.GetType(f.ProjectType, AddressOf PluginManager.AssemblyResolver, AddressOf PluginManager.TypeResolver, False).GetConstructor({}).Invoke({})
         Else
             p = New Project
         End If

@@ -125,7 +125,7 @@ Public Class MainWindow2
     Private Sub menuNewProject_Click(sender As Object, e As RoutedEventArgs) Handles menuNewProject.Click
         Dim newProj As New NewProjectWindow(_manager)
         If newProj.ShowDialog() Then
-            _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, newProj.SelectedProjectType, _manager)
+            _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, _manager.ProjectTypes(newProj.SelectedProjectType), _manager)
             RemoveWelcomePage()
         End If
     End Sub

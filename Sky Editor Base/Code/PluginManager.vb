@@ -80,7 +80,7 @@ Public Class PluginManager
                 If IO.Directory.Exists(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language")) Then
                     For Each lang In IO.Directory.GetFiles(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language"), "*.txt")
                         Internal.LanguageManager.Instance.ImportLanguageFile(lang, item.GetName.Name.Replace("_plg", ""))
-                        IO.File.Delete(lang)
+                        'IO.File.Delete(lang)
                     Next
                 End If
                 'Load types
@@ -590,12 +590,12 @@ Public Class PluginManager
         End If
     End Function
 
-    Private Shared Function AssemblyResolver(Name As AssemblyName) As Assembly
+    Public Shared Function AssemblyResolver(Name As AssemblyName) As Assembly
         Dim results = From a In PluginManager.GetInstance.Assemblies Where a.FullName = Name.FullName
 
         Return results.First
     End Function
-    Private Shared Function TypeResolver(A As Assembly, TypeName As String, ignoreCase As Boolean) As Type
+    Public Shared Function TypeResolver(A As Assembly, TypeName As String, ignoreCase As Boolean) As Type
         Return A.GetType(TypeName, False, True)
     End Function
 
