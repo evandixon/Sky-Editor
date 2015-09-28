@@ -2,6 +2,7 @@
 
 Public Class ObjectFile(Of T)
     Inherits GenericFile
+    Implements Interfaces.iOpenableFile
 
     Private Class JsonContainer(Of T)
         Public Property ContainedObject As T
@@ -31,7 +32,7 @@ Public Class ObjectFile(Of T)
         Dim j As New JavaScriptSerializer
         Dim c As New JsonContainer(Of T)
         c.ContainedObject = Me.ContainedObject
-        c.ContainedTypeName = GetType(T).FullName
+        c.ContainedTypeName = GetType(T).AssemblyQualifiedName
         IO.File.WriteAllText(Filename, j.Serialize(c))
         RaiseFileSaved(Me, New EventArgs)
     End Sub

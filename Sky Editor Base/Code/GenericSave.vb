@@ -36,13 +36,6 @@ Partial Public MustInherit Class GenericSave
 #End Region
 
 #Region "Properties"
-    ''' <summary>
-    ''' Gets or sets the name of the file.  Used to identify specific instances of files so more than one can be open at once.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property Name As String
 
     ''' <summary>
     ''' A unique string that identifies the save format this is a save for.  Will be used to open appropriate editor tabs for the game.

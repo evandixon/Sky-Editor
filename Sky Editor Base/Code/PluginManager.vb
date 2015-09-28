@@ -582,6 +582,15 @@ Public Class PluginManager
         End If
     End Function
 
+    Private Shared Function AssemblyResolver(Name As AssemblyName) As Assembly
+        Dim results = From a In PluginManager.GetInstance.Assemblies Where a.FullName = Name.FullName
+
+        Return results.First
+    End Function
+    Private Shared Function TypeResolver(A As Assembly, TypeName As String, ignoreCase As Boolean) As Type
+        Return A.GetType(TypeName, False, True)
+    End Function
+
     ''' <summary>
     ''' If the given file is of type ObjectFile, returns the contained Type.
     ''' Otherwise, returns Nothing.
@@ -591,7 +600,7 @@ Public Class PluginManager
     Public Shared Function TryGetObjectFileType(Filename As String) As Type
         Try
             Dim f As New ObjectFile(Of Object)(Filename)
-            Return Type.GetType(f.ContainedTypeName, False)
+            Return GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
         Catch ex As Exception
             Return Nothing
         End Try
