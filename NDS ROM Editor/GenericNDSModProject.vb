@@ -117,14 +117,24 @@ Public Class GenericNDSModProject
 
             If m.FilesToCopy.Count > 0 Then
                 Dim a As New Utilities.AsyncFor("Copying files...")
-                Await a.RunForEach(Of String)(Sub(Item As String)
-                                                  Dim source As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", Item)
-                                                  Dim dest As String = IO.Path.Combine(romDirectory, Item)
-                                                  If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
-                                                      IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
-                                                  End If
-                                                  IO.File.Copy(source, dest, True)
-                                              End Sub, m.FilesToCopy)
+                Await a.RunForEach(Sub(Item As String)
+                                       Dim source As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", Item)
+                                       If IO.File.Exists(source) Then
+                                           Dim dest As String = IO.Path.Combine(romDirectory, Item)
+                                           If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                               IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                                           End If
+                                           IO.File.Copy(source, dest, True)
+                                       ElseIf IO.Directory.Exists(source)
+                                           For Each f In IO.Directory.GetFiles(source, "*", IO.SearchOption.AllDirectories)
+                                               Dim dest As String = IO.Path.Combine(romDirectory, Item)
+                                               If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                                   IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                                               End If
+                                               IO.File.Copy(source, dest, True)
+                                           Next
+                                       End If
+                                   End Sub, m.FilesToCopy)
             Else
                 Await PluginHelper.CopyDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), romDirectory)
             End If
@@ -389,6 +399,22 @@ Public Class GenericNDSModProject
     ''' </summary>
     ''' <returns></returns>
     Public Overridable Function CustomFilePatchers() As List(Of FilePatcher)
-        Return New List(Of FilePatcher)
+        'Todo: make this plugin-able
+        Dim patchers = New List(Of FilePatcher)
+        If patchers Is Nothing Then
+            patchers = New List(Of FilePatcher)
+        End If
+        Dim LSPatcher As New FilePatcher()
+        With LSPatcher
+            .CreatePatchProgram = "LanguageStringPatcher.exe"
+            .CreatePatchArguments = "-c ""{0}"" ""{1}"" ""{2}"""
+            .ApplyPatchProgram = "LanguageStringPatcher.exe"
+            .ApplyPatchArguments = "-a ""{0}"" ""{1}"" ""{2}"""
+            .MergeSafe = True
+            .PatchExtension = "textstrlsp"
+            .FilePath = ".*text_.\.str"
+        End With
+        patchers.Add(LSPatcher)
+        Return patchers
     End Function
 End Class

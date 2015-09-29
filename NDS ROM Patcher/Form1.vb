@@ -225,7 +225,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
                 End If
             End If
         Else
-            IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename)
+            IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename, True)
         End If
 
         'Clean Up

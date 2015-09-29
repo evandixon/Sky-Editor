@@ -5,52 +5,9 @@ Namespace Mods
         Inherits GenericNDSMod
         Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
-            'Convert BACK
-            Dim BACKdir As String = IO.Path.Combine(ModDirectory, "Backgrounds")
-            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/")
-            Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(ROMDirectory, "Data", "BACK"), "*.bgp")
-            For count = 0 To backFiles.Count - 1
-                PluginHelper.StartLoading("Converting backgrounds...", count / backFiles.Count)
-                Dim item = backFiles(count)
-                Using b As New FileFormats.BGP(item)
-                    Dim image = Await b.GetImage
-                    Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
-                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
-                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
-                    End If
-                    image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
-                    IO.File.Copy(newFilename, newFilename & ".original")
-                    CurrentProject.OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
-                End Using
-            Next
 
-            ''Open Language
-            'Dim englishLanguage = New FileFormats.LanguageString(IO.Path.Combine(romDirectory, "Data", "MESSAGE", "text_en.str"))
-            'Dim itemNames(1351) As String
-            'englishLanguage.Items.CopyTo(6775, itemNames, 0, 1351)
 
-            'Convert Languages
-            PluginHelper.StartLoading("Converting languages...")
-            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Languages/")
-            Dim languageDictionary As New Dictionary(Of String, String)
-            languageDictionary.Add("text_e.str", "English")
-            languageDictionary.Add("text_f.str", "Frensh")
-            languageDictionary.Add("text_s.str", "Spanish")
-            languageDictionary.Add("text_i.str", "Italian")
-            languageDictionary.Add("text_g.str", "German")
-            languageDictionary.Add("text_j.str", "Japanese")
-            For Each item In languageDictionary
-                If IO.File.Exists(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key)) Then
-                    Using langString = New FileFormats.LanguageString(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
-                        Using langList As New ObjectFile(Of List(Of String))
-                            langList.ContainedObject = langString.Items
-                            langList.Save(IO.Path.Combine(ModDirectory, "Languages", item.Value))
 
-                            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
-                        End Using
-                    End Using
-                End If
-            Next
 
             'Copy Items
             PluginHelper.StartLoading("Converting item definitions...")
@@ -114,14 +71,7 @@ Namespace Mods
             CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), False)
             CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), False)
 
-            'Convert Personality Test
-            PluginHelper.StartLoading("Converting Personality Test")
-            Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(ROMDirectory, "Overlay", "overlay_0013.bin"))
-            Using personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
-                personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
-                personalityTest.Save(IO.Path.Combine(ModDirectory, "Starter Pokemon"))
-                CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
-            End Using
+
 
             'Convert Portraits
             'PluginHelper.StartLoading("Unpacking portraits...")

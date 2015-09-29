@@ -87,6 +87,7 @@ Namespace FileFormats
             For i As UInt32 = 0 To Items.Count - 1
                 offsets.Add(0)
             Next
+            offsets.Add(0) 'The file format contains an additional pointer to 1 byte after the last entry
             Dim stringdataBytes As New List(Of Byte)
             For count As Integer = 0 To Items.Count - 1
                 Dim offset As UInt32 = offsets.Count * 4 + stringdataBytes.Count
@@ -97,6 +98,7 @@ Namespace FileFormats
                 Next
                 stringdataBytes.Add(0)
             Next
+            offsets(offsets.Count - 1) = offsets.Count * 4 + stringdataBytes.Count 'The file format contains an additional pointer to 1 byte after the last entry
             Dim offsetBytes As New List(Of Byte)
             For Each offset In offsets
                 Dim t = BitConverter.GetBytes(offset)
