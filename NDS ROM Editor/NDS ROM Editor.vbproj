@@ -120,7 +120,10 @@
     <Compile Include="FileFormats\item_p.vb" />
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
-    <Compile Include="FileFormats\NDSModSource.vb" />
+    <Compile Include="ModRegistry.vb" />
+    <Compile Include="Mods\GenericSkyMod.vb" />
+    <Compile Include="Mods\KaomadoMod.vb" />
+    <Compile Include="Mods\GenericNDSMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
     <Compile Include="GenericNDSModProject.vb" />

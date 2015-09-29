@@ -138,22 +138,26 @@ Public Class Form1
     Private Async Function ApplyPatch(Mods As List(Of ModFile), ModFile As ModFile, currentDirectory As String, ROMDirectory As String, patchers As List(Of FilePatcher)) As Task
         If Not ModFile.Patched Then
             'Patch depencencies
-            For Each item In ModFile.ModDetails.DependenciesBefore
-                Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
+            If ModFile.ModDetails.DependenciesBefore IsNot Nothing Then
+                For Each item In ModFile.ModDetails.DependenciesBefore
+                    Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
 
-                For Each d In q
-                    Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                    For Each d In q
+                        Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                    Next
                 Next
-            Next
+            End If
             Await ModFile.ApplyPatch(currentDirectory, ROMDirectory, patchers)
             'Patch dependencies
-            For Each item In ModFile.ModDetails.DependenciesAfter
-                Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
+            If ModFile.ModDetails.DependenciesBefore IsNot Nothing Then
+                For Each item In ModFile.ModDetails.DependenciesAfter
+                    Dim q = From m In Mods Where m.Name = item AndAlso Not String.IsNullOrEmpty(m.Name)
 
-                For Each d In q
-                    Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                    For Each d In q
+                        Await ApplyPatch(Mods, d, currentDirectory, ROMDirectory, patchers)
+                    Next
                 Next
-            Next
+            End If
         End If
     End Function
     ''' <summary>

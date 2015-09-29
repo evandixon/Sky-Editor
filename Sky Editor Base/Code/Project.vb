@@ -194,6 +194,15 @@ Public Class Project
         '    Return (From file In Files Where file.Key.Contains("/") OrElse file.Key.Contains("\") AndAlso Not String.IsNullOrEmpty(InternalPath) Select file.Key).ToList
         'End If
     End Function
+    Public Function GetFiles(FileType As Type) As List(Of GenericFile)
+        Dim out As New List(Of GenericFile)
+        For Each item In Files
+            If item.Value IsNot Nothing AndAlso PluginManager.IsOfType(item.Value, FileType) Then
+                out.Add(item.Value)
+            End If
+        Next
+        Return out
+    End Function
 
 
 

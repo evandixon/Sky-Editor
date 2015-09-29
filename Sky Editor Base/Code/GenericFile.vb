@@ -169,6 +169,9 @@ Public Class GenericFile
                 _fileReader.CopyTo(dest)
             End Using
         End If
+        If String.IsNullOrEmpty(OriginalFilename) Then
+            OriginalFilename = Destination
+        End If
     End Sub
     Public Overridable Sub Save() Implements iSavable.Save
         PreSave()

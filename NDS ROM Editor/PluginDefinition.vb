@@ -5,23 +5,23 @@ Imports SkyEditorBase.Interfaces
 Public Class PluginDefinition
     Implements iSkyEditorPlugin
 
-    Public Function AutoDetectFileType(File As GenericFile) As Type
-        Dim out As Type = Nothing
-        If SkyNDSRom.IsFileOfType(File) Then
-            out = GetType(SkyNDSRom)
-        ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
-            out = GetType(FileFormats.BGP)
-        ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
-            out = GetType(FileFormats.NDSModSource)
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Item Definitions".ToLower
-            out = GetType(FileFormats.item_p)
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
-            out = GetType(FileFormats.item_s_p)
-        ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
-            out = GetType(ObjectFile(Of FileFormats.PersonalityTestContainer))
-        End If
-        Return out
-    End Function
+    'Public Function AutoDetectFileType(File As GenericFile) As Type
+    '    Dim out As Type = Nothing
+    '    If SkyNDSRom.IsFileOfType(File) Then
+    '        out = GetType(SkyNDSRom)
+    '    ElseIf File.OriginalFilename.ToLower.EndsWith(".bgp") Then
+    '        out = GetType(FileFormats.BGP)
+    '    ElseIf File.OriginalFilename.ToLower.EndsWith(".ndsmodsrc")
+    '        out = GetType(FileFormats.GenericNDSMod)
+    '    ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Item Definitions".ToLower
+    '        out = GetType(FileFormats.item_p)
+    '    ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "item_s_p.bin" OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower = "Exclusive Item Rarity".ToLower
+    '        out = GetType(FileFormats.item_s_p)
+    '    ElseIf IO.Path.GetFileName(File.OriginalFilename).ToLower = "starter pokemon"
+    '        out = GetType(ObjectFile(Of FileFormats.PersonalityTestContainer))
+    '    End If
+    '    Return out
+    'End Function
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
@@ -53,21 +53,7 @@ Public Class PluginDefinition
 
         Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
-        'Manager.RegisterSaveGameFormat(GameStrings.GenericNDSRom, GameStrings.GenericNDSRom, GetType(GenericNDSRom))
-        'Manager.RegisterSaveGameFormat(GameStrings.SkyNDSRom, GameStrings.SkyNDSRom, GetType(SkyNDSRom))
-
-        'Manager.RegisterFileFormat(GameStrings.BGPFile, GetType(FileFormats.BGP))
-        'Manager.RegisterFileFormat(GameStrings.NDSModSourceFile, GetType(FileFormats.NDSModSource))
-        'Manager.RegisterFileFormat(GameStrings.KaomadoFixNDSModSourceFile, GetType(FileFormats.KaomadoFixNDSMod))
-        'Manager.RegisterFileFormat(GameStrings.item_p_File, GetType(FileFormats.item_p))
-        'Manager.RegisterFileFormat(GameStrings.item_s_p_File, GetType(FileFormats.item_s_p))
-        'Manager.RegisterFileFormat(GameStrings.PersonalityTest, GetType(ObjectFile(Of FileFormats.PersonalityTestContainer)))
-
-        'Manager.RegisterSaveTypeDetector(AddressOf AutoDetectSaveType)
-
-        'Manager.RegisterProjectType("Explorers of Sky Rom Mod", GetType(SkyRomProject))
-
-        'Manager.RegisterFileTypeDetector(AddressOf AutoDetectFileType)
+        Manager.RegisterTypeSearcher(GetType(Mods.GenericNDSMod), AddressOf NDSModRegistry.AddNDSMod)
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

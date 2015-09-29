@@ -75,6 +75,9 @@ Public Class PluginManager
                     Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
                 End Try
             Next
+            For Each item In Plugins
+                item.Load(Me)
+            Next
             For Each item In Assemblies
                 'Load languages
                 If IO.Directory.Exists(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language")) Then
@@ -97,6 +100,11 @@ Public Class PluginManager
                             GenericFilesWithTypeValidator.Add(type)
                         End If
                     End If
+                    For Each searcher In TypeSearcher
+                        If IsOfType(type, searcher.Key) Then
+                            searcher.Value.Invoke(type)
+                        End If
+                    Next
                     For Each i In type.GetInterfaces
                         If i Is GetType(Interfaces.iCreatableFile) AndAlso type.GetConstructor({}) IsNot Nothing Then
                             CreatableFiles.Add(type)
@@ -105,9 +113,6 @@ Public Class PluginManager
                         End If
                     Next
                 Next
-            Next
-            For Each item In Plugins
-                item.Load(Me)
             Next
             RegisterFileTypeDetector(AddressOf Me.DetectFileType)
             RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
@@ -203,6 +208,7 @@ Public Class PluginManager
     Public Property ObjectTabs As New List(Of ObjectTab)
     Public Property PluginFolder As String
     Public Property ObjectControls As New List(Of ObjectControl)
+    Public Property TypeSearcher As New Dictionary(Of Type, TypeSearchFound)
     Private WithEvents _currentProject As Project
     Public Property CurrentProject As Project
         Get
@@ -220,6 +226,7 @@ Public Class PluginManager
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
     <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
     Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
+    Delegate Sub TypeSearchFound(TypeFound As Type)
 #End Region
 
 #Region "Registration"
@@ -332,6 +339,12 @@ Public Class PluginManager
             PluginFiles.Add(plugin, New List(Of String))
         End If
         PluginFiles(plugin).Add(FilePath)
+    End Sub
+
+    Public Sub RegisterTypeSearcher(TypeToSearch As Type, OnFound As TypeSearchFound)
+        If Not TypeSearcher.ContainsKey(TypeToSearch) Then
+            TypeSearcher.Add(TypeToSearch, OnFound)
+        End If
     End Sub
 #End Region
 
@@ -474,15 +487,15 @@ Public Class PluginManager
                 Next
             End If
         Next
-        If matches.Count > 0 Then
-            Dim saveID As String = Nothing
-            For Each item In SaveTypeDetectors
-                saveID = item.Invoke(File)
-                If Not String.IsNullOrEmpty(saveID) Then
-                    matches.Add(SaveTypes(saveID))
-                End If
-            Next
-        End If
+        'If matches.Count > 0 Then
+        '    Dim saveID As String = Nothing
+        '    For Each item In SaveTypeDetectors
+        '        saveID = item.Invoke(File)
+        '        If Not String.IsNullOrEmpty(saveID) Then
+        '            matches.Add(SaveTypes(saveID))
+        '        End If
+        '    Next
+        'End If
         If matches.Count = 0 Then
             Return Nothing
         ElseIf matches.Count = 1
@@ -538,7 +551,7 @@ Public Class PluginManager
         End If
     End Function
 
-    Private Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
+    Public Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
         Dim match = False
         Dim g As Type = Nothing
         If TypeOf Obj Is Type Then
@@ -563,7 +576,7 @@ Public Class PluginManager
         End If
         If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
             'Check to see if this is an object file of the type we're looking for
-            If IsOfType(ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), Obj, False) Then
+            If IsOfType(g, ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), False) Then
                 match = True
             End If
         End If

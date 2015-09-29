@@ -135,6 +135,7 @@ Public Class ProjectExplorer
                 Dim name = w.SelectedName
                 Await Task.Run(New Action(Sub()
                                               file.Save(IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*")))
+                                              file.OriginalFilename = IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*"))
                                               _manager.CurrentProject.AddFile(IO.Path.Combine(path, name & file.DefaultExtension.Trim("*")), file)
                                           End Sub))
             End If
