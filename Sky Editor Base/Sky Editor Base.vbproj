@@ -206,6 +206,7 @@
     <Compile Include="Code\Utilities\GenericListItem.vb" />
     <Compile Include="Code\Internal\LanguageManager.vb" />
     <Compile Include="Code\Redistribution\RedistributionHelpers.vb" />
+    <Compile Include="Code\Utilities\ReflectionHelpers.vb" />
     <Compile Include="Code\Utilities\ResourceDictionary.vb" />
     <Compile Include="Code\Settings.vb" />
     <Compile Include="Code\Utilities\BitOperations.vb" />

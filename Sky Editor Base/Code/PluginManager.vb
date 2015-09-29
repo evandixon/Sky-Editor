@@ -563,7 +563,7 @@ Public Class PluginManager
         End If
         If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
             'Check to see if this is an object file of the type we're looking for
-            If IsOfType(ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), TypeToCheck, False) Then
+            If IsOfType(ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), Obj, False) Then
                 match = True
             End If
         End If
@@ -596,19 +596,6 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Shared Function AssemblyResolver(Name As AssemblyName) As Assembly
-        Dim results = From a In PluginManager.GetInstance.Assemblies Where a.FullName = Name.FullName
-
-        Try
-            Return results.First
-        Catch ex As Exception
-            Return Assembly.GetCallingAssembly
-        End Try
-    End Function
-    Public Shared Function TypeResolver(A As Assembly, TypeName As String, ignoreCase As Boolean) As Type
-        Return A.GetType(TypeName, False, True)
-    End Function
-
     ''' <summary>
     ''' If the given file is of type ObjectFile, returns the contained Type.
     ''' Otherwise, returns Nothing.
@@ -619,7 +606,7 @@ Public Class PluginManager
         Try
             Dim f As New ObjectFile(Of Object)(Filename)
             'Doesn't work for ObjectFiles
-            Return Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False) 'GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
+            Return Utilities.ReflectionHelpers.GetTypeFromName(f.ContainedTypeName) 'GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
         Catch ex As Exception
             Return Nothing
         End Try

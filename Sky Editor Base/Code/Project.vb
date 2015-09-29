@@ -110,7 +110,7 @@ Public Class Project
         Dim f = j.Deserialize(Of ProjectFileFormat)(IO.File.ReadAllText(Filename))
         Dim p As Project
         If Not String.IsNullOrEmpty(f.ProjectType) Then
-            p = Type.GetType(f.ProjectType, AddressOf PluginManager.AssemblyResolver, AddressOf PluginManager.TypeResolver, False).GetConstructor({}).Invoke({})
+            p = Utilities.ReflectionHelpers.GetTypeFromName(f.ProjectType).GetConstructor({}).Invoke({})
         Else
             p = New Project
         End If
