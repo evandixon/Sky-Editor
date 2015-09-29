@@ -27,6 +27,10 @@ Namespace Mods
             End If
         End Function
 
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
+            Return {"C2SE", "C2SP"}
+        End Function
+
         Public Sub New(Filename As String)
             MyBase.New(Filename)
         End Sub

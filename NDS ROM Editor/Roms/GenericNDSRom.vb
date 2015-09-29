@@ -398,7 +398,9 @@ Namespace Roms
         End Sub
 #End Region
 
-
+        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+            Return (File.Length > &H15D AndAlso File.RawData(&H15C) = &H56 AndAlso File.RawData(&H15D) = &HCF)
+        End Function
 
     End Class
 End Namespace

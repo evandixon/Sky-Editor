@@ -100,7 +100,7 @@ Public Class GenericNDSModProject
         If o.ShowDialog = DialogResult.OK Then
             OpenFile(o.FileName, "BaseRom.nds")
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
-            Dim sky = DirectCast(Files("BaseRom.nds"), SkyNDSRom)
+            Dim sky = DirectCast(Files("BaseRom.nds"), GenericNDSRom)
             Await sky.Unpack(romDirectory)
             CreateDirectory("Mods")
         Else

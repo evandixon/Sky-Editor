@@ -130,6 +130,11 @@ Namespace Mods
 
             PluginHelper.StopLoading()
         End Function
+
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
+            Return {"C2SE", "C2SP"}
+        End Function
+
     End Class
 
 End Namespace
