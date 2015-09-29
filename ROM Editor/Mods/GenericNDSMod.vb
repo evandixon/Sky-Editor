@@ -2,7 +2,7 @@
 Imports SkyEditorBase
 
 Namespace Mods
-    Public Class NDSModSourceContainer
+    Public Class ModSourceContainer
         Public Property ModName As String
         Public Property Author As String
         Public Property Description As String
@@ -12,7 +12,7 @@ Namespace Mods
         Public Property Version As String
     End Class
     Public Class GenericMod
-        Inherits ObjectFile(Of NDSModSourceContainer)
+        Inherits ObjectFile(Of ModSourceContainer)
         Public Sub New(Filename As String)
             MyBase.New(Filename)
         End Sub
@@ -63,7 +63,7 @@ Namespace Mods
             Return {}
         End Function
         Public Overrides Function DefaultExtension() As String
-            Return ".ndsmodsrc"
+            Return ".modsrc"
         End Function
     End Class
 

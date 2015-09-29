@@ -110,7 +110,6 @@ Public Class GenericNDSModProject
 
     Private Async Sub NDSRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, SkyEditorBase.GenericFile)) Handles Me.FileAdded
         If TypeOf File.Value Is Mods.GenericMod Then
-            'Todo: ensure this is in the same directory as the mod
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(File.Value.OriginalFilename), IO.Path.GetFileNameWithoutExtension(File.Value.OriginalFilename), "RawFiles")
 
             Dim m = DirectCast(File.Value, Mods.GenericMod)
@@ -231,7 +230,7 @@ Public Class GenericNDSModProject
                 actions.Description = ndsmod.ContainedObject.Description
                 actions.UpdateUrl = ndsmod.ContainedObject.UpdateURL
             Catch ex As Exception
-                MessageBox.Show("The ndsmodsrc file is invalid and will not be used.")
+                MessageBox.Show("The modsrc file is invalid and will not be used.")
                 actions.DependenciesBefore = Nothing
                 actions.DependenciesAfter = Nothing
                 actions.Name = ""
@@ -322,8 +321,7 @@ Public Class GenericNDSModProject
         If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")) Then
             IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools"))
         End If
-        '-Copy ndstool
-        IO.File.Copy(PluginHelper.GetResourceName("ndstool.exe"), IO.Path.Combine(toolsDir, "ndstool.exe"), True)
+
         '-Copy xdelta
         'IO.File.Copy(PluginHelper.GetResourceName("xdelta/xdelta3.exe"), IO.Path.Combine(toolsDir, "xdelta3.exe"), True)
         '-Ensure xdelta is registered as a patching program
@@ -350,22 +348,29 @@ Public Class GenericNDSModProject
                 Next
             End If
         Next
-        '-Copy patching wizard
-        IO.File.Copy(PluginHelper.GetResourceName("NDSPatcher.exe"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), True)
-        IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "ICSharpCode.SharpZipLib.dll"), True)
+
+        '----------
+        'NDS Specific Code
+        '----------
+
+        CopyPatcherProgram()
+
         '-Zip it
         Utilities.Zip.Zip(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & ".zip"))
 
         'Apply patch
         PluginHelper.StartLoading("Applying patch...")
-        Await PluginHelper.RunProgram(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), String.Format("""{0}"" ""{1}""", IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom.nds"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds")), False)
+
+        '----------
+        'End NDS Specific Code
+        '----------
 
         PluginHelper.StopLoading()
     End Sub
     Public Overrides Sub Run()
         MyBase.Run()
-        If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds")) Then
-            DeSmuMe.RunDeSmuMe(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "PatchedRom.nds"))
+        If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename)) Then
+            DeSmuMe.RunDeSmuMe(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename))
         End If
     End Sub
     Private Function DictionaryContainsValue(Dictionary As Dictionary(Of String, Byte()), Value As Byte()) As Boolean
@@ -383,8 +388,8 @@ Public Class GenericNDSModProject
     End Function
     Public Overrides Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
         If InternalPath.ToLower = "mods/" Then
-            If TypeOf Files("BaseRom.nds") Is GenericNDSRom Then
-                Return NDSModRegistry.GetMods(Files("BaseRom.nds").GetType)
+            If TypeOf Files(BaseRomFilename) Is GenericNDSRom Then
+                Return NDSModRegistry.GetMods(Files(BaseRomFilename).GetType)
             Else
                 Return New List(Of Type)
             End If
@@ -417,4 +422,34 @@ Public Class GenericNDSModProject
         patchers.Add(LSPatcher)
         Return patchers
     End Function
+
+    Public Overridable Function BaseRomFilename() As String
+        Return "BaseRom.nds"
+    End Function
+    Public Overridable Function OutputRomFilename() As String
+        Return "PatchedRom.nds"
+    End Function
+
+    Public Overridable Sub CopyPatcherProgram()
+        Dim toolsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")
+        '-Copy ndstool
+        IO.File.Copy(PluginHelper.GetResourceName("ndstool.exe"), IO.Path.Combine(toolsDir, "ndstool.exe"), True)
+
+        '-Copy patching wizard
+        IO.File.Copy(PluginHelper.GetResourceName("NDSPatcher.exe"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), True)
+        IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "ICSharpCode.SharpZipLib.dll"), True)
+    End Sub
+    Public Overridable Async Function ApplyPatchAsync() As Task
+        If Not PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("ApplyPatch")) Then
+            Await PluginHelper.RunProgram(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "NDSPatcher.exe"), String.Format("""{0}"" ""{1}""", IO.Path.Combine(IO.Path.GetDirectoryName(Filename), BaseRomFilename), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename)), False)
+
+        Else
+            Await Task.Run(New Action(Sub()
+                                          ApplyPatch()
+                                      End Sub))
+        End If
+    End Function
+    Public Overridable Sub ApplyPatch()
+    End Sub
+
 End Class

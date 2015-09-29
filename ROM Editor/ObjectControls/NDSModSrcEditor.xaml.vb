@@ -2,7 +2,7 @@
 
 Namespace ObjectControls
     Public Class NDSModSrcEditor
-        Inherits ObjectControl(Of Mods.NDSModSourceContainer)
+        Inherits ObjectControl(Of Mods.ModSourceContainer)
         Public Overrides Sub RefreshDisplay()
             With Me.EditingItem
                 txtModName.Text = .ModName

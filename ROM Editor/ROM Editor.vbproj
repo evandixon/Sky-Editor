@@ -7,7 +7,7 @@
     <ProjectGuid>{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>ROMEditor</RootNamespace>
-    <AssemblyName>NDS ROM Editor_plg</AssemblyName>
+    <AssemblyName>ROM Editor_plg</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -23,7 +23,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\Sky Editor Base\bin\Debug\Resources\Plugins\</OutputPath>
-    <DocumentationFile>NDS ROM Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>ROM Editor_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -35,7 +35,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\Sky Editor Base\bin\Release\Resources\plugins\</OutputPath>
-    <DocumentationFile>NDS ROM Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>ROM Editor_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -120,6 +120,7 @@
     <Compile Include="FileFormats\item_p.vb" />
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
+    <Compile Include="Generic3DSModProject.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
     <Compile Include="Mods\KaomadoMod.vb" />
@@ -154,6 +155,7 @@
     </Compile>
     <Compile Include="Portrait.vb" />
     <Compile Include="ROM.vb" />
+    <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
@@ -181,10 +183,10 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="NDS ROM Editor\desmume-0.9.11-win32.zip">
+    <None Include="ROM Editor\desmume-0.9.11-win32.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="NDS ROM Editor\desmume-0.9.11-win64.zip">
+    <None Include="ROM Editor\desmume-0.9.11-win64.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -199,32 +201,35 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NDS ROM Editor\dsicontool.exe">
+    <Content Include="ROM Editor\ctrtool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\facenames.txt">
+    <Content Include="ROM Editor\dsicontool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\Language\English.txt">
+    <Content Include="ROM Editor\facenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\ndstool.exe">
+    <Content Include="ROM Editor\Language\English.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\pokenames.txt">
+    <Content Include="ROM Editor\ndstool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\ppmd_kaoutil.exe">
+    <Content Include="ROM Editor\pokenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\ppmd_kaoutil.txt" />
-    <Content Include="NDS ROM Editor\ppmd_pxcomp.exe">
+    <Content Include="ROM Editor\ppmd_kaoutil.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\ppmd_unpx.exe">
+    <Content Include="ROM Editor\ppmd_kaoutil.txt" />
+    <Content Include="ROM Editor\ppmd_pxcomp.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NDS ROM Editor\xdelta\xdelta3.exe">
+    <Content Include="ROM Editor\ppmd_unpx.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\xdelta\xdelta3.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -106,10 +106,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NDS ROM Editor\NDS ROM Editor.vbproj">
-      <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
-      <Name>NDS ROM Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{F3E6313C-4337-4D20-B4E2-ED41420C9D05}</Project>
       <Name>Sky Editor Base</Name>
