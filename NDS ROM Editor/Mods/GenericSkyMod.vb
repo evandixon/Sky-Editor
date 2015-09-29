@@ -6,7 +6,7 @@ Namespace Mods
         Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
             'Convert BACK
-            Dim BACKdir As String = IO.Path.Combine(ModOutputDirectory, "Backgrounds")
+            Dim BACKdir As String = IO.Path.Combine(ModDirectory, "Backgrounds")
             CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(ROMDirectory, "Data", "BACK"), "*.bgp")
             For count = 0 To backFiles.Count - 1
@@ -44,9 +44,9 @@ Namespace Mods
                     Using langString = New FileFormats.LanguageString(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
                         Using langList As New ObjectFile(Of List(Of String))
                             langList.ContainedObject = langString.Items
-                            langList.Save(IO.Path.Combine(ModOutputDirectory, "Languages", item.Value))
+                            langList.Save(IO.Path.Combine(ModDirectory, "Languages", item.Value))
 
-                            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
+                            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Languages", item.Value), IO.Path.Combine(internalPath, "Languages", item.Value), False)
                         End Using
                     End Using
                 End If
@@ -58,11 +58,11 @@ Namespace Mods
             Dim item_s_p_path As String = IO.Path.Combine(ROMDirectory, "Data", "BALANCE", "item_s_p.bin")
 
             CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Items/")
-            IO.File.Copy(item_p_path, IO.Path.Combine(ModOutputDirectory, "Items", "Item Definitions"))
-            IO.File.Copy(item_s_p_path, IO.Path.Combine(ModOutputDirectory, "Items", "Exclusive Item Rarity"))
+            IO.File.Copy(item_p_path, IO.Path.Combine(ModDirectory, "Items", "Item Definitions"))
+            IO.File.Copy(item_s_p_path, IO.Path.Combine(ModDirectory, "Items", "Exclusive Item Rarity"))
 
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Item Definitions"), IO.Path.Combine(internalPath, "Items", "Item Definitions"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Exclusive Item Rarity"), IO.Path.Combine(internalPath, "Items", "Exclusive Item Rarity"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Item Definitions"), IO.Path.Combine(internalPath, "Items", "Item Definitions"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Exclusive Item Rarity"), IO.Path.Combine(internalPath, "Items", "Exclusive Item Rarity"), False)
 
             'Copy Swap Shop Rewards
             PluginHelper.StartLoading("Copying swap shop rewards...")
@@ -88,39 +88,39 @@ Namespace Mods
             'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
             'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
             'IO.File.Copy(tableDat_00_path, IO.Path.Combine(modDirectory, "Items", "Swap Shop Rewards", "item00.bin"))
-            IO.File.Copy(tableDat_04_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"))
-            IO.File.Copy(tableDat_05_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Win"))
-            IO.File.Copy(tableDat_06_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"))
-            IO.File.Copy(tableDat_07_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"))
-            IO.File.Copy(tableDat_08_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Win"))
-            IO.File.Copy(tableDat_09_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"))
-            IO.File.Copy(tableDat_10_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"))
-            IO.File.Copy(tableDat_11_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Win"))
-            IO.File.Copy(tableDat_12_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"))
-            IO.File.Copy(tableDat_13_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"))
-            IO.File.Copy(tableDat_14_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"))
-            IO.File.Copy(tableDat_15_path, IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"))
+            IO.File.Copy(tableDat_04_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"))
+            IO.File.Copy(tableDat_05_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Win"))
+            IO.File.Copy(tableDat_06_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"))
+            IO.File.Copy(tableDat_07_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"))
+            IO.File.Copy(tableDat_08_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Win"))
+            IO.File.Copy(tableDat_09_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"))
+            IO.File.Copy(tableDat_10_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"))
+            IO.File.Copy(tableDat_11_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Win"))
+            IO.File.Copy(tableDat_12_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"))
+            IO.File.Copy(tableDat_13_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"))
+            IO.File.Copy(tableDat_14_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"))
+            IO.File.Copy(tableDat_15_path, IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"))
 
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), False)
-            CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Loss"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prize Ticket - Big Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Loss"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Silver Ticket - Big Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Loss"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Gold Ticket - Big Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Loss"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Win"), False)
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), IO.Path.Combine(internalPath, "Items", "Swap Shop Rewards", "Prism Ticket - Big Win"), False)
 
             'Convert Personality Test
             PluginHelper.StartLoading("Converting Personality Test")
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(ROMDirectory, "Overlay", "overlay_0013.bin"))
             Using personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
                 personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
-                personalityTest.Save(IO.Path.Combine(ModOutputDirectory, "Starter Pokemon"))
-                CurrentProject.OpenFile(IO.Path.Combine(ModOutputDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
+                personalityTest.Save(IO.Path.Combine(ModDirectory, "Starter Pokemon"))
+                CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
             End Using
 
             'Convert Portraits

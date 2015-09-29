@@ -63,14 +63,14 @@ Namespace Roms
         End Function
 #End Region
 
-        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
-            Dim e As New System.Text.ASCIIEncoding
-            If File.Length > 12 Then
-                Return (e.GetString(File.RawData(0, 12)).Trim) = GameStrings.SkyROMHeader
-            Else
-                Return False
-            End If
-        End Function
+        'Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+        '    Dim e As New System.Text.ASCIIEncoding
+        '    If File.Length > 12 Then
+        '        Return (e.GetString(File.RawData(0, 12)).Trim) = GameStrings.SkyROMHeader
+        '    Else
+        '        Return False
+        '    End If
+        'End Function
 
     End Class
 
