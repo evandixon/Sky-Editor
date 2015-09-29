@@ -127,11 +127,11 @@ Public Class GenericNDSModProject
                                            IO.File.Copy(source, dest, True)
                                        ElseIf IO.Directory.Exists(source)
                                            For Each f In IO.Directory.GetFiles(source, "*", IO.SearchOption.AllDirectories)
-                                               Dim dest As String = IO.Path.Combine(romDirectory, Item)
+                                               Dim dest As String = f.Replace(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), romDirectory)
                                                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
                                                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
                                                End If
-                                               IO.File.Copy(source, dest, True)
+                                               IO.File.Copy(f, dest, True)
                                            Next
                                        End If
                                    End Sub, m.FilesToCopy)

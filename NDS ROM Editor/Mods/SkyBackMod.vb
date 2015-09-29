@@ -66,6 +66,11 @@ Public Class SkyBackMod
 
             Next
         End If
+        'Cleanup
+        '-Data/Back/Decompressed
+        If IO.Directory.Exists(IO.Path.Combine(ROMDirectory, "Data", "BACK", "Decompressed")) Then
+            IO.Directory.Delete(IO.Path.Combine(ROMDirectory, "Data", "BACK", "Decompressed"), True)
+        End If
     End Sub
 
     Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)

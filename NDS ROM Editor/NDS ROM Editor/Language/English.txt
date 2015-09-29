@@ -1,2 +1,2 @@
-﻿GenericNDSModProject=Generic NDS Mod Project
+﻿GenericNDSModProject=NDS Mod Project
 KaomadoNDSMod=Pokemon Portrait Mod
