@@ -11,7 +11,7 @@ Namespace Mods
         Public Property DependenciesAfter As List(Of String)
         Public Property Version As String
     End Class
-    Public Class GenericNDSMod
+    Public Class GenericMod
         Inherits ObjectFile(Of NDSModSourceContainer)
         Public Sub New(Filename As String)
             MyBase.New(Filename)
@@ -59,7 +59,7 @@ Namespace Mods
         Public Overridable Sub Build(CurrentProject As Project)
 
         End Sub
-        Public Overridable Function SupportedGameCodes() As IEnumerable(Of String)
+        Public Overridable Function SupportedGameCodes() As IEnumerable(Of Type)
             Return {}
         End Function
         Public Overrides Function DefaultExtension() As String

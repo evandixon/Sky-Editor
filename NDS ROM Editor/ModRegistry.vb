@@ -1,15 +1,20 @@
-﻿Public Class NDSModRegistry
-    Private Shared Property Mods As New List(Of Mods.GenericNDSMod)
+﻿Imports SkyEditorBase
+
+Public Class NDSModRegistry
+    Private Shared Property Mods As New List(Of Mods.GenericMod)
     Public Shared Sub AddNDSMod(ModType As Type)
         Mods.Add(ModType.GetConstructor({}).Invoke({}))
     End Sub
-    Public Shared Function GetMods(GameCode As String) As IEnumerable(Of Type)
+    Public Shared Function GetMods(GameType As Type) As IEnumerable(Of Type)
         Dim matches As New List(Of Type)
         For Each item In Mods
             Dim games = item.SupportedGameCodes
-            If games.Count = 0 OrElse games.Contains(GameCode) Then
-                matches.Add(item.GetType)
-            End If
+            Dim match As Boolean = False
+            For Each t In games
+                If games.Count = 0 OrElse PluginManager.IsOfType(t, GameType) Then
+                    matches.Add(item.GetType)
+                End If
+            Next
         Next
         Return matches
     End Function

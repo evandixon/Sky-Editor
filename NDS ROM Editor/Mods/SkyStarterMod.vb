@@ -3,7 +3,7 @@ Imports SkyEditorBase
 
 Namespace Mods
     Public Class SkyStarterMod
-        Inherits GenericNDSMod
+        Inherits GenericMod
         Public Sub New()
             MyBase.New()
         End Sub
@@ -91,8 +91,8 @@ Namespace Mods
             If personalityTest IsNot Nothing Then personalityTest.Dispose()
         End Sub
 
-        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
-            Return {"C2SE", "C2SP"}
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of Type)
+            Return {GetType(Roms.SkyNDSRom)}
         End Function
 
         Public Sub New(Filename As String)

@@ -477,6 +477,20 @@ Public Class PluginManager
         Next
         Return out
     End Function
+    Private Class TypeComparer
+        Implements IComparer(Of Type)
+
+        Public Function Compare(x As Type, y As Type) As Integer Implements IComparer(Of Type).Compare
+            Return GetInheritanceDepth(x).CompareTo(GetInheritanceDepth(y))
+        End Function
+        Public Function GetInheritanceDepth(T As Type) As Integer
+            If Not T = GetType(Object) Then
+                Return 1 + GetInheritanceDepth(T.BaseType)
+            Else
+                Return 0
+            End If
+        End Function
+    End Class
     Public Function GetFileType(File As GenericFile) As Type
         Dim matches As New List(Of Type)
         For Each item In FileTypeDetectors
@@ -501,17 +515,20 @@ Public Class PluginManager
         ElseIf matches.Count = 1
             Return matches(0)
         Else
-            Dim w As New SkyEditorWindows.GameTypeSelector()
-            Dim games As New Dictionary(Of String, Type)
-            For Each item In matches
-                games.Add(PluginHelper.GetLanguageItem(item.Name), item)
-            Next
-            w.AddGames(games.Keys)
-            If w.ShowDialog Then
-                Return games(w.SelectedGame)
-            Else
-                Return Nothing
-            End If
+            matches.Sort(New TypeComparer)
+            matches.Reverse()
+            Return matches(0)
+            'Dim w As New SkyEditorWindows.GameTypeSelector()
+            'Dim games As New Dictionary(Of String, Type)
+            'For Each item In matches
+            '    games.Add(PluginHelper.GetLanguageItem(item.Name), item)
+            'Next
+            'w.AddGames(games.Keys)
+            'If w.ShowDialog Then
+            '    Return games(w.SelectedGame)
+            'Else
+            '    Return Nothing
+            'End If
         End If
     End Function
     Public Function CreateNewFile(NewFileName As String, FileType As Type) As GenericFile

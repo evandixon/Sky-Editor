@@ -5,6 +5,7 @@ Namespace Roms
     Public Class GenericNDSRom
         Inherits GenericSave
         Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements iPackedRom
 
 #Region "Constructors"
         Sub New()
@@ -52,7 +53,7 @@ Namespace Roms
                 Return True
             End If
         End Function
-        Public Async Function Unpack(Optional DestinationDirectory As String = Nothing) As Task(Of Boolean)
+        Public Async Function Unpack(Optional DestinationDirectory As String = Nothing) As Task Implements iPackedRom.Unpack
             If IsUnpacking Then
                 PluginHelper.Writeline("Something failed, unpack called when currently unpacking.")
             End If
@@ -62,7 +63,7 @@ Namespace Roms
             Else
                 romDirectory = DestinationDirectory
             End If
-            
+
             If IO.Directory.Exists(romDirectory) Then
                 Try
                     IO.Directory.Delete(romDirectory, True)
@@ -72,10 +73,10 @@ Namespace Roms
             End If
 
             IO.Directory.CreateDirectory(romDirectory)
-            Return Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
+            Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
                                                   String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, romDirectory))
         End Function
-        Public Async Function RePack(NewFileName As String) As Task(Of Boolean)
+        Public Async Function RePack(NewFileName As String) As Task Implements iPackedRom.RePack
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
             If Not IO.Directory.Exists(romDirectory) Then
                 IO.Directory.CreateDirectory(romDirectory)
@@ -84,7 +85,7 @@ Namespace Roms
                 IO.Directory.CreateDirectory(IO.Path.Combine(romDirectory, Name))
             End If
             PluginHelper.Writeline("Repacking ROM...")
-            Return Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
+            Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                                   String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, Name)))
         End Function
         ''' <summary>

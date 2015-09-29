@@ -53,7 +53,7 @@ Public Class PluginDefinition
 
         Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
-        Manager.RegisterTypeSearcher(GetType(Mods.GenericNDSMod), AddressOf NDSModRegistry.AddNDSMod)
+        Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

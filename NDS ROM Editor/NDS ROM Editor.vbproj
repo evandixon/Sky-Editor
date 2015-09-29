@@ -155,6 +155,7 @@
     <Compile Include="Portrait.vb" />
     <Compile Include="ROM.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
+    <Compile Include="Roms\iPackedRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="Windows\RomSelector.xaml.vb">

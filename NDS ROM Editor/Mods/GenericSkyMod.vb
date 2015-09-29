@@ -2,8 +2,8 @@
 
 Namespace Mods
     Public Class GenericSkyMod
-        Inherits GenericNDSMod
-        Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
+        Inherits GenericMod
+        Public Overrides Sub Initialize(CurrentProject As Project)
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
 
 
@@ -79,10 +79,10 @@ Namespace Mods
             'Await Kaomado.RunUnpack(IO.Path.Combine(romDirectory, "Data", "FONT", "kaomado.kao"), IO.Path.Combine(modDirectory, "Pokemon", "Portraits"))
 
             PluginHelper.StopLoading()
-        End Function
+        End Sub
 
-        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
-            Return {"C2SE", "C2SP"}
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of Type)
+            Return {GetType(Roms.SkyNDSRom)}
         End Function
 
     End Class
