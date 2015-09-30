@@ -60,7 +60,7 @@ Namespace Mods
 
         End Sub
         Public Overridable Function SupportedGameCodes() As IEnumerable(Of Type)
-            Return {}
+            Return {GetType(Roms.iPackedRom)}
         End Function
         Public Overrides Function DefaultExtension() As String
             Return ".modsrc"

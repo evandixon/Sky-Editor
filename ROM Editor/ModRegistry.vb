@@ -11,7 +11,7 @@ Public Class NDSModRegistry
             Dim games = item.SupportedGameCodes
             Dim match As Boolean = False
             For Each t In games
-                If games.Count = 0 OrElse PluginManager.IsOfType(t, GameType) Then
+                If games.Count = 0 OrElse PluginManager.IsOfType(GameType, t) Then
                     matches.Add(item.GetType)
                 End If
             Next

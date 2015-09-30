@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.NDS_ROM_Patcher.Form1
+            Me.MainForm = Global.DS_ROM_Patcher.Form1
         End Sub
     End Class
 End Namespace

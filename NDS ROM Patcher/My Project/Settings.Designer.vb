@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.NDS_ROM_Patcher.My.MySettings
+        Friend ReadOnly Property Settings() As Global.DS_ROM_Patcher.My.MySettings
             Get
-                Return Global.NDS_ROM_Patcher.My.MySettings.Default
+                Return Global.DS_ROM_Patcher.My.MySettings.Default
             End Get
         End Property
     End Module

@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{0A69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROM Patchers", "ROM Patchers", "{6313E1F3-4918-40A4-B6F9-F2E5D094424F}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "NDS ROM Patcher", "NDS ROM Patcher\NDS ROM Patcher.vbproj", "{A457E13A-C9DC-432A-BEB9-D04291DBD637}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DS ROM Patcher", "NDS ROM Patcher\DS ROM Patcher.vbproj", "{A457E13A-C9DC-432A-BEB9-D04291DBD637}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "LanguageStringPatcher", "LanguageStringPatcher\LanguageStringPatcher.vbproj", "{168715E4-DF09-4549-B2B5-69E66B534D31}"
 EndProject

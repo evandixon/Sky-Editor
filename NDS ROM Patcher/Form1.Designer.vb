@@ -44,17 +44,17 @@ Partial Class Form1
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(12, 15)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(104, 13)
+        Me.Label1.Size = New System.Drawing.Size(78, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "NDS ROM to Patch:"
+        Me.Label1.Text = "ROM to Patch:"
         '
         'txtFilename
         '
         Me.txtFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtFilename.Location = New System.Drawing.Point(122, 12)
+        Me.txtFilename.Location = New System.Drawing.Point(96, 12)
         Me.txtFilename.Name = "txtFilename"
-        Me.txtFilename.Size = New System.Drawing.Size(225, 20)
+        Me.txtFilename.Size = New System.Drawing.Size(251, 20)
         Me.txtFilename.TabIndex = 0
         '
         'Button1
@@ -142,7 +142,7 @@ Partial Class Form1
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "NDS ROM Files (*.nds)|*.nds|All Files (*.*)|(*.*)"
+        Me.OpenFileDialog1.Filter = "NDS ROM Files (*.nds)|*.nds|All Files (*.*)|*.*"
         '
         'Button2
         '
@@ -154,6 +154,7 @@ Partial Class Form1
         Me.Button2.Tag = "False"
         Me.Button2.Text = "Advanced"
         Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
         '
         'Form1
         '
@@ -170,7 +171,7 @@ Partial Class Form1
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.Name = "Form1"
-        Me.Text = "NDS ROM Patcher"
+        Me.Text = "DS ROM Patcher"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)

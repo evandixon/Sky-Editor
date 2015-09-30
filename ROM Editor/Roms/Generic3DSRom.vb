@@ -38,6 +38,8 @@ Namespace Roms
             Await RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
             'Unpack exefs
             Await RunCtrTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}""")
+            IO.File.Delete(exefsPath)
+            IO.File.Delete(romfsPath)
         End Function
 
         Public Function RePack(NewFileName As String) As Task Implements iPackedRom.RePack

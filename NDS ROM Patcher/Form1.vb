@@ -121,8 +121,15 @@ Public Class Form1
             Me.Filename = Filename
         End Sub
     End Class
-
+    Dim is3dsMode As Boolean
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If IO.File.Exists("Tools/ctrtool.exe") AndAlso IO.File.Exists("Tools/3DS Builder.exe") Then
+            is3dsMode = True
+            OpenFileDialog1.Filter = "3DS Files (*.3ds)|*.3ds|All Files (*.*)|*.*"
+        Else
+            is3dsMode = False
+            OpenFileDialog1.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
+        End If
         Dim args = Environment.GetCommandLineArgs
         If args.Length >= 3 Then
             Await PatchROM(args(1), args(2))
@@ -173,18 +180,37 @@ Public Class Form1
 
         btnPatch.Enabled = False
 
-        'Extract the NDS ROM
-        statusLabel1.Text = "Extracting the NDS ROM"
-        ToolStripProgressBar1.Value = 0
-        If Not IO.Directory.Exists(ROMDirectory) Then
-            IO.Directory.CreateDirectory(ROMDirectory)
+        If is3dsMode Then
+            If Not IO.Directory.Exists(ROMDirectory) Then IO.Directory.CreateDirectory(ROMDirectory)
+            Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
+            Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
+            Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
+            Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
+            Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
+            'Unpack portions
+            Await RunCTRTool($"-p --exheader=""{exHeaderPath}"" ""{SourceFilename}""")
+            Await RunCTRTool($"-p --exefs=""{exefsPath}"" ""{SourceFilename}""")
+            Await RunCTRTool($"-p --romfs=""{romfsPath}"" ""{SourceFilename}""")
+            'Unpack romfs
+            Await RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+            'Unpack exefs
+            Await RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}""")
+            IO.File.Delete(exefsPath)
+            IO.File.Delete(romfsPath)
+        Else
+            'Extract the NDS ROM
+            statusLabel1.Text = "Extracting the NDS ROM"
+            ToolStripProgressBar1.Value = 0
+            If Not IO.Directory.Exists(ROMDirectory) Then
+                IO.Directory.CreateDirectory(ROMDirectory)
+            End If
+            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SourceFilename, ROMDirectory))
         End If
-        Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SourceFilename, ROMDirectory))
 
         'Unpack the mods
         statusLabel1.Text = "Extracting the mods"
         ToolStripProgressBar1.Value = 20
-        For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod", IO.SearchOption.TopDirectoryOnly)
+        For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.dsmod", IO.SearchOption.TopDirectoryOnly)
             Dim z As New FastZip
             If Not IO.Directory.Exists(IO.Path.Combine(modTempDirectory, IO.Path.GetFileNameWithoutExtension(item))) Then
                 IO.Directory.CreateDirectory(IO.Path.Combine(modTempDirectory, IO.Path.GetFileNameWithoutExtension(item)))
@@ -209,32 +235,70 @@ Public Class Form1
         'Repack the ROM
         statusLabel1.Text = "Repacking the ROM"
         ToolStripProgressBar1.Value = 80
-        Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"),
-                                                  String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", IO.Path.Combine(currentDirectory, "PatchedROM.nds"), ROMDirectory))
-        'Save the ROM
-        statusLabel1.Text = "Saving the ROM"
-        ToolStripProgressBar1.Value = 100
-        If String.IsNullOrEmpty(DestinationFilename) Then
-            Dim o As New SaveFileDialog
-            o.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
-ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
-                IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), o.FileName)
-            Else
-                If MessageBox.Show("Are you sure you want to cancel the patching process?", "NDS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.No Then
-                    GoTo ShowSaveDialog
-                End If
-            End If
+        If is3dsMode Then
+            Dim exeFS As String = IO.Path.Combine(ROMDirectory, "exefs")
+            Dim romFS As String = IO.Path.Combine(ROMDirectory, "romfs")
+            Dim exHeader As String = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
+            Dim output As String = IO.Path.Combine(currentDirectory, "PatchedROM.3ds")
+            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
+                             $"""{exeFS}"" ""{romFS}"" ""{exHeader}"" ""{output}""")
         Else
-            IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename, True)
+            Await RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"),
+                                                  String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", IO.Path.Combine(currentDirectory, "PatchedROM.nds"), ROMDirectory))
         End If
 
-        'Clean Up
-        statusLabel1.Text = "Cleaning up"
-        ToolStripProgressBar1.Value = 100
-        If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
+        If is3dsMode Then
+            'Save the ROM
+            statusLabel1.Text = "Saving the ROM"
+            ToolStripProgressBar1.Value = 100
+            If String.IsNullOrEmpty(DestinationFilename) Then
+                Dim o As New SaveFileDialog
+                o.Filter = "3DS Files (*.3ds)|*.3ds|All Files (*.*)|*.*"
+ShowSaveDialog3DS: If o.ShowDialog = DialogResult.OK Then
+                    IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.3ds"), o.FileName)
+                Else
+                    If MessageBox.Show("Are you sure you want to cancel the patching process?", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.No Then
+                        GoTo ShowSaveDialog3DS
+                    End If
+                End If
+            Else
+                IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.3ds"), DestinationFilename, True)
+            End If
 
-        IO.Directory.Delete(ROMDirectory, True)
-        IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
+            'Clean Up
+            statusLabel1.Text = "Cleaning up"
+            ToolStripProgressBar1.Value = 100
+            If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
+
+            IO.Directory.Delete(ROMDirectory, True)
+            IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.3ds"))
+        Else
+            'Save the ROM
+            statusLabel1.Text = "Saving the ROM"
+            ToolStripProgressBar1.Value = 100
+            If String.IsNullOrEmpty(DestinationFilename) Then
+                Dim o As New SaveFileDialog
+                o.Filter = "NDS Files (*.nds)|*.nds|All Files (*.*)|*.*"
+ShowSaveDialogNDS: If o.ShowDialog = DialogResult.OK Then
+                    IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), o.FileName)
+                Else
+                    If MessageBox.Show("Are you sure you want to cancel the patching process?", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.No Then
+                        GoTo ShowSaveDialogNDS
+                    End If
+                End If
+            Else
+                IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.nds"), DestinationFilename, True)
+            End If
+
+            'Clean Up
+            statusLabel1.Text = "Cleaning up"
+            ToolStripProgressBar1.Value = 100
+            If IO.Directory.Exists(modTempDirectory) Then IO.Directory.Delete(modTempDirectory, True)
+
+            IO.Directory.Delete(ROMDirectory, True)
+            IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.nds"))
+        End If
+
 
         statusLabel1.Text = "Ready"
         ToolStripProgressBar1.Value = 100
@@ -247,7 +311,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
     ''' <param name="Filename"></param>
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
-    Public Shared Async Function RunProgram(Filename As String, Arguments As String) As Task(Of Boolean)
+    Public Shared Async Function RunProgram(Filename As String, Arguments As String) As Task
         'WriteLine(String.Format("Executing {0} {1}", Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
@@ -262,7 +326,9 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
         Await WaitForProcess(p)
         p.Dispose()
         ' WriteLine(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
-        Return True
+    End Function
+    Public Shared Async Function RunCTRTool(Arguments) As Task
+        Await RunProgram("Tools/ctrtool.exe", Arguments)
     End Function
     Private Shared Async Function WaitForProcess(p As Process) As Task
         Await Task.Run(Sub()
@@ -287,7 +353,7 @@ ShowSaveDialog: If o.ShowDialog = DialogResult.OK Then
     Private Sub ListAvailableMods()
         Dim currentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
         If IO.Directory.Exists(IO.Path.Combine(currentDirectory, "Mods")) Then
-            For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.ndsmod*", IO.SearchOption.TopDirectoryOnly)
+            For Each item In IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.dsmod*", IO.SearchOption.TopDirectoryOnly)
                 clbMods.Items.Add(IO.Path.GetFileNameWithoutExtension(item), Not item.ToLower.EndsWith(".disabled"))
             Next
         End If
