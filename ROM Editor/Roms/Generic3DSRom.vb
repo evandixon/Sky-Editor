@@ -37,7 +37,7 @@ Namespace Roms
             'Unpack romfs
             Await RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
             'Unpack exefs
-            Await RunCtrTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}""")
+            Await RunCtrTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
             IO.File.Delete(exefsPath)
             IO.File.Delete(romfsPath)
         End Function

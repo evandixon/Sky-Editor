@@ -279,6 +279,28 @@ namespace _3DS_Builder
                     TB_Serial.Text = exh.GetSerial();
                 }
 
+                //Exefs stuff
+                string[] files = (new DirectoryInfo(EXEFS_PATH)).GetFiles().Select(f => Path.GetFileNameWithoutExtension(f.FullName)).ToArray();
+                FileInfo fi = (new DirectoryInfo(EXEFS_PATH)).GetFiles()[Math.Max(Array.IndexOf(files, "code"), Array.IndexOf(files, ".code"))];
+                if (((files.Contains("code") || files.Contains(".code")) && !(files.Contains(".code") && files.Contains("code"))) && files.Contains("banner") && files.Contains("icon") && files.Length < 10)
+                {
+                    if (fi.Name == "code.bin")
+                    {
+                        string newName = fi.DirectoryName + Path.DirectorySeparatorChar + ".code.bin";
+                        File.Move(fi.FullName, newName);
+                        fi = new FileInfo(newName);
+                    }
+                    if (fi.Length % 0x200 == 0)
+                    {
+                        //Compress
+                        await Task.Run(new Action(() => {
+                            SetPrebuiltBoxes(false);
+                            new BLZCoder(new[] { "-en", fi.FullName }, PB_Show);
+                        }));
+                    }
+                }
+
+
                 string SERIAL_TEXT = TB_Serial.Text;
                 string SAVE_PATH = args[4];
 
