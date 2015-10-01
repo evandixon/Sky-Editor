@@ -181,6 +181,7 @@ Public Class Form1
         btnPatch.Enabled = False
 
         If is3dsMode Then
+            statusLabel1.Text = "Extracting the 3DS ROM"
             If Not IO.Directory.Exists(ROMDirectory) Then IO.Directory.CreateDirectory(ROMDirectory)
             Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
             Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
@@ -194,7 +195,7 @@ Public Class Form1
             'Unpack romfs
             Await RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
             'Unpack exefs
-            Await RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}""")
+            Await RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
             IO.File.Delete(exefsPath)
             IO.File.Delete(romfsPath)
         Else

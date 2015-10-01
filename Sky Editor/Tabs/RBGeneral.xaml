@@ -17,8 +17,8 @@
             <xctk:IntegerUpDown x:Name="numGeneral_StoredMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
             <Label x:Name="lblGeneral_RescuePoints" HorizontalAlignment="Left" Width="170" Content="Rescue Points:" />
             <xctk:IntegerUpDown x:Name="numGeneral_RescuePoints" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
-            <Label x:Name="lblGeneral_Base" HorizontalAlignment="Left" Width="170">Base Type:</Label>
-            <ComboBox x:Name="cbGeneral_Base" VerticalContentAlignment="Top" HorizontalContentAlignment="left" />
+            <Label x:Name="lblGeneral_Base" HorizontalAlignment="Left" Width="170" Visibility="Hidden">Base Type:</Label>
+            <ComboBox x:Name="cbGeneral_Base" VerticalContentAlignment="Top" HorizontalContentAlignment="left" Visibility="Hidden" />
             <Label x:Name="lblGeneral_Adventures" HorizontalAlignment="Left" Width="170" Visibility="Collapsed">Adventures:</Label>
             <xctk:IntegerUpDown x:Name="numGeneral_Adventures" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" Visibility="Collapsed" />
         </UniformGrid>

@@ -268,9 +268,9 @@ Namespace Saves
                 Dim output As New List(Of StoredPkm)
                 For count As Integer = 0 To Offsets.StoredPokemonNumber - 1
                     Dim i = StoredPokemon(count)
-                    If i.IsValid OrElse count < 9 Then 'Excepting when count < 9 because the first 8 pokemon slots are special
-                        output.Add(i)
-                    End If
+                    'If i.IsValid OrElse count < 9 Then 'Excepting when count < 9 because the first 8 pokemon slots are special
+                    output.Add(i)
+                    'End If
                 Next
                 Return output.ToArray
             End Get

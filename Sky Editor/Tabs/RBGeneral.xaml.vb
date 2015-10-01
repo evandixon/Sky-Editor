@@ -11,7 +11,7 @@ Namespace Tabs
                     numGeneral_HeldMoney.Value = .HeldMoney
                     numGeneral_StoredMoney.Value = .StoredMoney
                     numGeneral_RescuePoints.Value = .RescuePoints
-                    cbGeneral_Base.SelectedItem = Lists.RBBaseTypesInverse(.BaseType)
+                    'cbGeneral_Base.SelectedItem = cbGeneral_Base.Items.IndexOf(Lists.RBBaseTypesInverse(.BaseType))
                 End With
             End If
         End Sub
@@ -25,7 +25,7 @@ Namespace Tabs
                     .HeldMoney = numGeneral_HeldMoney.Value
                     .StoredMoney = numGeneral_StoredMoney.Value
                     .RescuePoints = numGeneral_RescuePoints.Value
-                    .BaseType = Lists.RBBaseTypes(cbGeneral_Base.SelectedItem)
+                    '.BaseType = Lists.RBBaseTypes(cbGeneral_Base.SelectedItem)
                 End With
                 Save = Save.Convert(Of Saves.RBSave)(rb)
             End If
@@ -38,6 +38,10 @@ Namespace Tabs
 
         Private Sub RBGeneral_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("General")
+            'For Each item In Lists.RBBaseTypes
+            '    cbGeneral_Base.Items.Add(item)
+            'Next
+            'cbGeneral_Base.DisplayMemberPath = "Key"
         End Sub
         Public Overrides ReadOnly Property SortOrder As Integer
             Get

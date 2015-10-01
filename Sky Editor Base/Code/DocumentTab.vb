@@ -95,8 +95,8 @@ Public Class DocumentTab
     End Sub
 
     Private Sub UpdateTitle()
-        If File IsNot Nothing Then
-            Me.Title = File.Name
+        If _file IsNot Nothing Then
+            Me.Title = _file.Name
             If IsModified Then
                 Me.Title = "* " & Me.Title
             End If
