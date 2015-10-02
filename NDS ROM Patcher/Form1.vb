@@ -123,7 +123,7 @@ Public Class Form1
     End Class
     Dim is3dsMode As Boolean
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        If IO.File.Exists("Tools/ctrtool.exe") AndAlso IO.File.Exists("Tools/3DS Builder.exe") Then
+        If IO.File.Exists("Tools/ctrtool.exe") Then
             is3dsMode = True
             OpenFileDialog1.Filter = "3DS Files (*.3ds)|*.3ds|All Files (*.*)|*.*"
         Else

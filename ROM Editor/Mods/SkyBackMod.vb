@@ -33,7 +33,7 @@ Public Class SkyBackMod
         PluginHelper.StopLoading()
     End Function
 
-    Public Overrides Sub Build(CurrentProject As Project)
+    Public Overrides Async Function Buildasync(CurrentProject As Project) As Task
         'Convert BACK
         If IO.Directory.Exists(IO.Path.Combine(ModDirectory, "Backgrounds")) Then
             For Each background In IO.Directory.GetFiles(IO.Path.Combine(ModDirectory, "Backgrounds"), "*.bmp")
@@ -62,6 +62,7 @@ Public Class SkyBackMod
                     Dim bgp = FileFormats.BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
                     bgp.Save(IO.Path.Combine(ROMDirectory, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                     bgp.Dispose()
+                    Await FileFormats.BGP.RunCompress(IO.Path.Combine(ROMDirectory, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                 End If
 
             Next
@@ -71,7 +72,7 @@ Public Class SkyBackMod
         If IO.Directory.Exists(IO.Path.Combine(ROMDirectory, "Data", "BACK", "Decompressed")) Then
             IO.Directory.Delete(IO.Path.Combine(ROMDirectory, "Data", "BACK", "Decompressed"), True)
         End If
-    End Sub
+    End Function
 
     Public Overrides Function SupportedGameCodes() As IEnumerable(Of Type)
         Return {GetType(Roms.SkyNDSRom)}

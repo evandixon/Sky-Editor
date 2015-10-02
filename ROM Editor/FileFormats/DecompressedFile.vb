@@ -31,10 +31,11 @@ Namespace FileFormats
             If IO.Directory.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed\") AndAlso IO.Directory.GetFiles(IO.Path.GetDirectoryName(Filename) & "\Decompressed\").Length = 0 Then
                 IO.Directory.Delete(IO.Path.GetDirectoryName(Filename) & "\Decompressed\")
             End If
-            'If Not IO.File.Exists(Filename) AndAlso IO.File.Exists(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx")) Then
-            'IO.File.Delete(Filename)
-            'IO.File.Copy(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx"), Filename)
-            'End If
+            If IO.File.Exists(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx")) Then
+                IO.File.Delete(Filename)
+                IO.File.Copy(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx"), Filename)
+                IO.File.Delete(Filename.Replace(IO.Path.GetExtension(Filename), ".pkdpx"))
+            End If
         End Function
         ''' <summary>
         ''' Returns a DecompressedFile after decompressing the data.
@@ -50,12 +51,12 @@ Namespace FileFormats
         ''' Saves and compresses the DecompressedFile.
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Async Sub Save(Path As String)
+        Public Overrides Sub Save(Path As String)
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Path) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Path) & "\Decompressed")
             End If
             MyBase.Save(Path.Replace(IO.Path.GetDirectoryName(Path), IO.Path.GetDirectoryName(Path) & "\Decompressed"))
-            Await RunCompress(Path)
+            'Await RunCompress(Path)
         End Sub
         Public Sub New(OriginalFilename As String)
             Dim Filename As String = OriginalFilename.Replace("/", "\").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed")

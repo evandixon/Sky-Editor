@@ -1,25 +1,20 @@
-﻿using System;
+﻿using _3DS_Builder.Properties;
+using blz;
+using CTR;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using blz;
-using CTR;
-using _3DS_Builder.Properties;
-using System.Threading.Tasks;
 
 namespace _3DS_Builder
 {
-
     public partial class Form1 : Form
     {
         public Form1()
         {
-
             //Code by SciresM
             InitializeComponent();
             B_Go.Enabled = false;
@@ -47,9 +42,6 @@ namespace _3DS_Builder
             }
             CHK_Card2.Checked = true;
             //End Code by SciresM
-
-
-
         }
 
         public volatile int threads = 0;
@@ -57,6 +49,7 @@ namespace _3DS_Builder
         public static Dictionary<ulong, string[]> RecognizedGames;
         internal static string LOGO_NAME;
         internal static bool Card2;
+        private bool CloseOnComplete = false;
 
         // UI Alerts
         internal static DialogResult Alert(params string[] lines)
@@ -65,6 +58,7 @@ namespace _3DS_Builder
             string msg = String.Join(Environment.NewLine + Environment.NewLine, lines);
             return MessageBox.Show(msg, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+
         internal static DialogResult Prompt(MessageBoxButtons btn, params string[] lines)
         {
             SystemSounds.Question.Play();
@@ -83,6 +77,7 @@ namespace _3DS_Builder
 
             Validate_Go();
         }
+
         private void B_Go_Click(object sender, EventArgs e)
         {
             if (threads > 0) { Alert("Please wait for all operations to finish first."); return; }
@@ -94,16 +89,19 @@ namespace _3DS_Builder
             string SAVE_PATH = TB_SavePath.Text;
 
             Enabled = false;
-            new Thread(() =>
-            {
-                threads++;
-                SetPrebuiltBoxes(false);
-                CTR_ROM.buildROM(Card2, LOGO_NAME, EXEFS_PATH, ROMFS_PATH, EXHEADER_PATH, SERIAL_TEXT, SAVE_PATH, PB_Show, RTB_Progress);
-                SetPrebuiltBoxes(true);
-                threads--;
-            }).Start();
+            //new Thread(() =>
+            //{
+            //    threads++;
+            SetPrebuiltBoxes(false);
+            CTR_ROM.buildROM(Card2, LOGO_NAME, EXEFS_PATH, ROMFS_PATH, EXHEADER_PATH, SERIAL_TEXT, SAVE_PATH, PB_Show, RTB_Progress);
+            SetPrebuiltBoxes(true);
+            //    threads--;
+            //}).Start();
             Enabled = true;
+            if (CloseOnComplete)
+                this.Close();
         }
+
         private void Validate_Go()
         {
             bool enable = CTR_ROM.isValid(TB_Exefs.Text, TB_Romfs.Text, TB_Exheader.Text,
@@ -148,6 +146,7 @@ namespace _3DS_Builder
                 Validate_Go();
             }
         }
+
         private void B_Exefs_Click(object sender, EventArgs e)
         {
             if (threads > 0) { Alert("Please wait for all operations to finish first."); return; }
@@ -161,7 +160,6 @@ namespace _3DS_Builder
             }
             else
             {
-
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
                 if (fbd.ShowDialog() != DialogResult.OK) return;
 
@@ -197,9 +195,9 @@ namespace _3DS_Builder
                 }
             }
         }
+
         private void B_Exheader_Click(object sender, EventArgs e)
         {
-
             if (threads > 0) { Alert("Please wait for all operations to finish first."); return; }
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -226,6 +224,7 @@ namespace _3DS_Builder
         {
             LOGO_NAME = CB_Logo.Text;
         }
+
         private void CHK_Card2_CheckedChanged(object sender, EventArgs e)
         {
             Card2 = CHK_Card2.Checked;
@@ -235,21 +234,25 @@ namespace _3DS_Builder
             }
             Validate_Go();
         }
+
         private void TB_Serial_TextChanged(object sender, EventArgs e)
         {
             TB_Serial.Text = TB_Serial.Text.ToUpper();
             Validate_Go();
         }
+
         private void CHK_PrebuiltRomfs_CheckedChanged(object sender, EventArgs e)
         {
             TB_Romfs.Text = string.Empty;
             Validate_Go();
         }
+
         private void CHK_PrebuiltExefs_CheckedChanged(object sender, EventArgs e)
         {
             TB_Exefs.Text = string.Empty;
             Validate_Go();
         }
+
         private void SetPrebuiltBoxes(bool en)
         {
             foreach (CheckBox c in new[] { CHK_PrebuiltExefs, CHK_PrebuiltRomfs })
@@ -263,56 +266,85 @@ namespace _3DS_Builder
             }
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            //Command-line argument support added by evandixon
-            string[] args = Environment.GetCommandLineArgs();
+            var args = Environment.GetCommandLineArgs();
             if (args.Length > 4)
             {
+                //this.Visible = false;
                 string EXEFS_PATH = args[1];
                 string ROMFS_PATH = args[2];
                 string EXHEADER_PATH = args[3];
+                //romfs
+                TB_Romfs.Text = ROMFS_PATH;
 
-                Exheader exh = new Exheader(EXHEADER_PATH);
-                if (RecognizedGames.ContainsKey(exh.TitleID))
-                {
-                    TB_Serial.Text = exh.GetSerial();
-                }
+                //exefs
 
-                //Exefs stuff
                 string[] files = (new DirectoryInfo(EXEFS_PATH)).GetFiles().Select(f => Path.GetFileNameWithoutExtension(f.FullName)).ToArray();
-                FileInfo fi = (new DirectoryInfo(EXEFS_PATH)).GetFiles()[Math.Max(Array.IndexOf(files, "code"), Array.IndexOf(files, ".code"))];
                 if (((files.Contains("code") || files.Contains(".code")) && !(files.Contains(".code") && files.Contains("code"))) && files.Contains("banner") && files.Contains("icon") && files.Length < 10)
                 {
+                    FileInfo fi = (new DirectoryInfo(EXEFS_PATH)).GetFiles()[Math.Max(Array.IndexOf(files, "code"), Array.IndexOf(files, ".code"))];
                     if (fi.Name == "code.bin")
                     {
+                        //Alert("Renaming \"code.bin\" to \".code.bin\"");
                         string newName = fi.DirectoryName + Path.DirectorySeparatorChar + ".code.bin";
                         File.Move(fi.FullName, newName);
                         fi = new FileInfo(newName);
                     }
                     if (fi.Length % 0x200 == 0)
                     {
-                        //Compress
-                        await Task.Run(new Action(() => {
-                            SetPrebuiltBoxes(false);
+                        //Compressing code.bin.
+                        //For now, this will run synchronously to try to avoid potential issues.
+                        //if (Prompt(MessageBoxButtons.YesNo, "Detected Decompressed code.bin.", "Compress? File will be replaced. Do not build an ExeFS with an uncompressed code.bin if the Exheader doesn't specify it.") == DialogResult.Yes)
+                        {
+                            //new Thread(() => {
+                            //    threads++;
+                            //    SetPrebuiltBoxes(false);
                             new BLZCoder(new[] { "-en", fi.FullName }, PB_Show);
-                        }));
+                            //    SetPrebuiltBoxes(true);
+                            //    threads--;
+                            //    //Alert("Compressed!");
+                            //}).Start();
+                            //}
+                        }
+                        if (files.Contains("logo"))
+                        {
+                            //Alert("Deleting unneeded exefs logo binary.");
+                            File.Delete((new DirectoryInfo(EXEFS_PATH)).GetFiles()[Array.IndexOf(files, "logo")].FullName);
+                        }
+                        TB_Exefs.Text = EXEFS_PATH;
+                        //Validate_Go();
                     }
+                    //else
+                    //{
+                    //    Alert("Your selected ExeFS is missing something essential.");
+                    //}
+
+                    //exheader
+                    //if (threads > 0) { Alert("Please wait for all operations to finish first."); return; }
+
+                    //OpenFileDialog ofd = new OpenFileDialog();
+                    //if (ofd.ShowDialog() == DialogResult.OK)
+                    //{
+                    FileInfo exfi = new FileInfo(EXHEADER_PATH);
+                    //if (exfi.Length < 0x800)
+                    //{
+                    //    Alert("Selected Exheader is too short. Correct size is 0x800 for Exheader and AccessDescriptor.");
+                    //    return;
+                    //}
+                    TB_Exheader.Text = EXHEADER_PATH;
+                    Exheader exh = new Exheader(TB_Exheader.Text);
+                    if (RecognizedGames.ContainsKey(exh.TitleID))
+                    {
+                        //if (Prompt(MessageBoxButtons.YesNo, "Detected " + RecognizedGames[exh.TitleID][1] + ". Load Defaults?") == DialogResult.Yes)
+                        TB_Serial.Text = exh.GetSerial();
+                    }
+                    // }
+                    CloseOnComplete = true;
+                    TB_SavePath.Text = args[4];
+                    //Validate_Go();
+                    B_Go_Click(sender, e);
                 }
-
-
-                string SERIAL_TEXT = TB_Serial.Text;
-                string SAVE_PATH = args[4];
-
-                Enabled = false;
-
-                await Task.Run(() => {
-                    SetPrebuiltBoxes(false);
-                    CTR_ROM.buildROM(Card2, LOGO_NAME, EXEFS_PATH, ROMFS_PATH, EXHEADER_PATH, SERIAL_TEXT, SAVE_PATH, PB_Show, RTB_Progress);
-                    SetPrebuiltBoxes(true);
-                });
-
-                this.Close();
             }
         }
     }

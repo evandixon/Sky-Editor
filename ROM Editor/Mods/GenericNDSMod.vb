@@ -43,6 +43,9 @@ Namespace Mods
         Public Overridable Function SupportsDelete() As Boolean
             Return Not PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("FilesToCopy"))
         End Function
+        Public Overridable Function SupportsAdd() As Boolean
+            Return Not PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("FilesToCopy"))
+        End Function
         Public Overridable Async Function InitializeAsync(CurrentProject As Project) As Task
             Await Task.Run(New Action(Sub()
                                           Initialize(CurrentProject)
