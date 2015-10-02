@@ -1,4 +1,6 @@
-﻿using _3DS_Builder.Properties;
+﻿//Code by SciresM, slightly modified by evandixon
+
+using _3DS_Builder.Properties;
 using blz;
 using CTR;
 using System;
@@ -15,7 +17,6 @@ namespace _3DS_Builder
     {
         public Form1()
         {
-            //Code by SciresM
             InitializeComponent();
             B_Go.Enabled = false;
             CB_Logo.Items.AddRange(new[] { "Nintendo", "Distributed", "Licensed", "iQue", "iQueForSystem" });
@@ -41,7 +42,6 @@ namespace _3DS_Builder
                 }
             }
             CHK_Card2.Checked = true;
-            //End Code by SciresM
         }
 
         public volatile int threads = 0;
