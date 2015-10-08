@@ -2,15 +2,41 @@
 Public Class GenericFile
     Implements IDisposable
     Implements iModifiable
-    'Implements iCreatableFile 'Excluded because not everything that inherits from this applies
-    'Implements iOpenableFile 'Excluded because not everything that inherits from this applies
+    'Implements iCreatableFile 'Excluded because this might not apply to children
+    'Implements iOpenableFile
+    Implements Interfaces.iGenericFile
     Implements iSavable
-    Protected _tempname As String
-    Protected _tempFilename As String
+    Private _tempname As String
+    Private _tempFilename As String
     Dim _fileReader As IO.FileStream
 
 #Region "Constructors"
     Public Sub New(Filename As String)
+        OpenFile(Filename)
+    End Sub
+    Public Sub New()
+
+    End Sub
+#End Region
+
+    ''' <summary>
+    ''' Creates a new file with the given name.
+    ''' </summary>
+    ''' <param name="Name">Name (not path) of the file.  Include the extension if applicable.</param>
+    Public Overridable Sub CreateFile(Name As String) 'Implements iCreatableFile.CreateFile
+        _tempname = Guid.NewGuid.ToString()
+        IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), {})
+        Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
+        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
+        Me.OriginalFilename = String.Empty
+        Me.Name = Name
+    End Sub
+
+    ''' <summary>
+    ''' Opens a file from the given filename.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    Public Overridable Sub OpenFile(Filename As String) ' Implements iOpenableFile.OpenFile
         _tempname = Guid.NewGuid.ToString()
         Me.OriginalFilename = Filename
         If IO.File.Exists(Filename) Then
@@ -21,26 +47,11 @@ Public Class GenericFile
         _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
         Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
     End Sub
-    Public Sub New(RawData As Byte())
-        _tempname = Guid.NewGuid.ToString()
-        IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
-        Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        Me.OriginalFilename = Filename
-    End Sub
-    Public Sub New()
-        _tempname = Guid.NewGuid.ToString()
-        IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), {})
-        Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        Me.OriginalFilename = String.Empty
-    End Sub
-#End Region
 
-#Region "Properties"
-    Public Property Filename As String
-    Public Property OriginalFilename As String
-    Public Property Name As String
+#Region "GenericFile Support"
+    Public Property Filename As String Implements Interfaces.iGenericFile.Filename
+    Public Property OriginalFilename As String Implements Interfaces.iGenericFile.OriginalFilename
+    Public Property Name As String Implements Interfaces.iGenericFile.Name
         Get
             If _name Is Nothing Then
                 Return IO.Path.GetFileName(OriginalFilename)
@@ -53,7 +64,12 @@ Public Class GenericFile
         End Set
     End Property
     Dim _name As String = Nothing
+    Public Overridable Function DefaultExtension() As String Implements Interfaces.iGenericFile.DefaultExtension
+        Return ""
+    End Function
+#End Region
 
+#Region "Properties"
     Protected ReadOnly Property FileReader As IO.FileStream
         Get
             If _fileReader Is Nothing Then
@@ -129,7 +145,7 @@ Public Class GenericFile
 
 #Region "Events"
     Public Event FileModified(sender As Object, e As EventArgs) Implements iModifiable.Modified
-    Public Event FileSaved(sender As Object, e As EventArgs)
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
 
     ''' <summary>
     ''' Raises the FileModified event, marking the file as having been modified.
@@ -149,9 +165,6 @@ Public Class GenericFile
 #End Region
 
 #Region "Methods"
-    Public Overridable Function DefaultExtension() As String
-        Return ""
-    End Function
     Protected Overridable Sub PreSave()
 
     End Sub

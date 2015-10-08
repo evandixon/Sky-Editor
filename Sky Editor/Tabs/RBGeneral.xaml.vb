@@ -1,34 +1,27 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Saves
+Imports SkyEditorBase
 
 Namespace Tabs
     Public Class RBGeneral
-        Inherits ObjectTab
+        Inherits ObjectTab(Of RBSave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.RBSave) Then
-                With Save.Convert(Of Saves.RBSave)()
-                    txtGeneral_TeamName.Text = .TeamName
-                    numGeneral_HeldMoney.Value = .HeldMoney
-                    numGeneral_StoredMoney.Value = .StoredMoney
-                    numGeneral_RescuePoints.Value = .RescuePoints
-                    'cbGeneral_Base.SelectedItem = cbGeneral_Base.Items.IndexOf(Lists.RBBaseTypesInverse(.BaseType))
-                End With
-            End If
+            With EditingItem
+                txtGeneral_TeamName.Text = .TeamName
+                numGeneral_HeldMoney.Value = .HeldMoney
+                numGeneral_StoredMoney.Value = .StoredMoney
+                numGeneral_RescuePoints.Value = .RescuePoints
+                'cbGeneral_Base.SelectedItem = cbGeneral_Base.Items.IndexOf(Lists.RBBaseTypesInverse(.BaseType))
+            End With
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.RBSave) Then
-                Dim rb = Save.Convert(Of Saves.RBSave)()
-                With rb
-                    .TeamName = txtGeneral_TeamName.Text
-                    .HeldMoney = numGeneral_HeldMoney.Value
-                    .StoredMoney = numGeneral_StoredMoney.Value
-                    .RescuePoints = numGeneral_RescuePoints.Value
-                    '.BaseType = Lists.RBBaseTypes(cbGeneral_Base.SelectedItem)
-                End With
-                Save = Save.Convert(Of Saves.RBSave)(rb)
-            End If
+            With EditingItem
+                .TeamName = txtGeneral_TeamName.Text
+                .HeldMoney = numGeneral_HeldMoney.Value
+                .StoredMoney = numGeneral_StoredMoney.Value
+                .RescuePoints = numGeneral_RescuePoints.Value
+                '.BaseType = Lists.RBBaseTypes(cbGeneral_Base.SelectedItem)
+            End With
         End Sub
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get

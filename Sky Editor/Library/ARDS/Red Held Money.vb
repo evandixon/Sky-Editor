@@ -1,4 +1,6 @@
 ﻿Imports SkyEditorBase.ARDS
+Imports SkyEditorBase.Interfaces
+
 Public Class RedHeldMoney
     Implements SkyEditorBase.ARDS.CodeDefinition
 
@@ -36,7 +38,7 @@ Public Class RedHeldMoney
         Return Name
     End Function
 
-    Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+    Public Function GenerateCode(Save As iGenericFile, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
         'Dim s = DirectCast(Save, RBSave)
         'Dim moneyHex As String = Conversion.Hex(Math.Min(s.HeldMoney, &HFFFFFF)).PadLeft(8, "0")
         'Dim code As New SkyEditorBase.ARDS.CBAHelper.Code

@@ -1,18 +1,15 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Saves
+Imports SkyEditorBase
 Namespace Tabs
     Public Class RBStoredItemsTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of RBSave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            'debug stored items
-            If Save.IsOfType(GameStrings.RBSave) Then
-                Dim x = Save.Convert(Of Saves.RBSave).StoredItemCounts
-                For count As Integer = 0 To 238
-                    If x(count) > 0 Then
-                        txtDisplay.Text &= Lists.RBItemNames(count + 1) & ": " & x(count) & vbCrLf
-                    End If
-                Next
-            End If
+            Dim x = editingitem.StoredItemCounts
+            For count As Integer = 0 To 238
+                If x(count) > 0 Then
+                    txtDisplay.Text &= Lists.RBItemNames(count + 1) & ": " & x(count) & vbCrLf
+                End If
+            Next
         End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()

@@ -16,10 +16,6 @@ Namespace FileFormats
             MyBase.New(Filename)
             InitItems()
         End Sub
-        Public Sub New(RawData As Byte())
-            MyBase.New(RawData)
-            InitItems()
-        End Sub
         Private Sub InitItems()
             Items = New List(Of TableDatItem)
             If Length >= 2 Then

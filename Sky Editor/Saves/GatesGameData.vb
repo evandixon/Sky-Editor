@@ -3,16 +3,16 @@ Imports SkyEditor
 
 Namespace Saves
     Public Class GatesGameData
-        Inherits GenericSave
-        Implements SkyEditorBase.Interfaces.iOpenableFile
-        Protected Property Bits As Binary
+        Inherits BinaryFile
         Dim originalChecksum As Byte
+        Public Sub New()
+            MyBase.New()
+        End Sub
         Public Sub New(Filename As String)
             MyBase.New(Filename)
-            Bits = New Binary()
-            For count As Integer = 0 To Length - 1
-                Bits.AppendByte(RawData(count))
-            Next
+        End Sub
+        Public Overrides Sub OpenFile(Filename As String)
+            MyBase.OpenFile(Filename)
             originalChecksum = CalculateChecksum()
         End Sub
 
@@ -80,7 +80,7 @@ Namespace Saves
             'End If
             Return sum1
         End Function
-        Public Overrides Sub FixChecksum()
+        Protected Overrides Sub FixChecksum()
             MyBase.FixChecksum()
             StoredChecksum = (StoredChecksum + (CalculateChecksum() - originalChecksum) And &HFF)
         End Sub
@@ -100,15 +100,10 @@ Namespace Saves
                 Bits.Int(9, 0, 16) = value
             End Set
         End Property
-        Public Overrides Sub DebugInfo()
-            MyBase.DebugInfo()
-            PluginHelper.Writeline("Calculated Checksum: " & CalculateChecksum())
-            PluginHelper.Writeline("    Stored Checksum: " & StoredChecksum)
-        End Sub
 
-        Public Overrides Function DefaultSaveID() As String
-            Return GameStrings.MDGatesData
-        End Function
+        'Public Overrides Function DefaultSaveID() As String
+        '    Return GameStrings.MDGatesData
+        'End Function
     End Class
 
 End Namespace

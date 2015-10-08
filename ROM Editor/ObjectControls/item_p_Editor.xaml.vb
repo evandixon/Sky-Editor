@@ -14,10 +14,9 @@ Namespace ObjectControls
                 With DirectCast(Me.EditingObject(), item_p)
                     Items = .Items
                     If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                        Using englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
-                            ReDim ItemNames(1959)
-                            englishlanguage.ContainedObject.CopyTo(6773, ItemNames, 0, 1959)
-                        End Using
+                        Dim englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                        ReDim ItemNames(1959)
+                        englishlanguage.ContainedObject.CopyTo(6773, ItemNames, 0, 1959)
                         'Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
                         '    ReDim ItemNames(1959)
                         '    englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)

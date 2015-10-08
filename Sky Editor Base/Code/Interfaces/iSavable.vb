@@ -12,6 +12,12 @@
         ''' </summary>
         ''' <param name="Filename"></param>
         Sub Save(Filename As String)
+        ''' <summary>
+        ''' Raised when the file is saved.
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
+        Event FileSaved(sender As Object, e As EventArgs)
     End Interface
 
 End Namespace

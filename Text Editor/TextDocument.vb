@@ -15,6 +15,14 @@ Public Class AsciiTextDocument
         MyBase.New(Filename)
         ReadText()
     End Sub
+    Public Overrides Sub CreateFile(Name As String) Implements Interfaces.iCreatableFile.CreateFile
+        Me.Text = String.Empty
+        Me.Name = Name
+    End Sub
+    Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+        MyBase.OpenFile(Filename)
+        ReadText()
+    End Sub
     Private Sub ReadText()
         Dim e As New Text.ASCIIEncoding
         Text = e.GetString(RawData)

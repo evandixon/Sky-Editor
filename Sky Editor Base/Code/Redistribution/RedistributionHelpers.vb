@@ -2,6 +2,7 @@
 Imports ICSharpCode.SharpZipLib.Zip
 Imports System.Reflection
 Imports System.Web.Script.Serialization
+Imports SkyEditorBase.Utilities
 
 Namespace Redistribution
     Public Class RedistributionHelpers
@@ -64,7 +65,7 @@ Namespace Redistribution
             Dim PluginNames As New List(Of String)
             If String.IsNullOrWhiteSpace(PluginName) Then
                 For Each item In Manager.Assemblies
-                    PluginNames.Add(IO.Path.GetFileName(Manager.GetAssemblyFileName(item)))
+                    PluginNames.Add(IO.Path.GetFileName(ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)))
                 Next
             Else
                 PluginNames.Add(PluginName)
@@ -216,10 +217,10 @@ Namespace Redistribution
                 Dim exists As Boolean = False
                 Dim outdated As Boolean = True
                 For Each item In Manager.Assemblies
-                    If Manager.GetAssemblyFileName(item).Replace(".dll", "").Replace(".exe", "") = p.Name Then
+                    If ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".dll", "").Replace(".exe", "") = p.Name Then
                         exists = True
-                        assemblyName = Manager.GetAssemblyFileName(item)
-                        If Manager.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
+                        assemblyName = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)
+                        If ReflectionHelpers.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
                             outdated = False
                         End If
                     End If
@@ -252,10 +253,10 @@ Namespace Redistribution
             Dim plugins As New List(Of PluginInfo)
             For Each item In Manager.Assemblies
                 Dim info As New PluginInfo
-                info.VersionString = Manager.GetAssemblyVersion(item).ToString
-                info.Name = Manager.GetAssemblyFileName(item).Replace(".exe", "").Replace(".dll", "")
+                info.VersionString = ReflectionHelpers.GetAssemblyVersion(item).ToString
+                info.Name = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "")
                 info.Dependencies = New List(Of PluginInfo)
-                info.DownloadUrl = IO.Path.Combine(WebDirectory, Manager.GetAssemblyFileName(item).Replace(".exe", "").Replace(".dll", "") & ".zip").Replace("\", "/")
+                info.DownloadUrl = IO.Path.Combine(WebDirectory, ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "") & ".zip").Replace("\", "/")
                 plugins.Add(info)
             Next
             Return SerializePluginInfo(plugins)

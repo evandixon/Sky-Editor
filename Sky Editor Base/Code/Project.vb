@@ -1,5 +1,7 @@
 ﻿Imports System.Text
 Imports System.Web.Script.Serialization
+Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Utilities
 
 Public Class Project
     Implements IDisposable
@@ -50,7 +52,7 @@ Public Class Project
 #End Region
 
 #Region "Events"
-    Public Event FileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile))
+    Public Event FileAdded(sender As Object, File As KeyValuePair(Of String, Interfaces.iGenericFile))
     Public Event FileRemoved(sender As Object, File As String)
     Public Event DirectoryCreated(sender As Object, Directory As String)
     Public Event DirectoryRemoved(sender As Object, Directory As String)
@@ -194,10 +196,10 @@ Public Class Project
         '    Return (From file In Files Where file.Key.Contains("/") OrElse file.Key.Contains("\") AndAlso Not String.IsNullOrEmpty(InternalPath) Select file.Key).ToList
         'End If
     End Function
-    Public Function GetFiles(FileType As Type) As List(Of GenericFile)
-        Dim out As New List(Of GenericFile)
+    Public Function GetFiles(FileType As Type) As List(Of iGenericFile)
+        Dim out As New List(Of iGenericFile)
         For Each item In Files
-            If item.Value IsNot Nothing AndAlso PluginManager.IsOfType(item.Value, FileType) Then
+            If item.Value IsNot Nothing AndAlso ReflectionHelpers.IsOfType(item.Value, FileType) Then
                 out.Add(item.Value)
             End If
         Next
@@ -239,7 +241,7 @@ Public Class Project
     Public Sub AddFile(InternalPath As String, File As GenericFile)
         'Files.Add(File.OriginalFilename.Replace(IO.Path.GetDirectoryName(Me.Filename), ""), File)
         Files.Add(InternalPath, File)
-        RaiseEvent FileAdded(Me, New KeyValuePair(Of String, GenericFile)(InternalPath, File))
+        RaiseEvent FileAdded(Me, New KeyValuePair(Of String, iGenericFile)(InternalPath, File))
         IsModified = True
     End Sub
     Public Sub RemoveFile(InternalPath As String)

@@ -55,9 +55,13 @@ Namespace FileFormats
             MyBase.New()
             Items = New List(Of String)
         End Sub
-
         Public Sub New(Filename As String)
-            MyBase.New(Filename)
+            Me.New
+            OpenFile(Filename)
+        End Sub
+
+        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
             Dim bytes = IO.File.ReadAllBytes(Filename)
 
             Items = New List(Of String)

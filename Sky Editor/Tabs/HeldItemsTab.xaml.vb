@@ -4,7 +4,7 @@ Imports SkyEditorBase.Utilities
 
 Namespace Tabs
     Public Class HeldItemsTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of iItemStorage)
         Dim slots As ItemSlot()
         Dim storage As iItemStorage
 
@@ -15,8 +15,7 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub RefreshDisplay()
-            Dim Save As GenericSave = DirectCast(Me.EditingObject, GenericSave)
-            storage = Save.Convert(Of iItemStorage)()
+            storage = EditingItem
             slots = storage.HeldItemSlots
             RefreshSlotDisplay()
             If lbInventorySlots.SelectedIndex = -1 Then
@@ -51,10 +50,10 @@ Namespace Tabs
         Public Overrides Sub UpdateObject()
             SaveSlot(lbInventorySlots.SelectedIndex)
 
-            'Dim s = Save.Convert(Of iItemStorage)()
-            'For count = 0 To s.HeldItemSlots.Length - 1
-            '    s.HeldItemSlots(count).Setter.Invoke(slots(count).)
-            'Next
+            Dim s = EditingItem
+            For count = 0 To s.HeldItemSlots.Length - 1
+                s.HeldItemSlots(count).Setter.Invoke(slots(count).Getter.Invoke)
+            Next
 
         End Sub
         Sub LoadHeldItemsDropDowns()

@@ -98,14 +98,8 @@
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
-    <Compile Include="Editor Tabs\FilesTab.xaml.vb">
-      <DependentUpon>FilesTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Editor Tabs\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor Tabs\PortraitTab.xaml.vb">
-      <DependentUpon>PortraitTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="File Format Controls\BGPControl.xaml.vb">
       <DependentUpon>BGPControl.xaml</DependentUpon>
@@ -234,15 +228,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Editor Tabs\FilesTab.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Editor Tabs\PersonalityTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Editor Tabs\PortraitTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -104,7 +104,7 @@
 '#Region "Technical Stuff"
 '        Public Overrides Sub FixChecksum()
 '            'Fix the first checksum
-'            Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(Bits, 0, Offsets.ChecksumEnd))
+'            Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(Bits, 4, Offsets.ChecksumEnd))
 '            For count = 0 To 3
 '                RawData(count) = buffer(count)
 '            Next

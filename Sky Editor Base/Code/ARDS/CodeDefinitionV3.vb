@@ -1,4 +1,6 @@
-﻿Namespace ARDS
+﻿Imports SkyEditorBase.Interfaces
+
+Namespace ARDS
     ''' <summary>
     ''' Interface a class must implement in order to be loaded as an ARDS plugin.
     ''' </summary>
@@ -13,7 +15,7 @@
         ''' <param name="CodeType">Single CheatFormat that the user wants to be generated.</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function GenerateCode(ByVal Save As GenericSave, TargetRegion As Region, ButtonActivator As UInt16, CodeType As CheatFormat) As String
+        Function GenerateCode(ByVal Save As iGenericFile, TargetRegion As Region, ButtonActivator As UInt16, CodeType As CheatFormat) As String
 
         ''' <summary>
         ''' Category this code definition belongs to.  CodeDefinitions of the same category will be grouped together.

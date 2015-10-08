@@ -3,7 +3,7 @@ Imports SkyEditorBase
 
 Namespace Roms
     Public Class GenericNDSRom
-        Inherits GenericSave
+        Inherits GenericFile
         Implements SkyEditorBase.Interfaces.iOpenableFile
         Implements iPackedRom
 
@@ -20,12 +20,16 @@ Namespace Roms
             MyBase.New(Filename)
             _unpackTask = Nothing
         End Sub
+        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
+            _unpackTask = Nothing
+        End Sub
 #End Region
 
 #Region "GenericSave Stuff"
-        Public Overrides Function DefaultSaveID() As String
-            Return GameStrings.GenericNDSRom
-        End Function
+        'Public Overrides Function DefaultSaveID() As String
+        '    Return GameStrings.GenericNDSRom
+        'End Function
         Public Overrides Function DefaultExtension() As String
             Return "*.nds"
         End Function

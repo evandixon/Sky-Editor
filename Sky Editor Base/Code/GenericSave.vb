@@ -1,6 +1,6 @@
 ﻿Imports System.Threading.Tasks
 
-Partial Public MustInherit Class GenericSave
+<Obsolete("Use GenericFile instead.")> Partial Public MustInherit Class GenericSave
     Inherits GenericFile
 
     Public Event SaveIDUpdated(sender As Object, NewSaveID As String)

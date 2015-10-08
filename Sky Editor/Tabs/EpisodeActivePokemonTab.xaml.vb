@@ -1,31 +1,21 @@
 ﻿Imports SkyEditorBase
 Namespace Tabs
     Public Class EpisodeActivePokemonTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of Saves.SkySave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.SkySave) Then
-                Dim p = Save.Convert(Of Saves.SkySave)()
-                lbActivePokemon.Items.Clear()
-                For Each apkm In p.SpEpisodeActivePokemon
-                    If apkm.IsValid Then
-                        lbActivePokemon.Items.Add(apkm)
-                    End If
-                Next
-            End If
+            lbActivePokemon.Items.Clear()
+            For Each apkm In EditingItem.SpEpisodeActivePokemon
+                If apkm.IsValid Then
+                    lbActivePokemon.Items.Add(apkm)
+                End If
+            Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.SkySave) Then
-                Dim p = Save.Convert(Of Saves.SkySave)()
-                Dim apkms As New List(Of Interfaces.iMDPkm)
-                For Each item In lbActivePokemon.Items
-                    apkms.Add(item)
-                Next
-                p.SpEpisodeActivePokemon = apkms.ToArray
-                Save = Save.Convert(Of Saves.SkySave)(p)
-            End If
-            EditingObject = Save
+            Dim apkms As New List(Of Interfaces.iMDPkm)
+            For Each item In lbActivePokemon.Items
+                apkms.Add(item)
+            Next
+            EditingItem.SpEpisodeActivePokemon = apkms.ToArray
         End Sub
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Sp. Episode Party")

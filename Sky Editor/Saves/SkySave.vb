@@ -2,15 +2,12 @@
 
 Namespace Saves
     Public Class SkySave
-        Inherits GenericSave
-        Implements SkyEditorBase.Interfaces.iOpenableFile
-        Protected Property Bits As Binary
+        Inherits BinaryFile
+        Public Sub New()
+            MyBase.New
+        End Sub
         Public Sub New(Filename As String)
             MyBase.New(Filename)
-            Bits = New Binary()
-            For count As Integer = 0 To Length - 1
-                Bits.AppendByte(RawData(count))
-            Next
         End Sub
         Protected Class Offsets
             Public Const BackupSaveStart As Integer = &HC800
@@ -147,15 +144,7 @@ Namespace Saves
 #End Region
 
 #Region "Technical Stuff"
-        Public Overrides Sub DebugInfo()
-            MyBase.DebugInfo()
-            For Each item In ActivePokemon
-                PluginHelper.Writeline(item.ToString)
-                PluginHelper.Writeline(StoredPokemon(DirectCast(item, ActivePkm).RosterNumber).ToString)
-                PluginHelper.Writeline("")
-            Next
-        End Sub
-        Public Overrides Sub FixChecksum()
+        Protected Overrides Sub FixChecksum()
             'Fix the first checksum
             Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(Bits, 4, Offsets.ChecksumEnd))
             For count = 0 To 3
@@ -178,15 +167,15 @@ Namespace Saves
                 Bits.Int(i + e, 0, 8) = Bits.Int(i, 0, 8)
             Next
         End Sub
-        Public Overrides Function DefaultSaveID() As String
-            Return GameStrings.SkySave
-        End Function
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
-            For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
-                RawData(count) = Bits.Int(count, 0, 8)
-            Next
-        End Sub
+        'Public Overrides Function DefaultSaveID() As String
+        '    Return GameStrings.SkySave
+        'End Function
+        'Protected Overrides Sub PreSave()
+        '    MyBase.PreSave()
+        '    For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
+        '        RawData(count) = Bits.Int(count, 0, 8)
+        '    Next
+        'End Sub
 #End Region
 
         Public Shared Function IsFileOfType(File As GenericFile) As Boolean

@@ -1,30 +1,22 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Saves
+Imports SkyEditorBase
 Namespace Tabs
     Public Class QuicksavePokemonTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of SkySave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.SkySave) Then
-                Dim p = Save.Convert(Of Saves.SkySave)()
-                lbActivePokemon.Items.Clear()
-                For Each apkm In p.QuicksavePokemon
-                    'If apkm.IsValid Then
-                    lbActivePokemon.Items.Add(apkm)
-                    'End If
-                Next
-            End If
+            lbActivePokemon.Items.Clear()
+            For Each apkm In EditingItem.QuicksavePokemon
+                'If apkm.IsValid Then
+                lbActivePokemon.Items.Add(apkm)
+                'End If
+            Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.SkySave) Then
-                Dim p = Save.Convert(Of Saves.SkySave)()
-                Dim apkms As New List(Of Saves.SkySave.QuicksavePkm)
-                For Each item In lbActivePokemon.Items
-                    apkms.Add(item)
-                Next
-                p.QuicksavePokemon = apkms.ToArray
-                Save = Save.Convert(p)
-            End If
+            Dim apkms As New List(Of Saves.SkySave.QuicksavePkm)
+            For Each item In lbActivePokemon.Items
+                apkms.Add(item)
+            Next
+            EditingItem.QuicksavePokemon = apkms.ToArray
         End Sub
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Quicksave Pokemon")

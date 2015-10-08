@@ -1,15 +1,13 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Saves
+Imports SkyEditorBase
 
 Namespace Tabs
     Public Class GIGDGeneralTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of GatesGameData)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.MDGatesData) Then
-                With Save.Convert(Of Saves.GatesGameData)()
-                    numGeneral_HeldMoney.Value = .HeldMoney
-                End With
-            End If
+            With editingitem
+                numGeneral_HeldMoney.Value = .HeldMoney
+            End With
         End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()
@@ -19,13 +17,9 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub UpdateObject()
-            If Me.EditingObject.IsOfType(GameStrings.MDGatesData) Then
-                Dim td = DirectCast(Me.EditingObject, GenericSave).Convert(Of Saves.GatesGameData)()
-                With td
-                    .HeldMoney = numGeneral_HeldMoney.Value
-                End With
-                Me.EditingObject = DirectCast(Me.EditingObject, GenericSave).Convert(td)
-            End If
+            With EditingItem
+                .HeldMoney = numGeneral_HeldMoney.Value
+            End With
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

@@ -34,10 +34,9 @@ Namespace Mods
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key)) Then
                     Using langString = New FileFormats.LanguageString(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
-                        Using langList As New ObjectFile(Of List(Of String))
-                            langList.ContainedObject = langString.Items
-                            langList.Save(IO.Path.Combine(ModDirectory, "Languages", item.Value))
-                        End Using
+                        Dim langList As New ObjectFile(Of List(Of String))
+                        langList.ContainedObject = langString.Items
+                        langList.Save(IO.Path.Combine(ModDirectory, "Languages", item.Value))
                     End Using
                 End If
             Next
@@ -45,13 +44,13 @@ Namespace Mods
             'Convert Personality Test
             PluginHelper.StartLoading("Converting Personality Test")
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(ROMDirectory, "Overlay", "overlay_0013.bin"))
-            Using personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
-                personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
+            Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
+            personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
                 personalityTest.Save(IO.Path.Combine(ModDirectory, "Starter Pokemon"))
-                CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
-            End Using
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
             PluginHelper.StopLoading()
         End Sub
+
 
         Public Overrides Sub Build(CurrentProject As Project)
             'Convert Personality Test
@@ -74,21 +73,18 @@ Namespace Mods
             languageDictionary.Add("text_j.str", "Japanese")
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(ModDirectory, "Languages", item.Value)) Then
-                    Using langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(ModDirectory, "Languages", item.Value))
-                        Using langString As New FileFormats.LanguageString
-                            langString.Items = langFile.ContainedObject
+                    Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(ModDirectory, "Languages", item.Value))
+                    Using langString As New FileFormats.LanguageString
+                        langString.Items = langFile.ContainedObject
 
-                            If personalityTest IsNot Nothing Then
-                                langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
-                            End If
+                        If personalityTest IsNot Nothing Then
+                            langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
+                        End If
 
-                            langString.Save(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
-                        End Using
+                        langString.Save(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
                     End Using
                 End If
             Next
-
-            If personalityTest IsNot Nothing Then personalityTest.Dispose()
         End Sub
 
         Public Overrides Function SupportedGameCodes() As IEnumerable(Of Type)

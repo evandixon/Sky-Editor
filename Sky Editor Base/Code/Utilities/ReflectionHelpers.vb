@@ -30,6 +30,53 @@ Namespace Utilities
             Return Type.GetType(TypeName, AddressOf CustomAssemblyResolver, AddressOf TypeResolver, False)
         End Function
 
+        Public Shared Function GetAssemblyVersion(Assembly As Assembly) As Version
+            Return Assembly.GetName.Version
+        End Function
+
+        Public Shared Function GetAssemblyFileName(Assembly As Assembly, PluginFolder As String) As String
+            Dim n = Assembly.GetName.Name
+            If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
+                Return n & ".dll"
+            ElseIf IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".exe")) Then
+                Return n & ".exe"
+            Else
+                Return n & ".dll"
+            End If
+        End Function
+
+        Public Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
+            Dim match = False
+            Dim g As Type = Nothing
+            If TypeOf Obj Is Type Then
+                If TypeToCheck.IsEquivalentTo(GetType(Type)) Then
+                    match = True
+                Else
+                    g = Obj
+                End If
+            Else
+                g = Obj.GetType
+            End If
+            If Not match Then
+                match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck, CheckObjectFile))
+            End If
+            If Not match Then
+                For Each item In g.GetInterfaces
+                    If item.IsEquivalentTo(TypeToCheck) Then
+                        match = True
+                        Exit For
+                    End If
+                Next
+            End If
+            If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
+                'Check to see if this is an object file of the type we're looking for
+                If IsOfType(g, ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), False) Then
+                    match = True
+                End If
+            End If
+            Return match
+        End Function
+
     End Class
 
 End Namespace

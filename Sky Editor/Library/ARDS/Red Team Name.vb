@@ -1,4 +1,6 @@
 ﻿Imports SkyEditorBase.ARDS
+Imports SkyEditorBase.Interfaces
+
 Public Class RedTeamName
     Implements SkyEditorBase.ARDS.CodeDefinition
 
@@ -36,7 +38,7 @@ Public Class RedTeamName
         Return Name
     End Function
 
-    Public Function GenerateCode(Save As SkyEditorBase.GenericSave, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+    Public Function GenerateCode(Save As iGenericFile, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
         'Dim s = DirectCast(Save, RBSave)
         'Dim n = s.TeamName.PadRight(10, vbNullChar)
         'Dim Hex0 As String = Conversion.Hex(SkyEditor.Lists.StringEncodingInverse(n(0))).PadLeft(2, "0")

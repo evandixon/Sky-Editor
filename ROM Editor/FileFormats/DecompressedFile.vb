@@ -62,16 +62,14 @@ Namespace FileFormats
             Dim Filename As String = OriginalFilename.Replace("/", "\").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed")
             RunDecompressSync(OriginalFilename)
 
-            _tempname = Guid.NewGuid.ToString()
-            Me.OriginalFilename = OriginalFilename
-            IO.File.Copy(Filename, PluginHelper.GetResourceName(_tempname & ".tmp"))
-            Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
+            MyBase.OpenFile(OriginalFilename)
         End Sub
         Public Sub New(RawData As Byte())
-            _tempname = Guid.NewGuid.ToString()
-            IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
-            Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
-            Me.OriginalFilename = Filename
+            Throw New NotImplementedException
+            '_tempname = Guid.NewGuid.ToString()
+            'IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
+            'Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
+            'Me.OriginalFilename = Filename
         End Sub
         ' ''' <summary>
         ' ''' Creates a new instance of the decompressed file, given the decompressed data

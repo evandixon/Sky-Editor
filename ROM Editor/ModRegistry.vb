@@ -1,4 +1,5 @@
 ﻿Imports SkyEditorBase
+Imports SkyEditorBase.Utilities
 
 Public Class NDSModRegistry
     Private Shared Property Mods As New List(Of Mods.GenericMod)
@@ -11,7 +12,7 @@ Public Class NDSModRegistry
             Dim games = item.SupportedGameCodes
             Dim match As Boolean = False
             For Each t In games
-                If games.Count = 0 OrElse PluginManager.IsOfType(GameType, t) Then
+                If games.Count = 0 OrElse ReflectionHelpers.IsOfType(GameType, t) Then
                     matches.Add(item.GetType)
                 End If
             Next
@@ -19,8 +20,9 @@ Public Class NDSModRegistry
         Return matches
     End Function
     Friend Shared Sub ClearMods()
-        For Each item In Mods
-            item.Dispose()
-        Next
+        Mods.Clear()
+        'For Each item In Mods
+        '    item.Dispose()
+        'Next
     End Sub
 End Class

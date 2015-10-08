@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Timers
 Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Public Class MainWindow2
@@ -29,7 +30,7 @@ Public Class MainWindow2
     End Sub
 
 
-    Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, GenericFile))
+    Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, iGenericFile))
         docPane.Children.Add(New DocumentTab(File.Value, _manager))
         RemoveWelcomePage()
     End Sub

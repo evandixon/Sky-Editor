@@ -54,14 +54,14 @@ Namespace Roms
 #End Region
 
 #Region "Properties"
- 
+
 #End Region
 
-#Region "GenericSave Stuff"
-        Public Overrides Function DefaultSaveID() As String
-            Return GameStrings.SkyNDSRom
-        End Function
-#End Region
+        '#Region "GenericSave Stuff"
+        '        Public Overrides Function DefaultSaveID() As String
+        '            Return GameStrings.SkyNDSRom
+        '        End Function
+        '#End Region
 
         Public Shared Shadows Function IsFileOfType(File As GenericFile) As Boolean
             Dim e As New System.Text.ASCIIEncoding

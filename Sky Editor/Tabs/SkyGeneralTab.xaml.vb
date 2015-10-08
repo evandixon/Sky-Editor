@@ -4,17 +4,14 @@ Namespace Tabs
     Public Class SkyGeneralTab
         Inherits ObjectTab(Of SkySave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.SkySave) Then
-                With Save.Convert(Of SkySave)()
-                    numGeneral_StoredMoney.Value = .StoredMoney
-                    numGeneral_HeldMoney.Value = .HeldMoney
-                    numGeneral_SpEpisodeHeldMoney.Value = .SpEpisode_HeldMoney
-                    numGeneral_Adventures.Value = .Adventures
-                    txtGeneral_TeamName.Text = .TeamName
-                    numGeneral_RankPoints.Value = .ExplorerRank
-                End With
-            End If
+            With EditingItem
+                numGeneral_StoredMoney.Value = .StoredMoney
+                numGeneral_HeldMoney.Value = .HeldMoney
+                numGeneral_SpEpisodeHeldMoney.Value = .SpEpisode_HeldMoney
+                numGeneral_Adventures.Value = .Adventures
+                txtGeneral_TeamName.Text = .TeamName
+                numGeneral_RankPoints.Value = .ExplorerRank
+            End With
         End Sub
 
         'Public Overrides ReadOnly Property SupportedTypes As Type()
@@ -24,20 +21,14 @@ Namespace Tabs
         'End Property
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            Dim out As GenericSave = Nothing
-            If Save.IsOfType(GameStrings.SkySave) Then
-                Dim sky = Save.Convert(Of SkySave)()
-                With sky
-                    .StoredMoney = numGeneral_StoredMoney.Value
-                    .HeldMoney = numGeneral_HeldMoney.Value
-                    .SpEpisode_HeldMoney = numGeneral_SpEpisodeHeldMoney.Value
-                    .Adventures = numGeneral_Adventures.Value
-                    .TeamName = txtGeneral_TeamName.Text
-                    .ExplorerRank = numGeneral_RankPoints.Value
-                End With
-                Me.EditingObject = Save.Convert(sky)
-            End If
+            With EditingItem
+                .StoredMoney = numGeneral_StoredMoney.Value
+                .HeldMoney = numGeneral_HeldMoney.Value
+                .SpEpisode_HeldMoney = numGeneral_SpEpisodeHeldMoney.Value
+                .Adventures = numGeneral_Adventures.Value
+                .TeamName = txtGeneral_TeamName.Text
+                .ExplorerRank = numGeneral_RankPoints.Value
+            End With
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

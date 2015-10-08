@@ -3,7 +3,7 @@ Imports SkyEditorBase
 Namespace FileFormats
     Public Class waza_p
         Inherits GenericFile
-        Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements Interfaces.iOpenableFile
         Public Property Pokemon As List(Of PokemonMoves)
         Public Class PokemonMoves
             Public Property LevelUpMoves As Dictionary(Of Byte, UInt16)
@@ -28,8 +28,8 @@ Namespace FileFormats
                 Return m
             End Function
         End Class
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
+        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
             Pokemon = New List(Of PokemonMoves)
             Dim index As Integer = &H13
             Dim section As Byte = 0
@@ -98,6 +98,9 @@ Namespace FileFormats
                         End If
                 End Select
             End While
+        End Sub
+        Public Sub New(Filename As String)
+            OpenFile(Filename)
         End Sub
     End Class
 End Namespace

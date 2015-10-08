@@ -4,6 +4,7 @@ Imports System.Web.Script.Serialization
 Imports System.Windows.Forms
 Imports ROMEditor.Roms
 Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Public Class GenericNDSModProject
     Inherits Project
@@ -108,7 +109,7 @@ Public Class GenericNDSModProject
         End If
     End Sub
 
-    Private Async Sub NDSRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, SkyEditorBase.GenericFile)) Handles Me.FileAdded
+    Private Async Sub NDSRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile)) Handles Me.FileAdded
         If TypeOf File.Value Is Mods.GenericMod Then
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(File.Value.OriginalFilename), IO.Path.GetFileNameWithoutExtension(File.Value.OriginalFilename), "RawFiles")
 
@@ -251,14 +252,14 @@ Public Class GenericNDSModProject
 
 
             For Each item In actions.ToAdd
-                    'Todo: remove item from toAdd if no longer exists
-                    If IO.File.Exists(IO.Path.Combine(rawFilesDir, item)) Then
-                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, item))) Then
-                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, item)))
-                        End If
-                        IO.File.Copy(IO.Path.Combine(rawFilesDir, item), IO.Path.Combine(modFilesDir, item), True)
+                'Todo: remove item from toAdd if no longer exists
+                If IO.File.Exists(IO.Path.Combine(rawFilesDir, item)) Then
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, item))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, item)))
                     End If
-                Next
+                    IO.File.Copy(IO.Path.Combine(rawFilesDir, item), IO.Path.Combine(modFilesDir, item), True)
+                End If
+            Next
 
 
             For Each item In actions.ToUpdate

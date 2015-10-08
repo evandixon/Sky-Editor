@@ -1,7 +1,9 @@
 ﻿Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
+
 Namespace FileFormats
     Public Class item_p
-        Inherits GenericFile
+        Inherits SkyEditorBase.GenericFile
         Implements SkyEditorBase.Interfaces.iOpenableFile
         Public Property Items As List(Of Item)
         Public Class Item
@@ -153,8 +155,18 @@ Namespace FileFormats
                 SpecificItems = &HF
             End Enum
         End Class
+        Public Sub New()
+            MyBase.New
+        End Sub
         Public Sub New(Filename As String)
             MyBase.New(Filename)
+            ProcessRawData()
+        End Sub
+        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
+            ProcessRawData()
+        End Sub
+        Private Sub ProcessRawData()
             Items = New List(Of Item)
             For count As Integer = &H20 To Me.Length * 16 - 17 Step 16
                 If BitConverter.ToUInt16(RawData(count, 2), 0) = &H404 Then

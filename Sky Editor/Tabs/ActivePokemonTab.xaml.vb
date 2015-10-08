@@ -4,30 +4,20 @@ Namespace Tabs
     Public Class ActivePokemonTab
         Inherits ObjectTab(Of iParty)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(EditingObject, GenericSave)
-            If Save.IsOfType(GetType(iParty)) Then
-                Dim p = Save.Convert(Of iParty)()
-                lbActivePokemon.Items.Clear()
-                For Each apkm In p.GetPokemon
-                    If apkm.IsValid Then
-                        lbActivePokemon.Items.Add(apkm)
-                    End If
-                Next
-            End If
+            lbActivePokemon.Items.Clear()
+            For Each apkm In EditingItem.GetPokemon
+                If apkm.IsValid Then
+                    lbActivePokemon.Items.Add(apkm)
+                End If
+            Next
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(EditingObject, GenericSave)
-            If Save.IsOfType(GetType(iParty)) Then
-                Dim p = Save.Convert(Of iParty)()
-                Dim apkms As New List(Of iMDPkm)
-                For Each item In lbActivePokemon.Items
-                    apkms.Add(item)
-                Next
-                p.SetPokemon(apkms.ToArray)
-                Save = Save.Convert(p)
-            End If
-            EditingObject = Save
+            Dim apkms As New List(Of iMDPkm)
+            For Each item In lbActivePokemon.Items
+                apkms.Add(item)
+            Next
+            EditingItem.SetPokemon(apkms.ToArray)
         End Sub
 
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

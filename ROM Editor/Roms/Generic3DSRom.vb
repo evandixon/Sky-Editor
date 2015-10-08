@@ -53,6 +53,9 @@ Namespace Roms
         Public Sub New(Filename As String)
             MyBase.New(Filename)
         End Sub
+        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
+        End Sub
     End Class
 
 End Namespace

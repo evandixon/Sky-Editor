@@ -2,14 +2,11 @@
 
 Namespace Tabs
     Public Class TDGeneralTab
-        Inherits ObjectTab
+        Inherits ObjectTab(Of Saves.TDSave)
         Public Overrides Sub RefreshDisplay()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.TDSave) Then
-                With Save.Convert(Of Saves.TDSave)()
-                    txtGeneral_TeamName.Text = .TeamName
-                End With
-            End If
+            With editingitem
+                txtGeneral_TeamName.Text = .TeamName
+            End With
         End Sub
 
         Public Overrides ReadOnly Property SupportedTypes As Type()
@@ -19,14 +16,9 @@ Namespace Tabs
         End Property
 
         Public Overrides Sub UpdateObject()
-            Dim Save = DirectCast(Me.EditingObject, GenericSave)
-            If Save.IsOfType(GameStrings.TDSave) Then
-                Dim td = Save.Convert(Of Saves.TDSave)()
-                With td
-                    .TeamName = txtGeneral_TeamName.Text
-                End With
-                Me.EditingObject = Save.Convert(Of Saves.TDSave)(td)
-            End If
+            With editingitem
+                .TeamName = txtGeneral_TeamName.Text
+            End With
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

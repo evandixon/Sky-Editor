@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase.Interfaces
 
 Public Class ProjectExplorer
     Inherits ToolWindow
@@ -68,7 +69,7 @@ Public Class ProjectExplorer
         Refresh()
     End Sub
 
-    Private Sub _manager_ProjectFileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile)) Handles _manager.ProjectFileAdded
+    Private Sub _manager_ProjectFileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile)) Handles _manager.ProjectFileAdded
         Refresh()
     End Sub
 

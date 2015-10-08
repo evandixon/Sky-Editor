@@ -2,6 +2,7 @@
 Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Utilities
 
 Public Class PluginManager
     Implements IDisposable
@@ -89,19 +90,19 @@ Public Class PluginManager
                 'Load types
                 Dim types As Type() = item.GetTypes
                 For Each type In types
-                    If IsOfType(type, GetType(ObjectTab)) Then
+                    If ReflectionHelpers.IsOfType(type, GetType(ObjectTab)) Then
                         RegisterObjectTab(type)
-                    ElseIf IsOfType(type, GetType(ObjectControl)) Then
+                    ElseIf ReflectionHelpers.IsOfType(type, GetType(ObjectControl)) Then
                         RegisterObjectControl(type)
-                    ElseIf IsOfType(type, GetType(Project))
+                    ElseIf ReflectionHelpers.IsOfType(type, GetType(Project))
                         RegisterProjectType(PluginHelper.GetLanguageItem(type.Name, CallingAssembly:=item.GetName.Name), type)
-                    ElseIf IsOfType(type, GetType(GenericFile))
+                    ElseIf ReflectionHelpers.IsOfType(type, GetType(GenericFile))
                         If type.GetMethod("IsFileOfType") IsNot Nothing Then
                             GenericFilesWithTypeValidator.Add(type)
                         End If
                     End If
                     For Each searcher In TypeSearcher
-                        If IsOfType(type, searcher.Key) Then
+                        If ReflectionHelpers.IsOfType(type, searcher.Key) Then
                             searcher.Value.Invoke(type)
                         End If
                     Next
@@ -129,14 +130,6 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property IOFilters As New Dictionary(Of String, String)
-    ''' <summary>
-    ''' Gets or sets whether or not to show the loading window when applicable.
-    ''' Defaults to True, useful when using PluginManager to load plugins without a GUI.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property ShowLoadingWindow As Boolean
 
     ''' <summary>
     ''' Matches the save ID using the given game name.
@@ -413,10 +406,74 @@ Public Class PluginManager
     'Public Event SaveGameFormatRegisterd(sender As Object, SaveGameFormat As Object)
     Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
     'Public Event ResourceFileRegistered(sender As Object, ResourceFile As Object)
-    Public Event ProjectFileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile))
+    Public Event ProjectFileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile))
     Public Event ProjectFileRemoved(sender As Object, File As String)
     Public Event ProjectChanged(sender As Object, NewProject As Project)
     Public Event ProjectDirectoryCreated(sender As Object, File As String)
+#End Region
+
+    Public Function CreateNewFile(NewFileName As String, FileType As Type) As iGenericFile
+        If Not ReflectionHelpers.IsOfType(FileType, GetType(iOpenableFile)) Then
+            Throw New ArgumentException("The given type must implement iCreatableFile.")
+        End If
+        Dim c = FileType.GetConstructor({})
+        If c Is Nothing Then
+            Throw New ArgumentException("The given type must provide a default constructor.")
+        End If
+        Dim file As iCreatableFile = c.Invoke({})
+        file.CreateFile(NewFileName)
+        Return file
+    End Function
+
+#Region "Open File"
+    ''' <summary>
+    ''' Creates a new instance of the given iOpenableFile type using the given filename.
+    ''' </summary>
+    ''' <param name="Filename">Filename of the file to open.</param>
+    ''' <param name="FileType">Type of the class to create an instance of.  Must have a default constructor and implement iOpenableFile.</param>
+    ''' <returns></returns>
+    Public Function OpenFile(Filename As String, FileType As Type) As iGenericFile
+        If String.IsNullOrEmpty(Filename) Then
+            Throw New ArgumentNullException(NameOf(Filename))
+        End If
+        If Not ReflectionHelpers.IsOfType(FileType, GetType(iOpenableFile)) Then
+            Throw New ArgumentException("The given type must implement iOpenableFile.")
+        End If
+        Dim c = FileType.GetConstructor({})
+        If c Is Nothing Then
+            Throw New ArgumentException("The given type must provide a default constructor.")
+        Else
+            Dim f As iOpenableFile = c.Invoke({})
+            f.OpenFile(Filename)
+            Return f
+        End If
+    End Function
+    ''' <summary>
+    ''' Auto-detects the file type and creates an instance of an appropriate class to model it.
+    ''' </summary>
+    ''' <param name="Filename"></param>
+    ''' <returns></returns>
+    Public Function OpenFile(Filename As String) As iGenericFile
+        Return OpenFile(New GenericFile(Filename))
+    End Function
+    ''' <summary>
+    ''' Using the given file, auto-detects the file type and creates an instance of an appropriate class.
+    ''' If no appropriate file can be found, will return the given File.
+    ''' </summary>
+    ''' <param name="File"></param>
+    ''' <returns></returns>
+    Public Function OpenFile(File As GenericFile) As iGenericFile
+        Dim type = GetFileType(File)
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
+            Return File
+        Else
+            Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
+            out.OpenFile(File.OriginalFilename)
+            File.Dispose()
+            Return out
+        End If
+    End Function
+
 #End Region
 
     ''' <summary>
@@ -431,7 +488,7 @@ Public Class PluginManager
             For Each item In (From o In ObjectControls Order By o.UsagePriority(ObjectToEdit.GetType) Descending)
                 If out Is Nothing Then
                     For Each t In item.SupportedTypes
-                        If IsOfType(ObjectToEdit, t) Then
+                        If ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
                             out = item.GetType.GetConstructor({}).Invoke({})
                             Exit For
                         End If
@@ -454,7 +511,7 @@ Public Class PluginManager
             Dim isMatch = False
             If Not isMatch Then
                 For Each t In etab.SupportedTypes
-                    If Save IsNot Nothing AndAlso ((TypeOf Save Is GenericSave AndAlso Save.IsOfType(t)) OrElse IsOfType(Save, t)) Then
+                    If Save IsNot Nothing AndAlso ReflectionHelpers.IsOfType(Save, t) Then 'If Save IsNot Nothing AndAlso ((TypeOf Save Is GenericSave AndAlso Save.IsOfType(t)) OrElse ReflectionHelpers.IsOfType(Save, t)) Then
                         isMatch = True
                         Exit For
                     End If
@@ -531,76 +588,8 @@ Public Class PluginManager
             'End If
         End If
     End Function
-    Public Function CreateNewFile(NewFileName As String, FileType As Type) As GenericFile
-        Dim file As GenericFile = FileType.GetConstructor({}).Invoke({})
-        file.Name = NewFileName & file.DefaultExtension
-        Return file
-    End Function
-    Public Function OpenFile(Filename As String, FileType As Type) As GenericFile
-        Return FileType.GetConstructor({GetType(String)}).Invoke({Filename})
-    End Function
-    Public Function OpenFile(Filename As String) As GenericFile
-        Return OpenFile(New GenericFile(Filename))
-    End Function
-    Public Function OpenFile(File As GenericFile) As GenericFile
-        Dim type = GetFileType(File)
-        If type Is Nothing OrElse Not IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
-            Return File
-        Else
-            Dim out As GenericFile = type.GetConstructor({GetType(String)}).Invoke({File.OriginalFilename})
-            File.Dispose()
-            Return out
-        End If
-    End Function
 
-    Public Function GetAssemblyVersion(Assembly As Assembly) As Version
-        Return Assembly.GetName.Version
-    End Function
-
-    Public Function GetAssemblyFileName(Assembly As Assembly) As String
-        Dim n = Assembly.GetName.Name
-        If IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".dll")) Then
-            Return n & ".dll"
-        ElseIf IO.File.Exists(IO.Path.Combine(PluginFolder, n & ".exe")) Then
-            Return n & ".exe"
-        Else
-            Return n & ".dll"
-        End If
-    End Function
-
-    Public Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
-        Dim match = False
-        Dim g As Type = Nothing
-        If TypeOf Obj Is Type Then
-            If TypeToCheck.IsEquivalentTo(GetType(Type)) Then
-                match = True
-            Else
-                g = Obj
-            End If
-        Else
-            g = Obj.GetType
-        End If
-        If Not match Then
-            match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck, CheckObjectFile))
-        End If
-        If Not match Then
-            For Each item In g.GetInterfaces
-                If item.IsEquivalentTo(TypeToCheck) Then
-                    match = True
-                    Exit For
-                End If
-            Next
-        End If
-        If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
-            'Check to see if this is an object file of the type we're looking for
-            If IsOfType(g, ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), False) Then
-                match = True
-            End If
-        End If
-        Return match
-    End Function
-
-    Private Sub _currentProject_FileAdded(sender As Object, File As KeyValuePair(Of String, GenericFile)) Handles _currentProject.FileAdded
+    Private Sub _currentProject_FileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile)) Handles _currentProject.FileAdded
         RaiseEvent ProjectFileAdded(sender, File)
     End Sub
 
