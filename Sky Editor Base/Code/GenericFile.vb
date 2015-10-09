@@ -185,12 +185,14 @@ Public Class GenericFile
         If String.IsNullOrEmpty(OriginalFilename) Then
             OriginalFilename = Destination
         End If
+        RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
     Public Overridable Sub Save() Implements iSavable.Save
         PreSave()
         _fileReader.Seek(0, IO.SeekOrigin.Begin)
         _fileReader.Flush()
         If Not Filename = OriginalFilename Then IO.File.Copy(Filename, OriginalFilename, True)
+        RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 #End Region
 

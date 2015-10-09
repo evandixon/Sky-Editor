@@ -172,6 +172,7 @@
     <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
     <Compile Include="Saves\GatesGameData.vb" />
+    <Compile Include="Saves\RBSaveEU.StoredPokemon.vb" />
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
     </Compile>

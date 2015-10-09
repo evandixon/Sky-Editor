@@ -4,6 +4,7 @@ Imports SkyEditorBase.Interfaces
 Public Class BinaryFile
     Inherits GenericFile
     Implements iOpenableFile
+    Implements iModifiable
 
 #Region "Constructors"
     Public Sub New()

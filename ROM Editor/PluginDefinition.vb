@@ -51,7 +51,7 @@ Public Class PluginDefinition
     Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
-        Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
+        'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
 
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
     End Sub
