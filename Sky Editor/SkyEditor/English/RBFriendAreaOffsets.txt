@@ -1,4 +1,4 @@
-﻿Bountiful Sea: 3
+﻿Bountiful Sea: 9
 Treasure Sea: 10
 Serene Sea: 4
 Deep-Sea Floor: 12

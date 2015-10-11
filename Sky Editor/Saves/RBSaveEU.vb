@@ -43,9 +43,9 @@ Namespace Saves
 
             'Public Const StoredItemOffset As Integer = &H4D2B * 8 - 2
 
-            Public Const StoredPokemonOffset As Integer = (&H5B7 * 8 + 3) - (323 * 3)
+            Public Const StoredPokemonOffset As Integer = (&H5B7 * 8 + 3) - (323 * 9)
             Public Const StoredPokemonLength As Integer = 323
-            Public Const StoredPokemonNumber As Integer = 407
+            Public Const StoredPokemonNumber As Integer = 407 + 6
         End Class
 
 #Region "Properties"
