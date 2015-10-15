@@ -109,7 +109,7 @@ Namespace Saves
 #Region "Technical Stuff"
         Protected Overrides Sub FixChecksum()
             'Fix the first checksum
-            Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(Bits, 4, Offsets.ChecksumEnd) - 1)
+            Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(Bits, 4, Offsets.ChecksumEnd)) ' - 1)
             For count = 0 To 3
                 Bits.Int(count, 0, 8) = buffer(count)
             Next
@@ -144,7 +144,7 @@ Namespace Saves
 #End Region
         Public Shared Function IsFileOfType(File As GenericFile) As Boolean
             If File.Length > Offsets.ChecksumEnd Then
-                Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd) - 1)
+                Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd)) ' - 1)
                 Return (File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))
             Else
                 Return False
