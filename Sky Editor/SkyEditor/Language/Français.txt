@@ -1,0 +1,4 @@
+﻿Adventures=Aventures:
+General=Général
+Moves=Capacités
+TeamName=Nom de l'Équipe:

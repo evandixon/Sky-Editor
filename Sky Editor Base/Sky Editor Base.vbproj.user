@@ -5,8 +5,8 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup>
-    <PublishUrlHistory>ftp://dl.uniquegeeks.net/SkyEditorBeta/|publish\</PublishUrlHistory>
-    <InstallUrlHistory>http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrlHistory>
+    <PublishUrlHistory>ftp://dl.uniquegeeks.net/SkyEditor4Alpha/|ftp://dl.uniquegeeks.net/SkyEditorBeta/|publish\</PublishUrlHistory>
+    <InstallUrlHistory>http://dl.uniquegeeks.net/SkyEditor4Alpha/|http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
@@ -14,5 +14,9 @@
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
     <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>

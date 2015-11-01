@@ -1,7 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports System.Threading.Tasks
 Imports System.Timers
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Redistribution
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Public Class MainWindow2
@@ -142,8 +144,23 @@ Public Class MainWindow2
 #End Region
 
 #Region "Form"
-    Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Async Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         _manager = PluginManager.GetInstance
+        If Settings.UpdatePlugins Then
+            Try
+                PluginHelper.StartLoading("Updating plugins...")
+                If Await Task.Run(Function() As Boolean
+                                      Return RedistributionHelpers.DownloadAllPlugins(_manager, Settings.GetSettings("PluginUpdateUrl"))
+                                  End Function) Then
+                    PluginHelper.StopLoading()
+                    RedistributionHelpers.RestartProgram()
+                End If
+                PluginHelper.StopLoading()
+            Catch ex As Exception
+                PluginHelper.StopLoading()
+                PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
+            End Try
+        End If
 
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
@@ -159,11 +176,15 @@ Public Class MainWindow2
             toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
         End If
 
-        _manager.RegisterIOFilter("*.skyproj", "Sky Editor Project File")
+        Me.Title = PluginHelper.GetLanguageItem("Sky Editor")
+
+        _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
 
         RefreshBuildRunVisibility()
 
         ShowWelcomePage()
+
+        TranslateControls()
 
         AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
 
@@ -171,13 +192,16 @@ Public Class MainWindow2
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
 
     End Sub
+    Private Sub TranslateControls()
+        PluginHelper.TranslateForm(menuMain)
+    End Sub
 
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
 
         Dim editsMade As Boolean = editedTabs.Any OrElse _manager.CurrentProject.IsModified
         If editsMade Then
-            If MessageBox.Show("Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
+            If MessageBox.Show(PluginHelper.GetLanguageItem("Unsaved File Close Confirmation", "Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
                 e.Cancel = True
             End If
         End If

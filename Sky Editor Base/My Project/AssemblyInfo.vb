@@ -14,8 +14,8 @@ Imports System.Windows
 <Assembly: AssemblyTitle("Sky Editor")> 
 <Assembly: AssemblyDescription("The core window of Sky Editor.")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Sky Editor")> 
-<Assembly: AssemblyCopyright("Copyright © 2014 by Unique Geeks Media")> 
+<Assembly: AssemblyProduct("Sky Editor")>
+<Assembly: AssemblyCopyright("Copyright © 2015 by Unique Geeks Media")>
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(False)> 
 
@@ -39,7 +39,7 @@ Imports System.Windows
 <Assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("d93df652-4994-40af-9e4a-3cdee6dbff04")> 
+<Assembly: Guid("d93df652-4994-40af-9e4a-3cdee6dbff04")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -52,5 +52,5 @@ Imports System.Windows
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("3.3.0.0")> 
-<Assembly: AssemblyFileVersion("3.3.0.0")> 
+<Assembly: AssemblyVersion("4.0.0.0")>
+<Assembly: AssemblyFileVersion("4.0.0.0")>

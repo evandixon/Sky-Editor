@@ -35,11 +35,27 @@ Class Application
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         Try
+            'If the settings file doesn't exist, use the default one.
+            If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt")) Then
+                IO.File.Copy(IO.Path.Combine(Environment.CurrentDirectory, "Resources", "Settings.txt"), IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"))
+            End If
+            'Delete and install things
             RedistributionHelpers.DeleteScheduledFiles()
             RedistributionHelpers.InstallPendingPlugins()
         Catch ex As Exception
             MessageBox.Show("An error has occurred during pre-startup: " & ex.ToString)
             Application.Current.Shutdown()
         End Try
+
+        'Run the program
+        Dim args = Environment.GetCommandLineArgs
+        If args.Contains("-console") Then
+            Internal.ConsoleManager.Show()
+            ConsoleModule.ConsoleMain()
+            Application.Current.Shutdown()
+        Else
+            Dim m As New MainWindow2
+            m.Show()
+        End If
     End Sub
 End Class

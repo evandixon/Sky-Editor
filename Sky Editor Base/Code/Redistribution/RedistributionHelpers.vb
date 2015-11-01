@@ -95,7 +95,7 @@ Namespace Redistribution
                     End If
                 Next
                 Dim z As New FastZip
-                z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, item.Replace(".dll", "").Replace(".exe", "") & ".zip"), tempDir, True, ".*", ".*")
+                z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item.Replace(".dll", "").Replace(".exe", "") & ".zip"), tempDir, True, ".*", ".*")
                 PluginHelper.Writeline("Packed plugin " & item, PluginHelper.LineType.Message)
             Next
         End Sub
@@ -263,11 +263,25 @@ Namespace Redistribution
         End Function
         Public Shared Sub GeneratePluginDownloadDir(Manager As PluginManager, WebDirectory As String)
             PackPlugins(Manager, Nothing)
-            IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "plugins.json"), GeneratePluginInfoString(Manager, "http://dl.uniquegeeks.net/SkyEditorPluginsBeta"))
+            IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", "plugins.json"), GeneratePluginInfoString(Manager, Settings.GetSettings("PluginUpdateUrl").Replace("plugins.json", "")))
         End Sub
         Public Shared Function DownloadAllPlugins(Manager As PluginManager, Url As String) As Boolean
             Return UpdatePlugins(Manager, GetPluginInfo(Url))
         End Function
+        Public Shared Sub PackageAll(Manager As PluginManager, Optional Argument As String = Nothing)
+            If Not IO.Directory.Exists(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist")) Then
+                IO.Directory.CreateDirectory(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist"))
+            End If
+            For Each item In IO.Directory.GetFiles(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist"), "*", SearchOption.AllDirectories)
+                Console.WriteLine("Deleting " & item)
+                IO.File.Delete(item)
+            Next
+            PrepareForDistribution(Manager, Nothing)
+            PackPlugins(Manager, Nothing)
+            GeneratePluginDownloadDir(Manager, Nothing)
+            PluginHelper.Writeline(PluginHelper.GetLanguageItem("All plugins packaged to:"))
+            PluginHelper.Writeline(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist"))
+        End Sub
     End Class
 
 End Namespace

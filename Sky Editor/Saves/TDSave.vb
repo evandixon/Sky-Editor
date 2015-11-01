@@ -3,6 +3,9 @@
 Namespace Saves
     Public Class TDSave
         Inherits BinaryFile
+        Public Sub New()
+            MyBase.New()
+        End Sub
         Public Sub New(Filename As String)
             MyBase.New(Filename)
             Bits = New Binary()

@@ -2,6 +2,7 @@
 Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Redistribution
 Imports SkyEditorBase.Utilities
 
 Public Class PluginManager
@@ -117,6 +118,14 @@ Public Class PluginManager
             Next
             RegisterFileTypeDetector(AddressOf Me.DetectFileType)
             RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
+
+            RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)
+            RegisterConsoleCommand("zip", AddressOf RedistributionHelpers.PackProgram)
+            RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
+            RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
+            RegisterConsoleCommand("generateinfo", AddressOf RedistributionHelpers.GeneratePluginDownloadDir)
+            RegisterConsoleCommand("updateall", AddressOf RedistributionHelpers.DownloadAllPlugins)
+            RegisterConsoleCommand("packall", AddressOf RedistributionHelpers.PackageAll)
             'CheatManager.GameIDs = GameTypes
         End If
     End Sub

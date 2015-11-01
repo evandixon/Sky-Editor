@@ -7,7 +7,11 @@ Public Class ProjectExplorer
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Public Event FileOpen(sender As Object, ProjectFile As String)
     Private Sub ProjectExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Title = "Files"
+        Me.Title = PluginHelper.GetLanguageItem("Files")
+        menuAddFile.Header = PluginHelper.GetLanguageItem("Add File")
+        menuAddFolder.Header = PluginHelper.GetLanguageItem("Add Folder")
+        menuOpenInExplorer.Header = PluginHelper.GetLanguageItem("Open in File Explorer")
+        btnAddFile.Content = PluginHelper.GetLanguageItem("Add File")
     End Sub
     Sub Refresh()
         Dispatcher.Invoke(New Action(Sub()
