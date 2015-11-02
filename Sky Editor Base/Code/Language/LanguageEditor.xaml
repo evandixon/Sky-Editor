@@ -8,12 +8,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
-        <ComboBox x:Name="cbLanguages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125"/>
-        <ListBox x:Name="lbItems" HorizontalAlignment="Left" Width="125" Margin="0,27,0,0"/>
-        <Label x:Name="lblKey" Content="Key:" HorizontalAlignment="Left" Margin="125,27,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtKey" Height="64" Margin="130,53,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
-        <Label x:Name="lblValue" Content="Value:" HorizontalAlignment="Left" Margin="125,126,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtValue" Margin="130,152,10,42" TextWrapping="Wrap" Text=""/>
-        <Label x:Name="lblChangeWarning" Content="Changes will not be applied until the program has been restarted." Margin="130,0,10,10" Height="27" VerticalAlignment="Bottom"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="57*" />
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="cbLanguages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Grid.Column="0"/>
+        <ListBox x:Name="lbItems" Margin="0,27,0,0"  Grid.Column="0"/>
+
+        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
+
+        <Label x:Name="lblKey" Content="Key:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"  Grid.Column="2"/>
+        <TextBox x:Name="txtKey" Height="64" Margin="10,41,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"  Grid.Column="2"/>
+        <Label x:Name="lblValue" Content="Value:" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"  Grid.Column="2"/>
+        <TextBox x:Name="txtValue" Margin="10,141,10,42" TextWrapping="Wrap" Text=""  Grid.Column="2"/>
+        <Label x:Name="lblChangeWarning" Content="Changes will not be applied until the program has been restarted." Margin="10,0,130,10" Height="27" VerticalAlignment="Bottom"  Grid.Column="2"/>
     </Grid>
 </local:ObjectControl>

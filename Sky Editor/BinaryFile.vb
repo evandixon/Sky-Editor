@@ -13,11 +13,11 @@ Public Class BinaryFile
 
     Public Sub New(Filename As String)
         MyBase.New(Filename)
-        ProcessRawData()
     End Sub
 
     Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
         MyBase.OpenFile(Filename)
+        Bits = New Binary(0)
         ProcessRawData()
     End Sub
 

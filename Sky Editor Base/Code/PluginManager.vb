@@ -417,13 +417,13 @@ Public Class PluginManager
     'Public Event SaveGameFormatRegisterd(sender As Object, SaveGameFormat As Object)
     Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
     'Public Event ResourceFileRegistered(sender As Object, ResourceFile As Object)
-    Public Event ProjectFileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile))
+    Public Event ProjectFileAdded(sender As Object, e As EventArguments.FileAddedEventArguments)
     Public Event ProjectFileRemoved(sender As Object, File As String)
     Public Event ProjectChanged(sender As Object, NewProject As Project)
     Public Event ProjectDirectoryCreated(sender As Object, File As String)
 #End Region
 
-    Public Function CreateNewFile(NewFileName As String, FileType As Type) As iGenericFile
+    Public Function CreateNewFile(NewFileName As String, FileType As Type) As iCreatableFile
         If Not ReflectionHelpers.IsOfType(FileType, GetType(iOpenableFile)) Then
             Throw New ArgumentException("The given type must implement iCreatableFile.")
         End If
@@ -443,7 +443,7 @@ Public Class PluginManager
     ''' <param name="Filename">Filename of the file to open.</param>
     ''' <param name="FileType">Type of the class to create an instance of.  Must have a default constructor and implement iOpenableFile.</param>
     ''' <returns></returns>
-    Public Function OpenFile(Filename As String, FileType As Type) As iGenericFile
+    Public Function OpenFile(Filename As String, FileType As Type) As Object
         If String.IsNullOrEmpty(Filename) Then
             Throw New ArgumentNullException(NameOf(Filename))
         End If
@@ -464,7 +464,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="Filename"></param>
     ''' <returns></returns>
-    Public Function OpenFile(Filename As String) As iGenericFile
+    Public Function OpenFile(Filename As String) As Object
         Return OpenFile(New GenericFile(Filename))
     End Function
     ''' <summary>
@@ -473,7 +473,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="File"></param>
     ''' <returns></returns>
-    Public Function OpenFile(File As GenericFile) As iGenericFile
+    Public Function OpenFile(File As GenericFile) As Object
         Dim type = GetFileType(File)
         If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
             Return File
@@ -600,8 +600,8 @@ Public Class PluginManager
         End If
     End Function
 
-    Private Sub _currentProject_FileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile)) Handles _currentProject.FileAdded
-        RaiseEvent ProjectFileAdded(sender, File)
+    Private Sub _currentProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles _currentProject.FileAdded
+        RaiseEvent ProjectFileAdded(sender, e)
     End Sub
 
     Private Sub _currentProject_FileRemoved(sender As Object, File As String) Handles _currentProject.FileRemoved

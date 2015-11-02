@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Interfaces
 Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Namespace Saves
     Partial Class SkySave
@@ -79,8 +80,13 @@ Namespace Saves
             Implements iMDPkmMetFloor
             Implements iMDPkmIQ
             Implements iPkmAttack
+            Implements iSavable
+            Implements iOnDisk
+            Implements iOpenableFile
             Public Const Length As Integer = 362
             Public Const MimeType As String = "application/x-sky-pokemon"
+            Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+
             Public Sub New(Bits As Binary)
                 MyBase.New(Bits)
             End Sub
@@ -250,6 +256,9 @@ Namespace Saves
                     StringPMD(0, 282, 10) = value
                 End Set
             End Property
+
+            Public Property Filename As String Implements iOnDisk.Filename
+
             Public Overrides Function ToString() As String
                 If IsValid Then
                     Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
@@ -264,6 +273,42 @@ Namespace Saves
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
                 Return Lists.SkyLocations
             End Function
+
+            Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+                Return ".skypkm"
+            End Function
+
+            Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+                Dim toOpen As New BinaryFile(Filename)
+                Me.Bits = toOpen.Bits.Bits
+                'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
+                Me.Bits.RemoveAt(0)
+                Me.Bits.RemoveAt(0)
+                Me.Bits.RemoveAt(0)
+                Me.Bits.RemoveAt(0)
+                Me.Bits.RemoveAt(0)
+                Me.Bits.RemoveAt(0)
+                toOpen.Dispose()
+            End Sub
+
+            Public Sub Save() Implements iSavable.Save
+                Save(Filename)
+            End Sub
+
+            Public Sub Save(Filename As String) Implements iSavable.Save
+                Dim toSave As New BinaryFile()
+                toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
+                'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.Add(0)
+                toSave.Bits.Bits.AddRange(Me.Bits)
+                toSave.Save(Filename)
+                toSave.Dispose()
+            End Sub
         End Class
         Public Property StoredPokemon(Index As Integer) As StoredPkm
             Get

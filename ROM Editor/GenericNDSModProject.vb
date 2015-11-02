@@ -109,11 +109,11 @@ Public Class GenericNDSModProject
         End If
     End Sub
 
-    Private Async Sub NDSRomProject_FileAdded(sender As Object, File As KeyValuePair(Of String, iGenericFile)) Handles Me.FileAdded
-        If TypeOf File.Value Is Mods.GenericMod Then
-            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(File.Value.OriginalFilename), IO.Path.GetFileNameWithoutExtension(File.Value.OriginalFilename), "RawFiles")
+    Private Async Sub NDSRomProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles Me.FileAdded
+        If TypeOf e.File.Value Is Mods.GenericMod Then
+            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(e.File.Value.OriginalFilename), IO.Path.GetFileNameWithoutExtension(e.File.Value.OriginalFilename), "RawFiles")
 
-            Dim m = DirectCast(File.Value, Mods.GenericMod)
+            Dim m = DirectCast(e.File.Value, Mods.GenericMod)
 
             If m.FilesToCopy.Count > 0 Then
                 Dim a As New Utilities.AsyncFor("Copying files...")

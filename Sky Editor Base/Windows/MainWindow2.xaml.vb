@@ -15,10 +15,10 @@ Public Class MainWindow2
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Private _queuedConsoleLines As Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
 #End Region
-    Private Function IsFileTabOpen(File As GenericFile) As Boolean
+    Private Function IsFileTabOpen(File As Object) As Boolean
         Dim out As Boolean = False
         For Each item In docPane.Children
-            If DirectCast(item, DocumentTab).File Is File Then
+            If DirectCast(item, DocumentTab).Document Is File Then
                 out = True
                 Exit For
             End If
@@ -26,14 +26,25 @@ Public Class MainWindow2
         Return out
     End Function
 
+    ''' <summary>
+    ''' Opens the given object in a document tab, if it is not already open.
+    ''' </summary>
+    ''' <param name="Document"></param>
+    Private Sub OpenDocumentTab(Document As Object)
+        If Not IsFileTabOpen(Document) Then
+            docPane.Children.Add(Document)
+            RemoveWelcomePage()
+        End If
+    End Sub
+
 
     Private Sub SaveProject()
         _manager.CurrentProject.SaveProject()
     End Sub
 
 
-    Private Sub FileOpened(sender As Object, File As KeyValuePair(Of String, iGenericFile))
-        docPane.Children.Add(New DocumentTab(File.Value, _manager))
+    Private Sub FileOpened(sender As Object, e As EventArguments.FileAddedEventArguments)
+        docPane.Children.Add(New DocumentTab(e.File.Value, _manager))
         RemoveWelcomePage()
     End Sub
 
@@ -76,15 +87,13 @@ Public Class MainWindow2
             Next
             w.AddGames(games.Keys)
             If w.ShowDialog Then
-                Dim file As GenericFile = _manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame))
-                docPane.Children.Add(New DocumentTab(file, _manager, True))
-                RemoveWelcomePage()
+                OpenDocumentTab(_manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame)))
             End If
         End If
     End Sub
     Private Sub menuFileSaveFile_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveFile.Click
         If docPane.SelectedContent IsNot Nothing Then
-            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).File
+            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
             If Not String.IsNullOrEmpty(file.OriginalFilename) Then
                 If TypeOf file Is iSavable Then
                     DirectCast(file, iSavable).Save()
@@ -102,7 +111,7 @@ Public Class MainWindow2
     Private Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
         If docPane.SelectedContent IsNot Nothing Then
             'Dim tab = DirectCast(docPane.SelectedContent, DocumentTab)
-            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).File
+            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
             SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
 
             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
@@ -119,7 +128,7 @@ Public Class MainWindow2
         SaveProject()
         For Each item In docPane.Children
             If TypeOf item Is DocumentTab Then
-                Dim file = DirectCast(item, DocumentTab).File
+                Dim file = DirectCast(item, DocumentTab).Document
                 If Not String.IsNullOrEmpty(file.OriginalFilename) Then
                     If TypeOf file Is iSavable Then
                         DirectCast(file, iSavable).Save()
@@ -144,11 +153,7 @@ Public Class MainWindow2
     End Sub
 
     Private Sub menuLanguageEditor_Click(sender As Object, e As RoutedEventArgs) Handles menuLanguageEditor.Click
-        Static languageTab As New DocumentTab(SkyEditorBase.Language.LanguageManager.Instance, _manager)
-        If Not docPane.Children.Contains(languageTab) Then
-            docPane.Children.Add(languageTab)
-            RemoveWelcomePage()
-        End If
+        OpenDocumentTab(SkyEditorBase.Language.LanguageManager.Instance)
     End Sub
 
     Private Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
@@ -241,8 +246,7 @@ Public Class MainWindow2
     Private Sub _projectExplorer_FileOpen(sender As Object, ProjectFile As String) Handles _projectExplorer.FileOpen
         If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
             If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
-                docPane.Children.Add(New DocumentTab(_manager.CurrentProject.Files(ProjectFile), _manager))
-                RemoveWelcomePage()
+                OpenDocumentTab(_manager.CurrentProject.Files(ProjectFile))
             End If
         End If
     End Sub

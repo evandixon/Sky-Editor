@@ -38,7 +38,7 @@ Public Class BlueHeldMoney
         Return Name
     End Function
 
-    Public Function GenerateCode(Save As iGenericFile, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+    Public Function GenerateCode(Save As Object, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
         'Dim s = DirectCast(Save, RBSave)
         'Dim moneyHex As String = Conversion.Hex(s.HeldMoney)
         'Dim code As New SkyEditorBase.ARDS.CodeGeneratorHelper.Code

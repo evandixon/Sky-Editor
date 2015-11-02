@@ -4,7 +4,7 @@ Imports SkyEditorBase.Interfaces
 
 Namespace Language
     Public Class LanguageManager
-        Implements iGenericFile 'So languages can be edited with a control using the current framework
+        Implements iNamed
         Implements iSavable
         Implements iModifiable
 
@@ -21,35 +21,46 @@ Namespace Language
                 Return _manager
             End Get
         End Property
+
         Private Sub New()
             MyBase.New()
             Languages = New Dictionary(Of String, LanguageFile)
         End Sub
+
+#End Region
+
+        Public Sub ImportFile(Filename As String)
+            Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))(Filename)
+            For Each lang In f.ContainedObject.Keys
+                EnsureLanguageLoaded(lang)
+                For Each item In f.ContainedObject(lang).ContainedObject
+                    AddLanguageItem(lang, item)
+                Next
+            Next
+        End Sub
+
+#Region "iSavable support"
+        Public Sub SaveAll() Implements iSavable.Save
+            For Each item In Languages.Values
+                item.Save()
+            Next
+        End Sub
+
+        Public Sub SaveAll(Filename As String) Implements iSavable.Save
+            Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
+            f.ContainedObject = Languages
+            f.Save(Filename)
+        End Sub
+        Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+            Return ".skylangpack"
+        End Function
 #End Region
 
         Public Property Languages As Dictionary(Of String, LanguageFile)
 
         Public Property AdditionsMade As Boolean
 
-        Public Property Filename As String Implements iGenericFile.Filename
-            Get
-                Return ""
-            End Get
-            Set(value As String)
-
-            End Set
-        End Property
-
-        Public Property OriginalFilename As String Implements iGenericFile.OriginalFilename
-            Get
-                Return ""
-            End Get
-            Set(value As String)
-
-            End Set
-        End Property
-
-        Public Property Name As String Implements iGenericFile.Name
+        Public Property Name As String Implements iNamed.Name
             Get
                 Return GetLanguageItem("Language Manager", Assembly.GetExecutingAssembly.GetName.Name)
             End Get
@@ -98,18 +109,6 @@ Namespace Language
             End If
         End Function
 
-        Public Sub SaveAll() Implements iSavable.Save
-            For Each item In Languages.Values
-                item.Save()
-            Next
-        End Sub
-
-        Public Sub SaveAll(Filename As String) Implements iSavable.Save
-            Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
-            f.ContainedObject = Languages
-            f.Save(Filename)
-        End Sub
-
         ''' <summary>
         ''' Gets the language item from the given key.
         ''' </summary>
@@ -146,7 +145,7 @@ Namespace Language
                         DefaultValue = Key
                     End If
 
-                    'Let's add the default language item to the default language, so it'll be easier to use a tool to translate.
+                    'Let's add the default language item to the current language, so it'll be easier to use a tool to translate.
                     Dim newItem As New LanguageItem(Key, DefaultValue, AssemblyName, True)
                     Instance.AddLanguageItem(defaultLanguage, newItem)
 
@@ -180,9 +179,7 @@ Namespace Language
             Return Input
         End Function
 
-        Public Function DefaultExtension() As String Implements iGenericFile.DefaultExtension
-            Return ""
-        End Function
+
 
         Public Sub RaiseModified() Implements iModifiable.RaiseModified
             RaiseEvent Modified(Me, New EventArgs)

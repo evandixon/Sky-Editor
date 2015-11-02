@@ -38,7 +38,7 @@ Public Class RedBaseType
         Return Name
     End Function
 
-    Public Function GenerateCode(Save As iGenericFile, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
+    Public Function GenerateCode(Save As Object, TargetRegion As Region, ButtonActivator As UShort, CodeType As CheatFormat) As String Implements CodeDefinition.GenerateCode
         'Const FF As Byte = &HFF
         'Dim s = DirectCast(Save, RBSave)
         'Dim moneyHex As String = Conversion.Hex(Math.Min(s.BaseType, FF))

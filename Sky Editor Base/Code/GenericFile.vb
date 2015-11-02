@@ -1,10 +1,11 @@
 ﻿Imports SkyEditorBase.Interfaces
 Public Class GenericFile
     Implements IDisposable
+    Implements iNamed
     Implements iModifiable
     'Implements iCreatableFile 'Excluded because this might not apply to children
     'Implements iOpenableFile
-    Implements Interfaces.iGenericFile
+    Implements iOnDisk
     Implements iSavable
     Private _tempname As String
     Private _tempFilename As String
@@ -49,9 +50,9 @@ Public Class GenericFile
     End Sub
 
 #Region "GenericFile Support"
-    Public Property Filename As String Implements Interfaces.iGenericFile.Filename
-    Public Property OriginalFilename As String Implements Interfaces.iGenericFile.OriginalFilename
-    Public Property Name As String Implements Interfaces.iGenericFile.Name
+    Public Property Filename As String
+    Public Property OriginalFilename As String Implements iOnDisk.Filename
+    Public Property Name As String Implements iNamed.Name
         Get
             If _name Is Nothing Then
                 Return IO.Path.GetFileName(OriginalFilename)
@@ -64,7 +65,7 @@ Public Class GenericFile
         End Set
     End Property
     Dim _name As String = Nothing
-    Public Overridable Function DefaultExtension() As String Implements Interfaces.iGenericFile.DefaultExtension
+    Public Overridable Function DefaultExtension() As String Implements iSavable.DefaultExtension
         Return ""
     End Function
 #End Region
@@ -204,7 +205,10 @@ Public Class GenericFile
         If Not Me.disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                If _fileReader IsNot Nothing Then _fileReader.Dispose()
+                If _fileReader IsNot Nothing Then
+                    _fileReader.Dispose()
+                    _fileReader = Nothing
+                End If
                 If IO.File.Exists(_tempFilename) Then IO.File.Delete(_tempFilename)
             End If
 

@@ -14,6 +14,11 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="57*" />
         </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="lbInventorySlots" Margin="0,0,0,0" Grid.Column="0" />
+
+        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
+
         <ListBox x:Name="lbHeldItems" Margin="0,0,0,77" SelectionMode="Extended" Grid.ColumnSpan="2" Grid.Column="2">
             <ListBox.ContextMenu>
                 <ContextMenu>
@@ -30,7 +35,5 @@
                 <xctk:IntegerUpDown x:Name="numHeldItemsBoxContentsAddCount" Margin="0,0,10,0" VerticalAlignment="Top" Minimum="0" Maximum="99" Value="0" HorizontalAlignment="Right" Width="41" />
             </Grid>
         </GroupBox>
-        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
-        <ListBox x:Name="lbInventorySlots" Margin="0,0,0,0" Grid.Column="0" />
     </Grid>
 </local:ObjectTab>

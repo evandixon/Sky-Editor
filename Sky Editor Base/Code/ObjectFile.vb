@@ -3,9 +3,10 @@ Imports SkyEditorBase.Interfaces
 
 Public Class ObjectFile(Of T)
     'Inherits GenericFile
-    Implements Interfaces.iOpenableFile
-    Implements Interfaces.iSavable
-    Implements Interfaces.iGenericFile
+    Implements iNamed
+    Implements iOpenableFile
+    Implements iSavable
+    Implements iOnDisk
     Private Class JsonContainer
         Public Property ContainedObject As T
 
@@ -16,11 +17,11 @@ Public Class ObjectFile(Of T)
 
     Public Property ContainedTypeName As String
 
-    Public Property Filename As String Implements Interfaces.iGenericFile.Filename
+    Public Property Filename As String
 
-    Public Property OriginalFilename As String Implements Interfaces.iGenericFile.OriginalFilename
+    Public Property OriginalFilename As String Implements iOnDisk.Filename
 
-    Public Property Name As String Implements Interfaces.iGenericFile.Name
+    Public Property Name As String Implements iNamed.Name
 
 #Region "Constructors"
     Public Sub New()
@@ -85,8 +86,7 @@ Public Class ObjectFile(Of T)
         Return TypeToCheck.IsGenericType AndAlso TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)
     End Function
 
-    Public Overridable Function DefaultExtension() As String Implements Interfaces.iGenericFile.DefaultExtension
+    Public Overridable Function DefaultExtension() As String Implements iSavable.DefaultExtension
         Return ""
     End Function
-
 End Class

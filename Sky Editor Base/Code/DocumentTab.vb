@@ -5,10 +5,10 @@ Public Class DocumentTab
     Inherits LayoutDocument
     Implements IDisposable
     Private _manager As PluginManager
-    Private WithEvents _file As iGenericFile
+    Private WithEvents _document As Object
 
 #Region "Properties"
-    Public Property File As iGenericFile
+    Public Property Document As Object
         Get
             If TypeOf Me.Content Is ObjectControl Then
                 DirectCast(Me.Content, ObjectControl).UpdateObject()
@@ -19,14 +19,14 @@ Public Class DocumentTab
                     End If
                 Next
             End If
-            Return _file
+            Return _document
         End Get
-        Set(value As iGenericFile)
-            If _file IsNot Nothing AndAlso TypeOf _file Is iModifiable Then
-                RemoveHandler DirectCast(_file, iModifiable).Modified, AddressOf File_FileModified
+        Set(value As Object)
+            If _document IsNot Nothing AndAlso TypeOf _document Is iModifiable Then
+                RemoveHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
             End If
-            If _file IsNot Nothing AndAlso TypeOf _file Is iSavable Then
-                RemoveHandler DirectCast(_file, iSavable).FileSaved, AddressOf File_FileModified
+            If _document IsNot Nothing AndAlso TypeOf _document Is iSavable Then
+                RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf File_FileModified
             End If
 
             Dim tabs = _manager.GetRefreshedTabs(value)
@@ -45,13 +45,13 @@ Public Class DocumentTab
                     Me.Content = control
                 End If
             End If
-            _file = value
+            _document = value
 
-            If TypeOf _file Is iModifiable Then
-                AddHandler DirectCast(_file, iModifiable).Modified, AddressOf File_FileModified
+            If TypeOf _document Is iModifiable Then
+                AddHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
             End If
-            If TypeOf _file Is iSavable Then
-                AddHandler DirectCast(_file, iSavable).FileSaved, AddressOf File_FileModified
+            If TypeOf _document Is iSavable Then
+                AddHandler DirectCast(_document, iSavable).FileSaved, AddressOf File_FileModified
             End If
         End Set
     End Property
@@ -85,13 +85,13 @@ Public Class DocumentTab
             If MessageBox.Show("Are you sure you want to close this file?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
                 e.Cancel = True
             Else
-                If TypeOf _file Is IDisposable Then
-                    DirectCast(_file, IDisposable).Dispose()
+                If TypeOf _document Is IDisposable Then
+                    DirectCast(_document, IDisposable).Dispose()
                 End If
             End If
         Else
-            If TypeOf _file Is IDisposable Then
-                DirectCast(_file, IDisposable).Dispose()
+            If TypeOf _document Is IDisposable Then
+                DirectCast(_document, IDisposable).Dispose()
             End If
         End If
     End Sub
@@ -107,19 +107,23 @@ Public Class DocumentTab
 
 #Region "Methods"
     Public Sub SaveFile(Filename As String)
-        If TypeOf File Is iSavable Then
-            DirectCast(File, iSavable).Save(Filename)
+        If TypeOf Document Is iSavable Then
+            DirectCast(Document, iSavable).Save(Filename)
         End If
     End Sub
     Public Sub SaveFile()
-        If TypeOf File Is iSavable Then
-            DirectCast(File, iSavable).Save()
+        If TypeOf Document Is iSavable Then
+            DirectCast(Document, iSavable).Save()
         End If
     End Sub
 
     Private Sub UpdateTitle()
-        If _file IsNot Nothing Then
-            Me.Title = _file.Name
+        If _document IsNot Nothing Then
+            If TypeOf _document Is iNamed Then
+                Me.Title = DirectCast(_document, iNamed).Name
+            Else
+                Me.Title = _document.GetType.Name
+            End If
             If IsModified Then
                 Me.Title = "* " & Me.Title
             End If
@@ -132,10 +136,10 @@ Public Class DocumentTab
         Me.CanClose = True
         Me.IsModified = False
     End Sub
-    Public Sub New(File As iGenericFile, Manager As PluginManager, Optional DisposeOnExit As Boolean = False)
+    Public Sub New(File As Object, Manager As PluginManager, Optional DisposeOnExit As Boolean = False)
         Me.New()
         _manager = Manager
-        Me.File = File
+        Me.Document = File
         UpdateTitle()
         Me.DisposeOnExit = DisposeOnExit
     End Sub
@@ -150,9 +154,9 @@ Public Class DocumentTab
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                If _file IsNot Nothing Then
-                    If TypeOf _file Is IDisposable Then
-                        DirectCast(_file, IDisposable).Dispose()
+                If _document IsNot Nothing Then
+                    If TypeOf _document Is IDisposable Then
+                        DirectCast(_document, IDisposable).Dispose()
                     End If
                 End If
             End If

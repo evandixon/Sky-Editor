@@ -188,10 +188,12 @@
     <Compile Include="Code\ARDS\Region.vb" />
     <Compile Include="Code\ChildControls.vb" />
     <Compile Include="Code\DocumentTab.vb" />
+    <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="Code\Interfaces\iCreatableFile.vb" />
     <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
-    <Compile Include="Code\Interfaces\iGenericFile.vb" />
     <Compile Include="Code\Interfaces\iModifiable.vb" />
+    <Compile Include="Code\Interfaces\iNamed.vb" />
+    <Compile Include="Code\Interfaces\iOnDisk.vb" />
     <Compile Include="Code\Interfaces\iOpenableFile.vb" />
     <Compile Include="Code\Interfaces\iSavable.vb" />
     <Compile Include="Code\Language\LanguageFile.vb" />

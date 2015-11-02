@@ -52,7 +52,7 @@ Public Class Project
 #End Region
 
 #Region "Events"
-    Public Event FileAdded(sender As Object, File As KeyValuePair(Of String, Interfaces.iGenericFile))
+    Public Event FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments)
     Public Event FileRemoved(sender As Object, File As String)
     Public Event DirectoryCreated(sender As Object, Directory As String)
     Public Event DirectoryRemoved(sender As Object, Directory As String)
@@ -198,8 +198,8 @@ Public Class Project
         '    Return (From file In Files Where file.Key.Contains("/") OrElse file.Key.Contains("\") AndAlso Not String.IsNullOrEmpty(InternalPath) Select file.Key).ToList
         'End If
     End Function
-    Public Function GetFiles(FileType As Type) As List(Of iGenericFile)
-        Dim out As New List(Of iGenericFile)
+    Public Function GetFiles(FileType As Type) As List(Of Object)
+        Dim out As New List(Of Object)
         For Each item In Files
             If item.Value IsNot Nothing AndAlso ReflectionHelpers.IsOfType(item.Value, FileType) Then
                 out.Add(item.Value)
@@ -240,10 +240,10 @@ Public Class Project
         If Copy Then IO.File.Copy(SourceFilename.Replace("\", "/"), newPath.Replace("\", "/"), True)
         AddFile(NewInternalPath.Replace("\", "/"), _manager.OpenFile(SourceFilename.Replace("\", "/")))
     End Sub
-    Public Sub AddFile(InternalPath As String, File As GenericFile)
+    Public Sub AddFile(InternalPath As String, File As Object)
         'Files.Add(File.OriginalFilename.Replace(IO.Path.GetDirectoryName(Me.Filename), ""), File)
         Files.Add(InternalPath, File)
-        RaiseEvent FileAdded(Me, New KeyValuePair(Of String, iGenericFile)(InternalPath, File))
+        RaiseEvent FileAdded(Me, New EventArguments.FileAddedEventArguments With {.File = New KeyValuePair(Of String, Object)(InternalPath, File)})
         IsModified = True
     End Sub
     Public Sub RemoveFile(InternalPath As String)
