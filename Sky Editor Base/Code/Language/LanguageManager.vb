@@ -4,10 +4,15 @@ Imports SkyEditorBase.Interfaces
 
 Namespace Language
     Public Class LanguageManager
-        Implements Interfaces.iGenericFile 'So languages can be edited with a control using the current framework
+        Implements iGenericFile 'So languages can be edited with a control using the current framework
+        Implements iSavable
+        Implements iModifiable
 
 #Region "Constructor"
         Private Shared _manager As LanguageManager
+        Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
+        Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
+
         Public Shared ReadOnly Property Instance As LanguageManager
             Get
                 If _manager Is Nothing Then
@@ -93,10 +98,16 @@ Namespace Language
             End If
         End Function
 
-        Public Sub SaveAll()
+        Public Sub SaveAll() Implements iSavable.Save
             For Each item In Languages.Values
                 item.Save()
             Next
+        End Sub
+
+        Public Sub SaveAll(Filename As String) Implements iSavable.Save
+            Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
+            f.ContainedObject = Languages
+            f.Save(Filename)
         End Sub
 
         ''' <summary>
@@ -172,5 +183,9 @@ Namespace Language
         Public Function DefaultExtension() As String Implements iGenericFile.DefaultExtension
             Return ""
         End Function
+
+        Public Sub RaiseModified() Implements iModifiable.RaiseModified
+            RaiseEvent Modified(Me, New EventArgs)
+        End Sub
     End Class
 End Namespace

@@ -133,14 +133,16 @@ Public Class Project
 
 #Region "Save"
     Public Sub SaveProject()
-        Dim j As New JavaScriptSerializer
-        Dim f As New ProjectFileFormat
-        For Each item In Files
-            f.Files.Add(item.Key)
-        Next
-        f.ProjectType = Me.ProjectType
-        IO.File.WriteAllText(Filename, j.Serialize(f))
-        IsModified = False
+        If Filename IsNot Nothing Then
+            Dim j As New JavaScriptSerializer
+            Dim f As New ProjectFileFormat
+            For Each item In Files
+                f.Files.Add(item.Key)
+            Next
+            f.ProjectType = Me.ProjectType
+            IO.File.WriteAllText(Filename, j.Serialize(f))
+            IsModified = False
+        End If
     End Sub
     Public Sub SaveAll()
         For Each item In Files

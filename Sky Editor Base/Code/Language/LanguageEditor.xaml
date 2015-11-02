@@ -6,9 +6,14 @@
              xmlns:local="clr-namespace:SkyEditorBase"
              xmlns:language="clr-namespace:SkyEditorBase.Language"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
-        <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Width="300"/>
-
+        <ComboBox x:Name="cbLanguages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125"/>
+        <ListBox x:Name="lbItems" HorizontalAlignment="Left" Width="125" Margin="0,27,0,0"/>
+        <Label x:Name="lblKey" Content="Key:" HorizontalAlignment="Left" Margin="125,27,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtKey" Height="64" Margin="130,53,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+        <Label x:Name="lblValue" Content="Value:" HorizontalAlignment="Left" Margin="125,126,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtValue" Margin="130,152,10,42" TextWrapping="Wrap" Text=""/>
+        <Label x:Name="lblChangeWarning" Content="Changes will not be applied until the program has been restarted." Margin="130,0,10,10" Height="27" VerticalAlignment="Bottom"/>
     </Grid>
 </local:ObjectControl>
