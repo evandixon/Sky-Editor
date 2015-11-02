@@ -2,12 +2,11 @@
     Public Shared Function CurrentLanguage() As String
         Return Settings("Language")
     End Function
+    Public Shared Function DefaultLanguage() As String
+        Return "English"
+    End Function
     Public Shared Function DebugMode() As Boolean
-#If DEBUG Then
-        Return True
-#Else
         Return Settings.ContainsKey("DebugMode") AndAlso Settings("DebugMode") = "True"
-#End If
     End Function
     Public Shared Function UpdatePlugins() As Boolean
         Return Settings.ContainsKey("UpdatePlugins") AndAlso Settings("UpdatePlugins") = "True"

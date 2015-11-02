@@ -42,10 +42,15 @@ Public Class ObjectFile(Of T)
         Me.OriginalFilename = Filename
         Me.Filename = Filename
 
-        Dim j As New JavaScriptSerializer
-        Dim c = j.Deserialize(Of JsonContainer)(IO.File.ReadAllText(Filename))
-        Me.ContainedObject = c.ContainedObject
-        Me.ContainedTypeName = c.ContainedTypeName
+        If IO.File.Exists(Filename) Then
+            Dim j As New JavaScriptSerializer
+            Dim c = j.Deserialize(Of JsonContainer)(IO.File.ReadAllText(Filename))
+            Me.ContainedObject = c.ContainedObject
+            Me.ContainedTypeName = c.ContainedTypeName
+        Else
+            Me.ContainedObject = GetType(T).GetConstructor({}).Invoke({})
+            Me.ContainedTypeName = GetType(T).AssemblyQualifiedName
+        End If
     End Sub
 
 #End Region
@@ -77,7 +82,7 @@ Public Class ObjectFile(Of T)
     End Function
 
     Public Shared Function IsObjectFile(TypeToCheck As Type) As Boolean
-        Return TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)
+        Return TypeToCheck.IsGenericType AndAlso TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)
     End Function
 
     Public Overridable Function DefaultExtension() As String Implements Interfaces.iGenericFile.DefaultExtension

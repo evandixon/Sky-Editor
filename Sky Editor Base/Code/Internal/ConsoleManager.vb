@@ -5,7 +5,7 @@
 Imports System.IO
 Imports System.Security
 Imports System.Runtime.InteropServices
-Namespace Internal
+Namespace Language
     <SuppressUnmanagedCodeSecurity> _
     Friend NotInheritable Class ConsoleManager
         Friend Class NativeMethods

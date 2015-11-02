@@ -22,6 +22,9 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem x:Name="menuCheats" Header="_Cheats" />
+            <MenuItem x:Name="menuTools" Header="_Tools">
+                <MenuItem x:Name="menuLanguageEditor" Header="_Language Editor"/>
+            </MenuItem>
             <MenuItem x:Name="menuCredits" Header="Cre_dits" />
             <MenuItem x:Name="menuDebug" Header="Debug" Visibility="Collapsed">
                 <MenuItem x:Name="menuShowConsole" Header="Show Console" />

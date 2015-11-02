@@ -86,11 +86,15 @@ Public Class MainWindow2
         If docPane.SelectedContent IsNot Nothing Then
             Dim file = DirectCast(docPane.SelectedContent, DocumentTab).File
             If Not String.IsNullOrEmpty(file.OriginalFilename) Then
-                file.Save()
+                If TypeOf file Is iSavable Then
+                    DirectCast(file, iSavable).Save()
+                End If
             Else
                 SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
                 If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                    file.Save(SaveFileDialog1.FileName)
+                    If TypeOf file Is iSavable Then
+                        DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
+                    End If
                 End If
             End If
         End If
@@ -102,7 +106,9 @@ Public Class MainWindow2
             SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
 
             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                file.Save(SaveFileDialog1.FileName)
+                If TypeOf file Is iSavable Then
+                    DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
+                End If
             End If
         End If
     End Sub
@@ -115,11 +121,15 @@ Public Class MainWindow2
             If TypeOf item Is DocumentTab Then
                 Dim file = DirectCast(item, DocumentTab).File
                 If Not String.IsNullOrEmpty(file.OriginalFilename) Then
-                    file.Save()
+                    If TypeOf file Is iSavable Then
+                        DirectCast(file, iSavable).Save()
+                    End If
                 Else
                     SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
                     If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                        file.Save(SaveFileDialog1.FileName)
+                        If TypeOf file Is iSavable Then
+                            DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
+                        End If
                     End If
                 End If
             End If
@@ -129,6 +139,14 @@ Public Class MainWindow2
         Dim newProj As New NewProjectWindow(_manager)
         If newProj.ShowDialog() Then
             _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, _manager.ProjectTypes(newProj.SelectedProjectType), _manager)
+            RemoveWelcomePage()
+        End If
+    End Sub
+
+    Private Sub menuLanguageEditor_Click(sender As Object, e As RoutedEventArgs) Handles menuLanguageEditor.Click
+        Static languageTab As New DocumentTab(SkyEditorBase.Language.LanguageManager.Instance, _manager)
+        If Not docPane.Children.Contains(languageTab) Then
+            docPane.Children.Add(languageTab)
             RemoveWelcomePage()
         End If
     End Sub

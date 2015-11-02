@@ -194,6 +194,8 @@
     <Compile Include="Code\Interfaces\iModifiable.vb" />
     <Compile Include="Code\Interfaces\iOpenableFile.vb" />
     <Compile Include="Code\Interfaces\iSavable.vb" />
+    <Compile Include="Code\Language\LanguageFile.vb" />
+    <Compile Include="Code\Language\LanguageItem.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />
@@ -208,7 +210,7 @@
     <Compile Include="Code\Utilities\AsyncForEach.vb" />
     <Compile Include="Code\Utilities\AsyncHelpers.vb" />
     <Compile Include="Code\Utilities\GenericListItem.vb" />
-    <Compile Include="Code\Internal\LanguageManager.vb" />
+    <Compile Include="Code\Language\LanguageManager.vb" />
     <Compile Include="Code\Redistribution\RedistributionHelpers.vb" />
     <Compile Include="Code\Utilities\ReflectionHelpers.vb" />
     <Compile Include="Code\Utilities\ResourceDictionary.vb" />
@@ -222,6 +224,9 @@
     <Compile Include="Code\Utilities\Zip.vb" />
     <Compile Include="Code\Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="ConsoleModule.vb" />
+    <Compile Include="Code\Language\LanguageEditor.xaml.vb">
+      <DependentUpon>LanguageEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
@@ -252,6 +257,10 @@
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Code\Language\LanguageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Tool Windows\ProjectExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -355,7 +364,6 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

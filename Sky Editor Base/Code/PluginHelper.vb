@@ -85,7 +85,7 @@ Public Class PluginHelper
         If SkyEditorBase.Settings.GetSettings.Setting("DebugLangaugePlaceholders") = "True" Then
             Return String.Format("[{0}]", Key)
         Else
-            Return Internal.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
+            Return Language.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
         End If
     End Function
     ''' <summary>

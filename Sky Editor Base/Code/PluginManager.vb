@@ -84,7 +84,7 @@ Public Class PluginManager
                 'Load languages
                 If IO.Directory.Exists(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language")) Then
                     For Each lang In IO.Directory.GetFiles(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language"), "*.txt")
-                        Internal.LanguageManager.Instance.ImportLanguageFile(lang, item.GetName.Name.Replace("_plg", ""))
+                        Language.LanguageManager.ImportLanguageFile(lang, item.GetName.Name.Replace("_plg", ""))
                         'IO.File.Delete(lang)
                     Next
                 End If
@@ -126,6 +126,8 @@ Public Class PluginManager
             RegisterConsoleCommand("generateinfo", AddressOf RedistributionHelpers.GeneratePluginDownloadDir)
             RegisterConsoleCommand("updateall", AddressOf RedistributionHelpers.DownloadAllPlugins)
             RegisterConsoleCommand("packall", AddressOf RedistributionHelpers.PackageAll)
+
+            RegisterObjectControl(GetType(Language.LanguageEditor))
             'CheatManager.GameIDs = GameTypes
         End If
     End Sub

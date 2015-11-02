@@ -15,6 +15,12 @@ Class Application
             End Try
         Next
 
+        'Save pending language changes
+        Dim languageManager = Language.LanguageManager.Instance
+        If languageManager.AdditionsMade Then
+            languageManager.SaveAll
+        End If
+
         'Restart program if exit code warrants it
         If e.ApplicationExitCode = 1 Then
             Dim args = Environment.GetCommandLineArgs()
@@ -50,7 +56,7 @@ Class Application
         'Run the program
         Dim args = Environment.GetCommandLineArgs
         If args.Contains("-console") Then
-            Internal.ConsoleManager.Show()
+            Language.ConsoleManager.Show()
             ConsoleModule.ConsoleMain()
             Application.Current.Shutdown()
         Else
