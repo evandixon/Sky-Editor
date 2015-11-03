@@ -29,7 +29,7 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Private Sub New()
         Me.New(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
-        Me.CurrentProject = New Project(Me)
+        Me.CurrentProject = Nothing ' New Project(Me)
     End Sub
 
     ''' <summary>
@@ -128,6 +128,7 @@ Public Class PluginManager
             RegisterConsoleCommand("packall", AddressOf RedistributionHelpers.PackageAll)
 
             RegisterObjectControl(GetType(Language.LanguageEditor))
+            RegisterObjectControl(GetType(SettingsEditor))
             'CheatManager.GameIDs = GameTypes
         End If
     End Sub
@@ -667,7 +668,9 @@ Public Class PluginManager
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                CurrentProject.Dispose()
+                If CurrentProject IsNot Nothing Then
+                    CurrentProject.Dispose()
+                End If
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

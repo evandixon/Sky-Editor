@@ -82,7 +82,7 @@ Public Class PluginHelper
         If CallingAssembly Is Nothing Then
             CallingAssembly = Assembly.GetCallingAssembly.GetName.Name
         End If
-        If SkyEditorBase.Settings.GetSettings.Setting("DebugLangaugePlaceholders") = "True" Then
+        If SettingsManager.Instance.Settings.DebugLanguagePlaceholders Then
             Return String.Format("[{0}]", Key)
         Else
             Return Language.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
@@ -101,13 +101,20 @@ Public Class PluginHelper
             If TypeOf item Is Label Then
                 Dim t As String = DirectCast(item, Label).Content
                 If t IsNot Nothing Then DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-            ElseIf TypeOf item Is Controls.Button Then
+
+            ElseIf TypeOf item Is Button Then
                 Dim t As String = DirectCast(item, Button).Content
                 If t IsNot Nothing Then DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-            ElseIf TypeOf item Is Controls.MenuItem Then
+
+            ElseIf TypeOf item Is CheckBox Then
+                Dim t As String = DirectCast(item, CheckBox).Content
+                If t IsNot Nothing Then DirectCast(item, CheckBox).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+
+            ElseIf TypeOf item Is MenuItem Then
                 Dim t As String = DirectCast(item, MenuItem).Header
                 If t IsNot Nothing Then DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-            ElseIf TypeOf item Is Controls.TabItem Then
+
+            ElseIf TypeOf item Is TabItem Then
                 Dim t As String = DirectCast(item, TabItem).Header
                 If t IsNot Nothing Then DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             End If

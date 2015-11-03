@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Interfaces
 Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Namespace Saves
     Partial Class TDSave
@@ -71,9 +72,14 @@ Namespace Saves
             Implements iMDPkmGender
             Implements iMDPkmMetFloor
             Implements iPkmAttack
+            Implements iSavable
+            Implements iOnDisk
+            Implements iOpenableFile
 
             Public Const Length As Integer = 388
             Public Const MimeType As String = "application/x-td-pokemon"
+            Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+
             Public Sub New(Bits As Binary)
                 MyBase.New(Bits)
             End Sub
@@ -254,6 +260,36 @@ Namespace Saves
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
                 Return Lists.TDLocations
             End Function
+
+            Public Property Filename As String Implements iOnDisk.Filename
+
+            Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+                Return ".tdpkm"
+            End Function
+
+            Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+                Dim toOpen As New BinaryFile(Filename)
+                Me.Bits = toOpen.Bits.Bits
+                For i = 1 To 8 - (Length Mod 8)
+                    Me.Bits.RemoveAt(Me.Bits.Count - 1)
+                Next
+                toOpen.Dispose()
+            End Sub
+
+            Public Sub Save() Implements iSavable.Save
+                Save(Filename)
+            End Sub
+
+            Public Sub Save(Filename As String) Implements iSavable.Save
+                Dim toSave As New BinaryFile()
+                toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
+                toSave.Bits.Bits.AddRange(Me.Bits)
+                For i = 1 To 8 - (Length Mod 8)
+                    toSave.Bits.Bits.Add(0)
+                Next
+                toSave.Save(Filename)
+                toSave.Dispose()
+            End Sub
         End Class
         Public Property StoredPokemon(Index As Integer) As StoredPkm
             Get
@@ -290,7 +326,7 @@ Namespace Saves
         End Function
 
         Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
-            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\TDFriendAreaOffsets.txt"))).ToArray
+            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(SettingsManager.Instance.Settings.CurrentLanguage & "\TDFriendAreaOffsets.txt"))).ToArray
         End Function
 
         Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon

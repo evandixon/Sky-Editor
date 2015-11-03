@@ -263,7 +263,7 @@ Namespace Redistribution
         End Function
         Public Shared Sub GeneratePluginDownloadDir(Manager As PluginManager, WebDirectory As String)
             PackPlugins(Manager, Nothing)
-            IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", "plugins.json"), GeneratePluginInfoString(Manager, Settings.GetSettings("PluginUpdateUrl").Replace("plugins.json", "")))
+            IO.File.WriteAllText(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", "plugins.json"), GeneratePluginInfoString(Manager, SettingsManager.Instance.Settings.PluginUpdateUrl.Replace("plugins.json", "")))
         End Sub
         Public Shared Function DownloadAllPlugins(Manager As PluginManager, Url As String) As Boolean
             Return UpdatePlugins(Manager, GetPluginInfo(Url))

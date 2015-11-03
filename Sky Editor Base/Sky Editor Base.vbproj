@@ -196,6 +196,9 @@
     <Compile Include="Code\Interfaces\iOnDisk.vb" />
     <Compile Include="Code\Interfaces\iOpenableFile.vb" />
     <Compile Include="Code\Interfaces\iSavable.vb" />
+    <Compile Include="Code\Language\AddLanguageItem.xaml.vb">
+      <DependentUpon>AddLanguageItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Code\Language\LanguageFile.vb" />
     <Compile Include="Code\Language\LanguageItem.vb" />
     <Compile Include="Code\ObjectControl.vb" />
@@ -229,6 +232,9 @@
     <Compile Include="Code\Language\LanguageEditor.xaml.vb">
       <DependentUpon>LanguageEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsEditor.xaml.vb">
+      <DependentUpon>SettingsEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
@@ -259,7 +265,15 @@
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Code\Language\AddLanguageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Code\Language\LanguageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

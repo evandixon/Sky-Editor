@@ -26,7 +26,7 @@ Public Class DocumentTab
                 RemoveHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
             End If
             If _document IsNot Nothing AndAlso TypeOf _document Is iSavable Then
-                RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf File_FileModified
+                RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
 
             Dim tabs = _manager.GetRefreshedTabs(value)
@@ -51,7 +51,7 @@ Public Class DocumentTab
                 AddHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
             End If
             If TypeOf _document Is iSavable Then
-                AddHandler DirectCast(_document, iSavable).FileSaved, AddressOf File_FileModified
+                AddHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
         End Set
     End Property

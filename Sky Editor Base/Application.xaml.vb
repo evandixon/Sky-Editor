@@ -41,10 +41,6 @@ Class Application
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         Try
-            'If the settings file doesn't exist, use the default one.
-            If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt")) Then
-                IO.File.Copy(IO.Path.Combine(Environment.CurrentDirectory, "Resources", "Settings.txt"), IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"))
-            End If
             'Delete and install things
             RedistributionHelpers.DeleteScheduledFiles()
             RedistributionHelpers.InstallPendingPlugins()

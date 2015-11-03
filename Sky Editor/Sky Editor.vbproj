@@ -205,7 +205,6 @@
     <Compile Include="Saves\TDSave.HeldItem.vb" />
     <Compile Include="Saves\TDSave.StoredPokemon.vb" />
     <Compile Include="Saves\TDSave.vb" />
-    <Compile Include="Settings.vb" />
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
       <DependentUpon>ActivePokemonTab.xaml</DependentUpon>

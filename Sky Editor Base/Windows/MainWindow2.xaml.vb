@@ -18,7 +18,7 @@ Public Class MainWindow2
     Private Function IsFileTabOpen(File As Object) As Boolean
         Dim out As Boolean = False
         For Each item In docPane.Children
-            If DirectCast(item, DocumentTab).Document Is File Then
+            If TypeOf item Is DocumentTab AndAlso DirectCast(item, DocumentTab).Document Is File Then
                 out = True
                 Exit For
             End If
@@ -30,9 +30,9 @@ Public Class MainWindow2
     ''' Opens the given object in a document tab, if it is not already open.
     ''' </summary>
     ''' <param name="Document"></param>
-    Private Sub OpenDocumentTab(Document As Object)
+    Private Sub OpenDocumentTab(Document As Object, DisposeOnExit As Boolean)
         If Not IsFileTabOpen(Document) Then
-            docPane.Children.Add(Document)
+            docPane.Children.Add(New DocumentTab(Document, _manager, DisposeOnExit))
             RemoveWelcomePage()
         End If
     End Sub
@@ -87,23 +87,27 @@ Public Class MainWindow2
             Next
             w.AddGames(games.Keys)
             If w.ShowDialog Then
-                OpenDocumentTab(_manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame)))
+                OpenDocumentTab(_manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame)), True)
             End If
         End If
     End Sub
     Private Sub menuFileSaveFile_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveFile.Click
         If docPane.SelectedContent IsNot Nothing Then
             Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
-            If Not String.IsNullOrEmpty(file.OriginalFilename) Then
+            If TypeOf file Is iOnDisk AndAlso String.IsNullOrEmpty(DirectCast(file, iOnDisk).Filename) Then
                 If TypeOf file Is iSavable Then
-                    DirectCast(file, iSavable).Save()
-                End If
-            Else
-                SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
-                If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                    If TypeOf file Is iSavable Then
+                    If TypeOf file Is iOnDisk Then
+                        SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iOnDisk).Filename))
+                    Else
+                        SaveFileDialog1.Filter = _manager.IOFiltersString(IsSaveAs:=True) 'Todo: use default extension
+                    End If
+                    If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                         DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
                     End If
+                End If
+            Else
+                If TypeOf file Is iSavable Then
+                    DirectCast(file, iSavable).Save()
                 End If
             End If
         End If
@@ -112,10 +116,14 @@ Public Class MainWindow2
         If docPane.SelectedContent IsNot Nothing Then
             'Dim tab = DirectCast(docPane.SelectedContent, DocumentTab)
             Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
-            SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
+            If TypeOf file Is iOnDisk Then
+                SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iOnDisk).Filename))
+            Else
+                SaveFileDialog1.Filter = _manager.IOFiltersString(IsSaveAs:=True)
+            End If
 
-            If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                If TypeOf file Is iSavable Then
+            If TypeOf file Is iSavable Then
+                If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                     DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
                 End If
             End If
@@ -153,7 +161,11 @@ Public Class MainWindow2
     End Sub
 
     Private Sub menuLanguageEditor_Click(sender As Object, e As RoutedEventArgs) Handles menuLanguageEditor.Click
-        OpenDocumentTab(SkyEditorBase.Language.LanguageManager.Instance)
+        OpenDocumentTab(SkyEditorBase.Language.LanguageManager.Instance, False)
+    End Sub
+
+    Private Sub MenuSettings_Click(sender As Object, e As RoutedEventArgs) Handles MenuSettings.Click
+        OpenDocumentTab(SettingsManager.Instance, False)
     End Sub
 
     Private Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
@@ -169,11 +181,11 @@ Public Class MainWindow2
 #Region "Form"
     Private Async Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         _manager = PluginManager.GetInstance
-        If Settings.UpdatePlugins Then
+        If SettingsManager.Instance.Settings.UpdatePlugins Then
             Try
                 PluginHelper.StartLoading("Updating plugins...")
                 If Await Task.Run(Function() As Boolean
-                                      Return RedistributionHelpers.DownloadAllPlugins(_manager, Settings.GetSettings("PluginUpdateUrl"))
+                                      Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
                                   End Function) Then
                     PluginHelper.StopLoading()
                     RedistributionHelpers.RestartProgram()
@@ -190,14 +202,8 @@ Public Class MainWindow2
 
         'menuFileOpenNoDetect.Visibility = Visibility.Collapsed
 
-        If Settings.GetSettings.Setting("SimpleMode").ToLower = "true" Then
-            menuFileSaveProject.Visibility = Visibility.Collapsed
-            menuNewProject.Visibility = Visibility.Collapsed
-            menuBuild.Visibility = Visibility.Collapsed
-        Else
-            _projectExplorer = New ProjectExplorer(_manager)
-            toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
-        End If
+        _projectExplorer = New ProjectExplorer(_manager)
+        toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
 
         Me.Title = PluginHelper.GetLanguageItem("Sky Editor")
 
@@ -209,7 +215,7 @@ Public Class MainWindow2
 
         TranslateControls()
 
-        AddHandler _manager.CurrentProject.FileAdded, AddressOf FileOpened
+        AddHandler _manager.ProjectFileAdded, AddressOf FileOpened
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
@@ -222,7 +228,7 @@ Public Class MainWindow2
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
 
-        Dim editsMade As Boolean = editedTabs.Any OrElse _manager.CurrentProject.IsModified
+        Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.IsModified)
         If editsMade Then
             If MessageBox.Show(PluginHelper.GetLanguageItem("Unsaved File Close Confirmation", "Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
                 e.Cancel = True
@@ -246,7 +252,7 @@ Public Class MainWindow2
     Private Sub _projectExplorer_FileOpen(sender As Object, ProjectFile As String) Handles _projectExplorer.FileOpen
         If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
             If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
-                OpenDocumentTab(_manager.CurrentProject.Files(ProjectFile))
+                OpenDocumentTab(_manager.CurrentProject.Files(ProjectFile), False)
             End If
         End If
     End Sub
@@ -274,12 +280,12 @@ Public Class MainWindow2
     End Sub
 #End Region
     Private Sub RefreshBuildRunVisibility()
-        If _manager.CurrentProject.CanBuild Then
+        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanBuild Then
             menuBuild.Visibility = Visibility.Visible
         Else
             menuBuild.Visibility = Visibility.Collapsed
         End If
-        If _manager.CurrentProject.CanRun Then
+        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanRun Then
             menuRun.Visibility = Visibility.Visible
         Else
             menuRun.Visibility = Visibility.Collapsed

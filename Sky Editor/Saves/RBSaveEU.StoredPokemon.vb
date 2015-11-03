@@ -1,4 +1,6 @@
 ﻿Imports SkyEditor.Interfaces
+Imports SkyEditorBase
+
 Namespace Saves
     Partial Class RBSaveEU
         Implements Interfaces.iPokemonStorage
@@ -41,7 +43,7 @@ Namespace Saves
         End Sub
 
         Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
-            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(SkyEditorBase.PluginHelper.GetResourceName(Settings.CurrentLanguage & "\RBFriendAreaOffsets.txt"))).ToArray
+            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(SkyEditorBase.PluginHelper.GetResourceName(SettingsManager.Instance.Settings.CurrentLanguage & "\RBFriendAreaOffsets.txt"))).ToArray
         End Function
     End Class
 

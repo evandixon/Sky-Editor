@@ -5,6 +5,8 @@
             MyBase.RefreshDisplay()
             cbLanguages.Items.Clear()
 
+            EditingItem.LoadAllLanguages()
+
             For Each item In EditingItem.Languages.Keys
                 cbLanguages.Items.Add(item)
             Next
@@ -71,6 +73,27 @@
             If lbItems.SelectedValue IsNot Nothing AndAlso Not DirectCast(lbItems.SelectedItem, LanguageItem).Value = txtValue.Text Then
                 DirectCast(lbItems.SelectedItem, LanguageItem).Value = txtValue.Text
                 RaiseModified()
+            End If
+        End Sub
+
+        Private Sub btnNewLang_Click(sender As Object, e As RoutedEventArgs) Handles btnNewLang.Click
+            Dim newDialog As New SkyEditorWindows.NewNameWindow(PluginHelper.GetLanguageItem("NewLanguageMessage", "What is the name of the language you want to add?"), PluginHelper.GetLanguageItem("NewLanguageTitle"))
+            If newDialog.ShowDialog Then
+                If Not EditingItem.Languages.ContainsKey(newDialog.SelectedName) Then
+                    EditingItem.EnsureLanguageLoaded(newDialog.SelectedName)
+                    cbLanguages.Items.Add(newDialog.SelectedName)
+                End If
+            End If
+        End Sub
+
+        Private Sub btnAddLangItem_Click(sender As Object, e As RoutedEventArgs) Handles btnAddLangItem.Click
+            Dim addDialog As New AddLanguageItem
+            For Each item In lbItems.Items
+                addDialog.CurrentLanguageItems.Add(item)
+            Next
+            addDialog.DefaultLanguageItems.AddRange(EditingItem.Languages(SettingsManager.Instance.Settings.DefaultLanguage).ContainedObject)
+            If addDialog.ShowDialog Then
+                lbItems.Items.Add(addDialog.SelectedItem.Clone)
             End If
         End Sub
     End Class

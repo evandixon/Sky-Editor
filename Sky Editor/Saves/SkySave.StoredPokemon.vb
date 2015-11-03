@@ -282,12 +282,9 @@ Namespace Saves
                 Dim toOpen As New BinaryFile(Filename)
                 Me.Bits = toOpen.Bits.Bits
                 'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
-                Me.Bits.RemoveAt(0)
-                Me.Bits.RemoveAt(0)
-                Me.Bits.RemoveAt(0)
-                Me.Bits.RemoveAt(0)
-                Me.Bits.RemoveAt(0)
-                Me.Bits.RemoveAt(0)
+                For i = 1 To 8 - (Length Mod 8)
+                    Me.Bits.RemoveAt(0)
+                Next
                 toOpen.Dispose()
             End Sub
 
@@ -299,12 +296,9 @@ Namespace Saves
                 Dim toSave As New BinaryFile()
                 toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
                 'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
-                toSave.Bits.Bits.Add(0)
-                toSave.Bits.Bits.Add(0)
-                toSave.Bits.Bits.Add(0)
-                toSave.Bits.Bits.Add(0)
-                toSave.Bits.Bits.Add(0)
-                toSave.Bits.Bits.Add(0)
+                For i = 1 To 8 - (Length Mod 8)
+                    toSave.Bits.Bits.Add(0)
+                Next
                 toSave.Bits.Bits.AddRange(Me.Bits)
                 toSave.Save(Filename)
                 toSave.Dispose()
@@ -344,7 +338,7 @@ Namespace Saves
         End Function
 
         Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
-            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(Settings.CurrentLanguage & "\SkyFriendAreaOffsets.txt"))).ToArray
+            Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(PluginHelper.GetResourceName(SettingsManager.Instance.Settings.CurrentLanguage & "\SkyFriendAreaOffsets.txt"))).ToArray
         End Function
 
         Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon

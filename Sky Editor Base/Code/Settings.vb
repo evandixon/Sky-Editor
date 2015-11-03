@@ -1,68 +1,88 @@
-﻿Public Class Settings
-    Public Shared Function CurrentLanguage() As String
-        Return Settings("Language")
-    End Function
-    Public Shared Function DefaultLanguage() As String
-        Return "English"
-    End Function
-    Public Shared Function DebugMode() As Boolean
-        Return Settings.ContainsKey("DebugMode") AndAlso Settings("DebugMode") = "True"
-    End Function
-    Public Shared Function UpdatePlugins() As Boolean
-        Return Settings.ContainsKey("UpdatePlugins") AndAlso Settings("UpdatePlugins") = "True"
-    End Function
-    Public Shared Function ShowConsoleOnStart() As Boolean
-        Return Settings.ContainsKey("ShowConsoleOnStart") AndAlso Settings("ShowConsoleOnStart") = "True"
-    End Function
-    Public Shared Function TabStripPlacement() As System.Windows.Controls.Dock
-        If Settings.ContainsKey("TabStripPlacement") Then
-            Return Settings("TabStripPlacement")
-        Else
-            Return Dock.Top
-        End If
-    End Function
-    Private Shared _settingsCache As Dictionary(Of String, String)
-    Protected Shared Property Settings As Dictionary(Of String, String)
+﻿Imports SkyEditorBase.Interfaces
+
+Public Class SettingsContainer
+    Public Property CurrentLanguage As String
+    Public Property DefaultLanguage As String
+    Public Property UpdatePlugins As Boolean
+    Public Property DebugLanguagePlaceholders As Boolean
+    Public Property PluginUpdateUrl As String
+    Public Sub New()
+        'Todo: load defaults from somewhere
+        CurrentLanguage = "English"
+        DefaultLanguage = "English"
+        UpdatePlugins = False
+        DebugLanguagePlaceholders = False
+        PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4PluginsAlpha/plugins.json"
+    End Sub
+End Class
+Public Class SettingsManager
+    Implements Interfaces.iSavable
+    Implements iModifiable
+    Implements iNamed
+    Private Shared _settingsManager As SettingsManager
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
+    Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
+
+    Public Shared ReadOnly Property Instance As SettingsManager
         Get
-            If _settingsCache Is Nothing Then
-                _settingsCache = New Dictionary(Of String, String)
-                Dim lines = IO.File.ReadAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"))
-                For Each line In lines
-                    If Not String.IsNullOrEmpty(line) AndAlso Not line.StartsWith("#") Then
-                        Dim p As String() = line.Split("=".ToCharArray, 2)
-                        If Not _settingsCache.ContainsKey(p(0)) Then
-                            _settingsCache.Add(p(0), p(1))
-                        End If
-                    End If
-                Next
+            If _settingsManager Is Nothing Then
+                _settingsManager = New SettingsManager
             End If
-            Return _settingsCache
+            Return _settingsManager
         End Get
-        Set(value As Dictionary(Of String, String))
-            Dim settingsText As String = ""
-            For Each item In value
-                settingsText &= item.Key & "=" & item.Value & vbCrLf
-            Next
-            IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.txt"), settingsText.Trim)
+    End Property
+
+    Private Sub New()
+        MyBase.New()
+        If IO.File.Exists(SettingsFilename) Then
+            Dim f As New ObjectFile(Of SettingsContainer)(SettingsFilename)
+            Settings = f.ContainedObject
+        Else
+            Settings = New SettingsContainer
+        End If
+    End Sub
+
+    Private Function SettingsFilename() As String
+        Return IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.json")
+    End Function
+
+    Public Property Settings As SettingsContainer
+        Get
+            Return _settings
+        End Get
+        Private Set(value As SettingsContainer)
+            _settings = value
         End Set
     End Property
-    Default Public Property Setting(Key As String) As String
+
+    Public Property Name As String Implements iNamed.Name
         Get
-            Dim value As String = ""
-            If Settings.ContainsKey(Key) Then
-                value = Settings(Key)
-            End If
-            Return value
+            Return PluginHelper.GetLanguageItem("Settings")
         End Get
         Set(value As String)
-            If Settings.ContainsKey(Key) Then
-                Settings(Key) = value
-            Else
-                Settings.Add(Key, value)
-            End If
+
         End Set
     End Property
-    Public Shared Function GetSettings() As Settings
-        Return New Settings
+
+    Dim _settings As SettingsContainer
+
+    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+        Return ".skysettings"
     End Function
+
+    Public Sub Save() Implements iSavable.Save
+        Save(SettingsFilename)
+        RaiseEvent FileSaved(Me, New EventArgs)
+    End Sub
+
+    Public Sub Save(Filename As String) Implements iSavable.Save
+        Dim f As New ObjectFile(Of SettingsContainer)
+        f.ContainedObject = Settings
+        f.Save(Filename)
+        RaiseEvent FileSaved(Me, New EventArgs)
+    End Sub
+
+    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        RaiseEvent Modified(Me, New EventArgs)
+    End Sub
 End Class

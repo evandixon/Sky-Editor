@@ -12,11 +12,17 @@ Public Class ProjectExplorer
         menuAddFolder.Header = PluginHelper.GetLanguageItem("Add Folder")
         menuOpenInExplorer.Header = PluginHelper.GetLanguageItem("Open in File Explorer")
         btnAddFile.Content = PluginHelper.GetLanguageItem("Add File")
+        Refresh()
     End Sub
     Sub Refresh()
         Dispatcher.Invoke(New Action(Sub()
-                                         tvFiles.Items.Clear()
-                                         tvFiles.Items.Add(GetDirectoryNode(""))
+                                         If _manager.CurrentProject Is Nothing Then
+                                             Me.Visibility = Visibility.Collapsed
+                                         Else
+                                             Me.Visibility = Visibility.Visible
+                                             tvFiles.Items.Clear()
+                                             tvFiles.Items.Add(GetDirectoryNode(""))
+                                         End If
                                      End Sub))
     End Sub
     Private Function GetDirectoryNode(Directory As String) As TreeViewItem

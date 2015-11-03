@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.Serialization
 Imports System.Reflection
+Imports SkyEditorBase
 
 Namespace Utilities
     <Serializable()>
@@ -9,7 +10,7 @@ Namespace Utilities
             MyBase.New()
             Dim newResourceName As String
             If ResourceName.Contains("&L;") Then
-                newResourceName = ResourceName.Replace("&L;", Settings.CurrentLanguage)
+                newResourceName = ResourceName.Replace("&L;", SettingsManager.Instance.Settings.CurrentLanguage)
             Else
                 newResourceName = ResourceName
             End If

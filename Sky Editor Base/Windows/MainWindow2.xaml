@@ -24,6 +24,7 @@
             <MenuItem x:Name="menuCheats" Header="_Cheats" />
             <MenuItem x:Name="menuTools" Header="_Tools">
                 <MenuItem x:Name="menuLanguageEditor" Header="_Language Editor"/>
+                <MenuItem x:Name="MenuSettings" Header="_Settings" />
             </MenuItem>
             <MenuItem x:Name="menuCredits" Header="Cre_dits" />
             <MenuItem x:Name="menuDebug" Header="Debug" Visibility="Collapsed">

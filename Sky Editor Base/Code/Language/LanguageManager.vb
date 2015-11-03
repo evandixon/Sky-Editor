@@ -44,12 +44,14 @@ Namespace Language
             For Each item In Languages.Values
                 item.Save()
             Next
+            RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
 
         Public Sub SaveAll(Filename As String) Implements iSavable.Save
             Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
             f.ContainedObject = Languages
             f.Save(Filename)
+            RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
         Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
             Return ".skylangpack"
@@ -69,7 +71,14 @@ Namespace Language
             End Set
         End Property
 
-        Private Sub EnsureLanguageLoaded(Language As String)
+        Public Sub LoadAllLanguages()
+            Dim languageDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages")
+            For Each item In IO.Directory.GetFiles(languageDir, "*.json", IO.SearchOption.TopDirectoryOnly)
+                EnsureLanguageLoaded(IO.Path.GetFileNameWithoutExtension(item))
+            Next
+        End Sub
+
+        Public Sub EnsureLanguageLoaded(Language As String)
             If Not Languages.ContainsKey(Language) Then
                 Dim languageDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages")
                 If Not IO.Directory.Exists(languageDir) Then
@@ -79,15 +88,15 @@ Namespace Language
             End If
         End Sub
 
-        Private Sub EnsureCurrentLanguageLoaded()
-            EnsureLanguageLoaded(Settings.CurrentLanguage)
+        Public Sub EnsureCurrentLanguageLoaded()
+            EnsureLanguageLoaded(SettingsManager.Instance.Settings.CurrentLanguage)
         End Sub
 
-        Private Sub EnsureDefaultLanguageLoaded()
-            EnsureLanguageLoaded(Settings.DefaultLanguage)
+        Public Sub EnsureDefaultLanguageLoaded()
+            EnsureLanguageLoaded(SettingsManager.Instance.Settings.DefaultLanguage)
         End Sub
 
-        Private Sub AddLanguageItem(Language As String, Item As LanguageItem)
+        Public Sub AddLanguageItem(Language As String, Item As LanguageItem)
             EnsureLanguageLoaded(Language)
             If Not Languages(Language).ContainedObject.Contains(Item) Then
                 Languages(Language).ContainedObject.Add(Item)
@@ -117,7 +126,7 @@ Namespace Language
         ''' <param name="DefaultValue">English value to use if the language item is not found.</param>
         ''' <returns></returns>
         Public Shared Function GetLanguageItem(Key As String, AssemblyName As String, Optional DefaultValue As String = Nothing) As String
-            Dim language = Settings.CurrentLanguage
+            Dim language = SettingsManager.Instance.Settings.CurrentLanguage
             'Get rid of invalid characters
             If Key.Contains("=") Then Key = Key.Replace("=", "_")
 
@@ -131,7 +140,7 @@ Namespace Language
                 Return FormatString(wantedItem.Value)
             Else
                 'If it doesn't exist, we'll try the value in the Default language (which is probably English).
-                Dim defaultLanguage = Settings.DefaultLanguage
+                Dim defaultLanguage = SettingsManager.Instance.Settings.DefaultLanguage
                 Instance.EnsureDefaultLanguageLoaded()
                 Dim defaultItem = Instance.SearchLanguageItem(defaultLanguage, Key, AssemblyName)
                 If defaultItem IsNot Nothing Then

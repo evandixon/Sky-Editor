@@ -33,5 +33,9 @@
         Public Overrides Function ToString() As String
             Return Value
         End Function
+
+        Public Function Clone() As LanguageItem
+            Return New LanguageItem(Key, Value, PluginName, False)
+        End Function
     End Class
 End Namespace

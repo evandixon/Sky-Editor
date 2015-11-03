@@ -36,4 +36,14 @@ Public Class ToolWindow
             _parentAnchorable.Title = _header
         End Set
     End Property
+    Public Shadows Property Visibility As Visibility
+        Get
+            Return MyBase.Visibility
+        End Get
+        Set(value As Visibility)
+            ParentAnchorable.IsVisible = (value = Visibility.Visible)
+            MyBase.Visibility = value
+        End Set
+    End Property
+
 End Class
