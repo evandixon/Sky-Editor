@@ -34,6 +34,14 @@ Public Class PluginHelper
         End If
         Return IO.Path.Combine(baseDir, Path)
     End Function
+
+    Public Shared Function GetResourceName(Path As String, Plugin As String) As String
+        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Plugin.Replace("_plg", ""))
+        If Not IO.Directory.Exists(baseDir) Then
+            IO.Directory.CreateDirectory(baseDir)
+        End If
+        Return IO.Path.Combine(baseDir, Path)
+    End Function
     ''' <summary>
     ''' Returns your plugin's resource directory as managed by Sky Editor.
     ''' It will be created if it does not exist.

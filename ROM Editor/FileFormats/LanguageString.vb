@@ -181,13 +181,48 @@ Namespace FileFormats
         Public Const BoldMale As Integer = 01706
         Public Const BoldFemale As Integer = 01707
 
+        Public Const PokemonNameLength As Integer = 553
+        Public Const ItemLength As Integer = 1352
+        Public Const LocationLength As Integer = 255
+        Public Const MoveLength As Integer = 562
+
         Public Function GetPokemonName(PokemonID As Integer) As String
             If FileRegion = Region.Europe Then
                 Return Item(8736 + PokemonID)
             ElseIf FileRegion = Region.US
                 Return Item(8734 + PokemonID)
             Else
-                Return Item(8734 + PokemonID)
+                Return Item(8736 + PokemonID)
+            End If
+        End Function
+
+        Public Function GetItemName(ItemID As Integer) As String
+            If FileRegion = Region.Europe Then
+                Return Item(6775 + ItemID)
+            ElseIf FileRegion = Region.US
+                Return Item(6773 + ItemID)
+            Else
+                Return Item(6775 + ItemID)
+            End If
+        End Function
+
+        Public Function GetLocationName(LocationID As Integer) As String
+            If FileRegion = Region.Europe Then
+                Return Item(16566 + LocationID)
+            ElseIf FileRegion = Region.US
+                Return Item(16564 + LocationID)
+            Else
+                Return Item(16566 + LocationID)
+            End If
+        End Function
+
+        Public Function GetMoveName(MoveID As Integer) As String
+            If FileRegion = Region.Europe Then
+                Return Item(8175 + MoveID)
+            ElseIf FileRegion = Region.US
+                Return Item(8173 + MoveID)
+            Else
+                Return Item(8175 + MoveID)
             End If
         End Function
 

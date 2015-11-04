@@ -416,10 +416,19 @@
     <Resource Include="SkyEditor\Language\Français.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Content Include="SkyEditor\Français\SkyFriendAreaOffsets.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SkyEditor\Français\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyFriendAreaOffsets.txt">
+    <Content Include="SkyEditor\Français\SkyLocations.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SkyEditor\Français\SkyMoves.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SkyEditor\Français\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SkyEditor\Français\TDFriendAreaOffsets.txt">
