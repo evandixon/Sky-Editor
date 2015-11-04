@@ -116,7 +116,7 @@
     <ManifestKeyFile>Sky Editor Base_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -389,6 +389,8 @@
     </None>
     <AppDesigner Include="My Project\" />
     <None Include="packages.config" />
+    <None Include="Resources\Languages\English.json" />
+    <None Include="Resources\Languages\Français.json" />
     <None Include="Sky Editor Base_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
