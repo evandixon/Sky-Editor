@@ -14,7 +14,7 @@
         <CheckBox x:Name="chbSet" Content="Set" HorizontalAlignment="Right" Margin="0,21,82,0" VerticalAlignment="Top" />
         <CheckBox x:Name="chbSealed" Content="Sealed" HorizontalAlignment="Right" Margin="0,21,22,0" VerticalAlignment="Top" />
         <xctk:IntegerUpDown x:Name="numPP" Minimum="0" Maximum="128" Margin="0,18,230,0" ToolTip="PP" HorizontalAlignment="Right" Width="41" Height="22" VerticalAlignment="Top" />
-        <Label Content="PP" HorizontalAlignment="Left" Margin="177,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
-        <Label Content="Ginseng" HorizontalAlignment="Left" Margin="218,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
+        <Label x:Name="lblPP" Content="PP" HorizontalAlignment="Left" Margin="177,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
+        <Label x:Name="lblGinseng" Content="Ginseng" HorizontalAlignment="Left" Margin="218,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
     </Grid>
 </local:ObjectControl>

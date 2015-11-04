@@ -1,4 +1,5 @@
-﻿Imports ROMEditor.Mods
+﻿Imports System.Windows
+Imports ROMEditor.Mods
 Imports SkyEditorBase
 
 Public Class SkyBackMod
@@ -17,17 +18,21 @@ Public Class SkyBackMod
         CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/")
         Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(ROMDirectory, "Data", "BACK"), "*.bgp")
         For count = 0 To backFiles.Count - 1
-            PluginHelper.StartLoading("Converting backgrounds...", count / backFiles.Count)
+            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting backgrounds..."), count / backFiles.Count)
             Dim item = backFiles(count)
             Using b As New FileFormats.BGP(item)
-                Dim image = Await b.GetImage
-                Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
-                End If
-                image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
-                IO.File.Copy(newFilename, newFilename & ".original")
-                CurrentProject.OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+                Try
+                    Dim image = Await b.GetImage
+                    Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
+                    End If
+                    image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
+                    IO.File.Copy(newFilename, newFilename & ".original")
+                    CurrentProject.OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+                Catch ex As BadImageFormatException
+                    MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("BadImageFormatConversion", "Unable to convert image {0}.  Bad image format."), IO.Path.GetFileNameWithoutExtension(b.OriginalFilename)))
+                End Try
             End Using
         Next
         PluginHelper.StopLoading()

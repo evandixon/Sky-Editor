@@ -97,7 +97,7 @@ Public Class GenericNDSModProject
     Public Overrides Async Sub Initialize()
         MyBase.Initialize()
         Dim o As New OpenFileDialog
-        o.Filter = "Nintendo DS Roms (*.nds)|*.nds|All Files (*.*)|*.*"
+        o.Filter = PluginHelper.GetLanguageItem("Nintendo DS Roms") & " (*.nds)|*.nds|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             OpenFile(o.FileName, "BaseRom.nds")
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
@@ -105,7 +105,7 @@ Public Class GenericNDSModProject
             Await sky.Unpack(romDirectory)
             CreateDirectory("Mods")
         Else
-            MessageBox.Show("Project initialization failed.  You must supply a base ROM.")
+            MessageBox.Show(PluginHelper.GetLanguageItem("Project initialization failed.  You must supply a base ROM."))
         End If
     End Sub
 
@@ -116,7 +116,7 @@ Public Class GenericNDSModProject
             Dim m = DirectCast(e.File.Value, Mods.GenericMod)
 
             If m.FilesToCopy.Count > 0 Then
-                Dim a As New Utilities.AsyncFor("Copying files...")
+                Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
                 Await a.RunForEach(Sub(Item As String)
                                        Dim source As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", Item)
                                        If IO.File.Exists(source) Then
@@ -150,20 +150,42 @@ Public Class GenericNDSModProject
     End Function
 
     Public Overrides Async Sub Build()
-        PluginHelper.StartLoading("Building mod pack.")
+        PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Building mod pack."))
         MyBase.Build()
-        If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files")) Then
+        If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"))) Then
             PluginHelper.DeleteDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"))
             'IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), True)
         End If
         Dim j As New JavaScriptSerializer
         Dim patchers As New List(Of FilePatcher)
 
+        'Dim baseRomFiles As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("BaseRom RawFiles"))
+        'Dim modPackFiles As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"))
+        'Dim modPackFilesMods As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"), PluginHelper.GetLanguageItem("Mods"))
+        'Dim modPackFilesTools As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"), PluginHelper.GetLanguageItem("Tools"))
+        'Dim modPackFilesToolsPatchers As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"), PluginHelper.GetLanguageItem("Tools"), PluginHelper.GetLanguageItem("Patchers"))
+
+        Dim baseRomFiles As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
+        Dim modPackFiles As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files")
+        Dim modPackFilesMods As String = IO.Path.Combine(modPackFiles, "Mods")
+        Dim modPackFilesTools As String = IO.Path.Combine(modPackFiles, "Tools")
+        Dim modPackFilesToolsPatchers As String = IO.Path.Combine(modPackFilesTools, "Patchers")
+
         'Build mods
         Dim modFiles = GetFiles(GetType(Mods.GenericMod)) 'IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Mods"), "*.ndsmodsrc")
         For count = 0 To modFiles.Count - 1
-            PluginHelper.StartLoading(String.Format("Building mod {0} of {1}", count + 1, modFiles.Count))
+            PluginHelper.StartLoading(String.Format(PluginHelper.GetLanguageItem("BuildingModProgress", "Building mod {0} of {1}"), count + 1, modFiles.Count))
             Dim ndsmod = DirectCast(modFiles(count), Mods.GenericMod)
+            'Dim rawFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("RawFiles"))
+            'Dim modFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("ModFiles"))
+            'Dim modFilesFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("ModFiles"), PluginHelper.GetLanguageItem("Files"))
+            'Dim modFilesToolsDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("ModFiles"), PluginHelper.GetLanguageItem("Tools"))
+
+            Dim rawFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "RawFiles")
+            Dim modFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "ModFiles")
+            Dim modFilesFilesDir As String = IO.Path.Combine(modFilesDir, "Files")
+            Dim modFilesToolsDir As String = IO.Path.Combine(modFilesDir, "Tools")
+
 
             Await ndsmod.BuildAsync(Me)
 
@@ -171,15 +193,15 @@ Public Class GenericNDSModProject
             '-Analyze files (find out what's changed)
             Dim sourceFiles As New Dictionary(Of String, Byte())
             Using hash = MD5.Create
-                For Each file In IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), "*", IO.SearchOption.AllDirectories)
-                    sourceFiles.Add(file.Replace(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
+                For Each file In IO.Directory.GetFiles(baseRomFiles, "*", IO.SearchOption.AllDirectories)
+                    sourceFiles.Add(file.Replace(baseRomFiles, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
                 Next
             End Using
 
             Dim destFiles As New Dictionary(Of String, Byte())
             Using hash = MD5.Create
-                For Each file In IO.Directory.GetFiles(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "RawFiles"), "*", IO.SearchOption.AllDirectories)
-                    destFiles.Add(file.Replace(IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "RawFiles"), "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
+                For Each file In IO.Directory.GetFiles(rawFilesDir, "*", IO.SearchOption.AllDirectories)
+                    destFiles.Add(file.Replace(rawFilesDir, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
                 Next
             End Using
 
@@ -231,7 +253,7 @@ Public Class GenericNDSModProject
                 actions.Description = ndsmod.ContainedObject.Description
                 actions.UpdateUrl = ndsmod.ContainedObject.UpdateURL
             Catch ex As Exception
-                MessageBox.Show("The modsrc file is invalid and will not be used.")
+                MessageBox.Show(PluginHelper.GetLanguageItem("The modsrc file is invalid and will not be used."))
                 actions.DependenciesBefore = Nothing
                 actions.DependenciesAfter = Nothing
                 actions.Name = ""
@@ -241,8 +263,6 @@ Public Class GenericNDSModProject
             End Try
 
             '-Copy and write files
-            Dim modFilesDir = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "ModFiles")
-            Dim rawFilesDir = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "RawFiles")
             If IO.Directory.Exists(modFilesDir) Then
                 PluginHelper.DeleteDirectory(modFilesDir)
             End If
@@ -269,13 +289,13 @@ Public Class GenericNDSModProject
                     Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
                     If reg.IsMatch(item) Then
                         patchers.Add(patcher)
-                        If Not IO.Directory.Exists(IO.Path.Combine(modFilesDir, "Files", item.Trim("\"))) Then
-                            IO.Directory.CreateDirectory(IO.Path.Combine(modFilesDir, "Files", item.Trim("\")))
+                        If Not IO.Directory.Exists(IO.Path.Combine(modFilesFilesDir, item.Trim("\"))) Then
+                            IO.Directory.CreateDirectory(IO.Path.Combine(modFilesFilesDir, item.Trim("\")))
                         End If
 
-                        Dim oldF As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", item.Trim("\"))
+                        Dim oldF As String = IO.Path.Combine(baseRomFiles, item.Trim("\"))
                         Dim newF As String = IO.Path.Combine(rawFilesDir, item.Trim("\"))
-                        Dim patchFile As String = IO.Path.Combine(modFilesDir, "Files", item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
+                        Dim patchFile As String = IO.Path.Combine(modFilesFilesDir, item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
 
                         Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
                         patchMade = True
@@ -284,14 +304,14 @@ Public Class GenericNDSModProject
                 Next
                 If Not patchMade Then
                     'Use xdelta for all other file types
-                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, "Files", item.Trim("\")))) Then
-                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesDir, "Files", item.Trim("\"))))
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesFilesDir, item.Trim("\")))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modFilesFilesDir, item.Trim("\"))))
                     End If
-                    Dim oldFile As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", item.Trim("\"))
+                    Dim oldFile As String = IO.Path.Combine(baseRomFiles, item.Trim("\"))
                     Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
                     Dim newFile As String = IO.Path.Combine(rawFilesDir, item.Trim("\"))
                     Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
-                    Dim deltaFile As String = IO.Path.Combine(modFilesDir, "Files", item.Trim("\") & ".xdelta")
+                    Dim deltaFile As String = IO.Path.Combine(modFilesFilesDir, item.Trim("\") & ".xdelta")
                     Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
                     IO.File.Copy(oldFile, oldFileTemp, True)
                     IO.File.Copy(newFile, newFileTemp, True)
@@ -304,26 +324,25 @@ Public Class GenericNDSModProject
                 End If
             Next
             '-Copy Patcher programs for non-standard file formats
-            If Not IO.Directory.Exists(IO.Path.Combine(modFilesDir, "Tools")) Then
-                IO.Directory.CreateDirectory(IO.Path.Combine(modFilesDir, "Tools"))
+            If Not IO.Directory.Exists(modFilesToolsDir) Then
+                IO.Directory.CreateDirectory(modFilesToolsDir)
             End If
             For Each item In patchers
-                IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modFilesDir, "Tools", IO.Path.GetFileName(item.ApplyPatchProgram)), True)
+                IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modFilesToolsDir, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
             Next
 
             '-Zip Mod
-            If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Mods")) Then
-                IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Mods"))
+            If Not IO.Directory.Exists(modPackFilesMods) Then
+                IO.Directory.CreateDirectory(modPackFilesMods)
             End If
-            SkyEditorBase.Utilities.Zip.Zip(modFilesDir, IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Mods", IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename) & ".dsmod"))
+            SkyEditorBase.Utilities.Zip.Zip(modFilesDir, IO.Path.Combine(modPackFilesMods, IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename) & ".dsmod"))
 
         Next
 
-        PluginHelper.StartLoading("Copying files...")
+        PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
         'Copy Patcher programs for all file formats
-        Dim toolsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")
-        If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools")) Then
-            IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Tools"))
+        If Not IO.Directory.Exists(modPackFilesTools) Then
+            IO.Directory.CreateDirectory(modPackFilesTools)
         End If
 
         '-Copy xdelta
@@ -336,19 +355,19 @@ Public Class GenericNDSModProject
         xdelta.PatchExtension = "xdelta"
         patchers.Add(xdelta)
         '-Copy patchers
-        IO.File.WriteAllText(IO.Path.Combine(toolsDir, "patchers.json"), j.Serialize(patchers))
+        IO.File.WriteAllText(IO.Path.Combine(modPackFilesTools, "patchers.json"), j.Serialize(patchers))
         For Each item In patchers
-            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram))) Then
-                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram)))
+            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modPackFilesToolsPatchers, item.ApplyPatchProgram))) Then
+                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modPackFilesToolsPatchers, item.ApplyPatchProgram)))
             End If
-            IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(toolsDir, "Patchers", item.ApplyPatchProgram), True)
+            IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modPackFilesToolsPatchers, item.ApplyPatchProgram), True)
             '--Copy Dependencies
             If item.ApplyPatchDependencies IsNot Nothing Then
                 For Each d In item.ApplyPatchDependencies
-                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", d.Value))) Then
-                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(toolsDir, "Patchers", d.Value)))
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modPackFilesToolsPatchers, d.Value))) Then
+                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modPackFilesToolsPatchers, d.Value)))
                     End If
-                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, d.Key), IO.Path.Combine(toolsDir, "Patchers", d.Value), True)
+                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, d.Key), IO.Path.Combine(modPackFilesToolsPatchers, d.Value), True)
                 Next
             End If
         Next
@@ -356,10 +375,10 @@ Public Class GenericNDSModProject
         CopyPatcherProgram()
 
         '-Zip it
-        Utilities.Zip.Zip(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & ".zip"))
+        Utilities.Zip.Zip(modPackFiles, IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & ".zip"))
 
         'Apply patch
-        PluginHelper.StartLoading("Applying patch...")
+        PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))
 
         Await ApplyPatchAsync()
 

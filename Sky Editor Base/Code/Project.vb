@@ -15,7 +15,7 @@ Public Class Project
     End Class
     Dim _manager As PluginManager
     Public Property Filename As String
-    Public Property Files As Dictionary(Of String, GenericFile)
+    Public Property Files As Dictionary(Of String, Object)
     Public Property IsModified As Boolean
         Get
             Return _modified
@@ -33,7 +33,7 @@ Public Class Project
 
 #Region "Constructors"
     Public Sub New()
-        Files = New Dictionary(Of String, GenericFile)
+        Files = New Dictionary(Of String, Object)
         _modified = False
     End Sub
     Public Sub New(Manager As PluginManager)
@@ -291,8 +291,8 @@ Public Class Project
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
                 For Each item In Files
-                    If item.Value IsNot Nothing Then
-                        item.Value.Dispose()
+                    If item.Value IsNot Nothing AndAlso TypeOf item.Value Is IDisposable Then
+                        DirectCast(item.Value, IDisposable).Dispose()
                     End If
                 Next
             End If

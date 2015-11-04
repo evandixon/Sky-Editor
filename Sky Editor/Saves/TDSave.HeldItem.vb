@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Interfaces
+Imports SkyEditorBase
 
 Namespace Saves
     Partial Class TDSave
@@ -154,7 +155,7 @@ Namespace Saves
             Public Overrides Function ToString() As String
                 If IsValid Then
                     Dim output As New Text.StringBuilder
-                    output.Append(Lists.SkyItemNames(ID))
+                    output.Append(Lists.TDItemNames(ID))
                     If Parameter > 0 Then
                         If Me.IsBox Then
                             If Lists.SkyItemNames.ContainsKey(Parameter) Then
@@ -169,7 +170,9 @@ Namespace Saves
                         End If
                     End If
                     If HeldBy > 0 Then
-                        output.Append(" [Held by ")
+                        output.Append(" [")
+                        output.Append(PluginHelper.GetLanguageItem("Held by"))
+                        output.Append(" ")
                         output.Append(HeldBy)
                         output.Append("]")
                     End If

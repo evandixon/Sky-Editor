@@ -83,7 +83,7 @@ Public Class ObjectFile(Of T)
     End Function
 
     Public Shared Function IsObjectFile(TypeToCheck As Type) As Boolean
-        Return TypeToCheck.IsGenericType AndAlso TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)
+        Return (TypeToCheck.IsGenericType AndAlso TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)) OrElse (Not TypeToCheck.BaseType = GetType(Object) AndAlso IsObjectFile(TypeToCheck.BaseType))
     End Function
 
     Public Overridable Function DefaultExtension() As String Implements iSavable.DefaultExtension

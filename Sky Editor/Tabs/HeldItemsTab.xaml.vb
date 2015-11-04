@@ -60,14 +60,18 @@ Namespace Tabs
             cbHeldItems.Items.Clear()
             cbHeldItemsBoxContents.Items.Clear()
 
-            gbHeldBoxContent.IsEnabled = storage.SupportsBoxes
+            If storage.SupportsBoxes Then
+                gbHeldBoxContent.Visibility = Visibility.Visible
+            Else
+                gbHeldBoxContent.Visibility = Visibility.Collapsed
+            End If
 
             Dim dictionary As Dictionary(Of Integer, String) = storage.GetItemDictionary
 
             For Each item In From n In dictionary Select n Where Not n.Value = "$$$" Order By n.Value
                 Dim i As New GenericListItem(Of Integer)(item.Value, item.Key)
                 cbHeldItems.Items.Add(i)
-                If gbHeldBoxContent.IsEnabled Then
+                If gbHeldBoxContent.Visibility = Visibility.Visible Then
                     cbHeldItemsBoxContents.Items.Add(i)
                 End If
             Next
@@ -96,8 +100,8 @@ Namespace Tabs
         End Sub
 
         Private Sub cbHeldItems_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbHeldItems.SelectionChanged
-            If gbHeldBoxContent.IsEnabled AndAlso cbHeldItems.SelectedIndex > -1 Then
-                gbHeldBoxContent.Focusable = storage.IsBox(DirectCast(cbHeldItems.SelectedItem, GenericListItem(Of Integer)).Value) 'slots(lbInventorySlots.SelectedIndex).Creator.Invoke(DirectCast(cbHeldItems.SelectedItem, GenericListItem(Of Integer)).Value, 0).IsBox
+            If gbHeldBoxContent.Visibility = Visibility.Visible AndAlso cbHeldItems.SelectedIndex > -1 Then
+                gbHeldBoxContent.IsEnabled = storage.IsBox(DirectCast(cbHeldItems.SelectedItem, GenericListItem(Of Integer)).Value) 'slots(lbInventorySlots.SelectedIndex).Creator.Invoke(DirectCast(cbHeldItems.SelectedItem, GenericListItem(Of Integer)).Value, 0).IsBox
             End If
         End Sub
 

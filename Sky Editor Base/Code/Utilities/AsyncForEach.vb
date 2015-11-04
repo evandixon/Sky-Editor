@@ -79,7 +79,7 @@ Namespace Utilities
         Private _opMax As Integer
         Private Sub ReportProgress(Completed As Integer, Max As Integer)
             If Completed < Max Then
-                If SetLoadingStatus Then PluginHelper.SetLoadingStatus($"{ProgressMessage} ({Completed} of {Max})", Completed / Max)
+                If SetLoadingStatus Then PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), ProgressMessage, Completed, Max), Completed / Max)
             Else
                 If SetLoadingStatusOnFinish Then PluginHelper.SetLoadingStatusFinished()
             End If

@@ -162,7 +162,7 @@ Namespace Saves
             Public Overrides Function ToString() As String
                 If IsValid Then
                     Dim output As New Text.StringBuilder
-                    output.Append(Lists.SkyItemNames(ID))
+                    output.Append(Lists.RBItemNames(ID))
                     If Parameter > 0 Then
                         'If Me.IsBox Then
                         '    output.Append(" (")
@@ -175,9 +175,11 @@ Namespace Saves
                         'End If
                     End If
                     'If HeldBy > 0 Then
-                    '    output.Append(" [Held by ")
-                    '    output.Append(HeldBy)
-                    '    output.Append("]")
+                    'output.Append(" [")
+                    'output.Append(PluginHelper.GetLanguageItem("Held by"))
+                    'output.Append(" ")
+                    'output.Append(HeldBy)
+                    'output.Append("]")
                     'End If
                     Return output.ToString
                 Else

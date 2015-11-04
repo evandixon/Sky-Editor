@@ -5,7 +5,7 @@ Public Class ProjectExplorer
     Inherits ToolWindow
     WithEvents _manager As PluginManager
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Public Event FileOpen(sender As Object, ProjectFile As String)
+    Public Event FileOpen(sender As Object, e As EventArguments.FileOpenedEventArguments)
     Private Sub ProjectExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Me.Title = PluginHelper.GetLanguageItem("Files")
         menuAddFile.Header = PluginHelper.GetLanguageItem("Add File")
@@ -93,7 +93,7 @@ Public Class ProjectExplorer
 
     Private Sub tvFiles_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles tvFiles.MouseDoubleClick
         If tvFiles.SelectedItem IsNot Nothing AndAlso _manager.CurrentProject.Files.ContainsKey(tvFiles.SelectedItem.Tag) Then
-            RaiseEvent FileOpen(Me, tvFiles.SelectedItem.Tag)
+            RaiseEvent FileOpen(Me, New EventArguments.FileOpenedEventArguments() With {.ProjectPath = tvFiles.SelectedItem.Tag, .File = _manager.CurrentProject.Files(tvFiles.SelectedItem.Tag)})
         End If
     End Sub
 
@@ -141,12 +141,14 @@ Public Class ProjectExplorer
             Next
             w.AddGames(games.Keys)
             If w.ShowDialog Then
-                Dim file As GenericFile = games(w.SelectedGame).GetConstructor({}).Invoke({})
+                Dim file As iSavable = games(w.SelectedGame).GetConstructor({}).Invoke({})
                 Dim path = SelectedPath()
                 Dim name = w.SelectedName
                 Await Task.Run(New Action(Sub()
                                               file.Save(IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*")))
-                                              file.OriginalFilename = IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*"))
+                                              If TypeOf file Is iOnDisk Then
+                                                  DirectCast(file, iOnDisk).Filename = IO.Path.Combine(IO.Path.GetDirectoryName(_manager.CurrentProject.Filename), path, name & file.DefaultExtension.Trim("*"))
+                                              End If
                                               _manager.CurrentProject.AddFile(IO.Path.Combine(path, name & file.DefaultExtension.Trim("*")), file)
                                           End Sub))
             End If

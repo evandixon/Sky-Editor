@@ -100,23 +100,23 @@ Public Class PluginHelper
         For Each item In controls
             If TypeOf item Is Label Then
                 Dim t As String = DirectCast(item, Label).Content
-                If t IsNot Nothing Then DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
 
             ElseIf TypeOf item Is Button Then
                 Dim t As String = DirectCast(item, Button).Content
-                If t IsNot Nothing Then DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
 
             ElseIf TypeOf item Is CheckBox Then
                 Dim t As String = DirectCast(item, CheckBox).Content
-                If t IsNot Nothing Then DirectCast(item, CheckBox).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, CheckBox).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
 
             ElseIf TypeOf item Is MenuItem Then
                 Dim t As String = DirectCast(item, MenuItem).Header
-                If t IsNot Nothing Then DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
 
             ElseIf TypeOf item Is TabItem Then
                 Dim t As String = DirectCast(item, TabItem).Header
-                If t IsNot Nothing Then DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
             End If
         Next
     End Sub
@@ -150,7 +150,7 @@ Public Class PluginHelper
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
     Public Shared Sub RunProgramSync(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True)
-        Writeline(String.Format("Executing {0} {1}", Filename, Arguments))
+        Writeline(String.Format(PluginHelper.GetLanguageItem("Executing {0} {1}", "Executing {0} {1}"), Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -169,13 +169,11 @@ Public Class PluginHelper
 
             StopLoading()
             RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-            p.Dispose()
-            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
         Else
             p.WaitForExit()
-            p.Dispose()
-            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
         End If
+        p.Dispose()
+        Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
     End Sub
     ''' <summary>
     ''' Runs the specified program, capturing console output.
@@ -185,7 +183,7 @@ Public Class PluginHelper
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
     Public Shared Async Function RunProgram(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True) As Task(Of Boolean)
-        Writeline(String.Format("Executing {0} {1}", Filename, Arguments))
+        Writeline(String.Format(PluginHelper.GetLanguageItem("Executing {0} {1}", "Executing {0} {1}"), Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -206,12 +204,12 @@ Public Class PluginHelper
             StopLoading()
             RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
             p.Dispose()
-            Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+            Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
         Else
             If Await WaitForProcess(p) Then
                 RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
                 p.Dispose()
-                Writeline(String.Format("""{0}"" finished running.", p.StartInfo.FileName))
+                Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
             End If
         End If
         Return True
@@ -229,7 +227,7 @@ Public Class PluginHelper
     ''' <param name="Arguments"></param>
     ''' <remarks></remarks>
     Public Shared Sub RunProgramInBackground(Filename As String, Arguments As String)
-        Writeline(String.Format("(Async) Executing ""{0}"" ""{1}""", Filename, Arguments))
+        Writeline(String.Format(PluginHelper.GetLanguageItem("(Async) Executing ""{0}"" ""{1}"""), Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -380,34 +378,6 @@ Public Class PluginHelper
     End Sub
     Public Shared Event ConsoleLineWritten(sender As Object, e As ConsoleLineWrittenEventArgs)
 #End Region
-
-    ''' <summary>
-    ''' Starts accepting commands from the console.
-    ''' </summary>
-    ''' <param name="Manager"></param>
-    ''' <param name="ConsoleCommands"></param>
-    ''' <remarks></remarks>
-    Friend Shared Sub DoCommands(Manager As PluginManager, ConsoleCommands As Dictionary(Of String, PluginManager.ConsoleCommand))
-        Writeline("Type ""exit"" to return to Sky Editor.")
-        While True
-            Console.Write("> ")
-            Dim line = Console.ReadLine()
-            Dim cmdParts = line.Split(" ".ToCharArray, 2)
-            Dim cmd = cmdParts(0).ToLower
-            Dim arg = ""
-            If cmdParts.Length > 1 Then
-                arg = cmdParts(1)
-            End If
-            If cmd = "exit" Then
-                Writeline("You may now use Sky Editor again.")
-                Exit While
-            ElseIf ConsoleCommands.Keys.Contains(cmd) Then
-                ConsoleCommands(cmd).Invoke(Manager, arg)
-            Else
-                Writeline(String.Format("""{0}"" is not a recognizable command.", cmd))
-            End If
-        End While
-    End Sub
 
     Public Shared Async Function CopyDirectory(SourceDirectory As String, DestinationDirectory As String) As Task
         Dim f As New Utilities.AsyncFileCopier

@@ -43,9 +43,11 @@ Public Class MainWindow2
     End Sub
 
 
-    Private Sub FileOpened(sender As Object, e As EventArguments.FileAddedEventArguments)
-        docPane.Children.Add(New DocumentTab(e.File.Value, _manager))
-        RemoveWelcomePage()
+    Private Sub _projectExplorer_FileOpened(sender As Object, e As EventArguments.FileOpenedEventArguments) Handles _projectExplorer.FileOpen
+        Dispatcher.Invoke(Sub()
+                              docPane.Children.Add(New DocumentTab(e.File, _manager))
+                              RemoveWelcomePage()
+                          End Sub)
     End Sub
 
 
@@ -215,14 +217,14 @@ Public Class MainWindow2
 
         TranslateControls()
 
-        AddHandler _manager.ProjectFileAdded, AddressOf FileOpened
-
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
 
     End Sub
     Private Sub TranslateControls()
         PluginHelper.TranslateForm(menuMain)
+        toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
+        lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
     End Sub
 
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -247,14 +249,6 @@ Public Class MainWindow2
 
     Private Sub _manager_MenuItemRegistered(sender As Object, Item As MenuItem) Handles _manager.MenuItemRegistered
         menuMain.Items.Add(Item)
-    End Sub
-
-    Private Sub _projectExplorer_FileOpen(sender As Object, ProjectFile As String) Handles _projectExplorer.FileOpen
-        If Not IsFileTabOpen(_manager.CurrentProject.Files(ProjectFile)) Then
-            If _manager.CurrentProject.Files(ProjectFile) IsNot Nothing Then
-                OpenDocumentTab(_manager.CurrentProject.Files(ProjectFile), False)
-            End If
-        End If
     End Sub
 
     Private Sub OnLoadingMessageChanged(sender As Object, e As PluginHelper.LoadingMessageChangedEventArgs)

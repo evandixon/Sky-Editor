@@ -82,7 +82,7 @@ Public Class DocumentTab
 #Region "Event Handlers"
     Private Sub DocumentTab_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
         If IsModified Then
-            If MessageBox.Show("Are you sure you want to close this file?  Any unsaved changes will be lost.", "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.No Then
+            If MessageBox.Show(PluginHelper.GetLanguageItem("Document Close Notification", "Are you sure you want to close this file?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
                 e.Cancel = True
             Else
                 If TypeOf _document Is IDisposable Then

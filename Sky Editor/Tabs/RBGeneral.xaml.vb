@@ -31,6 +31,13 @@ Namespace Tabs
 
         Private Sub RBGeneral_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("General")
+            lblGeneral_Adventures.Content = PluginHelper.GetLanguageItem("Adventures")
+            lblGeneral_Base.Content = PluginHelper.GetLanguageItem("Base Type")
+            lblGeneral_HeldMoney.Content = PluginHelper.GetLanguageItem("Held Money")
+            lblGeneral_RescuePoints.Content = PluginHelper.GetLanguageItem("Rescue Points")
+            lblGeneral_StoredMoney.Content = PluginHelper.GetLanguageItem("Stored Money")
+            lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("Team Name")
+
             'For Each item In Lists.RBBaseTypes
             '    cbGeneral_Base.Items.Add(item)
             'Next

@@ -35,6 +35,12 @@ Public Class ObjectWindow
             menuFileSaveAs.Visibility = Visibility.Collapsed
         End If
 
+        If TypeOf _objectToEdit Is iNamed Then
+            Me.Title = DirectCast(_objectToEdit, iNamed).Name
+        Else
+            Me.Title = PluginHelper.GetLanguageItem("Edit")
+        End If
+
         menuFile.Visibility = menuFileOpen.Visibility * menuFileSave.Visibility 'The underlying values are integers, and visibile is 0.  If any of these are visible, this is visible
         menuMain.Visibility = menuFile.Visibility
     End Sub
@@ -100,6 +106,10 @@ Public Class ObjectWindow
                 End If
             End If
         End If
+    End Sub
+
+    Private Sub ObjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        PluginHelper.TranslateForm(menuMain)
     End Sub
 
     Public ReadOnly Property TabCount As Integer

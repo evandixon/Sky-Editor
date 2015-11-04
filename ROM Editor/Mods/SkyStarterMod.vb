@@ -22,15 +22,15 @@ Namespace Mods
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
 
             'Convert Languages
-            PluginHelper.StartLoading("Converting languages...")
+            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting languages..."))
             CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Languages/")
             Dim languageDictionary As New Dictionary(Of String, String)
             languageDictionary.Add("text_e.str", "English")
-            languageDictionary.Add("text_f.str", "Frensh")
-            languageDictionary.Add("text_s.str", "Spanish")
-            languageDictionary.Add("text_i.str", "Italian")
-            languageDictionary.Add("text_g.str", "German")
-            languageDictionary.Add("text_j.str", "Japanese")
+            languageDictionary.Add("text_f.str", "Français")
+            languageDictionary.Add("text_s.str", "Español")
+            languageDictionary.Add("text_i.str", "Italiano")
+            languageDictionary.Add("text_g.str", "Deutsche") 'German
+            languageDictionary.Add("text_j.str", "日本語") 'Japanese
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key)) Then
                     Using langString = New FileFormats.LanguageString(IO.Path.Combine(ROMDirectory, "Data", "MESSAGE", item.Key))
@@ -42,7 +42,7 @@ Namespace Mods
             Next
 
             'Convert Personality Test
-            PluginHelper.StartLoading("Converting Personality Test")
+            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting Personality Test"))
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(ROMDirectory, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
             personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)

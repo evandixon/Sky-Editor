@@ -30,6 +30,11 @@ Public Class NewProjectWindow
         End If
     End Sub
 
+    Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        Me.Title = PluginHelper.GetLanguageItem("New Project")
+        PluginHelper.TranslateForm(Me)
+    End Sub
+
     Public Property SelectedName As String
         Get
             Return txtName.Text

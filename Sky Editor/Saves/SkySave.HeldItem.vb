@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Interfaces
+Imports SkyEditorBase
 
 Namespace Saves
     Partial Class SkySave
@@ -175,7 +176,9 @@ Namespace Saves
                         End If
                     End If
                     If HeldBy > 0 Then
-                        output.Append(" [Held by ")
+                        output.Append(" [")
+                        output.Append(PluginHelper.GetLanguageItem("Held by"))
+                        output.Append(" ")
                         output.Append(HeldBy)
                         output.Append("]")
                     End If

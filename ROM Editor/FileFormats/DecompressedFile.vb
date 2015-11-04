@@ -62,7 +62,7 @@ Namespace FileFormats
             Dim Filename As String = OriginalFilename.Replace("/", "\").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed")
             RunDecompressSync(OriginalFilename)
 
-            MyBase.OpenFile(OriginalFilename)
+            MyBase.OpenFile(Filename)
         End Sub
         Public Sub New(RawData As Byte())
             Throw New NotImplementedException

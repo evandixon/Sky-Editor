@@ -116,8 +116,8 @@ Namespace FileFormats
         Private ReadOnly Property ChunkData As List(Of Byte())
             Get
                 Dim chunks As New List(Of Byte())
-                For count As Integer = 0 To ImageData.Count - 1 Step 32
-                    chunks.Add(GenericArrayOperations(Of Byte).CopyOfRange(ImageData, count, count + 31))
+                For count As Integer = 0 To Math.Min(Math.Floor((ImageData.Count - 1) / 32) - 1, &H1400)
+                    chunks.Add(GenericArrayOperations(Of Byte).CopyOfRange(ImageData, count * 32, (count + 1) * 32 - 1))
                 Next
                 Return chunks
             End Get
@@ -133,6 +133,9 @@ Namespace FileFormats
             Dim colorIndex = 0
             For y As Byte = 0 To 7
                 For x As Byte = 0 To 7
+                    If colors.Count <= colorIndex Then
+                        Throw New BadImageFormatException("The tile size is too small.")
+                    End If
                     g.FillRectangle(GetBrush(colors(colorIndex), PalData, PalIndex), x, y, 1, 1)
                     colorIndex += 1
                 Next

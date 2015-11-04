@@ -117,6 +117,8 @@ Namespace Tabs
 
         Private Sub StoredPokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Stored Pokemon")
+            btnShowAll.Content = PluginHelper.GetLanguageItem("Show All")
+            btnEditPokemon.Content = PluginHelper.GetLanguageItem("Edit")
         End Sub
         'Sub ChangeHeader(Optional RefreshFriendArea As Boolean = True)
         '    'load language
