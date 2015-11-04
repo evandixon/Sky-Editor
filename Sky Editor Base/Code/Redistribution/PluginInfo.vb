@@ -12,4 +12,12 @@
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Dependencies As List(Of PluginInfo)
+    Public Property Type As PluginType
+    Public Enum PluginType
+        Code
+        Language
+    End Enum
+    Public Sub New()
+
+    End Sub
 End Class

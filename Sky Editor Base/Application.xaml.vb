@@ -1,6 +1,7 @@
 ﻿Imports System.Deployment
 Imports System.Deployment.Application
 Imports System.IO
+Imports System.Threading.Tasks
 Imports SkyEditorBase.Redistribution
 
 Class Application
@@ -39,7 +40,7 @@ Class Application
     ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
     ' can be handled in this file.
 
-    Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+    Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         Try
             'Delete and install things
             RedistributionHelpers.DeleteScheduledFiles()
@@ -49,6 +50,8 @@ Class Application
             Application.Current.Shutdown()
         End Try
 
+
+
         'Run the program
         Dim args = Environment.GetCommandLineArgs
         If args.Contains("-console") Then
@@ -56,7 +59,30 @@ Class Application
             ConsoleModule.ConsoleMain()
             Application.Current.Shutdown()
         Else
-            Dim m As New MainWindow2
+            Dim _manager As PluginManager = PluginManager.GetInstance
+
+            If SettingsManager.Instance.Settings.UpdatePlugins Then
+                Dim l As New SkyEditorWindows.BackgroundTaskWait
+                l.ChangeMessage(PluginHelper.GetLanguageItem("Updating plugins..."))
+                l.Show()
+
+                Try
+                    PluginHelper.StartLoading("Updating plugins...")
+                    If Await Task.Run(Function() As Boolean
+                                          Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
+                                      End Function) Then
+                        PluginHelper.StopLoading()
+                        RedistributionHelpers.RestartProgram()
+                    End If
+                    PluginHelper.StopLoading()
+                Catch ex As Exception
+                    PluginHelper.StopLoading()
+                    PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
+                End Try
+                l.Close()
+            End If
+
+            Dim m As New MainWindow2(_manager)
             m.Show()
         End If
     End Sub

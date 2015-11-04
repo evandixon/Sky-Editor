@@ -181,24 +181,7 @@ Public Class MainWindow2
 #End Region
 
 #Region "Form"
-    Private Async Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        _manager = PluginManager.GetInstance
-        If SettingsManager.Instance.Settings.UpdatePlugins Then
-            Try
-                PluginHelper.StartLoading("Updating plugins...")
-                If Await Task.Run(Function() As Boolean
-                                      Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
-                                  End Function) Then
-                    PluginHelper.StopLoading()
-                    RedistributionHelpers.RestartProgram()
-                End If
-                PluginHelper.StopLoading()
-            Catch ex As Exception
-                PluginHelper.StopLoading()
-                PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
-            End Try
-        End If
-
+    Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
 
@@ -301,5 +284,22 @@ Public Class MainWindow2
         For Each item In tabs
             docPane.Children.Remove(item)
         Next
+    End Sub
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        _manager = PluginManager.GetInstance
+    End Sub
+    Public Sub New(Manager As PluginManager)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        _manager = Manager
     End Sub
 End Class

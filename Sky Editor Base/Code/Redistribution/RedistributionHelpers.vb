@@ -98,6 +98,12 @@ Namespace Redistribution
                 z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item.Replace(".dll", "").Replace(".exe", "") & ".zip"), tempDir, True, ".*", ".*")
                 PluginHelper.Writeline("Packed plugin " & item, PluginHelper.LineType.Message)
             Next
+            Dim l = Language.LanguageManager.Instance
+            l.LoadAllLanguages()
+            l.SaveAll()
+            For Each item In l.Languages.Keys
+                IO.File.Copy(l.Languages(item).Filename, IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item & ".language"), True)
+            Next
         End Sub
         ''' <summary>
         ''' Unpacks all plugins into the appropriate folder, or only one if PluginName is not nothing.
@@ -160,6 +166,9 @@ Namespace Redistribution
                 End If
                 IO.File.Delete(IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, item))
             Next
+            For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*.language")
+                IO.File.Copy(item, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages", IO.Path.GetFileNameWithoutExtension(item) & ".json"))
+            Next
         End Sub
         Public Shared Function GetAssemblies(PluginDirectory As String) As List(Of String)
             Dim assemblies As New List(Of String)
@@ -193,9 +202,9 @@ Namespace Redistribution
             IO.File.AppendAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), {Path})
         End Sub
         Public Shared Sub RestartProgram()
-            'Windows.Forms.Application.Restart()
+            Windows.Forms.Application.Restart()
             'Application.Current.Shutdown()
-            Application.Current.Shutdown(1)
+            'Application.Current.Shutdown(1)
         End Sub
         Public Shared Function RequiredPlugins(Plugins As List(Of PluginInfo)) As List(Of PluginInfo)
             Dim pending As New List(Of PluginInfo)
@@ -253,10 +262,22 @@ Namespace Redistribution
             Dim plugins As New List(Of PluginInfo)
             For Each item In Manager.Assemblies
                 Dim info As New PluginInfo
+                info.Type = PluginInfo.PluginType.Code
                 info.VersionString = ReflectionHelpers.GetAssemblyVersion(item).ToString
                 info.Name = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "")
                 info.Dependencies = New List(Of PluginInfo)
                 info.DownloadUrl = IO.Path.Combine(WebDirectory, ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "") & ".zip").Replace("\", "/")
+                plugins.Add(info)
+            Next
+            Dim l = Language.LanguageManager.Instance
+            l.LoadAllLanguages()
+            For Each item In l.Languages.Keys
+                Dim info As New PluginInfo
+                info.Type = PluginInfo.PluginType.Language
+                info.VersionString = ReflectionHelpers.GetAssemblyVersion(Assembly.GetExecutingAssembly).ToString
+                info.Name = item
+                info.Dependencies = New List(Of PluginInfo)
+                info.DownloadUrl = IO.Path.Combine(WebDirectory, item & ".language").Replace("\", "/")
                 plugins.Add(info)
             Next
             Return SerializePluginInfo(plugins)
