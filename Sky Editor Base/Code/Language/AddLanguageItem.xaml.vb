@@ -8,6 +8,9 @@
             ' Add any initialization after the InitializeComponent() call.
             DefaultLanguageItems = New List(Of LanguageItem)
             CurrentLanguageItems = New List(Of LanguageItem)
+
+            Me.Title = PluginHelper.GetLanguageItem("Add Language Item")
+            PluginHelper.TranslateForm(Me)
         End Sub
         Public ReadOnly Property SelectedItem As LanguageItem
             Get

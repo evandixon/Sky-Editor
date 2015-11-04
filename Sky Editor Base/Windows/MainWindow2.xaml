@@ -21,7 +21,7 @@
                     <MenuItem x:Name="menuFileSaveAll" Header="Save _All"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem x:Name="menuCheats" Header="_Cheats" />
+            <MenuItem x:Name="menuCheats" Header="_Cheats" Visibility="Collapsed" />
             <MenuItem x:Name="menuTools" Header="_Tools">
                 <MenuItem x:Name="menuLanguageEditor" Header="_Language Editor"/>
                 <MenuItem x:Name="MenuSettings" Header="_Settings" />
@@ -47,15 +47,15 @@
                     </ad:LayoutAnchorablePaneGroup>
                 </ad:LayoutPanel>
 
-                <ad:LayoutRoot.BottomSide>
+                <!--<ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output">
-                                <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                            <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output" IsVisible="False">
+                                <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Visibility="Collapsed"/>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.BottomSide>
+                </ad:LayoutRoot.BottomSide>-->
             </ad:LayoutRoot>
         </ad:DockingManager>
         <StatusBar Height="34" VerticalAlignment="Bottom">

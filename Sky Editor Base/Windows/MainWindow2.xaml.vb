@@ -201,12 +201,12 @@ Public Class MainWindow2
         TranslateControls()
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
-        AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
+        ''AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
 
     End Sub
     Private Sub TranslateControls()
         PluginHelper.TranslateForm(menuMain)
-        toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
+        'toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
         lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
     End Sub
 
@@ -241,16 +241,16 @@ Public Class MainWindow2
                                          progressBar.Value = e.Progress ' * 100
                                      End Sub))
     End Sub
-    Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
-        If Not e.Type = PluginHelper.LineType.ConsoleOutput Then
-            '_queuedConsoleLines.Enqueue(e)
-            Dispatcher.InvokeAsync(New Action(Sub()
-                                                  txtOutput.AppendText(e.Line)
-                                                  txtOutput.AppendText(vbCrLf)
-                                                  txtOutput.ScrollToEnd()
-                                              End Sub))
-        End If
-    End Sub
+    'Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
+    '    If Not e.Type = PluginHelper.LineType.ConsoleOutput Then
+    '        '_queuedConsoleLines.Enqueue(e)
+    '        Dispatcher.InvokeAsync(New Action(Sub()
+    '                                              txtOutput.AppendText(e.Line)
+    '                                              txtOutput.AppendText(vbCrLf)
+    '                                              txtOutput.ScrollToEnd()
+    '                                          End Sub))
+    '    End If
+    'End Sub
 
     Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
         RefreshBuildRunVisibility()
