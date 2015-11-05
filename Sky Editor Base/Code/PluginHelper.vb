@@ -376,7 +376,7 @@ Public Class PluginHelper
         ConsoleOutput = 4
     End Enum
     Public Shared Sub Writeline(Line As String, Optional type As LineType = LineType.Message, <CallerMemberName> Optional CallerName As String = Nothing)
-        Console.WriteLine(String.Format("{1}", CallerName, Line)) 'Old format: "{0}: {1}"
+        Console.WriteLine(Line) 'String.Format("{1}", CallerName, Line)) 'Old format: "{0}: {1}"
 
         Dim e As New ConsoleLineWrittenEventArgs
         e.Line = Line
