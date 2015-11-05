@@ -20,6 +20,7 @@ Public Class GenericNDSModProject
     End Class
 
     Public Class NDSModBuildingEventArgs
+        Inherits EventArgs
         Public Property NDSModSourceFilename As String
     End Class
 
