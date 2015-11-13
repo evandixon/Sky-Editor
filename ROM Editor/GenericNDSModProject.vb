@@ -9,6 +9,8 @@ Imports SkyEditorBase.Interfaces
 Public Class GenericNDSModProject
     Inherits Project
 
+    Private Const PatcherVersion As String = "alpha 1"
+
     Public Event NDSModAdded(sender As Object, e As NDSModAddedEventArgs)
     Public Event NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs)
 
@@ -100,11 +102,26 @@ Public Class GenericNDSModProject
         Dim o As New OpenFileDialog
         o.Filter = PluginHelper.GetLanguageItem("Nintendo DS Roms") & " (*.nds)|*.nds|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
-            OpenFile(o.FileName, "BaseRom.nds")
+            'Make the modpack info
+            Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
+            info.Save()
+            AddFile("Modpack Info", info)
+
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying Base ROM..."))
+
+            Await Task.Run(New Action(Sub()
+                                          OpenFile(o.FileName, "BaseRom.nds")
+                                      End Sub))
+
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Unpacking ROM..."))
+
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
             Dim sky = DirectCast(Files("BaseRom.nds"), iPackedRom)
             Await sky.Unpack(romDirectory)
             CreateDirectory("Mods")
+
+
+            PluginHelper.SetLoadingStatusFinished()
         Else
             MessageBox.Show(PluginHelper.GetLanguageItem("Project initialization failed.  You must supply a base ROM."))
         End If
@@ -155,7 +172,6 @@ Public Class GenericNDSModProject
         MyBase.Build()
         If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"))) Then
             PluginHelper.DeleteDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"))
-            'IO.Directory.Delete(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files"), True)
         End If
         Dim j As New JavaScriptSerializer
         Dim patchers As New List(Of FilePatcher)
@@ -376,7 +392,7 @@ Public Class GenericNDSModProject
         CopyPatcherProgram()
 
         '-Zip it
-        Utilities.Zip.Zip(modPackFiles, IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & ".zip"))
+        Utilities.Zip.Zip(modPackFiles, IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & " " & DirectCast(Files("Modpack Info"), ObjectFile(Of ModpackInfo)).ContainedObject.Version & "-" & PatcherVersion & ".zip"))
 
         'Apply patch
         PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))
