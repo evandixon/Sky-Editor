@@ -8,6 +8,10 @@ Public Class Generic3DSModProject
         Dim o As New OpenFileDialog
         o.Filter = "3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
+            Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
+            info.Save()
+            AddFile("Modpack Info", info)
+
             OpenFile(o.FileName, "BaseRom.3ds")
             Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
             Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
@@ -39,4 +43,7 @@ Public Class Generic3DSModProject
     Public Overrides Function CanRun() As Boolean
         Return False
     End Function
+    Public Sub New()
+        MyBase.New
+    End Sub
 End Class
