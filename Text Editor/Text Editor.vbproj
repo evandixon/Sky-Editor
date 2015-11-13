@@ -97,7 +97,7 @@
     <Compile Include="Controls\TextControl.xaml.vb">
       <DependentUpon>TextControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextDocument.vb" />
+    <Compile Include="TextFile.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
