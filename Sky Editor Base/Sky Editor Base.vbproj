@@ -190,6 +190,7 @@
     <Compile Include="Code\DocumentTab.vb" />
     <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="Code\EventArguments\FileOpenedEventArgs.vb" />
+    <Compile Include="Code\EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="Code\Interfaces\iCreatableFile.vb" />
     <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Code\Interfaces\iGenericFile.vb" />
@@ -203,6 +204,7 @@
     </Compile>
     <Compile Include="Code\Language\LanguageFile.vb" />
     <Compile Include="Code\Language\LanguageItem.vb" />
+    <Compile Include="Code\MenuAction.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />
