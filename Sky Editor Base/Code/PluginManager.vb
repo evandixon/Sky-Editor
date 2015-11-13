@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Text
 Imports System.Threading.Tasks
+Imports SkyEditorBase.EventArguments
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Redistribution
 Imports SkyEditorBase.Utilities
@@ -110,7 +111,7 @@ Public Class PluginManager
                     For Each i In type.GetInterfaces
                         If i Is GetType(Interfaces.iCreatableFile) AndAlso type.GetConstructor({}) IsNot Nothing Then
                             CreatableFiles.Add(type)
-                        ElseIf i Is GetType(Interfaces.iOpenableFile) AndAlso type.GetConstructor({GetType(String)}) IsNot Nothing
+                        ElseIf i Is GetType(Interfaces.iOpenableFile) AndAlso type.GetConstructor({}) IsNot Nothing
                             OpenableFiles.Add(type)
                         End If
                     Next
@@ -205,6 +206,18 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Property GenericFilesWithTypeValidator As New List(Of Type)
 
+    ''' <summary>
+    ''' List of all registered MenuActions, for use with creating custom menu items.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property Actions As List(Of MenuAction)
+
+    ''' <summary>
+    ''' List of the MenuItems created from the MenuActions.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property MenuItems As List(Of MenuItem)
+
     Public Property CheatManager As New ARDS.Manager
     <Obsolete("Depricated.  Use FileTypeDetectors instead.")> Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
@@ -279,13 +292,6 @@ Public Class PluginManager
         IOFilters = TempIOFilters
     End Sub
 
-    Public Sub RegisterMenuItem(Item As MenuItem)
-        If Item IsNot Nothing Then
-            Item.Tag = True
-            'Window.AddMenuItem(Item)
-            RaiseEvent MenuItemRegistered(Me, Item)
-        End If
-    End Sub
     ''' <summary>
     ''' Registers a save game format using the given information.
     ''' </summary>
@@ -306,22 +312,37 @@ Public Class PluginManager
         ProjectTypes.Add(ProjectName, ProjectType)
     End Sub
 
-    '''' <summary>
-    '''' Registers a file format using the given information.
-    ''''
-    '''' This is intended for generic files.  If this is a game save, use RegisterSaveGameFormat.
-    '''' </summary>
-    '''' <param name="FormatName">Human readable English identifier for the kind of save format this game uses.  Do not include an extension.</param>
-    '''' <param name="ContainerType">Type that represents the save file format.  Given Type should inherit SkyEditorBase.GenericFile</param>
-    '''' <remarks></remarks>
-    'Public Sub RegisterFileFormat(FormatName As String, ContainerType As Type)
-    '    If Not SaveTypes.ContainsKey(FormatName) Then
-    '        SaveTypes.Add(FormatName, ContainerType)
-    '    End If
-    'End Sub
+    ''' <summary>
+    ''' Registers a Menu Action for use with creating custom menu items.
+    ''' </summary>
+    ''' <param name="Action"></param>
+    <Obsolete("Not implemented")> Public Sub RegisterMenuAction(Action As MenuAction)
+        Throw New NotImplementedException
+        'Generate the MenuItem
+        If MenuItems Is Nothing Then
+            MenuItems = New List(Of MenuItem)
+        End If
+        If Action.ActionPath.Count = 1 Then
+            'Check to see if the menu item exists
 
-    <Obsolete("Depricated.  Use RegisterFileTypeDetector instead.")> Public Sub RegisterSaveTypeDetector(Detector As SaveTypeDetector)
-        SaveTypeDetectors.Add(Detector)
+            'Add the menu item, and give it a proper tag
+        ElseIf Action.ActionPath.Count > 1
+            'Create parent menu items
+
+            'Check to see if the menu item exists
+
+            'Add the menu item, and give it a proper tag
+
+        Else 'Count=0
+            Throw New ArgumentException("The action's ActionPath needs to contain at least 1 item.")
+        End If
+        Dim pathParents As New List(Of String)
+
+        'Register the item
+        Actions.Add(Action)
+
+        'Call the event
+        RaiseEvent MenuActionAdded(Me, New EventArguments.MenuActionAddedEventArgs With {.Action = Action})
     End Sub
 
     Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
@@ -418,10 +439,25 @@ Public Class PluginManager
     'Public Event SaveGameFormatRegisterd(sender As Object, SaveGameFormat As Object)
     Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
     'Public Event ResourceFileRegistered(sender As Object, ResourceFile As Object)
-    Public Event ProjectFileAdded(sender As Object, e As EventArguments.FileAddedEventArguments)
+    Public Event ProjectFileAdded(sender As Object, e As FileAddedEventArguments)
     Public Event ProjectFileRemoved(sender As Object, File As String)
     Public Event ProjectChanged(sender As Object, NewProject As Project)
     Public Event ProjectDirectoryCreated(sender As Object, File As String)
+    Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
+#End Region
+
+#Region "Event Handlers"
+    Private Sub _currentProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles _currentProject.FileAdded
+        RaiseEvent ProjectFileAdded(sender, e)
+    End Sub
+
+    Private Sub _currentProject_FileRemoved(sender As Object, File As String) Handles _currentProject.FileRemoved
+        RaiseEvent ProjectFileRemoved(sender, File)
+    End Sub
+
+    Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
+        RaiseEvent ProjectDirectoryCreated(sender, Directory)
+    End Sub
 #End Region
 
     Public Function CreateNewFile(NewFileName As String, FileType As Type) As iCreatableFile
@@ -546,20 +582,7 @@ Public Class PluginManager
         Next
         Return out
     End Function
-    Private Class TypeComparer
-        Implements IComparer(Of Type)
 
-        Public Function Compare(x As Type, y As Type) As Integer Implements IComparer(Of Type).Compare
-            Return GetInheritanceDepth(x).CompareTo(GetInheritanceDepth(y))
-        End Function
-        Public Function GetInheritanceDepth(T As Type) As Integer
-            If Not T = GetType(Object) Then
-                Return 1 + GetInheritanceDepth(T.BaseType)
-            Else
-                Return 0
-            End If
-        End Function
-    End Class
     Public Function GetFileType(File As GenericFile) As Type
         Dim matches As New List(Of Type)
         For Each item In FileTypeDetectors
@@ -570,21 +593,13 @@ Public Class PluginManager
                 Next
             End If
         Next
-        'If matches.Count > 0 Then
-        '    Dim saveID As String = Nothing
-        '    For Each item In SaveTypeDetectors
-        '        saveID = item.Invoke(File)
-        '        If Not String.IsNullOrEmpty(saveID) Then
-        '            matches.Add(SaveTypes(saveID))
-        '        End If
-        '    Next
-        'End If
+
         If matches.Count = 0 Then
             Return Nothing
         ElseIf matches.Count = 1
             Return matches(0)
         Else
-            matches.Sort(New TypeComparer)
+            matches.Sort(New Utilities.ReflectionHelpers.TypeInheritanceDepthComparer)
             matches.Reverse()
             Return matches(0)
             'Dim w As New SkyEditorWindows.GameTypeSelector()
@@ -601,18 +616,6 @@ Public Class PluginManager
         End If
     End Function
 
-    Private Sub _currentProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles _currentProject.FileAdded
-        RaiseEvent ProjectFileAdded(sender, e)
-    End Sub
-
-    Private Sub _currentProject_FileRemoved(sender As Object, File As String) Handles _currentProject.FileRemoved
-        RaiseEvent ProjectFileRemoved(sender, File)
-    End Sub
-
-    Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
-        RaiseEvent ProjectDirectoryCreated(sender, Directory)
-    End Sub
-
     Public Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
         Dim matches As New List(Of Type)
         For Each item In GenericFilesWithTypeValidator
@@ -626,6 +629,22 @@ Public Class PluginManager
             Return matches
         End If
     End Function
+
+    ''' <summary>
+    ''' Gets the MenuItems generated from the registered MenuActions.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetRootMenuItems() As List(Of MenuItem)
+        Return MenuItems
+    End Function
+
+    ''' <summary>
+    ''' Updates the visibility of the MenuItems based on the currently selected Type.
+    ''' </summary>
+    ''' <param name="SelectedType"></param>
+    Public Sub UpdateMenuItemVisibility(SelectedType As Type)
+
+    End Sub
 
     ''' <summary>
     ''' If the given file is of type ObjectFile, returns the contained Type.
@@ -642,6 +661,7 @@ Public Class PluginManager
             Return Nothing
         End Try
     End Function
+
     ''' <summary>
     ''' If the given file is of type ObjectFile, returns the contained Type.
     ''' Otherwise, returns Nothing.
