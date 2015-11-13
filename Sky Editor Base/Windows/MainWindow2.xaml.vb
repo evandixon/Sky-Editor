@@ -63,7 +63,7 @@ Public Class MainWindow2
         Next
         w.AddGames(games.Keys)
         If w.ShowDialog Then
-            Dim file As GenericFile = _manager.CreateNewFile(w.SelectedName, games(w.SelectedGame))
+            Dim file As Object = _manager.CreateNewFile(w.SelectedName, games(w.SelectedGame))
             docPane.Children.Add(New DocumentTab(file, _manager, True))
             RemoveWelcomePage()
         End If
@@ -118,13 +118,8 @@ Public Class MainWindow2
         If docPane.SelectedContent IsNot Nothing Then
             'Dim tab = DirectCast(docPane.SelectedContent, DocumentTab)
             Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
-            If TypeOf file Is iOnDisk Then
-                SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iOnDisk).Filename))
-            Else
-                SaveFileDialog1.Filter = _manager.IOFiltersString(IsSaveAs:=True)
-            End If
-
             If TypeOf file Is iSavable Then
+                SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iSavable).DefaultExtension))
                 If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                     DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
                 End If
