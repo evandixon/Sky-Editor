@@ -54,6 +54,7 @@ Namespace FileFormats
         Public Sub New()
             MyBase.New()
             Items = New List(Of String)
+            CreateFile("")
         End Sub
         Public Sub New(Filename As String)
             Me.New
