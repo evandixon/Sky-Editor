@@ -7,6 +7,7 @@ Public Class ObjectFile(Of T)
     Implements iOpenableFile
     Implements iSavable
     Implements iOnDisk
+    Implements iCreatableFile
     Private Class JsonContainer
         Public Property ContainedObject As T
 
@@ -33,7 +34,7 @@ Public Class ObjectFile(Of T)
         Me.OpenFile(Filename)
     End Sub
 
-    Public Sub CreateFile(Name As String)
+    Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
         If GetType(T).GetConstructor({}) IsNot Nothing Then
             ContainedObject = GetType(T).GetConstructor({}).Invoke({})
         End If
