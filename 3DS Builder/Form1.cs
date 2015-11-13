@@ -272,9 +272,9 @@ namespace _3DS_Builder
             if (args.Length > 4)
             {
                 //this.Visible = false;
-                string EXEFS_PATH = args[1];
-                string ROMFS_PATH = args[2];
-                string EXHEADER_PATH = args[3];
+                string EXEFS_PATH = args[1].Replace("/","\\");
+                string ROMFS_PATH = args[2].Replace("/", "\\");
+                string EXHEADER_PATH = args[3].Replace("/", "\\");
                 //romfs
                 TB_Romfs.Text = ROMFS_PATH;
 
@@ -312,9 +312,10 @@ namespace _3DS_Builder
                             //Alert("Deleting unneeded exefs logo binary.");
                             File.Delete((new DirectoryInfo(EXEFS_PATH)).GetFiles()[Array.IndexOf(files, "logo")].FullName);
                         }
-                        TB_Exefs.Text = EXEFS_PATH;
+                        
                         //Validate_Go();
                     }
+                    TB_Exefs.Text = EXEFS_PATH;
                     //else
                     //{
                     //    Alert("Your selected ExeFS is missing something essential.");
@@ -341,7 +342,7 @@ namespace _3DS_Builder
                     }
                     // }
                     CloseOnComplete = true;
-                    TB_SavePath.Text = args[4];
+                    TB_SavePath.Text = args[4].Replace("/", "\\");
                     //Validate_Go();
                     B_Go_Click(sender, e);
                 }
