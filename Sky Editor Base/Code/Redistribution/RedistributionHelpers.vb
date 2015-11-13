@@ -167,7 +167,7 @@ Namespace Redistribution
                 IO.File.Delete(IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, item))
             Next
             For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*.language")
-                IO.File.Copy(item, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages", IO.Path.GetFileNameWithoutExtension(item) & ".json"))
+                IO.File.Copy(item, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages", IO.Path.GetFileNameWithoutExtension(item) & ".json"), True)
             Next
         End Sub
         Public Shared Function GetAssemblies(PluginDirectory As String) As List(Of String)
