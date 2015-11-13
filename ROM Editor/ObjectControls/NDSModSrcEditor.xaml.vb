@@ -9,6 +9,7 @@ Namespace ObjectControls
                 txtAuthor.Text = .Author
                 txtDescription.Text = .Description
                 txtUpdateUrl.Text = .UpdateURL
+                txtVersion.Text = .Version
                 'txtDependenciesBefore.Text = .DependenciesBefore
                 'txtDependenciesAfter.Text = .DependenciesAfter
             End With
@@ -20,6 +21,7 @@ Namespace ObjectControls
                 .Author = txtAuthor.Text
                 .Description = txtDescription.Text
                 .UpdateURL = txtUpdateUrl.Text
+                .Version = txtVersion.Text
                 '.DependenciesBefore = txtDependenciesBefore.Text
                 '.DependenciesAfter = txtDependenciesAfter.Text
             End With

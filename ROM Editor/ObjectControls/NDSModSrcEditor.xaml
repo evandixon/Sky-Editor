@@ -17,14 +17,18 @@
         <Label Content="Description" Height="25" VerticalAlignment="Top"/>
         <TextBox x:Name="txtDescription" Height="25" VerticalAlignment="Top"/>
 
-        <Label Content="Update URL" Height="25" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUpdateUrl" Height="25" VerticalAlignment="Top"/>
+        <Label Content="Version" Height="25" VerticalAlignment="Top"/>
+        <TextBlock x:Name="txtVersion" Height="25" VerticalAlignment="Top"/>
 
-        <Label Content="Dependencies - Before" Height="25" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtDependenciesBefore" Height="25" VerticalAlignment="Top"/>
+        <Label Content="Update URL" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
+        <TextBox x:Name="txtUpdateUrl" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
 
-        <Label Content="Dependencies - After" Height="25" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtDependenciesAfter" Height="25" VerticalAlignment="Top"/>
+            <Label Content="Dependencies - Before" Height="25" VerticalAlignment="Top"  Visibility="Collapsed"/>
+            <TextBox x:Name="txtDependenciesBefore" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
+
+            <Label Content="Dependencies - After" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
+            <TextBox x:Name="txtDependenciesAfter" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
+       
 
     </UniformGrid>
     </Grid>
