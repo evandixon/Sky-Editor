@@ -10,7 +10,7 @@ Public Class SettingsContainer
         'Todo: load defaults from somewhere
         CurrentLanguage = "English"
         DefaultLanguage = "English"
-        UpdatePlugins = False
+        UpdatePlugins = True
         DebugLanguagePlaceholders = False
         PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4PluginsAlpha/plugins.json"
     End Sub

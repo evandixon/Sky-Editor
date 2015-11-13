@@ -70,7 +70,25 @@ Public Class PluginDefinition
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
         EnsureDirDeleted(PluginHelper.GetResourceName("Current"))
+        EnsureDirDeleted(PluginHelper.GetResourceName("temp"))
+        EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win32"))
+        EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win64"))
         EnsureFileDeleted(PluginHelper.GetResourceName("Current.nds"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.pdb"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe.manifest"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.pdb"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe.manifest"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.xml"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("itemppatcher.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("itemppatcher.pdb"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("LanguageStringPatcher.exe.config"))
+        EnsureFileDeleted(PluginHelper.GetResourceName("LanguageStringPatcher.pdb"))
     End Sub
 
     Private Sub EnsureDirDeleted(Dir As String)

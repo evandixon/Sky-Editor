@@ -19,16 +19,16 @@
         Private Sub cbLanguages_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbLanguages.SelectionChanged
             'Save existing values
             If e.RemovedItems IsNot Nothing AndAlso e.RemovedItems.Count > 0 AndAlso EditingItem.Languages.ContainsKey(e.RemovedItems(0)) Then
-                EditingItem.Languages(e.RemovedItems(0)).ContainedObject.Clear()
+                EditingItem.Languages(e.RemovedItems(0)).ContainedObject.Items.Clear()
                 For Each item In lbItems.Items
-                    EditingItem.Languages(e.RemovedItems(0)).ContainedObject.Add(item)
+                    EditingItem.Languages(e.RemovedItems(0)).ContainedObject.Items.Add(item)
                 Next
             End If
 
             'Load new values
             If EditingItem.Languages.ContainsKey(cbLanguages.SelectedItem) Then
                 lbItems.Items.Clear()
-                For Each item In EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject
+                For Each item In EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject.Items
                     lbItems.Items.Add(item)
                 Next
             End If
@@ -62,9 +62,9 @@
             End If
 
             If cbLanguages.SelectedItem IsNot Nothing AndAlso EditingItem.Languages.ContainsKey(cbLanguages.SelectedItem) Then
-                EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject.Clear()
+                EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject.Items.Clear()
                 For Each item In lbItems.Items
-                    EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject.Add(item)
+                    EditingItem.Languages(cbLanguages.SelectedItem).ContainedObject.Items.Add(item)
                 Next
             End If
         End Sub

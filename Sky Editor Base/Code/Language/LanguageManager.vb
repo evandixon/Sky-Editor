@@ -33,7 +33,7 @@ Namespace Language
             Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))(Filename)
             For Each lang In f.ContainedObject.Keys
                 EnsureLanguageLoaded(lang)
-                For Each item In f.ContainedObject(lang).ContainedObject
+                For Each item In f.ContainedObject(lang).ContainedObject.Items
                     AddLanguageItem(lang, item)
                 Next
             Next
@@ -42,6 +42,7 @@ Namespace Language
 #Region "iSavable support"
         Public Sub SaveAll() Implements iSavable.Save
             For Each item In Languages.Values
+                item.ContainedObject.Revision += 1
                 item.Save()
             Next
             RaiseEvent FileSaved(Me, New EventArgs)
@@ -98,15 +99,15 @@ Namespace Language
 
         Public Sub AddLanguageItem(Language As String, Item As LanguageItem)
             EnsureLanguageLoaded(Language)
-            If Not Languages(Language).ContainedObject.Contains(Item) Then
-                Languages(Language).ContainedObject.Add(Item)
+            If Not Languages(Language).ContainedObject.Items.Contains(Item) Then
+                Languages(Language).ContainedObject.Items.Add(Item)
                 Instance.AdditionsMade = True
             End If
         End Sub
 
         Private Function SearchLanguageItem(Language As String, Key As String, AssemblyName As String) As LanguageItem
             If Languages.ContainsKey(Language) Then
-                Dim q = From l In Languages(Language).ContainedObject Where l.Key = Key AndAlso l.PluginName = AssemblyName Select l
+                Dim q = From l In Languages(Language).ContainedObject.Items Where l.Key = Key AndAlso l.PluginName = AssemblyName Select l
 
                 If q.Any Then
                     Return q.First

@@ -22,6 +22,8 @@ Class Application
             languageManager.SaveAll
         End If
 
+        SettingsManager.Instance.Save()
+
         'Restart program if exit code warrants it
         If e.ApplicationExitCode = 1 Then
             Dim args = Environment.GetCommandLineArgs()
@@ -61,29 +63,35 @@ Class Application
         Else
             Dim _manager As PluginManager = PluginManager.GetInstance
 
+            Dim l As SkyEditorWindows.BackgroundTaskWait = Nothing
             If SettingsManager.Instance.Settings.UpdatePlugins Then
-                Dim l As New SkyEditorWindows.BackgroundTaskWait
+                l = New SkyEditorWindows.BackgroundTaskWait
                 l.ChangeMessage(PluginHelper.GetLanguageItem("Updating plugins..."))
                 l.Show()
 
                 Try
-                    PluginHelper.StartLoading("Updating plugins...")
+                    PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Updating plugins..."))
                     If Await Task.Run(Function() As Boolean
                                           Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
                                       End Function) Then
                         PluginHelper.StopLoading()
                         RedistributionHelpers.RestartProgram()
+                        l.Close()
+                        Exit Sub
                     End If
                     PluginHelper.StopLoading()
                 Catch ex As Exception
                     PluginHelper.StopLoading()
                     PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
                 End Try
-                l.Close()
+                l.Visibility = Visibility.Collapsed
             End If
 
             Dim m As New MainWindow2(_manager)
             m.Show()
+            If l IsNot Nothing Then
+                l.Close()
+            End If
         End If
     End Sub
 End Class

@@ -8,8 +8,8 @@ Public Class ObjectFile(Of T)
     Implements iSavable
     Implements iOnDisk
     Implements iCreatableFile
-    Private Class JsonContainer
-        Public Property ContainedObject As T
+    Private Class JsonContainer(Of U)
+        Public Property ContainedObject As U
 
         Public Property ContainedTypeName As String
     End Class
@@ -46,7 +46,7 @@ Public Class ObjectFile(Of T)
 
         If IO.File.Exists(Filename) Then
             Dim j As New JavaScriptSerializer
-            Dim c = j.Deserialize(Of JsonContainer)(IO.File.ReadAllText(Filename))
+            Dim c = j.Deserialize(Of JsonContainer(Of T))(IO.File.ReadAllText(Filename))
             Me.ContainedObject = c.ContainedObject
             Me.ContainedTypeName = c.ContainedTypeName
         Else
@@ -61,7 +61,7 @@ Public Class ObjectFile(Of T)
 
     Public Sub Save(Filename As String) Implements Interfaces.iSavable.Save
         Dim j As New JavaScriptSerializer
-        Dim c As New JsonContainer
+        Dim c As New JsonContainer(Of T)
         c.ContainedObject = Me.ContainedObject
         c.ContainedTypeName = Me.GetType.AssemblyQualifiedName 'GetType(T).AssemblyQualifiedName
         IO.File.WriteAllText(Filename, j.Serialize(c))

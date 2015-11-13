@@ -225,15 +225,26 @@ Namespace Redistribution
                 Dim assemblyName As String = Nothing
                 Dim exists As Boolean = False
                 Dim outdated As Boolean = True
-                For Each item In Manager.Assemblies
-                    If ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".dll", "").Replace(".exe", "") = p.Name Then
-                        exists = True
-                        assemblyName = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)
-                        If ReflectionHelpers.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
+
+                If p.Type = PluginInfo.PluginType.Code Then
+                    For Each item In Manager.Assemblies
+                        If ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".dll", "").Replace(".exe", "") = p.Name Then
+                            exists = True
+                            assemblyName = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)
+                            If ReflectionHelpers.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
+                                outdated = False
+                            End If
+                        End If
+                    Next
+                ElseIf p.Type = PluginInfo.PluginType.Language
+                    With Language.LanguageManager.Instance
+                        .EnsureLanguageLoaded(p.Name)
+                        If CInt(p.VersionString) > .Languages(p.Name).ContainedObject.Revision Then
                             outdated = False
                         End If
-                    End If
-                Next
+                    End With
+                End If
+
                 If outdated Then
                     If exists AndAlso assemblyName IsNot Nothing Then
                         PluginHelper.Writeline("Deleting plugin " & assemblyName)
@@ -256,6 +267,7 @@ Namespace Redistribution
         End Function
         Public Shared Function GetPluginInfo(InfoUrl As String) As List(Of PluginInfo)
             Dim c As New Net.WebClient
+            c.Encoding = New Text.UTF8Encoding
             Return ParsePluginInfo(c.DownloadString(InfoUrl))
         End Function
         Public Shared Function GeneratePluginInfoString(Manager As PluginManager, WebDirectory As String) As String
@@ -274,7 +286,7 @@ Namespace Redistribution
             For Each item In l.Languages.Keys
                 Dim info As New PluginInfo
                 info.Type = PluginInfo.PluginType.Language
-                info.VersionString = ReflectionHelpers.GetAssemblyVersion(Assembly.GetExecutingAssembly).ToString
+                info.VersionString = l.Languages(item).ContainedObject.Revision.ToString
                 info.Name = item
                 info.Dependencies = New List(Of PluginInfo)
                 info.DownloadUrl = IO.Path.Combine(WebDirectory, item & ".language").Replace("\", "/")

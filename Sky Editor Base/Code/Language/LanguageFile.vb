@@ -1,6 +1,6 @@
 ﻿Namespace Language
     Public Class LanguageFile
-        Inherits ObjectFile(Of List(Of LanguageItem))
+        Inherits ObjectFile(Of LanguageItemList)
         Public Sub New()
             MyBase.New()
         End Sub

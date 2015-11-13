@@ -31,7 +31,7 @@
     <MinimumRequiredVersion>4.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -116,7 +116,7 @@
     <ManifestKeyFile>Sky Editor Base_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -204,6 +204,7 @@
     </Compile>
     <Compile Include="Code\Language\LanguageFile.vb" />
     <Compile Include="Code\Language\LanguageItem.vb" />
+    <Compile Include="Code\Language\LanguageItemList.vb" />
     <Compile Include="Code\MenuAction.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
@@ -400,9 +401,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ICSharpCode.SharpZipLib.dll" />
-    <Content Include="Resources\Français\Language.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Settings.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
