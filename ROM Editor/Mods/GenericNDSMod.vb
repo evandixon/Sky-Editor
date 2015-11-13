@@ -10,6 +10,9 @@ Namespace Mods
         Public Property DependenciesBefore As List(Of String)
         Public Property DependenciesAfter As List(Of String)
         Public Property Version As String
+        Public Sub New()
+            Version = "1.0.0"
+        End Sub
     End Class
     Public Class GenericMod
         Inherits ObjectFile(Of ModSourceContainer)
