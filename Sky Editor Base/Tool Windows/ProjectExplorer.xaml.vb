@@ -142,6 +142,9 @@ Public Class ProjectExplorer
             w.AddGames(games.Keys)
             If w.ShowDialog Then
                 Dim file As iSavable = games(w.SelectedGame).GetConstructor({}).Invoke({})
+                If TypeOf file Is iCreatableFile Then
+                    DirectCast(file, iCreatableFile).CreateFile(w.SelectedName)
+                End If
                 Dim path = SelectedPath()
                 Dim name = w.SelectedName
                 Await Task.Run(New Action(Sub()
