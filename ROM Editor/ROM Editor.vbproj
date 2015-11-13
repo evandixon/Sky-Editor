@@ -116,6 +116,7 @@
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
     <Compile Include="Generic3DSModProject.vb" />
+    <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
     <Compile Include="Mods\KaomadoMod.vb" />
