@@ -92,12 +92,12 @@ Public Class Form1
 
                 'Move to a temporary directory (so swapping files works)
                 For Each file In ModDetails.ToRename
-                    MoveFile(IO.Path.Combine(ROMDirectory, file.Key.Trim("\")), IO.Path.Combine(renameTemp, file.Key.Trim("\")), True)
+                    CopyFile(IO.Path.Combine(ROMDirectory, file.Key.Trim("\")), IO.Path.Combine(renameTemp, file.Key.Trim("\")), True)
                 Next
 
                 'Rename the things
                 For Each file In ModDetails.ToRename
-                    MoveFile(IO.Path.Combine(renameTemp, file.Key.Trim("\")), IO.Path.Combine(ROMDirectory, file.Value.Trim("\")), True)
+                    CopyFile(IO.Path.Combine(renameTemp, file.Key.Trim("\")), IO.Path.Combine(ROMDirectory, file.Value.Trim("\")), True)
                 Next
             End If
 
@@ -336,9 +336,11 @@ ShowSaveDialogNDS: If o.ShowDialog = DialogResult.OK Then
                            p.WaitForExit()
                        End Sub)
     End Function
-    Public Shared Sub MoveFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
+    Public Shared Sub CopyFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
+        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(NewFilename)) Then
+            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(NewFilename))
+        End If
         IO.File.Copy(OriginalFilename, NewFilename, Overwrite)
-        IO.File.Delete(OriginalFilename)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
