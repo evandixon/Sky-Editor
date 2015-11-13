@@ -4,6 +4,20 @@ Imports System.Text.RegularExpressions
 Namespace Utilities
 
     Public Class ReflectionHelpers
+        Public Class TypeInheritanceDepthComparer
+            Implements IComparer(Of Type)
+
+            Public Function Compare(x As Type, y As Type) As Integer Implements IComparer(Of Type).Compare
+                Return GetInheritanceDepth(x).CompareTo(GetInheritanceDepth(y))
+            End Function
+            Public Function GetInheritanceDepth(T As Type) As Integer
+                If Not T = GetType(Object) Then
+                    Return 1 + GetInheritanceDepth(T.BaseType)
+                Else
+                    Return 0
+                End If
+            End Function
+        End Class
         Private Shared Function CustomAssemblyResolver(Name As AssemblyName) As Assembly
             Dim results = From a In AppDomain.CurrentDomain.GetAssemblies Where a.FullName = Name.FullName
 
