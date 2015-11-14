@@ -3,13 +3,8 @@ Imports ROMEditor.FileFormats
 Imports ROMEditor.Roms
 
 Public Class PersonalityTest
-    Inherits ObjectTab
+    Inherits ObjectControl(Of PersonalityTestContainer)
     Private Property ReportModified As Boolean
-    Public Overrides ReadOnly Property SupportedTypes As Type()
-        Get
-            Return {GetType(PersonalityTestContainer), GetType(ObjectFile(Of PersonalityTestContainer))}
-        End Get
-    End Property
 
     Public Overrides Sub RefreshDisplay()
         ReportModified = False
@@ -304,7 +299,7 @@ Public Class PersonalityTest
 
     Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         ReportModified = False
-        Me.Header = "Personality Test"
+        'Me.Header = "Personality Test"
         PluginHelper.TranslateForm(Me)
         For Each count In SkyEditor.Lists.SkyPokemon.Keys
             Dim item As String = SkyEditor.Lists.SkyPokemon(count)

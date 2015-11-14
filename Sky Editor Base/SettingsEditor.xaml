@@ -10,6 +10,7 @@
         <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="77,14,0,0" VerticalAlignment="Top" Width="120"/>
         <Label x:Name="lblLanguage" Content="Language" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="chbDebugLanguagePlaceholders" Content="Enable Debug Language Placeholders" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chbVerbose" Content="Enable Verbose Output" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label" Content="Changes will not be applied until the program has been restarted." HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>
     </Grid>
 </local:ObjectControl>

@@ -22,7 +22,16 @@ Public Class ObjectFile(Of T)
 
     Public Property OriginalFilename As String Implements iOnDisk.Filename
 
-    Public Property Name As String Implements iNamed.Name
+    Public ReadOnly Property Name As String Implements iNamed.Name
+        Get
+            If String.IsNullOrEmpty(OriginalFilename) Then
+                Return _name
+            Else
+                Return IO.Path.GetFileName(OriginalFilename)
+            End If
+        End Get
+    End Property
+    Dim _name As String
 
 #Region "Constructors"
     Public Sub New()
@@ -37,6 +46,7 @@ Public Class ObjectFile(Of T)
     Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
         If GetType(T).GetConstructor({}) IsNot Nothing Then
             ContainedObject = GetType(T).GetConstructor({}).Invoke({})
+            _name = Name
         End If
     End Sub
 

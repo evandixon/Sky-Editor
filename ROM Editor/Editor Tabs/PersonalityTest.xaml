@@ -1,4 +1,4 @@
-﻿<local:ObjectTab x:Class="PersonalityTest"
+﻿<local:ObjectControl x:Class="PersonalityTest" x:TypeArguments="ff:PersonalityTestContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -195,7 +195,7 @@
                     <CheckBox x:Name="chbPartner21" Content="Female" Height="21" VerticalContentAlignment="Center" />
                 </UniformGrid>
             </TabItem>
-            <TabItem Header="Text">
+            <TabItem Header="Text" Visibility="Collapsed">
                 <ScrollViewer>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -337,4 +337,4 @@
             </TabItem>
         </TabControl>
     </Grid>
-</local:ObjectTab>
+</local:ObjectControl>

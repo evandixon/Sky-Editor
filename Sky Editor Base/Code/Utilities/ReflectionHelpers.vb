@@ -19,7 +19,7 @@ Namespace Utilities
             End Function
         End Class
         Private Shared Function CustomAssemblyResolver(Name As AssemblyName) As Assembly
-            Dim results = From a In AppDomain.CurrentDomain.GetAssemblies Where a.FullName = Name.FullName
+            Dim results = From a In AppDomain.CurrentDomain.GetAssemblies Where a.GetName.Name = Name.Name
 
             If results.Count > 0 Then
                 Return results.First

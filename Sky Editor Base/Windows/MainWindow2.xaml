@@ -47,15 +47,15 @@
                     </ad:LayoutAnchorablePaneGroup>
                 </ad:LayoutPanel>
 
-                <!--<ad:LayoutRoot.BottomSide>
+                <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output" IsVisible="False">
-                                <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Visibility="Collapsed"/>
+                                <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.BottomSide>-->
+                </ad:LayoutRoot.BottomSide>
             </ad:LayoutRoot>
         </ad:DockingManager>
         <StatusBar Height="34" VerticalAlignment="Bottom">

@@ -12,6 +12,7 @@
         comboBox.SelectedItem = EditingItem.Settings.CurrentLanguage
 
         chbDebugLanguagePlaceholders.IsChecked = EditingItem.Settings.DebugLanguagePlaceholders
+        chbVerbose.IsChecked = EditingItem.Settings.VerboseOutput
     End Sub
 
     Public Overrides Sub UpdateObject()
@@ -19,6 +20,7 @@
 
         EditingItem.Settings.DebugLanguagePlaceholders = chbDebugLanguagePlaceholders.IsChecked
         EditingItem.Settings.CurrentLanguage = comboBox.SelectedItem
+        EditingItem.Settings.VerboseOutput = chbVerbose.IsChecked
     End Sub
 
     Private Sub chbDebugLanguagePlaceholders_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked

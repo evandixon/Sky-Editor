@@ -166,7 +166,12 @@ Public Class MainWindow2
     End Sub
 
     Private Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
-        _manager.CurrentProject.Build()
+        Try
+            _manager.CurrentProject.Build()
+        Catch ex As Exception
+            Console.WriteLine(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
+            PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
+        End Try
     End Sub
 
     Private Sub menuRun_Click(sender As Object, e As RoutedEventArgs) Handles menuRun.Click
@@ -196,7 +201,7 @@ Public Class MainWindow2
         TranslateControls()
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
-        ''AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
+        AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
 
     End Sub
     Private Sub TranslateControls()
@@ -236,16 +241,16 @@ Public Class MainWindow2
                                          progressBar.Value = e.Progress ' * 100
                                      End Sub))
     End Sub
-    'Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
-    '    If Not e.Type = PluginHelper.LineType.ConsoleOutput Then
-    '        '_queuedConsoleLines.Enqueue(e)
-    '        Dispatcher.InvokeAsync(New Action(Sub()
-    '                                              txtOutput.AppendText(e.Line)
-    '                                              txtOutput.AppendText(vbCrLf)
-    '                                              txtOutput.ScrollToEnd()
-    '                                          End Sub))
-    '    End If
-    'End Sub
+    Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
+        If Not e.Type = PluginHelper.LineType.ConsoleOutput OrElse SettingsManager.Instance.Settings.VerboseOutput Then
+            '_queuedConsoleLines.Enqueue(e)
+            Dispatcher.InvokeAsync(New Action(Sub()
+                                                  txtOutput.AppendText(e.Line)
+                                                  txtOutput.AppendText(vbCrLf)
+                                                  txtOutput.ScrollToEnd()
+                                              End Sub))
+        End If
+    End Sub
 
     Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
         RefreshBuildRunVisibility()

@@ -6,6 +6,7 @@ Public Class SettingsContainer
     Public Property UpdatePlugins As Boolean
     Public Property DebugLanguagePlaceholders As Boolean
     Public Property PluginUpdateUrl As String
+    Public Property VerboseOutput As Boolean
     Public Sub New()
         'Todo: load defaults from somewhere
         CurrentLanguage = "English"
@@ -13,6 +14,7 @@ Public Class SettingsContainer
         UpdatePlugins = True
         DebugLanguagePlaceholders = False
         PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4PluginsAlpha/plugins.json"
+        VerboseOutput = False
     End Sub
 End Class
 Public Class SettingsManager
