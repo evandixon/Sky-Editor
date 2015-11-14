@@ -165,12 +165,13 @@ Public Class MainWindow2
         OpenDocumentTab(SettingsManager.Instance, False)
     End Sub
 
-    Private Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
+    Private Async Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
         Try
-            _manager.CurrentProject.Build()
+            Await _manager.CurrentProject.BuildAsync()
         Catch ex As Exception
-            Console.WriteLine(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
+            MessageBox.Show(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
             PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
+            PluginHelper.SetLoadingStatus("Failed.", 0)
         End Try
     End Sub
 

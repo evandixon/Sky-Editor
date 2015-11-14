@@ -10,13 +10,22 @@ Public Class GenericFile
     Private _tempname As String
     Private _tempFilename As String
     Dim _fileReader As IO.FileStream
+    Dim _makeTempCopy As Boolean
 
 #Region "Constructors"
     Public Sub New(Filename As String)
+        _makeTempCopy = True
         OpenFile(Filename)
     End Sub
     Public Sub New()
-
+        _makeTempCopy = True
+    End Sub
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="MakeTempCopy">Whether or not to make a background copy of a file when opening a file.</param>
+    Public Sub New(MakeTempCopy As Boolean)
+        _makeTempCopy = MakeTempCopy
     End Sub
 #End Region
 
@@ -38,15 +47,20 @@ Public Class GenericFile
     ''' </summary>
     ''' <param name="Filename"></param>
     Public Overridable Sub OpenFile(Filename As String) ' Implements iOpenableFile.OpenFile
-        _tempname = Guid.NewGuid.ToString()
-        Me.OriginalFilename = Filename
-        If IO.File.Exists(Filename) Then
-            IO.File.Copy(Filename, PluginHelper.GetResourceName(_tempname & ".tmp"))
+        If _makeTempCopy Then
+            _tempname = Guid.NewGuid.ToString()
+            Me.OriginalFilename = Filename
+            If IO.File.Exists(Filename) Then
+                IO.File.Copy(Filename, PluginHelper.GetResourceName(_tempname & ".tmp"))
+            Else
+                IO.File.WriteAllText(PluginHelper.GetResourceName(_tempname & ".tmp"), "")
+            End If
+            _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
+            Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
         Else
-            IO.File.WriteAllText(PluginHelper.GetResourceName(_tempname & ".tmp"), "")
+            Me.OriginalFilename = Filename
+            Me.Filename = Filename
         End If
-        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
     End Sub
 
 #Region "GenericFile Support"

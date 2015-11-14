@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports System.Threading.Tasks
 Imports System.Web.Script.Serialization
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Utilities
@@ -269,7 +270,11 @@ Public Class Project
     Public Overridable Sub Opened()
 
     End Sub
-
+    Public Overridable Async Function BuildAsync() As Task
+        Await Task.Run(New Action(Sub()
+                                      Build()
+                                  End Sub))
+    End Function
     Public Overridable Sub Build()
 
     End Sub

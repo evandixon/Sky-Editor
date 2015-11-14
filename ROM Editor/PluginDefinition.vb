@@ -23,6 +23,27 @@ Public Class PluginDefinition
     '    Return out
     'End Function
 
+    Public Function AutoDetect3dsRom(File As GenericFile) As Type
+        If File.Length > &H115A Then
+            Dim e As New System.Text.ASCIIEncoding
+            If e.GetString(File.RawData(&H100, 4)) = "NCSD" Then 'This is a 3DS ROM
+                Dim r As New Generic3DSRom(File.OriginalFilename)
+                Select Case r.GameCode
+                    Case "APDE"
+                        Return GetType(GatesToInfinityRom)
+                    Case "ECLE"
+                        Return GetType(ORASRom)
+                    Case Else
+                        Return GetType(Generic3DSRom)
+                End Select
+            Else
+                Return Nothing
+            End If
+        Else
+            Return Nothing
+        End If
+    End Function
+
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
             Return PluginHelper.GetLanguageItem("RomEditorCredits", "Rom Editor Credits:\n     psy_commando (Pokemon portraits, most of the research)\n     Grovyle91 (Language strings)\n     evandixon (Personality test, bgp files)")
@@ -52,6 +73,8 @@ Public Class PluginDefinition
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
+
+        Manager.RegisterFileTypeDetector(AddressOf AutoDetect3dsRom)
 
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
 

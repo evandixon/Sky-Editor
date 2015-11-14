@@ -28,10 +28,12 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://dl.uniquegeeks.net/SkyEditor4Alpha/</InstallUrl>
+    <SupportUrl>http://projectpokemon.org/forums/showthread.php%3f29465-Sky-Editor-The-first-save-editor-for-Pokemon-Mystery-Dungeon-Explorers-of-Sky</SupportUrl>
+    <ProductName>Sky Editor</ProductName>
     <MinimumRequiredVersion>4.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

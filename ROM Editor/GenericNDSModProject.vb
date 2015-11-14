@@ -167,7 +167,7 @@ Public Class GenericNDSModProject
         Return Task.CompletedTask
     End Function
 
-    Public Overrides Async Sub Build()
+    Public Overrides Async Function BuildAsync() As Task
         PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Building mod pack."))
         MyBase.Build()
         If IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), PluginHelper.GetLanguageItem("ModPack Files"))) Then
@@ -400,7 +400,7 @@ Public Class GenericNDSModProject
         Await ApplyPatchAsync()
 
         PluginHelper.StopLoading()
-    End Sub
+    End Function
     Public Overrides Sub Run()
         MyBase.Run()
         If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename)) Then

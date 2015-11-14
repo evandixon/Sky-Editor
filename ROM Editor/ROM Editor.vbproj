@@ -125,6 +125,7 @@
     <Compile Include="FileFormats\waza_p.vb" />
     <Compile Include="GenericNDSModProject.vb" />
     <Compile Include="DeSmuMe.vb" />
+    <Compile Include="Mods\pk3DSMod.vb" />
     <Compile Include="Mods\SkyBackMod.vb" />
     <Compile Include="Mods\SkyStarterMod.vb" />
     <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
@@ -151,10 +152,13 @@
     </Compile>
     <Compile Include="Portrait.vb" />
     <Compile Include="ROM.vb" />
+    <Compile Include="Roms\GatesToInfinityRom.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
+    <Compile Include="Roms\ORASRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
+    <Compile Include="Roms\XYRom.vb" />
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="Windows\RomSelector.xaml.vb">
       <DependentUpon>RomSelector.xaml</DependentUpon>

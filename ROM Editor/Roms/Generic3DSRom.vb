@@ -9,14 +9,19 @@ Namespace Roms
             Return "*.3ds"
         End Function
 
-        Public Shared Shadows Function IsFileOfType(File As GenericFile) As Boolean
-            If File.Length > 104 Then
-                Dim e As New System.Text.ASCIIEncoding
-                Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
-            Else
-                Return False
-            End If
-        End Function
+        'Public Shared Shadows Function IsFileOfType(File As GenericFile) As Boolean
+        '    If File.Length > 104 Then
+        '        Dim e As New System.Text.ASCIIEncoding
+        '        Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
+        '    Else
+        '        Return False
+        '    End If
+        'End Function
+        Public ReadOnly Property GameCode As String
+            Get
+                Return BitConverter.ToString(RawData(&H1156, 4), 0, 4).Trim
+            End Get
+        End Property
 
         Public Async Function Unpack(Optional DestinationDirectory As String = Nothing) As Task Implements iPackedRom.Unpack
             If DestinationDirectory Is Nothing Then
@@ -51,7 +56,7 @@ Namespace Roms
         End Function
 
         Public Sub New()
-            MyBase.New
+            MyBase.New(False)
         End Sub
 
         Public Sub New(Filename As String)

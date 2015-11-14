@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PublishUrlHistory>ftp://dl.uniquegeeks.net/SkyEditor4Alpha/|ftp://dl.uniquegeeks.net/SkyEditorBeta/|publish\</PublishUrlHistory>
     <InstallUrlHistory>http://dl.uniquegeeks.net/SkyEditor4Alpha/|http://dl.uniquegeeks.net/SkyEditorBeta/</InstallUrlHistory>
-    <SupportUrlHistory />
+    <SupportUrlHistory>http://projectpokemon.org/forums/showthread.php%3f29465-Sky-Editor-The-first-save-editor-for-Pokemon-Mystery-Dungeon-Explorers-of-Sky</SupportUrlHistory>
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
@@ -16,7 +16,6 @@
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>-console</StartArguments>
   </PropertyGroup>
 </Project>
