@@ -171,7 +171,7 @@ Public Class MainWindow2
         Catch ex As Exception
             MessageBox.Show(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
             PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
-            PluginHelper.SetLoadingStatus("Failed.", 0)
+            PluginHelper.SetLoadingStatusFailed
         End Try
     End Sub
 

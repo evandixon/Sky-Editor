@@ -360,6 +360,9 @@ Public Class PluginHelper
     Public Shared Sub SetLoadingStatusFinished()
         RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
     End Sub
+    Public Shared Sub SetLoadingStatusFailed()
+        SetLoadingStatus(PluginHelper.GetLanguageItem("Failed"), 0)
+    End Sub
 #End Region
 
 #Region "Console Writeline"
