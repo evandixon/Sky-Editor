@@ -50,6 +50,10 @@ Namespace Roms
             Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ctrtool.exe"), Arguments)
         End Function
 
+        Public Sub New()
+            MyBase.New
+        End Sub
+
         Public Sub New(Filename As String)
             MyBase.New(Filename)
         End Sub
