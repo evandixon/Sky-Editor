@@ -239,7 +239,7 @@ Namespace Redistribution
                 ElseIf p.Type = PluginInfo.PluginType.Language
                     With Language.LanguageManager.Instance
                         .EnsureLanguageLoaded(p.Name)
-                        If CInt(p.VersionString) > .Languages(p.Name).ContainedObject.Revision Then
+                        If CInt(p.VersionString) <= .Languages(p.Name).ContainedObject.Revision Then
                             outdated = False
                         End If
                     End With
