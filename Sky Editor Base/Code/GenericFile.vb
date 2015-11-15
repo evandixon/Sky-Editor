@@ -11,14 +11,22 @@ Public Class GenericFile
     Private _tempFilename As String
     Dim _fileReader As IO.FileStream
     Dim _makeTempCopy As Boolean
+    Dim _openReadOnly As Boolean
 
 #Region "Constructors"
     Public Sub New(Filename As String)
         _makeTempCopy = True
+        _openReadOnly = False
+        OpenFile(Filename)
+    End Sub
+    Public Sub New(Filename As String, OpenReadOnly As Boolean)
+        _makeTempCopy = Not OpenReadOnly
+        _openReadOnly = OpenReadOnly
         OpenFile(Filename)
     End Sub
     Public Sub New()
         _makeTempCopy = True
+        _openReadOnly = False
     End Sub
     ''' <summary>
     ''' 
@@ -88,7 +96,11 @@ Public Class GenericFile
     Protected ReadOnly Property FileReader As IO.FileStream
         Get
             If _fileReader Is Nothing Then
-                _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
+                If _openReadOnly Then
+                    _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.Read, IO.FileShare.Read)
+                Else
+                    _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
+                End If
             End If
             Return _fileReader
         End Get

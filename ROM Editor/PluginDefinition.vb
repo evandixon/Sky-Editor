@@ -23,24 +23,26 @@ Public Class PluginDefinition
     '    Return out
     'End Function
 
-    Public Function AutoDetect3dsRom(File As GenericFile) As Type
+    Public Function AutoDetect3dsRom(File As GenericFile) As Type()
         If File.Length > &H115A Then
             Dim e As New System.Text.ASCIIEncoding
             If e.GetString(File.RawData(&H100, 4)) = "NCSD" Then 'This is a 3DS ROM
                 Dim r As New Generic3DSRom(File.OriginalFilename)
                 Select Case r.GameCode
                     Case "APDE"
-                        Return GetType(GatesToInfinityRom)
-                    Case "ECLE"
-                        Return GetType(ORASRom)
+                        Return {GetType(GatesToInfinityRom)}
+                    Case "ECLA"
+                        Return {GetType(ORASRom)}
+                    Case "ECRA"
+                        Return {GetType(ORASRom)}
                     Case Else
-                        Return GetType(Generic3DSRom)
+                        Return {GetType(Generic3DSRom)}
                 End Select
             Else
-                Return Nothing
+                Return {}
             End If
         Else
-            Return Nothing
+            Return {}
         End If
     End Function
 

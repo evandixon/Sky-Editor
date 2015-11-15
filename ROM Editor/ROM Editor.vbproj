@@ -120,7 +120,7 @@
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
     <Compile Include="Mods\KaomadoMod.vb" />
-    <Compile Include="Mods\GenericNDSMod.vb" />
+    <Compile Include="Mods\GenericMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
     <Compile Include="GenericNDSModProject.vb" />
@@ -214,6 +214,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\ndstool.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\pk3DS.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\pokenames.txt">

@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Reflection
 Imports System.Threading.Tasks
 Imports System.Timers
 Imports SkyEditorBase
@@ -191,7 +192,7 @@ Public Class MainWindow2
         _projectExplorer = New ProjectExplorer(_manager)
         toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
 
-        Me.Title = PluginHelper.GetLanguageItem("Sky Editor")
+        Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Alpha " & Assembly.GetExecutingAssembly.GetName.Version.ToString
 
         _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
 

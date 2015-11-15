@@ -117,6 +117,9 @@ Public Class PluginManager
                     Next
                 Next
             Next
+
+            OpenableFiles.Add(GetType(ExecutableFile))
+
             RegisterFileTypeDetector(AddressOf Me.DetectFileType)
             RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
 
@@ -502,7 +505,7 @@ Public Class PluginManager
     ''' <param name="Filename"></param>
     ''' <returns></returns>
     Public Function OpenFile(Filename As String) As Object
-        Return OpenFile(New GenericFile(Filename))
+        Return OpenFile(New GenericFile(Filename, True))
     End Function
     ''' <summary>
     ''' Using the given file, auto-detects the file type and creates an instance of an appropriate class.
@@ -618,11 +621,19 @@ Public Class PluginManager
 
     Public Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
         Dim matches As New List(Of Type)
-        For Each item In GenericFilesWithTypeValidator
-            If item.GetMethod("IsFileOfType").Invoke(Nothing, {File}) Then
-                matches.Add(item)
-            End If
-        Next
+
+        If ExecutableFile.IsExeFile(File.OriginalFilename) Then
+            matches.Add(GetType(ExecutableFile))
+        End If
+
+        If matches.Count = 0 Then
+            For Each item In GenericFilesWithTypeValidator
+                If item.GetMethod("IsFileOfType").Invoke(Nothing, {File}) Then
+                    matches.Add(item)
+                End If
+            Next
+        End If
+
         If matches.Count = 0 Then
             Return Nothing
         Else
@@ -668,7 +679,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Public Shared Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of Type)
-        If File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
+        If File.Length > 0 AndAlso File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
             Dim result = TryGetObjectFileType(File.OriginalFilename)
             If result Is Nothing Then
                 Return Nothing

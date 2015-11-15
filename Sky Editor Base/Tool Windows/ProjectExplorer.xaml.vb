@@ -93,7 +93,12 @@ Public Class ProjectExplorer
 
     Private Sub tvFiles_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles tvFiles.MouseDoubleClick
         If tvFiles.SelectedItem IsNot Nothing AndAlso _manager.CurrentProject.Files.ContainsKey(tvFiles.SelectedItem.Tag) Then
-            RaiseEvent FileOpen(Me, New EventArguments.FileOpenedEventArguments() With {.ProjectPath = tvFiles.SelectedItem.Tag, .File = _manager.CurrentProject.Files(tvFiles.SelectedItem.Tag)})
+            Dim file = _manager.CurrentProject.Files(tvFiles.SelectedItem.Tag)
+            If TypeOf file Is ExecutableFile Then
+                DirectCast(file, ExecutableFile).Start()
+            Else
+                RaiseEvent FileOpen(Me, New EventArguments.FileOpenedEventArguments() With {.ProjectPath = tvFiles.SelectedItem.Tag, .File = file})
+            End If
         End If
     End Sub
 

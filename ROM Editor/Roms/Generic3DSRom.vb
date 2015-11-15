@@ -19,7 +19,7 @@ Namespace Roms
         'End Function
         Public ReadOnly Property GameCode As String
             Get
-                Return BitConverter.ToString(RawData(&H1156, 4), 0, 4).Trim
+                Return Text.Encoding.UTF8.GetString(RawData(&H1156, 4), 0, 4).Trim
             End Get
         End Property
 

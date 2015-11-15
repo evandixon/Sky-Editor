@@ -33,7 +33,7 @@
     <MinimumRequiredVersion>4.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -193,6 +193,7 @@
     <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="Code\EventArguments\FileOpenedEventArgs.vb" />
     <Compile Include="Code\EventArguments\MenuActionAddedEventArgs.vb" />
+    <Compile Include="Code\ExecutableFile.vb" />
     <Compile Include="Code\Interfaces\iCreatableFile.vb" />
     <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Code\Interfaces\iGenericFile.vb" />
