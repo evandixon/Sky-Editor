@@ -401,6 +401,111 @@ Public Class GenericNDSModProject
 
         PluginHelper.StopLoading()
     End Function
+
+    Public Overrides Async Function ArchiveAsync() As Task
+        Dim arcModsDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Archive\Mods")
+        Dim arcDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Archive")
+        Dim modDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Mods")
+        Dim zipName As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Archive.zip")
+        Dim baseDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
+
+        'Copy the files
+        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Deleting existing archive..."))
+        Await Task.Run(New Action(Sub()
+                                      If IO.Directory.Exists(arcModsDir) Then
+                                          IO.Directory.Delete(arcModsDir, True)
+                                      End If
+                                      IO.Directory.CreateDirectory(arcModsDir)
+                                  End Sub))
+
+        'Generate ROM info
+        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Analyzing ROM..."))
+        Await Task.Run(New Action(Sub()
+                                      Dim report As New Text.StringBuilder
+
+                                      'Get the ROM header
+                                      If IO.File.Exists(IO.Path.Combine(baseDir, "header.bin")) Then
+                                          Using f As New GenericFile(IO.Path.Combine(baseDir, "header.bin"))
+                                              report.AppendLine("NDS ROM Header: " & Text.Encoding.ASCII.GetString(f.RawData(0, 18), 0, 18))
+                                          End Using
+                                      Else
+                                          report.AppendLine("NDS ROM Header not found.")
+                                      End If
+
+                                      'MD5 Calculation
+                                      For Each item In IO.Directory.GetFiles(baseDir, "*", IO.SearchOption.AllDirectories)
+                                              Dim m = MD5.Create()
+                                              Dim h = m.ComputeHash(New IO.FileStream(item, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite))
+                                              report.Append(item.Replace(baseDir, "") & ": ")
+                                              For Each b In h
+                                                  report.Append(Hex(b).PadLeft(2, "0"))
+                                              Next
+                                              report.Append(vbCrLf)
+                                          Next
+                                          IO.File.WriteAllText(IO.Path.Combine(arcDir, "MD5 Report.txt"), report.ToString)
+                                  End Sub))
+
+
+        'Find files and directories to copy
+        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Preparing to copy files..."))
+        Dim toCopy As New List(Of String)
+
+        Dim modFiles = GetFiles(GetType(Mods.GenericMod))
+        For count = 0 To modFiles.Count - 1
+            For Each item In DirectCast(modFiles(count), Mods.GenericMod).FilesToArchive
+                toCopy.Add(IO.Path.Combine(IO.Path.GetFileNameWithoutExtension(DirectCast(modFiles(count), Mods.GenericMod).Name), item))
+            Next
+        Next
+
+        'Convert to a list of FILES to be copied (so things are more async)
+        Dim filesToCopy As New List(Of String)
+        For Each item In toCopy
+            Dim source As String = IO.Path.Combine(modDir, item)
+            If IO.File.Exists(source) Then
+                filesToCopy.Add(source)
+            ElseIf IO.Directory.Exists(source)
+                For Each f In IO.Directory.GetFiles(source, "*", IO.SearchOption.AllDirectories)
+                    filesToCopy.Add(f)
+                Next
+            End If
+        Next
+
+        Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
+        Await a.RunForEach(Sub(Item As String)
+                               Dim source As String = IO.Path.Combine(modDir, Item)
+                               'If IO.File.Exists(source) Then
+                               Dim dest As String = Item.Replace(modDir, arcModsDir)
+                               If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                   IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                               End If
+                               IO.File.Copy(source, dest, True)
+                               'ElseIf IO.Directory.Exists(source)
+                               '    For Each f In IO.Directory.GetFiles(source, "*", IO.SearchOption.AllDirectories)
+                               '        Dim dest As String = f.Replace(modDir, arcDir)
+                               '        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                               '            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                               '        End If
+                               '        IO.File.Copy(f, dest, True)
+                               '    Next
+                               'End If
+                           End Sub, filesToCopy)
+
+        'Zip the project
+        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Zipping the project..."))
+
+        Await Task.Run(New Action(Sub()
+                                      If IO.File.Exists(zipName) Then
+                                          IO.File.Delete(zipName)
+                                      End If
+                                      Utilities.Zip.Zip(arcDir, zipName)
+                                  End Sub))
+
+        PluginHelper.SetLoadingStatusFinished()
+    End Function
+    Public Overrides Function CanArchive() As Boolean
+        Return True
+    End Function
+
     Public Overrides Sub Run()
         MyBase.Run()
         If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename)) Then

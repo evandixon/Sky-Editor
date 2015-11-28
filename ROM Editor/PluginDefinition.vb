@@ -35,6 +35,8 @@ Public Class PluginDefinition
                         Return {GetType(ORASRom)}
                     Case "ECRA"
                         Return {GetType(ORASRom)}
+                    Case "BPXE"
+                        Return {GetType(PSMDRom)}
                     Case Else
                         Return {GetType(Generic3DSRom)}
                 End Select
@@ -81,6 +83,7 @@ Public Class PluginDefinition
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
 
         Manager.RegisterConsoleCommand("import-language", AddressOf ConsoleCommands.ImportSkyLanguageString)
+        Manager.RegisterConsoleCommand("psmd-soundtrack", AddressOf ConsoleCommands.CreatePSMDSoundtrack)
     End Sub
 
     Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

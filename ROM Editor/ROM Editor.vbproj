@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="ConsoleCommands.vb" />
     <Compile Include="DSIconTool.vb" />
+    <Compile Include="ffmpeg.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
@@ -126,6 +127,7 @@
     <Compile Include="GenericNDSModProject.vb" />
     <Compile Include="DeSmuMe.vb" />
     <Compile Include="Mods\pk3DSMod.vb" />
+    <Compile Include="Mods\PMD3DLuaMod.vb" />
     <Compile Include="Mods\SkyBackMod.vb" />
     <Compile Include="Mods\SkyStarterMod.vb" />
     <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
@@ -157,9 +159,11 @@
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
     <Compile Include="Roms\ORASRom.vb" />
+    <Compile Include="Roms\PSMDRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
     <Compile Include="Roms\XYRom.vb" />
     <Compile Include="SkyRomProject.vb" />
+    <Compile Include="vgmstream.vb" />
     <Compile Include="Windows\RomSelector.xaml.vb">
       <DependentUpon>RomSelector.xaml</DependentUpon>
     </Compile>
@@ -183,12 +187,34 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
     <None Include="ROM Editor\desmume-0.9.11-win32.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ROM Editor\desmume-0.9.11-win64.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="ROM Editor\ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\PSMD English Soundtrack.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\g7221-siren7_14_G719_license_agreement.doc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\libogg-1.1.3.COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\libvorbis-1.2.0.COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\mpg123-1.4.3.COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
@@ -230,6 +256,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\ppmd_unpx.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\g7221-gen-lic.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\in_vgmstream.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\libg7221_decode.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\libmpg123-0.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\libvorbis.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\vgmstream\test.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\xdelta\xdelta3.exe">

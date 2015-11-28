@@ -171,11 +171,11 @@ Public Class PluginHelper
         p.BeginOutputReadLine()
 
         If ShowLoadingWindow Then
-            StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
+            SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
             p.WaitForExit()
 
-            StopLoading()
+
             RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
         Else
             p.WaitForExit()
@@ -222,6 +222,7 @@ Public Class PluginHelper
         End If
         Return True
     End Function
+
     Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
         Return Await Task.Run(Function()
                                   p.WaitForExit()

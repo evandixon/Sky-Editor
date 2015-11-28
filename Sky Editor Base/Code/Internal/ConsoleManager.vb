@@ -5,23 +5,23 @@
 Imports System.IO
 Imports System.Security
 Imports System.Runtime.InteropServices
-Namespace Language
-    <SuppressUnmanagedCodeSecurity> _
+Namespace Internal
+    <SuppressUnmanagedCodeSecurity>
     Friend NotInheritable Class ConsoleManager
         Friend Class NativeMethods
-            <DllImport(Kernel32_DllName)> _
+            <DllImport(Kernel32_DllName)>
             Friend Shared Function AllocConsole() As Boolean
             End Function
 
-            <DllImport(Kernel32_DllName)> _
+            <DllImport(Kernel32_DllName)>
             Friend Shared Function FreeConsole() As Boolean
             End Function
 
-            <DllImport(Kernel32_DllName)> _
+            <DllImport(Kernel32_DllName)>
             Friend Shared Function GetConsoleWindow() As IntPtr
             End Function
 
-            <DllImport(Kernel32_DllName)> _
+            <DllImport(Kernel32_DllName)>
             Friend Shared Function GetConsoleOutputCP() As Integer
             End Function
         End Class

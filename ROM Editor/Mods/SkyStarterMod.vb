@@ -18,6 +18,10 @@ Namespace Mods
                     IO.Path.Combine("data", "MESSAGE", "text_j.str")}
         End Function
 
+        Public Overrides Function FilesToArchive() As IEnumerable(Of String)
+            Return {"Languages", "Starter Pokemon"}
+        End Function
+
         Public Overrides Sub Initialize(CurrentProject As Project)
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
 

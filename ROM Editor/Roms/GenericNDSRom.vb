@@ -17,7 +17,7 @@ Namespace Roms
         End Sub
 
         Sub New(Filename As String)
-            MyBase.New(Filename)
+            MyBase.New(Filename, True)
             _unpackTask = Nothing
         End Sub
         Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile

@@ -4,6 +4,7 @@ Imports System.Threading.Tasks
 Imports System.Timers
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Language
 Imports SkyEditorBase.Redistribution
 Imports Xceed.Wpf.AvalonDock.Layout
 
@@ -172,12 +173,27 @@ Public Class MainWindow2
         Catch ex As Exception
             MessageBox.Show(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
             PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
-            PluginHelper.SetLoadingStatusFailed
+            PluginHelper.SetLoadingStatusFailed()
+        End Try
+    End Sub
+
+    Private Async Sub menuArchive_Click(sender As Object, e As RoutedEventArgs) Handles menuArchive.Click
+        Try
+            Await _manager.CurrentProject.ArchiveAsync()
+        Catch ex As Exception
+            MessageBox.Show(PluginHelper.GetLanguageItem("Failed to archive project.  See output for details."))
+            PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
+            PluginHelper.SetLoadingStatusFailed()
         End Try
     End Sub
 
     Private Sub menuRun_Click(sender As Object, e As RoutedEventArgs) Handles menuRun.Click
         _manager.CurrentProject.Run()
+    End Sub
+
+    Private Sub menuConsole_Click(sender As Object, e As RoutedEventArgs) Handles menuConsole.Click
+        Internal.ConsoleManager.Show()
+        ConsoleMain(_manager)
     End Sub
 
 #End Region
@@ -269,6 +285,11 @@ Public Class MainWindow2
         Else
             menuRun.Visibility = Visibility.Collapsed
         End If
+        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanArchive Then
+            menuArchive.Visibility = Visibility.Visible
+        Else
+            menuArchive.Visibility = Visibility.Collapsed
+        End If
     End Sub
     Private Sub ShowWelcomePage()
         Dim l As New LayoutDocument
@@ -304,4 +325,6 @@ Public Class MainWindow2
         ' Add any initialization after the InitializeComponent() call.
         _manager = Manager
     End Sub
+
+
 End Class

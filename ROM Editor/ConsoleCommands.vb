@@ -73,7 +73,90 @@ Public Class ConsoleCommands
         IO.File.WriteAllLines(locFile, LocationLines.ToList)
         Console.WriteLine("Saved Locations.")
 
-
         Console.WriteLine("Done!")
     End Sub
+
+    Public Shared Async Function CreatePSMDSoundtrack(Manager As PluginManager, Arguments As String) As Task
+        'If current BaseRom is a PSMD Rom
+        If Manager.CurrentProject IsNot Nothing AndAlso TypeOf Manager.CurrentProject Is Generic3DSModProject AndAlso Manager.CurrentProject.Files.ContainsKey("BaseRom.3ds") AndAlso TypeOf Manager.CurrentProject.Files("BaseRom.3ds") Is Roms.PSMDRom Then
+            Console.WriteLine("Starting conversion...")
+
+            Dim sourceDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Manager.CurrentProject.Filename), "BaseRom RawFiles", "romfs", "sound", "stream")
+            Dim destDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Manager.CurrentProject.Filename), "soundtrack")
+
+            'Todo: do error checks on input file
+            Dim trackNames As New Dictionary(Of String, String)
+            If IO.File.Exists(PluginHelper.GetResourceName("PSMD English Soundtrack.txt")) Then
+                Dim lines = IO.File.ReadAllLines(PluginHelper.GetResourceName("PSMD English Soundtrack.txt"))
+                For Each item In lines
+                    Dim parts = item.Split("=".ToCharArray, 2)
+                    If parts.Count = 2 Then
+                        trackNames.Add(parts(0), parts(1))
+                    End If
+                Next
+            End If
+
+            If Not IO.Directory.Exists(destDir) Then
+                IO.Directory.CreateDirectory(destDir)
+            End If
+
+            For Each item In IO.Directory.GetFiles(destDir)
+                IO.File.Delete(item)
+            Next
+
+            Dim f As New SkyEditorBase.Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting streams..."))
+            Await f.RunForEach(Sub(Item As String)
+                                   Console.WriteLine("Converting " & Item & " to wav.")
+                                   Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
+
+                                   'Create the wav
+                                   Dim destinationWav = source.Replace(sourceDir, destDir).Replace("dspadpcm.bcstm", "wav")
+
+                                   Dim filename = IO.Path.GetFileNameWithoutExtension(destinationWav)
+
+                                   If trackNames.ContainsKey(filename) Then
+                                       destinationWav = destinationWav.Replace(filename, trackNames(filename).Replace(":", "").Replace("é", "e"))
+                                   End If
+
+                                   For Each c In "!?,".ToCharArray
+                                       destinationWav = destinationWav.Replace(c, "")
+                                   Next
+
+                                   Dim destinationMp3 = destinationWav.Replace(".wav", ".mp3")
+
+                                   vgmstream.RunVGMStreamSync(source, destinationWav)
+
+                                   'Convert to mp3
+                                   Console.WriteLine("Converting " & Item & " to mp3.")
+                                   ConvertToMp3(destinationWav, destinationMp3)
+
+                                   IO.File.Delete(destinationWav)
+
+                                   'Add ID3 tags
+                                   'Console.WriteLine("Tagging " & Item)
+                                   'Dim m As New Id3.Mp3File(destinationMp3, Id3.Mp3Permissions.ReadWrite)
+                                   'Dim t As New Id3.Id3Tag
+
+                                   't.Album.Value = "Pokémon Super Mystery Dungeon"
+                                   't.Artists.Value.Clear()
+                                   't.Artists.Value.Add("Chunsoft")
+
+                                   'Dim filenameParts = filename.Split(" ".ToCharArray, 2)
+                                   'If filenameParts.Count = 2 Then
+                                   '    If IsNumeric(filenameParts(0)) Then
+                                   '        t.Track.Value = CInt(filenameParts(0))
+                                   '    End If
+
+                                   '    t.Track.Value = filenameParts(1)
+                                   'End If
+
+                                   'm.WriteTag(t, 2, 3, Id3.WriteConflictAction.Replace)
+
+            End Sub, trackNames.Keys)
+
+            Console.WriteLine("Conversion complete!")
+        Else
+            Console.WriteLine("Unable To create the soundtrack.  Please load a 3DS Mod Project For Pokemon Super Mystery Dungeon, And try again.")
+        End If
+    End Function
 End Class

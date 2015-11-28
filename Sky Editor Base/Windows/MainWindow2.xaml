@@ -33,6 +33,8 @@
             </MenuItem>
             <MenuItem x:Name="menuBuild" Header="Build"/>
             <MenuItem x:Name="menuRun" Header="Run"/>
+            <MenuItem x:Name="menuArchive" Header="Archive"/>
+            <MenuItem x:Name="menuConsole" Header="Console"/>
         </Menu>
         <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,39">
             <ad:LayoutRoot>

@@ -12,6 +12,10 @@ Public Class SkyBackMod
         Return {IO.Path.Combine("data", "BACK")}
     End Function
 
+    Public Overrides Function FilesToArchive() As IEnumerable(Of String)
+        Return {"Backgrounds"}
+    End Function
+
     Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
         'Convert BACK
         Dim BACKdir As String = IO.Path.Combine(ModDirectory, "Backgrounds")

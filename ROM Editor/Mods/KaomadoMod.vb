@@ -20,6 +20,10 @@ Namespace Mods
             Await k.ApplyMissingPortraitFix(portraitDir)
         End Function
 
+        Public Overrides Function FilesToArchive() As IEnumerable(Of String)
+            Return {"Pokemon"}
+        End Function
+
         Public Overrides Async Function BuildAsync(CurrentProject As Project) As Task
             'Convert portraits
             If IO.Directory.Exists(IO.Path.Combine(ModDirectory, "Pokemon", "Portraits")) Then

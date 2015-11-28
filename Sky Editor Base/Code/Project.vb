@@ -93,6 +93,10 @@ Public Class Project
     Public Overridable Function CanRun() As Boolean
         Return PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("Run"))
     End Function
+
+    Public Overridable Function CanArchive() As Boolean
+        Return False
+    End Function
 #End Region
 
     Public Shared Function CreateProject(Name As String, Location As String, ProjectType As Type, Manager As PluginManager)
@@ -280,6 +284,16 @@ Public Class Project
     End Sub
 
     Public Overridable Sub Run()
+
+    End Sub
+
+    Public Overridable Async Function ArchiveAsync() As Task
+        Await Task.Run(New Action(Sub()
+                                      Archive()
+                                  End Sub))
+    End Function
+
+    Public Overridable Sub Archive()
 
     End Sub
 

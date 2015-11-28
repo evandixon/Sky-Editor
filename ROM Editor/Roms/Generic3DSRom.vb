@@ -60,7 +60,7 @@ Namespace Roms
         End Sub
 
         Public Sub New(Filename As String)
-            MyBase.New(Filename)
+            MyBase.New(Filename, True)
         End Sub
         Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)

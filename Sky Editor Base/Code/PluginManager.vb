@@ -167,6 +167,14 @@ Public Class PluginManager
     Public Property ConsoleCommandList As New Dictionary(Of String, ConsoleCommand)
 
     ''' <summary>
+    ''' Dictionary matching console commands to the relevant PluginManager.ConsoleCommand delegate.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property ConsoleCommandAsyncList As New Dictionary(Of String, ConsoleCommandAsync)
+
+    ''' <summary>
     ''' List of all the plugins' assembly names.
     ''' </summary>
     ''' <value></value>
@@ -245,6 +253,7 @@ Public Class PluginManager
 
 #Region "Delegates"
     Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
+    Delegate Function ConsoleCommandAsync(ByVal Manager As PluginManager, ByVal Argument As String) As Task
     <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
     Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
     Delegate Sub TypeSearchFound(TypeFound As Type)
@@ -256,6 +265,13 @@ Public Class PluginManager
             ConsoleCommandList = New Dictionary(Of String, ConsoleCommand)
         End If
         ConsoleCommandList.Add(CommandName, Command)
+        PluginHelper.Writeline("Registered console command """ & CommandName & """.")
+    End Sub
+    Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommandAsync)
+        If ConsoleCommandAsyncList Is Nothing Then
+            ConsoleCommandAsyncList = New Dictionary(Of String, ConsoleCommandAsync)
+        End If
+        ConsoleCommandAsyncList.Add(CommandName, Command)
         PluginHelper.Writeline("Registered console command """ & CommandName & """.")
     End Sub
 
@@ -516,7 +532,10 @@ Public Class PluginManager
     Public Function OpenFile(File As GenericFile) As Object
         Dim type = GetFileType(File)
         If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
-            Return File
+            'Reopen the file without being readonly
+            Dim filename = File.OriginalFilename
+            File.Dispose()
+            Return New GenericFile(File.OriginalFilename, False)
         Else
             Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
             out.OpenFile(File.OriginalFilename)

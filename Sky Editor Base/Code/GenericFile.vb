@@ -97,7 +97,7 @@ Public Class GenericFile
         Get
             If _fileReader Is Nothing Then
                 If _openReadOnly Then
-                    _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.Read, IO.FileShare.Read)
+                    _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.Read, IO.FileShare.ReadWrite)
                 Else
                     _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
                 End If
@@ -126,7 +126,6 @@ Public Class GenericFile
             FileReader.Seek(Index, IO.SeekOrigin.Begin)
             FileReader.Read(output, 0, Length)
             Return output
-            'End If
         End Get
         Set(value As Byte())
             FileReader.Seek(Index, IO.SeekOrigin.Begin)
@@ -197,16 +196,13 @@ Public Class GenericFile
     End Sub
     Public Overridable Sub Save(Destination As String) Implements iSavable.Save
         PreSave()
-        If _fileReader Is Nothing Then
-            _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
-        End If
-        _fileReader.Seek(0, IO.SeekOrigin.Begin)
-        _fileReader.Flush()
+        FileReader.Seek(0, IO.SeekOrigin.Begin)
+        FileReader.Flush()
         If IO.File.Exists(Filename) Then
             IO.File.Copy(Filename, Destination, True)
         Else
             Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
-                _fileReader.CopyTo(dest)
+                FileReader.CopyTo(dest)
             End Using
         End If
         If String.IsNullOrEmpty(OriginalFilename) Then
@@ -216,8 +212,8 @@ Public Class GenericFile
     End Sub
     Public Overridable Sub Save() Implements iSavable.Save
         PreSave()
-        _fileReader.Seek(0, IO.SeekOrigin.Begin)
-        _fileReader.Flush()
+        FileReader.Seek(0, IO.SeekOrigin.Begin)
+        FileReader.Flush()
         If Not Filename = OriginalFilename Then IO.File.Copy(Filename, OriginalFilename, True)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub

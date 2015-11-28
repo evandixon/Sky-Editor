@@ -57,7 +57,7 @@ Class Application
         'Run the program
         Dim args = Environment.GetCommandLineArgs
         If args.Contains("-console") Then
-            Language.ConsoleManager.Show()
+            Internal.ConsoleManager.Show()
             ConsoleModule.ConsoleMain()
             Application.Current.Shutdown()
         Else

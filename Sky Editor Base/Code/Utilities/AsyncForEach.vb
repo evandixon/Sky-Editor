@@ -65,6 +65,16 @@ Namespace Utilities
                                           Task.WaitAll(tasks.ToArray)
                                       End Sub))
         End Function
+        Public Async Function RunForEachSync(Of T)(DelegateSub As ForEachItem(Of T), Collection As IEnumerable(Of T)) As Task
+            Dim tasks As New List(Of Task)
+            _opMax = Collection.Count
+            For Each item In Collection
+                Await Task.Run(New Action(Sub()
+                                              DelegateSub(item)
+                                              OperationsCompleted += 1
+                                          End Sub))
+            Next
+        End Function
 
         Private Property OperationsCompleted As Integer
             Get

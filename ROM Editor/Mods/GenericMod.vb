@@ -43,6 +43,18 @@ Namespace Mods
         Public Overridable Function FilesToCopy() As IEnumerable(Of String)
             Return New List(Of String)
         End Function
+
+        ''' <summary>
+        ''' Files or directories to be preserved when archiving the project.
+        ''' Only archive files that cannot be regenerated from the ROM.
+        ''' 
+        ''' Paths should be relative to the mod directory.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Overridable Function FilesToArchive() As IEnumerable(Of String)
+            Return New List(Of String)
+        End Function
+
         Public Overridable Function SupportsDelete() As Boolean
             Return Not PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("FilesToCopy"))
         End Function
