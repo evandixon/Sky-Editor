@@ -132,12 +132,46 @@ Public Class ConsoleCommands
 
                                    IO.File.Delete(destinationWav)
 
+                                   Console.WriteLine("Tagging " & Item)
+
+                                   ' Dim m = IdSharp.AudioInfo.AudioFile.Create(destinationMp3, True)
+                                   Dim t As New IdSharp.Tagging.ID3v2.ID3v2Tag(destinationMp3)
+                                   t.Album = "Pokémon Super Mystery Dungeon"
+                                   t.Artist = "Chunsoft"
+                                   t.Year = 2015
+                                   Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
+                                   If filenameParts.Count = 2 Then
+                                       If IsNumeric(filenameParts(0)) Then
+                                           t.TrackNumber = CInt(filenameParts(0))
+                                       End If
+
+                                       t.Title = filenameParts(1)
+                                   End If
+                                   t.Save(destinationMp3)
+
+                                   ''Using Orthogonal's library, which didn't like the input mp3s.
+                                   'Dim m = Orthogonal.NTagLite.LiteFile.LoadFromFile(destinationMp3)
+                                   'm.Tag.Album = "Pokémon Super Mystery Dungeon"
+                                   'm.Tag.Artist = "Chunsoft"
+
+                                   'Dim filenameParts = filename.Split(" ".ToCharArray, 2)
+                                   'If filenameParts.Count = 2 Then
+                                   '    If IsNumeric(filenameParts(0)) Then
+                                   '        m.Tag.TrackNumber = CInt(filenameParts(0))
+                                   '    End If
+
+                                   '    m.Tag.Title = filenameParts(1)
+                                   'End If
+
+                                   'm.UpdateFile()
+
+                                   ''Using ID3.Net, which isn't built 100% properly in either release.
                                    'Add ID3 tags
                                    'Console.WriteLine("Tagging " & Item)
                                    'Dim m As New Id3.Mp3File(destinationMp3, Id3.Mp3Permissions.ReadWrite)
                                    'Dim t As New Id3.Id3Tag
 
-                                   't.Album.Value = "Pokémon Super Mystery Dungeon"
+                                   't.Album.Value = 
                                    't.Artists.Value.Clear()
                                    't.Artists.Value.Add("Chunsoft")
 

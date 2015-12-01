@@ -62,6 +62,15 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IdSharp.AudioInfo">
+      <HintPath>..\IdSharp.AudioInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="IdSharp.Common">
+      <HintPath>..\IdSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IdSharp.Tagging">
+      <HintPath>..\IdSharp.Tagging.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -194,6 +203,7 @@
     <None Include="ROM Editor\desmume-0.9.11-win64.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="App.ico" />
     <Content Include="ROM Editor\ffmpeg\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
