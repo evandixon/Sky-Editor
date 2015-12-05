@@ -75,6 +75,7 @@ Class Application
                                           Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
                                       End Function) Then
                         PluginHelper.StopLoading()
+                        _manager.Dispose()
                         RedistributionHelpers.RestartProgram()
                         l.Close()
                         Exit Sub

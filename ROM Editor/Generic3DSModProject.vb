@@ -6,16 +6,55 @@ Public Class Generic3DSModProject
     Inherits GenericNDSModProject
     Public Overrides Async Sub Initialize()
         Dim o As New OpenFileDialog
-        o.Filter = "3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|All Files (*.*)|*.*"
+        o.Filter = "Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
             info.Save()
             AddFile("Modpack Info", info)
 
-            OpenFile(o.FileName, "BaseRom.3ds")
-            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
-            Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
-            Await sky.Unpack(romDirectory)
+            If IO.Path.GetFileName(o.FileName).ToLower = "romfs.bin" Then
+                Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
+                Dim romfsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", "romfs")
+                Dim exefsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", "exefs")
+
+                If Not IO.Directory.Exists(romDirectory) Then
+                    IO.Directory.CreateDirectory(romDirectory)
+                End If
+
+                PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying romfs"))
+                Await Task.Run(New Action(Sub()
+                                              OpenFile(o.FileName, "romfs.bin")
+                                          End Sub))
+
+                Dim exefsSource As String = IO.Path.Combine(IO.Path.GetDirectoryName(o.FileName), "exefs.bin")
+                If IO.File.Exists(exefsSource) Then
+                    PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying exefs"))
+                    Await Task.Run(New Action(Sub()
+                                                  OpenFile(exefsSource, "exefs.bin")
+                                              End Sub))
+
+                    Dim exefs As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "exefs.bin")
+
+                    If Not IO.Directory.Exists(exefsDir) Then
+                        IO.Directory.CreateDirectory(exefsDir)
+                    End If
+                    Await Generic3DSRom.RunCtrTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefs}"" --decompresscode")
+                End If
+
+                'Unpack romfs
+                If Not IO.Directory.Exists(romfsDir) Then
+                    IO.Directory.CreateDirectory(romfsDir)
+                End If
+
+                Dim romfs As String = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "romfs.bin")
+                Await Generic3DSRom.RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfs}""")
+            Else
+                OpenFile(o.FileName, "BaseRom.3ds")
+                Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
+                Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
+                Await sky.Unpack(romDirectory)
+            End If
+
             CreateDirectory("Mods")
         Else
             MessageBox.Show("Project initialization failed.  You must supply a base ROM.")

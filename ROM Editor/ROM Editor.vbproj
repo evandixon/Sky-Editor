@@ -126,6 +126,7 @@
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
     <Compile Include="Generic3DSModProject.vb" />
+    <Compile Include="Java.vb" />
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
@@ -172,6 +173,7 @@
     <Compile Include="Roms\SkyNDSRom.vb" />
     <Compile Include="Roms\XYRom.vb" />
     <Compile Include="SkyRomProject.vb" />
+    <Compile Include="unluac.vb" />
     <Compile Include="vgmstream.vb" />
     <Compile Include="Windows\RomSelector.xaml.vb">
       <DependentUpon>RomSelector.xaml</DependentUpon>
@@ -207,7 +209,37 @@
     <Content Include="ROM Editor\ffmpeg\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ROM Editor\lua\bin2c5.1.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\lua5.1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\lua5.1.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\lua51.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\luac5.1.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcm80.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcp80.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcr80.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\wlua5.1.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ROM Editor\PSMD English Soundtrack.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\unluac.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\vgmstream\COPYING">
@@ -223,6 +255,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\vgmstream\mpg123-1.4.3.COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -318,6 +353,7 @@
   <ItemGroup>
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

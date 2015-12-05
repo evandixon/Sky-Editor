@@ -6,6 +6,11 @@ Imports SkyEditorBase.Utilities
 
 Namespace Redistribution
     Public Class RedistributionHelpers
+        ''' <summary>
+        ''' Runs the PrepareForDistribution method in all plugins, deleting any files that aren't distribution safe.
+        ''' </summary>
+        ''' <param name="Manager"></param>
+        ''' <param name="Argument"></param>
         Public Shared Sub PrepareForDistribution(Manager As PluginManager, Argument As String)
             PluginHelper.Writeline("Preparing for distribution...")
             For Each item In Manager.Plugins
@@ -13,6 +18,7 @@ Namespace Redistribution
             Next
             PluginHelper.Writeline("Distribution preparation complete.")
         End Sub
+
         ''' <summary>
         ''' Packages the program and its Resources folder into a single zip file.
         ''' </summary>
@@ -53,8 +59,8 @@ Namespace Redistribution
             Next
             Dim z As New FastZip
             z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "Sky Editor Archives", ArchiveName & ".zip"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp"), True, ".*", ".*")
-
         End Sub
+
         ''' <summary>
         ''' Packs all plugins into one archive per plugin, or only one if PluginName is not nothing.
         ''' </summary>
@@ -105,6 +111,7 @@ Namespace Redistribution
                 IO.File.Copy(l.Languages(item).Filename, IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item & ".language"), True)
             Next
         End Sub
+
         ''' <summary>
         ''' Unpacks all plugins into the appropriate folder, or only one if PluginName is not nothing.
         ''' </summary>
@@ -129,6 +136,13 @@ Namespace Redistribution
                 PluginHelper.Writeline("Unpacked plugin " & item, PluginHelper.LineType.Message)
             Next
         End Sub
+
+        ''' <summary>
+        ''' Schedules the plugin contained in the given assembly for deletion.
+        ''' Will restart the application when complete.
+        ''' </summary>
+        ''' <param name="Manager"></param>
+        ''' <param name="AssemblyName"></param>
         Public Shared Sub DeletePlugin(Manager As PluginManager, AssemblyName As String)
             Dim toDelete As New List(Of String)
             toDelete.Add(IO.Path.Combine(Manager.PluginFolder, AssemblyName))
@@ -139,9 +153,14 @@ Namespace Redistribution
             For Each item In toDelete
                 ScheduleDelete(item)
             Next
+            Manager.Dispose()
             RestartProgram()
             'Manager.ReloadPlugins()
         End Sub
+
+        ''' <summary>
+        ''' Installs plugins that are scheduled for installation.
+        ''' </summary>
         Public Shared Sub InstallPendingPlugins()
             'Dim a = GetAssemblies()
             Dim PluginNames As New List(Of String)
@@ -170,6 +189,12 @@ Namespace Redistribution
                 IO.File.Copy(item, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages", IO.Path.GetFileNameWithoutExtension(item) & ".json"), True)
             Next
         End Sub
+
+        ''' <summary>
+        ''' Gets all plugin assemblies in the given plugin directory.
+        ''' </summary>
+        ''' <param name="PluginDirectory"></param>
+        ''' <returns></returns>
         Public Shared Function GetAssemblies(PluginDirectory As String) As List(Of String)
             Dim assemblies As New List(Of String)
             If Not IO.Directory.Exists(PluginDirectory) Then
@@ -179,9 +204,10 @@ Namespace Redistribution
             assemblies.AddRange(IO.Directory.GetFiles(PluginDirectory, "*_plg.exe"))
             Return assemblies
         End Function
-        Public Shared Function GetAssemblies() As List(Of String)
-            Return GetAssemblies(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
-        End Function
+
+        ''' <summary>
+        ''' Deletes files and directories scheduled for deletion.
+        ''' </summary>
         Public Shared Sub DeleteScheduledFiles()
             If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
                 IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
@@ -195,17 +221,27 @@ Namespace Redistribution
             Next
             IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
         End Sub
+
+        ''' <summary>
+        ''' Schedules a file or directory for deletion.
+        ''' </summary>
+        ''' <param name="Path"></param>
         Public Shared Sub ScheduleDelete(Path As String)
             If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
                 IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
             End If
             IO.File.AppendAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), {Path})
         End Sub
+
+        ''' <summary>
+        ''' Restarts the application.
+        ''' </summary>
         Public Shared Sub RestartProgram()
             Windows.Forms.Application.Restart()
             'Application.Current.Shutdown()
             'Application.Current.Shutdown(1)
         End Sub
+
         Public Shared Function RequiredPlugins(Plugins As List(Of PluginInfo)) As List(Of PluginInfo)
             Dim pending As New List(Of PluginInfo)
             For Each p In Plugins

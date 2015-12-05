@@ -95,6 +95,12 @@ Public Class ConsoleCommands
                     End If
                 Next
             End If
+            Console.WriteLine("Track names: " & trackNames.Count)
+            If trackNames.Count = 0 Then
+                For Each item In IO.File.ReadAllLines(PluginHelper.GetResourceName("PSMD English Soundtrack.txt"))
+                    Console.WriteLine(item)
+                Next
+            End If
 
             If Not IO.Directory.Exists(destDir) Then
                 IO.Directory.CreateDirectory(destDir)

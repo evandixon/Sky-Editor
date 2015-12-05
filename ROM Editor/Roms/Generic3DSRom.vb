@@ -32,19 +32,19 @@ Namespace Roms
             End If
             Dim exHeaderPath = IO.Path.Combine(DestinationDirectory, "DecryptedExHeader.bin")
             Dim exefsPath = IO.Path.Combine(DestinationDirectory, "DecryptedExeFS.bin")
-            Dim romfsPath = IO.Path.Combine(DestinationDirectory, "DecryptedRomFS.bin")
+            Dim romfs = IO.Path.Combine(DestinationDirectory, "DecryptedRomFS.bin")
             Dim romfsDir = IO.Path.Combine(DestinationDirectory, "romfs")
             Dim exefsDir = IO.Path.Combine(DestinationDirectory, "exefs")
             'Unpack portions
             Await RunCtrTool($"-p --exheader=""{exHeaderPath}"" ""{Filename}""")
             Await RunCtrTool($"-p --exefs=""{exefsPath}"" ""{Filename}""")
-            Await RunCtrTool($"-p --romfs=""{romfsPath}"" ""{Filename}""")
+            Await RunCtrTool($"-p --romfs=""{romfs}"" ""{Filename}""")
             'Unpack romfs
-            Await RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+            Await RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfs}""")
             'Unpack exefs
             Await RunCtrTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
             IO.File.Delete(exefsPath)
-            IO.File.Delete(romfsPath)
+            IO.File.Delete(romfs)
         End Function
 
         Public Function RePack(NewFileName As String) As Task Implements iPackedRom.RePack
