@@ -132,8 +132,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="NDSPatcherCore.vb" />
     <Compile Include="PatcherCore.vb" />
     <Compile Include="ProcessHelper.vb" />
+    <Compile Include="ThreeDSPatcherCore.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

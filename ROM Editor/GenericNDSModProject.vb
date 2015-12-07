@@ -9,7 +9,7 @@ Imports SkyEditorBase.Interfaces
 Public Class GenericNDSModProject
     Inherits Project
 
-    Private Const PatcherVersion As String = "alpha 1"
+    Private Const PatcherVersion As String = "alpha 2"
 
     Public Event NDSModAdded(sender As Object, e As NDSModAddedEventArgs)
     Public Event NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs)

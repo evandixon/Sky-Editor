@@ -9,6 +9,7 @@
     Public Property DependenciesBefore As List(Of String)
     Public Property DependenciesAfter As List(Of String)
     Public Property UpdateUrl As String
+    Public Property Filename As String
     Public Sub New()
         ToAdd = New List(Of String)
         ToDelete = New List(Of String)
@@ -17,4 +18,17 @@
         DependenciesBefore = New List(Of String)
         DependenciesAfter = New List(Of String)
     End Sub
+
+    Public Function GetDescription() As String
+        '        Return $"Name: {Name}
+        'Description: {Description}"
+        Return Me.ToString
+    End Function
+    Public Overrides Function ToString() As String
+        If String.IsNullOrEmpty(Name) Then
+            Return IO.Path.GetFileNameWithoutExtension(Filename)
+        Else
+            Return Name
+        End If
+    End Function
 End Class

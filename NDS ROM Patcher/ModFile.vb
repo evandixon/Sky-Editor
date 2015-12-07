@@ -9,7 +9,7 @@ Public Class ModFile
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
         If ModDetails.ToAdd IsNot Nothing Then
             For Each file In ModDetails.ToAdd
-                IO.File.Copy(IO.Path.Combine(Filename, "Files", file.Trim("\")), IO.Path.Combine(ROMDirectory, file.Trim("\")), True)
+                IO.File.Copy(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Files", file.Trim("\")), IO.Path.Combine(ROMDirectory, file.Trim("\")), True)
             Next
         End If
 
@@ -31,8 +31,13 @@ Public Class ModFile
                             Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
                             'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
                             Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
-                            IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
-                            IO.File.Delete(tempFilename)
+
+                            If Not IO.File.Exists(tempFilename) Then
+                                MessageBox.Show("Unable to patch file """ & file & """.  Please ensure you're using a supported ROM.  If you sure you are, report this to the mod author.")
+                            Else
+                                IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
+                                IO.File.Delete(tempFilename)
+                            End If
                         End If
                     Next
                 End If
