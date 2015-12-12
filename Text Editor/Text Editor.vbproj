@@ -53,6 +53,10 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AurelienRibon.Ui.SyntaxHighlightBox, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AurelienRibon.Ui.SyntaxHighlightBox.2.0.2\lib\NET40\AurelienRibon.Ui.SyntaxHighlightBox.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -81,7 +85,12 @@
     <Compile Include="Controls\CodeControl.xaml.vb">
       <DependentUpon>CodeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SyntaxHighlightBox.xaml.vb">
+      <DependentUpon>SyntaxHighlightBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomHighlighter.vb" />
     <Compile Include="iTextFile.vb" />
+    <Compile Include="LuaCodeFile.vb" />
     <Compile Include="PluginInfo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -102,6 +111,7 @@
       <DependentUpon>TextControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextFile.vb" />
+    <Compile Include="VhdlCodeFile.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -121,6 +131,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
@@ -130,6 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\CodeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SyntaxHighlightBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

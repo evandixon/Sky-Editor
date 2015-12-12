@@ -40,7 +40,7 @@ Public Class PluginInfo
         If File.OriginalFilename.ToLower.EndsWith(".txt") Then
             Return {GetType(TextFile)}
         ElseIf File.OriginalFilename.ToLower.EndsWith(".lua")
-            Return {GetType(CodeFile)}
+            Return {GetType(LuaCodeFile)}
         Else
             Return {}
         End If
