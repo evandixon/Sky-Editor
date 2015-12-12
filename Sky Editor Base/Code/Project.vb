@@ -23,12 +23,23 @@ Public Class Project
         End Get
         Private Set(value As Boolean)
             _modified = value
-            If value Then
+            If value AndAlso EnableRaisingEvents Then
                 RaiseEvent Modified(Me, New EventArgs)
             End If
         End Set
     End Property
     Dim _modified As Boolean
+
+    Public Property EnableRaisingEvents As Boolean
+        Get
+            Return _EnableRaisingEvents
+        End Get
+        Set(value As Boolean)
+            _EnableRaisingEvents = value
+            IsModified = True
+        End Set
+    End Property
+    Dim _EnableRaisingEvents As Boolean
 
     Private Property ProjectType As String
 
@@ -36,6 +47,7 @@ Public Class Project
     Public Sub New()
         Files = New Dictionary(Of String, Object)
         _modified = False
+        _EnableRaisingEvents = True
     End Sub
     Public Sub New(Manager As PluginManager)
         Me.New()
@@ -228,7 +240,9 @@ Public Class Project
                 IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), InternalPath))
             End If
         End If
-        RaiseEvent DirectoryCreated(Me, path)
+        If EnableRaisingEvents Then
+            RaiseEvent DirectoryCreated(Me, path)
+        End If
         IsModified = True
     End Sub
     Public Sub RemoveDirectory(InternalPath As String)
@@ -237,10 +251,12 @@ Public Class Project
         For Each item In toDelete
             Files.Remove(item.Key)
         Next
-        RaiseEvent DirectoryRemoved(Me, InternalPath)
+        If EnableRaisingEvents Then
+            RaiseEvent DirectoryRemoved(Me, InternalPath)
+        End If
         IsModified = True
     End Sub
-        Public Sub OpenFile(SourceFilename As String, NewInternalPath As String, Optional Copy As Boolean = True)
+    Public Sub OpenFile(SourceFilename As String, NewInternalPath As String, Optional Copy As Boolean = True)
         Dim newPath = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), NewInternalPath).Replace("\", "/")
         If Copy Then IO.File.Copy(SourceFilename.Replace("\", "/"), newPath.Replace("\", "/"), True)
         AddFile(NewInternalPath.Replace("\", "/"), _manager.OpenFile(SourceFilename.Replace("\", "/")))
@@ -248,12 +264,16 @@ Public Class Project
     Public Sub AddFile(InternalPath As String, File As Object)
         'Files.Add(File.OriginalFilename.Replace(IO.Path.GetDirectoryName(Me.Filename), ""), File)
         Files.Add(InternalPath, File)
-        RaiseEvent FileAdded(Me, New EventArguments.FileAddedEventArguments With {.File = New KeyValuePair(Of String, Object)(InternalPath, File)})
+        If EnableRaisingEvents Then
+            RaiseEvent FileAdded(Me, New EventArguments.FileAddedEventArguments With {.File = New KeyValuePair(Of String, Object)(InternalPath, File)})
+        End If
         IsModified = True
     End Sub
     Public Sub RemoveFile(InternalPath As String)
         Files.Remove(InternalPath)
-        RaiseEvent FileRemoved(Me, InternalPath)
+        If EnableRaisingEvents Then
+            RaiseEvent FileRemoved(Me, InternalPath)
+        End If
         IsModified = True
     End Sub
 

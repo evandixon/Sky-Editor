@@ -6,7 +6,7 @@ Public Class ThreeDSPatcherCore
 
     Public Overrides Sub PromptFilePath()
         Dim o As New OpenFileDialog
-        o.Filter = "Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
+        o.Filter = "Supported Files (*.3ds;*.3dz)|*.3ds;*.3dz|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|All Files (*.*)|*.*" '"Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             SelectedFilename = o.FileName
         End If
@@ -31,6 +31,7 @@ Public Class ThreeDSPatcherCore
         End If
 
         If hansMode Then
+            MessageBox.Show("You have selected a romfs.bin as the input.  This is only semi-supported for the time being.  You will not be able to add any mods, but you shouldn't have to re-create the project when support is added.")
             Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
             Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
             Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")

@@ -73,7 +73,7 @@ Public Class PluginDefinition
     '    ROMFileTypes.Add("bgp", New BGPControl)
     'End Sub
 
-    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
+    Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
@@ -89,9 +89,11 @@ Public Class PluginDefinition
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Tagging.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "zlib.net.dll"))
+
+        Manager.RegisterMenuAction(New PsmdSoundtrackMenuAction)
     End Sub
 
-    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = PluginHelper.GetResourceName("Temp")
         If IO.Directory.Exists(directory) Then

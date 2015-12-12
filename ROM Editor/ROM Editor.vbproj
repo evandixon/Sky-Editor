@@ -163,6 +163,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Portrait.vb" />
+    <Compile Include="PsmdSoundtrackAction.vb" />
     <Compile Include="ROM.vb" />
     <Compile Include="Roms\GatesToInfinityRom.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />

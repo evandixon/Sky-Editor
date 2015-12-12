@@ -13,6 +13,10 @@ Namespace Controls
         Private Sub txtText_TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtText.TextChanged
             RaiseModified()
         End Sub
+
+        Public Overrides Function UsagePriority(Type As Type) As Integer
+            Return 0
+        End Function
     End Class
 End Namespace
 

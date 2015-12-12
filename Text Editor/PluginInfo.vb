@@ -22,15 +22,27 @@ Public Class PluginInfo
         End Get
     End Property
 
-    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
+    Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         Manager.RegisterIOFilter("*.txt", "Text Files")
+        Manager.RegisterIOFilter("*.lua", "Lua Script Files")
+        Manager.RegisterFileTypeDetector(AddressOf DetectFileType)
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
 
     End Sub
 
-    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 
     End Sub
+
+    Public Shared Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
+        If File.OriginalFilename.ToLower.EndsWith(".txt") Then
+            Return {GetType(TextFile)}
+        ElseIf File.OriginalFilename.ToLower.EndsWith(".lua")
+            Return {GetType(CodeFile)}
+        Else
+            Return {}
+        End If
+    End Function
 End Class

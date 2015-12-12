@@ -39,6 +39,57 @@ Public Class MainWindow2
         End If
     End Sub
 
+    Private Function GetSelectedDocumentObject() As Object
+        Dim current = docPane.SelectedContent
+        If current IsNot Nothing AndAlso TypeOf current Is DocumentTab Then
+            Return DirectCast(current, DocumentTab).Document
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Private Function GetMenuActionTargets() As IEnumerable(Of Object)
+        Dim targets As New List(Of Object)
+
+        'Add the current project to the targets if supported
+        If _manager.CurrentProject IsNot Nothing Then
+            targets.Add(_manager.CurrentProject)
+        End If
+
+        Dim currentDocumentObject = GetSelectedDocumentObject()
+        If currentDocumentObject IsNot Nothing Then
+            targets.Add(currentDocumentObject)
+        End If
+        Return targets
+    End Function
+
+    Private Function GetMenuActionTargets(Action As MenuAction) As IEnumerable(Of Object)
+        Dim targets As New List(Of Object)
+
+        'Add the current project to the targets if supported
+        If _manager.CurrentProject IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentProject) Then
+            targets.Add(_manager.CurrentProject)
+        End If
+
+        If Action.TargetAll Then
+            For Each item In docPane.Children
+                If TypeOf item Is DocumentTab Then
+                    Dim d = DirectCast(item, DocumentTab).Document
+                    If d IsNot Nothing AndAlso Action.SupportsObject(d) Then
+                        targets.Add(d)
+                    End If
+                End If
+            Next
+        Else
+            Dim currentDocumentObject = GetSelectedDocumentObject()
+            If currentDocumentObject IsNot Nothing AndAlso Action.SupportsObject(currentDocumentObject) Then
+                targets.Add(currentDocumentObject)
+            End If
+        End If
+
+        Return targets
+    End Function
+
 
     Private Sub SaveProject()
         _manager.CurrentProject.SaveProject()
@@ -55,148 +106,25 @@ Public Class MainWindow2
 
 #Region "Event Handlers"
 
-#Region "MenuItems"
-    Private Sub menuNew_Click(sender As Object, e As RoutedEventArgs) Handles menuNew.Click
-        'Get what kind of file to create.
-        Dim w As New SkyEditorWindows.NewFileWindow()
-        Dim games As New Dictionary(Of String, Type)
-        For Each item In _manager.CreatableFiles
-            games.Add(PluginHelper.GetLanguageItem(item.Name), item)
-        Next
-        w.AddGames(games.Keys)
-        If w.ShowDialog Then
-            Dim file As Object = _manager.CreateNewFile(w.SelectedName, games(w.SelectedGame))
-            docPane.Children.Add(New DocumentTab(file, _manager, True))
-            RemoveWelcomePage()
-        End If
-    End Sub
-    Private Sub menuFileOpenAuto_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenAuto.Click
-        OpenFileDialog1.Filter = _manager.IOFiltersString
-        If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-            If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
-                _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
-            Else
-                docPane.Children.Add(New DocumentTab(_manager.OpenFile(OpenFileDialog1.FileName), _manager, True))
-            End If
-            RemoveWelcomePage()
-        End If
-    End Sub
-    Private Sub menuFileOpenNoDetect_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpenNoDetect.Click
-        OpenFileDialog1.Filter = _manager.IOFiltersString
-        If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-            Dim w As New SkyEditorWindows.GameTypeSelector()
-            Dim games As New Dictionary(Of String, Type)
-            For Each item In _manager.OpenableFiles
-                games.Add(PluginHelper.GetLanguageItem(item.Name), item)
-            Next
-            w.AddGames(games.Keys)
-            If w.ShowDialog Then
-                OpenDocumentTab(_manager.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame)), True)
-            End If
-        End If
-    End Sub
-    Private Sub menuFileSaveFile_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveFile.Click
-        If docPane.SelectedContent IsNot Nothing Then
-            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
-            If TypeOf file Is iOnDisk AndAlso String.IsNullOrEmpty(DirectCast(file, iOnDisk).Filename) Then
-                If TypeOf file Is iSavable Then
-                    If TypeOf file Is iOnDisk Then
-                        SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iOnDisk).Filename))
-                    Else
-                        SaveFileDialog1.Filter = _manager.IOFiltersString(IsSaveAs:=True) 'Todo: use default extension
-                    End If
-                    If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                        DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
-                    End If
-                End If
-            Else
-                If TypeOf file Is iSavable Then
-                    DirectCast(file, iSavable).Save()
-                End If
-            End If
-        End If
-    End Sub
-    Private Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
-        If docPane.SelectedContent IsNot Nothing Then
-            'Dim tab = DirectCast(docPane.SelectedContent, DocumentTab)
-            Dim file = DirectCast(docPane.SelectedContent, DocumentTab).Document
-            If TypeOf file Is iSavable Then
-                SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(file, iSavable).DefaultExtension))
-                If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                    DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
-                End If
-            End If
-        End If
-    End Sub
-    Private Sub menuFileSaveProject_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveProject.Click
-        SaveProject()
-    End Sub
-    Private Sub menuFileSaveAll_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAll.Click
-        SaveProject()
-        For Each item In docPane.Children
-            If TypeOf item Is DocumentTab Then
-                Dim file = DirectCast(item, DocumentTab).Document
-                If Not String.IsNullOrEmpty(file.OriginalFilename) Then
-                    If TypeOf file Is iSavable Then
-                        DirectCast(file, iSavable).Save()
-                    End If
-                Else
-                    SaveFileDialog1.Filter = _manager.IOFiltersStringSaveAs(IO.Path.GetExtension(file.OriginalFilename))
-                    If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                        If TypeOf file Is iSavable Then
-                            DirectCast(file, iSavable).Save(SaveFileDialog1.FileName)
-                        End If
-                    End If
-                End If
-            End If
-        Next
-    End Sub
-    Private Sub menuNewProject_Click(sender As Object, e As RoutedEventArgs) Handles menuNewProject.Click
-        Dim newProj As New NewProjectWindow(_manager)
-        If newProj.ShowDialog() Then
-            _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, _manager.ProjectTypes(newProj.SelectedProjectType), _manager)
-            RemoveWelcomePage()
-        End If
-    End Sub
-
-    Private Sub menuLanguageEditor_Click(sender As Object, e As RoutedEventArgs) Handles menuLanguageEditor.Click
-        OpenDocumentTab(SkyEditorBase.Language.LanguageManager.Instance, False)
-    End Sub
-
-    Private Sub MenuSettings_Click(sender As Object, e As RoutedEventArgs) Handles MenuSettings.Click
-        OpenDocumentTab(SettingsManager.Instance, False)
-    End Sub
-
-    Private Async Sub menuBuild_Click(sender As Object, e As RoutedEventArgs) Handles menuBuild.Click
+    Private Async Sub MenuItemClicked(sender As Object, e As EventArgs)
         Try
-            Await _manager.CurrentProject.BuildAsync()
+            If sender IsNot Nothing AndAlso TypeOf sender Is MenuItem Then
+                Dim m As MenuItem = DirectCast(sender, MenuItem)
+                Dim tasks As New List(Of Task)
+                If m.Tag IsNot Nothing AndAlso TypeOf m.Tag Is List(Of MenuAction) Then
+                    Dim tags = DirectCast(m.Tag, List(Of MenuAction))
+                    For Each t In tags
+                        tasks.Add(t.DoAction(GetMenuActionTargets(t)))
+                    Next
+                End If
+                Await Task.WhenAll(tasks)
+            End If
         Catch ex As Exception
-            MessageBox.Show(PluginHelper.GetLanguageItem("Failed to build project.  See output for details."))
+            MessageBox.Show(PluginHelper.GetLanguageItem("An error has occurred.  See output for details."))
             PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
             PluginHelper.SetLoadingStatusFailed()
         End Try
     End Sub
-
-    Private Async Sub menuArchive_Click(sender As Object, e As RoutedEventArgs) Handles menuArchive.Click
-        Try
-            Await _manager.CurrentProject.ArchiveAsync()
-        Catch ex As Exception
-            MessageBox.Show(PluginHelper.GetLanguageItem("Failed to archive project.  See output for details."))
-            PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
-            PluginHelper.SetLoadingStatusFailed()
-        End Try
-    End Sub
-
-    Private Sub menuRun_Click(sender As Object, e As RoutedEventArgs) Handles menuRun.Click
-        _manager.CurrentProject.Run()
-    End Sub
-
-    Private Sub menuConsole_Click(sender As Object, e As RoutedEventArgs) Handles menuConsole.Click
-        Internal.ConsoleManager.Show()
-        ConsoleMain(_manager)
-    End Sub
-
-#End Region
 
 #Region "Form"
     Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -212,16 +140,33 @@ Public Class MainWindow2
 
         _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
 
-        RefreshBuildRunVisibility()
-
         ShowWelcomePage()
 
         TranslateControls()
 
+        For Each item In _manager.GetRootMenuItems
+            menuMain.Items.Add(item)
+            RegisterEventMenuItemHandlers(item)
+        Next
+
+        _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
-
+        AddHandler PluginHelper.FileOpenRequested, AddressOf OnFileOpenRequested
     End Sub
+
+    ''' <summary>
+    ''' Adds MenuItemClicked(Object,EventArgs) as a handler for MenuItem.Click and its children
+    ''' </summary>
+    ''' <param name="MenuItem"></param>
+    Private Sub RegisterEventMenuItemHandlers(MenuItem As MenuItem)
+        For Each Item In MenuItem.Items
+            RegisterEventMenuItemHandlers(Item)
+        Next
+        AddHandler MenuItem.Click, AddressOf MenuItemClicked
+    End Sub
+
     Private Sub TranslateControls()
         PluginHelper.TranslateForm(menuMain)
         'toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
@@ -270,27 +215,22 @@ Public Class MainWindow2
         End If
     End Sub
 
+    Private Sub OnFileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
+        OpenDocumentTab(e.File, e.DisposeOnExit)
+    End Sub
+
     Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
-        RefreshBuildRunVisibility()
+        _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+        RemoveWelcomePage()
+    End Sub
+
+    Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged
+        If e.PropertyName = "SelectedContent" AndAlso _manager IsNot Nothing Then 'docPane.SelectedContent 
+            _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+        End If
     End Sub
 #End Region
-    Private Sub RefreshBuildRunVisibility()
-        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanBuild Then
-            menuBuild.Visibility = Visibility.Visible
-        Else
-            menuBuild.Visibility = Visibility.Collapsed
-        End If
-        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanRun Then
-            menuRun.Visibility = Visibility.Visible
-        Else
-            menuRun.Visibility = Visibility.Collapsed
-        End If
-        If _manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.CanArchive Then
-            menuArchive.Visibility = Visibility.Visible
-        Else
-            menuArchive.Visibility = Visibility.Collapsed
-        End If
-    End Sub
+
     Private Sub ShowWelcomePage()
         Dim l As New LayoutDocument
         l.Content = New WelcomeTabContent
@@ -325,6 +265,4 @@ Public Class MainWindow2
         ' Add any initialization after the InitializeComponent() call.
         _manager = Manager
     End Sub
-
-
 End Class

@@ -33,7 +33,7 @@
     <MinimumRequiredVersion>4.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -205,6 +205,7 @@
     <Compile Include="Code\Interfaces\iOnDisk.vb" />
     <Compile Include="Code\Interfaces\iOpenableFile.vb" />
     <Compile Include="Code\Interfaces\iSavable.vb" />
+    <Compile Include="Code\Internal\PluginInfo.vb" />
     <Compile Include="Code\Language\AddLanguageItem.xaml.vb">
       <DependentUpon>AddLanguageItem.xaml</DependentUpon>
     </Compile>
@@ -212,6 +213,19 @@
     <Compile Include="Code\Language\LanguageItem.vb" />
     <Compile Include="Code\Language\LanguageItemList.vb" />
     <Compile Include="Code\MenuAction.vb" />
+    <Compile Include="Code\MenuActions\FileNewFile.vb" />
+    <Compile Include="Code\MenuActions\FileNewProject.vb" />
+    <Compile Include="Code\MenuActions\FileOpenAuto.vb" />
+    <Compile Include="Code\MenuActions\FileOpenManual.vb" />
+    <Compile Include="Code\MenuActions\FileSave.vb" />
+    <Compile Include="Code\MenuActions\FileSaveAll.vb" />
+    <Compile Include="Code\MenuActions\FileSaveAs.vb" />
+    <Compile Include="Code\MenuActions\FileSaveProject.vb" />
+    <Compile Include="Code\MenuActions\ProjectArchive.vb" />
+    <Compile Include="Code\MenuActions\ProjectBuild.vb" />
+    <Compile Include="Code\MenuActions\ProjectRun.vb" />
+    <Compile Include="Code\MenuActions\ToolsSettings.vb" />
+    <Compile Include="Code\MenuActions\ToolsLanguage.vb" />
     <Compile Include="Code\ObjectControl.vb" />
     <Compile Include="Code\ObjectControlPlaceholder.vb" />
     <Compile Include="Code\ObjectFile.vb" />

@@ -63,7 +63,7 @@ Public Class TextFile
         Return ".txt"
     End Function
 
-    'Public Shared Function IsOfType(File As GenericFile) As Boolean
-
-    'End Function
+    Public Shared Function IsOfType(File As GenericFile) As Boolean
+        Return IO.Path.GetFileName(File.OriginalFilename).ToLower.EndsWith(".txt") OrElse IO.Path.GetFileName(File.OriginalFilename).ToLower.EndsWith(".lua")
+    End Function
 End Class

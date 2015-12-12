@@ -21,7 +21,7 @@ Public Class SkyEditorInfo
         End Get
     End Property
 
-    Public Sub Load(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.Load
+    Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         'Manager.RegisterEditorTab(GetType(Tabs.SkyGeneralTab))
         'Manager.RegisterEditorTab(GetType(Tabs.TDGeneralTab))
         'Manager.RegisterEditorTab(GetType(Tabs.RBGeneral))
@@ -91,7 +91,7 @@ Public Class SkyEditorInfo
         End Try
     End Function
 
-    Public Sub UnLoad(ByRef Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 
     End Sub
 

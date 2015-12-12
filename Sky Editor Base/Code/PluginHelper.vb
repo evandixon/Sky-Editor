@@ -391,6 +391,13 @@ Public Class PluginHelper
     Public Shared Event ConsoleLineWritten(sender As Object, e As ConsoleLineWrittenEventArgs)
 #End Region
 
+#Region "Open File"
+    Public Shared Event FileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
+    Public Shared Sub RequestFileOpen(File As Object, DisposeOnClose As Boolean)
+        RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+    End Sub
+#End Region
+
     Public Shared Async Function CopyDirectory(SourceDirectory As String, DestinationDirectory As String) As Task
         Dim f As New Utilities.AsyncFileCopier
         Await f.CopyDirectory(SourceDirectory, DestinationDirectory)

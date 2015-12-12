@@ -7,6 +7,7 @@ Namespace Utilities
 
         Public Delegate Sub ForItem(i As Integer)
         Public Delegate Sub ForEachItem(Of T)(i As T)
+        Public Delegate Function ForEachItemAsync(Of T)(i As T) As Task
 
         Public Sub New(ProgressMessage As String)
             SetLoadingStatus = True
@@ -44,9 +45,7 @@ Namespace Utilities
                 t.Start()
                 tasks.Add(t)
             Next
-            Await Task.Run(New Action(Sub()
-                                          Task.WaitAll(tasks.ToArray)
-                                      End Sub))
+            Await Task.WhenAll(tasks)
         End Function
 
         Public Async Function RunForEach(Of T)(DelegateSub As ForEachItem(Of T), Collection As IEnumerable(Of T)) As Task
@@ -61,9 +60,21 @@ Namespace Utilities
                 tTask.Start()
                 tasks.Add(tTask)
             Next
-            Await Task.Run(New Action(Sub()
-                                          Task.WaitAll(tasks.ToArray)
-                                      End Sub))
+            Await Task.WhenAll(tasks)
+        End Function
+
+        Public Async Function RunForEach(Of T)(DelegateFunction As ForEachItemAsync(Of T), Collection As IEnumerable(Of T)) As Task
+            Dim tasks As New List(Of Task)
+            _opMax = Collection.Count
+            For Each item In Collection
+                Dim item2 = item 'Needed because we're running a lambda in a for statement.
+                Dim tTask = Task.Run(Async Function() As Task
+                                         Await DelegateFunction(item2)
+                                         OperationsCompleted += 1
+                                     End Function)
+                tasks.Add(tTask)
+            Next
+            Await Task.WhenAll(tasks)
         End Function
         Public Async Function RunForEachSync(Of T)(DelegateSub As ForEachItem(Of T), Collection As IEnumerable(Of T)) As Task
             Dim tasks As New List(Of Task)

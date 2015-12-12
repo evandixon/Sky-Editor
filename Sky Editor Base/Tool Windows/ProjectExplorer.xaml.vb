@@ -91,6 +91,10 @@ Public Class ProjectExplorer
         Refresh()
     End Sub
 
+    Private Sub _manager_ProjectModified(sender As Object, e As EventArgs) Handles _manager.ProjectModified
+        Refresh()
+    End Sub
+
     Private Sub tvFiles_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles tvFiles.MouseDoubleClick
         If tvFiles.SelectedItem IsNot Nothing AndAlso _manager.CurrentProject.Files.ContainsKey(tvFiles.SelectedItem.Tag) Then
             Dim file = _manager.CurrentProject.Files(tvFiles.SelectedItem.Tag)

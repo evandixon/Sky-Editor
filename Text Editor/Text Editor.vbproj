@@ -77,6 +77,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeFile.vb" />
+    <Compile Include="Controls\CodeControl.xaml.vb">
+      <DependentUpon>CodeControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="iTextFile.vb" />
     <Compile Include="PluginInfo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -125,6 +129,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\CodeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TextControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

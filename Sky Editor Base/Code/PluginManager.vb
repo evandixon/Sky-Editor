@@ -31,6 +31,8 @@ Public Class PluginManager
     Private Sub New()
         Me.New(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
         Me.CurrentProject = Nothing ' New Project(Me)
+        MenuItems = New List(Of MenuItem)
+        Actions = New List(Of MenuAction)
     End Sub
 
     ''' <summary>
@@ -78,6 +80,9 @@ Public Class PluginManager
                     Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
                 End Try
             Next
+
+            Internal.PluginInfo.Load(Me)
+
             For Each item In Plugins
                 item.Load(Me)
             Next
@@ -117,23 +122,6 @@ Public Class PluginManager
                     Next
                 Next
             Next
-
-            OpenableFiles.Add(GetType(ExecutableFile))
-
-            RegisterFileTypeDetector(AddressOf Me.DetectFileType)
-            RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
-
-            RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)
-            RegisterConsoleCommand("zip", AddressOf RedistributionHelpers.PackProgram)
-            RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
-            RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
-            RegisterConsoleCommand("generateinfo", AddressOf RedistributionHelpers.GeneratePluginDownloadDir)
-            RegisterConsoleCommand("updateall", AddressOf RedistributionHelpers.DownloadAllPlugins)
-            RegisterConsoleCommand("packall", AddressOf RedistributionHelpers.PackageAll)
-
-            RegisterObjectControl(GetType(Language.LanguageEditor))
-            RegisterObjectControl(GetType(SettingsEditor))
-            'CheatManager.GameIDs = GameTypes
         End If
     End Sub
 #End Region
@@ -335,27 +323,78 @@ Public Class PluginManager
     ''' Registers a Menu Action for use with creating custom menu items.
     ''' </summary>
     ''' <param name="Action"></param>
-    <Obsolete("Not implemented")> Public Sub RegisterMenuAction(Action As MenuAction)
-        Throw New NotImplementedException
+    Public Sub RegisterMenuAction(Action As MenuAction)
         'Generate the MenuItem
         If MenuItems Is Nothing Then
             MenuItems = New List(Of MenuItem)
         End If
-        If Action.ActionPath.Count = 1 Then
-            'Check to see if the menu item exists
-
-            'Add the menu item, and give it a proper tag
-        ElseIf Action.ActionPath.Count > 1
+        If Actions Is Nothing Then
+            Actions = New List(Of MenuAction)
+        End If
+        If Action.ActionPath.Count >= 1 Then
             'Create parent menu items
+            Dim parent = From m In MenuItems Where m.Header = Action.ActionPath(0)
 
-            'Check to see if the menu item exists
+            Dim current As MenuItem
+            If parent.Any Then
+                current = parent.First
+            Else
+                Dim m As New MenuItem
+                m.Header = Action.ActionPath(0)
+                If Action.ActionPath.Count = 1 Then
+                    If m.Tag Is Nothing Then
+                        m.Tag = New List(Of MenuAction)
+                    End If
+                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
+                End If
+                MenuItems.Add(m)
+                current = m
+            End If
 
-            'Add the menu item, and give it a proper tag
+
+            For count = 1 To Action.ActionPath.Count - 2
+                Dim index = count 'To avoid potential issues with using the below linq expression.  Might not be needed, but it's probably best to avoid potential issues.
+                parent = From m As MenuItem In current.Items Where m.Header = Action.ActionPath(index)
+                If parent.Any Then
+                    current = parent.First
+                Else
+                    Dim m As New MenuItem
+                    m.Header = Action.ActionPath(count)
+                    If count = 0 Then
+                        MenuItems.Add(m)
+                    Else
+                        current.Items.Add(m)
+                    End If
+                    current = m
+                End If
+            Next
+
+
+            If Action.ActionPath.Count > 1 Then
+                'Check to see if the menu item exists
+                parent = From m As MenuItem In current.Items Where m.Header = Action.ActionPath.Last
+
+                If parent.Any Then
+                    Dim m = DirectCast(parent.First, MenuItem)
+                    If m.Tag Is Nothing Then
+                        m.Tag = New List(Of MenuAction)
+                    End If
+                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
+                Else
+                    'Add the menu item, and give it a proper tag
+                    Dim m As New MenuItem
+                    m.Header = Action.ActionPath.Last
+                    If m.Tag Is Nothing Then
+                        m.Tag = New List(Of MenuAction)
+                    End If
+                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
+                    current.Items.Add(m)
+                End If
+            End If
 
         Else 'Count=0
             Throw New ArgumentException("The action's ActionPath needs to contain at least 1 item.")
         End If
-        Dim pathParents As New List(Of String)
 
         'Register the item
         Actions.Add(Action)
@@ -462,6 +501,7 @@ Public Class PluginManager
     Public Event ProjectFileRemoved(sender As Object, File As String)
     Public Event ProjectChanged(sender As Object, NewProject As Project)
     Public Event ProjectDirectoryCreated(sender As Object, File As String)
+    Public Event ProjectModified(sender As Object, e As EventArgs)
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
 #End Region
 
@@ -477,6 +517,11 @@ Public Class PluginManager
     Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
         RaiseEvent ProjectDirectoryCreated(sender, Directory)
     End Sub
+
+    Private Sub _currentProject_Modified(sender As Object, e As EventArgs) Handles _currentProject.Modified
+        RaiseEvent ProjectModified(sender, e)
+    End Sub
+
 #End Region
 
     Public Function CreateNewFile(NewFileName As String, FileType As Type) As iCreatableFile
@@ -669,12 +714,65 @@ Public Class PluginManager
     End Function
 
     ''' <summary>
-    ''' Updates the visibility of the MenuItems based on the currently selected Type.
+    ''' Updates the visibility of the MenuItems based on the currently selected Types.
     ''' </summary>
     ''' <param name="SelectedType"></param>
-    Public Sub UpdateMenuItemVisibility(SelectedType As Type)
-
+    Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object))
+        For Each item In MenuItems
+            UpdateMenuItemVisibility(SelectedObjects, item)
+        Next
     End Sub
+
+    ''' <summary>
+    ''' Updates the visibility of the MenuItems based on the currently selected Types.
+    ''' </summary>
+    ''' <param name="SelectedType"></param>
+    ''' <param name="Parent"></param>
+    Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object), Parent As MenuItem)
+        For Each item In Parent.Items
+            UpdateMenuItemVisibility(SelectedObjects, item)
+        Next
+        If Parent.Tag IsNot Nothing AndAlso TypeOf Parent.Tag Is List(Of MenuAction) Then
+            Dim tags = DirectCast(Parent.Tag, List(Of MenuAction))
+            Dim hasMatch As Boolean = False
+            'Each menu item has one or more menu action
+            For Each tag In tags
+
+                If Not hasMatch Then
+                    'Each action can target multiple things
+                    hasMatch = tag.AlwaysVisible OrElse tag.SupportsObjects(SelectedObjects)
+                Else
+                    Exit For
+                End If
+
+
+            Next
+
+            If hasMatch Then
+                Parent.Visibility = Visibility.Visible
+            Else
+                Parent.Visibility = Visibility.Collapsed
+            End If
+        Else
+            'This menu item doesn't have an action.
+            'Setting visibility to whether or not it has visible children.
+            If MenuItemHasVisibleChildren(Parent) Then
+                Parent.Visibility = Visibility.Visible
+            Else
+                Parent.Visibility = Visibility.Collapsed
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Determines whether or not the given menu item has visible children.
+    ''' </summary>
+    ''' <param name="Item"></param>
+    Public Function MenuItemHasVisibleChildren(Item As MenuItem) As Boolean
+        Dim q = From m As MenuItem In Item.Items Where m.Visibility = Visibility.Visible
+
+        Return q.Any
+    End Function
 
     ''' <summary>
     ''' If the given file is of type ObjectFile, returns the contained Type.
