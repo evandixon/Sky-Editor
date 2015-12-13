@@ -106,6 +106,7 @@
     <Compile Include="ConsoleCommands.vb" />
     <Compile Include="DSIconTool.vb" />
     <Compile Include="ffmpeg.vb" />
+    <Compile Include="FileFormats\Farc.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
@@ -127,6 +128,8 @@
     <Compile Include="FileFormats\LanguageString.vb" />
     <Compile Include="Generic3DSModProject.vb" />
     <Compile Include="Java.vb" />
+    <Compile Include="MenuActions\CteImage.vb" />
+    <Compile Include="MenuActions\ExtractFarc.vb" />
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />

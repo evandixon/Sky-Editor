@@ -91,6 +91,7 @@ Public Class PluginDefinition
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "zlib.net.dll"))
 
         Manager.RegisterMenuAction(New PsmdSoundtrackMenuAction)
+        Manager.RegisterMenuAction(New MenuActions.ExtractFarc)
     End Sub
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
