@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleCommands.vb" />
+    <Compile Include="DrawingImageConverter.vb" />
     <Compile Include="DSIconTool.vb" />
     <Compile Include="ffmpeg.vb" />
     <Compile Include="FileFormats\Farc.vb" />
@@ -128,7 +129,9 @@
     <Compile Include="FileFormats\LanguageString.vb" />
     <Compile Include="Generic3DSModProject.vb" />
     <Compile Include="Java.vb" />
-    <Compile Include="MenuActions\CteImage.vb" />
+    <Compile Include="FileFormats\CteImage.vb" />
+    <Compile Include="MenuActions\CteImageExport.vb" />
+    <Compile Include="MenuActions\CteImageImport.vb" />
     <Compile Include="MenuActions\ExtractFarc.vb" />
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
@@ -143,6 +146,9 @@
     <Compile Include="Mods\PMD3DLuaMod.vb" />
     <Compile Include="Mods\SkyBackMod.vb" />
     <Compile Include="Mods\SkyStarterMod.vb" />
+    <Compile Include="ObjectControls\CteImageControl.xaml.vb">
+      <DependentUpon>CteImageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
       <DependentUpon>item_p_Editor.xaml</DependentUpon>
     </Compile>
@@ -338,6 +344,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="File Format Controls\BGPControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\CteImageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

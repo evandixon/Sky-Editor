@@ -4,8 +4,31 @@ Public MustInherit Class ObjectControl
     Public Sub New()
         MyBase.New()
     End Sub
+    ''' <summary>
+    ''' Called when the EditingObject is being changed to something else, but before it has actually been changed.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event EditingObjectChanging(sender As Object, e As EventArgs)
+
+    ''' <summary>
+    ''' Called when the EditingObject has been changed.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event EditingObjectChanged(sender As Object, e As EventArgs)
 
     Public Overridable Property EditingObject As Object
+        Get
+            Return _editingObject
+        End Get
+        Set(value As Object)
+            RaiseEvent EditingObjectChanging(Me, New EventArgs)
+            _editingObject = value
+            RaiseEvent EditingObjectChanged(Me, New EventArgs)
+        End Set
+    End Property
+    Dim _editingObject As Object
 
     Public Overridable Sub RefreshDisplay()
 
@@ -46,7 +69,7 @@ Public MustInherit Class ObjectControl(Of T)
 
     Public Property EditingItem As T
         Get
-            If ObjectFile(Of T).IsObjectFile(Me.EditingObject.GetType) Then
+            If EditingObject IsNot Nothing AndAlso ObjectFile(Of T).IsObjectFile(Me.EditingObject.GetType) Then
                 Return DirectCast(Me.EditingObject, ObjectFile(Of T)).ContainedObject
             Else
                 Return DirectCast(MyBase.EditingObject, T)
@@ -54,6 +77,7 @@ Public MustInherit Class ObjectControl(Of T)
         End Get
         Set(value As T)
             If ObjectFile(Of T).IsObjectFile(Me.EditingObject) Then
+                'TODO: raise events before and after next line
                 DirectCast(Me.EditingObject, ObjectFile(Of T)).ContainedObject = value
             Else
                 Me.EditingObject = value

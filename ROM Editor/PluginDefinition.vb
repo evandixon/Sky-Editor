@@ -48,6 +48,18 @@ Public Class PluginDefinition
         End If
     End Function
 
+    Public Function FileFormatDetector(File As GenericFile) As Type()
+        If File.Length > &H4 Then
+            If File.RawData(0) = 0 AndAlso File.RawData(1) = &H63 AndAlso File.RawData(2) = &H74 AndAlso File.RawData(3) = &H65 Then
+                Return {GetType(FileFormats.CteImage)}
+            Else
+                Return {}
+            End If
+        Else
+            Return {}
+        End If
+    End Function
+
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
             Return PluginHelper.GetLanguageItem("RomEditorCredits", "Rom Editor Credits:\n     psy_commando (Pokemon portraits, most of the research)\n     Grovyle91 (Language strings)\n     evandixon (Personality test, bgp files)")
@@ -77,8 +89,10 @@ Public Class PluginDefinition
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
 
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
+        Manager.RegisterIOFilter("*.img", "CTE Image Files")
 
         Manager.RegisterFileTypeDetector(AddressOf AutoDetect3dsRom)
+        Manager.RegisterFileTypeDetector(AddressOf FileFormatDetector)
 
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
 
@@ -91,6 +105,8 @@ Public Class PluginDefinition
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "zlib.net.dll"))
 
         Manager.RegisterMenuAction(New PsmdSoundtrackMenuAction)
+        Manager.RegisterMenuAction(New MenuActions.CteImageExport)
+        Manager.RegisterMenuAction(New MenuActions.CteImageImport)
         Manager.RegisterMenuAction(New MenuActions.ExtractFarc)
     End Sub
 
