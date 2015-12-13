@@ -44,10 +44,10 @@ Namespace FileFormats
         Public Function GetColor(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer) As Color
             If PixelLength = &H20 Then '32 bit
                 Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart, 4)
-                Return Color.FromArgb(data(0), data(1), data(2), data(3))
+                Return Color.FromArgb(data(0), data(3), data(2), data(1))
             ElseIf PixelLength = &H18
                 Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart, 3)
-                Return Color.FromArgb(255, data(0), data(1), data(2))
+                Return Color.FromArgb(255, data(2), data(1), data(0))
             End If
         End Function
         Public Function DrawTile(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer, TileSize As Integer) As Bitmap
