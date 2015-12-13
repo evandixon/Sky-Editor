@@ -33,7 +33,7 @@ Namespace FileFormats
 
         Private Property Height As Integer
 
-        Private Sub iOpenableFile_OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             ImageFormat = BitConverter.ToInt32(RawData(&H4, 4), 0)
             Width = BitConverter.ToInt32(RawData(&H8, 4), 0)
@@ -147,6 +147,10 @@ Namespace FileFormats
 
         Public Sub New()
             MyBase.New
+        End Sub
+        Public Sub New(Filename As String)
+            Me.New
+            OpenFile(Filename)
         End Sub
     End Class
 End Namespace

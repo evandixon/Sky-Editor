@@ -136,6 +136,7 @@
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
+    <Compile Include="Mods\GtiImageBg.vb" />
     <Compile Include="Mods\KaomadoMod.vb" />
     <Compile Include="Mods\GenericMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />

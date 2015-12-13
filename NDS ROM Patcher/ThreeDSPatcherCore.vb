@@ -100,7 +100,7 @@ Public Class ThreeDSPatcherCore
         Dim destination As String = Nothing
 
         If Not hansMode AndAlso DestinationPath Is Nothing Then
-            If MessageBox.Show("Would you like to output to HANS?  (Say no to output to .3DS or .CIA)", "DS ROM Patcher", MessageBoxButtons.YesNo) Then
+            If MessageBox.Show("Would you like to output to HANS?  (Say no to output to .3DS or .CIA)", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.Yes Then
                 hansMode = True
             End If
         End If

@@ -52,7 +52,7 @@ Namespace Utilities
         Private _fileCopyMax As Integer
         Private Sub UpdatePortraitFixLoading(Completed As Integer, Max As Integer)
             If Completed < Max Then
-                If SetLoadingStatus Then PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "Copying files... ({0} of {1})"), Completed, Max), Completed / Max)
+                If SetLoadingStatus Then PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), PluginHelper.GetLanguageItem("Copying Files..."), Completed, Max), Completed / Max)
             Else
                 If SetLoadingStatusOnFinish Then PluginHelper.SetLoadingStatusFinished()
             End If
