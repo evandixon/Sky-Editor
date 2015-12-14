@@ -17,7 +17,7 @@ Namespace Roms
         '        Return False
         '    End If
         'End Function
-        Public ReadOnly Property GameCode As String
+        Public ReadOnly Property GameCode As String Implements iPackedRom.GameCode
             Get
                 Return Text.Encoding.UTF8.GetString(RawData(&H1156, 4), 0, 4).Trim
             End Get

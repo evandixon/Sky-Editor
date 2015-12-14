@@ -102,11 +102,6 @@ Public Class GenericNDSModProject
         Dim o As New OpenFileDialog
         o.Filter = PluginHelper.GetLanguageItem("Nintendo DS Roms") & " (*.nds)|*.nds|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
-            'Make the modpack info
-            Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
-            info.Save()
-            AddFile("Modpack Info", info)
-
             PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying Base ROM..."))
 
             Await Task.Run(New Action(Sub()
@@ -120,6 +115,12 @@ Public Class GenericNDSModProject
             Await sky.Unpack(romDirectory)
             CreateDirectory("Mods")
 
+            'Make the modpack info
+            Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
+            info.ContainedObject.System = "NDS"
+            info.ContainedObject.GameCode = sky.GameCode
+            info.Save()
+            AddFile("Modpack Info", info)
 
             PluginHelper.SetLoadingStatusFinished()
         Else
@@ -530,7 +531,8 @@ Public Class GenericNDSModProject
             If Files.ContainsKey(BaseRomFilename) Then
                 Return NDSModRegistry.GetMods(Files(BaseRomFilename).GetType)
             Else
-                Return New List(Of Type)
+                Dim info As ObjectFile(Of ModpackInfo) = Files("Modpack Info")
+                Return NDSModRegistry.GetMods(info.ContainedObject.GameCode)
             End If
         Else
             Return New List(Of Type)

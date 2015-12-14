@@ -1,5 +1,4 @@
 ﻿Imports SkyEditorBase
-Imports System.Windows.Media.Imaging
 
 Public Class RomSelector
     Public Overloads Function ShowDialog(Roms As List(Of String)) As Boolean

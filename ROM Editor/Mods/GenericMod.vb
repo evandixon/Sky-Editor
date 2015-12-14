@@ -77,7 +77,7 @@ Namespace Mods
         Public Overridable Sub Build(CurrentProject As Project)
 
         End Sub
-        Public Overridable Function SupportedGameCodes() As IEnumerable(Of Type)
+        Public Overridable Function SupportedGameTypes() As IEnumerable(Of Type)
             Return {GetType(Roms.iPackedRom)}
         End Function
         Public Overrides Function DefaultExtension() As String

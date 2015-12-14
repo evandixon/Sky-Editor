@@ -26,6 +26,7 @@ Public Class PluginInfo
         Manager.RegisterIOFilter("*.txt", "Text Files")
         Manager.RegisterIOFilter("*.lua", "Lua Script Files")
         Manager.RegisterFileTypeDetector(AddressOf DetectFileType)
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "AurelienRibon.Ui.SyntaxHighlightBox.dll"))
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution

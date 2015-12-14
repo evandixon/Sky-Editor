@@ -64,6 +64,11 @@ Namespace FileFormats
             ElseIf PixelLength = &H18
                 Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart, 3)
                 Return Color.FromArgb(255, data(2), data(1), data(0))
+            ElseIf PixelLength = 8
+                Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart)
+                Dim a = ((data And &HF0) >> 4) * 17
+                Dim c = ((data And &HF)) * 17
+                Return Color.FromArgb(a, c, c, c)
             Else
                 Throw New NotImplementedException("Unsupported pixel length: " & PixelLength)
             End If
@@ -121,6 +126,9 @@ Namespace FileFormats
                 Return {Color.A, Color.B, Color.G, Color.R}
             ElseIf PixelLength = &H18
                 Return {Color.B, Color.G, Color.R}
+            ElseIf PixelLength = &H8
+                'Return {255 - ((Color.B + Color.G + Color.R) / 3)}
+                Throw New NotImplementedException("Unsupported pixel length: " & PixelLength)
             Else
                 Throw New NotImplementedException("Unsupported pixel length: " & PixelLength)
             End If

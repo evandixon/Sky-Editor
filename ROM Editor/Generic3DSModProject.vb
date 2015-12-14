@@ -9,10 +9,18 @@ Public Class Generic3DSModProject
         o.Filter = "Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             Dim info = New ObjectFile(Of ModpackInfo)(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack Info"))
-            info.Save()
-            AddFile("Modpack Info", info)
-
+            info.ContainedObject.System = "3DS"
             If IO.Path.GetFileName(o.FileName).ToLower = "romfs.bin" Then
+                Dim gcSelector As New GameCodeSelector
+                gcSelector.Presets = GameCodeRegistry.Registry
+                If gcSelector.ShowDialog Then
+                    info.ContainedObject.GameCode = gcSelector.SelectedGameCode
+                Else
+                    MessageBox.Show(PluginHelper.GetLanguageItem("Game code not provided.  To add one later, edit the Modpack Info."))
+                    info.ContainedObject.GameCode = ""
+                End If
+                info.Save()
+                AddFile("Modpack Info", info)
                 Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
                 Dim romfsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", "romfs")
                 Dim exefsDir = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles", "exefs")
@@ -52,6 +60,9 @@ Public Class Generic3DSModProject
                 OpenFile(o.FileName, "BaseRom.3ds")
                 Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
                 Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
+                info.ContainedObject.GameCode = sky.GameCode
+                info.Save()
+                AddFile("Modpack Info", info)
                 Await sky.Unpack(romDirectory)
             End If
 

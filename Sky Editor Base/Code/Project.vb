@@ -234,7 +234,10 @@ Public Class Project
         Else
             path = InternalPath & "/"
         End If
-        Files.Add(path, Nothing)
+        path = path.Replace("\", "/")
+        If Not Files.ContainsKey(path) Then
+            Files.Add(path, Nothing)
+        End If
         If CreateInFileSystem Then
             If Not IO.Directory.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), InternalPath)) Then
                 IO.Directory.CreateDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), InternalPath))

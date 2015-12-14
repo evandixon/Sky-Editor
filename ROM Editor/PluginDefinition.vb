@@ -98,6 +98,7 @@ Public Class PluginDefinition
 
         Manager.RegisterConsoleCommand("import-language", AddressOf ConsoleCommands.ImportSkyLanguageString)
         Manager.RegisterConsoleCommand("psmd-soundtrack", AddressOf ConsoleCommands.CreatePSMDSoundtrack)
+        Manager.RegisterConsoleCommand("cteconvert", AddressOf ConsoleCommands.BatchCteConvert)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
@@ -108,6 +109,11 @@ Public Class PluginDefinition
         Manager.RegisterMenuAction(New MenuActions.CteImageExport)
         Manager.RegisterMenuAction(New MenuActions.CteImageImport)
         Manager.RegisterMenuAction(New MenuActions.ExtractFarc)
+
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), "ECRA", GetType(Roms.ORASRom))
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), "ECLA", GetType(Roms.ORASRom))
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon: Gates to Infinity"), "APDE", GetType(Roms.GatesToInfinityRom))
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Super Mystery Dungeon"), "BPXE", GetType(Roms.PSMDRom))
     End Sub
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

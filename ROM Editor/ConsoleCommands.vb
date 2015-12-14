@@ -1,6 +1,23 @@
 ﻿Imports SkyEditorBase
 
 Public Class ConsoleCommands
+    Public Shared Sub BatchCteConvert(Manager As PluginManager, SourceDir As String)
+        If Not IO.Directory.Exists(SourceDir) Then
+            Console.WriteLine($"Invalid dir ""{SourceDir}""")
+            Exit Sub
+        End If
+        For Each item In IO.Directory.GetFiles(SourceDir)
+            Try
+                Using c As New FileFormats.CteImage(item)
+                    c.ContainedImage.Save(item & ".png", Drawing.Imaging.ImageFormat.Png)
+                    Console.WriteLine("Converted " & item)
+                End Using
+            Catch ex As Exception
+                Console.WriteLine("Failed " & item)
+                Console.WriteLine(ex)
+            End Try
+        Next
+    End Sub
     Public Shared Sub ImportSkyLanguageString(Manager As PluginManager, LanguageStringPath As String)
         Dim formatRegex As New Text.RegularExpressions.Regex("\[.+\]")
         Dim ls As New FileFormats.LanguageString(LanguageStringPath)

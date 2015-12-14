@@ -127,7 +127,7 @@ Namespace Roms
                 Next
             End Set
         End Property
-        Public Property GameCode As String
+        Public Property GameCode As String Implements iPackedRom.GameCode
             Get
                 Dim e As New System.Text.ASCIIEncoding
                 Return e.GetString(RawData(12, 4)).Trim

@@ -37,6 +37,7 @@ Namespace Internal
             Manager.RegisterMenuAction(New MenuActions.ProjectBuild)
             Manager.RegisterMenuAction(New MenuActions.ProjectRun)
             Manager.RegisterMenuAction(New MenuActions.ProjectArchive)
+            Manager.RegisterMenuAction(New MenuActions.DevConsole)
         End Sub
         Public Shared Sub UnLoad(Manager As PluginManager)
 

@@ -45,7 +45,21 @@ Class Application
     Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         Try
             'Delete and install things
-            RedistributionHelpers.DeleteScheduledFiles()
+            Dim tryAgain As Boolean = False
+
+            Try
+                RedistributionHelpers.DeleteScheduledFiles()
+            Catch ex As UnauthorizedAccessException
+                'Can't delete a file because it's in use.  Let's wait a few seconds then try again.  Once.
+                tryAgain = True
+            End Try
+
+            If tryAgain Then
+                Await Task.Delay(3000)
+                'If it fails this time, it'll be caught by the general exception handler
+                RedistributionHelpers.DeleteScheduledFiles()
+            End If
+
             RedistributionHelpers.InstallPendingPlugins()
         Catch ex As Exception
             MessageBox.Show("An error has occurred during pre-startup: " & ex.ToString)

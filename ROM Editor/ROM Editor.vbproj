@@ -110,6 +110,7 @@
     <Compile Include="FileFormats\Farc.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
+    <Compile Include="GameCodeRegistry.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
@@ -132,7 +133,7 @@
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
-    <Compile Include="Mods\GtiImageBg.vb" />
+    <Compile Include="Mods\GtiImage2d.vb" />
     <Compile Include="Mods\KaomadoMod.vb" />
     <Compile Include="Mods\GenericMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />
@@ -182,6 +183,9 @@
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="unluac.vb" />
     <Compile Include="vgmstream.vb" />
+    <Compile Include="Windows\GameCodeSelector.xaml.vb">
+      <DependentUpon>GameCodeSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RomSelector.xaml.vb">
       <DependentUpon>RomSelector.xaml</DependentUpon>
     </Compile>
@@ -349,6 +353,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ObjectControls\NDSModSrcEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GameCodeSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

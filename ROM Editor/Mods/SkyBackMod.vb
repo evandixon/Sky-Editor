@@ -83,7 +83,7 @@ Public Class SkyBackMod
         End If
     End Function
 
-    Public Overrides Function SupportedGameCodes() As IEnumerable(Of Type)
+    Public Overrides Function SupportedGameTypes() As IEnumerable(Of Type)
         Return {GetType(Roms.SkyNDSRom)}
     End Function
 
