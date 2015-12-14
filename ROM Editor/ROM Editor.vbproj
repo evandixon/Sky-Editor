@@ -111,13 +111,9 @@
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameStrings.vb" />
-    <Compile Include="Editor Tabs\PersonalityTest.xaml.vb">
+    <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="File Format Controls\BGPControl.xaml.vb">
-      <DependentUpon>BGPControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="File Format Controls\FileFormatControl.vb" />
     <Compile Include="FileFormats\Animations\AnimatedSprite.vb" />
     <Compile Include="FileFormats\Animations\Frame.vb" />
     <Compile Include="FileFormats\BGP.vb" />
@@ -340,11 +336,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Editor Tabs\PersonalityTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="File Format Controls\BGPControl.xaml">
+    <Page Include="ObjectControls\PersonalityTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,4 @@
-﻿<local:ObjectControl x:Class="PersonalityTest" x:TypeArguments="ff:PersonalityTestContainer"
+﻿<local:ObjectControl x:Class="ObjectControls.PersonalityTest" x:TypeArguments="ff:PersonalityTestContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

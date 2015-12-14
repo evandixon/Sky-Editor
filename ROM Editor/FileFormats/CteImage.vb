@@ -57,7 +57,7 @@ Namespace FileFormats
 
             ContainedImage = image
         End Sub
-        Public Function GetColor(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer) As Color
+        Private Function GetColor(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer) As Color
             If PixelLength = &H20 Then '32 bit
                 Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart, 4)
                 Return Color.FromArgb(data(0), data(3), data(2), data(1))
@@ -68,7 +68,7 @@ Namespace FileFormats
                 Throw New NotImplementedException("Unsupported pixel length: " & PixelLength)
             End If
         End Function
-        Public Function DrawTile(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer, TileSize As Integer) As Bitmap
+        Private Function DrawTile(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer, TileSize As Integer) As Bitmap
             If TileSize = 2 Then
                 Dim output As New Bitmap(2, 2)
                 output.SetPixel(0, 1, GetColor(PixelIndex + 0, PixelLength, DataStart))
