@@ -50,7 +50,7 @@ Namespace Mods
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(ROMDirectory, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
             personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
-                personalityTest.Save(IO.Path.Combine(ModDirectory, "Starter Pokemon"))
+            personalityTest.Save(IO.Path.Combine(ModDirectory, "Starter Pokemon"))
             CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "Starter Pokemon"), IO.Path.Combine(internalPath, "Starter Pokemon"), False)
             PluginHelper.StopLoading()
         End Sub

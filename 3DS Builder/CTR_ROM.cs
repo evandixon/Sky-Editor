@@ -31,6 +31,20 @@ namespace CTR
             return success;
         }
 
+        /// <summary>
+        /// Builds the romfs at ROMFS_PATH and saves it to the file SAVE_PATH
+        /// </summary>
+        /// <param name="ROMFS_PATH">Directory of the romfs to pack.  Pass in null to skip.</param>
+        /// <param name="SAVE_PATH">Filename of the built romfs.</param>
+        /// <returns></returns>
+        internal static void buildRomfs(string ROMFS_PATH, string SAVE_PATH, RichTextBox RTB, System.Windows.Forms.ProgressBar progress)
+        {
+            if (!string.IsNullOrEmpty(ROMFS_PATH))
+            {
+                RomFS.BuildRomFS(SAVE_PATH, ROMFS_PATH, RTB, progress);
+            }      
+        }
+
         // Sub methods that drive the operation
         internal static NCCH setNCCH(string EXEFS_PATH, string ROMFS_PATH, string EXHEADER_PATH, string TB_Serial, string LOGO_NAME,
             ProgressBar PB_Show = null, RichTextBox TB_Progress = null)

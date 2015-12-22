@@ -9,7 +9,7 @@ Imports SkyEditorBase.Interfaces
 Public Class GenericNDSModProject
     Inherits Project
 
-    Private Const PatcherVersion As String = "alpha 2"
+    Private Const PatcherVersion As String = "alpha 3"
 
     Public Event NDSModAdded(sender As Object, e As NDSModAddedEventArgs)
     Public Event NDSModBuilding(sender As Object, e As NDSModBuildingEventArgs)
@@ -158,9 +158,13 @@ Public Class GenericNDSModProject
                 Await PluginHelper.CopyDirectory(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles"), romDirectory)
             End If
 
-            Await m.InitializeAsync(Me)
-
-            PluginHelper.SetLoadingStatusFinished()
+            Try
+                Await m.InitializeAsync(Me)
+                PluginHelper.SetLoadingStatusFinished()
+            Catch ex As Exception
+                PluginHelper.ReportExceptionThrown(Me, ex)
+                PluginHelper.SetLoadingStatusFailed()
+            End Try
         End If
     End Sub
 

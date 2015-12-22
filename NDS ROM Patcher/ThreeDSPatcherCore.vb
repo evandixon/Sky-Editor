@@ -18,7 +18,7 @@ Public Class ThreeDSPatcherCore
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
 
         Dim hansMode As Boolean
-        If IO.Path.GetFileName(SelectedFilename).ToLower = "romfs.bin" Then
+        If IO.Path.GetFileName(SelectedFilename).Replace("/", "\").Trim("\").ToLower.Replace(".bin", "").EndsWith("romfs") Then
             hansMode = True
         Else
             hansMode = False
@@ -31,35 +31,53 @@ Public Class ThreeDSPatcherCore
         End If
 
         If hansMode Then
-            MessageBox.Show("You have selected a romfs.bin as the input.  This is only semi-supported for the time being.  You will not be able to add any mods, but you shouldn't have to re-create the project when support is added.")
             Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
             Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
             Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
             Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
+            If IO.File.Exists(SelectedFilename) Then
+                'It's a romfs.bin file
 
-            If Not IO.Directory.Exists(ROMDirectory) Then
-                IO.Directory.CreateDirectory(ROMDirectory)
-            End If
-
-            IO.File.Copy(SelectedFilename, romfsPath, True)
-
-            'Unpack exefs
-            Dim exefsSource As String = IO.Path.Combine(IO.Path.GetDirectoryName(SelectedFilename), "exefs.bin")
-            If IO.File.Exists(exefsSource) Then
-                IO.File.Copy(exefsSource, exefsPath)
-
-                If Not IO.Directory.Exists(exefsDir) Then
-                    IO.Directory.CreateDirectory(exefsDir)
+                If Not IO.Directory.Exists(ROMDirectory) Then
+                    IO.Directory.CreateDirectory(ROMDirectory)
                 End If
-                Await ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
-            End If
 
-            'Unpack romfs
-            If Not IO.Directory.Exists(romfsDir) Then
-                IO.Directory.CreateDirectory(romfsDir)
-            End If
+                IO.File.Copy(SelectedFilename, romfsPath, True)
 
-            Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+                'Unpack exefs
+                Dim exefsSource As String = IO.Path.Combine(IO.Path.GetDirectoryName(SelectedFilename), "exefs.bin")
+                If IO.File.Exists(exefsSource) Then
+                    IO.File.Copy(exefsSource, exefsPath, True)
+
+                    If Not IO.Directory.Exists(exefsDir) Then
+                        IO.Directory.CreateDirectory(exefsDir)
+                    End If
+                    Await ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
+                End If
+
+                'Unpack romfs
+                If Not IO.Directory.Exists(romfsDir) Then
+                    IO.Directory.CreateDirectory(romfsDir)
+                End If
+
+                Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+            Else
+                'WARNING: untested, possibly redundant
+                'It's a romfs directory
+
+                Dim files As New List(Of Task)
+                For Each item In IO.Directory.GetFiles(SelectedFilename, "*", IO.SearchOption.AllDirectories)
+                    Dim source = item
+                    Dim dest = item.Replace(SelectedFilename, ROMDirectory)
+                    files.Add(Task.Run(New Action(Sub()
+                                                      If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                                          IO.Directory.CreateDirectory(dest)
+                                                      End If
+                                                      IO.File.Copy(source, dest, True)
+                                                  End Sub)))
+                Next
+                Await Task.WhenAll(files)
+            End If
         Else
             'We're dealing with a .3DS file
             Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
@@ -123,30 +141,37 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
             If destination IsNot Nothing Then
                 Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
                 Dim romfsPath = IO.Path.Combine(ROMDirectory, "romfsRepacked.bin")
-                Dim romfsTrimmedPath = IO.Path.Combine(ROMDirectory, "romfsRepacked.bin")
+                Dim romfsTrimmedPath = IO.Path.Combine(ROMDirectory, "romfsRepackedTrimmed.bin")
 
                 'Repack romfs
-                'TODO: run tool to repack romfs
-                Throw New NotImplementedException("Repacking the romfs is currently not implemented.")
+                Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
+                                     $"-romfs ""{romfsDir}"" ""{romfsPath}""")
 
                 'Trim the first part of the romfs
+                Const HansRomfsTrim As Integer = &H1000
                 Using source As New IO.FileStream(romfsPath, IO.FileMode.Open, IO.FileAccess.ReadWrite)
                     Using dest As New IO.FileStream(romfsTrimmedPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite)
-                        dest.SetLength(source.Length - &HFF0)
-                        source.Seek(&HFF0, IO.SeekOrigin.Begin)
-                        For i = 0 To dest.Length - 1
-                            dest.WriteByte(source.ReadByte)
-                            source.Seek(1, IO.SeekOrigin.Current)
-                            dest.Seek(1, IO.SeekOrigin.Current)
-                        Next
+                        dest.SetLength(source.Length - HansRomfsTrim)
+                        source.Seek(HansRomfsTrim, IO.SeekOrigin.Begin)
+                        dest.Seek(0, IO.SeekOrigin.Begin)
+                        source.CopyTo(dest)
                         dest.Flush()
+                        End Using
                     End Using
-                End Using
 
-                IO.File.Copy(romfsTrimmedPath, IO.Path.Combine(destination, "romfs.bin"), True)
-                'TODO: copy code.bin
+                'Copy the files
+                If Not IO.Directory.Exists(destination) Then
+                    IO.Directory.CreateDirectory(destination)
+                End If
 
-                'TODO: make Hans integration nicer
+                IO.File.Copy(romfsTrimmedPath, IO.Path.Combine(destination, "romfs.romfs"), True)
+
+                If IO.File.Exists(IO.Path.Combine(ROMDirectory, "exefs", "code.bin")) Then
+                    IO.File.Copy(IO.Path.Combine(ROMDirectory, "exefs", "code.bin"), IO.Path.Combine(destination, "code.code"), True)
+                End If
+
+
+                'TODO: make hans shortcut
             Else
                 RaiseProgressChanged(1, "Patching canceled by user")
             End If

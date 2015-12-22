@@ -90,7 +90,7 @@ namespace CTR
             }
             catch { }
         }
-        internal static void BuildRomFS(string outfile, string infile, RichTextBox TB_Progress = null, ProgressBar PB_Show = null)
+        public static void BuildRomFS(string outfile, string infile, RichTextBox TB_Progress = null, ProgressBar PB_Show = null)
         {
             OutFile = outfile;
             ROOT_DIR = infile;

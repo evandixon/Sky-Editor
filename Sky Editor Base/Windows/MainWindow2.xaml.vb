@@ -154,6 +154,7 @@ Public Class MainWindow2
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
         AddHandler PluginHelper.FileOpenRequested, AddressOf OnFileOpenRequested
+        AddHandler PluginHelper.ExceptionThrown, AddressOf OnExceptionThrown
     End Sub
 
     ''' <summary>
@@ -217,6 +218,11 @@ Public Class MainWindow2
 
     Private Sub OnFileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
         OpenDocumentTab(e.File, e.DisposeOnExit)
+    End Sub
+
+    Private Sub OnExceptionThrown(sender As Object, e As EventArguments.ExceptionThrownEventArgs)
+        MessageBox.Show(PluginHelper.GetLanguageItem("GenericErrorMessage", "An error has occurred.  See output for details."))
+        PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
     End Sub
 
     Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged

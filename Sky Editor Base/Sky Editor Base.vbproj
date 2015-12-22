@@ -33,7 +33,7 @@
     <MinimumRequiredVersion>4.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>15</ApplicationRevision>
+    <ApplicationRevision>16</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -193,6 +193,7 @@
     <Compile Include="Code\ARDS\Region.vb" />
     <Compile Include="Code\ChildControls.vb" />
     <Compile Include="Code\DocumentTab.vb" />
+    <Compile Include="Code\EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="Code\EventArguments\FileOpenedEventArgs.vb" />
     <Compile Include="Code\EventArguments\MenuActionAddedEventArgs.vb" />

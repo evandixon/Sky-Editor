@@ -269,10 +269,17 @@ namespace _3DS_Builder
         private void Form1_Load(object sender, EventArgs e)
         {
             var args = Environment.GetCommandLineArgs();
-            if (args.Length > 4)
+            if (args.Length > 3 && args[1] == "-romfs")
+            {
+                string ROMFS_PATH = args[2].Replace("/", "\\");
+                string SAVE_PATH = args[3].Replace("/", "\\");
+                CTR_ROM.buildRomfs(ROMFS_PATH, SAVE_PATH, RTB_Progress, PB_Show);
+                this.Close();
+            }
+            else if (args.Length > 4)
             {
                 //this.Visible = false;
-                string EXEFS_PATH = args[1].Replace("/","\\");
+                string EXEFS_PATH = args[1].Replace("/", "\\");
                 string ROMFS_PATH = args[2].Replace("/", "\\");
                 string EXHEADER_PATH = args[3].Replace("/", "\\");
                 //romfs
@@ -312,7 +319,7 @@ namespace _3DS_Builder
                             //Alert("Deleting unneeded exefs logo binary.");
                             File.Delete((new DirectoryInfo(EXEFS_PATH)).GetFiles()[Array.IndexOf(files, "logo")].FullName);
                         }
-                        
+
                         //Validate_Go();
                     }
                     TB_Exefs.Text = EXEFS_PATH;

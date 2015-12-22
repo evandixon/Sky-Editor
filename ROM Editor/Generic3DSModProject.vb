@@ -91,7 +91,7 @@ Public Class Generic3DSModProject
         If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), BaseRomFilename)) Then
             Await PluginHelper.RunProgram(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", IO.Path.Combine(IO.Path.GetDirectoryName(Filename), BaseRomFilename), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), OutputRomFilename)), False)
         Else
-            MessageBox.Show("Unable to find BaseRom.3DS.  Patch will not be tested.  If you are using a romfs made with Braindump, support for this is coming soon.")
+            Await PluginHelper.RunProgram(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "romfs.bin"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Hans Output")), False)
         End If
     End Function
     Public Overrides Function CanRun() As Boolean
