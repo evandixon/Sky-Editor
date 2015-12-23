@@ -27,19 +27,7 @@ Public Class PluginDefinition
         If File.Length > &H115A Then
             Dim e As New System.Text.ASCIIEncoding
             If e.GetString(File.RawData(&H100, 4)) = "NCSD" Then 'This is a 3DS ROM
-                Dim r As New Generic3DSRom(File.OriginalFilename)
-                Select Case r.GameCode
-                    Case "APDE"
-                        Return {GetType(GatesToInfinityRom)}
-                    Case "ECLA"
-                        Return {GetType(ORASRom)}
-                    Case "ECRA"
-                        Return {GetType(ORASRom)}
-                    Case "BPXE"
-                        Return {GetType(PSMDRom)}
-                    Case Else
-                        Return {GetType(Generic3DSRom)}
-                End Select
+                Return {GetType(Generic3DSRom)}
             Else
                 Return {}
             End If
@@ -97,7 +85,6 @@ Public Class PluginDefinition
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
 
         Manager.RegisterConsoleCommand("import-language", AddressOf ConsoleCommands.ImportSkyLanguageString)
-        Manager.RegisterConsoleCommand("psmd-soundtrack", AddressOf ConsoleCommands.CreatePSMDSoundtrack)
         Manager.RegisterConsoleCommand("cteconvert", AddressOf ConsoleCommands.BatchCteConvert)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
@@ -110,10 +97,10 @@ Public Class PluginDefinition
         Manager.RegisterMenuAction(New MenuActions.CteImageImport)
         Manager.RegisterMenuAction(New MenuActions.ExtractFarc)
 
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), "ECRA", GetType(Roms.ORASRom))
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), "ECLA", GetType(Roms.ORASRom))
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon: Gates to Infinity"), "APDE", GetType(Roms.GatesToInfinityRom))
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Super Mystery Dungeon"), "BPXE", GetType(Roms.PSMDRom))
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon: Gates to Infinity"), GameStrings.GTICode)
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Super Mystery Dungeon"), GameStrings.PSMDCode)
     End Sub
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

@@ -4,8 +4,8 @@ Namespace Mods
     Public Class pk3DSMod
         Inherits GenericMod
 
-        Public Overrides Function SupportedGameTypes() As IEnumerable(Of Type)
-            Return {GetType(Roms.XYRom), GetType(Roms.ORASRom)}
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
+            Return {GameStrings.PokemonXCode, GameStrings.PokemonYCode, GameStrings.ORCode, GameStrings.ASCode}
         End Function
 
         Public Overrides Sub Initialize(CurrentProject As Project)

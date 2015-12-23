@@ -18,7 +18,7 @@
         <TextBox x:Name="txtDescription" Height="25" VerticalAlignment="Top"/>
 
         <Label Content="Version" Height="25" VerticalAlignment="Top"/>
-        <TextBlock x:Name="txtVersion" Height="25" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtVersion" Height="25" VerticalAlignment="Top"/>
 
         <Label Content="Update URL" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>
         <TextBox x:Name="txtUpdateUrl" Height="25" VerticalAlignment="Top" Visibility="Collapsed"/>

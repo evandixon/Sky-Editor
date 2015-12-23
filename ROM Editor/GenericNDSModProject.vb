@@ -532,12 +532,8 @@ Public Class GenericNDSModProject
     End Function
     Public Overrides Function CreatableFiles(InternalPath As String, Manager As PluginManager) As IList(Of Type)
         If InternalPath.ToLower = "mods/" Then
-            If Files.ContainsKey(BaseRomFilename) Then
-                Return NDSModRegistry.GetMods(Files(BaseRomFilename).GetType)
-            Else
-                Dim info As ObjectFile(Of ModpackInfo) = Files("Modpack Info")
-                Return NDSModRegistry.GetMods(info.ContainedObject.GameCode)
-            End If
+            Dim info As ObjectFile(Of ModpackInfo) = Files("Modpack Info")
+            Return NDSModRegistry.GetMods(info.ContainedObject.GameCode)
         Else
             Return New List(Of Type)
         End If

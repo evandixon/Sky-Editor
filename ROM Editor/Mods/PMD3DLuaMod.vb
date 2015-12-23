@@ -55,8 +55,8 @@ Namespace Mods
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
         End Function
 
-        Public Overrides Function SupportedGameTypes() As IEnumerable(Of Type)
-            Return {GetType(Roms.GatesToInfinityRom), GetType(Roms.PSMDRom)}
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
+            Return {GameStrings.GTICode, GameStrings.PSMDCode}
         End Function
 
         Public Overrides Function FilesToCopy() As IEnumerable(Of String)

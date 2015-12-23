@@ -113,6 +113,9 @@
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameCodeRegistry.vb" />
     <Compile Include="GameStrings.vb" />
+    <Compile Include="ObjectControls\ModpackInfoControl.xaml.vb">
+      <DependentUpon>ModpackInfoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
     </Compile>
@@ -173,14 +176,10 @@
     <Compile Include="Portrait.vb" />
     <Compile Include="PsmdSoundtrackAction.vb" />
     <Compile Include="ROM.vb" />
-    <Compile Include="Roms\GatesToInfinityRom.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
-    <Compile Include="Roms\ORASRom.vb" />
-    <Compile Include="Roms\PSMDRom.vb" />
     <Compile Include="Roms\SkyNDSRom.vb" />
-    <Compile Include="Roms\XYRom.vb" />
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="unluac.vb" />
     <Compile Include="vgmstream.vb" />
@@ -341,6 +340,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ObjectControls\ModpackInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ObjectControls\PersonalityTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

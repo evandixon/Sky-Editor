@@ -89,8 +89,8 @@ Namespace Mods
             End If
         End Sub
 
-        Public Overrides Function SupportedGameTypes() As IEnumerable(Of Type)
-            Return {GetType(Roms.GatesToInfinityRom)}
+        Public Overrides Function SupportedGameCodes() As IEnumerable(Of String)
+            Return {GameStrings.GTICode}
         End Function
 
         Public Sub New(Filename As String)

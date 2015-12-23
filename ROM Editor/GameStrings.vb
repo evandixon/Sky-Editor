@@ -33,4 +33,13 @@ Public Class GameStrings
     Public Shared Function PersonalityTest() As String
         Return PluginHelper.GetLanguageItem("PersonalityTest", "Personality Test")
     End Function
+
+    Public Const PokemonXCode = "0004000000055D00"
+    Public Const PokemonYCode = "0004000000055E00"
+    Public Const ORCode = "000400000011C400"
+    Public Const ASCode = "000400000011C500"
+    Public Const GTICode = "00040000000BA800"
+    Public Const PSMDCode = "0004000000174600"
+
+    Public Const SkyCode = "C2S."
 End Class
