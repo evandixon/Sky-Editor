@@ -6,7 +6,7 @@ Public Class ThreeDSPatcherCore
 
     Public Overrides Sub PromptFilePath()
         Dim o As New OpenFileDialog
-        o.Filter = "Supported Files (*.3ds;*.3dz)|*.3ds;*.3dz|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|All Files (*.*)|*.*" '"Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
+        o.Filter = "Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             SelectedFilename = o.FileName
         End If
@@ -14,8 +14,11 @@ Public Class ThreeDSPatcherCore
 
     Public Overrides Async Function RunPatch(Mods As IEnumerable(Of ModJson), Optional DestinationPath As String = Nothing) As Task
         Dim currentDirectory = Environment.CurrentDirectory
-        Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools/ndstemp")
-        Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
+        Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools", "ndstemp")
+        Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools", "modstemp")
+        Dim modsDirectory = IO.Path.Combine(currentDirectory, "mods")
+        Dim j As New JavaScriptSerializer
+        Dim info As ModpackInfo = j.Deserialize(Of ModpackInfo)(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Mods", "Modpack Info")))
 
         Dim hansMode As Boolean
         If IO.Path.GetFileName(SelectedFilename).Replace("/", "\").Trim("\").ToLower.Replace(".bin", "").EndsWith("romfs") Then
@@ -101,7 +104,6 @@ Public Class ThreeDSPatcherCore
         Const RepackMessage As String = "Repacking the ROM..."
         RaiseProgressChanged(1 / 3, RepackMessage)
 
-        Dim j As New JavaScriptSerializer
         Dim patchers = j.Deserialize(Of List(Of FilePatcher))(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Tools", "patchers.json")))
         Dim modFiles As New List(Of ModFile)
         For Each item In Mods
@@ -126,7 +128,7 @@ Public Class ThreeDSPatcherCore
         If hansMode Then
             If DestinationPath Is Nothing Then
                 Dim d As New FolderBrowserDialog
-                d.Description = "Please select a folder to export romfs.bin and exefs.bin" '"Please select your Hans folder.  (Should be SD:/Hans)"
+                d.Description = "Please select the root of your SD card."
 ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
                     destination = d.SelectedPath
                 Else
@@ -142,6 +144,8 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
                 Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
                 Dim romfsPath = IO.Path.Combine(ROMDirectory, "romfsRepacked.bin")
                 Dim romfsTrimmedPath = IO.Path.Combine(ROMDirectory, "romfsRepackedTrimmed.bin")
+                Dim hansName As String = info.Name.Replace(" ", "").Replace("é", "e")
+                Dim shortName As String = info.shortname
 
                 'Repack romfs
                 Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
@@ -164,14 +168,61 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
                     IO.Directory.CreateDirectory(destination)
                 End If
 
-                IO.File.Copy(romfsTrimmedPath, IO.Path.Combine(destination, "romfs.romfs"), True)
-
-                If IO.File.Exists(IO.Path.Combine(ROMDirectory, "exefs", "code.bin")) Then
-                    IO.File.Copy(IO.Path.Combine(ROMDirectory, "exefs", "code.bin"), IO.Path.Combine(destination, "code.code"), True)
+                If Not IO.Directory.Exists(IO.Path.Combine(destination, "hans")) Then
+                    IO.Directory.CreateDirectory(IO.Path.Combine(destination, "hans"))
                 End If
 
+                IO.File.Copy(romfsTrimmedPath, IO.Path.Combine(destination, "hans", shortName & ".romfs"), True)
 
-                'TODO: make hans shortcut
+                If IO.File.Exists(IO.Path.Combine(ROMDirectory, "exefs", "code.bin")) Then
+                    IO.File.Copy(IO.Path.Combine(ROMDirectory, "exefs", "code.bin"), IO.Path.Combine(destination, "hans", shortName & ".code"), True)
+                End If
+
+                If Not IO.Directory.Exists(IO.Path.Combine(destination, "3ds")) Then
+                    IO.Directory.CreateDirectory(IO.Path.Combine(destination, "3ds"))
+                End If
+
+                'Copy smdh
+                Dim iconExists As Boolean = False
+                If IO.File.Exists(IO.Path.Combine(modsDirectory, "Modpack.smdh")) Then
+                    iconExists = True
+                    IO.File.Copy(IO.Path.Combine(modsDirectory, "Modpack.smdh"), IO.Path.Combine(destination, "3ds", hansName & ".smdh"), True)
+                End If
+
+                'Write hans shortcut
+                Dim shortcut As New Text.StringBuilder
+                shortcut.AppendLine("<shortcut>")
+                shortcut.AppendLine("	<executable>/3ds/hans/hans.3dsx</executable>")
+                If iconExists Then
+                    shortcut.AppendLine($"	<icon>/3ds/{hansName}.smdh</icon>")
+                End If
+                shortcut.AppendLine($"	<arg>-f/3ds/hans/titles/{shortName}.txt</arg>")
+                shortcut.AppendLine("</shortcut>")
+                shortcut.AppendLine("<targets selectable=""false"">")
+                shortcut.AppendLine($"	<title mediatype=""2"">{info.GameCode}</title>")
+                shortcut.AppendLine($"	<title mediatype=""1"">{info.GameCode}</title>")
+                shortcut.AppendLine("</targets>")
+                IO.File.WriteAllText(IO.Path.Combine(destination, "3ds", hansName & ".xml"), shortcut.ToString)
+
+                'Write hans title settings
+                Dim preset As New Text.StringBuilder
+                preset.Append("region : -1")
+                preset.Append(vbLf)
+                preset.Append("language : -1")
+                preset.Append(vbLf)
+                preset.Append("clock : 0")
+                preset.Append(vbLf)
+                preset.Append("romfs : 0")
+                preset.Append(vbLf)
+                preset.Append("code : 0")
+                preset.Append(vbLf)
+                preset.Append("nim_checkupdate : 1")
+                preset.Append(vbLf)
+                If Not IO.Directory.Exists(IO.Path.Combine(destination, "3ds", "hans", "titles")) Then
+                    IO.Directory.CreateDirectory(IO.Path.Combine(destination, "3ds", "hans", "titles"))
+                End If
+                IO.File.WriteAllText(IO.Path.Combine(destination, "3ds", "hans", "titles", shortName & ".txt"), preset.ToString)
+                RaiseProgressChanged(1, "Ready")
             Else
                 RaiseProgressChanged(1, "Patching canceled by user")
             End If

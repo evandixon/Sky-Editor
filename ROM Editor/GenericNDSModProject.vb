@@ -396,6 +396,8 @@ Public Class GenericNDSModProject
 
         CopyPatcherProgram()
 
+        IO.File.WriteAllText(IO.Path.Combine(modPackFilesMods, "Modpack Info"), j.Serialize(DirectCast(Files("Modpack Info"), ObjectFile(Of ModpackInfo)).ContainedObject))
+
         '-Zip it
         Utilities.Zip.Zip(modPackFiles, IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename) & " " & DirectCast(Files("Modpack Info"), ObjectFile(Of ModpackInfo)).ContainedObject.Version & "-" & PatcherVersion & ".zip"))
 

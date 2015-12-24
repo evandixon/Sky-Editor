@@ -140,7 +140,6 @@ Partial Class Form2
         '
         'pbProgress
         '
-        Me.pbProgress.Maximum = 1
         Me.pbProgress.Name = "pbProgress"
         Me.pbProgress.Size = New System.Drawing.Size(100, 16)
         '

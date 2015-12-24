@@ -6,7 +6,7 @@ Public Class ModFile
     Public Property Patched As Boolean
     Public Property Filename As String
     Public Async Function ApplyPatch(currentDirectory As String, ROMDirectory As String, patchers As List(Of FilePatcher)) As Task
-        Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools/renametemp")
+        Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools", "renametemp")
         If ModDetails.ToAdd IsNot Nothing Then
             For Each file In ModDetails.ToAdd
                 IO.File.Copy(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Files", file.Trim("\")), IO.Path.Combine(ROMDirectory, file.Trim("\")), True)

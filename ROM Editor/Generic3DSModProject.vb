@@ -86,6 +86,11 @@ Public Class Generic3DSModProject
         '-Copy patching wizard
         IO.File.Copy(PluginHelper.GetResourceName("DSPatcher.exe"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "DSPatcher.exe"), True)
         IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "ICSharpCode.SharpZipLib.dll"), True)
+
+        '-Copy Modpack.smdh
+        If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack.smdh")) Then
+            IO.File.Copy(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Modpack.smdh"), IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "ModPack Files", "Mods", "Modpack.smdh"))
+        End If
     End Sub
     Public Overrides Async Function ApplyPatchAsync() As Task
         If IO.File.Exists(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), BaseRomFilename)) Then

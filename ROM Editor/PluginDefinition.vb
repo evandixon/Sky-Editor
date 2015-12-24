@@ -99,6 +99,8 @@ Public Class PluginDefinition
 
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon X"), GameStrings.PokemonXCode)
+        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Y"), GameStrings.PokemonYCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon: Gates to Infinity"), GameStrings.GTICode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Super Mystery Dungeon"), GameStrings.PSMDCode)
     End Sub

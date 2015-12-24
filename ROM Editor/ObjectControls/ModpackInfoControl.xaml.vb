@@ -8,6 +8,7 @@ Namespace ObjectControls
             MyBase.RefreshDisplay()
             With EditingItem
                 txtName.Text = .Name
+                txtShortName.Text = .ShortName
                 txtAuthor.Text = .Author
                 txtVersion.Text = .Version
                 txtGameCode.Text = .GameCode
@@ -18,6 +19,7 @@ Namespace ObjectControls
             MyBase.UpdateObject()
             With EditingItem
                 .Name = txtName.Text
+                .ShortName = txtShortName.Text
                 .Author = txtAuthor.Text
                 .Version = txtVersion.Text
                 .GameCode = txtGameCode.Text

@@ -9,13 +9,15 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="87,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtAuthor" HorizontalAlignment="Left" Height="23" Margin="87,38,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtVersion" HorizontalAlignment="Left" Height="23" Margin="87,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtGameCode" HorizontalAlignment="Left" Height="23" Margin="87,94,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="Author" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="Version" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label3" Content="Game Code" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtAuthor" HorizontalAlignment="Left" Height="23" Margin="87,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtVersion" HorizontalAlignment="Left" Height="23" Margin="87,94,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtGameCode" HorizontalAlignment="Left" Height="23" Margin="87,122,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="12,7,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Content="Author" HorizontalAlignment="Left" Margin="12,63,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label2" Content="Version" HorizontalAlignment="Left" Margin="12,91,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label3" Content="Game Code" HorizontalAlignment="Left" Margin="12,119,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtShortName" HorizontalAlignment="Left" Height="23" Margin="87,38,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label_Copy" Content="Short Name" HorizontalAlignment="Left" Margin="12,35,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </sky:ObjectControl>

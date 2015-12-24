@@ -131,7 +131,7 @@ Public Class Form2
                    End Sub)
         Else
             lblStatus.Text = e.Message
-            pbProgress.Value = e.Progress
+            pbProgress.Value = e.Progress * 100
         End If
     End Sub
 End Class

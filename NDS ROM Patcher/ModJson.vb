@@ -20,9 +20,13 @@
     End Sub
 
     Public Function GetDescription() As String
-        '        Return $"Name: {Name}
-        'Description: {Description}"
-        Return Me.ToString
+        If Name IsNot Nothing AndAlso Description IsNot Nothing Then
+            Return $"Name: {Name}
+Author: {Author}
+Description: {Description}"
+        Else
+            Return Me.ToString
+        End If
     End Function
     Public Overrides Function ToString() As String
         If String.IsNullOrEmpty(Name) Then
