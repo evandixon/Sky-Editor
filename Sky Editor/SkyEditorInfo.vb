@@ -64,6 +64,8 @@ Public Class SkyEditorInfo
         'Manager.RegisterCodeGenerator(New RedTeamName)
 
         'Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
+
+        Manager.RegisterMenuAction(New MenuActions.ImportSdf)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String

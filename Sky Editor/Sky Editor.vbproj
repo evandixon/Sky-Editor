@@ -100,6 +100,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -171,8 +172,11 @@
     <Compile Include="Library\ARDS\Red Team Name.vb" />
     <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
+    <Compile Include="MenuActions\ImportSdf.vb" />
     <Compile Include="Saves\GatesGameData.vb" />
     <Compile Include="Saves\RBSaveEU.StoredPokemon.vb" />
+    <Compile Include="SdfSave.vb" />
+    <Compile Include="SdfSaveDataDirectory.vb" />
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
     </Compile>

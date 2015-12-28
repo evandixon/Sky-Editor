@@ -110,6 +110,7 @@ Namespace Roms
 
 #Region "Properties"
         'Credit to http://nocash.emubase.de/gbatek.htm#dscartridgesencryptionfirmware (As of Jan 1 2014) for research
+        'Later moved to http://problemkaputt.de/gbatek.htm#dscartridgeheader
         Public Property GameTitle As String
             Get
                 Dim e As New System.Text.ASCIIEncoding
