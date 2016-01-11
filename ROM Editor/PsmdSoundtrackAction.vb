@@ -9,7 +9,7 @@ Public Class PsmdSoundtrackMenuAction
     Public Overrides Function SupportsObject(Obj As Object) As Boolean
         If TypeOf Obj Is Generic3DSModProject Then
             Dim info As ObjectFile(Of ModpackInfo) = DirectCast(Obj, Generic3DSModProject).Files("Modpack Info")
-            Return info.ContainedObject.System = "3DS" AndAlso info.ContainedObject.GameCode = "BPXE"
+            Return info.ContainedObject.System = "3DS" AndAlso info.ContainedObject.GameCode = GameStrings.PSMDCode
         Else
             Return False
         End If
