@@ -25,7 +25,7 @@ Namespace Roms
 
         Public ReadOnly Property TitleID As String Implements iPackedRom.GameCode
             Get
-                Return Conversion.Hex(BitConverter.ToUInt64(RawData(&H108, 8), 0))
+                Return Conversion.Hex(BitConverter.ToUInt64(RawData(&H108, 8), 0)).PadLeft(16, "0"c)
             End Get
         End Property
 
