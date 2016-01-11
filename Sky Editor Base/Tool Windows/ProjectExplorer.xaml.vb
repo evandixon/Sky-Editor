@@ -29,11 +29,11 @@ Public Class ProjectExplorer
         Dim Node As New TreeViewItem()
         Node.Header = GetNodeContents(IO.Path.GetFileName(Directory.Trim("/")), SkyEditorBase.PluginHelper.GetLanguageItem("DirPrefix", "[DIR] "))
         Node.Tag = Directory
-        For Each d In _manager.CurrentProject.GetDirectories(Directory, False)
-            If Not String.IsNullOrEmpty(d) Then Node.Items.Add(GetDirectoryNode(d))
+        For Each item In (From d In _manager.CurrentProject.GetDirectories(Directory, False) Order By d Ascending Select d)
+            If Not String.IsNullOrEmpty(item) Then Node.Items.Add(GetDirectoryNode(item))
         Next
-        For Each f In _manager.CurrentProject.GetFiles(Directory)
-            Node.Items.Add(GetFileNode(f))
+        For Each item In (From f In _manager.CurrentProject.GetFiles(Directory) Order By f Ascending Select f)
+            Node.Items.Add(GetFileNode(item))
         Next
         Return Node
     End Function
