@@ -174,7 +174,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Portrait.vb" />
-    <Compile Include="PsmdSoundtrackAction.vb" />
+    <Compile Include="MenuActions\PsmdSoundtrackAction.vb" />
     <Compile Include="ROM.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
