@@ -75,7 +75,7 @@ Public Class ProjectExplorer
         _manager = Manager
     End Sub
 
-    Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
+    Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
         Refresh()
     End Sub
 
@@ -83,11 +83,11 @@ Public Class ProjectExplorer
         Refresh()
     End Sub
 
-    Private Sub _manager_ProjectFileRemoved(sender As Object, File As String) Handles _manager.ProjectFileRemoved
+    Private Sub _manager_ProjectFileRemoved(sender As Object, e As EventArguments.FileRemovedEventArgs) Handles _manager.ProjectFileRemoved
         Refresh()
     End Sub
 
-    Private Sub _manager_ProjectDirectoryCreated(sender As Object, File As String) Handles _manager.ProjectDirectoryCreated
+    Private Sub _manager_ProjectDirectoryCreated(sender As Object, e As EventArguments.ProjectDirectoryCreatedEventArgs) Handles _manager.ProjectDirectoryCreated
         Refresh()
     End Sub
 

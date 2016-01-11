@@ -234,7 +234,7 @@ Public Class PluginManager
         Set(value As Project)
             If _currentProject IsNot Nothing Then _currentProject.Dispose()
             _currentProject = value
-            RaiseEvent ProjectChanged(Me, value)
+            RaiseEvent ProjectChanged(Me, New ProjectChangedEventArgs With {.Project = value})
         End Set
     End Property
 #End Region
@@ -492,15 +492,15 @@ Public Class PluginManager
     'Public Event ConsoleCommandRegistered(sender As Object, ConsoleCommand As ConsoleCommand)
     'Public Event EditorTabRegistered(sender As Object, EditorTab As Type)
     'Public Event ObjectControlRegistered(sender As Object, ObjectControl As Type)
-    Public Event IOFilterRegistered(sender As Object, IOFilter As Object)
-    Public Event MenuItemRegistered(sender As Object, Item As MenuItem)
+    'Public Event IOFilterRegistered(sender As Object, IOFilter As IoFilterRegisteredEventArgs)
+    'Public Event MenuItemRegistered(sender As Object, Item As MenuItem)
     'Public Event SaveGameFormatRegisterd(sender As Object, SaveGameFormat As Object)
-    Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
+    'Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
     'Public Event ResourceFileRegistered(sender As Object, ResourceFile As Object)
     Public Event ProjectFileAdded(sender As Object, e As FileAddedEventArguments)
-    Public Event ProjectFileRemoved(sender As Object, File As String)
-    Public Event ProjectChanged(sender As Object, NewProject As Project)
-    Public Event ProjectDirectoryCreated(sender As Object, File As String)
+    Public Event ProjectFileRemoved(sender As Object, e As FileRemovedEventArgs)
+    Public Event ProjectChanged(sender As Object, e As ProjectChangedEventArgs)
+    Public Event ProjectDirectoryCreated(sender As Object, e As ProjectDirectoryCreatedEventArgs)
     Public Event ProjectModified(sender As Object, e As EventArgs)
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
 #End Region
@@ -511,11 +511,11 @@ Public Class PluginManager
     End Sub
 
     Private Sub _currentProject_FileRemoved(sender As Object, File As String) Handles _currentProject.FileRemoved
-        RaiseEvent ProjectFileRemoved(sender, File)
+        RaiseEvent ProjectFileRemoved(sender, New FileRemovedEventArgs With {.File = File})
     End Sub
 
     Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
-        RaiseEvent ProjectDirectoryCreated(sender, Directory)
+        RaiseEvent ProjectDirectoryCreated(sender, New EventArguments.ProjectDirectoryCreatedEventArgs With {.Directory = Directory})
     End Sub
 
     Private Sub _currentProject_Modified(sender As Object, e As EventArgs) Handles _currentProject.Modified

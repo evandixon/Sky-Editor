@@ -193,11 +193,6 @@ Public Class MainWindow2
     End Sub
 #End Region
 
-
-    Private Sub _manager_MenuItemRegistered(sender As Object, Item As MenuItem) Handles _manager.MenuItemRegistered
-        menuMain.Items.Add(Item)
-    End Sub
-
     Private Sub OnLoadingMessageChanged(sender As Object, e As PluginHelper.LoadingMessageChangedEventArgs)
         Dispatcher.Invoke(New Action(Sub()
                                          lblStatus.Content = e.NewMessage
@@ -225,7 +220,7 @@ Public Class MainWindow2
         PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
     End Sub
 
-    Private Sub _manager_ProjectChanged(sender As Object, NewProject As Project) Handles _manager.ProjectChanged
+    Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
         _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
         RemoveWelcomePage()
     End Sub

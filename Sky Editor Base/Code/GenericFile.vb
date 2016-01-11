@@ -14,11 +14,13 @@ Public Class GenericFile
     Dim _openReadOnly As Boolean
 
 #Region "Constructors"
+    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
     Public Sub New(Filename As String)
         _makeTempCopy = True
         _openReadOnly = False
         OpenFile(Filename)
     End Sub
+    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
     Public Sub New(Filename As String, OpenReadOnly As Boolean)
         _makeTempCopy = Not OpenReadOnly
         _openReadOnly = OpenReadOnly

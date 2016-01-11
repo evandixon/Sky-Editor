@@ -196,7 +196,11 @@
     <Compile Include="Code\EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="Code\EventArguments\FileOpenedEventArgs.vb" />
+    <Compile Include="Code\EventArguments\FileRemovedEventArgs.vb" />
+    <Compile Include="Code\EventArguments\IoFilterRegisteredEventArgs.vb" />
     <Compile Include="Code\EventArguments\MenuActionAddedEventArgs.vb" />
+    <Compile Include="Code\EventArguments\ProjectChangedEventArgs.vb" />
+    <Compile Include="Code\EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
     <Compile Include="Code\ExecutableFile.vb" />
     <Compile Include="Code\Interfaces\iCreatableFile.vb" />
     <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
