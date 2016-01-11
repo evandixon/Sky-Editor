@@ -716,7 +716,6 @@ Public Class PluginManager
     ''' <summary>
     ''' Updates the visibility of the MenuItems based on the currently selected Types.
     ''' </summary>
-    ''' <param name="SelectedType"></param>
     Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object))
         For Each item In MenuItems
             UpdateMenuItemVisibility(SelectedObjects, item)
@@ -726,7 +725,6 @@ Public Class PluginManager
     ''' <summary>
     ''' Updates the visibility of the MenuItems based on the currently selected Types.
     ''' </summary>
-    ''' <param name="SelectedType"></param>
     ''' <param name="Parent"></param>
     Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object), Parent As MenuItem)
         For Each item In Parent.Items

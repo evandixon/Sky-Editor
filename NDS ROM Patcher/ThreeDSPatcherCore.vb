@@ -230,9 +230,9 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
         Else
             'Choose an output file
             If DestinationPath Is Nothing Then
-                Dim s As New SaveFileDialog
+ShowSaveDialog3DS: Dim s As New SaveFileDialog
                 s.Filter = "3DS Files (*.3ds)|*.3ds|All Files (*.*)|*.*"
-ShowSaveDialog3DS: If s.ShowDialog = DialogResult.OK Then
+                If s.ShowDialog = DialogResult.OK Then
                     destination = s.FileName
                 Else
                     If MessageBox.Show("Are you sure you want to cancel the patching process?", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.No Then

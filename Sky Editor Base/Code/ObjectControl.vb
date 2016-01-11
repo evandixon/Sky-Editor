@@ -54,7 +54,6 @@ Public MustInherit Class ObjectControl
     ''' Priority for this control to be used in relevant circumstances.  Higher values are more likely to be used.
     ''' Useless for ObjectTabs or EditorTabs.
     ''' </summary>
-    ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Overridable Function UsagePriority(Type As Type) As Integer
