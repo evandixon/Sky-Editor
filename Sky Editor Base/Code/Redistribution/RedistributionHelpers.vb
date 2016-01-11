@@ -187,6 +187,7 @@ Namespace Redistribution
             Next
             For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*.language")
                 IO.File.Copy(item, IO.Path.Combine(PluginHelper.RootResourceDirectory, "Languages", IO.Path.GetFileNameWithoutExtension(item) & ".json"), True)
+                IO.File.Delete(item)
             Next
         End Sub
 

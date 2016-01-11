@@ -46,10 +46,12 @@
             End If
 
             'Load new values
-            With DirectCast(lbItems.SelectedItem, Language.LanguageItem)
-                txtKey.Text = .Key
-                txtValue.Text = .Value
-            End With
+            If lbItems.SelectedItem IsNot Nothing Then
+                With DirectCast(lbItems.SelectedItem, Language.LanguageItem)
+                    txtKey.Text = .Key
+                    txtValue.Text = .Value
+                End With
+            End If
         End Sub
 
         Public Overrides Sub UpdateObject()
@@ -91,9 +93,11 @@
             For Each item In lbItems.Items
                 addDialog.CurrentLanguageItems.Add(item)
             Next
-            addDialog.DefaultLanguageItems.AddRange(EditingItem.Languages(SettingsManager.Instance.Settings.DefaultLanguage).ContainedObject)
+            addDialog.DefaultLanguageItems.AddRange(EditingItem.Languages(SettingsManager.Instance.Settings.DefaultLanguage).ContainedObject.Items)
             If addDialog.ShowDialog Then
-                lbItems.Items.Add(addDialog.SelectedItem.Clone)
+                Dim newItem = addDialog.SelectedItem.Clone
+                lbItems.Items.Add(newItem)
+                lbItems.SelectedItem = newItem
             End If
         End Sub
     End Class
