@@ -46,6 +46,7 @@ Public Class PluginManager
         'Me.CheatManager = New ARDS.Manager
         'Me.Saves = New List(Of GenericSave)
         'LoadPlugins(PluginFolder)
+        Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.PluginFolder = PluginFolder
         PluginHelper.PluginManagerInstance = Me
     End Sub
@@ -220,6 +221,7 @@ Public Class PluginManager
     Public Property CheatManager As New ARDS.Manager
     <Obsolete("Depricated.  Use FileTypeDetectors instead.")> Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
+    Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property ProjectTypes As New Dictionary(Of String, Type)
     Public Property ObjectTabs As New List(Of ObjectTab)
@@ -244,6 +246,7 @@ Public Class PluginManager
     Delegate Function ConsoleCommandAsync(ByVal Manager As PluginManager, ByVal Argument As String) As Task
     <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
     Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
+    Delegate Function DirectoryTypeDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
     Delegate Sub TypeSearchFound(TypeFound As Type)
 #End Region
 
@@ -407,6 +410,10 @@ Public Class PluginManager
         FileTypeDetectors.Add(Detector)
     End Sub
 
+    Public Sub RegisterDirectoryTypeDetector(Detector As DirectoryTypeDetector)
+        DirectoryTypeDetectors.Add(Detector)
+    End Sub
+
     Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
         Me.CheatManager.CodeDefinitions.Add(Generator)
     End Sub
@@ -561,18 +568,25 @@ Public Class PluginManager
         End If
     End Function
     ''' <summary>
-    ''' Auto-detects the file type and creates an instance of an appropriate class to model it.
+    ''' Auto-detects the file/directory type and creates an instance of an appropriate class to model it.
     ''' </summary>
     ''' <param name="Filename"></param>
     ''' <returns></returns>
-    Public Function OpenFile(Filename As String) As Object
-        Return OpenFile(New GenericFile(Filename, True))
+    Public Function OpenObject(Filename As String) As Object
+        If IO.File.Exists(Filename) Then
+            Return OpenFile(New GenericFile(Filename, True))
+        Else
+            If IO.Directory.Exists(Filename) Then
+                Return OpenDirectory(New IO.DirectoryInfo(Filename))
+            Else
+                Return Nothing
+            End If
+        End If
     End Function
     ''' <summary>
     ''' Using the given file, auto-detects the file type and creates an instance of an appropriate class.
     ''' If no appropriate file can be found, will return the given File.
     ''' </summary>
-    ''' <param name="File"></param>
     ''' <returns></returns>
     Public Function OpenFile(File As GenericFile) As Object
         Dim type = GetFileType(File)
@@ -585,6 +599,22 @@ Public Class PluginManager
             Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
             out.OpenFile(File.OriginalFilename)
             File.Dispose()
+            Return out
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Sometimes a "file" actually exists as multiple files in a directory.  This method will open a "file" using the given directory.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function OpenDirectory(Directory As IO.DirectoryInfo) As Object
+        Dim type = GetDirectoryType(Directory)
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
+            'Let's not return nothing.  Maybe something wants to use the directory info.
+            Return Directory
+        Else
+            Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
+            out.OpenFile(Directory.FullName)
             Return out
         End If
     End Function
@@ -663,7 +693,7 @@ Public Class PluginManager
 
         If matches.Count = 0 Then
             Return Nothing
-        ElseIf matches.Count = 1
+        ElseIf matches.Count = 1 Then
             Return matches(0)
         Else
             matches.Sort(New Utilities.ReflectionHelpers.TypeInheritanceDepthComparer)
@@ -680,6 +710,28 @@ Public Class PluginManager
             'Else
             '    Return Nothing
             'End If
+        End If
+    End Function
+
+    Public Function GetDirectoryType(Directory As IO.DirectoryInfo) As Type
+        Dim matches As New List(Of Type)
+        For Each item In DirectoryTypeDetectors
+            Dim t = item.Invoke(Directory)
+            If t IsNot Nothing Then
+                For Each match In t
+                    matches.Add(match)
+                Next
+            End If
+        Next
+
+        If matches.Count = 0 Then
+            Return Nothing
+        ElseIf matches.Count = 1 Then
+            Return matches(0)
+        Else
+            matches.Sort(New Utilities.ReflectionHelpers.TypeInheritanceDepthComparer)
+            matches.Reverse()
+            Return matches(0)
         End If
     End Function
 

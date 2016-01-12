@@ -42,4 +42,7 @@ Public Class GameStrings
     Public Shared Function MDGatesData() As String
         Return PluginHelper.GetLanguageItem("Pokemon Mystery Dungeon: Gates to Infinity (game_data)")
     End Function
+    Public Shared Function GTIMiniTitleID() As String
+        Return "00000ba8"
+    End Function
 End Class

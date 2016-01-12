@@ -140,7 +140,7 @@ Public Class Project
             If item.EndsWith("/") OrElse item.EndsWith("\") Then
                 p.Files.Add(item, Nothing)
             Else
-                p.Files.Add(item, Manager.OpenFile(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), item)))
+                p.Files.Add(item, Manager.OpenObject(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), item)))
             End If
         Next
         p.Opened()
@@ -262,7 +262,7 @@ Public Class Project
     Public Sub OpenFile(SourceFilename As String, NewInternalPath As String, Optional Copy As Boolean = True)
         Dim newPath = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), NewInternalPath).Replace("\", "/")
         If Copy Then IO.File.Copy(SourceFilename.Replace("\", "/"), newPath.Replace("\", "/"), True)
-        AddFile(NewInternalPath.Replace("\", "/"), _manager.OpenFile(SourceFilename.Replace("\", "/")))
+        AddFile(NewInternalPath.Replace("\", "/"), _manager.OpenObject(SourceFilename.Replace("\", "/")))
     End Sub
     Public Sub AddFile(InternalPath As String, File As Object)
         'Files.Add(File.OriginalFilename.Replace(IO.Path.GetDirectoryName(Me.Filename), ""), File)

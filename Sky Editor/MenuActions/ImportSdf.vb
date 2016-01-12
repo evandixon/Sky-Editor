@@ -12,7 +12,7 @@
         End Function
 
         Public Sub New()
-            MyBase.New("SDF/Import", "/", True)
+            MyBase.New("_SDF/_Import", "/", True)
             Me.AlwaysVisible = True
 
             FolderBrowserDialog1 = New Forms.FolderBrowserDialog

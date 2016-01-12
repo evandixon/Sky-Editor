@@ -1,4 +1,6 @@
 ﻿
+Imports SkyEditorBase.Interfaces
+
 Public MustInherit Class ObjectTab
     Inherits ObjectControl
 
@@ -80,10 +82,23 @@ Public MustInherit Class ObjectTab(Of T)
 
     Public Property EditingItem As T
         Get
-            Return DirectCast(MyBase.EditingObject, T)
+            If TypeOf MyBase.EditingObject Is T Then
+                Return DirectCast(MyBase.EditingObject, T)
+            ElseIf TypeOf MyBase.EditingObject Is iContainer(Of T) Then
+                Return DirectCast(MyBase.EditingObject, iContainer(Of T)).Item
+            Else
+                'I should probably throw my own exception here, but since the next line is invalid, there will be one anyway
+                Return DirectCast(MyBase.EditingObject, T)
+            End If
         End Get
         Set(value As T)
-            MyBase.EditingObject = value
+            If TypeOf MyBase.EditingObject Is T Then
+                MyBase.EditingObject = value
+            ElseIf TypeOf MyBase.EditingObject Is iContainer(Of T) Then
+                DirectCast(MyBase.EditingObject, iContainer(Of T)).Item = value
+            Else
+                MyBase.EditingObject = value
+            End If
         End Set
     End Property
 

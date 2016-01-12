@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Text.RegularExpressions
+Imports SkyEditorBase.Interfaces
 
 Namespace Utilities
 
@@ -59,32 +60,32 @@ Namespace Utilities
             End If
         End Function
 
-        Public Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckObjectFile As Boolean = True) As Boolean
+        Public Shared Function IsOfType(Obj As Object, TypeToCheck As Type, Optional CheckContainer As Boolean = True) As Boolean
             Dim match = False
-            Dim g As Type = Nothing
+            Dim Original As Type = Nothing
             If TypeOf Obj Is Type Then
                 If TypeToCheck.IsEquivalentTo(GetType(Type)) Then
                     match = True
                 Else
-                    g = Obj
+                    Original = Obj
                 End If
             Else
-                g = Obj.GetType
+                Original = Obj.GetType
             End If
             If Not match Then
-                match = g.IsEquivalentTo(TypeToCheck) OrElse (g.BaseType IsNot Nothing AndAlso IsOfType(g.BaseType, TypeToCheck, CheckObjectFile))
+                match = Original.IsEquivalentTo(TypeToCheck) OrElse (Original.BaseType IsNot Nothing AndAlso IsOfType(Original.BaseType, TypeToCheck, CheckContainer))
             End If
             If Not match Then
-                For Each item In g.GetInterfaces
+                For Each item In Original.GetInterfaces
                     If item.IsEquivalentTo(TypeToCheck) Then
                         match = True
                         Exit For
                     End If
                 Next
             End If
-            If Not match AndAlso CheckObjectFile AndAlso Not g.IsEquivalentTo(GetType(Object)) Then
+            If Not match AndAlso CheckContainer AndAlso Not Original.IsEquivalentTo(GetType(Object)) Then
                 'Check to see if this is an object file of the type we're looking for
-                If IsOfType(g, ObjectFile(Of Object).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), False) Then
+                If IsOfType(Original, GetType(iContainer(Of Object)).GetGenericTypeDefinition.MakeGenericType(TypeToCheck), False) Then
                     match = True
                 End If
             End If

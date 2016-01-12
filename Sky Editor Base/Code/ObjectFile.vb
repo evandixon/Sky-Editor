@@ -8,13 +8,14 @@ Public Class ObjectFile(Of T)
     Implements iSavable
     Implements iOnDisk
     Implements iCreatableFile
+    Implements iContainer(Of T)
     Private Class JsonContainer(Of U)
         Public Property ContainedObject As U
 
         Public Property ContainedTypeName As String
     End Class
 
-    Public Property ContainedObject As T
+    Public Property ContainedObject As T Implements iContainer(Of T).Item
 
     Public Property ContainedTypeName As String
 

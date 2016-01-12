@@ -13,7 +13,7 @@ Namespace MenuActions
                 If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
                     _manager.CurrentProject = Project.OpenProject(OpenFileDialog1.FileName, _manager)
                 Else
-                    PluginHelper.RequestFileOpen(_manager.OpenFile(OpenFileDialog1.FileName), True)
+                    PluginHelper.RequestFileOpen(_manager.OpenObject(OpenFileDialog1.FileName), True)
                 End If
             End If
             Return Task.CompletedTask

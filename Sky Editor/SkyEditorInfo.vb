@@ -66,6 +66,9 @@ Public Class SkyEditorInfo
         'Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
 
         Manager.RegisterMenuAction(New MenuActions.ImportSdf)
+        Manager.RegisterMenuAction(New MenuActions.OpenSdfSave)
+
+        Manager.RegisterDirectoryTypeDetector(AddressOf Me.DirectoryDetector)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
@@ -91,6 +94,20 @@ Public Class SkyEditorInfo
         Catch ex As Exception
             Return Nothing
         End Try
+    End Function
+
+    Public Function DirectoryDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
+        Dim s As New SdfSave(Directory.FullName)
+        If s.IsValid Then
+            Select Case s.MiniTitleId.ToLower
+                Case GameStrings.GTIMiniTitleID
+                    Return {GetType(GTISave)}
+                Case Else
+                    Return {GetType(SdfSave)}
+            End Select
+        Else
+            Return {}
+        End If
     End Function
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

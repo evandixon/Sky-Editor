@@ -1,6 +1,9 @@
 ﻿Imports System.Web.Script.Serialization
+Imports SkyEditorBase.Interfaces
 
 Public Class SdfSave
+    Implements iOpenableFile
+
     Public Class SdfSaveExtraData
         Public Property Name As String
         Public Property Notes As String
@@ -14,6 +17,19 @@ Public Class SdfSave
     Public Property MiniTitleId As String
     Public Property Path As String
     Public Property IsValid As Boolean
+
+    Public Function GetContainedFilenames() As String()
+        Return IO.Directory.GetFiles(IO.Path.Combine(Path, MiniTitleId))
+    End Function
+
+    ''' <summary>
+    ''' Gets the path on disk of the sub file contained in the SdfSave
+    ''' </summary>
+    ''' <param name="Filename">Name of the file.  Ex. "main"</param>
+    ''' <returns></returns>
+    Public Function GetFilePath(Filename As String) As String
+        Return IO.Path.Combine(Path, MiniTitleId, Filename)
+    End Function
 
     Public Sub CopyTo(Directory As SdfSaveDataDirectory)
         Dim dirName As String = ExportDate.ToString("yyyyMMddhhmmss")
@@ -39,7 +55,15 @@ Public Class SdfSave
     End Sub
 
     Public Sub New(Path As String)
-        Me.Path = Path
+        OpenFile(Path)
+    End Sub
+
+    Public Sub New()
+        Info = New SdfSaveExtraData
+    End Sub
+
+    Public Overridable Sub OpenFile(SdfDirectory As String) Implements iOpenableFile.OpenFile
+        Me.Path = SdfDirectory
         Me.Info = New SdfSaveExtraData
         Dim dirName As String = IO.Path.GetFileNameWithoutExtension(Path)
         'Todo: see if Date.Parse works instead of the regex

@@ -202,6 +202,7 @@
     <Compile Include="Code\EventArguments\ProjectChangedEventArgs.vb" />
     <Compile Include="Code\EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
     <Compile Include="Code\ExecutableFile.vb" />
+    <Compile Include="Code\Interfaces\iContainer.vb" />
     <Compile Include="Code\Interfaces\iCreatableFile.vb" />
     <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Code\Interfaces\iGenericFile.vb" />
