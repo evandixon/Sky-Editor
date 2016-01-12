@@ -3,9 +3,9 @@
 Namespace Saves
     Public Class GTISave
         Inherits SdfSave
-        Implements iContainer(Of GatesGameData)
+        Implements iContainer(Of GTIGameData)
 
-        Public Property GameData As GatesGameData Implements iContainer(Of GatesGameData).Item
+        Public Property GameData As GTIGameData Implements iContainer(Of GTIGameData).Item
 
         Public Sub New()
             MyBase.New
@@ -14,7 +14,7 @@ Namespace Saves
         Public Overrides Sub OpenFile(SdfDirectory As String)
             MyBase.OpenFile(SdfDirectory)
 
-            GameData = New GatesGameData(Me.GetFilePath("game_data"))
+            GameData = New GTIGameData(Me.GetFilePath("game_data"))
         End Sub
     End Class
 

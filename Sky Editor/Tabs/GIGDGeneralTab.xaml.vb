@@ -3,7 +3,7 @@ Imports SkyEditorBase
 
 Namespace Tabs
     Public Class GIGDGeneralTab
-        Inherits ObjectTab(Of GatesGameData)
+        Inherits ObjectTab(Of GTIGameData)
         Public Overrides Sub RefreshDisplay()
             With editingitem
                 numGeneral_HeldMoney.Value = .HeldMoney
@@ -12,7 +12,7 @@ Namespace Tabs
 
         Public Overrides ReadOnly Property SupportedTypes As Type()
             Get
-                Return {GetType(Saves.GatesGameData)}
+                Return {GetType(Saves.GTIGameData)}
             End Get
         End Property
 

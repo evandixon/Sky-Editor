@@ -174,7 +174,7 @@
     <Compile Include="ByteExtensions.vb" />
     <Compile Include="MenuActions\ImportSdf.vb" />
     <Compile Include="MenuActions\OpenSdfSave.vb" />
-    <Compile Include="Saves\GatesGameData.vb" />
+    <Compile Include="Saves\GTIGameData.vb" />
     <Compile Include="Saves\GTISave.vb" />
     <Compile Include="Saves\RBSaveEU.StoredPokemon.vb" />
     <Compile Include="SdfSave.vb" />

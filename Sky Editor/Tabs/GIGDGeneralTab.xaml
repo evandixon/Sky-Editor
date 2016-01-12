@@ -1,4 +1,4 @@
-﻿<local:ObjectTab x:Class="Tabs.GIGDGeneralTab" x:TypeArguments="saves:GatesGameData"
+﻿<local:ObjectTab x:Class="Tabs.GIGDGeneralTab" x:TypeArguments="saves:GTIGameData"
                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
