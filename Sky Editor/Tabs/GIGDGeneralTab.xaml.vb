@@ -5,8 +5,9 @@ Namespace Tabs
     Public Class GIGDGeneralTab
         Inherits ObjectTab(Of GTIGameData)
         Public Overrides Sub RefreshDisplay()
-            With editingitem
+            With EditingItem
                 numGeneral_HeldMoney.Value = .HeldMoney
+                numCompanionHeldMoney.Value = .CompanionHeldMoney
             End With
         End Sub
 
@@ -19,6 +20,7 @@ Namespace Tabs
         Public Overrides Sub UpdateObject()
             With EditingItem
                 .HeldMoney = numGeneral_HeldMoney.Value
+                .CompanionHeldMoney = numCompanionHeldMoney.Value
             End With
         End Sub
 
@@ -27,7 +29,7 @@ Namespace Tabs
             'lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("TeamName", "Team Name:")
         End Sub
 
-        Private Sub OnModified(sender As Object, e As EventArgs) Handles numGeneral_HeldMoney.ValueChanged
+        Private Sub OnModified(sender As Object, e As EventArgs) Handles numGeneral_HeldMoney.ValueChanged, numCompanionHeldMoney.ValueChanged
             RaiseModified()
         End Sub
     End Class

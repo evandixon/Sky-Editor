@@ -7,11 +7,13 @@
              xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
              xmlns:saves="clr-namespace:SkyEditor.Saves"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     <Grid>
-        <UniformGrid Columns="2" Rows="1" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
-            <Label x:Name="lblGeneral_HeldMoney" HorizontalAlignment="Left" Width="170">Held Money:</Label>
+        <UniformGrid Columns="2" Rows="1" HorizontalAlignment="Left" Width="400" VerticalAlignment="Top">
+            <Label x:Name="lblGeneral_HeldMoney" HorizontalAlignment="Left" Width="200">Held Money:</Label>
             <xctk:IntegerUpDown x:Name="numGeneral_HeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
-        </UniformGrid>
+            <Label x:Name="lblCompanionHeldMoney" HorizontalAlignment="Left" Width="200">Companion Mode Held Money:</Label>
+            <xctk:IntegerUpDown x:Name="numCompanionHeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+        </UniformGrid>        
     </Grid>
 </local:ObjectTab>
