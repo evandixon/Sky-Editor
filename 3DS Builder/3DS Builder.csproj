@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Sky Editor Base\bin\x86\Debug\Resources\Plugins\ROM Editor\</OutputPath>
+    <OutputPath>..\Sky Editor Base\bin\Debug\Resources\Plugins\ROM Editor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -89,13 +89,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\bin\Logo\Distributed.bin" />
-    <None Include="Resources\bin\Logo\iQue.bin" />
-    <None Include="Resources\bin\Logo\iQueForSystem.bin" />
-    <None Include="Resources\bin\Logo\Licensed.bin" />
-    <None Include="Resources\bin\Logo\Nintendo.bin" />
-    <None Include="Resources\bin\PlainRegion\ORAS.bin" />
-    <None Include="Resources\bin\PlainRegion\XY.bin" />
+    <Resource Include="Resources\bin\Logo\Distributed.bin" />
+    <Resource Include="Resources\bin\Logo\iQue.bin" />
+    <Resource Include="Resources\bin\Logo\iQueForSystem.bin" />
+    <Resource Include="Resources\bin\Logo\Licensed.bin" />
+    <Resource Include="Resources\bin\Logo\Nintendo.bin" />
+    <Resource Include="Resources\bin\PlainRegion\ORAS.bin" />
+    <Resource Include="Resources\bin\PlainRegion\XY.bin" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\txt\3dsgames.txt" />
