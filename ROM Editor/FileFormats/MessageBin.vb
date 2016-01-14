@@ -45,7 +45,7 @@ Namespace FileFormats
                         j += 1
                     Loop Until (SkyEditorBase.Utilities.GenericArrayOperations(Of Byte).ArraysEqual(cRaw, {0, 0}))
 
-                    Strings.Add(stringHash, s.ToString)
+                    Strings.Add(stringHash, s.ToString.Trim)
                 Next
             End Using
         End Sub

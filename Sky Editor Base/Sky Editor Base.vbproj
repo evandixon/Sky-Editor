@@ -192,6 +192,12 @@
     <Compile Include="Code\ARDS\Manager.vb" />
     <Compile Include="Code\ARDS\Region.vb" />
     <Compile Include="Code\ChildControls.vb" />
+    <Compile Include="Code\ConsoleCommand.vb" />
+    <Compile Include="Code\ConsoleCommandAsync.vb" />
+    <Compile Include="Code\ConsoleCommands\DistPrep.vb" />
+    <Compile Include="Code\ConsoleCommands\PackAll.vb" />
+    <Compile Include="Code\ConsoleCommands\UpdateAll.vb" />
+    <Compile Include="Code\ConsoleCommands\Zip.vb" />
     <Compile Include="Code\DocumentTab.vb" />
     <Compile Include="Code\EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />

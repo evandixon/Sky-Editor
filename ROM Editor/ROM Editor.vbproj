@@ -103,10 +103,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleCommands.vb" />
+    <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
+    <Compile Include="ConsoleCommands\ImportLanguage.vb" />
     <Compile Include="DrawingImageConverter.vb" />
     <Compile Include="DSIconTool.vb" />
     <Compile Include="ffmpeg.vb" />
+    <Compile Include="FileFormats\DatabaseBin.vb" />
     <Compile Include="FileFormats\Farc.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\MessageBin.vb" />

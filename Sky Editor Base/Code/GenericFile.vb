@@ -142,6 +142,17 @@ Public Class GenericFile
             RawData(0, Length) = value
         End Set
     End Property
+
+    Public Property Int(Index As Long) As Integer
+        Get
+            Return BitConverter.ToInt32(RawData(Index, 4), 0)
+        End Get
+        Set(value As Integer)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 4) = bytes
+        End Set
+    End Property
+
     Public Property Length As Long
         Get
             Return FileReader.Length

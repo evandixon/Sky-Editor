@@ -84,8 +84,8 @@ Public Class PluginDefinition
 
         Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
 
-        Manager.RegisterConsoleCommand("import-language", AddressOf ConsoleCommands.ImportSkyLanguageString)
-        Manager.RegisterConsoleCommand("cteconvert", AddressOf ConsoleCommands.BatchCteConvert)
+        Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
+        Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))

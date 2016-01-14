@@ -10,8 +10,7 @@ Namespace Redistribution
         ''' Runs the PrepareForDistribution method in all plugins, deleting any files that aren't distribution safe.
         ''' </summary>
         ''' <param name="Manager"></param>
-        ''' <param name="Argument"></param>
-        Public Shared Sub PrepareForDistribution(Manager As PluginManager, Argument As String)
+        Public Shared Sub PrepareForDistribution(Manager As PluginManager)
             PluginHelper.Writeline("Preparing for distribution...")
             For Each item In Manager.Plugins
                 item.PrepareForDistribution()
@@ -346,7 +345,7 @@ Namespace Redistribution
                 Console.WriteLine("Deleting " & item)
                 IO.File.Delete(item)
             Next
-            PrepareForDistribution(Manager, Nothing)
+            PrepareForDistribution(Manager)
             PackPlugins(Manager, Nothing)
             GeneratePluginDownloadDir(Manager, Nothing)
             PluginHelper.Writeline(PluginHelper.GetLanguageItem("All plugins packaged to:"))

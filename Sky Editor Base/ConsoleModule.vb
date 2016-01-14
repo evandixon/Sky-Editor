@@ -22,15 +22,14 @@ Module ConsoleModule
                 Exit While
             ElseIf cmd = "help" Then
                 Console.WriteLine(PluginHelper.GetLanguageItem("The following commands are available:"))
-                Dim commands As New List(Of String)(Manager.ConsoleCommandList.Keys)
+                Dim commands As New List(Of String)(Manager.GetConsoleCommands.Keys)
                 commands.Sort()
                 For Each item In commands
                     Console.WriteLine(item)
                 Next
-            ElseIf Manager.ConsoleCommandList.Keys.Contains(cmd) Then
-                Manager.ConsoleCommandList(cmd).Invoke(Manager, arg)
-            ElseIf Manager.ConsoleCommandAsyncList.Keys.Contains(cmd)
-                Dim t = Manager.ConsoleCommandAsyncList(cmd).Invoke(Manager, arg)
+            ElseIf Manager.GetConsoleCommands.Keys.Contains(cmd) Then
+                'Todo: split arg on spaces, while respecting quotation marks
+                Dim t = Manager.GetConsoleCommands(cmd).MainAsync({arg})
                 t.Wait()
             Else
                 Console.WriteLine(String.Format("""{0}"" is not a recognizable command.", cmd))

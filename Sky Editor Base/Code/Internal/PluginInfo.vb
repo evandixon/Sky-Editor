@@ -13,13 +13,10 @@ Namespace Internal
             Manager.RegisterFileTypeDetector(AddressOf Manager.DetectFileType)
             Manager.RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
 
-            Manager.RegisterConsoleCommand("distprep", AddressOf RedistributionHelpers.PrepareForDistribution)
-            Manager.RegisterConsoleCommand("zip", AddressOf RedistributionHelpers.PackProgram)
-            Manager.RegisterConsoleCommand("packplug", AddressOf RedistributionHelpers.PackPlugins)
-            Manager.RegisterConsoleCommand("delplug", AddressOf RedistributionHelpers.DeletePlugin)
-            Manager.RegisterConsoleCommand("generateinfo", AddressOf RedistributionHelpers.GeneratePluginDownloadDir)
-            Manager.RegisterConsoleCommand("updateall", AddressOf RedistributionHelpers.DownloadAllPlugins)
-            Manager.RegisterConsoleCommand("packall", AddressOf RedistributionHelpers.PackageAll)
+            Manager.RegisterConsoleCommand("distprep", New ConsoleCommands.DistPrep)
+            Manager.RegisterConsoleCommand("zip", New ConsoleCommands.Zip)
+            Manager.RegisterConsoleCommand("updateall", New ConsoleCommands.UpdateAll)
+            Manager.RegisterConsoleCommand("packall", New ConsoleCommands.PackAll)
 
             Manager.RegisterObjectControl(GetType(Language.LanguageEditor))
             Manager.RegisterObjectControl(GetType(SettingsEditor))

@@ -47,6 +47,7 @@ Public Class PluginManager
         'Me.Saves = New List(Of GenericSave)
         'LoadPlugins(PluginFolder)
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
+        Me.ConsoleCommands = New Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
         Me.PluginFolder = PluginFolder
         PluginHelper.PluginManagerInstance = Me
     End Sub
@@ -153,7 +154,7 @@ Public Class PluginManager
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property ConsoleCommandList As New Dictionary(Of String, ConsoleCommand)
+    <Obsolete> Public Property ConsoleCommandList As New Dictionary(Of String, ConsoleCommand)
 
     ''' <summary>
     ''' Dictionary matching console commands to the relevant PluginManager.ConsoleCommand delegate.
@@ -161,7 +162,9 @@ Public Class PluginManager
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property ConsoleCommandAsyncList As New Dictionary(Of String, ConsoleCommandAsync)
+    <Obsolete> Public Property ConsoleCommandAsyncList As New Dictionary(Of String, ConsoleCommandAsync)
+
+    Private Property ConsoleCommands As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
 
     ''' <summary>
     ''' List of all the plugins' assembly names.
@@ -251,19 +254,28 @@ Public Class PluginManager
 #End Region
 
 #Region "Registration"
-    Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommand)
+    <Obsolete> Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommand)
         If ConsoleCommandList Is Nothing Then
             ConsoleCommandList = New Dictionary(Of String, ConsoleCommand)
         End If
         ConsoleCommandList.Add(CommandName, Command)
         PluginHelper.Writeline("Registered console command """ & CommandName & """.")
     End Sub
-    Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommandAsync)
+    <Obsolete> Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommandAsync)
         If ConsoleCommandAsyncList Is Nothing Then
             ConsoleCommandAsyncList = New Dictionary(Of String, ConsoleCommandAsync)
         End If
         ConsoleCommandAsyncList.Add(CommandName, Command)
         PluginHelper.Writeline("Registered console command """ & CommandName & """.")
+    End Sub
+
+    ''' <summary>
+    ''' Registers a ConsoleCommand or ConsoleCommandAsync.
+    ''' </summary>
+    ''' <param name="CommandName">Name of the command, as will be typed in the console.</param>
+    ''' <param name="Command">The command to run when CommandName is typed in the console.</param>
+    Public Sub RegisterConsoleCommand(CommandName As String, Command As SkyEditorBase.ConsoleCommandAsync)
+        ConsoleCommands.Add(CommandName, Command)
     End Sub
 
     Private Function IsObjectTab(T As Type) As Boolean
@@ -492,6 +504,10 @@ Public Class PluginManager
         End If
     End Function
 #End Region
+
+    Public Function GetConsoleCommands() As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
+        Return ConsoleCommands
+    End Function
 
 #End Region
 
