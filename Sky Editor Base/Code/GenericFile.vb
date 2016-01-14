@@ -37,6 +37,12 @@ Public Class GenericFile
     Public Sub New(MakeTempCopy As Boolean)
         _makeTempCopy = MakeTempCopy
     End Sub
+    Public Sub New(RawData As Byte())
+        Me.New
+        CreateFile("")
+        Length = RawData.Length
+        Me.RawData = RawData
+    End Sub
 #End Region
 
     ''' <summary>
@@ -230,6 +236,11 @@ Public Class GenericFile
         If Not Filename = OriginalFilename Then IO.File.Copy(Filename, OriginalFilename, True)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
+
+    Public Function ReadUnicodeString(Offset As Integer, Length As Integer) As String
+        Dim u = Text.Encoding.Unicode
+        Return u.GetString(RawData(Offset, Length * 2))
+    End Function
 #End Region
 
 #Region "IDisposable Support"

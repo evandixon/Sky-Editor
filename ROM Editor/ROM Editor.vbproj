@@ -112,6 +112,8 @@
     <Compile Include="FileFormats\Farc.vb" />
     <Compile Include="FileFormats\item_s_p.vb" />
     <Compile Include="FileFormats\MessageBin.vb" />
+    <Compile Include="FileFormats\Sir0.vb" />
+    <Compile Include="FileFormats\Sir0Fat5.vb" />
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameCodeRegistry.vb" />
     <Compile Include="GameStrings.vb" />
