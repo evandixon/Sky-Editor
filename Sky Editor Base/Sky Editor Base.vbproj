@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F3E6313C-4337-4D20-B4E2-ED41420C9D05}</ProjectGuid>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>SkyEditorBase</RootNamespace>
-    <AssemblyName>SkyEditor</AssemblyName>
+    <AssemblyName>SkyEditorBase</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <SccProjectName>SAK</SccProjectName>
@@ -46,8 +46,8 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>SkyEditor.xml</DocumentationFile>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DocumentationFile>SkyEditorBase.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -60,8 +60,8 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>SkyEditor.xml</DocumentationFile>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DocumentationFile>SkyEditorBase.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -82,7 +82,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DocumentationFile>SkyEditor.xml</DocumentationFile>
+    <DocumentationFile>SkyEditorBase.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DocumentationFile>SkyEditor.xml</DocumentationFile>
+    <DocumentationFile>SkyEditorBase.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -180,94 +180,90 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Application.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Code\ARDS\Button.vb" />
-    <Compile Include="Code\ARDS\CBAHelper.vb" />
-    <Compile Include="Code\ARDS\CheatFormat.vb" />
-    <Compile Include="Code\ARDS\CodeDefinitionV3.vb" />
-    <Compile Include="Code\ARDS\CodeGeneratorHelper.vb" />
-    <Compile Include="Code\ARDS\Manager.vb" />
-    <Compile Include="Code\ARDS\Region.vb" />
-    <Compile Include="Code\ChildControls.vb" />
-    <Compile Include="Code\ConsoleCommand.vb" />
-    <Compile Include="Code\ConsoleCommandAsync.vb" />
-    <Compile Include="Code\ConsoleCommands\DistPrep.vb" />
-    <Compile Include="Code\ConsoleCommands\PackAll.vb" />
-    <Compile Include="Code\ConsoleCommands\UpdateAll.vb" />
-    <Compile Include="Code\ConsoleCommands\Zip.vb" />
-    <Compile Include="Code\DocumentTab.vb" />
-    <Compile Include="Code\EventArguments\ExceptionThrownEventArgs.vb" />
-    <Compile Include="Code\EventArguments\FileAddedEventArguments.vb" />
-    <Compile Include="Code\EventArguments\FileOpenedEventArgs.vb" />
-    <Compile Include="Code\EventArguments\FileRemovedEventArgs.vb" />
-    <Compile Include="Code\EventArguments\IoFilterRegisteredEventArgs.vb" />
-    <Compile Include="Code\EventArguments\MenuActionAddedEventArgs.vb" />
-    <Compile Include="Code\EventArguments\ProjectChangedEventArgs.vb" />
-    <Compile Include="Code\EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
-    <Compile Include="Code\ExecutableFile.vb" />
-    <Compile Include="Code\Interfaces\iContainer.vb" />
-    <Compile Include="Code\Interfaces\iCreatableFile.vb" />
-    <Compile Include="Code\Interfaces\iGameTypeSelector.vb" />
-    <Compile Include="Code\Interfaces\iGenericFile.vb" />
-    <Compile Include="Code\Interfaces\iModifiable.vb" />
-    <Compile Include="Code\Interfaces\iNamed.vb" />
-    <Compile Include="Code\Interfaces\iOnDisk.vb" />
-    <Compile Include="Code\Interfaces\iOpenableFile.vb" />
-    <Compile Include="Code\Interfaces\iSavable.vb" />
-    <Compile Include="Code\Internal\PluginInfo.vb" />
-    <Compile Include="Code\Language\AddLanguageItem.xaml.vb">
+    <Compile Include="ARDS\Button.vb" />
+    <Compile Include="ARDS\CBAHelper.vb" />
+    <Compile Include="ARDS\CheatFormat.vb" />
+    <Compile Include="ARDS\CodeDefinitionV3.vb" />
+    <Compile Include="ARDS\CodeGeneratorHelper.vb" />
+    <Compile Include="ARDS\Manager.vb" />
+    <Compile Include="ARDS\Region.vb" />
+    <Compile Include="ChildControls.vb" />
+    <Compile Include="ConsoleCommand.vb" />
+    <Compile Include="ConsoleCommandAsync.vb" />
+    <Compile Include="ConsoleCommands\DistPrep.vb" />
+    <Compile Include="ConsoleCommands\PackAll.vb" />
+    <Compile Include="ConsoleCommands\UpdateAll.vb" />
+    <Compile Include="ConsoleCommands\Zip.vb" />
+    <Compile Include="DocumentTab.vb" />
+    <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
+    <Compile Include="EventArguments\FileAddedEventArguments.vb" />
+    <Compile Include="EventArguments\FileOpenedEventArgs.vb" />
+    <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
+    <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
+    <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
+    <Compile Include="EventArguments\ProjectChangedEventArgs.vb" />
+    <Compile Include="EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
+    <Compile Include="ExecutableFile.vb" />
+    <Compile Include="Interfaces\iContainer.vb" />
+    <Compile Include="Interfaces\iCreatableFile.vb" />
+    <Compile Include="Interfaces\iGameTypeSelector.vb" />
+    <Compile Include="Interfaces\iGenericFile.vb" />
+    <Compile Include="Interfaces\iModifiable.vb" />
+    <Compile Include="Interfaces\iNamed.vb" />
+    <Compile Include="Interfaces\iOnDisk.vb" />
+    <Compile Include="Interfaces\iOpenableFile.vb" />
+    <Compile Include="Interfaces\iSavable.vb" />
+    <Compile Include="Internal\PluginInfo.vb" />
+    <Compile Include="Language\AddLanguageItem.xaml.vb">
       <DependentUpon>AddLanguageItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\Language\LanguageFile.vb" />
-    <Compile Include="Code\Language\LanguageItem.vb" />
-    <Compile Include="Code\Language\LanguageItemList.vb" />
-    <Compile Include="Code\MenuAction.vb" />
-    <Compile Include="Code\MenuActions\DevConsole.vb" />
-    <Compile Include="Code\MenuActions\FileNewFile.vb" />
-    <Compile Include="Code\MenuActions\FileNewProject.vb" />
-    <Compile Include="Code\MenuActions\FileOpenAuto.vb" />
-    <Compile Include="Code\MenuActions\FileOpenManual.vb" />
-    <Compile Include="Code\MenuActions\FileSave.vb" />
-    <Compile Include="Code\MenuActions\FileSaveAll.vb" />
-    <Compile Include="Code\MenuActions\FileSaveAs.vb" />
-    <Compile Include="Code\MenuActions\FileSaveProject.vb" />
-    <Compile Include="Code\MenuActions\ProjectArchive.vb" />
-    <Compile Include="Code\MenuActions\ProjectBuild.vb" />
-    <Compile Include="Code\MenuActions\ProjectRun.vb" />
-    <Compile Include="Code\MenuActions\ToolsSettings.vb" />
-    <Compile Include="Code\MenuActions\ToolsLanguage.vb" />
-    <Compile Include="Code\ObjectControl.vb" />
-    <Compile Include="Code\ObjectControlPlaceholder.vb" />
-    <Compile Include="Code\ObjectFile.vb" />
-    <Compile Include="Code\ObjectTab.vb" />
-    <Compile Include="Code\PluginHelper.vb" />
-    <Compile Include="Code\PluginManager.vb" />
-    <Compile Include="Code\Project.vb" />
-    <Compile Include="Code\Redistribution\PluginInfo.vb" />
-    <Compile Include="Code\SearchableDropDown.vb" />
-    <Compile Include="Code\ToolWindow.vb" />
-    <Compile Include="Code\Utilities\AsyncFileCopier.vb" />
-    <Compile Include="Code\Utilities\AsyncForEach.vb" />
-    <Compile Include="Code\Utilities\AsyncHelpers.vb" />
-    <Compile Include="Code\Utilities\GenericListItem.vb" />
-    <Compile Include="Code\Language\LanguageManager.vb" />
-    <Compile Include="Code\Redistribution\RedistributionHelpers.vb" />
-    <Compile Include="Code\Utilities\ReflectionHelpers.vb" />
-    <Compile Include="Code\Utilities\ResourceDictionary.vb" />
-    <Compile Include="Code\Settings.vb" />
-    <Compile Include="Code\Utilities\BitOperations.vb" />
-    <Compile Include="Code\Utilities\Bits8.vb" />
-    <Compile Include="Code\Utilities\ByteExtensions.vb" />
-    <Compile Include="Code\Internal\ConsoleManager.vb" />
-    <Compile Include="Code\Utilities\GenericArrayOperations.vb" />
-    <Compile Include="Code\GenericFile.vb" />
-    <Compile Include="Code\Utilities\Zip.vb" />
-    <Compile Include="Code\Interfaces\iSkyEditorPlugin.vb" />
+    <Compile Include="Language\LanguageFile.vb" />
+    <Compile Include="Language\LanguageItem.vb" />
+    <Compile Include="Language\LanguageItemList.vb" />
+    <Compile Include="MenuAction.vb" />
+    <Compile Include="MenuActions\DevConsole.vb" />
+    <Compile Include="MenuActions\FileNewFile.vb" />
+    <Compile Include="MenuActions\FileNewProject.vb" />
+    <Compile Include="MenuActions\FileOpenAuto.vb" />
+    <Compile Include="MenuActions\FileOpenManual.vb" />
+    <Compile Include="MenuActions\FileSave.vb" />
+    <Compile Include="MenuActions\FileSaveAll.vb" />
+    <Compile Include="MenuActions\FileSaveAs.vb" />
+    <Compile Include="MenuActions\FileSaveProject.vb" />
+    <Compile Include="MenuActions\ProjectArchive.vb" />
+    <Compile Include="MenuActions\ProjectBuild.vb" />
+    <Compile Include="MenuActions\ProjectRun.vb" />
+    <Compile Include="MenuActions\ToolsSettings.vb" />
+    <Compile Include="MenuActions\ToolsLanguage.vb" />
+    <Compile Include="ObjectControl.vb" />
+    <Compile Include="ObjectControlPlaceholder.vb" />
+    <Compile Include="ObjectFile.vb" />
+    <Compile Include="ObjectTab.vb" />
+    <Compile Include="PluginHelper.vb" />
+    <Compile Include="PluginManager.vb" />
+    <Compile Include="Project.vb" />
+    <Compile Include="Redistribution\PluginInfo.vb" />
+    <Compile Include="SearchableDropDown.vb" />
+    <Compile Include="ToolWindow.vb" />
+    <Compile Include="Utilities\AsyncFileCopier.vb" />
+    <Compile Include="Utilities\AsyncForEach.vb" />
+    <Compile Include="Utilities\AsyncHelpers.vb" />
+    <Compile Include="Utilities\GenericListItem.vb" />
+    <Compile Include="Language\LanguageManager.vb" />
+    <Compile Include="Redistribution\RedistributionHelpers.vb" />
+    <Compile Include="Utilities\ReflectionHelpers.vb" />
+    <Compile Include="Utilities\ResourceDictionary.vb" />
+    <Compile Include="Settings.vb" />
+    <Compile Include="Utilities\BitOperations.vb" />
+    <Compile Include="Utilities\Bits8.vb" />
+    <Compile Include="Utilities\ByteExtensions.vb" />
+    <Compile Include="Internal\ConsoleManager.vb" />
+    <Compile Include="Utilities\GenericArrayOperations.vb" />
+    <Compile Include="GenericFile.vb" />
+    <Compile Include="Utilities\Zip.vb" />
+    <Compile Include="Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="ConsoleModule.vb" />
-    <Compile Include="Code\Language\LanguageEditor.xaml.vb">
+    <Compile Include="Language\LanguageEditor.xaml.vb">
       <DependentUpon>LanguageEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsEditor.xaml.vb">
@@ -276,14 +272,20 @@
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WelcomeTabContent.xaml.vb">
+      <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CodeGenerator.xaml.vb">
+      <DependentUpon>CodeGenerator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\GameTypeSelector.xaml.vb">
       <DependentUpon>GameTypeSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WelcomeTabContent.xaml.vb">
-      <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
+    <Compile Include="Windows\MainWindow.xaml.vb">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow2.xaml.vb">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
@@ -303,11 +305,11 @@
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Code\Language\AddLanguageItem.xaml">
+    <Page Include="Language\AddLanguageItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Code\Language\LanguageEditor.xaml">
+    <Page Include="Language\LanguageEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -319,61 +321,50 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\BackgroundTaskWait.xaml">
-      <SubType>Designer</SubType>
+    <Compile Include="GenericSave.vb" />
+    <Page Include="WelcomeTabContent.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\BackgroundTaskWait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\CodeGenerator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\GameTypeSelector.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Application.xaml.vb">
-      <DependentUpon>Application.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Windows\CodeGenerator.xaml.vb">
-      <DependentUpon>CodeGenerator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Code\GenericSave.vb" />
-    <Compile Include="Windows\MainWindow.xaml.vb">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="WelcomeTabContent.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\MainWindow2.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NewFileWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NewNameWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NewProjectWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ObjectWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\PluginWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +407,7 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="My Project\app.manifest" />
@@ -434,9 +426,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ICSharpCode.SharpZipLib.dll" />
-    <Content Include="Resources\Settings.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">

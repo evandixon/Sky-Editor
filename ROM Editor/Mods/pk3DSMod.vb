@@ -12,8 +12,8 @@ Namespace Mods
             MyBase.Initialize(CurrentProject)
 
             IO.File.Copy(PluginHelper.GetResourceName("pk3DS.exe"), IO.Path.Combine(ModDirectory, "pk3DS.exe"))
-            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename))
-            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "pk3DS.exe"), "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/pk3DS.exe", False)
+            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename))
+            CurrentProject.OpenFile(IO.Path.Combine(ModDirectory, "pk3DS.exe"), "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/pk3DS.exe", False)
 
             IO.File.WriteAllText(IO.Path.Combine(ModDirectory, "config.ini"), "RawFiles")
         End Sub

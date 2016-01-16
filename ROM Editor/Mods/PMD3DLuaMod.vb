@@ -28,12 +28,12 @@ Namespace Mods
             CurrentProject.EnableRaisingEvents = False
             For Each item In filesToOpen
                 'Create project directory if it doesn't exist
-                Dim projDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/").Replace(IO.Path.GetFileName(item), "")
+                Dim projDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/").Replace(IO.Path.GetFileName(item), "")
                 If Not CurrentProject.Files.ContainsKey(projDir) Then
                     CurrentProject.CreateDirectory(projDir)
                 End If
                 'Add file to project
-                CurrentProject.OpenFile(item, "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/"), False)
+                CurrentProject.OpenFile(item, "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/"), False)
             Next
             CurrentProject.EnableRaisingEvents = True
             PluginHelper.SetLoadingStatusFinished()

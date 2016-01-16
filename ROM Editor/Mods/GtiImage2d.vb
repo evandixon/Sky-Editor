@@ -19,7 +19,7 @@ Namespace Mods
         Public Overrides Sub Initialize(CurrentProject As Project)
             'Convert BACK
             Dim BACKdir As String = ModDirectory
-            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/")
+            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Backgrounds/")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(ROMDirectory, "romfs"), "*.img", IO.SearchOption.AllDirectories)
             CurrentProject.EnableRaisingEvents = False
             For count = 0 To backFiles.Count - 1
@@ -35,7 +35,7 @@ Namespace Mods
                         image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
                         IO.File.Copy(newFilename, newFilename & ".original")
 
-                        Dim internalDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & IO.Path.GetDirectoryName(item).Replace(ROMDirectory, "").Replace("\romfs", "")
+                        Dim internalDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & IO.Path.GetDirectoryName(item).Replace(ROMDirectory, "").Replace("\romfs", "")
                         If Not CurrentProject.Files.ContainsKey(internalDir) Then
                             CurrentProject.CreateDirectory(internalDir)
                         End If

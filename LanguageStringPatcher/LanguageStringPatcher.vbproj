@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\Sky Editor Base\bin\x86\Debug\Resources\Plugins\ROMEditor\</OutputPath>
+    <OutputPath>..\bin\Debug\Resources\Plugins\ROM Editor\</OutputPath>
     <DocumentationFile>LanguageStringPatcher.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\Resources\Plugins\ROM Editor\</OutputPath>
     <DocumentationFile>LanguageStringPatcher.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>

@@ -53,7 +53,7 @@ Namespace FileFormats
 
         ' IDisposable
         Protected Overrides Sub Dispose(disposing As Boolean)
-            MyBase.Dispose()
+            MyBase.Dispose(True)
 
             If Not Me.disposedValue Then
                 If disposing Then

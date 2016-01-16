@@ -86,6 +86,7 @@ Public Class PluginDefinition
 
         Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
         Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
+        Manager.RegisterConsoleCommand("gzip", New ConsoleCommands.Gzip)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))

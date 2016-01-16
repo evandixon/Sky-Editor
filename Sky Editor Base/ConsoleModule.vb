@@ -1,6 +1,6 @@
 ﻿Imports System.Reflection
 
-Module ConsoleModule
+Public Module ConsoleModule
     Sub ConsoleMain()
         Console.WriteLine(String.Format(PluginHelper.GetLanguageItem("Sky Editor {0}"), Assembly.GetCallingAssembly.GetName.Version.ToString))
         Console.WriteLine()

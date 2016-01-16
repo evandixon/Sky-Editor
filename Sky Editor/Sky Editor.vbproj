@@ -39,7 +39,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
-    <OutputPath>..\Sky Editor Base\bin\Debug\Resources\Plugins\</OutputPath>
+    <OutputPath>..\bin\Debug\Resources\Plugins\</OutputPath>
     <DocumentationFile>SkyEditor_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -54,7 +54,7 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
-    <OutputPath>..\Sky Editor Base\bin\Release\Resources\plugins\</OutputPath>
+    <OutputPath>..\bin\Release\Resources\Plugins\</OutputPath>
     <DocumentationFile>SkyEditor_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>

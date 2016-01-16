@@ -59,29 +59,5 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Language=English
-        '''
-        '''# 0=Left, 1=Top, 2=Right, 3=Bottom
-        '''TabStripPlacement=1
-        '''
-        '''UpdatePlugins=False
-        '''
-        '''PluginUpdateUrl=http://dl.uniquegeeks.net/SkyEditorPluginsBeta/plugins.json
-        '''
-        '''#Recommended for developers and ROM hackers
-        '''DebugMode=True
-        '''
-        '''#DebugMode must also be enabled
-        '''ShowConsoleOnStart=True
-        '''
-        '''DebugLangaugePlaceholders=False.
-        '''</summary>
-        Friend ReadOnly Property Settings() As String
-            Get
-                Return ResourceManager.GetString("Settings", resourceCulture)
-            End Get
-        End Property
     End Module
 End Namespace

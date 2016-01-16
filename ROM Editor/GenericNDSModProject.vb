@@ -203,8 +203,8 @@ Public Class GenericNDSModProject
             'Dim modFilesFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("ModFiles"), PluginHelper.GetLanguageItem("Files"))
             'Dim modFilesToolsDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), PluginHelper.GetLanguageItem("ModFiles"), PluginHelper.GetLanguageItem("Tools"))
 
-            Dim rawFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "RawFiles")
-            Dim modFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.OriginalFilename), IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename), "ModFiles")
+            Dim rawFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.Filename), IO.Path.GetFileNameWithoutExtension(ndsmod.Filename), "RawFiles")
+            Dim modFilesDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(ndsmod.Filename), IO.Path.GetFileNameWithoutExtension(ndsmod.Filename), "ModFiles")
             Dim modFilesFilesDir As String = IO.Path.Combine(modFilesDir, "Files")
             Dim modFilesToolsDir As String = IO.Path.Combine(modFilesDir, "Tools")
 
@@ -357,7 +357,7 @@ Public Class GenericNDSModProject
             If Not IO.Directory.Exists(modPackFilesMods) Then
                 IO.Directory.CreateDirectory(modPackFilesMods)
             End If
-            SkyEditorBase.Utilities.Zip.Zip(modFilesDir, IO.Path.Combine(modPackFilesMods, IO.Path.GetFileNameWithoutExtension(ndsmod.OriginalFilename) & ".dsmod"))
+            SkyEditorBase.Utilities.Zip.Zip(modFilesDir, IO.Path.Combine(modPackFilesMods, IO.Path.GetFileNameWithoutExtension(ndsmod.Filename) & ".dsmod"))
 
         Next
 

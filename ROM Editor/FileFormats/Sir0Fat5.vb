@@ -11,6 +11,13 @@ Namespace FileFormats
             Public Property DataOffset As Integer
             Public Property DataLength As Integer
             Public Property Filename As String
+            Public Overrides Function ToString() As String
+                If Filename IsNot Nothing Then
+                    Return Filename
+                Else
+                    Return MyBase.ToString
+                End If
+            End Function
         End Class
 
         Protected Property FileCount As Integer
@@ -40,7 +47,7 @@ Namespace FileFormats
                     Dim filenameLength = Me.Int(DataOffset + (count + 1) * 12 + 0) - filenameOffset
                     info.Filename = Me.ReadUnicodeString(filenameOffset, filenameLength / 2)
                 Else
-                    info.Filename = Nothing
+                    info.Filename = Hex(filenameOffset).PadLeft(8, "0"c)
                 End If
                 FileData.Add(info)
             Next

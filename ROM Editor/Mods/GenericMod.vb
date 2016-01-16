@@ -25,17 +25,17 @@ Namespace Mods
 
         Protected ReadOnly Property ModDirectory As String
             Get
-                Return IO.Path.Combine(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetFileNameWithoutExtension(OriginalFilename))
+                Return IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename))
             End Get
         End Property
         Protected ReadOnly Property ModOutputDirectory As String
             Get
-                Return IO.Path.Combine(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetFileNameWithoutExtension(OriginalFilename), "ModFiles")
+                Return IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename), "ModFiles")
             End Get
         End Property
         Protected ReadOnly Property ROMDirectory As String
             Get
-                Return IO.Path.Combine(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetFileNameWithoutExtension(OriginalFilename), "RawFiles")
+                Return IO.Path.Combine(IO.Path.GetDirectoryName(Filename), IO.Path.GetFileNameWithoutExtension(Filename), "RawFiles")
             End Get
         End Property
 

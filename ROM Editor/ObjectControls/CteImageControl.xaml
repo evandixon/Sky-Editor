@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ROMEditor"
              xmlns:ff="clr-namespace:ROMEditor.FileFormats"
-             xmlns:sky="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+             xmlns:sky="clr-namespace:SkyEditorBase;assembly=SkyEditorBase"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>

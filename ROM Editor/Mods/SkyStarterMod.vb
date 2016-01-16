@@ -23,11 +23,11 @@ Namespace Mods
         End Function
 
         Public Overrides Sub Initialize(CurrentProject As Project)
-            Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename)
+            Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename)
 
             'Convert Languages
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting languages..."))
-            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Languages/")
+            CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Languages/")
             Dim languageDictionary As New Dictionary(Of String, String)
             languageDictionary.Add("text_e.str", "English")
             languageDictionary.Add("text_f.str", "Français")

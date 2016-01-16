@@ -1,7 +1,7 @@
 ﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="QPkmWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditor"
+        xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditorBase"
     Title="Quicksave Pokemon" Height="447.568" Width="399.333">
     <Grid>
         <Menu IsMainMenu="True" Height="21" Margin="0,0,0,0" VerticalAlignment="Top" Visibility="Collapsed">

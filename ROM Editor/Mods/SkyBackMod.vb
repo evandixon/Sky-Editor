@@ -19,7 +19,7 @@ Public Class SkyBackMod
     Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
         'Convert BACK
         Dim BACKdir As String = IO.Path.Combine(ModDirectory, "Backgrounds")
-        CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/")
+        CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Backgrounds/")
         Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(ROMDirectory, "Data", "BACK"), "*.bgp")
         For count = 0 To backFiles.Count - 1
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting backgrounds..."), count / backFiles.Count)
@@ -33,7 +33,7 @@ Public Class SkyBackMod
                     End If
                     image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
                     IO.File.Copy(newFilename, newFilename & ".original")
-                    CurrentProject.OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(OriginalFilename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
+                    CurrentProject.OpenFile(newFilename, "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Backgrounds/" & IO.Path.GetFileName(newFilename), False)
                 Catch ex As BadImageFormatException
                     MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("BadImageFormatConversion", "Unable to convert image {0}.  Bad image format."), IO.Path.GetFileNameWithoutExtension(b.OriginalFilename)))
                 End Try
