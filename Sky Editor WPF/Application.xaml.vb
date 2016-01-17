@@ -16,7 +16,7 @@ Class Application
         Next
 
         'Save pending language changes
-        Dim languageManager = Language.LanguageManager.Instance
+        Dim languageManager = SkyEditorBase.Language.LanguageManager.Instance
         If languageManager.AdditionsMade Then
             languageManager.SaveAll()
         End If
@@ -55,7 +55,14 @@ Class Application
             ConsoleModule.ConsoleMain()
             Application.Current.Shutdown()
         Else
-            Dim _manager As PluginManager = PluginManager.GetInstance
+            Dim manager As PluginManager = PluginManager.GetInstance
+            'Add a handler so we can register certain things as if this application was a plugin
+            AddHandler manager.PluginsLoading, AddressOf OnPluginsLoading
+            manager.LoadPlugins()
+
+            'Remove the handler.
+            'Since we've already done what was needed at the particular point in LoadPlugins(), having the event handler registered is pointless at best
+            RemoveHandler manager.PluginsLoading, AddressOf OnPluginsLoading
 
             Dim checkForUpdates As Boolean = SettingsManager.Instance.Settings.UpdatePlugins
             If args.Contains("-disableupdates") Then
@@ -71,10 +78,10 @@ Class Application
                 Try
                     PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Updating plugins..."))
                     If Await Task.Run(Function() As Boolean
-                                          Return RedistributionHelpers.DownloadAllPlugins(_manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
+                                          Return RedistributionHelpers.DownloadAllPlugins(manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
                                       End Function) Then
                         PluginHelper.StopLoading()
-                        _manager.Dispose()
+                        manager.Dispose()
                         RedistributionHelpers.RestartProgram()
                         l.Close()
                         Exit Sub
@@ -87,11 +94,15 @@ Class Application
                 l.Visibility = Visibility.Collapsed
             End If
 
-            Dim m As New MainWindow2(_manager)
+            Dim m As New MainWindow2(manager)
             m.Show()
             If l IsNot Nothing Then
                 l.Close()
             End If
         End If
+    End Sub
+
+    Private Shared Sub OnPluginsLoading(sender As Object, e As EventArguments.PluginLoadingEventArgs)
+        PluginInfo.Load(sender)
     End Sub
 End Class

@@ -22,7 +22,7 @@ Namespace ObjectControls
                         '    englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)
                         'End Using
                     Else
-                        ItemNames = SkyEditor.Lists.SkyItemNames.Values.ToArray
+                        ItemNames = SaveEditor.Lists.SkyItemNames.Values.ToArray
                     End If
                 End With
                 RefreshItems()

@@ -3,9 +3,10 @@ Imports System.Windows.Forms
 Imports SkyEditorBase.Interfaces
 
 Public Class ObjectWindow
+    Implements iObjectWindow
     Dim _objectToEdit As Object
     Dim _manager As PluginManager
-    Public Property ObjectToEdit As Object
+    Public Property ObjectToEdit As Object Implements iObjectWindow.ObjectToEdit
         Get
             UpdateSave()
             Return _objectToEdit
@@ -52,6 +53,14 @@ Public Class ObjectWindow
     Public Sub New(Manager As PluginManager)
         InitializeComponent()
         _manager = Manager
+    End Sub
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        _manager = PluginManager.GetInstance
     End Sub
 
     Private Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpen.Click
@@ -117,4 +126,8 @@ Public Class ObjectWindow
             Return tcTabs.Items.Count
         End Get
     End Property
+
+    Public Shadows Function ShowDialog() As Boolean? Implements iObjectWindow.ShowDialog
+        Return MyBase.ShowDialog
+    End Function
 End Class

@@ -1,5 +1,5 @@
 ﻿Imports SkyEditorBase
-Imports SkyEditor.Saves
+Imports SaveEditor.Saves
 Namespace Tabs
     Public Class SkyGeneralTab
         Inherits ObjectTab(Of SkySave)

@@ -11,8 +11,8 @@ Imports System.Windows
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Sky Editor")> 
-<Assembly: AssemblyDescription("The tabs and editing information for Sky Editor.")> 
+<Assembly: AssemblyTitle("Save Editor")>
+<Assembly: AssemblyDescription("The save editing portion of Sky Editor")>
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Sky Editor")> 
 <Assembly: AssemblyCopyright("Copyright © Unique Geeks Media 2013")> 

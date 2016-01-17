@@ -8,7 +8,7 @@ Namespace MenuActions
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            PluginHelper.RequestFileOpen(Language.LanguageManager.Instance, False)
+            PluginHelper.RequestFileOpen(SkyEditorBase.Language.LanguageManager.Instance, False)
             Return Task.CompletedTask
         End Function
 

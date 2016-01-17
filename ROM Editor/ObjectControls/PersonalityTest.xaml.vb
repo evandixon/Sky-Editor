@@ -301,8 +301,8 @@ Namespace ObjectControls
             ReportModified = False
             'Me.Header = "Personality Test"
             PluginHelper.TranslateForm(Me)
-            For Each count In SkyEditor.Lists.SkyPokemon.Keys
-                Dim item As String = SkyEditor.Lists.SkyPokemon(count)
+            For Each count In SaveEditor.Lists.SkyPokemon.Keys
+                Dim item As String = SaveEditor.Lists.SkyPokemon(count)
                 cbPartner01.Items.Add(item)
                 cbPartner02.Items.Add(item)
                 cbPartner03.Items.Add(item)

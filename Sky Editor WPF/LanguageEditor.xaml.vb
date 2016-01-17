@@ -1,6 +1,7 @@
-﻿Namespace Language
-    Public Class LanguageEditor
-        Inherits ObjectControl(Of Language.LanguageManager)
+﻿Imports SkyEditorBase.Language
+
+Public Class LanguageEditor
+        Inherits ObjectControl(Of SkyEditorBase.Language.LanguageManager)
         Public Overrides Sub RefreshDisplay()
             MyBase.RefreshDisplay()
             cbLanguages.Items.Clear()
@@ -37,7 +38,7 @@
         Private Sub lbItems_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbItems.SelectionChanged
             'Save existing values
             If e.RemovedItems IsNot Nothing AndAlso e.RemovedItems.Count > 0 Then
-                With DirectCast(e.RemovedItems(0), Language.LanguageItem)
+                With DirectCast(e.RemovedItems(0), SkyEditorBase.Language.LanguageItem)
                     If Not .Value = txtValue.Text Then
                         .Value = txtValue.Text
                         RaiseModified()
@@ -47,7 +48,7 @@
 
             'Load new values
             If lbItems.SelectedItem IsNot Nothing Then
-                With DirectCast(lbItems.SelectedItem, Language.LanguageItem)
+                With DirectCast(lbItems.SelectedItem, LanguageItem)
                     txtKey.Text = .Key
                     txtValue.Text = .Value
                 End With
@@ -58,7 +59,7 @@
             MyBase.UpdateObject()
 
             If lbItems.SelectedItem IsNot Nothing Then
-                With DirectCast(lbItems.SelectedItem, Language.LanguageItem)
+                With DirectCast(lbItems.SelectedItem, LanguageItem)
                     .Value = txtValue.Text
                 End With
             End If
@@ -100,5 +101,4 @@
                 lbItems.SelectedItem = newItem
             End If
         End Sub
-    End Class
-End Namespace
+End Class

@@ -30,9 +30,9 @@ Namespace Redistribution
                                          "ICSharpCode.SharpZipLib.dll",
                                          "ROMEditor_plg.pdb",
                                          "ROMEditor_plg.xml",
-                                         "SkyEditor.exe",
-                                         "SkyEditor.pdb",
-                                         "SkyEditor.xml",
+                                         "SaveEditor.exe",
+                                         "SaveEditor.pdb",
+                                         "SaveEditor.xml",
                                          "SkyEditor_plg.dll.config",
                                          "SkyEditor_plg.pdb",
                                          "SkyEditor_plg.xml"}
@@ -46,7 +46,7 @@ Namespace Redistribution
             If Not IO.Directory.Exists(IO.Path.Combine(Environment.CurrentDirectory, "Sky Editor Archives")) Then
                 IO.Directory.CreateDirectory(IO.Path.Combine(Environment.CurrentDirectory, "Sky Editor Archives"))
             End If
-            IO.File.Copy(IO.Path.Combine(Environment.CurrentDirectory, "SkyEditor.exe"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp", "SkyEditor.exe"), True)
+            IO.File.Copy(IO.Path.Combine(Environment.CurrentDirectory, "SaveEditor.exe"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp", "SaveEditor.exe"), True)
             IO.File.Copy(IO.Path.Combine(Environment.CurrentDirectory, "ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp", "ICSharpCode.SharpZipLib.dll"), True)
             For Each File In IO.Directory.GetFiles(IO.Path.Combine(Environment.CurrentDirectory, "Resources"), "*", SearchOption.AllDirectories)
                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(File.Replace(Environment.CurrentDirectory, IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp")))) Then

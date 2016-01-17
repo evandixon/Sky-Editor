@@ -190,10 +190,6 @@
     <Compile Include="ChildControls.vb" />
     <Compile Include="ConsoleCommand.vb" />
     <Compile Include="ConsoleCommandAsync.vb" />
-    <Compile Include="ConsoleCommands\DistPrep.vb" />
-    <Compile Include="ConsoleCommands\PackAll.vb" />
-    <Compile Include="ConsoleCommands\UpdateAll.vb" />
-    <Compile Include="ConsoleCommands\Zip.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="EventArguments\FileAddedEventArguments.vb" />
@@ -201,6 +197,7 @@
     <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
+    <Compile Include="EventArguments\PluginLoadingEventArgs.vb" />
     <Compile Include="EventArguments\ProjectChangedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
     <Compile Include="ExecutableFile.vb" />
@@ -213,32 +210,15 @@
     <Compile Include="Interfaces\iOnDisk.vb" />
     <Compile Include="Interfaces\iOpenableFile.vb" />
     <Compile Include="Interfaces\iSavable.vb" />
-    <Compile Include="Internal\PluginInfo.vb" />
-    <Compile Include="Language\AddLanguageItem.xaml.vb">
-      <DependentUpon>AddLanguageItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Language\LanguageFile.vb" />
     <Compile Include="Language\LanguageItem.vb" />
     <Compile Include="Language\LanguageItemList.vb" />
     <Compile Include="MenuAction.vb" />
-    <Compile Include="MenuActions\DevConsole.vb" />
-    <Compile Include="MenuActions\FileNewFile.vb" />
-    <Compile Include="MenuActions\FileNewProject.vb" />
-    <Compile Include="MenuActions\FileOpenAuto.vb" />
-    <Compile Include="MenuActions\FileOpenManual.vb" />
-    <Compile Include="MenuActions\FileSave.vb" />
-    <Compile Include="MenuActions\FileSaveAll.vb" />
-    <Compile Include="MenuActions\FileSaveAs.vb" />
-    <Compile Include="MenuActions\FileSaveProject.vb" />
-    <Compile Include="MenuActions\ProjectArchive.vb" />
-    <Compile Include="MenuActions\ProjectBuild.vb" />
-    <Compile Include="MenuActions\ProjectRun.vb" />
-    <Compile Include="MenuActions\ToolsSettings.vb" />
-    <Compile Include="MenuActions\ToolsLanguage.vb" />
     <Compile Include="ObjectControl.vb" />
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectFile.vb" />
     <Compile Include="ObjectTab.vb" />
+    <Compile Include="Interfaces\iObjectWindow.vb" />
     <Compile Include="PluginHelper.vb" />
     <Compile Include="PluginManager.vb" />
     <Compile Include="Project.vb" />
@@ -263,106 +243,10 @@
     <Compile Include="Utilities\Zip.vb" />
     <Compile Include="Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="ConsoleModule.vb" />
-    <Compile Include="Language\LanguageEditor.xaml.vb">
-      <DependentUpon>LanguageEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsEditor.xaml.vb">
-      <DependentUpon>SettingsEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
-      <DependentUpon>ProjectExplorer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WelcomeTabContent.xaml.vb">
       <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
-      <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\CodeGenerator.xaml.vb">
-      <DependentUpon>CodeGenerator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\GameTypeSelector.xaml.vb">
-      <DependentUpon>GameTypeSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow.xaml.vb">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow2.xaml.vb">
-      <DependentUpon>MainWindow2.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\NewFileWindow.xaml.vb">
-      <DependentUpon>NewFileWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\NewNameWindow.xaml.vb">
-      <DependentUpon>NewNameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\NewProjectWindow.xaml.vb">
-      <DependentUpon>NewProjectWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ObjectWindow.xaml.vb">
-      <DependentUpon>ObjectWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PluginWindow.xaml.vb">
-      <DependentUpon>PluginWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Language\AddLanguageItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Language\LanguageEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SettingsEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tool Windows\ProjectExplorer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="GenericSave.vb" />
     <Page Include="WelcomeTabContent.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\BackgroundTaskWait.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\CodeGenerator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\GameTypeSelector.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\NewFileWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\NewNameWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\NewProjectWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\ObjectWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\PluginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -423,9 +307,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ICSharpCode.SharpZipLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">

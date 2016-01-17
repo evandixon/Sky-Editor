@@ -1,10 +1,7 @@
-﻿Imports System.Collections.Concurrent
-Imports System.Reflection
-Imports SkyEditorBase.SkyEditorWindows
+﻿Imports System.Reflection
 Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
-Imports System.Threading
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -266,7 +263,6 @@ Public Class PluginHelper
         End Sub
     End Class
     Private Shared _loadingShown As Boolean = False
-    Private Shared _loadingWindow As BackgroundTaskWait
     Private Shared _loadingDefinitions As New Dictionary(Of String, LoadingMessageChangedEventArgs)
 
     ''' <summary>
@@ -303,17 +299,6 @@ Public Class PluginHelper
         End If
     End Sub
     Private Shared Sub MakeLoadingVisibleorNot()
-        If _loadingWindow Is Nothing Then
-            'Dim s As New StaTaskScheduler(1)
-            'Task.Factory.StartNew(New Action(Sub()
-            'Try
-            '    ' _loadingWindow = New BackgroundTaskWait()
-            'Catch ex As Exception
-            '    PluginHelper.Writeline("Unable to show loading window.  Exception details: " & ex.ToString, LineType.Error)
-            '    Exit Sub
-            'End Try
-            'End Sub), CancellationToken.None, TaskCreationOptions.None, s)
-        End If
         Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
         Dim isShowing As Boolean = _loadingShown
 
@@ -326,30 +311,6 @@ Public Class PluginHelper
         Else
             RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
         End If
-
-        'If shouldShow AndAlso Not isShowing Then
-        '    If _loadingDefinitions.Count > 1 Then
-        '        ' _loadingWindow.Show(PluginHelper.GetLanguageItem("Loading", "Loading..."))
-        '        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
-        '    ElseIf _loadingDefinitions.Count = 1 Then
-        '        ' _loadingWindow.Show(_loadingDefinitions.Values(0))
-        '        RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
-        '    End If
-        '    _loadingShown = True
-        'ElseIf shouldShow AndAlso isShowing Then
-        '    If _loadingDefinitions.Count > 1 Then
-        '        ' _loadingWindow.ChangeMessage(PluginHelper.GetLanguageItem("Loading", "Loading..."))
-        '        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
-        '    ElseIf _loadingDefinitions.Count = 1 Then
-        '        '  _loadingWindow.ChangeMessage(_loadingDefinitions.Values(0))
-        '        RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
-        '    End If
-        'ElseIf isShowing AndAlso Not shouldShow Then
-        '    ' _loadingWindow.DoClose()
-        '    _loadingWindow = Nothing
-        '    _loadingShown = False
-        '    RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
-        'End If
     End Sub
     Public Shared Event LoadingMessageChanged(sender As Object, e As LoadingMessageChangedEventArgs)
     Public Shared Sub SetLoadingStatus(Message As String, Progress As Single)

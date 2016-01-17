@@ -1,6 +1,6 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
-Imports SkyEditor.Saves
+Imports SaveEditor.Saves
 
 Public Class QPkmWindow
     Public Property JSkyPokemonQ As Object

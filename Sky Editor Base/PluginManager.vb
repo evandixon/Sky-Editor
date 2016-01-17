@@ -19,7 +19,6 @@ Public Class PluginManager
     Public Shared Function GetInstance() As PluginManager
         If _instance Is Nothing Then
             _instance = New PluginManager
-            _instance.LoadPlugins(_instance.PluginFolder)
         End If
         Return _instance
     End Function
@@ -50,6 +49,9 @@ Public Class PluginManager
         Me.ConsoleCommands = New Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
         Me.PluginFolder = PluginFolder
         PluginHelper.PluginManagerInstance = Me
+    End Sub
+    Public Sub LoadPlugins()
+        LoadPlugins(PluginFolder)
     End Sub
     Public Sub LoadPlugins(FromFolder As String)
         'Me.PluginFolder = FromFolder
@@ -83,7 +85,8 @@ Public Class PluginManager
                 End Try
             Next
 
-            Internal.PluginInfo.Load(Me)
+            'Internal.PluginInfo.Load(Me)
+            RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
 
             For Each item In Plugins
                 item.Load(Me)
@@ -148,22 +151,6 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property GameTypes As New Dictionary(Of String, String)
 
-    ''' <summary>
-    ''' Dictionary matching console commands to the relevant PluginManager.ConsoleCommand delegate.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    <Obsolete> Public Property ConsoleCommandList As New Dictionary(Of String, ConsoleCommand)
-
-    ''' <summary>
-    ''' Dictionary matching console commands to the relevant PluginManager.ConsoleCommand delegate.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    <Obsolete> Public Property ConsoleCommandAsyncList As New Dictionary(Of String, ConsoleCommandAsync)
-
     Private Property ConsoleCommands As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
 
     ''' <summary>
@@ -222,7 +209,6 @@ Public Class PluginManager
     Private Property MenuItems As List(Of MenuItem)
 
     Public Property CheatManager As New ARDS.Manager
-    <Obsolete("Depricated.  Use FileTypeDetectors instead.")> Public Property SaveTypeDetectors As New List(Of SaveTypeDetector)
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
     Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
@@ -231,6 +217,7 @@ Public Class PluginManager
     Public Property PluginFolder As String
     Public Property ObjectControls As New List(Of ObjectControl)
     Public Property TypeSearcher As New Dictionary(Of Type, TypeSearchFound)
+    Public Property ObjectWindowType As Type
     Private WithEvents _currentProject As Project
     Public Property CurrentProject As Project
         Get
@@ -245,30 +232,12 @@ Public Class PluginManager
 #End Region
 
 #Region "Delegates"
-    Delegate Sub ConsoleCommand(ByVal Manager As PluginManager, ByVal Argument As String)
-    Delegate Function ConsoleCommandAsync(ByVal Manager As PluginManager, ByVal Argument As String) As Task
-    <Obsolete("Depricated.  Use FileTypeDetector instead.")> Delegate Function SaveTypeDetector(SaveBytes As GenericFile) As String
     Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
     Delegate Function DirectoryTypeDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
     Delegate Sub TypeSearchFound(TypeFound As Type)
 #End Region
 
 #Region "Registration"
-    <Obsolete> Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommand)
-        If ConsoleCommandList Is Nothing Then
-            ConsoleCommandList = New Dictionary(Of String, ConsoleCommand)
-        End If
-        ConsoleCommandList.Add(CommandName, Command)
-        PluginHelper.Writeline("Registered console command """ & CommandName & """.")
-    End Sub
-    <Obsolete> Public Sub RegisterConsoleCommand(CommandName As String, Command As ConsoleCommandAsync)
-        If ConsoleCommandAsyncList Is Nothing Then
-            ConsoleCommandAsyncList = New Dictionary(Of String, ConsoleCommandAsync)
-        End If
-        ConsoleCommandAsyncList.Add(CommandName, Command)
-        PluginHelper.Writeline("Registered console command """ & CommandName & """.")
-    End Sub
-
     ''' <summary>
     ''' Registers a ConsoleCommand or ConsoleCommandAsync.
     ''' </summary>
@@ -512,14 +481,12 @@ Public Class PluginManager
 #End Region
 
 #Region "Events"
-    'Public Event ConsoleCommandRegistered(sender As Object, ConsoleCommand As ConsoleCommand)
-    'Public Event EditorTabRegistered(sender As Object, EditorTab As Type)
-    'Public Event ObjectControlRegistered(sender As Object, ObjectControl As Type)
-    'Public Event IOFilterRegistered(sender As Object, IOFilter As IoFilterRegisteredEventArgs)
-    'Public Event MenuItemRegistered(sender As Object, Item As MenuItem)
-    'Public Event SaveGameFormatRegisterd(sender As Object, SaveGameFormat As Object)
-    'Public Event CodeGeneratorRegistered(sender As Object, CodeGenerator As ARDS.CodeDefinition)
-    'Public Event ResourceFileRegistered(sender As Object, ResourceFile As Object)
+    ''' <summary>
+    ''' Raised before each plugin's Load method is called.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event PluginsLoading(sender As Object, e As PluginLoadingEventArgs)
     Public Event ProjectFileAdded(sender As Object, e As FileAddedEventArguments)
     Public Event ProjectFileRemoved(sender As Object, e As FileRemovedEventArgs)
     Public Event ProjectChanged(sender As Object, e As ProjectChangedEventArgs)
@@ -636,6 +603,10 @@ Public Class PluginManager
     End Function
 
 #End Region
+
+    Public Function GetObjectWindow() As Interfaces.iObjectWindow
+        Return ObjectWindowType.GetConstructor({}).Invoke({})
+    End Function
 
     ''' <summary>
     ''' Gets an object control that can edit the given object.

@@ -133,7 +133,7 @@ Public Class ProjectExplorer
 
     Private Sub menuAddFolder_Click(sender As Object, e As RoutedEventArgs) Handles menuAddFolder.Click
         If _manager.CurrentProject.CanCreateDirectory(SelectedPath) Then
-            Dim w As New SkyEditorBase.SkyEditorWindows.NewNameWindow("What should the folder be named?", "New Folder")
+            Dim w As New SkyEditorWindows.NewNameWindow("What should the folder be named?", "New Folder")
             If w.ShowDialog Then
                 _manager.CurrentProject.CreateDirectory(IO.Path.Combine(SelectedPath, w.SelectedName))
             End If

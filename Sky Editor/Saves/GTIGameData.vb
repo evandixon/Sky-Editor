@@ -1,6 +1,4 @@
 ﻿Imports SkyEditorBase
-Imports SkyEditor
-
 Namespace Saves
     Public Class GTIGameData
         Inherits BinaryFile

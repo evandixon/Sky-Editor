@@ -283,9 +283,9 @@
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sky Editor\Sky Editor.vbproj">
+    <ProjectReference Include="..\Sky Editor\Save Editor.vbproj">
       <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
-      <Name>Sky Editor</Name>
+      <Name>Save Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

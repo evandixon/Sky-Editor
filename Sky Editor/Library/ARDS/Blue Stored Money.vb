@@ -24,7 +24,7 @@ Public Class BlueStoredMoney
 
     Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
         Get
-            Return {SkyEditor.GameStrings.BlueGame}
+            Return {SaveEditor.GameStrings.BlueGame}
         End Get
     End Property
 

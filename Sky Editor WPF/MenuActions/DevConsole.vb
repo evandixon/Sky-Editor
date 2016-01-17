@@ -5,7 +5,7 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Internal.ConsoleManager.Show()
+            PluginHelper.ShowConsole()
             ConsoleMain(PluginManager.GetInstance)
             Return Task.CompletedTask
         End Function

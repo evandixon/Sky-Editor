@@ -1,5 +1,5 @@
 ﻿Imports SkyEditorBase
-Imports SkyEditor.Interfaces
+Imports SaveEditor.Interfaces
 Imports SkyEditorBase.Utilities
 
 Namespace Tabs

@@ -62,9 +62,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.SkyEditor.MySettings
+        Friend ReadOnly Property Settings() As Global.SaveEditor.MySettings
             Get
-                Return Global.SkyEditor.MySettings.Default
+                Return Global.SaveEditor.MySettings.Default
             End Get
         End Property
     End Module

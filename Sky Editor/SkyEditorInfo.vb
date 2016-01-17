@@ -1,6 +1,6 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
-Imports SkyEditor.Saves
+Imports SaveEditor.Saves
 Public Class SkyEditorInfo
     Implements iSkyEditorPlugin
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor

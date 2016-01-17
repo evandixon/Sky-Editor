@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Saves
+﻿Imports SaveEditor.Saves
 Imports SkyEditorBase
 Namespace Tabs
     Public Class RBStoredItemsTab

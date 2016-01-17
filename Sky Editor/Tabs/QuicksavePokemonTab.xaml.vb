@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Saves
+﻿Imports SaveEditor.Saves
 Imports SkyEditorBase
 Namespace Tabs
     Public Class QuicksavePokemonTab
@@ -35,7 +35,7 @@ Namespace Tabs
         End Sub
         Sub ShowActivePkmEditDialog()
             If lbActivePokemon.SelectedIndex > -1 Then
-                Dim w As New SkyEditorBase.ObjectWindow(Me.GetPluginManager)
+                Dim w = Me.GetPluginManager.GetObjectWindow
                 w.ObjectToEdit = lbActivePokemon.SelectedItem
                 w.ShowDialog()
                 lbActivePokemon.SelectedItem = w.ObjectToEdit

@@ -1,5 +1,5 @@
 ﻿Imports SkyEditorBase
-Imports SkyEditor.Interfaces
+Imports SaveEditor.Interfaces
 Namespace Tabs
     Public Class ActivePokemonTab
         Inherits ObjectTab(Of iParty)
@@ -37,7 +37,7 @@ Namespace Tabs
         End Sub
         Sub ShowActivePkmEditDialog()
             If lbActivePokemon.SelectedIndex > -1 Then
-                Dim w As New SkyEditorBase.ObjectWindow(Me.GetPluginManager)
+                Dim w = Me.GetPluginManager.GetObjectWindow
                 w.ObjectToEdit = lbActivePokemon.SelectedItem
                 w.ShowDialog()
                 lbActivePokemon.SelectedItem = w.ObjectToEdit

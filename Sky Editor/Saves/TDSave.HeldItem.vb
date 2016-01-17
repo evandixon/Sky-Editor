@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Interfaces
+﻿Imports SaveEditor.Interfaces
 Imports SkyEditorBase
 
 Namespace Saves
