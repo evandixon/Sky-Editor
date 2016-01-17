@@ -140,7 +140,7 @@ Namespace Tabs
         End Sub
         Public Overrides ReadOnly Property SortOrder As Integer
             Get
-                Return 25
+                Return 1
             End Get
         End Property
     End Class

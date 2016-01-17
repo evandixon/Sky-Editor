@@ -5,6 +5,7 @@ Namespace Roms
     Public Class GenericNDSRom
         Inherits GenericFile
         Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements SkyEditorBase.Interfaces.iDetectableFileType
         Implements iPackedRom
 
 #Region "Constructors"
@@ -404,7 +405,7 @@ Namespace Roms
         End Sub
 #End Region
 
-        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+        Public Overridable Function IsFileOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
             Return (File.Length > &H15D AndAlso File.RawData(&H15C) = &H56 AndAlso File.RawData(&H15D) = &HCF)
         End Function
 

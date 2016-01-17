@@ -65,8 +65,8 @@ Public Class SkyEditorInfo
 
         'Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
 
-        Manager.RegisterMenuAction(New MenuActions.ImportSdf)
-        Manager.RegisterMenuAction(New MenuActions.OpenSdfSave)
+        Manager.RegisterMenuActionType(GetType(MenuActions.ImportSdf))
+        Manager.RegisterMenuActionType(GetType(MenuActions.OpenSdfSave))
 
         Manager.RegisterDirectoryTypeDetector(AddressOf Me.DirectoryDetector)
     End Sub

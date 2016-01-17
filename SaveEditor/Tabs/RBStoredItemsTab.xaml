@@ -8,6 +8,6 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBox x:Name="txtDisplay" VerticalScrollBarVisibility="Auto"></TextBox>
+        <TextBox x:Name="txtDisplay" VerticalScrollBarVisibility="Auto" IsReadOnly="True"></TextBox>
     </Grid>
 </local:ObjectTab>

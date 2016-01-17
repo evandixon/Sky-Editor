@@ -45,7 +45,7 @@ Namespace Tabs
         End Sub
         Public Overrides ReadOnly Property SortOrder As Integer
             Get
-                Return 26
+                Return 0
             End Get
         End Property
         Private Sub OnModified(sender As Object, e As EventArgs) Handles txtGeneral_TeamName.TextChanged,

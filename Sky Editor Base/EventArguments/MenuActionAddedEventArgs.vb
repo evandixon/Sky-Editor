@@ -2,7 +2,7 @@
     Public Class MenuActionAddedEventArgs
         Inherits EventArgs
 
-        Public Property Action As MenuAction
+        Public Property ActionType As Type
     End Class
 End Namespace
 

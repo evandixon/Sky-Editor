@@ -57,7 +57,7 @@ Namespace Tabs
 
         Public Overrides ReadOnly Property SortOrder As Integer
             Get
-                Return 26
+                Return 0
             End Get
         End Property
     End Class

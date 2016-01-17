@@ -144,12 +144,12 @@ Public Class MainWindow2
 
         TranslateControls()
 
-        For Each item In _manager.GetRootMenuItems
+        For Each item In UiHelper.GenerateMenuItems(_manager.GetMenuItemInfo)
             menuMain.Items.Add(item)
             RegisterEventMenuItemHandlers(item)
         Next
 
-        _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+        UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
@@ -221,13 +221,13 @@ Public Class MainWindow2
     End Sub
 
     Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
-        _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+        UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
         RemoveWelcomePage()
     End Sub
 
     Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged
         If e.PropertyName = "SelectedContent" AndAlso _manager IsNot Nothing Then 'docPane.SelectedContent 
-            _manager.UpdateMenuItemVisibility(GetMenuActionTargets)
+            UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
         End If
     End Sub
 #End Region

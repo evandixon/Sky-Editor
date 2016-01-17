@@ -1,8 +1,10 @@
 ﻿Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Namespace Saves
     Public Class RBSave
         Inherits BinaryFile
+        Implements SkyEditorBase.Interfaces.iDetectableFileType
 
         Public Sub New()
             MyBase.New()
@@ -87,10 +89,10 @@ Namespace Saves
         End Property
         Public Property StoredMoney As Integer
             Get
-                Return Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength)
+                Return Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength)
             End Get
             Set(value As Integer)
-                Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength) = value
+                Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength) = value
             End Set
         End Property
 
@@ -138,7 +140,7 @@ Namespace Saves
         '    Return GameStrings.RBSave
         'End Function
 #End Region
-        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+        Public Function IsFileOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
             If File.Length > Offsets.ChecksumEnd Then
                 Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd))
                 Return (File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))
@@ -146,7 +148,6 @@ Namespace Saves
                 Return False
             End If
         End Function
-
     End Class
 
 End Namespace

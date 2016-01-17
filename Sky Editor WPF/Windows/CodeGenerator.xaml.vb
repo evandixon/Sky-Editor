@@ -12,7 +12,7 @@
             lblGame.Content = PluginHelper.GetLanguageItem("Game")
             Me.Title = PluginHelper.GetLanguageItem("CodeGeneratorTitle", "Cheat Code Generator")
             btnGenerate.Content = PluginHelper.GetLanguageItem("Generate")
-            If m.CheatManager.CodeDefinitions.Count > 0 Then
+            If False Then 'm.CheatManager.CodeDefinitions.Count > 0 Then
                 LoadCodeTypes()
             Else
                 MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoCheats", "You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ and restart the program."))
@@ -32,7 +32,7 @@
         End Sub
         Private Sub cbCodeType_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCodeType.SelectionChanged
             cbRegion.Items.Clear()
-            For Each r In m.CheatManager.GetRegions(cbCodeType.SelectedItem)
+            For Each r In {} 'm.CheatManager.GetRegions(cbCodeType.SelectedItem)
                 cbRegion.Items.Add(r)
             Next
             If cbRegion.Items.Count > 0 Then cbRegion.SelectedIndex = 0
@@ -53,14 +53,14 @@
         End Sub
         Private Sub cbGame_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbGame.SelectionChanged
             cbCategory.Items.Clear()
-            For Each c In m.CheatManager.GetCategories(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem)
+            For Each c In {} ' m.CheatManager.GetCategories(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem)
                 cbCategory.Items.Add(c)
             Next
             If cbCategory.Items.Count > 0 Then cbCategory.SelectedIndex = 0
         End Sub
         Private Sub cbCategory_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbCategory.SelectionChanged
             cbProperty.Items.Clear()
-            For Each p In m.CheatManager.GetCode(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem, cbCategory.SelectedItem)
+            For Each p In {} 'm.CheatManager.GetCode(cbCodeType.SelectedItem, cbRegion.SelectedItem, cbGame.SelectedItem, cbCategory.SelectedItem)
                 cbProperty.Items.Add(p)
             Next
             If cbProperty.Items.Count > 0 Then cbProperty.SelectedIndex = 0

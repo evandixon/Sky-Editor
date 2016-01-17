@@ -365,112 +365,112 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SkyEditor\Italiano\SkyItems.txt">
+    <Content Include="SaveEditor\Italiano\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Italiano\SkyLocations.txt">
+    <Content Include="SaveEditor\Italiano\SkyLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Italiano\SkyMoves.txt">
+    <Content Include="SaveEditor\Italiano\SkyMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Italiano\SkyPokemon.txt">
+    <Content Include="SaveEditor\Italiano\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Deutsche\SkyItems.txt">
+    <Content Include="SaveEditor\Deutsche\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Deutsche\SkyLocations.txt">
+    <Content Include="SaveEditor\Deutsche\SkyLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Deutsche\SkyMoves.txt">
+    <Content Include="SaveEditor\Deutsche\SkyMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Deutsche\SkyPokemon.txt">
+    <Content Include="SaveEditor\Deutsche\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\Language.txt">
+    <Content Include="SaveEditor\English\Language.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBBaseTypes.txt">
+    <Content Include="SaveEditor\English\RBBaseTypes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBFriendAreaOffsets.txt">
+    <Content Include="SaveEditor\English\RBFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBItemOffsets.txt">
+    <Content Include="SaveEditor\English\RBItemOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBItemOrder.txt">
+    <Content Include="SaveEditor\English\RBItemOrder.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBItems.txt">
+    <Content Include="SaveEditor\English\RBItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBMoves.txt">
+    <Content Include="SaveEditor\English\RBMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBPokemon.txt">
+    <Content Include="SaveEditor\English\RBPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\SkyFriendAreaOffsets.txt">
+    <Content Include="SaveEditor\English\SkyFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\SkyItems.txt">
+    <Content Include="SaveEditor\English\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\RBLocations.txt">
+    <Content Include="SaveEditor\English\RBLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\SkyLocations.txt">
+    <Content Include="SaveEditor\English\SkyLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\SkyMoves.txt">
+    <Content Include="SaveEditor\English\SkyMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\SkyPokemon.txt">
+    <Content Include="SaveEditor\English\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\StringEncoding.txt">
+    <Content Include="SaveEditor\English\StringEncoding.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\TDFriendAreaOffsets.txt">
+    <Content Include="SaveEditor\English\TDFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\TDItems.txt">
+    <Content Include="SaveEditor\English\TDItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\English\TDLocations.txt">
+    <Content Include="SaveEditor\English\TDLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Español\SkyItems.txt">
+    <Content Include="SaveEditor\Español\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Español\SkyLocations.txt">
+    <Content Include="SaveEditor\Español\SkyLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Español\SkyMoves.txt">
+    <Content Include="SaveEditor\Español\SkyMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Español\SkyPokemon.txt">
+    <Content Include="SaveEditor\Español\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyFriendAreaOffsets.txt">
+    <Content Include="SaveEditor\Français\SkyFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyItems.txt">
+    <Content Include="SaveEditor\Français\SkyItems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyLocations.txt">
+    <Content Include="SaveEditor\Français\SkyLocations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyMoves.txt">
+    <Content Include="SaveEditor\Français\SkyMoves.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\SkyPokemon.txt">
+    <Content Include="SaveEditor\Français\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SkyEditor\Français\TDFriendAreaOffsets.txt">
+    <Content Include="SaveEditor\Français\TDFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -4,6 +4,7 @@ Namespace Saves
     Public Class RBSaveEU
         Inherits BinaryFile
         Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements SkyEditorBase.Interfaces.iDetectableFileType
 
         Public Sub New()
             MyBase.New()
@@ -142,7 +143,7 @@ Namespace Saves
         '    Next
         'End Sub
 #End Region
-        Public Shared Function IsFileOfType(File As GenericFile) As Boolean
+        Public Function IsFileOfType(File As GenericFile) As Boolean Implements SkyEditorBase.Interfaces.iDetectableFileType.IsOfType
             If File.Length > Offsets.ChecksumEnd Then
                 Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd)) ' - 1)
                 Return (File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))

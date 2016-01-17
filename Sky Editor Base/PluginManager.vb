@@ -29,9 +29,6 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Private Sub New()
         Me.New(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
-        Me.CurrentProject = Nothing ' New Project(Me)
-        MenuItems = New List(Of MenuItem)
-        Actions = New List(Of MenuAction)
     End Sub
 
     ''' <summary>
@@ -41,13 +38,10 @@ Public Class PluginManager
     ''' <param name="PluginFolder"></param>
     ''' <remarks></remarks>
     Private Sub New(PluginFolder As String)
-        'Me.Window = Window
-        'Me.CheatManager = New ARDS.Manager
-        'Me.Saves = New List(Of GenericSave)
-        'LoadPlugins(PluginFolder)
+        Me.CurrentProject = Nothing
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
-        Me.ConsoleCommands = New Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
         Me.PluginFolder = PluginFolder
+        Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         PluginHelper.PluginManagerInstance = Me
     End Sub
     Public Sub LoadPlugins()
@@ -85,6 +79,16 @@ Public Class PluginManager
                 End Try
             Next
 
+            RegisterTypeRegister(GetType(ObjectControl))
+            RegisterTypeRegister(GetType(ObjectTab))
+            RegisterTypeRegister(GetType(Project))
+            RegisterTypeRegister(GetType(iCreatableFile))
+            RegisterTypeRegister(GetType(iOpenableFile))
+            RegisterTypeRegister(GetType(iDetectableFileType))
+            RegisterFileTypeDetector(AddressOf Me.DetectFileType)
+            RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
+
+
             'Internal.PluginInfo.Load(Me)
             RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
 
@@ -101,29 +105,31 @@ Public Class PluginManager
                 End If
                 'Load types
                 Dim types As Type() = item.GetTypes
-                For Each type In types
-                    If ReflectionHelpers.IsOfType(type, GetType(ObjectTab)) Then
-                        RegisterObjectTab(type)
-                    ElseIf ReflectionHelpers.IsOfType(type, GetType(ObjectControl)) Then
-                        RegisterObjectControl(type)
-                    ElseIf ReflectionHelpers.IsOfType(type, GetType(Project))
-                        RegisterProjectType(PluginHelper.GetLanguageItem(type.Name, CallingAssembly:=item.GetName.Name), type)
-                    ElseIf ReflectionHelpers.IsOfType(type, GetType(GenericFile))
-                        If type.GetMethod("IsFileOfType") IsNot Nothing Then
-                            GenericFilesWithTypeValidator.Add(type)
-                        End If
-                    End If
-                    For Each searcher In TypeSearcher
-                        If ReflectionHelpers.IsOfType(type, searcher.Key) Then
-                            searcher.Value.Invoke(type)
+                For Each actualType In types
+                    'Check to see if this type inherits from one we're looking for
+                    For Each registeredType In TypeRegistery.Keys
+                        If ReflectionHelpers.IsOfType(actualType, registeredType) Then
+                            If TypeRegistery(registeredType) Is Nothing Then
+                                TypeRegistery(registeredType) = New List(Of Type)
+                            End If
+                            If Not TypeRegistery(registeredType).Contains(actualType) Then
+                                TypeRegistery(registeredType).Add(actualType)
+                            End If
                         End If
                     Next
-                    For Each i In type.GetInterfaces
-                        If i Is GetType(Interfaces.iCreatableFile) AndAlso type.GetConstructor({}) IsNot Nothing Then
-                            CreatableFiles.Add(type)
-                        ElseIf i Is GetType(Interfaces.iOpenableFile) AndAlso type.GetConstructor({}) IsNot Nothing
-                            OpenableFiles.Add(type)
-                        End If
+
+                    'Do the same for each interface
+                    For Each i In actualType.GetInterfaces
+                        For Each registeredType In TypeRegistery.Keys
+                            If ReflectionHelpers.IsOfType(i, registeredType) Then
+                                If TypeRegistery(registeredType) Is Nothing Then
+                                    TypeRegistery(registeredType) = New List(Of Type)
+                                End If
+                                If Not TypeRegistery(registeredType).Contains(actualType) Then
+                                    TypeRegistery(registeredType).Add(actualType)
+                                End If
+                            End If
+                        Next
                     Next
                 Next
             Next
@@ -151,8 +157,6 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property GameTypes As New Dictionary(Of String, String)
 
-    Private Property ConsoleCommands As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
-
     ''' <summary>
     ''' List of all the plugins' assembly names.
     ''' </summary>
@@ -177,47 +181,14 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property PluginFiles As New Dictionary(Of String, List(Of String))
-
-    ''' <summary>
-    ''' List of types of files that support creation (ie. a default constructor for the context of creating a new file).
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property CreatableFiles As New List(Of Type)
-
-    ''' <summary>
-    ''' List of types of files that support opening (ie. a constructor with a filename).
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property OpenableFiles As New List(Of Type)
-
-    ''' <summary>
-    ''' List of all GenericFile classes that have a shared method with signature: IsFileOfType(GenericFile) as Boolean
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property GenericFilesWithTypeValidator As New List(Of Type)
-
-    ''' <summary>
-    ''' List of all registered MenuActions, for use with creating custom menu items.
-    ''' </summary>
-    ''' <returns></returns>
-    Private Property Actions As List(Of MenuAction)
-
-    ''' <summary>
-    ''' List of the MenuItems created from the MenuActions.
-    ''' </summary>
-    ''' <returns></returns>
-    Private Property MenuItems As List(Of MenuItem)
-
-    Public Property CheatManager As New ARDS.Manager
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
     Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property ProjectTypes As New Dictionary(Of String, Type)
-    Public Property ObjectTabs As New List(Of ObjectTab)
     Public Property PluginFolder As String
-    Public Property ObjectControls As New List(Of ObjectControl)
-    Public Property TypeSearcher As New Dictionary(Of Type, TypeSearchFound)
     Public Property ObjectWindowType As Type
+    Private Property MenuItems As List(Of MenuItemInfo)
+    Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
     Private WithEvents _currentProject As Project
     Public Property CurrentProject As Project
         Get
@@ -238,15 +209,6 @@ Public Class PluginManager
 #End Region
 
 #Region "Registration"
-    ''' <summary>
-    ''' Registers a ConsoleCommand or ConsoleCommandAsync.
-    ''' </summary>
-    ''' <param name="CommandName">Name of the command, as will be typed in the console.</param>
-    ''' <param name="Command">The command to run when CommandName is typed in the console.</param>
-    Public Sub RegisterConsoleCommand(CommandName As String, Command As SkyEditorBase.ConsoleCommandAsync)
-        ConsoleCommands.Add(CommandName, Command)
-    End Sub
-
     Private Function IsObjectTab(T As Type) As Boolean
         If T.BaseType Is GetType(ObjectTab) Then
             Return True
@@ -258,16 +220,6 @@ Public Class PluginManager
             End If
         End If
     End Function
-
-    Private Sub RegisterObjectTab(Tab As Type)
-        If IsObjectTab(Tab) Then
-            ObjectTabs.Add(Tab.GetConstructor({}).Invoke({}))
-        End If
-    End Sub
-
-    Public Sub RegisterObjectControl(T As Type)
-        ObjectControls.Add(T.GetConstructor({}).Invoke({}))
-    End Sub
 
     ''' <summary>
     ''' Registers a filter for use in open and save file dialogs.
@@ -306,73 +258,79 @@ Public Class PluginManager
     ''' <summary>
     ''' Registers a Menu Action for use with creating custom menu items.
     ''' </summary>
-    ''' <param name="Action"></param>
-    Public Sub RegisterMenuAction(Action As MenuAction)
+    ''' <param name="ActionType">Type of the menu action to be registered.</param>
+    Public Sub RegisterMenuActionType(ActionType As Type)
+        If ActionType Is Nothing Then
+            Throw New ArgumentNullException(NameOf(ActionType))
+        End If
+        If Not ReflectionHelpers.IsOfType(ActionType, GetType(MenuAction)) Then
+            Throw New ArgumentException("Given type must inherit from MenuAction.", NameOf(ActionType))
+        End If
+
+        'While we're registering the type, we need an instance to get extra information, like where to put it
+        Dim ActionInstance As MenuAction = ActionType.GetConstructor({}).Invoke({})
+
+
         'Generate the MenuItem
         If MenuItems Is Nothing Then
-            MenuItems = New List(Of MenuItem)
+            MenuItems = New List(Of MenuItemInfo)
         End If
-        If Actions Is Nothing Then
-            Actions = New List(Of MenuAction)
-        End If
-        If Action.ActionPath.Count >= 1 Then
-            'Create parent menu items
-            Dim parent = From m In MenuItems Where m.Header = Action.ActionPath(0)
 
-            Dim current As MenuItem
+        If ActionInstance.ActionPath.Count >= 1 Then
+            'Create parent menu items
+            Dim parent = From m In MenuItems Where m.Header = ActionInstance.ActionPath(0)
+
+            Dim current As MenuItemInfo
             If parent.Any Then
                 current = parent.First
             Else
-                Dim m As New MenuItem
-                m.Header = Action.ActionPath(0)
-                If Action.ActionPath.Count = 1 Then
-                    If m.Tag Is Nothing Then
-                        m.Tag = New List(Of MenuAction)
-                    End If
-                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
+                Dim m As New MenuItemInfo
+                m.Header = ActionInstance.ActionPath(0)
+                m.Children = New List(Of MenuItemInfo)
+                m.ActionTypes = New List(Of Type)
+                If ActionInstance.ActionPath.Count = 1 Then
+                    m.ActionTypes.Add(ActionType)
                 End If
                 MenuItems.Add(m)
                 current = m
             End If
 
 
-            For count = 1 To Action.ActionPath.Count - 2
+            For count = 1 To ActionInstance.ActionPath.Count - 2
                 Dim index = count 'To avoid potential issues with using the below linq expression.  Might not be needed, but it's probably best to avoid potential issues.
-                parent = From m As MenuItem In current.Items Where m.Header = Action.ActionPath(index)
+                parent = From m As MenuItemInfo In current.Children Where m.Header = ActionInstance.ActionPath(index)
                 If parent.Any Then
                     current = parent.First
                 Else
-                    Dim m As New MenuItem
-                    m.Header = Action.ActionPath(count)
+                    Dim m As New MenuItemInfo
+                    m.Header = ActionInstance.ActionPath(count)
+                    m.Children = New List(Of MenuItemInfo)
                     If count = 0 Then
                         MenuItems.Add(m)
                     Else
-                        current.Items.Add(m)
+                        current.Children.Add(m)
                     End If
                     current = m
                 End If
             Next
 
 
-            If Action.ActionPath.Count > 1 Then
+            If ActionInstance.ActionPath.Count > 1 Then
                 'Check to see if the menu item exists
-                parent = From m As MenuItem In current.Items Where m.Header = Action.ActionPath.Last
+                parent = From m As MenuItemInfo In current.Children Where m.Header = ActionInstance.ActionPath.Last
 
                 If parent.Any Then
-                    Dim m = DirectCast(parent.First, MenuItem)
-                    If m.Tag Is Nothing Then
-                        m.Tag = New List(Of MenuAction)
-                    End If
-                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
+                    Dim m = DirectCast(parent.First, MenuItemInfo)
+                    m.ActionTypes = New List(Of Type)
+                    m.ActionTypes.Add(ActionType)
                 Else
                     'Add the menu item, and give it a proper tag
-                    Dim m As New MenuItem
-                    m.Header = Action.ActionPath.Last
-                    If m.Tag Is Nothing Then
-                        m.Tag = New List(Of MenuAction)
-                    End If
-                    DirectCast(m.Tag, List(Of MenuAction)).Add(Action)
-                    current.Items.Add(m)
+                    Dim m As New MenuItemInfo
+                    m.Children = New List(Of MenuItemInfo)
+                    m.Header = ActionInstance.ActionPath.Last
+                    m.ActionTypes = New List(Of Type)
+                    m.ActionTypes.Add(ActionType)
+                    current.Children.Add(m)
                 End If
             End If
 
@@ -380,11 +338,8 @@ Public Class PluginManager
             Throw New ArgumentException("The action's ActionPath needs to contain at least 1 item.")
         End If
 
-        'Register the item
-        Actions.Add(Action)
-
         'Call the event
-        RaiseEvent MenuActionAdded(Me, New EventArguments.MenuActionAddedEventArgs With {.Action = Action})
+        RaiseEvent MenuActionAdded(Me, New EventArguments.MenuActionAddedEventArgs With {.ActionType = ActionType})
     End Sub
 
     Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
@@ -395,9 +350,6 @@ Public Class PluginManager
         DirectoryTypeDetectors.Add(Detector)
     End Sub
 
-    Public Sub RegisterCodeGenerator(Generator As ARDS.CodeDefinition)
-        Me.CheatManager.CodeDefinitions.Add(Generator)
-    End Sub
     ''' <summary>
     ''' Registers the given File Path as being a resource used by the calling plugin.
     ''' This should be used for files in the same directory as the plugin, that are a strict requirement of functionality for your plugin.
@@ -413,10 +365,17 @@ Public Class PluginManager
         PluginFiles(plugin).Add(FilePath)
     End Sub
 
-    Public Sub RegisterTypeSearcher(TypeToSearch As Type, OnFound As TypeSearchFound)
-        If Not TypeSearcher.ContainsKey(TypeToSearch) Then
-            TypeSearcher.Add(TypeToSearch, OnFound)
+    ''' <summary>
+    ''' Adds the given type to the type registry.
+    ''' After plugins are loaded, any type that inherits or implements the given Type can be easily found.
+    ''' </summary>
+    ''' <param name="Type"></param>
+    Public Sub RegisterTypeRegister(Type As Type)
+        If Type Is Nothing Then
+            Throw New ArgumentNullException(NameOf(Type))
         End If
+
+        TypeRegistery.Add(Type, New List(Of Type))
     End Sub
 #End Region
 
@@ -474,8 +433,86 @@ Public Class PluginManager
     End Function
 #End Region
 
+    ''' <summary>
+    ''' Returns an IEnumerable of all the registered types that inherit or implement the given BaseType.
+    ''' </summary>
+    ''' <param name="BaseType">Type to get children or implementors of.</param>
+    ''' <returns></returns>
+    Protected Function GetRegisteredTypes(BaseType As Type) As IEnumerable(Of Type)
+        If BaseType Is Nothing Then
+            Throw New ArgumentNullException(NameOf(BaseType))
+        End If
+
+        If TypeRegistery.ContainsKey(BaseType) Then
+            Return TypeRegistery(BaseType)
+        Else
+            Return {}
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Returns an IEnumerable of all the registered types that implement iCreatableFile.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetCreatableFiles() As IEnumerable(Of Type)
+        Return GetRegisteredTypes(GetType(iCreatableFile))
+    End Function
+
+    ''' <summary>
+    ''' Returns an IEnumerable of all the registered types that implement iOpenableFile.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetOpenableFiles() As IEnumerable(Of Type)
+        Return GetRegisteredTypes(GetType(iOpenableFile))
+    End Function
+
+    ''' <summary>
+    ''' Returns an IEnumerable of all the registered types that implement iDetectableFileType.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetDetectableFileTypes() As IEnumerable(Of Type)
+        Return GetRegisteredTypes(GetType(iDetectableFileType))
+    End Function
+
     Public Function GetConsoleCommands() As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
-        Return ConsoleCommands
+        Throw New NotImplementedException
+        'Return ConsoleCommands
+    End Function
+
+    ''' <summary>
+    ''' Returns data that can be used to make MenuItems that run MenuActions.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetMenuItemInfo() As IEnumerable(Of MenuItemInfo)
+        Return MenuItems
+    End Function
+
+    ''' <summary>
+    ''' Returns a new instance of each registed ObjectTab.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetObjectTabs() As IEnumerable(Of ObjectTab)
+        Dim output As New List(Of ObjectTab)
+
+        For Each item In GetRegisteredTypes(GetType(ObjectTab))
+            output.Add(item.GetConstructor({}).Invoke({}))
+        Next
+
+        Return output
+    End Function
+
+    ''' <summary>
+    ''' Returns a new instance of each registered ObjectControl.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetObjectControls() As IEnumerable(Of ObjectControl)
+        Dim output As New List(Of ObjectControl)
+
+        For Each item In GetRegisteredTypes(GetType(ObjectControl))
+            output.Add(item.GetConstructor({}).Invoke({}))
+        Next
+
+        Return output
     End Function
 
 #End Region
@@ -617,7 +654,7 @@ Public Class PluginManager
     Public Function GetObjectControl(ObjectToEdit As Object) As ObjectControl
         Dim out As ObjectControl = Nothing
         If ObjectToEdit IsNot Nothing Then
-            For Each item In (From o In ObjectControls Order By o.UsagePriority(ObjectToEdit.GetType) Ascending)
+            For Each item In (From o In GetObjectControls() Order By o.UsagePriority(ObjectToEdit.GetType) Ascending)
                 If out Is Nothing Then
                     For Each t In item.SupportedTypes
                         If ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
@@ -639,7 +676,7 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Function GetRefreshedTabs(Save As Object) As List(Of TabItem)
         Dim tabs As New List(Of ObjectTab)
-        For Each etab In (From e In ObjectTabs Order By e.SortOrder Ascending)
+        For Each etab In (From e In GetObjectTabs() Order By e.SortOrder Ascending)
             Dim isMatch = False
             If Not isMatch Then
                 For Each t In etab.SupportedTypes
@@ -730,8 +767,9 @@ Public Class PluginManager
         End If
 
         If matches.Count = 0 Then
-            For Each item In GenericFilesWithTypeValidator
-                If item.GetMethod("IsFileOfType").Invoke(Nothing, {File}) Then
+            For Each item In GetDetectableFileTypes()
+                Dim instance As iDetectableFileType = item.GetConstructor({}).Invoke({})
+                If instance.isoftype(File) Then
                     matches.Add(item)
                 End If
             Next
@@ -742,73 +780,6 @@ Public Class PluginManager
         Else
             Return matches
         End If
-    End Function
-
-    ''' <summary>
-    ''' Gets the MenuItems generated from the registered MenuActions.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetRootMenuItems() As List(Of MenuItem)
-        Return MenuItems
-    End Function
-
-    ''' <summary>
-    ''' Updates the visibility of the MenuItems based on the currently selected Types.
-    ''' </summary>
-    Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object))
-        For Each item In MenuItems
-            UpdateMenuItemVisibility(SelectedObjects, item)
-        Next
-    End Sub
-
-    ''' <summary>
-    ''' Updates the visibility of the MenuItems based on the currently selected Types.
-    ''' </summary>
-    ''' <param name="Parent"></param>
-    Public Sub UpdateMenuItemVisibility(SelectedObjects As IEnumerable(Of Object), Parent As MenuItem)
-        For Each item In Parent.Items
-            UpdateMenuItemVisibility(SelectedObjects, item)
-        Next
-        If Parent.Tag IsNot Nothing AndAlso TypeOf Parent.Tag Is List(Of MenuAction) Then
-            Dim tags = DirectCast(Parent.Tag, List(Of MenuAction))
-            Dim hasMatch As Boolean = False
-            'Each menu item has one or more menu action
-            For Each tag In tags
-
-                If Not hasMatch Then
-                    'Each action can target multiple things
-                    hasMatch = tag.AlwaysVisible OrElse tag.SupportsObjects(SelectedObjects)
-                Else
-                    Exit For
-                End If
-
-
-            Next
-
-            If hasMatch Then
-                Parent.Visibility = Visibility.Visible
-            Else
-                Parent.Visibility = Visibility.Collapsed
-            End If
-        Else
-            'This menu item doesn't have an action.
-            'Setting visibility to whether or not it has visible children.
-            If MenuItemHasVisibleChildren(Parent) Then
-                Parent.Visibility = Visibility.Visible
-            Else
-                Parent.Visibility = Visibility.Collapsed
-            End If
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Determines whether or not the given menu item has visible children.
-    ''' </summary>
-    ''' <param name="Item"></param>
-    Public Function MenuItemHasVisibleChildren(Item As MenuItem) As Boolean
-        Dim q = From m As MenuItem In Item.Items Where m.Visibility = Visibility.Visible
-
-        Return q.Any
     End Function
 
     ''' <summary>
@@ -832,7 +803,7 @@ Public Class PluginManager
     ''' Otherwise, returns Nothing.
     ''' </summary>
     ''' <returns></returns>
-    Public Shared Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of Type)
+    Public Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of Type)
         If File.Length > 0 AndAlso File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
             Dim result = TryGetObjectFileType(File.OriginalFilename)
             If result Is Nothing Then
@@ -879,4 +850,5 @@ Public Class PluginManager
         ' GC.SuppressFinalize(Me)
     End Sub
 #End Region
+
 End Class

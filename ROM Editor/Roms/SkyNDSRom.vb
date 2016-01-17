@@ -63,7 +63,7 @@ Namespace Roms
         '        End Function
         '#End Region
 
-        Public Shared Shadows Function IsFileOfType(File As GenericFile) As Boolean
+        Public Overrides Function IsFileOfType(File As GenericFile) As Boolean
             Dim e As New System.Text.ASCIIEncoding
             If File.Length > 16 Then
                 Return e.GetString(File.RawData(12, 4)) = "C2SE" OrElse e.GetString(File.RawData(12, 4)) = "C2SP"

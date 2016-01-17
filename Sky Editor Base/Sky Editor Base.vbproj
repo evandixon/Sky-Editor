@@ -203,6 +203,7 @@
     <Compile Include="ExecutableFile.vb" />
     <Compile Include="Interfaces\iContainer.vb" />
     <Compile Include="Interfaces\iCreatableFile.vb" />
+    <Compile Include="Interfaces\iDetectableFileType.vb" />
     <Compile Include="Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Interfaces\iGenericFile.vb" />
     <Compile Include="Interfaces\iModifiable.vb" />
@@ -214,6 +215,7 @@
     <Compile Include="Language\LanguageItem.vb" />
     <Compile Include="Language\LanguageItemList.vb" />
     <Compile Include="MenuAction.vb" />
+    <Compile Include="MenuItemInfo.vb" />
     <Compile Include="ObjectControl.vb" />
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectFile.vb" />

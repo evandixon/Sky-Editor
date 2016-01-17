@@ -8,7 +8,7 @@ Namespace MenuActions
             Dim _manager = PluginManager.GetInstance
             Dim w As New SkyEditorWindows.NewFileWindow()
             Dim games As New Dictionary(Of String, Type)
-            For Each item In _manager.CreatableFiles
+            For Each item In _manager.GetCreatableFiles
                 games.Add(PluginHelper.GetLanguageItem(item.Name), item)
             Next
             w.AddGames(games.Keys)

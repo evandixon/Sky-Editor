@@ -10,8 +10,8 @@ Namespace MenuActions
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Dim w As New SkyEditorWindows.GameTypeSelector()
                 Dim games As New Dictionary(Of String, Type)
-                For Each item In _manager.OpenableFiles
-                    games.Add(PluginHelper.GetLanguageItem(item.Name), item)
+                For Each item In _manager.GetOpenableFiles
+                    games.Add(PluginHelper.GetLanguageItem(item.FullName), item)
                 Next
                 w.AddGames(games.Keys)
                 If w.ShowDialog Then

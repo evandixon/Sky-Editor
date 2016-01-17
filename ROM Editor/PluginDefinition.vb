@@ -82,21 +82,21 @@ Public Class PluginDefinition
         Manager.RegisterFileTypeDetector(AddressOf AutoDetect3dsRom)
         Manager.RegisterFileTypeDetector(AddressOf FileFormatDetector)
 
-        Manager.RegisterTypeSearcher(GetType(Mods.GenericMod), AddressOf NDSModRegistry.AddNDSMod)
+        Manager.RegisterTypeRegister(GetType(Mods.GenericMod))
 
-        Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
-        Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
-        Manager.RegisterConsoleCommand("gzip", New ConsoleCommands.Gzip)
+        'Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
+        'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
+        'Manager.RegisterConsoleCommand("gzip", New ConsoleCommands.Gzip)
 
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Tagging.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "zlib.net.dll"))
 
-        Manager.RegisterMenuAction(New MenuActions.PsmdSoundtrackMenuAction)
-        Manager.RegisterMenuAction(New MenuActions.CteImageExport)
-        Manager.RegisterMenuAction(New MenuActions.CteImageImport)
-        Manager.RegisterMenuAction(New MenuActions.ExtractFarc)
+        Manager.RegisterMenuActionType(GetType(MenuActions.PsmdSoundtrackMenuAction))
+        Manager.RegisterMenuActionType(GetType(MenuActions.CteImageExport))
+        Manager.RegisterMenuActionType(GetType(MenuActions.CteImageImport))
+        Manager.RegisterMenuActionType(GetType(MenuActions.ExtractFarc))
 
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
