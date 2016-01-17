@@ -1,0 +1,57 @@
+﻿Bountiful Sea: 9
+Treasure Sea: 10
+Serene Sea: 4
+Deep-Sea Floor: 12
+Deep Sea Current: 1
+Seafloor Cave: 1
+Shallow Beach: 5
+Mt. Deepgreen: 12
+Mt. Cleft: 9
+Mt. Moon View: 6
+Rainbow Peak: 1
+Wild Plains: 13
+Beau Plains: 12
+Sky Blue Plains: 13
+Safari: 15
+Scorched Plains: 10
+Sacred Field: 3
+Mist-Rise Forest: 14
+Flyaway Forest: 12
+Overgrown Forest: 9
+Energetic Forest: 15
+Mushroom Forest: 7
+Healing Forst: 1
+Transform Forest: 6
+Secretive Forest: 9
+Rub-a-dub River: 7
+Tadpole Pond: 9
+Turtleshell Pond: 10
+Mystic Lake: 4
+Waterfall Lake: 4
+Peanut Swamp: 7
+Poison Swamp: 6
+Echo Cave: 11
+Cryptic Cave: 1
+Dragon Cave: 3
+Boulder Cave: 4
+Jungle: 13
+Decrepit Lab: 7
+Mt. Discipline: 11
+Thunder Meadow: 11
+Power Plant: 6
+Crater: 7
+Furnace Desert: 7
+Aged Chamber AN: 14 
+Aged Chamber O: 14
+Ancient Relic: 6
+Darkness Ridge: 13
+Frigid Cavern: 7
+Ice Floe Beach: 5
+Volcanic Pit: 1
+Statos Lookout: 1
+Ravaged Field: 5
+Magnetic Quarry: 3
+Legendary Island: 3
+Southern Island: 2
+Enclosed Island: 1
+Final Island: 1
