@@ -20,8 +20,8 @@ Public Class NewProjectWindow
         ' Add any initialization after the InitializeComponent() call.
         _folderBrowser = New FolderBrowserDialog
 
-        For Each item In Manager.ProjectTypes.Keys
-            ddType.Items.Add(item)
+        For Each item In Manager.GetProjects
+            ddType.Items.Add(item.GetProjectTypeName)
         Next
         If ddType.Items.Count > 0 Then ddType.SelectedIndex = 0
     End Sub

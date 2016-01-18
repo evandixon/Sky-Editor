@@ -184,7 +184,6 @@ Public Class PluginManager
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
     Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
-    Public Property ProjectTypes As New Dictionary(Of String, Type)
     Public Property PluginFolder As String
     Public Property ObjectWindowType As Type
     Private Property MenuItems As List(Of MenuItemInfo)
@@ -249,10 +248,6 @@ Public Class PluginManager
         If Not SaveTypes.ContainsKey(SaveName) Then
             SaveTypes.Add(SaveName, ContainerType)
         End If
-    End Sub
-
-    Private Sub RegisterProjectType(ProjectName As String, ProjectType As Type)
-        ProjectTypes.Add(ProjectName, ProjectType)
     End Sub
 
     ''' <summary>
@@ -368,6 +363,8 @@ Public Class PluginManager
     ''' <summary>
     ''' Adds the given type to the type registry.
     ''' After plugins are loaded, any type that inherits or implements the given Type can be easily found.
+    ''' 
+    ''' If the type is already in the type registry, nothing will be done.
     ''' </summary>
     ''' <param name="Type"></param>
     Public Sub RegisterTypeRegister(Type As Type)
@@ -375,7 +372,27 @@ Public Class PluginManager
             Throw New ArgumentNullException(NameOf(Type))
         End If
 
-        TypeRegistery.Add(Type, New List(Of Type))
+        If Not TypeRegistery.ContainsKey(Type) Then
+            TypeRegistery.Add(Type, New List(Of Type))
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Registers the given Type in the type registry.
+    ''' </summary>
+    ''' <param name="Register">The base type or interface that the given Type inherits or implements.</param>
+    ''' <param name="Type">The type to register.</param>
+    Public Sub RegisterType(Register As Type, Type As Type)
+        If Register Is Nothing Then
+            Throw New ArgumentNullException(NameOf(Register))
+        End If
+        If Type Is Nothing Then
+            Throw New ArgumentNullException(NameOf(Type))
+        End If
+
+        RegisterTypeRegister(Register)
+
+        TypeRegistery(Register).Add(Type)
     End Sub
 #End Region
 
@@ -513,6 +530,35 @@ Public Class PluginManager
         Next
 
         Return output
+    End Function
+
+    ''' <summary>
+    ''' Returns a new instance of each registered Project.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetProjects() As IEnumerable(Of Project)
+        Dim output As New List(Of Project)
+
+        For Each item In GetRegisteredTypes(GetType(Project))
+            output.Add(item.GetConstructor({}).Invoke({}))
+        Next
+
+        Return output
+    End Function
+
+    ''' <summary>
+    ''' Returns the type of the project with the given Project Type Name
+    ''' </summary>
+    ''' <param name="ProjectTypeName">Name of the Project Type.</param>
+    ''' <returns></returns>
+    Public Function GetProjectType(ProjectTypeName As String) As Type
+        Dim q = From p In GetProjects() Where p.GetProjectTypeName = ProjectTypeName Select p
+
+        If q.Any Then
+            Return q.First.GetType
+        Else
+            Return Nothing
+        End If
     End Function
 
 #End Region
