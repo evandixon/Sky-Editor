@@ -98,7 +98,9 @@ Public Class MainWindow2
 
     Private Sub _projectExplorer_FileOpened(sender As Object, e As EventArguments.FileOpenedEventArguments) Handles _projectExplorer.FileOpen
         Dispatcher.Invoke(Sub()
-                              docPane.Children.Add(New DocumentTab(e.File, _manager))
+                              Dim d As New DocumentTab(e.File, _manager)
+                              docPane.Children.Add(d)
+                              docPane.SelectedContentIndex = docPane.Children.IndexOf(d)
                               RemoveWelcomePage()
                           End Sub)
     End Sub
@@ -213,8 +215,10 @@ Public Class MainWindow2
     End Sub
 
     Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
-        UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
-        RemoveWelcomePage()
+        Dispatcher.Invoke(Sub()
+                              UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
+                              RemoveWelcomePage()
+                          End Sub)
     End Sub
 
     Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged

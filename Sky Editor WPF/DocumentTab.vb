@@ -41,7 +41,6 @@ Public Class DocumentTab
                     Me.Content = tabControl
                 ElseIf ucTabs.Count = 1 Then
                     Dim control = ucTabs(0)
-                    control.EditingObject = value
                     Me.Content = control
                 Else
                     'Nothing is registered to edit this object.

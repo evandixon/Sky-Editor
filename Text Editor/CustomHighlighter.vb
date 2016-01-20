@@ -21,6 +21,7 @@ Public Class CustomHighlighter
     End Sub
 
     Public Sub New(root As XElement)
+        Me.New
         For Each elem As XElement In root.Elements()
             Select Case elem.Name.ToString()
                 Case "HighlightWordsRule"

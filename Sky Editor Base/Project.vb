@@ -128,7 +128,7 @@ Public Class Project
         Return p
     End Function
 
-    Public Shared Function OpenProject(Filename As String, Manager As PluginManager) As Project
+    Public Shared Async Function OpenProject(Filename As String, Manager As PluginManager) As Task(Of Project)
         Dim j As New JavaScriptSerializer
         Dim f = j.Deserialize(Of ProjectFileFormat)(IO.File.ReadAllText(Filename))
         Dim p As Project
@@ -140,13 +140,15 @@ Public Class Project
         p.SetManager(Manager)
         p.Filename = Filename
         p.ProjectType = f.ProjectType
-        For Each item In f.Files
-            If item.EndsWith("/") OrElse item.EndsWith("\") Then
-                p.Files.Add(item, Nothing)
-            Else
-                p.Files.Add(item, Manager.OpenObject(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), item)))
-            End If
-        Next
+        Await Task.Run(New Action(Sub()
+                                      For Each item In f.Files
+                                          If item.EndsWith("/") OrElse item.EndsWith("\") Then
+                                              p.Files.Add(item, Nothing)
+                                          Else
+                                              p.Files.Add(item, Manager.OpenObject(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), item)))
+                                          End If
+                                      Next
+                                  End Sub))
         p.Opened()
         p._modified = False
         Return p
