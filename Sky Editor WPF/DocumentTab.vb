@@ -22,9 +22,9 @@ Public Class DocumentTab
             Return _document
         End Get
         Set(value As Object)
-            If _document IsNot Nothing AndAlso TypeOf _document Is iModifiable Then
-                RemoveHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
-            End If
+            'If _document IsNot Nothing AndAlso TypeOf _document Is iModifiable Then
+            '    RemoveHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
+            'End If
             If _document IsNot Nothing AndAlso TypeOf _document Is iSavable Then
                 RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
@@ -37,11 +37,14 @@ Public Class DocumentTab
                     tabControl.TabStripPlacement = Controls.Dock.Left
                     For Each item In UiHelper.GenerateObjectTabs(ucTabs)
                         tabControl.Items.Add(item)
+                        AddHandler item.ContainedObjectControl.IsModifiedChanged, AddressOf File_FileModified
                     Next
                     Me.Content = tabControl
+
                 ElseIf ucTabs.Count = 1 Then
                     Dim control = ucTabs(0)
                     Me.Content = control
+                    AddHandler control.IsModifiedChanged, AddressOf File_FileModified
                 Else
                     'Nothing is registered to edit this object.
                     Dim label As New Label
@@ -51,9 +54,6 @@ Public Class DocumentTab
             End If
             _document = value
 
-            If TypeOf _document Is iModifiable Then
-                AddHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
-            End If
             If TypeOf _document Is iSavable Then
                 AddHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
@@ -100,7 +100,11 @@ Public Class DocumentTab
         End If
     End Sub
     Private Sub File_FileModified(sender As Object, e As EventArgs)
-        IsModified = True
+        If TypeOf sender Is iObjectControl Then
+            IsModified = DirectCast(sender, iObjectControl).IsModified
+        Else
+            IsModified = True
+        End If
         RaiseEvent FileModified(sender, e)
     End Sub
     Private Sub _file_FileSaved(sender As Object, e As EventArgs)

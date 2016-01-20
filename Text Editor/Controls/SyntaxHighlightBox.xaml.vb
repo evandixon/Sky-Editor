@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Controls
+Imports System.Windows.Input
 Imports AurelienRibon.Ui.SyntaxHighlightBox
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
@@ -8,9 +9,12 @@ Namespace Controls
         Inherits UserControl
         Implements iObjectControl
 
+        Private WithEvents AutoComplete As AutoCompletePopup
+
         Public Sub RefreshDisplay()
             txtCode.CurrentHighlighter = GetEditingObject(Of CodeFile).CodeHighlighter
             txtCode.Text = GetEditingObject(Of CodeFile).Text
+            IsModified = False
         End Sub
         Public Sub UpdateObject()
             GetEditingObject(Of CodeFile).Text = txtCode.Text
@@ -27,6 +31,101 @@ Namespace Controls
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
             Return 0
         End Function
+        Private Sub txtCode_KeyUp(sender As Object, e As KeyEventArgs) Handles txtCode.KeyUp
+            If Not e.Key = Key.RightShift AndAlso Not e.Key = Key.LeftShift Then
+                Select Case e.Key
+                    Case Else
+                        If IsAutoCompleteOpen() Then
+                            Dim partStart = txtCode.Text.LastIndexOf(".", txtCode.CaretIndex)
+                            If partStart = -1 Then
+                                partStart = 0
+                            End If
+                            Dim part As String = txtCode.Text.Substring(partStart, txtCode.CaretIndex - partStart).Trim.Trim(".")
+                            FilterAutoComplete(part)
+                        End If
+                End Select
+            End If
+        End Sub
+        Private Sub txtCode_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCode.KeyDown
+            If Not e.Key = Key.RightShift AndAlso Not e.Key = Key.LeftShift Then
+                Select Case e.Key
+                    Case Key.OemPeriod
+                        'Get the last word, preceding the period
+                        Dim wordStart = txtCode.Text.LastIndexOf(" ", txtCode.CaretIndex - 1)
+                        If wordStart = -1 Then
+                            wordStart = 0
+                        End If
+                        Dim lastWord As String = txtCode.Text.Substring(wordStart, txtCode.CaretIndex - wordStart).Trim.Trim(".").ToLower
+                        If lastWord = "testc" Then
+                            ShowAutoComplete(txtCode.GetRectFromCharacterIndex(txtCode.CaretIndex, True), lastWord)
+                        End If
+                End Select
+            End If
+        End Sub
+        Private Sub txtCode_PreviewKeyDown(sender As Object, e As KeyEventArgs) Handles txtCode.PreviewKeyDown
+            Select Case e.Key
+                Case Key.Tab
+                    If IsAutoCompleteOpen() Then
+                        Hide()
+                        AutoFill()
+                    End If
+                Case Key.Enter
+                    If IsAutoCompleteOpen() Then
+                        Hide()
+                        AutoFill()
+                    End If
+                Case Key.Escape
+                    Hide()
+            End Select
+        End Sub
+
+        Sub ShowAutoComplete(Position As Windows.Rect, PreviousWord As String)
+            AutoComplete.PlacementRectangle = Position
+            AutoComplete.ItemsSource = GetItemsSource(PreviousWord)
+            AutoComplete.IsOpen = True
+            AutoComplete.Focus()
+        End Sub
+        Function GetItemsSource(PreviousWord As String)
+            Return From s In {"Alpha", "Beta", "Others", "Omega"} Select s
+        End Function
+        Sub FilterAutoComplete(CurrentText As String)
+            AutoComplete.ApplyFilter(CurrentText)
+        End Sub
+        Function IsAutoCompleteOpen()
+            Return AutoComplete.IsOpen
+        End Function
+        Sub Hide()
+            AutoComplete.IsOpen = False
+        End Sub
+        Sub AutoFill()
+            Dim index = txtCode.CaretIndex
+            Dim text = AutoComplete.SelectedItem
+            If text IsNot Nothing Then
+                'We're going to insert a whole word, but there might already be part of one.
+                'First we remove the part
+                Dim partStart = txtCode.Text.LastIndexOf(".", txtCode.CaretIndex)
+                If partStart = -1 Then
+                    partStart = 0
+                End If
+                Dim part As String = txtCode.Text.Substring(partStart, txtCode.CaretIndex - partStart).Trim.Trim(".")
+                index -= part.Length
+                txtCode.Text = txtCode.Text.Remove(index, part.Length)
+                'Then we add the new word
+                txtCode.Text = txtCode.Text.Insert(index, text)
+                txtCode.CaretIndex = index + text.Length
+                txtCode.Focus()
+            End If
+        End Sub
+
+        Public Sub New()
+            ' This call is required by the designer.
+            InitializeComponent()
+
+            ' Add any initialization after the InitializeComponent() call.
+            AutoComplete = New AutoCompletePopup
+            AutoComplete.PlacementTarget = txtCode
+        End Sub
+
 
 #Region "IObjectControl Support"
         ''' <summary>
