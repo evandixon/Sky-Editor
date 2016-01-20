@@ -10,12 +10,12 @@ Public Class DocumentTab
 #Region "Properties"
     Public Property Document As Object
         Get
-            If TypeOf Me.Content Is ObjectControl Then
-                DirectCast(Me.Content, ObjectControl).UpdateObject()
+            If TypeOf Me.Content Is iObjectControl Then
+                _document = DirectCast(Me.Content, iObjectControl).EditingObject()
             ElseIf TypeOf Me.Content Is TabControl Then
                 For Each item In DirectCast(Me.Content, TabControl).Items
-                    If TypeOf item.Content Is ObjectTab Then
-                        DirectCast(item.Content, ObjectTab).UpdateObject()
+                    If TypeOf item.Content Is iObjectControl Then
+                        _document = DirectCast(item.Content, iObjectControl).EditingObject()
                     End If
                 Next
             End If
@@ -29,20 +29,25 @@ Public Class DocumentTab
                 RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
 
-            Dim tabs = _manager.GetRefreshedTabs(value)
-            If tabs.Count > 0 Then
-                Dim tabControl As New TabControl
-                tabControl.TabStripPlacement = Controls.Dock.Left
-                For Each item In tabs
-                    tabControl.Items.Add(item)
-                Next
-                Me.Content = tabControl
-            Else
-                Dim control = _manager.GetObjectControl(value)
-                If control IsNot Nothing Then
+            If value IsNot Nothing Then
+                Dim tabs = _manager.GetRefreshedTabs(value)
+                Dim ucTabs = (From t In tabs Where Utilities.ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
+                If ucTabs.Count > 1 Then
+                    Dim tabControl As New TabControl
+                    tabControl.TabStripPlacement = Controls.Dock.Left
+                    For Each item In UiHelper.GenerateObjectTabs(ucTabs)
+                        tabControl.Items.Add(item)
+                    Next
+                    Me.Content = tabControl
+                ElseIf ucTabs.Count = 1 Then
+                    Dim control = ucTabs(0)
                     control.EditingObject = value
-                    control.RefreshDisplay()
                     Me.Content = control
+                Else
+                    'Nothing is registered to edit this object.
+                    Dim label As New Label
+                    label.Content = String.Format(PluginHelper.GetLanguageItem("There are no UserControls for this object of type ""{0}""."), value.GetType.FullName)
+                    Me.Content = label
                 End If
             End If
             _document = value

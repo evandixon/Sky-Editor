@@ -18,7 +18,7 @@ Public Class ObjectWindow
     End Property
     Public Sub RefreshDisplay()
         tcTabs.Items.Clear()
-        For Each item In _manager.GetRefreshedTabs(_objectToEdit)
+        For Each item In UiHelper.GenerateObjectTabs(_manager.GetRefreshedTabs(_objectToEdit))
             tcTabs.Items.Add(item)
         Next
 
@@ -46,8 +46,10 @@ Public Class ObjectWindow
         menuMain.Visibility = menuFile.Visibility
     End Sub
     Public Sub UpdateSave()
-        For Each item In (From t In tcTabs.Items Order By DirectCast(t.Content, ObjectTab).UpdatePriority Descending)
-            DirectCast(item.Content, ObjectTab).UpdateObject()
+        For Each item In tcTabs.Items
+            'Here, we want to force the ObjectControl to apply its GUI changes to the underlying model.
+            'Calling should accomplish this goal
+            Dim x = DirectCast(item.containedobjectcontrol, iObjectControl).EditingObject
         Next
     End Sub
     Public Sub New(Manager As PluginManager)
@@ -118,7 +120,7 @@ Public Class ObjectWindow
     End Sub
 
     Private Sub ObjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        PluginHelper.TranslateForm(menuMain)
+        UiHelper.TranslateForm(menuMain)
     End Sub
 
     Public ReadOnly Property TabCount As Integer

@@ -2,6 +2,7 @@
 Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
+Imports SkyEditorBase.Interfaces
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -59,15 +60,21 @@ Public Class PluginHelper
         End If
         Return baseDir
     End Function
+
+    ''' <summary>
+    ''' Returns a the path of the root resource directory and creates it if it doesn't exist.
+    ''' </summary>
+    ''' <returns></returns>
     Public Shared Function RootResourceDirectory() As String
         Dim d As String
         If ApplicationDeployment.IsNetworkDeployed Then
-            d = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
+            'I'm choosing not to verify if the folder exists because I'm already going to check below.
+            d = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create)
         Else
             d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
-        End If
-        If Not IO.Directory.Exists(d) Then
-            IO.Directory.CreateDirectory(d)
+            If Not IO.Directory.Exists(d) Then
+                IO.Directory.CreateDirectory(d)
+            End If
         End If
         Return d
     End Function
@@ -93,38 +100,7 @@ Public Class PluginHelper
             Return Language.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
         End If
     End Function
-    ''' <summary>
-    '''
-    ''' </summary>
-    ''' <param name="v"></param>
-    ''' <param name="SearchLevel">The depth to search for controls.</param>
-    ''' <remarks></remarks>
-    Public Shared Sub TranslateForm(ByRef v As Visual, Optional SearchLevel As Integer = 5)
-        Dim controls = (New ChildControls).GetChildren(v, 10)
-        If Not controls.Contains(v) Then controls.Add(v)
-        For Each item In controls
-            If TypeOf item Is Label Then
-                Dim t As String = DirectCast(item, Label).Content
-                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Label).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
 
-            ElseIf TypeOf item Is Button Then
-                Dim t As String = DirectCast(item, Button).Content
-                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Button).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-
-            ElseIf TypeOf item Is CheckBox Then
-                Dim t As String = DirectCast(item, CheckBox).Content
-                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, CheckBox).Content = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-
-            ElseIf TypeOf item Is MenuItem Then
-                Dim t As String = DirectCast(item, MenuItem).Header
-                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, MenuItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-
-            ElseIf TypeOf item Is TabItem Then
-                Dim t As String = DirectCast(item, TabItem).Header
-                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, TabItem).Header = GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
-            End If
-        Next
-    End Sub
     Public Shared Function PluginsToInstallDirectory() As String
         Dim d = IO.Path.Combine(RootResourceDirectory, "ToInstall")
         If Not IO.Directory.Exists(d) Then
@@ -280,11 +256,11 @@ Public Class PluginHelper
             End If
         Else
             If Progress.HasValue Then
-                    _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
-                Else
-                    _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
-                End If
+                _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
+            Else
+                _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
             End If
+        End If
         MakeLoadingVisibleorNot()
     End Sub
     ''' <summary>
@@ -401,4 +377,47 @@ Public Class PluginHelper
         Internal.ConsoleManager.Show()
     End Sub
 
+    ''' <summary>
+    ''' Returns whether or not ObjectToCheck is of type T.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="ObjectToCheck"></param>
+    ''' <returns></returns>
+    Public Shared Function IsTypeOf(Of T)(ObjectToCheck As Object) As Boolean
+        Return Utilities.ReflectionHelpers.IsOfType(ObjectToCheck, GetType(T))
+    End Function
+
+    ''' <summary>
+    ''' Casts the given object to type T, or returns its contained item if it implements the interface iContainer(Of T).
+    ''' </summary>
+    ''' <typeparam name="T">Type to cast to.</typeparam>
+    ''' <param name="ObjectToCast">Object to cast.</param>
+    ''' <returns></returns>
+    Public Shared Function Cast(Of T)(ObjectToCast As Object) As T
+        If TypeOf ObjectToCast Is T Then
+            Return DirectCast(ObjectToCast, T)
+        ElseIf TypeOf ObjectToCast Is iContainer(Of T) Then
+            Return DirectCast(ObjectToCast, iContainer(Of T)).Item
+        Else
+            'I should probably throw my own exception here, since I'm casting EditingObject to T even though I just found that EditingObject is NOT T, but there will be an exception anyway
+            Return DirectCast(ObjectToCast, T)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' If ObjectToCast implements iContainer(Of T), sets iContainer(Of T).Item to NewValue.
+    ''' Otherwise, sets ObjectToCast to NewValue.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="ObjectToCast"></param>
+    ''' <param name="NewValue"></param>
+    Public Shared Sub CastUpdate(Of T)(ByRef ObjectToCast As Object, ByVal NewValue As T)
+        If TypeOf ObjectToCast Is T Then
+            ObjectToCast = NewValue
+        ElseIf TypeOf ObjectToCast Is iContainer(Of T) Then
+            DirectCast(ObjectToCast, iContainer(Of T)).Item = NewValue
+        Else
+            ObjectToCast = NewValue
+        End If
+    End Sub
 End Class

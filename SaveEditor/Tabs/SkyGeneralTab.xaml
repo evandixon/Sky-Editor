@@ -1,4 +1,4 @@
-﻿<local:ObjectTab x:Class="Tabs.SkyGeneralTab" x:TypeArguments="saves:SkySave"
+﻿<UserControl x:Class="Tabs.SkyGeneralTab"
                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -24,4 +24,4 @@
             <xctk:IntegerUpDown x:Name="numGeneral_RankPoints" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
         </UniformGrid>
     </Grid>
-</local:ObjectTab>
+</UserControl>

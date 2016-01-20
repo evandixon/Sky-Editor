@@ -99,7 +99,8 @@ Public Class ProjectExplorer
         If tvFiles.SelectedItem IsNot Nothing AndAlso _manager.CurrentProject.Files.ContainsKey(tvFiles.SelectedItem.Tag) Then
             Dim file = _manager.CurrentProject.Files(tvFiles.SelectedItem.Tag)
             If TypeOf file Is ExecutableFile Then
-                DirectCast(file, ExecutableFile).Start()
+                Dim restartIfOpen As Boolean = (Not DirectCast(file, ExecutableFile).Started) OrElse (MessageBox.Show(PluginHelper.GetLanguageItem("This program is alredy open.  Would you like to stop the current instance?  Any unsaved data may be lost."), "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.Yes)
+                DirectCast(file, ExecutableFile).Start(restartIfOpen)
             Else
                 RaiseEvent FileOpen(Me, New EventArguments.FileOpenedEventArguments() With {.ProjectPath = tvFiles.SelectedItem.Tag, .File = file})
             End If

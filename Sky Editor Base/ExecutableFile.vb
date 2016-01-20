@@ -8,6 +8,12 @@ Public Class ExecutableFile
     Dim _started As Boolean
     Public Property Filename As String Implements iOnDisk.Filename
 
+    Public ReadOnly Property Started As Boolean
+        Get
+            Return _started
+        End Get
+    End Property
+
     Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
         Me.Filename = Filename
         InitProcess()
@@ -26,13 +32,14 @@ Public Class ExecutableFile
         _started = False
     End Sub
 
-    Public Sub Start()
+    Public Sub Start(RestartIfOpen)
         If _process Is Nothing Then
             InitProcess()
         End If
 
         If _started Then
-            If MessageBox.Show(PluginHelper.GetLanguageItem("This program is alredy open.  Would you like to stop the current instance?  Any unsaved data may be lost."), "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+            'If MessageBox.Show(PluginHelper.GetLanguageItem("This program is alredy open.  Would you like to stop the current instance?  Any unsaved data may be lost."), "Sky Editor", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+            If RestartIfOpen Then
                 _process.Kill()
                 _process.Dispose()
                 InitProcess()

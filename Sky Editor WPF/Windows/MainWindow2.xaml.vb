@@ -142,8 +142,6 @@ Public Class MainWindow2
 
         ShowWelcomePage()
 
-        TranslateControls()
-
         For Each item In UiHelper.GenerateMenuItems(_manager.GetMenuItemInfo)
             menuMain.Items.Add(item)
             RegisterEventMenuItemHandlers(item)
@@ -166,12 +164,6 @@ Public Class MainWindow2
             RegisterEventMenuItemHandlers(Item)
         Next
         AddHandler MenuItem.Click, AddressOf MenuItemClicked
-    End Sub
-
-    Private Sub TranslateControls()
-        PluginHelper.TranslateForm(menuMain)
-        'toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
-        lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
     End Sub
 
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

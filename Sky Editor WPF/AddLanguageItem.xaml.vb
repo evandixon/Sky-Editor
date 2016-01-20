@@ -11,7 +11,7 @@ Public Class AddLanguageItem
         CurrentLanguageItems = New List(Of LanguageItem)
 
         Me.Title = PluginHelper.GetLanguageItem("Add Language Item")
-        PluginHelper.TranslateForm(Me)
+        UiHelper.TranslateForm(Me)
     End Sub
     Public ReadOnly Property SelectedItem As LanguageItem
         Get

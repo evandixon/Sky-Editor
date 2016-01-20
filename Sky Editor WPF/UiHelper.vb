@@ -1,4 +1,26 @@
-﻿Public Class UiHelper
+﻿Imports System.Reflection
+Imports SkyEditorBase.Interfaces
+
+Public Class UiHelper
+
+    ''' <summary>
+    ''' Generates ObjectTabs using the given ObjectControls
+    ''' </summary>
+    ''' <param name="ObjectControls"></param>
+    ''' <returns></returns>
+    Public Shared Function GenerateObjectTabs(ObjectControls As IEnumerable(Of iObjectControl)) As List(Of ObjectTab)
+        If ObjectControls Is Nothing Then
+            Throw New ArgumentNullException(NameOf(ObjectControls))
+        End If
+
+        Dim output As New List(Of ObjectTab)
+
+        For Each item In ObjectControls
+            output.Add(New ObjectTab(item))
+        Next
+
+        Return output
+    End Function
 
     ''' <summary>
     ''' Generates MenuItems from the given IEnumerable of MenuItemInfo.
@@ -122,4 +144,39 @@
 
         Return q.Any
     End Function
+
+    ''' <summary>
+    ''' Translates certain properties of certain controls using PluginHelper.GetLanguageItem.
+    ''' Supported controls: Label.Content, Button.Content, CheckBox.Content, MenuItem.Header, TabItem.Header.
+    ''' Others may be added in the future.
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <param name="SearchLevel">The depth to search for controls.</param>
+    ''' <remarks></remarks>
+    Public Shared Sub TranslateForm(ByRef v As Visual, Optional SearchLevel As Integer = 5)
+        Dim controls = (New ChildControls).GetChildren(v, 10)
+        If Not controls.Contains(v) Then controls.Add(v)
+        For Each item In controls
+            If TypeOf item Is Label Then
+                Dim t As String = DirectCast(item, Label).Content
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Label).Content = PluginHelper.GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+
+            ElseIf TypeOf item Is Button Then
+                Dim t As String = DirectCast(item, Button).Content
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, Button).Content = PluginHelper.GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+
+            ElseIf TypeOf item Is CheckBox Then
+                Dim t As String = DirectCast(item, CheckBox).Content
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, CheckBox).Content = PluginHelper.GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+
+            ElseIf TypeOf item Is MenuItem Then
+                Dim t As String = DirectCast(item, MenuItem).Header
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, MenuItem).Header = PluginHelper.GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+
+            ElseIf TypeOf item Is TabItem Then
+                Dim t As String = DirectCast(item, TabItem).Header
+                If t IsNot Nothing AndAlso Not String.IsNullOrEmpty(t) Then DirectCast(item, TabItem).Header = PluginHelper.GetLanguageItem(t.Trim("$"), CallingAssembly:=Assembly.GetCallingAssembly.GetName.Name)
+            End If
+        Next
+    End Sub
 End Class

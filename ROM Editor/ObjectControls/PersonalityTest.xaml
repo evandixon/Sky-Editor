@@ -1,10 +1,9 @@
-﻿<local:ObjectControl x:Class="ObjectControls.PersonalityTest" x:TypeArguments="ff:PersonalityTestContainer"
+﻿<UserControl x:Class="ObjectControls.PersonalityTest"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:SkyEditorBase;assembly=SkyEditorBase"
-             xmlns:ff="clr-namespace:ROMEditor.FileFormats"
+             xmlns:local="clr-namespace:SkyEditorWPF;assembly=SkyEditor"
              mc:Ignorable="d">
     <Grid x:Name="grid1">
         <TabControl x:Name="tc1">
@@ -337,4 +336,4 @@
             </TabItem>
         </TabControl>
     </Grid>
-</local:ObjectControl>
+</UserControl>

@@ -8,7 +8,7 @@ Public Class NDSModRegistry
     End Sub
     Public Shared Function GetMods(GameCode As String) As IEnumerable(Of Type)
         Dim matches As New List(Of Type)
-        For Each item In Mods
+        For Each item In PluginManager.GetInstance.GetRegisteredObjects(GetType(Mods.GenericMod))
             Dim games = item.SupportedGameCodes
             Dim match As Boolean = False
             For Each t In games

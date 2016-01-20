@@ -79,8 +79,7 @@ Public Class PluginManager
                 End Try
             Next
 
-            RegisterTypeRegister(GetType(ObjectControl))
-            RegisterTypeRegister(GetType(ObjectTab))
+            RegisterTypeRegister(GetType(iObjectControl))
             RegisterTypeRegister(GetType(Project))
             RegisterTypeRegister(GetType(iCreatableFile))
             RegisterTypeRegister(GetType(iOpenableFile))
@@ -208,18 +207,6 @@ Public Class PluginManager
 #End Region
 
 #Region "Registration"
-    Private Function IsObjectTab(T As Type) As Boolean
-        If T.BaseType Is GetType(ObjectTab) Then
-            Return True
-        Else
-            If T.BaseType Is GetType(Object) Then
-                Return False
-            Else
-                Return IsObjectTab(T.BaseType)
-            End If
-        End If
-    End Function
-
     ''' <summary>
     ''' Registers a filter for use in open and save file dialogs.
     ''' </summary>
@@ -455,7 +442,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="BaseType">Type to get children or implementors of.</param>
     ''' <returns></returns>
-    Protected Function GetRegisteredTypes(BaseType As Type) As IEnumerable(Of Type)
+    Public Function GetRegisteredTypes(BaseType As Type) As IEnumerable(Of Type)
         If BaseType Is Nothing Then
             Throw New ArgumentNullException(NameOf(BaseType))
         End If
@@ -465,6 +452,16 @@ Public Class PluginManager
         Else
             Return {}
         End If
+    End Function
+
+    Public Function GetRegisteredObjects(BaseType As Type) As IEnumerable(Of Object)
+        Dim output As New List(Of Object)
+
+        For Each item In GetRegisteredTypes(BaseType)
+            output.Add(item.GetConstructor({}).Invoke({}))
+        Next
+
+        Return output
     End Function
 
     ''' <summary>
@@ -505,27 +502,13 @@ Public Class PluginManager
     End Function
 
     ''' <summary>
-    ''' Returns a new instance of each registed ObjectTab.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetObjectTabs() As IEnumerable(Of ObjectTab)
-        Dim output As New List(Of ObjectTab)
-
-        For Each item In GetRegisteredTypes(GetType(ObjectTab))
-            output.Add(item.GetConstructor({}).Invoke({}))
-        Next
-
-        Return output
-    End Function
-
-    ''' <summary>
     ''' Returns a new instance of each registered ObjectControl.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetObjectControls() As IEnumerable(Of ObjectControl)
-        Dim output As New List(Of ObjectControl)
+    Public Function GetObjectControls() As IEnumerable(Of iObjectControl)
+        Dim output As New List(Of iObjectControl)
 
-        For Each item In GetRegisteredTypes(GetType(ObjectControl))
+        For Each item In GetRegisteredTypes(GetType(iObjectControl))
             output.Add(item.GetConstructor({}).Invoke({}))
         Next
 
@@ -697,12 +680,12 @@ Public Class PluginManager
     ''' <param name="ObjectToEdit"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetObjectControl(ObjectToEdit As Object) As ObjectControl
-        Dim out As ObjectControl = Nothing
+    Public Function GetObjectControl(ObjectToEdit As Object) As iObjectControl
+        Dim out As iObjectControl = Nothing
         If ObjectToEdit IsNot Nothing Then
-            For Each item In (From o In GetObjectControls() Order By o.UsagePriority(ObjectToEdit.GetType) Ascending)
+            For Each item In (From o In GetObjectControls() Order By o.GetSortOrder(ObjectToEdit.GetType, False) Descending)
                 If out Is Nothing Then
-                    For Each t In item.SupportedTypes
+                    For Each t In item.GetSupportedTypes
                         If ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
                             out = item.GetType.GetConstructor({}).Invoke({})
                             Exit For
@@ -716,38 +699,41 @@ Public Class PluginManager
         Return out
     End Function
     ''' <summary>
-    ''' Gets tabs that can edit the specified object.
+    ''' Returns a list of iObjectControl that edit the given ObjectToEdit.
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetRefreshedTabs(Save As Object) As List(Of TabItem)
-        Dim tabs As New List(Of ObjectTab)
-        For Each etab In (From e In GetObjectTabs() Order By e.SortOrder Ascending)
+    Public Function GetRefreshedTabs(ObjectToEdit As Object) As List(Of iObjectControl)
+        If ObjectToEdit Is Nothing Then
+            Throw New ArgumentNullException(NameOf(ObjectToEdit))
+        End If
+
+        Dim tabs As New List(Of iObjectControl)
+        For Each etab In (From e In GetObjectControls() Order By e.GetSortOrder(ObjectToEdit.GetType, True) Ascending)
             Dim isMatch = False
             If Not isMatch Then
-                For Each t In etab.SupportedTypes
-                    If Save IsNot Nothing AndAlso ReflectionHelpers.IsOfType(Save, t) Then 'If Save IsNot Nothing AndAlso ((TypeOf Save Is GenericSave AndAlso Save.IsOfType(t)) OrElse ReflectionHelpers.IsOfType(Save, t)) Then
+                For Each t In etab.GetSupportedTypes
+                    If ObjectToEdit IsNot Nothing AndAlso ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
                         isMatch = True
                         Exit For
                     End If
                 Next
             End If
             If isMatch Then
-                Dim t As ObjectTab = etab.GetType.GetConstructor({}).Invoke({})
-                t.EditingObject = Save
-                t.RefreshDisplay()
+                Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
+                t.EditingObject = ObjectToEdit
                 tabs.Add(t)
             End If
         Next
-        Dim out As New List(Of TabItem)
-        For Each item In tabs
-            Dim t As New TabItem
-            item.Margin = New Thickness(0, 0, 0, 0)
-            t.Content = item
-            item.ParentTabItem = t
-            out.Add(t)
-        Next
-        Return out
+        'Dim out As New List(Of TabItem)
+        'For Each item In tabs
+        '    Dim t As New TabItem
+        '    item.Margin = New Thickness(0, 0, 0, 0)
+        '    t.Content = item
+        '    item.ParentTabItem = t
+        '    out.Add(t)
+        'Next
+        Return tabs
     End Function
 
     Public Function GetFileType(File As GenericFile) As Type

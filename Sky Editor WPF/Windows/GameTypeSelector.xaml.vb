@@ -25,7 +25,7 @@ Namespace SkyEditorWindows
         End Sub
 
         Private Sub GameTypeSelector_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            PluginHelper.TranslateForm(Me)
+            UiHelper.TranslateForm(Me)
             Me.Title = PluginHelper.GetLanguageItem("File Type Selector")
         End Sub
         Public Shadows Function ShowDialog() As Boolean Implements iGameTypeSelector.ShowDialog

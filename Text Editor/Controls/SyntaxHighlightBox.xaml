@@ -1,14 +1,12 @@
-﻿<sky:ObjectControl x:Class="Controls.SyntaxHighlightBox" x:TypeArguments="local:CodeFile"
+﻿<UserControl x:Class="Controls.SyntaxHighlightBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Text_Editor"
-             xmlns:sky="clr-namespace:SkyEditorBase;assembly=SkyEditorBase"
              xmlns:aurelien="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <aurelien:SyntaxHighlightBox x:Name="txtCode"></aurelien:SyntaxHighlightBox>
     </Grid>
-</sky:ObjectControl>
+</UserControl>

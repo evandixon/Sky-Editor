@@ -93,7 +93,8 @@ Namespace Redistribution
                     Else
                         'It's probably a directory.
                         If IO.Directory.Exists(file) Then
-                            My.Computer.FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+                            Throw New NotImplementedException
+                            'My.Computer.FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
                             'Else
                             'Guess not.
                         End If
@@ -216,7 +217,8 @@ Namespace Redistribution
                 If IO.File.Exists(item) Then
                     IO.File.Delete(item)
                 ElseIf IO.Directory.Exists(item) Then
-                    My.Computer.FileSystem.DeleteDirectory(item, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    Throw New NotImplementedException
+                    'My.Computer.FileSystem.DeleteDirectory(item, FileIO.DeleteDirectoryOption.DeleteAllContents)
                 End If
             Next
             IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
@@ -237,7 +239,8 @@ Namespace Redistribution
         ''' Restarts the application.
         ''' </summary>
         Public Shared Sub RestartProgram()
-            Windows.Forms.Application.Restart()
+            Throw New NotImplementedException
+            ' Windows.Forms.Application.Restart()
             'Application.Current.Shutdown()
             'Application.Current.Shutdown(1)
         End Sub

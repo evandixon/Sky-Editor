@@ -239,9 +239,6 @@
     <Compile Include="Tabs\TDGeneralTab.xaml.vb">
       <DependentUpon>TDGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\QPokemonWindow.xaml.vb">
-      <DependentUpon>QPokemonWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="Controls\iAttack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -305,10 +302,6 @@
     <Page Include="Tabs\TDGeneralTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\QPokemonWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -500,6 +493,10 @@
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sky Editor WPF\Sky Editor WPF.vbproj">
+      <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
+      <Name>Sky Editor WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

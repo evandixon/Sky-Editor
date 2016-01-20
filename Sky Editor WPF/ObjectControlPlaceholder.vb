@@ -12,10 +12,7 @@ Public Class ObjectControlPlaceholder
     Dim _object As Object
     Public Property ObjectToEdit As Object
         Get
-            If _object IsNot Nothing Then
-                DirectCast(Content, ObjectControl).UpdateObject()
-            End If
-            Return _object
+            Return DirectCast(Content, iObjectControl).EditingObject
         End Get
         Set(value As Object)
             If _object IsNot Nothing AndAlso TypeOf _object Is iModifiable Then
@@ -26,12 +23,12 @@ Public Class ObjectControlPlaceholder
                 AddHandler DirectCast(value, iModifiable).Modified, AddressOf OnModified
             End If
             Content = PluginHelper.PluginManagerInstance.GetObjectControl(value)
-            With DirectCast(Content, ObjectControl)
-                .VerticalAlignment = VerticalAlignment.Top
-                .HorizontalAlignment = HorizontalAlignment.Left
-                .EditingObject = value
-                .RefreshDisplay()
-            End With
+            'With DirectCast(Content, iObjectControl)
+            '    .VerticalAlignment = VerticalAlignment.Top
+            '    .HorizontalAlignment = HorizontalAlignment.Left
+            '    .EditingObject = value
+            '    .RefreshDisplay()
+            'End With
         End Set
     End Property
 

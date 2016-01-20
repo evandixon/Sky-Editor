@@ -34,7 +34,7 @@ Public Class NewProjectWindow
 
     Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Me.Title = PluginHelper.GetLanguageItem("New Project")
-        PluginHelper.TranslateForm(Me)
+        UiHelper.TranslateForm(Me)
     End Sub
 
     Public Property SelectedName As String

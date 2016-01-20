@@ -130,7 +130,7 @@ Public Class GenericNDSModProject
 
     Private Async Sub NDSRomProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles Me.FileAdded
         If TypeOf e.File.Value Is Mods.GenericMod Then
-            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(e.File.Value.OriginalFilename), IO.Path.GetFileNameWithoutExtension(e.File.Value.OriginalFilename), "RawFiles")
+            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(DirectCast(e.File.Value, Mods.GenericMod).Filename), IO.Path.GetFileNameWithoutExtension(DirectCast(e.File.Value, Mods.GenericMod).Filename), "RawFiles")
 
             Dim m = DirectCast(e.File.Value, Mods.GenericMod)
 
