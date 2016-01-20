@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports System.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace Controls

@@ -1,7 +1,5 @@
 ﻿Imports System.IO
 Imports ICSharpCode.SharpZipLib.Zip
-Imports System.Reflection
-Imports System.Web.Script.Serialization
 Imports SkyEditorBase.Utilities
 
 Namespace Redistribution
@@ -297,12 +295,10 @@ Namespace Redistribution
             Return restart
         End Function
         Public Shared Function ParsePluginInfo(PluginInfoText As String) As List(Of PluginInfo)
-            Dim j As New JavaScriptSerializer
-            Return j.Deserialize(Of List(Of PluginInfo))(PluginInfoText)
+            Return Utilities.Json.Deserialize(Of List(Of PluginInfo))(PluginInfoText)
         End Function
         Public Shared Function SerializePluginInfo(Plugins As List(Of PluginInfo)) As String
-            Dim j As New JavaScriptSerializer
-            Return j.Serialize(Plugins)
+            Return Utilities.Json.Serialize(Plugins)
         End Function
         Public Shared Function GetPluginInfo(InfoUrl As String) As List(Of PluginInfo)
             Dim c As New Net.WebClient

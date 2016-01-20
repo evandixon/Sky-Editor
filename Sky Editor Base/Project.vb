@@ -1,7 +1,5 @@
 ﻿Imports System.Text
 Imports System.Threading.Tasks
-Imports System.Web.Script.Serialization
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Utilities
 
 Public Class Project
@@ -129,8 +127,7 @@ Public Class Project
     End Function
 
     Public Shared Async Function OpenProject(Filename As String, Manager As PluginManager) As Task(Of Project)
-        Dim j As New JavaScriptSerializer
-        Dim f = j.Deserialize(Of ProjectFileFormat)(IO.File.ReadAllText(Filename))
+        Dim f = Utilities.Json.DeserializeFromFile(Of ProjectFileFormat)(Filename)
         Dim p As Project
         If Not String.IsNullOrEmpty(f.ProjectType) Then
             p = Utilities.ReflectionHelpers.GetTypeFromName(f.ProjectType).GetConstructor({}).Invoke({})
@@ -157,13 +154,12 @@ Public Class Project
 #Region "Save"
     Public Sub SaveProject()
         If Filename IsNot Nothing Then
-            Dim j As New JavaScriptSerializer
             Dim f As New ProjectFileFormat
             For Each item In Files
                 f.Files.Add(item.Key)
             Next
             f.ProjectType = Me.ProjectType
-            IO.File.WriteAllText(Filename, j.Serialize(f))
+            Utilities.Json.SerializeToFile(Filename, f)
             IsModified = False
         End If
     End Sub

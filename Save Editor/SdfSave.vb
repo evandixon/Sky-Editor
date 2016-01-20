@@ -1,5 +1,4 @@
-﻿Imports System.Web.Script.Serialization
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditorBase.Interfaces
 
 Public Class SdfSave
     Implements iOpenableFile
@@ -49,9 +48,7 @@ Public Class SdfSave
         For Each item In IO.Directory.GetFiles(IO.Path.Combine(Me.Path, MiniTitleId), "*", IO.SearchOption.TopDirectoryOnly)
             IO.File.Copy(item, IO.Path.Combine(dir, MiniTitleId, IO.Path.GetFileName(item)), True)
         Next
-
-        Dim j As New JavaScriptSerializer
-        IO.File.WriteAllText(IO.Path.Combine(dir, "info.json"), j.Serialize(Info))
+        SkyEditorBase.Utilities.Json.SerializeToFile(IO.Path.Combine(dir, "info.json"), Info)
     End Sub
 
     Public Sub New(Path As String)
@@ -90,8 +87,7 @@ Public Class SdfSave
             End If
 
             If IO.File.Exists(IO.Path.Combine(Path, "info.json")) Then
-                Dim j As New JavaScriptSerializer
-                Info = j.Deserialize(Of SdfSaveExtraData)(IO.File.ReadAllText(IO.Path.Combine(Path, "info.json")))
+                Info = SkyEditorBase.Utilities.Json.DeserializeFromFile(Of SdfSaveExtraData)(IO.Path.Combine(Path, "info.json"))
             End If
         Else
             IsValid = False

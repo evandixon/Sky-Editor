@@ -22,35 +22,8 @@ Public Class SkyEditorInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        'Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
-        Manager.RegisterIOFilter("*.sav", PluginHelper.GetLanguageItem("Raw Save File"))
-        Manager.RegisterIOFilter("*.dsv", PluginHelper.GetLanguageItem("DeSmuMe Save File"))
-
-        'Manager.RegisterSaveGameFormat(GameStrings.BlueGame, GameStrings.RBSave, GetType(RBSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.RedGame, GameStrings.RBSave, GetType(RBSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.BlueGameEU, GameStrings.RBSaveEU, GetType(RBSaveEU))
-        'Manager.RegisterSaveGameFormat(GameStrings.RedGameEU, GameStrings.RBSave, GetType(RBSaveEU))
-        'Manager.RegisterSaveGameFormat(GameStrings.TimeGame, GameStrings.TDSave, GetType(TDSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.DarknessGame, GameStrings.TDSave, GetType(TDSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.SkyGame, GameStrings.SkySave, GetType(SkySave))
-        'Manager.RegisterSaveGameFormat(GameStrings.MDGatesData, GameStrings.MDGatesData, GetType(GatesGameData))
-
-        'Manager.RegisterCodeGenerator(New BlueBaseType)
-        'Manager.RegisterCodeGenerator(New BlueHeldMoney)
-        'Manager.RegisterCodeGenerator(New BlueRescuePoints)
-        'Manager.RegisterCodeGenerator(New BlueStoredMoney)
-        'Manager.RegisterCodeGenerator(New BlueTeamName)
-
-        'Manager.RegisterCodeGenerator(New RedBaseType)
-        'Manager.RegisterCodeGenerator(New RedHeldMoney)
-        'Manager.RegisterCodeGenerator(New RedRescuePoints)
-        'Manager.RegisterCodeGenerator(New RedStoredMoney)
-        'Manager.RegisterCodeGenerator(New RedTeamName)
-
-        'Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
-
-
-        Manager.RegisterDirectoryTypeDetector(AddressOf Me.DirectoryDetector)
+        Manager.RegisterMenuActionType(GetType(MenuActions.ImportSdf))
+        Manager.RegisterMenuActionType(GetType(MenuActions.OpenSdfSave))
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String

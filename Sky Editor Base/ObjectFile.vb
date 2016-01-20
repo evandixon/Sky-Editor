@@ -1,5 +1,4 @@
-﻿Imports System.Web.Script.Serialization
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditorBase.Interfaces
 
 Public Class ObjectFile(Of T)
     'Inherits GenericFile
@@ -53,8 +52,7 @@ Public Class ObjectFile(Of T)
         Me.Filename = Filename
 
         If IO.File.Exists(Filename) Then
-            Dim j As New JavaScriptSerializer
-            Dim c = j.Deserialize(Of JsonContainer(Of T))(IO.File.ReadAllText(Filename))
+            Dim c = Utilities.Json.DeserializeFromFile(Of JsonContainer(Of T))(Filename)
             Me.ContainedObject = c.ContainedObject
             Me.ContainedTypeName = c.ContainedTypeName
         Else
@@ -68,11 +66,10 @@ Public Class ObjectFile(Of T)
 #Region "iSaveableFile support"
 
     Public Sub Save(Filename As String) Implements Interfaces.iSavable.Save
-        Dim j As New JavaScriptSerializer
         Dim c As New JsonContainer(Of T)
         c.ContainedObject = Me.ContainedObject
         c.ContainedTypeName = Me.GetType.AssemblyQualifiedName 'GetType(T).AssemblyQualifiedName
-        IO.File.WriteAllText(Filename, j.Serialize(c))
+        Utilities.Json.SerializeToFile(Filename, c)
         RaiseFileSaved(Me, New EventArgs)
     End Sub
 
