@@ -30,7 +30,6 @@ Public Class LuaCodeFile
                               <FontStyle>Normal</FontStyle>
                           </AdvancedHighlightRule>
                       </Syntax>
-            Return out
             Return New CustomHighlighter(out)
         End Get
     End Property
