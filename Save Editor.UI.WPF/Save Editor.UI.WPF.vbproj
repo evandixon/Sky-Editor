@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{80EE8542-3060-4ACF-8C4F-7868255EED8A}</ProjectGuid>
+    <ProjectGuid>{81176732-8BFA-46F0-AB6D-94ACAEC2B9FC}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ROMEditor.UI</RootNamespace>
-    <AssemblyName>ROMEditor.UI_plg</AssemblyName>
+    <RootNamespace>SaveEditor.UI.WPF</RootNamespace>
+    <AssemblyName>SaveEditor.UI.WPF_plg</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\bin\Debug\Resources\Plugins\</OutputPath>
-    <DocumentationFile>ROMEditor.UI_plg.xml</DocumentationFile>
+    <DocumentationFile>SaveEditor.UI.WPF_plg.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -28,7 +28,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>ROMEditor.UI_plg.xml</DocumentationFile>
+    <DocumentationFile>SaveEditor.UI.WPF_plg.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -48,9 +48,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -58,28 +56,28 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -92,11 +90,23 @@
     <Import Include="System.Diagnostics" />
     <Import Include="System.Linq" />
     <Import Include="System.Windows" />
+    <Import Include="System.Windows.Controls" />
+    <Import Include="System.Windows.Input" />
     <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawingImageConverter.vb" />
+    <Compile Include="Controls\iAttack.xaml.vb">
+      <DependentUpon>iAttack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MDActiveAttack.xaml.vb">
+      <DependentUpon>MDActiveAttack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MDAttack.xaml.vb">
+      <DependentUpon>MDAttack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuActions\ImportSdf.vb" />
+    <Compile Include="MenuActions\OpenSdfSave.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -112,28 +122,45 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ObjectControls\CteImageControl.xaml.vb">
-      <DependentUpon>CteImageControl.xaml</DependentUpon>
+    <Compile Include="SkyEditorInfo.vb" />
+    <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
+      <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
-      <DependentUpon>item_p_Editor.xaml</DependentUpon>
+    <Compile Include="Tabs\EpisodeActivePokemonTab.xaml.vb">
+      <DependentUpon>EpisodeActivePokemonTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\ModpackInfoControl.xaml.vb">
-      <DependentUpon>ModpackInfoControl.xaml</DependentUpon>
+    <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
+      <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\NDSModSrcEditor.xaml.vb">
-      <DependentUpon>NDSModSrcEditor.xaml</DependentUpon>
+    <Compile Include="Tabs\HeldItemsTab.xaml.vb">
+      <DependentUpon>HeldItemsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
-      <DependentUpon>PersonalityTest.xaml</DependentUpon>
+    <Compile Include="Tabs\PkmGeneralTab.xaml.vb">
+      <DependentUpon>PkmGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PluginDefinition.vb" />
-    <Compile Include="ROM.vb" />
-    <Compile Include="Windows\GameCodeSelector.xaml.vb">
-      <DependentUpon>GameCodeSelector.xaml</DependentUpon>
+    <Compile Include="Tabs\PkmMovesTab.xaml.vb">
+      <DependentUpon>PkmMovesTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RomSelector.xaml.vb">
-      <DependentUpon>RomSelector.xaml</DependentUpon>
+    <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
+      <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\QuicksavePokemonTab.xaml.vb">
+      <DependentUpon>QuicksavePokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\RBGeneral.xaml.vb">
+      <DependentUpon>RBGeneral.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\RBStoredItemsTab.xaml.vb">
+      <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\SkyGeneralTab.xaml.vb">
+      <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\StoredPokemonTab.xaml.vb">
+      <DependentUpon>StoredPokemonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\TDGeneralTab.xaml.vb">
+      <DependentUpon>TDGeneralTab.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -157,40 +184,72 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ObjectControls\CteImageControl.xaml">
+    <Page Include="Controls\iAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\item_p_Editor.xaml">
+    <Page Include="Controls\MDActiveAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\ModpackInfoControl.xaml">
+    <Page Include="Controls\MDAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\NDSModSrcEditor.xaml">
+    <Page Include="Tabs\ActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\PersonalityTest.xaml">
+    <Page Include="Tabs\EpisodeActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\GameCodeSelector.xaml">
+    <Page Include="Tabs\GIGDGeneralTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\RomSelector.xaml">
+    <Page Include="Tabs\HeldItemsTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\PkmGeneralTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\PkmMovesTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\PkmQuicksaveTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\QuicksavePokemonTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\RBGeneral.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\RBStoredItemsTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\SkyGeneralTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\StoredPokemonTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tabs\TDGeneralTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ROM Editor\ROM Editor.vbproj">
-      <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
-      <Name>ROM Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Save Editor\Save Editor.vbproj">
       <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
       <Name>Save Editor</Name>
