@@ -1,5 +1,6 @@
 ﻿Imports System.Windows
 Imports System.Windows.Controls
+Imports ROMEditor
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 

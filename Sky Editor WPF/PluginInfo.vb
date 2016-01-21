@@ -1,4 +1,5 @@
-﻿''' <summary>
+﻿Imports SkyEditorBase.Interfaces
+''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
 ''' </summary>
 Friend Class PluginInfo
@@ -10,13 +11,13 @@ Friend Class PluginInfo
         'Manager.RegisterFileTypeDetector(AddressOf Manager.DetectFileType)
         'Manager.RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
 
-        'Manager.RegisterConsoleCommand("distprep", New ConsoleCommands.DistPrep)
-        'Manager.RegisterConsoleCommand("zip", New ConsoleCommands.Zip)
-        'Manager.RegisterConsoleCommand("updateall", New ConsoleCommands.UpdateAll)
-        'Manager.RegisterConsoleCommand("packall", New ConsoleCommands.PackAll)
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.DistPrep))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.Zip))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.UpdateAll))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.PackAll))
 
-        'Manager.RegisterObjectControl(GetType(LanguageEditor))
-        'Manager.RegisterObjectControl(GetType(SettingsEditor))
+        Manager.RegisterType(GetType(iObjectControl), GetType(LanguageEditor))
+        Manager.RegisterType(GetType(iObjectControl), GetType(SettingsEditor))
 
         Manager.RegisterMenuActionType(GetType(MenuActions.FileNewFile))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileNewProject))

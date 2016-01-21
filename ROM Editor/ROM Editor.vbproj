@@ -71,8 +71,6 @@
     <Reference Include="IdSharp.Tagging">
       <HintPath>..\IdSharp.Tagging.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -80,16 +78,10 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Presentation" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -106,7 +98,6 @@
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />
     <Compile Include="ConsoleCommands\ImportLanguage.vb" />
-    <Compile Include="DrawingImageConverter.vb" />
     <Compile Include="DSIconTool.vb" />
     <Compile Include="ffmpeg.vb" />
     <Compile Include="FileFormats\DatabaseBin.vb" />
@@ -119,12 +110,6 @@
     <Compile Include="FileFormats\TableDatItemList.vb" />
     <Compile Include="GameCodeRegistry.vb" />
     <Compile Include="GameStrings.vb" />
-    <Compile Include="ObjectControls\ModpackInfoControl.xaml.vb">
-      <DependentUpon>ModpackInfoControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
-      <DependentUpon>PersonalityTest.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FileFormats\Animations\AnimatedSprite.vb" />
     <Compile Include="FileFormats\Animations\Frame.vb" />
     <Compile Include="FileFormats\BGP.vb" />
@@ -154,15 +139,6 @@
     <Compile Include="Mods\PMD3DLuaMod.vb" />
     <Compile Include="Mods\SkyBackMod.vb" />
     <Compile Include="Mods\SkyStarterMod.vb" />
-    <Compile Include="ObjectControls\CteImageControl.xaml.vb">
-      <DependentUpon>CteImageControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
-      <DependentUpon>item_p_Editor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectControls\NDSModSrcEditor.xaml.vb">
-      <DependentUpon>NDSModSrcEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -181,7 +157,6 @@
     </Compile>
     <Compile Include="Portrait.vb" />
     <Compile Include="MenuActions\PsmdSoundtrackAction.vb" />
-    <Compile Include="ROM.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
@@ -189,12 +164,6 @@
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="unluac.vb" />
     <Compile Include="vgmstream.vb" />
-    <Compile Include="Windows\GameCodeSelector.xaml.vb">
-      <DependentUpon>GameCodeSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\RomSelector.xaml.vb">
-      <DependentUpon>RomSelector.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -348,36 +317,6 @@
     <Content Include="ROM Editor\xdelta\xdelta3.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="ObjectControls\ModpackInfoControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ObjectControls\PersonalityTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ObjectControls\CteImageControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ObjectControls\item_p_Editor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ObjectControls\NDSModSrcEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\GameCodeSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\RomSelector.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />

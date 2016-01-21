@@ -1,6 +1,6 @@
 ﻿Imports SkyEditorBase
 
-Module DSIconTool
+Public Module DSIconTool
     Sub ExtractIcon(RomPath As String, OutputPath As String)
         Dim romDirectory As String = PluginHelper.GetResourceDirectory
         'Dim extractTask = SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "DSIconTool.exe"),

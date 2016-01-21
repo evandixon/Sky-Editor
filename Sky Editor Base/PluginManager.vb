@@ -84,6 +84,7 @@ Public Class PluginManager
             RegisterTypeRegister(GetType(iCreatableFile))
             RegisterTypeRegister(GetType(iOpenableFile))
             RegisterTypeRegister(GetType(iDetectableFileType))
+            RegisterTypeRegister(GetType(ConsoleCommandAsync))
             RegisterFileTypeDetector(AddressOf Me.DetectFileType)
             RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
 
@@ -489,8 +490,13 @@ Public Class PluginManager
     End Function
 
     Public Function GetConsoleCommands() As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
-        Throw New NotImplementedException
-        'Return ConsoleCommands
+        Dim out As New Dictionary(Of String, ConsoleCommandAsync)
+        For Each item As ConsoleCommandAsync In GetRegisteredObjects(GetType(ConsoleCommandAsync))
+            If Not out.ContainsKey(item.CommandName) Then
+                out.Add(item.commandname, item)
+            End If
+        Next
+        Return out
     End Function
 
     ''' <summary>

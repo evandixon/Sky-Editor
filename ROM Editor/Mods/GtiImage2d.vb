@@ -25,8 +25,7 @@ Namespace Mods
             For count = 0 To backFiles.Count - 1
                 PluginHelper.StartLoading(String.Format(PluginHelper.GetLanguageItem("Converting backgrounds... ({0} of {1})"), count, backFiles.Count), count / backFiles.Count)
                 Dim item = backFiles(count)
-                Try
-                    Using b As New FileFormats.CteImage(item)
+                Using b As New FileFormats.CteImage(item)
                         Dim image = b.ContainedImage
                         Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetDirectoryName(item).Replace(ROMDirectory, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
                         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
@@ -41,13 +40,6 @@ Namespace Mods
                         End If
                         CurrentProject.OpenFile(newFilename, internalDir & IO.Path.GetFileName(newFilename), False)
                     End Using
-                Catch ne As NotImplementedException
-                    'Do nothing, simply don't convert the file for now.
-                    'We will, however, log it.
-                    PluginHelper.Writeline(String.Format("Error converting {0}: ", IO.Path.GetFileNameWithoutExtension(item)) & ne.Message, PluginHelper.LineType.Warning)
-                Catch ex As BadImageFormatException
-                    MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("BadImageFormatConversion", "Unable to convert image {0}.  Bad image format."), IO.Path.GetFileNameWithoutExtension(item)))
-                End Try
             Next
             CurrentProject.EnableRaisingEvents = True
             PluginHelper.StopLoading()

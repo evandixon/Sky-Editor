@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor
+Imports SkyEditorBase
 
 Public Class RomSelector
     Public Overloads Function ShowDialog(Roms As List(Of String)) As Boolean

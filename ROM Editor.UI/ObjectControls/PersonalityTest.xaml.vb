@@ -2,6 +2,7 @@
 Imports ROMEditor.FileFormats
 Imports SkyEditorBase.Interfaces
 Imports System.Windows.Controls
+Imports ROMEditor
 
 Namespace ObjectControls
     Public Class PersonalityTest

@@ -99,10 +99,15 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System" />
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binary.vb" />
     <Compile Include="BinaryFile.vb" />
+    <Compile Include="ConsoleCommands\Inflate.vb" />
     <Compile Include="Interfaces\iItem.vb" />
     <Compile Include="Interfaces\iItemStorage.vb" />
     <Compile Include="Interfaces\iAttack.vb" />
