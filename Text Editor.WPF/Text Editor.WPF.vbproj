@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{142E3B2B-19E9-4560-B411-4AD40FF8BD1B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Text_Editor</RootNamespace>
-    <AssemblyName>Text Editor_plg</AssemblyName>
+    <RootNamespace>TextEditor.WPF</RootNamespace>
+    <AssemblyName>TextEditor.WPF_plg</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\bin\Debug\Resources\Plugins\</OutputPath>
-    <DocumentationFile>Text Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>TextEditor.WPF_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -27,7 +27,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\Resources\Plugins\</OutputPath>
-    <DocumentationFile>Text Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>TextEditor.WPF_plg.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
