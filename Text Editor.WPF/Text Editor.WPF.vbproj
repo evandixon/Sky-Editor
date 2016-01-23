@@ -57,6 +57,10 @@
       <HintPath>..\packages\AurelienRibon.Ui.SyntaxHighlightBox.2.0.2\lib\NET40\AurelienRibon.Ui.SyntaxHighlightBox.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -82,16 +86,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoCompletePopup.xaml.vb">
-      <DependentUpon>AutoCompletePopup.xaml</DependentUpon>
+    <Compile Include="AutoCompleteData.vb" />
+    <Compile Include="AvalonCodeHighlighter.vb" />
+    <Compile Include="AvalonEditControl.xaml.vb">
+      <DependentUpon>AvalonEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CodeFile.vb" />
-    <Compile Include="Controls\SyntaxHighlightBox.xaml.vb">
-      <DependentUpon>SyntaxHighlightBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CustomHighlighter.vb" />
-    <Compile Include="iTextFile.vb" />
-    <Compile Include="LuaCodeFile.vb" />
+    <Compile Include="DebugExtraData.vb" />
     <Compile Include="PluginInfo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -108,11 +108,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Controls\TextControl.xaml.vb">
+    <Compile Include="TextControl.xaml.vb">
       <DependentUpon>TextControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextFile.vb" />
-    <Compile Include="VhdlCodeFile.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -135,21 +133,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeFiles\CodeFiles.vbproj">
+      <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
+      <Name>CodeFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AutoCompletePopup.xaml">
+    <Page Include="AvalonEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SyntaxHighlightBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\TextControl.xaml">
+    <Page Include="TextControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

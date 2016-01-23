@@ -6,20 +6,17 @@ Namespace MenuActions
 
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
 
-        Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
+        Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             Dim _manager = PluginManager.GetInstance
             OpenFileDialog1.Filter = _manager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                If OpenFileDialog1.FileName.ToLower.EndsWith(".skyproj") Then
-                    PluginHelper.SetLoadingStatus("Opening project...")
-                    'Await Task.Run(New Action(Sub()
-                    _manager.CurrentProject = Await Project.OpenProject(OpenFileDialog1.FileName, _manager)
-                    '                          End Sub))
-                    PluginHelper.SetLoadingStatusFinished()
+                If OpenFileDialog1.FileName.ToLower.EndsWith(".skysln") Then
+                    PluginManager.GetInstance.CurrentSolution = Solution.OpenSolutionFile(OpenFileDialog1.FileName)
                 Else
                     PluginHelper.RequestFileOpen(_manager.OpenObject(OpenFileDialog1.FileName), True)
                 End If
             End If
+            Return Task.CompletedTask
         End Function
 
         Public Sub New()

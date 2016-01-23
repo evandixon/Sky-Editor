@@ -99,7 +99,11 @@
     <Compile Include="ConsoleCommands\PackAll.vb" />
     <Compile Include="ConsoleCommands\UpdateAll.vb" />
     <Compile Include="ConsoleCommands\Zip.vb" />
+    <Compile Include="ContextMenuAction.vb" />
     <Compile Include="DocumentTab.vb" />
+    <Compile Include="MenuActions\FileNewSolution.vb" />
+    <Compile Include="MenuActions\FileSaveSolution.vb" />
+    <Compile Include="MenuActions\SolutionBuild.vb" />
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectTab.vb" />
     <Compile Include="SearchableDropDown.vb" />
@@ -131,6 +135,10 @@
     <Compile Include="LanguageEditor.xaml.vb">
       <DependentUpon>LanguageEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SolutionExplorer.xaml.vb">
+      <DependentUpon>SolutionExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
@@ -156,6 +164,9 @@
     </Compile>
     <Compile Include="Windows\NewNameWindow.xaml.vb">
       <DependentUpon>NewNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NewSolutionWindow.xaml.vb">
+      <DependentUpon>NewSolutionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewProjectWindow.xaml.vb">
       <DependentUpon>NewProjectWindow.xaml</DependentUpon>
@@ -239,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SolutionExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Tool Windows\ProjectExplorer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -271,6 +286,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\NewSolutionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\NewProjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -286,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

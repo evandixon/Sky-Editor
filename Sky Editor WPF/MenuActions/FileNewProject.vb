@@ -5,11 +5,11 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Dim _manager = PluginManager.GetInstance
-            Dim newProj As New NewProjectWindow(_manager)
-            If newProj.ShowDialog() Then
-                _manager.CurrentProject = Project.CreateProject(newProj.SelectedName, newProj.SelectedLocation, _manager.GetProjectType(newProj.SelectedProjectType), _manager)
-            End If
+            'Dim _manager = PluginManager.GetInstance
+            'Dim newProj As New NewProjectWindow(_manager)
+            'If newProj.ShowDialog() Then
+            '    _manager.CurrentProject = ProjectOld.CreateProject(newProj.SelectedName, newProj.SelectedLocation, _manager.GetProjectType(newProj.SelectedProjectType), _manager)
+            'End If
             Return Task.CompletedTask
         End Function
 

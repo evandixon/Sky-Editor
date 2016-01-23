@@ -4,7 +4,7 @@ Namespace Mods
     Public Class PMD3DLuaMod
         Inherits GenericMod
 
-        Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
+        Public Overrides Async Function InitializeAsync(CurrentProject As ProjectOld) As Task
             Dim scriptSource As String = IO.Path.Combine(Me.ROMDirectory, "romfs", "script")
             Dim scriptDestination As String = IO.Path.Combine(Me.ModDirectory, "Scripts")
             Dim filesToOpen As New List(Of String)
@@ -39,7 +39,7 @@ Namespace Mods
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function BuildAsync(CurrentProject As Project) As Task
+        Public Overrides Async Function BuildAsync(CurrentProject As ProjectOld) As Task
             Dim scriptDestination As String = IO.Path.Combine(Me.ROMDirectory, "romfs", "script")
             Dim scriptSource As String = IO.Path.Combine(Me.ModDirectory, "Scripts")
 

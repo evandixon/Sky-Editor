@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports CodeFiles
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class PluginInfo

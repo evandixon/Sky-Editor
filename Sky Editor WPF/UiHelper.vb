@@ -4,6 +4,23 @@ Imports SkyEditorBase.Interfaces
 Public Class UiHelper
 
     ''' <summary>
+    ''' Generates TargetedToolWindows from the given ITargetedControls.
+    ''' </summary>
+    ''' <param name="Info">IEnumerable of ITargetedControl used to generate TargetedToolWindows.  Currently, only UserControls implementing this interface are supported; all others will be ignored.</param>
+    ''' <returns></returns>
+    Public Shared Function GenerateToolWindows(Info As IEnumerable(Of ITargetedControl)) As IEnumerable(Of TargetedToolWindow)
+        Dim out As New List(Of TargetedToolWindow)
+        For Each item In Info
+            If TypeOf item Is UserControl Then
+                Dim tool As New TargetedToolWindow
+                tool.ContainedControl = item
+                out.Add(tool)
+            End If
+        Next
+        Return out
+    End Function
+
+    ''' <summary>
     ''' Generates ObjectTabs using the given ObjectControls
     ''' </summary>
     ''' <param name="ObjectControls"></param>
@@ -17,6 +34,28 @@ Public Class UiHelper
 
         For Each item In ObjectControls
             output.Add(New ObjectTab(item))
+        Next
+
+        Return output
+    End Function
+
+    ''' <summary>
+    ''' Generates MenuItems from the given IEnumerable of ContextMenuAction.
+    ''' </summary>
+    ''' <param name="MenuItemInfo">IEnumerable of ContextMenuAction that will be used to create the MenuItems.</param>
+    ''' <returns></returns>
+    Public Shared Function GenerateContextMenuItems(MenuItemInfo As IEnumerable(Of ContextMenuAction)) As List(Of MenuItem)
+        If MenuItemInfo Is Nothing Then
+            Throw New ArgumentNullException(NameOf(MenuItemInfo))
+        End If
+
+        Dim output As New List(Of MenuItem)
+
+        For Each item In MenuItemInfo
+            Dim m As New MenuItem
+            m.Header = item.Header
+            m.Tag = item
+            output.Add(m)
         Next
 
         Return output

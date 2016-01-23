@@ -5,11 +5,11 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Project)}
+            Return {GetType(ProjectOld)}
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As Project In Targets
+            For Each item As ProjectOld In Targets
                 item.SaveProject()
             Next
             Return Task.CompletedTask

@@ -4,19 +4,20 @@ Namespace Roms
     Public Class Generic3DSRom
         Inherits GenericFile
         Implements Interfaces.iOpenableFile
+        Implements Interfaces.iDetectableFileType
         Implements iPackedRom
         Public Overrides Function DefaultExtension() As String
             Return "*.3ds"
         End Function
 
-        'Public Shared Shadows Function IsFileOfType(File As GenericFile) As Boolean
-        '    If File.Length > 104 Then
-        '        Dim e As New System.Text.ASCIIEncoding
-        '        Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
-        '    Else
-        '        Return False
-        '    End If
-        'End Function
+        Public Function IsOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
+            If File.Length > 104 Then
+                Dim e As New System.Text.ASCIIEncoding
+                Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
+            Else
+                Return False
+            End If
+        End Function
         Public ReadOnly Property GameCode As String
             Get
                 Return Text.Encoding.UTF8.GetString(RawData(&H1156, 4), 0, 4).Trim

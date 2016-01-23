@@ -331,7 +331,9 @@ Public Class PluginHelper
 #Region "Open File"
     Public Shared Event FileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
     Public Shared Sub RequestFileOpen(File As Object, DisposeOnClose As Boolean)
-        RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+        If File IsNot Nothing Then
+            RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+        End If
     End Sub
 #End Region
 

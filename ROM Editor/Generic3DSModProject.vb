@@ -59,15 +59,15 @@ Public Class Generic3DSModProject
             '    Await Generic3DSRom.RunCtrTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfs}""")
             'Else
             OpenFile(o.FileName, "BaseRom.3ds")
-                Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
-                Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
-                info.ContainedObject.GameCode = sky.GameCode
-                info.Save()
-                AddFile("Modpack Info", info)
-                Await sky.Unpack(romDirectory)
-                'End If
+            Dim romDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "BaseRom RawFiles")
+            Dim sky = DirectCast(Files("BaseRom.3ds"), iPackedRom)
+            info.ContainedObject.GameCode = sky.GameCode
+            info.Save()
+            AddFile("Modpack Info", info)
+            Await sky.Unpack(romDirectory)
+            'End If
 
-                CreateDirectory("Mods")
+            CreateDirectory("Mods")
         Else
             MessageBox.Show("Project initialization failed.  You must supply a base ROM.")
         End If

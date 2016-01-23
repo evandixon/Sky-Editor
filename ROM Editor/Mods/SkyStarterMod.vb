@@ -22,7 +22,7 @@ Namespace Mods
             Return {"Languages", "Starter Pokemon"}
         End Function
 
-        Public Overrides Sub Initialize(CurrentProject As Project)
+        Public Overrides Sub Initialize(CurrentProject As ProjectOld)
             Dim internalPath = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename)
 
             'Convert Languages
@@ -56,7 +56,7 @@ Namespace Mods
         End Sub
 
 
-        Public Overrides Sub Build(CurrentProject As Project)
+        Public Overrides Sub Build(CurrentProject As ProjectOld)
             'Convert Personality Test
             Dim personalityTest As ObjectFile(Of PersonalityTestContainer) = Nothing
             If IO.File.Exists(IO.Path.Combine(ModDirectory, "Starter Pokemon")) Then

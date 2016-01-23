@@ -16,7 +16,7 @@ Namespace Mods
             Return {"bg", "font", "image_2d"}
         End Function
 
-        Public Overrides Sub Initialize(CurrentProject As Project)
+        Public Overrides Sub Initialize(CurrentProject As ProjectOld)
             'Convert BACK
             Dim BACKdir As String = ModDirectory
             CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Backgrounds/")
@@ -45,7 +45,7 @@ Namespace Mods
             PluginHelper.StopLoading()
         End Sub
 
-        Public Overrides Sub Build(CurrentProject As Project)
+        Public Overrides Sub Build(CurrentProject As ProjectOld)
             'Convert BACK
             If IO.Directory.Exists(ModDirectory) Then
                 For Each background In IO.Directory.GetFiles(ModDirectory, "*.bmp", IO.SearchOption.AllDirectories)

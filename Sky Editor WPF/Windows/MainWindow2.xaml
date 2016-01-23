@@ -10,6 +10,10 @@
         <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,39">
             <ad:LayoutRoot>
                 <ad:LayoutPanel Orientation="Horizontal">
+                    <ad:LayoutAnchorablePaneGroup DockWidth="250" Orientation="Vertical">
+                        <ad:LayoutAnchorablePane x:Name="toolbarPaneLeft">                            
+                        </ad:LayoutAnchorablePane>
+                    </ad:LayoutAnchorablePaneGroup>
                     <ad:LayoutDocumentPaneGroup>
                         <ad:LayoutDocumentPane x:Name="docPane">
                         </ad:LayoutDocumentPane>
@@ -22,7 +26,7 @@
 
                 <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
-                        <ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup x:Name="toolbarPaneBottom">
                             <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output" IsVisible="False">
                                 <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                             </ad:LayoutAnchorable>

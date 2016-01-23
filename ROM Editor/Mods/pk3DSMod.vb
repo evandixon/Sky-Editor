@@ -8,7 +8,7 @@ Namespace Mods
             Return {GameStrings.PokemonXCode, GameStrings.PokemonYCode, GameStrings.ORCode, GameStrings.ASCode}
         End Function
 
-        Public Overrides Sub Initialize(CurrentProject As Project)
+        Public Overrides Sub Initialize(CurrentProject As ProjectOld)
             MyBase.Initialize(CurrentProject)
 
             IO.File.Copy(PluginHelper.GetResourceName("pk3DS.exe"), IO.Path.Combine(ModDirectory, "pk3DS.exe"))

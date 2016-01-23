@@ -44,6 +44,7 @@
         ''' <summary>
         ''' Returns the sort order of this control when editing the given type.
         ''' Note: The returned value is context-specific.  Higher values make a Control more likely to be used, but lower values make tabs appear higher in the list of tabs.
+        ''' Note: Negative values will result in the control not being used if there are other controls with positive values.
         ''' </summary>
         ''' <param name="CurrentType">Type of the EditingObject to get a sort order for.</param>
         ''' <param name="IsTab">Whether or not the iObjectControl is registered to behave as a Tab or a Control.</param>

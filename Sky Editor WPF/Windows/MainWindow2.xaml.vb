@@ -12,11 +12,12 @@ Public Class MainWindow2
 
 #Region "Private Variables"
     Private WithEvents _manager As PluginManager
-    Private WithEvents _projectExplorer As ProjectExplorer
     Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Private _queuedConsoleLines As Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
+    Private _toolWindows As List(Of ITargetedControl)
 #End Region
+
     Private Function IsFileTabOpen(File As Object) As Boolean
         Dim out As Boolean = False
         For Each item In docPane.Children
@@ -34,7 +35,9 @@ Public Class MainWindow2
     ''' <param name="Document"></param>
     Private Sub OpenDocumentTab(Document As Object, DisposeOnExit As Boolean)
         If Not IsFileTabOpen(Document) Then
-            docPane.Children.Add(New DocumentTab(Document, _manager, DisposeOnExit))
+            Dim t = New DocumentTab(Document, _manager, DisposeOnExit)
+            docPane.Children.Add(t)
+            docPane.SelectedContentIndex = docPane.IndexOf(t)
             RemoveWelcomePage()
         End If
     End Sub
@@ -52,8 +55,8 @@ Public Class MainWindow2
         Dim targets As New List(Of Object)
 
         'Add the current project to the targets if supported
-        If _manager.CurrentProject IsNot Nothing Then
-            targets.Add(_manager.CurrentProject)
+        If _manager.CurrentSolution IsNot Nothing Then
+            targets.Add(_manager.CurrentSolution)
         End If
 
         Dim currentDocumentObject = GetSelectedDocumentObject()
@@ -67,8 +70,8 @@ Public Class MainWindow2
         Dim targets As New List(Of Object)
 
         'Add the current project to the targets if supported
-        If _manager.CurrentProject IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentProject) Then
-            targets.Add(_manager.CurrentProject)
+        If _manager.CurrentSolution IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentSolution) Then
+            targets.Add(_manager.CurrentSolution)
         End If
 
         If Action.TargetAll Then
@@ -89,21 +92,6 @@ Public Class MainWindow2
 
         Return targets
     End Function
-
-
-    Private Sub SaveProject()
-        _manager.CurrentProject.SaveProject()
-    End Sub
-
-
-    Private Sub _projectExplorer_FileOpened(sender As Object, e As EventArguments.FileOpenedEventArguments) Handles _projectExplorer.FileOpen
-        Dispatcher.Invoke(Sub()
-                              Dim d As New DocumentTab(e.File, _manager)
-                              docPane.Children.Add(d)
-                              docPane.SelectedContentIndex = docPane.Children.IndexOf(d)
-                              RemoveWelcomePage()
-                          End Sub)
-    End Sub
 
 
 #Region "Event Handlers"
@@ -133,23 +121,35 @@ Public Class MainWindow2
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
 
-        'menuFileOpenNoDetect.Visibility = Visibility.Collapsed
-
-        _projectExplorer = New ProjectExplorer(_manager)
-        toolbarPaneRight.Children.Add(_projectExplorer.ParentAnchorable)
-
         Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Alpha " & Assembly.GetExecutingAssembly.GetName.Version.ToString
 
         _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
 
         ShowWelcomePage()
 
+        _toolWindows = New List(Of ITargetedControl)
+        For Each item In _manager.GetRegisteredObjects(GetType(ITargetedControl))
+            _toolWindows.Add(item)
+        Next
+        For Each item In UiHelper.GenerateToolWindows(_toolWindows)
+            Select Case item.ContainedControl.GetDefaultPane
+                Case ITargetedControl.Pane.Bottom
+                    toolbarPaneBottom.Children.Add(item)
+                Case ITargetedControl.Pane.Left
+                    toolbarPaneLeft.Children.Add(item)
+                Case ITargetedControl.Pane.Right
+                    toolbarPaneRight.Children.Add(item)
+            End Select
+        Next
+
         For Each item In UiHelper.GenerateMenuItems(_manager.GetMenuItemInfo)
             menuMain.Items.Add(item)
             RegisterEventMenuItemHandlers(item)
         Next
 
-        UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
+        Dim t = GetMenuActionTargets()
+        UiHelper.UpdateMenuItemVisibility(t, menuMain)
+        UpdateTargetedControlTargets(t)
 
         AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
         AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
@@ -171,7 +171,7 @@ Public Class MainWindow2
     Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
 
-        Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentProject IsNot Nothing AndAlso _manager.CurrentProject.IsModified)
+        Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentSolution IsNot Nothing AndAlso _manager.CurrentSolution.IsModified)
         If editsMade Then
             If MessageBox.Show(PluginHelper.GetLanguageItem("Unsaved File Close Confirmation", "Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
                 e.Cancel = True
@@ -216,14 +216,35 @@ Public Class MainWindow2
 
     Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
         Dispatcher.Invoke(Sub()
-                              UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
+                              Dim t = GetMenuActionTargets()
+                              UiHelper.UpdateMenuItemVisibility(t, menuMain)
+                              UpdateTargetedControlTargets(t)
+                              RemoveWelcomePage()
+                          End Sub)
+    End Sub
+
+    Private Sub _manager_SolutionChanged(sender As Object, e As EventArgs) Handles _manager.SolutionChanged
+        Dispatcher.Invoke(Sub()
+                              Dim t = GetMenuActionTargets()
+                              UiHelper.UpdateMenuItemVisibility(t, menuMain)
+                              UpdateTargetedControlTargets(t)
                               RemoveWelcomePage()
                           End Sub)
     End Sub
 
     Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged
         If e.PropertyName = "SelectedContent" AndAlso _manager IsNot Nothing Then 'docPane.SelectedContent 
-            UiHelper.UpdateMenuItemVisibility(GetMenuActionTargets, menuMain)
+            Dim t = GetMenuActionTargets()
+            UiHelper.UpdateMenuItemVisibility(t, menuMain)
+            'UpdateTargetedControlTargets(t)
+        End If
+    End Sub
+
+    Private Sub UpdateTargetedControlTargets(Targets As IEnumerable(Of Object))
+        If _toolWindows IsNot Nothing Then
+            For Each item In _toolWindows
+                item.UpdateTargets(Targets)
+            Next
         End If
     End Sub
 #End Region

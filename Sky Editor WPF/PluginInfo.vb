@@ -11,24 +11,33 @@ Friend Class PluginInfo
         'Manager.RegisterFileTypeDetector(AddressOf Manager.DetectFileType)
         'Manager.RegisterFileTypeDetector(AddressOf PluginManager.TryGetObjectFileType)
 
+        Manager.RegisterTypeRegister(GetType(ContextMenuAction))
+
+        Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
+
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.DistPrep))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.Zip))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.UpdateAll))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.PackAll))
 
+        Manager.RegisterType(GetType(ITargetedControl), GetType(SolutionExplorer))
+
         Manager.RegisterType(GetType(iObjectControl), GetType(LanguageEditor))
         Manager.RegisterType(GetType(iObjectControl), GetType(SettingsEditor))
 
         Manager.RegisterMenuActionType(GetType(MenuActions.FileNewFile))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileNewProject))
+        'Manager.RegisterMenuActionType(GetType(MenuActions.FileNewProject))
+        Manager.RegisterMenuActionType(GetType(MenuActions.FileNewSolution))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileOpenAuto))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileOpenManual))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSave))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAs))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveProject))
+        Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveSolution))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAll))
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsSettings))
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsLanguage))
+        Manager.RegisterMenuActionType(GetType(MenuActions.SolutionBuild))
         Manager.RegisterMenuActionType(GetType(MenuActions.ProjectBuild))
         Manager.RegisterMenuActionType(GetType(MenuActions.ProjectRun))
         Manager.RegisterMenuActionType(GetType(MenuActions.ProjectArchive))

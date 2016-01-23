@@ -20,6 +20,7 @@ Public Class NDSModRegistry
         Next
         Return matches
     End Function
+
     Friend Shared Sub ClearMods()
         Mods.Clear()
         'For Each item In Mods

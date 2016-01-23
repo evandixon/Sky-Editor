@@ -82,7 +82,7 @@ Public Class PluginDefinition
         Manager.RegisterFileTypeDetector(AddressOf AutoDetect3dsRom)
         Manager.RegisterFileTypeDetector(AddressOf FileFormatDetector)
 
-        Manager.RegisterTypeRegister(GetType(Mods.GenericMod))
+        Manager.RegisterTypeRegister(GetType(GenericModProject))
 
         'Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
         'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)

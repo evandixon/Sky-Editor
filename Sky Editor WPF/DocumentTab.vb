@@ -29,10 +29,12 @@ Public Class DocumentTab
                 RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
 
+            'Todo: make a better way of omitting tabs with less a than 0 sort order
             If value IsNot Nothing Then
                 Dim tabs = _manager.GetRefreshedTabs(value)
                 Dim ucTabs = (From t In tabs Where Utilities.ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
-                If ucTabs.Count > 1 Then
+                Dim count = ucTabs.Count - (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
+                If count > 1 Then
                     Dim tabControl As New TabControl
                     tabControl.TabStripPlacement = Controls.Dock.Left
                     For Each item In UiHelper.GenerateObjectTabs(ucTabs)
@@ -41,8 +43,8 @@ Public Class DocumentTab
                     Next
                     Me.Content = tabControl
 
-                ElseIf ucTabs.Count = 1 Then
-                    Dim control = ucTabs(0)
+                ElseIf Count = 1 Then
+                    Dim control = (From t In ucTabs Where t.GetSortOrder(value.GetType, True) >= 0).First
                     Me.Content = control
                     AddHandler control.IsModifiedChanged, AddressOf File_FileModified
                 Else
@@ -71,6 +73,17 @@ Public Class DocumentTab
         Private Set(value As Boolean)
             _isModified = value
             UpdateTitle()
+            If value = False Then
+                If TypeOf Me.Content Is iObjectControl Then
+                    DirectCast(Me.Content, iObjectControl).IsModified = False
+                ElseIf TypeOf Me.Content Is TabControl Then
+                    For Each item As TabItem In DirectCast(Me.Content, TabControl).Items
+                        If TypeOf item.Content Is iObjectControl Then
+                            DirectCast(item.Content, iObjectControl).IsModified = False
+                        End If
+                    Next
+                End If
+            End If
         End Set
     End Property
     Dim _isModified As Boolean

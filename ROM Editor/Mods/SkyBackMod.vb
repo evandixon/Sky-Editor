@@ -16,7 +16,7 @@ Public Class SkyBackMod
         Return {"Backgrounds"}
     End Function
 
-    Public Overrides Async Function InitializeAsync(CurrentProject As Project) As Task
+    Public Overrides Async Function InitializeAsync(CurrentProject As ProjectOld) As Task
         'Convert BACK
         Dim BACKdir As String = IO.Path.Combine(ModDirectory, "Backgrounds")
         CurrentProject.CreateDirectory("Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Backgrounds/")
@@ -38,7 +38,7 @@ Public Class SkyBackMod
         PluginHelper.StopLoading()
     End Function
 
-    Public Overrides Async Function Buildasync(CurrentProject As Project) As Task
+    Public Overrides Async Function Buildasync(CurrentProject As ProjectOld) As Task
         'Convert BACK
         If IO.Directory.Exists(IO.Path.Combine(ModDirectory, "Backgrounds")) Then
             For Each background In IO.Directory.GetFiles(IO.Path.Combine(ModDirectory, "Backgrounds"), "*.bmp")

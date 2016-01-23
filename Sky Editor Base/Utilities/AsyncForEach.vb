@@ -76,7 +76,7 @@ Namespace Utilities
             Next
             Await Task.WhenAll(tasks)
         End Function
-        Public Async Function RunForEachSync(Of T)(DelegateSub As ForEachItem(Of T), Collection As IEnumerable(Of T)) As Task
+        Public Async Function RunForEachSync(Of T)(DelegateSub As ForEachItemAsync(Of T), Collection As IEnumerable(Of T)) As Task
             Dim tasks As New List(Of Task)
             _opMax = Collection.Count
             For Each item In Collection

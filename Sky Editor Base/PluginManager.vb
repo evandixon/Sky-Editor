@@ -38,7 +38,7 @@ Public Class PluginManager
     ''' <param name="PluginFolder"></param>
     ''' <remarks></remarks>
     Private Sub New(PluginFolder As String)
-        Me.CurrentProject = Nothing
+        Me.CurrentSolution = Nothing
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.PluginFolder = PluginFolder
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
@@ -80,13 +80,17 @@ Public Class PluginManager
             Next
 
             RegisterTypeRegister(GetType(iObjectControl))
+            RegisterTypeRegister(GetType(Solution))
             RegisterTypeRegister(GetType(Project))
             RegisterTypeRegister(GetType(iCreatableFile))
             RegisterTypeRegister(GetType(iOpenableFile))
             RegisterTypeRegister(GetType(iDetectableFileType))
             RegisterTypeRegister(GetType(ConsoleCommandAsync))
+            RegisterTypeRegister(GetType(ITargetedControl))
             RegisterFileTypeDetector(AddressOf Me.DetectFileType)
             RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
+            RegisterType(GetType(Solution), GetType(Solution))
+            RegisterType(GetType(Project), GetType(Project))
 
 
             'Internal.PluginInfo.Load(Me)
@@ -188,15 +192,15 @@ Public Class PluginManager
     Public Property ObjectWindowType As Type
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
-    Private WithEvents _currentProject As Project
-    Public Property CurrentProject As Project
+    Private WithEvents _currentSolutoin As Solution
+    Public Property CurrentSolution As Solution
         Get
-            Return _currentProject
+            Return _currentSolutoin
         End Get
-        Set(value As Project)
-            If _currentProject IsNot Nothing Then _currentProject.Dispose()
-            _currentProject = value
-            RaiseEvent ProjectChanged(Me, New ProjectChangedEventArgs With {.Project = value})
+        Set(value As Solution)
+            If _currentSolutoin IsNot Nothing Then _currentSolutoin.Dispose()
+            _currentSolutoin = value
+            RaiseEvent SolutionChanged(Me, New EventArgs)
         End Set
     End Property
 #End Region
@@ -525,10 +529,10 @@ Public Class PluginManager
     ''' Returns a new instance of each registered Project.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetProjects() As IEnumerable(Of Project)
-        Dim output As New List(Of Project)
+    Public Function GetProjects() As IEnumerable(Of ProjectOld)
+        Dim output As New List(Of ProjectOld)
 
-        For Each item In GetRegisteredTypes(GetType(Project))
+        For Each item In GetRegisteredTypes(GetType(ProjectOld))
             output.Add(item.GetConstructor({}).Invoke({}))
         Next
 
@@ -565,22 +569,23 @@ Public Class PluginManager
     Public Event ProjectDirectoryCreated(sender As Object, e As ProjectDirectoryCreatedEventArgs)
     Public Event ProjectModified(sender As Object, e As EventArgs)
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
+    Public Event SolutionChanged(sender As Object, e As EventArgs)
 #End Region
 
 #Region "Event Handlers"
-    Private Sub _currentProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) Handles _currentProject.FileAdded
+    Private Sub _currentProject_FileAdded(sender As Object, e As EventArguments.FileAddedEventArguments) ' Handles _currentProject.FileAdded
         RaiseEvent ProjectFileAdded(sender, e)
     End Sub
 
-    Private Sub _currentProject_FileRemoved(sender As Object, File As String) Handles _currentProject.FileRemoved
+    Private Sub _currentProject_FileRemoved(sender As Object, File As String) ' Handles _currentProject.FileRemoved
         RaiseEvent ProjectFileRemoved(sender, New FileRemovedEventArgs With {.File = File})
     End Sub
 
-    Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) Handles _currentProject.DirectoryCreated
+    Private Sub _currentProject_DirectoryCreated(sender As Object, Directory As String) ' Handles _currentProject.DirectoryCreated
         RaiseEvent ProjectDirectoryCreated(sender, New EventArguments.ProjectDirectoryCreatedEventArgs With {.Directory = Directory})
     End Sub
 
-    Private Sub _currentProject_Modified(sender As Object, e As EventArgs) Handles _currentProject.Modified
+    Private Sub _currentProject_Modified(sender As Object, e As EventArgs) ' Handles _currentProject.Modified
         RaiseEvent ProjectModified(sender, e)
     End Sub
 
@@ -862,8 +867,8 @@ Public Class PluginManager
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
-                If CurrentProject IsNot Nothing Then
-                    CurrentProject.Dispose()
+                If CurrentSolution IsNot Nothing Then
+                    CurrentSolution.Dispose()
                 End If
             End If
 

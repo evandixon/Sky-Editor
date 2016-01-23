@@ -61,20 +61,20 @@ Namespace Mods
         Public Overridable Function SupportsAdd() As Boolean
             Return Not PluginHelper.IsMethodOverridden(Me.GetType.GetMethod("FilesToCopy"))
         End Function
-        Public Overridable Async Function InitializeAsync(CurrentProject As Project) As Task
+        Public Overridable Async Function InitializeAsync(CurrentProject As ProjectOld) As Task
             Await Task.Run(New Action(Sub()
                                           Initialize(CurrentProject)
                                       End Sub))
         End Function
-        Public Overridable Sub Initialize(CurrentProject As Project)
+        Public Overridable Sub Initialize(CurrentProject As ProjectOld)
 
         End Sub
-        Public Overridable Async Function BuildAsync(CurrentProject As Project) As Task
+        Public Overridable Async Function BuildAsync(CurrentProject As ProjectOld) As Task
             Await Task.Run(New Action(Sub()
                                           Build(CurrentProject)
                                       End Sub))
         End Function
-        Public Overridable Sub Build(CurrentProject As Project)
+        Public Overridable Sub Build(CurrentProject As ProjectOld)
 
         End Sub
 

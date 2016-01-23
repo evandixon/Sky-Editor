@@ -22,6 +22,14 @@
         Public Shared Function Deserialize(Of T)(Json As String) As T
             Return Newtonsoft.Json.JsonConvert.DeserializeObject(Of T)(Json)
         End Function
+        ''' <summary>
+        ''' Deserializes the given json string into a new object of type T.
+        ''' </summary>
+        ''' <param name="Json">The JSON to deserialize</param>
+        ''' <returns></returns>
+        Public Shared Function Deserialize(Type As Type, Json As String) As Object
+            Return Newtonsoft.Json.JsonConvert.DeserializeObject(Json, Type)
+        End Function
 
         ''' <summary>
         ''' Serializes the given object into JSON and writes it to disk.
