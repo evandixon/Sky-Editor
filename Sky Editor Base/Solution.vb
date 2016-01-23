@@ -496,10 +496,12 @@ Public Class Solution
         file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
         file.Name = Me.Name
         For Each item In Me.Settings
-            Dim value As New SettingValue
-            value.AssemblyQualifiedTypeName = item.Value.GetType.AssemblyQualifiedName
-            value.ValueJson = Utilities.Json.Serialize(item.Value)
-            file.Settings.Add(item.Key, value)
+            If item.Value IsNot Nothing Then
+                Dim value As New SettingValue
+                value.AssemblyQualifiedTypeName = item.Value.GetType.AssemblyQualifiedName
+                value.ValueJson = Utilities.Json.Serialize(item.Value)
+                file.Settings.Add(item.Key, value)
+            End If
         Next
         file.Projects = GetProjectDictionary(SolutionNode, "")
         Utilities.Json.SerializeToFile(Filename, file)

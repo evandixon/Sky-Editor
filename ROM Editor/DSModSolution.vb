@@ -33,7 +33,6 @@ Public Class DSModSolution
     End Function
 
     Private Sub DSModSolution_Created(sender As Object, e As EventArgs) Handles Me.Created
-        Me.Setting("ModpackInfo") = New ModpackInfo With {.Name = Me.Name}
         Me.Setting("BaseRomProject") = "BaseRom"
         Me.Setting("ModPackProject") = "ModPack"
         CreateProject("", "BaseRom", GetType(BaseRomProject))
@@ -58,11 +57,23 @@ Public Class DSModSolution
                 PluginHelper.ReportExceptionThrown(Me, ex)
                 PluginHelper.SetLoadingStatusFailed()
             End Try
+        ElseIf TypeOf e.Project Is DSModPackProject Then
+            Dim m = DirectCast(e.Project, DSModPackProject)
+            m.Setting("ModPackName") = Me.Name
+            m.Setting("ModPackVersion") = "1.0.0"
+            m.Setting("ModPackAuthor") = "Unknown"
+            m.Setting("ModPackDescription") = "A generic modpack"
+            m.Setting("ModPackUpdateUrl") = ""
+            m.Setting("ModpackInfo") = New ModpackInfo With {.Name = Me.Name}
         End If
     End Sub
 
     Public Overrides Async Function Build() As Task
         Dim info As ModpackInfo = Me.Setting("ModpackInfo")
+        If info Is Nothing Then
+            info = New ModpackInfo
+            Me.Setting("ModpackInfo") = info
+        End If
         Dim baseRomProject As BaseRomProject = GetProjectsByName(Me.Setting("BaseRomProject")).FirstOrDefault
         If baseRomProject IsNot Nothing Then
             info.System = baseRomProject.Setting("System")

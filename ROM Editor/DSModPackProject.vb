@@ -9,7 +9,7 @@ Public Class DSModPackProject
         Return IO.Path.Combine(GetModPackDir, "Tools")
     End Function
     Public Overridable Function GetPatchersDir() As String
-        Return IO.Path.Combine(GetModPackDir, "Tools")
+        Return IO.Path.Combine(GetModPackDir, "Tools", "Patchers")
     End Function
     Public Overridable Function GetModPackDir() As String
         Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Modpack Files")
@@ -77,10 +77,10 @@ Public Class DSModPackProject
 
         CopyPatcherProgram(Solution)
 
-        IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Solution.Setting("ModpackInfo")))
+        IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Me.Setting("ModpackInfo")))
 
         '-Zip it
-        Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Solution.Setting("ModName") & " " & Solution.Setting("ModVersion") & "-" & PatcherVersion & ".zip"))
+        Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Setting("ModName") & " " & Me.Setting("ModVersion") & "-" & patcherVersion & ".zip"))
 
         'Apply patch
         PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))

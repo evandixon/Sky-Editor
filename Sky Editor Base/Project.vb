@@ -376,14 +376,14 @@ Public Class Project
     ''' <param name="FullFilename">Full path of the file to import.</param>
     ''' <returns></returns>
     Protected Overridable Function GetImportedFilePath(ParentProjectPath As String, FullFilename As String)
-        Return IO.Path.GetFileName(FullFilename)
+        Return IO.Path.Combine(ParentProjectPath, IO.Path.GetFileName(FullFilename))
     End Function
 
     Public Overridable Function GetImportIOFilter(ParentProjectPath As String) As String
         Return PluginManager.GetInstance.IOFiltersString
     End Function
 
-    Public Overridable Async Function AddExistingFile(ParentProjectPath As String, FilePath As String) As Task
+    Public Overridable Function AddExistingFile(ParentProjectPath As String, FilePath As String) As Task
         Dim item = GetProjectItemByPath(ParentProjectPath)
         Dim filename = IO.Path.GetFileName(FilePath)
         If item IsNot Nothing Then
@@ -393,24 +393,26 @@ Public Class Project
                 Dim projItem As New ProjectItem(Me)
                 projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
-                Await Task.Run(New Action(Sub()
-                                              Dim source = FilePath
-                                              Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename)
-                                              If Not source.Replace("\", "/").ToLower = dest.Replace("\", "/").ToLower Then
-                                                  IO.File.Copy(FilePath, dest, True)
-                                              End If
-                                          End Sub))
+                'Await Task.Run(New Action(Sub()
+                Dim source = FilePath
+                Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename)
+                If Not source.Replace("\", "/").ToLower = dest.Replace("\", "/").ToLower Then
+                    IO.File.Copy(FilePath, dest, True)
+                End If
+                'End Sub))
 
-                projItem.Name = projItem.Filename
+                projItem.Name = IO.Path.GetFileName(projItem.Filename)
                 item.Children.Add(projItem)
-                RaiseEvent FileAdded(Me, New EventArguments.ProjectFileAddedEventArgs With {.ParentPath = ParentProjectPath, .Filename = projItem.Filename, .FullFilename = FilePath})
+                RaiseEvent FileAdded(Me, New EventArguments.ProjectFileAddedEventArgs With {.ParentPath = ParentProjectPath, .Filename = projItem.Name, .FullFilename = dest})
             Else
                 'There's already a project here
+                'Todo: throw exception
                 'Throw New ProjectAlreadyExistsException("A project with the name """ & ProjectName & """ already exists in the given path: " & ParentPath)
             End If
         Else
             Throw New IO.DirectoryNotFoundException("Cannot add a file at the given path: " & ParentProjectPath)
         End If
+        Return Task.CompletedTask
     End Function
 
     Public Overridable Function CanDeleteFile(FilePath As String) As Boolean
