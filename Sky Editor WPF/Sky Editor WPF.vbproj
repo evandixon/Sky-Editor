@@ -118,10 +118,6 @@
     <Compile Include="MenuActions\FileSave.vb" />
     <Compile Include="MenuActions\FileSaveAll.vb" />
     <Compile Include="MenuActions\FileSaveAs.vb" />
-    <Compile Include="MenuActions\FileSaveProject.vb" />
-    <Compile Include="MenuActions\ProjectArchive.vb" />
-    <Compile Include="MenuActions\ProjectBuild.vb" />
-    <Compile Include="MenuActions\ProjectRun.vb" />
     <Compile Include="MenuActions\ToolsLanguage.vb" />
     <Compile Include="MenuActions\ToolsSettings.vb" />
     <Compile Include="WpfCoreMod.vb" />
@@ -140,9 +136,6 @@
     </Compile>
     <Compile Include="StartupHelpers.vb" />
     <Compile Include="TargetedToolWindow.vb" />
-    <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
-      <DependentUpon>ProjectExplorer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ToolWindow.vb" />
     <Compile Include="UiHelper.vb" />
     <Compile Include="WelcomeTabContent.xaml.vb">
@@ -168,9 +161,6 @@
     </Compile>
     <Compile Include="Windows\NewSolutionWindow.xaml.vb">
       <DependentUpon>NewSolutionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\NewProjectWindow.xaml.vb">
-      <DependentUpon>NewProjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
@@ -256,10 +246,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Tool Windows\ProjectExplorer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="WelcomeTabContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -289,10 +275,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NewSolutionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\NewProjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

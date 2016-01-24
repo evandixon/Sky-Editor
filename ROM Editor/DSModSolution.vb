@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.Projects
+Imports SkyEditorBase
 Imports SkyEditorBase.EventArguments
 
 Public Class DSModSolution

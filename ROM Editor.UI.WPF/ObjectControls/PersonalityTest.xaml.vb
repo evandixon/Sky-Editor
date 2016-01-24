@@ -12,12 +12,7 @@ Namespace ObjectControls
 
         Public Sub RefreshDisplay()
             ReportModified = False
-            Dim overlay As PersonalityTestContainer = Nothing
-            If TypeOf EditingObject Is ObjectFile(Of PersonalityTestContainer) Then
-                overlay = DirectCast(EditingObject, ObjectFile(Of PersonalityTestContainer)).ContainedObject
-            ElseIf TypeOf EditingObject Is PersonalityTestContainer Then
-                overlay = DirectCast(EditingObject, PersonalityTestContainer)
-            End If
+            Dim overlay As PersonalityTestContainer = Me.GetEditingObject(Of PersonalityTestContainer)
             cbPartner01.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner01)
             cbPartner02.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner02)
             cbPartner03.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner03)
@@ -183,12 +178,7 @@ Namespace ObjectControls
         End Sub
 
         Public Sub UpdateObject()
-            Dim o As PersonalityTestContainer = Nothing
-            If TypeOf EditingObject Is ObjectFile(Of PersonalityTestContainer) Then
-                o = DirectCast(EditingObject, ObjectFile(Of PersonalityTestContainer)).ContainedObject
-            ElseIf TypeOf EditingObject Is PersonalityTestContainer Then
-                o = DirectCast(EditingObject, PersonalityTestContainer)
-            End If
+            Dim o As PersonalityTestContainer = Me.GetEditingObject(Of PersonalityTestContainer)
             o.Partner01 = Overlay13.SetPokemonIDGender(cbPartner01.LastSafeIndex, chbPartner01.IsChecked)
             o.Partner02 = Overlay13.SetPokemonIDGender(cbPartner02.LastSafeIndex, chbPartner02.IsChecked)
             o.Partner03 = Overlay13.SetPokemonIDGender(cbPartner03.LastSafeIndex, chbPartner03.IsChecked)

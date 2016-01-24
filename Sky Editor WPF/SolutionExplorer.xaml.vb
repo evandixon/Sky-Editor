@@ -536,35 +536,39 @@ Public Class SolutionExplorer
     End Function
 
     Private Sub Project_DirectoryCreated(sender As Object, e As EventArguments.DirectoryCreatedEventArgs)
-        Dim parent = GetProjectNode(sender, e.ParentPath)
-        If parent IsNot Nothing Then
-            Dim t As New TreeViewItem
-            t.Header = "[Dir] " & e.DirectoryName
-            Dim n As New NodeTag
-            n.Name = e.DirectoryName
-            n.IsDirectory = True
-            n.ParentSolution = DirectCast(parent.Tag, NodeTag).ParentSolution
-            n.ParentPath = e.ParentPath
-            n.ParentProject = sender
-            t.Tag = n
-            parent.Items.Add(t)
-        End If
+        Dispatcher.Invoke(Sub()
+                              Dim parent = GetProjectNode(sender, e.ParentPath)
+                              If parent IsNot Nothing Then
+                                  Dim t As New TreeViewItem
+                                  t.Header = "[Dir] " & e.DirectoryName
+                                  Dim n As New NodeTag
+                                  n.Name = e.DirectoryName
+                                  n.IsDirectory = True
+                                  n.ParentSolution = DirectCast(parent.Tag, NodeTag).ParentSolution
+                                  n.ParentPath = e.ParentPath
+                                  n.ParentProject = sender
+                                  t.Tag = n
+                                  parent.Items.Add(t)
+                              End If
+                          End Sub)
     End Sub
 
     Private Sub Project_FileAdded(sender As Object, e As EventArguments.ProjectFileAddedEventArgs)
-        Dim parent = GetProjectNode(sender, e.ParentPath)
-        If parent IsNot Nothing Then
-            Dim t As New TreeViewItem
-            t.Header = "[File] " & e.Filename
-            Dim n As New NodeTag
-            n.Name = e.Filename
-            n.IsDirectory = False
-            n.ParentSolution = DirectCast(parent.Tag, NodeTag).ParentSolution
-            n.ParentPath = e.ParentPath
-            n.ParentProject = sender
-            t.Tag = n
-            parent.Items.Add(t)
-        End If
+        Dispatcher.Invoke(Sub()
+                              Dim parent = GetProjectNode(sender, e.ParentPath)
+                              If parent IsNot Nothing Then
+                                  Dim t As New TreeViewItem
+                                  t.Header = "[File] " & e.Filename
+                                  Dim n As New NodeTag
+                                  n.Name = e.Filename
+                                  n.IsDirectory = False
+                                  n.ParentSolution = DirectCast(parent.Tag, NodeTag).ParentSolution
+                                  n.ParentPath = e.ParentPath
+                                  n.ParentProject = sender
+                                  t.Tag = n
+                                  parent.Items.Add(t)
+                              End If
+                          End Sub)
     End Sub
 
     Private Sub Project_DirectoryDeleted(sender As Object, e As EventArguments.DirectoryDeletedEventArgs)

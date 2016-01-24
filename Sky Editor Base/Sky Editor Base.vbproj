@@ -170,7 +170,6 @@
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="EventArguments\PluginLoadingEventArgs.vb" />
     <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectChangedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectFileAddedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectFileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovedEventArgs.vb" />

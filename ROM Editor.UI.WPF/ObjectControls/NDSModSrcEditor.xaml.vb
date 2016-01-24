@@ -8,7 +8,7 @@ Namespace ObjectControls
         Inherits UserControl
         Implements Interfaces.iObjectControl
         Public Sub RefreshDisplay()
-            With GetEditingObject(Of Mods.ModSourceContainer)()
+            With GetEditingObject() '(Of Mods.ModSourceContainer)()
                 txtModName.Text = .ModName
                 txtAuthor.Text = .Author
                 txtDescription.Text = .Description
@@ -20,7 +20,7 @@ Namespace ObjectControls
         End Sub
 
         Public Sub UpdateObject()
-            With GetEditingObject(Of Mods.ModSourceContainer)()
+            With GetEditingObject() '(Of Mods.ModSourceContainer)()
                 .ModName = txtModName.Text
                 .Author = txtAuthor.Text
                 .Description = txtDescription.Text
@@ -32,7 +32,7 @@ Namespace ObjectControls
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-            Return {GetType(Mods.ModSourceContainer)}
+            Return {} '{GetType(Mods.ModSourceContainer)}
         End Function
 
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder

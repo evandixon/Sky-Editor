@@ -6,19 +6,20 @@ Namespace MenuActions
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(ProjectOld), GetType(iSavable)}
+            Return {GetType(Solution), GetType(iSavable)}
         End Function
         Public Overrides Function SupportsObjects(Objects As IEnumerable(Of Object)) As Boolean
-            Dim hasProject = From o In Objects Where TypeOf o Is ProjectOld
+            Dim hasProject = From o In Objects Where TypeOf o Is Solution
             Dim hasSavable = From o In Objects Where TypeOf o Is iSavable
 
             Return hasProject.Any AndAlso hasSavable.Any
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item In Targets
-                If TypeOf item Is ProjectOld Then
-                    DirectCast(item, ProjectOld).SaveProject()
-                ElseIf TypeOf item Is iSavable
+                If TypeOf item Is Solution Then
+                    DirectCast(item, Solution).SaveAllProjects()
+                ElseIf TypeOf item Is iSavable Then
+
                     If TypeOf item Is iOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, iOnDisk).Filename) Then
                         If TypeOf item Is iOnDisk Then
                             SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(item, iOnDisk).Filename))

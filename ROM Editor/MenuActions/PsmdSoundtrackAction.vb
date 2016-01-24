@@ -1,27 +1,27 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.Projects
+Imports SkyEditorBase
 Namespace MenuActions
     Public Class PsmdSoundtrackMenuAction
         Inherits MenuAction
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Generic3DSModProject)}
+            Return {GetType(BaseRomProject)}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
-            If TypeOf Obj Is Generic3DSModProject Then
-                Dim info As ObjectFile(Of ModpackInfo) = DirectCast(Obj, Generic3DSModProject).Files("Modpack Info")
-                Return info.ContainedObject.System = "3DS" AndAlso info.ContainedObject.GameCode = GameStrings.PSMDCode
+            If TypeOf Obj Is BaseRomProject Then
+                Return DirectCast(Obj, BaseRomProject).Setting("System") = "3DS" AndAlso DirectCast(Obj, BaseRomProject).Setting("GameCode") = GameStrings.PSMDCode
             Else
                 Return False
             End If
         End Function
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each Project As Generic3DSModProject In Targets
+            For Each Project As BaseRomProject In Targets
                 Console.WriteLine("Starting conversion...")
 
-                Dim sourceDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Project.Filename), "BaseRom RawFiles", "romfs", "sound", "stream")
-                Dim destDir As String = IO.Path.Combine(IO.Path.GetDirectoryName(Project.Filename), "Soundtrack")
+                Dim sourceDir As String = IO.Path.Combine(Project.GetRawFilesDir, "romfs", "sound", "stream")
+                Dim destDir As String = IO.Path.Combine(Project.GetRootDirectory, "Soundtrack")
 
                 'Todo: do error checks on input file
                 Dim trackNames As New Dictionary(Of String, String)

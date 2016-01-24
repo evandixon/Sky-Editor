@@ -95,12 +95,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseRomProject.vb" />
+    <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />
     <Compile Include="ConsoleCommands\ImportLanguage.vb" />
     <Compile Include="DSIconTool.vb" />
-    <Compile Include="DSModPackProject.vb" />
+    <Compile Include="Projects\DSModPackProject.vb" />
     <Compile Include="DSModSolution.vb" />
     <Compile Include="ffmpeg.vb" />
     <Compile Include="FileFormats\DatabaseBin.vb" />
@@ -123,8 +123,7 @@
     <Compile Include="FileFormats\item_p.vb" />
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
-    <Compile Include="Generic3DSModProject.vb" />
-    <Compile Include="GenericModProject.vb" />
+    <Compile Include="Projects\GenericModProject.vb" />
     <Compile Include="Java.vb" />
     <Compile Include="FileFormats\CteImage.vb" />
     <Compile Include="MenuActions\CteImageExport.vb" />
@@ -132,19 +131,10 @@
     <Compile Include="MenuActions\ExtractFarc.vb" />
     <Compile Include="ModJson.vb" />
     <Compile Include="ModpackInfo.vb" />
-    <Compile Include="ModRegistry.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
-    <Compile Include="Mods\GtiImage2d.vb" />
-    <Compile Include="Mods\KaomadoMod.vb" />
-    <Compile Include="Mods\GenericMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
-    <Compile Include="GenericNDSModProject.vb" />
     <Compile Include="DeSmuMe.vb" />
-    <Compile Include="Mods\pk3DSMod.vb" />
-    <Compile Include="Mods\PMD3DLuaMod.vb" />
-    <Compile Include="Mods\SkyBackMod.vb" />
-    <Compile Include="Mods\SkyStarterMod.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -163,7 +153,12 @@
     </Compile>
     <Compile Include="Portrait.vb" />
     <Compile Include="MenuActions\PsmdSoundtrackAction.vb" />
-    <Compile Include="PsmdLuaProject.vb" />
+    <Compile Include="Projects\GtiImage2dProject.vb" />
+    <Compile Include="Projects\KaomadoProject.vb" />
+    <Compile Include="Projects\Pk3DSModProject.vb" />
+    <Compile Include="Projects\SkyBackModProject.vb" />
+    <Compile Include="Projects\SkyStarterModProject.vb" />
+    <Compile Include="Projects\PsmdLuaProject.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />

@@ -5,6 +5,7 @@ Public Class ModFile
     Public Property Name As String
     Public Property Patched As Boolean
     Public Property Filename As String
+    Public Property ModLevelPatchers As List(Of FilePatcher)
     Public Async Function ApplyPatch(currentDirectory As String, ROMDirectory As String, patchers As List(Of FilePatcher)) As Task
         Dim renameTemp = IO.Path.Combine(currentDirectory, "Tools", "renametemp")
         If ModDetails.ToAdd IsNot Nothing Then
@@ -20,25 +21,41 @@ Public Class ModFile
                     'Hopefully we only have 1 patch, but if there's more than 1 patch, apply them all.
                     For Each patchFile In patches
                         Dim possiblePatchers As New List(Of FilePatcher) ' = (From p In patchers Where p.PatchExtension = IO.Path.GetExtension(patchFile) Select p).ToList
+                        'Load pack level patchers
                         For Each p As FilePatcher In patchers
                             If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
                                 possiblePatchers.Add(p)
                             End If
                         Next
+
+                        'Load mod level patchers
+                        For Each p As FilePatcher In ModLevelPatchers
+                            If "." & p.PatchExtension = IO.Path.GetExtension(patchFile) Then
+                                possiblePatchers.Add(p)
+                            End If
+                        Next
+
                         'If possiblePatchers.Count = 0 Then
                         '   Do nothing, we don't have the tools to deal with this patch
                         If possiblePatchers.Count >= 1 Then
                             Dim tempFilename As String = IO.Path.Combine(currentDirectory, "Tools", "tempFile")
                             'If there's 1 possible patcher, great.  If there's more than one, then multiple programs have the same extension, which is their fault.  Only using the first one because we don't need to apply the same patch multiple times.
-                            Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools", "Patchers", possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
-
-                            If Not IO.File.Exists(tempFilename) Then
-                                MessageBox.Show("Unable to patch file """ & file & """.  Please ensure you're using a supported ROM.  If you sure you are, report this to the mod author.")
+                            Dim path As String
+                            If ModLevelPatchers.Contains(possiblePatchers(0)) Then
+                                path = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Tools")
                             Else
-                                IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
-                                IO.File.Delete(tempFilename)
+                                path = IO.Path.Combine(currentDirectory, "Tools", "Patchers")
                             End If
-                        End If
+
+                            Await ProcessHelper.RunProgram(IO.Path.Combine(path, possiblePatchers(0).ApplyPatchProgram), String.Format(possiblePatchers(0).ApplyPatchArguments, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), patchFile, tempFilename))
+
+                                If Not IO.File.Exists(tempFilename) Then
+                                    MessageBox.Show("Unable to patch file """ & file & """.  Please ensure you're using a supported ROM.  If you sure you are, report this to the mod author.")
+                                Else
+                                    IO.File.Copy(tempFilename, IO.Path.Combine(ROMDirectory, file.TrimStart("\")), True)
+                                    IO.File.Delete(tempFilename)
+                                End If
+                            End If
                     Next
                 End If
             Next
@@ -104,6 +121,11 @@ Public Class ModFile
         Me.Name = Me.ModDetails.Name
         Me.Patched = False
         Me.Filename = Filename
+        'Todo: load patchers.json
+        Dim patchersPath = IO.Path.Combine(IO.Path.GetDirectoryName(Filename), "Tools", "patchers.json")
+        If IO.File.Exists(patchersPath) Then
+            Me.ModLevelPatchers = j.Deserialize(Of List(Of FilePatcher))(IO.File.ReadAllText(patchersPath))
+        End If
     End Sub
     Public Shared Sub CopyFile(OriginalFilename As String, NewFilename As String, Overwrite As Boolean)
         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(NewFilename)) Then

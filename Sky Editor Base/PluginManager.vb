@@ -522,35 +522,6 @@ Public Class PluginManager
         Return output
     End Function
 
-    ''' <summary>
-    ''' Returns a new instance of each registered Project.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetProjects() As IEnumerable(Of ProjectOld)
-        Dim output As New List(Of ProjectOld)
-
-        For Each item In GetRegisteredTypes(GetType(ProjectOld))
-            output.Add(item.GetConstructor({}).Invoke({}))
-        Next
-
-        Return output
-    End Function
-
-    ''' <summary>
-    ''' Returns the type of the project with the given Project Type Name
-    ''' </summary>
-    ''' <param name="ProjectTypeName">Name of the Project Type.</param>
-    ''' <returns></returns>
-    Public Function GetProjectType(ProjectTypeName As String) As Type
-        Dim q = From p In GetProjects() Where p.GetProjectTypeName = ProjectTypeName Select p
-
-        If q.Any Then
-            Return q.First.GetType
-        Else
-            Return Nothing
-        End If
-    End Function
-
 #End Region
 
 #Region "Events"
@@ -562,7 +533,6 @@ Public Class PluginManager
     Public Event PluginsLoading(sender As Object, e As PluginLoadingEventArgs)
     Public Event ProjectFileAdded(sender As Object, e As FileAddedEventArguments)
     Public Event ProjectFileRemoved(sender As Object, e As FileRemovedEventArgs)
-    Public Event ProjectChanged(sender As Object, e As ProjectChangedEventArgs)
     Public Event ProjectDirectoryCreated(sender As Object, e As ProjectDirectoryCreatedEventArgs)
     Public Event ProjectModified(sender As Object, e As EventArgs)
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)

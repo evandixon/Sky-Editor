@@ -1,6 +1,7 @@
 ﻿Imports SkyEditorBase
 Imports ROMEditor.Roms
 Imports SkyEditorBase.Interfaces
+Imports ROMEditor.Projects
 
 Public Class PluginDefinition
     Implements iSkyEditorPlugin

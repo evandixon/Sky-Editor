@@ -65,7 +65,8 @@ Namespace FileFormats
             MyBase.OpenFile(Filename)
         End Sub
         Public Sub New(RawData As Byte())
-            Throw New NotImplementedException
+            MyBase.New(RawData)
+            'Throw New NotImplementedException
             '_tempname = Guid.NewGuid.ToString()
             'IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
             'Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")

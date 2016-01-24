@@ -75,6 +75,7 @@ Public Class SettingsSet
     End Property
 
     Public Sub New()
+        Settings = New Dictionary(Of String, Object)
         'Todo: load defaults from somewhere
         CurrentLanguage = "English"
         DefaultLanguage = "English"

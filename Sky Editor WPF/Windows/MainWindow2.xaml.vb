@@ -214,15 +214,6 @@ Public Class MainWindow2
         PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
     End Sub
 
-    Private Sub _manager_ProjectChanged(sender As Object, e As EventArguments.ProjectChangedEventArgs) Handles _manager.ProjectChanged
-        Dispatcher.Invoke(Sub()
-                              Dim t = GetMenuActionTargets()
-                              UiHelper.UpdateMenuItemVisibility(t, menuMain)
-                              UpdateTargetedControlTargets(t)
-                              RemoveWelcomePage()
-                          End Sub)
-    End Sub
-
     Private Sub _manager_SolutionChanged(sender As Object, e As EventArgs) Handles _manager.SolutionChanged
         Dispatcher.Invoke(Sub()
                               Dim t = GetMenuActionTargets()

@@ -295,6 +295,21 @@ Public Class Project
     End Sub
 
     ''' <summary>
+    ''' Creates a directory with the given full path.
+    ''' </summary>
+    ''' <param name="FullPath"></param>
+    Public Overridable Sub CreateDirectory(FullPath As String)
+        Dim pathParts = FullPath.Replace("\", "/").TrimStart("/").Split("/")
+        Dim parentPath As New Text.StringBuilder
+        For count = 0 To pathParts.Length - 2
+            parentPath.Append(pathParts(count))
+            parentPath.Append("/")
+        Next
+        Dim parentPathString = parentPath.ToString.TrimEnd("/")
+        CreateDirectory(parentPathString, pathParts.last)
+    End Sub
+
+    ''' <summary>
     ''' Returns whether or not the directory at the given path can be deleted.
     ''' </summary>
     ''' <param name="Path"></param>
@@ -395,7 +410,7 @@ Public Class Project
 
                 'Await Task.Run(New Action(Sub()
                 Dim source = FilePath
-                Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename)
+                Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))
                 If Not source.Replace("\", "/").ToLower = dest.Replace("\", "/").ToLower Then
                     IO.File.Copy(FilePath, dest, True)
                 End If
