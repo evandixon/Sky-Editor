@@ -17,7 +17,7 @@ Namespace Tabs
         End Sub
         Sub ShowPkmEditDialog()
             If lbPokemon.SelectedIndex > -1 Then
-                Dim w = PluginManager.GetInstance.GetObjectWindow
+                Dim w As New SkyEditorWPF.ObjectWindow
                 w.ObjectToEdit = lbPokemon.SelectedItem
                 w.ShowDialog()
                 lbPokemon.SelectedItem = w.ObjectToEdit

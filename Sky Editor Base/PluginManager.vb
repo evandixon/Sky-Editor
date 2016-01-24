@@ -10,7 +10,6 @@ Public Class PluginManager
     Implements IDisposable
 
 #Region "Constructors"
-    Private Shared _instance As PluginManager
     ''' <summary>
     ''' Returns an instance of PluginManager, or returns nothing if an instance has not been created.
     ''' </summary>
@@ -22,6 +21,8 @@ Public Class PluginManager
         End If
         Return _instance
     End Function
+    Private Shared _instance As PluginManager
+
     ''' <summary>
     ''' Creates a new PluginManager, using the default storage location for plugins, which is Resources/Plugins, stored in the current working directory.
     ''' Plugins should end in _plg.dll or _plg.exe,  Ex. MyPlugin_plg.dll
@@ -44,10 +45,10 @@ Public Class PluginManager
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         PluginHelper.PluginManagerInstance = Me
     End Sub
-    Public Sub LoadPlugins()
-        LoadPlugins(PluginFolder)
+    Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
+        LoadPlugins(PluginFolder, CoreMod)
     End Sub
-    Public Sub LoadPlugins(FromFolder As String)
+    Public Sub LoadPlugins(FromFolder As String, CoreMod As iSkyEditorPlugin)
         'Me.PluginFolder = FromFolder
         If IO.Directory.Exists(FromFolder) Then
             Dim assemblyPaths As New List(Of String)
@@ -79,21 +80,8 @@ Public Class PluginManager
                 End Try
             Next
 
-            RegisterTypeRegister(GetType(iObjectControl))
-            RegisterTypeRegister(GetType(Solution))
-            RegisterTypeRegister(GetType(Project))
-            RegisterTypeRegister(GetType(iCreatableFile))
-            RegisterTypeRegister(GetType(iOpenableFile))
-            RegisterTypeRegister(GetType(iDetectableFileType))
-            RegisterTypeRegister(GetType(ConsoleCommandAsync))
-            RegisterTypeRegister(GetType(ITargetedControl))
-            RegisterFileTypeDetector(AddressOf Me.DetectFileType)
-            RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
-            RegisterType(GetType(Solution), GetType(Solution))
-            RegisterType(GetType(Project), GetType(Project))
+            CoreMod.Load(Me)
 
-
-            'Internal.PluginInfo.Load(Me)
             RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
 
             For Each item In Plugins
@@ -189,7 +177,6 @@ Public Class PluginManager
     Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property PluginFolder As String
-    Public Property ObjectWindowType As Type
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
     Private WithEvents _currentSolutoin As Solution
@@ -330,7 +317,17 @@ Public Class PluginManager
     End Sub
 
     Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
-        FileTypeDetectors.Add(Detector)
+        If Not FileTypeDetectors.Contains(Detector) Then
+            FileTypeDetectors.Add(Detector)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Registers SkyEditorBase's file type detectors.
+    ''' </summary>
+    Public Sub RegisterDefaultFileTypeDetectors()
+        RegisterFileTypeDetector(AddressOf Me.DetectFileType)
+        RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
     End Sub
 
     Public Sub RegisterDirectoryTypeDetector(Detector As DirectoryTypeDetector)
@@ -680,10 +677,6 @@ Public Class PluginManager
     End Function
 
 #End Region
-
-    Public Function GetObjectWindow() As Interfaces.iObjectWindow
-        Return ObjectWindowType.GetConstructor({}).Invoke({})
-    End Function
 
     ''' <summary>
     ''' Gets an object control that can edit the given object.

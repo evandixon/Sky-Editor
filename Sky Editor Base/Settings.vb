@@ -1,12 +1,79 @@
 ﻿Imports SkyEditorBase.Interfaces
 
-Public Class SettingsContainer
+Public Class SettingsSet
+    Private Property Settings As Dictionary(Of String, Object)
+
+    Public Property Setting(SettingName As String) As Object
+        Get
+            If Settings.ContainsKey(SettingName) Then
+                Return Settings.Item(SettingName)
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(value As Object)
+            If Settings.ContainsKey(SettingName) Then
+                Settings.Item(SettingName) = value
+            Else
+                Settings.Add(SettingName, value)
+            End If
+        End Set
+    End Property
+
     Public Property CurrentLanguage As String
+        Get
+            Return Setting("CurrentLanguage")
+        End Get
+        Set(value As String)
+            Setting("CurrentLanguage") = value
+        End Set
+    End Property
+
     Public Property DefaultLanguage As String
+        Get
+            Return Setting("DefaultLanguage")
+        End Get
+        Set(value As String)
+            Setting("DefaultLanguage") = value
+        End Set
+    End Property
+
     Public Property UpdatePlugins As Boolean
+        Get
+            Return Setting("UpdatePlugins")
+        End Get
+        Set(value As Boolean)
+            Setting("UpdatePlugins") = value
+        End Set
+    End Property
+
     Public Property DebugLanguagePlaceholders As Boolean
+        Get
+            Return Setting("DebugLanguagePlaceholders")
+        End Get
+        Set(value As Boolean)
+            Setting("DebugLanguagePlaceholders") = value
+        End Set
+    End Property
+
     Public Property PluginUpdateUrl As String
+        Get
+            Return Setting("PluginUpdateUrl")
+        End Get
+        Set(value As String)
+            Setting("PluginUpdateUrl") = value
+        End Set
+    End Property
+
     Public Property VerboseOutput As Boolean
+        Get
+            Return Setting("VerboseOutput")
+        End Get
+        Set(value As Boolean)
+            Setting("VerboseOutput") = value
+        End Set
+    End Property
+
     Public Sub New()
         'Todo: load defaults from somewhere
         CurrentLanguage = "English"
@@ -37,10 +104,10 @@ Public Class SettingsManager
     Private Sub New()
         MyBase.New()
         If IO.File.Exists(SettingsFilename) Then
-            Dim f As New ObjectFile(Of SettingsContainer)(SettingsFilename)
+            Dim f As New ObjectFile(Of SettingsSet)(SettingsFilename)
             Settings = f.ContainedObject
         Else
-            Settings = New SettingsContainer
+            Settings = New SettingsSet
         End If
     End Sub
 
@@ -48,14 +115,15 @@ Public Class SettingsManager
         Return IO.Path.Combine(PluginHelper.RootResourceDirectory, "Settings.json")
     End Function
 
-    Public Property Settings As SettingsContainer
+    Public Property Settings As SettingsSet
         Get
             Return _settings
         End Get
-        Private Set(value As SettingsContainer)
+        Private Set(value As SettingsSet)
             _settings = value
         End Set
     End Property
+    Dim _settings As SettingsSet
 
     Public Property Name As String Implements iNamed.Name
         Get
@@ -65,8 +133,6 @@ Public Class SettingsManager
 
         End Set
     End Property
-
-    Dim _settings As SettingsContainer
 
     Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
         Return ".skysettings"
@@ -78,7 +144,7 @@ Public Class SettingsManager
     End Sub
 
     Public Sub Save(Filename As String) Implements iSavable.Save
-        Dim f As New ObjectFile(Of SettingsContainer)
+        Dim f As New ObjectFile(Of SettingsSet)
         f.ContainedObject = Settings
         f.Save(Filename)
         RaiseEvent FileSaved(Me, New EventArgs)

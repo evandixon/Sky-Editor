@@ -99,7 +99,7 @@
     <Compile Include="ConsoleCommands\PackAll.vb" />
     <Compile Include="ConsoleCommands\UpdateAll.vb" />
     <Compile Include="ConsoleCommands\Zip.vb" />
-    <Compile Include="ContextMenuAction.vb" />
+    <Compile Include="ConsoleCoreMod.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
@@ -124,7 +124,7 @@
     <Compile Include="MenuActions\ProjectRun.vb" />
     <Compile Include="MenuActions\ToolsLanguage.vb" />
     <Compile Include="MenuActions\ToolsSettings.vb" />
-    <Compile Include="PluginInfo.vb" />
+    <Compile Include="WpfCoreMod.vb" />
     <Compile Include="AddLanguageItem.xaml.vb">
       <DependentUpon>AddLanguageItem.xaml</DependentUpon>
     </Compile>
@@ -138,6 +138,7 @@
     <Compile Include="SolutionExplorer.xaml.vb">
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StartupHelpers.vb" />
     <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="Tool Windows\ProjectExplorer.xaml.vb">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
@@ -177,6 +178,7 @@
     <Compile Include="Windows\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WpfCoreModBase.vb" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="SkyEditorBase" />

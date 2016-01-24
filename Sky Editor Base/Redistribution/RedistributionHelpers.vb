@@ -4,6 +4,8 @@ Imports SkyEditorBase.Utilities
 
 Namespace Redistribution
     Public Class RedistributionHelpers
+        Public Shared Event ApplicationRestartRequested(sender As Object, e As EventArgs)
+
         ''' <summary>
         ''' Runs the PrepareForDistribution method in all plugins, deleting any files that aren't distribution safe.
         ''' </summary>
@@ -152,7 +154,7 @@ Namespace Redistribution
                 ScheduleDelete(item)
             Next
             Manager.Dispose()
-            RestartProgram()
+            RequestRestartProgram()
             'Manager.ReloadPlugins()
         End Sub
 
@@ -236,11 +238,8 @@ Namespace Redistribution
         ''' <summary>
         ''' Restarts the application.
         ''' </summary>
-        Public Shared Sub RestartProgram()
-            Throw New NotImplementedException
-            ' Windows.Forms.Application.Restart()
-            'Application.Current.Shutdown()
-            'Application.Current.Shutdown(1)
+        Public Shared Sub RequestRestartProgram()
+            RaiseEvent ApplicationRestartRequested(Nothing, New EventArgs)
         End Sub
 
         Public Shared Function RequiredPlugins(Plugins As List(Of PluginInfo)) As List(Of PluginInfo)
@@ -273,7 +272,8 @@ Namespace Redistribution
                             End If
                         End If
                     Next
-                ElseIf p.Type = PluginInfo.PluginType.Language
+                ElseIf p.Type = PluginInfo.PluginType.Language Then
+
                     With Language.LanguageManager.Instance
                         .EnsureLanguageLoaded(p.Name)
                         If CInt(p.VersionString) <= .Languages(p.Name).ContainedObject.Revision Then

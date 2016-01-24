@@ -40,28 +40,6 @@ Public Class UiHelper
     End Function
 
     ''' <summary>
-    ''' Generates MenuItems from the given IEnumerable of ContextMenuAction.
-    ''' </summary>
-    ''' <param name="MenuItemInfo">IEnumerable of ContextMenuAction that will be used to create the MenuItems.</param>
-    ''' <returns></returns>
-    Public Shared Function GenerateContextMenuItems(MenuItemInfo As IEnumerable(Of ContextMenuAction)) As List(Of MenuItem)
-        If MenuItemInfo Is Nothing Then
-            Throw New ArgumentNullException(NameOf(MenuItemInfo))
-        End If
-
-        Dim output As New List(Of MenuItem)
-
-        For Each item In MenuItemInfo
-            Dim m As New MenuItem
-            m.Header = item.Header
-            m.Tag = item
-            output.Add(m)
-        Next
-
-        Return output
-    End Function
-
-    ''' <summary>
     ''' Generates MenuItems from the given IEnumerable of MenuItemInfo.
     ''' </summary>
     ''' <param name="MenuItemInfo">IEnumerable of MenuItemInfo that will be used to create the MenuItems.</param>
