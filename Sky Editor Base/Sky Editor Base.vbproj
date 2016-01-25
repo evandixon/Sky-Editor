@@ -159,6 +159,7 @@
     <Compile Include="ARDS\CodeGeneratorHelper.vb" />
     <Compile Include="ARDS\Manager.vb" />
     <Compile Include="ARDS\Region.vb" />
+    <Compile Include="BasicIniFile.vb" />
     <Compile Include="ConsoleCommand.vb" />
     <Compile Include="ConsoleCommandAsync.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />

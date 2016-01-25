@@ -5,10 +5,10 @@ Namespace MenuActions
     Public Class ExtractFarc
         Inherits MenuAction
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(FileFormats.Farc)}
+            Return {GetType(FileFormats.FarcF5)}
         End Function
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each target As FileFormats.Farc In Targets
+            For Each target As FileFormats.FarcF5 In Targets
                 Dim item = target
                 Dim f As New SkyEditorBase.Utilities.AsyncFor(PluginHelper.GetLanguageItem("Extracting files..."))
                 Await f.RunFor(Sub(count As Integer)

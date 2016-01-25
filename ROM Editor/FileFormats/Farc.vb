@@ -1,7 +1,11 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats
-    Public Class Farc
+    ''' <summary>
+    ''' Models a type 5 FARC file, one that does not contain embedded filenames.
+    ''' </summary>
+    Public Class FarcF5
         Inherits SkyEditorBase.GenericFile
         Implements iOpenableFile
 
@@ -29,6 +33,43 @@ Namespace FileFormats
                 Stream.WriteByte(FileReader.ReadByte)
             Next
         End Sub
+
+        ''' <summary>
+        ''' Extracts the FARC to the given directory.
+        ''' </summary>
+        ''' <param name="Directory">Directory to extract the FARC to.</param>
+        Public Async Function Extract(Directory As String) As Task
+            Dim asyncFor As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Extracting files..."))
+            Dim dic = GetFileDictionary()
+            Await asyncFor.RunFor(Sub(Count As Integer)
+                                      Dim filename As String
+                                      If dic.ContainsKey(Count) Then
+                                          filename = dic(Count)
+                                      Else
+                                          filename = Count.ToString
+                                      End If
+                                      Using f As New IO.FileStream(IO.Path.Combine(Directory, filename), IO.FileMode.OpenOrCreate)
+                                          ReadData(Count, f)
+                                      End Using
+                                  End Sub, 0, FileCount - 1, 1)
+        End Function
+
+        ''' <summary>
+        ''' Gets a dictionary matching file indexes to file names.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetFileDictionary() As Dictionary(Of Integer, String)
+            Dim out As New Dictionary(Of Integer, String)
+            Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Me.Filename) & ".txt"))
+            If IO.File.Exists(resourceFile) Then
+                Dim i As New BasicIniFile
+                i.OpenFile(resourceFile)
+                For Each item In i.Entries
+                    out.Add(CInt(item.Key), item.Value)
+                Next
+            End If
+            Return out
+        End Function
 
         Public Sub New()
             MyBase.New

@@ -1,0 +1,11 @@
+﻿28=wallpaper_main_perippa_01
+130=wallpaper_main_top01
+154=wallpaper_sub_skill01
+274=wallpaper_sub_correlation_03
+328=IMEV1301
+420=wallpaper_sub_cafe
+479=IMEV1302
+689=wallpaper_main_top02
+709=wallpaper_sub_bank
+819=wallpaper_sub_gold01
+999999=IMEV1303
