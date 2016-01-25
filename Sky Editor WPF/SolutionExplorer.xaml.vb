@@ -380,9 +380,7 @@ Public Class SolutionExplorer
 
                     If t.ParentProject IsNot Nothing Then
                         'Then we're at the project level
-                        PluginHelper.SetLoadingStatus("Opening file...")
                         t.ParentProject.AddExistingFile(t.ParentPath, w.FileName)
-                        PluginHelper.SetLoadingStatusFinished()
                     Else
                         'Then we're somewhere else?
                     End If

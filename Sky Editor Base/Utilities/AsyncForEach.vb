@@ -63,18 +63,64 @@ Namespace Utilities
             Await Task.WhenAll(tasks)
         End Function
 
-        Public Async Function RunForEach(Of T)(DelegateFunction As ForEachItemAsync(Of T), Collection As IEnumerable(Of T)) As Task
-            Dim tasks As New List(Of Task)
-            _opMax = Collection.Count
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="DelegateFunction"></param>
+        ''' <param name="Collection"></param>
+        ''' <param name="BatchSize">Number of tasks to run at once.  Must be at least 1.  Defaults to Environment.ProcessorCount.</param>
+        ''' <returns></returns>
+        Public Async Function RunForEach(Of T)(DelegateFunction As ForEachItemAsync(Of T), Collection As IEnumerable(Of T), Optional BatchSize As Integer? = Nothing) As Task
+            If Not BatchSize.HasValue OrElse BatchSize < 1 Then
+                BatchSize = Environment.ProcessorCount
+            End If
+            Dim taskItemQueue As New Queue(Of T)
             For Each item In Collection
-                Dim item2 = item 'Needed because we're running a lambda in a for statement.
-                Dim tTask = Task.Run(Async Function() As Task
-                                         Await DelegateFunction(item2)
-                                         OperationsCompleted += 1
-                                     End Function)
-                tasks.Add(tTask)
+                taskItemQueue.Enqueue(item)
             Next
-            Await Task.WhenAll(tasks)
+            _opMax = taskItemQueue.Count
+            Dim runningTasks As Integer = 0
+            Dim taskList As New List(Of Task)
+
+            'While there's still items in the collection to run, or if there's still items being processed
+            While (taskItemQueue.Count > 0 OrElse (taskItemQueue.Count = 0 AndAlso runningTasks > 0))
+                If runningTasks < BatchSize AndAlso taskItemQueue.Count > 0 Then
+                    'Then we can add another task
+                    Dim item = taskItemQueue.Dequeue 'Needed because we're running a lambda in a for statement.
+                    runningTasks += 1
+                    Dim tTask = Task.Run(Async Function() As Task
+                                             Await DelegateFunction(item)
+                                             OperationsCompleted += 1
+                                             runningTasks -= 1
+                                         End Function)
+                    taskList.Add(tTask)
+                Else
+                    'Then we must wait for another task to complete
+                    Await Task.WhenAny(taskList)
+                    'Remove completed tasks
+                    For count = taskList.Count - 1 To 0 Step -1
+                        Dim item = taskList(count)
+                        If item.IsCompleted Then
+                            taskList.RemoveAt(count)
+                        End If
+                    Next
+                End If
+            End While
+            'In case we somehow got out of the above loop, we want to make sure all tasks have completed
+            Await Task.WhenAll(taskList)
+
+            'Dim tasks As New List(Of Task)
+            '_opMax = Collection.Count
+            'For Each item In Collection
+            '    Dim item2 = item 'Needed because we're running a lambda in a for statement.
+            '    Dim tTask = Task.Run(Async Function() As Task
+            '                             Await DelegateFunction(item2)
+            '                             OperationsCompleted += 1
+            '                         End Function)
+            '    tasks.Add(tTask)
+            'Next
+            'Await Task.WhenAll(tasks)
         End Function
         Public Async Function RunForEachSync(Of T)(DelegateSub As ForEachItemAsync(Of T), Collection As IEnumerable(Of T)) As Task
             Dim tasks As New List(Of Task)

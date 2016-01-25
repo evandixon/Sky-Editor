@@ -10,34 +10,34 @@ Namespace Projects
             Dim filesToOpen As New List(Of String)
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Decompiling Scripts..."))
-            'Await f.RunForEachSync(Async Function(Item As String) As Task
-            '                           Dim unlua As New unluac(Item)
-            '                           Dim script As String = Await unlua.Decompile
-            '                           Dim dest = Item.Replace(scriptSource, scriptDestination)
-            '                           If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
-            '                               IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
-            '                           End If
-            '                           IO.File.WriteAllText(dest, script)
-            '                           IO.File.WriteAllText(dest & ".original", script)
+            Await f.RunForEach(Async Function(Item As String) As Task
+                                   Dim unlua As New unluac(Item)
+                                   Dim script As String = Await unlua.Decompile
+                                   Dim dest = Item.Replace(scriptSource, scriptDestination)
+                                   If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                       IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                                   End If
+                                   IO.File.WriteAllText(dest, script)
+                                   IO.File.WriteAllText(dest & ".original", script)
 
-            '                           filesToOpen.Add(dest)
-            '                       End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
-            Dim toConvert = IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories)
-            Dim done As Integer = 0
-            For Each item In toConvert
-                PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Converting Scripts... {0} of {1}"), done, toConvert.Length), done / toConvert.Length)
-                Dim unlua As New unluac(item)
-                Dim script As String = Await unlua.Decompile
-                Dim dest = item.Replace(scriptSource, scriptDestination)
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
-                End If
-                IO.File.WriteAllText(dest, script)
-                IO.File.WriteAllText(dest & ".original", script)
+                                   filesToOpen.Add(dest)
+                               End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
+            'Dim toConvert = IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories)
+            'Dim done As Integer = 0
+            'For Each item In toConvert
+            '    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Converting Scripts... {0} of {1}"), done, toConvert.Length), done / toConvert.Length)
+            '    Dim unlua As New unluac(item)
+            '    Dim script As String = Await unlua.Decompile
+            '    Dim dest = item.Replace(scriptSource, scriptDestination)
+            '    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+            '        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+            '    End If
+            '    IO.File.WriteAllText(dest, script)
+            '    IO.File.WriteAllText(dest & ".original", script)
 
-                filesToOpen.Add(dest)
-                done += 1
-            Next
+            '    filesToOpen.Add(dest)
+            '    done += 1
+            'Next
 
             PluginHelper.SetLoadingStatusFinished()
 
