@@ -1,7 +1,38 @@
 ﻿Imports SkyEditorBase
+Imports SkyEditorBase.Interfaces
+
 Namespace Projects
     Public Class DSModPackProject
         Inherits Project
+        Implements iContainer(Of ModpackInfo)
+
+        Public Property Info As ModpackInfo Implements Interfaces.iContainer(Of ModpackInfo).Item
+            Get
+                Return Me.Setting("ModpackInfo")
+            End Get
+            Set(value As ModpackInfo)
+                Me.Setting("ModpackInfo") = value
+            End Set
+        End Property
+
+        Public Property BaseRomProject As String
+            Get
+                Return Me.Setting("BaseRomProject")
+            End Get
+            Set(value As String)
+                Me.Setting("BaseRomProject") = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets the directory non-project mods are stored in.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Overridable Function GetSourceModsDir() As String
+            Return IO.Path.Combine(GetRootDirectory, "Mods")
+        End Function
+
+        'Gets the directory mods in the current modpack build are stored in.
         Public Overridable Function GetModsDir() As String
             Return IO.Path.Combine(GetModPackDir, "Mods")
         End Function
@@ -14,13 +45,23 @@ Namespace Projects
         Public Overridable Function GetModPackDir() As String
             Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Modpack Files")
         End Function
+
+        ''' <summary>
+        ''' Gets the directory the modpack will be outputted to.
+        ''' </summary>
+        ''' <returns></returns>
         Public Overridable Function OutputDir() As String
             Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Output")
         End Function
 
         Public Overridable Function GetBaseRomFilename(Solution As Solution) As String
-            Dim baseRomProject As BaseRomProject = Solution.GetProjectsByName(Solution.Setting("BaseRomProject")).FirstOrDefault
-            Return baseRomProject.GetProjectItemByPath("/BaseRom").GetFilename
+            Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
+            Return p.GetProjectItemByPath("/BaseRom").GetFilename
+        End Function
+
+        Public Overrides Function CanBuild(Solution As Solution) As Boolean
+            Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
+            Return (p IsNot Nothing)
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
@@ -29,7 +70,7 @@ Namespace Projects
             Dim modpackModsDir = GetModsDir()
             Dim modpackToolsDir = GetToolsDir()
             Dim modpackToolsPatchersDir = GetPatchersDir()
-
+            Dim modsSourceDir = GetSourceModsDir()
 
             If Not IO.Directory.Exists(modpackDir) Then
                 IO.Directory.CreateDirectory(modpackDir)
@@ -43,9 +84,35 @@ Namespace Projects
             If Not IO.Directory.Exists(modpackToolsPatchersDir) Then
                 IO.Directory.CreateDirectory(modpackToolsPatchersDir)
             End If
+            If Not IO.Directory.Exists(modsSourceDir) Then
+                IO.Directory.CreateDirectory(modsSourceDir)
+            End If
             If Not IO.Directory.Exists(OutputDir) Then
                 IO.Directory.CreateDirectory(OutputDir)
             End If
+
+            'Clear the files that are currently in the modpack directory
+            For Each item In IO.Directory.GetFiles(modpackDir)
+                IO.File.Delete(item)
+            Next
+
+            'Copy external mods
+            For Each item In IO.Directory.GetFiles(modsSourceDir)
+                Dim sourceFilename = item
+                Dim destFilename = IO.Path.Combine(modpackModsDir, IO.Path.GetFileName(sourceFilename))
+                IO.File.Copy(sourceFilename, destFilename, True)
+            Next
+
+            'Copy mods from other projects
+            For Each item In Me.GetReferences(Solution)
+                If TypeOf item Is GenericModProject Then
+                    Dim sourceFilename = DirectCast(item, GenericModProject).GetModOutputFilename(BaseRomProject)
+                    Dim destFilename = IO.Path.Combine(modpackModsDir, IO.Path.GetFileName(sourceFilename))
+                    If IO.File.Exists(sourceFilename) Then
+                        IO.File.Copy(sourceFilename, destFilename, True)
+                    End If
+                End If
+            Next
 
             Dim patchers As New List(Of FilePatcher)
             '-Copy xdelta
@@ -77,10 +144,10 @@ Namespace Projects
 
             CopyPatcherProgram(Solution)
 
-            IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Me.Setting("ModpackInfo")))
+            IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Me.Info))
 
             '-Zip it
-            Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Setting("ModName") & " " & Me.Setting("ModVersion") & "-" & patcherVersion & ".zip"))
+            Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
 
             'Apply patch
             PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))

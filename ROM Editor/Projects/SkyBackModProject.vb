@@ -21,21 +21,20 @@ Namespace Projects
             Dim BACKdir As String = IO.Path.Combine(projectDir, "Backgrounds")
             Me.CreateDirectory("Backgrounds")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "BACK"), "*.bgp")
-            For count = 0 To backFiles.Count - 1
-                PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting backgrounds..."), count / backFiles.Count)
-                Dim item = backFiles(count)
-                Using b As New FileFormats.BGP(item)
-                    Dim image = Await b.GetImage
-                    Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
-                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
-                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
-                    End If
-                    image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
-                    IO.File.Copy(newFilename, newFilename & ".original")
-                    Await Me.AddExistingFile("Backgrounds", newFilename)
-                End Using
-            Next
-            PluginHelper.SetLoadingStatusFinished()
+            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
+
+            Await f.RunForEach(Async Function(Item As String) As Task
+                                   Using b As New FileFormats.BGP(Item)
+                                       Dim image = Await b.GetImage
+                                       Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
+                                       If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
+                                           IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
+                                       End If
+                                       image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
+                                       IO.File.Copy(newFilename, newFilename & ".original")
+                                       Me.AddExistingFile("Backgrounds", newFilename)
+                                   End Using
+                               End Function, backFiles)
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task

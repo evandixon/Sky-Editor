@@ -10,7 +10,7 @@ Namespace MenuActions
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
             If TypeOf Obj Is BaseRomProject Then
-                Return DirectCast(Obj, BaseRomProject).Setting("System") = "3DS" AndAlso DirectCast(Obj, BaseRomProject).Setting("GameCode") = GameStrings.PSMDCode
+                Return DirectCast(Obj, BaseRomProject).RomSystem = "3DS" AndAlso DirectCast(Obj, BaseRomProject).GameCode = GameStrings.PSMDCode
             Else
                 Return False
             End If

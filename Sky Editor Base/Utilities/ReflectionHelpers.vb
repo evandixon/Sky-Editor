@@ -92,6 +92,10 @@ Namespace Utilities
             Return match
         End Function
 
+        Public Shared Function IsMethodOverridden(Method As MethodInfo) As Boolean
+            Return Not (Method.GetBaseDefinition = Method)
+        End Function
+
     End Class
 
 End Namespace

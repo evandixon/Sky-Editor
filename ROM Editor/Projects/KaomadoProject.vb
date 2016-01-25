@@ -27,10 +27,11 @@ Namespace Projects
             Dim toAdd = IO.Directory.GetFiles(portraitDir, "*", IO.SearchOption.AllDirectories)
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Opening Files..."))
-            Await f.RunForEachSync(Async Function(Item As String) As Task
+            Await f.RunForEachSync(Function(Item As String) As Task
                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(rootDir, "")
                                        Me.CreateDirectory(d)
-                                       Await Me.AddExistingFile(d, Item)
+                                       Me.AddExistingFile(d, Item)
+                                       Return Task.CompletedTask
                                    End Function, toAdd)
             PluginHelper.SetLoadingStatusFinished()
         End Function

@@ -3,6 +3,7 @@
 Public Module ConsoleModule
     Sub ConsoleMain(Manager As PluginManager)
         While True
+            Dim paramRegex As New Text.RegularExpressions.Regex("(\"".*?\"")|(\S+)", Text.RegularExpressions.RegexOptions.Compiled)
             Dim line = Console.ReadLine()
             Dim cmdParts = line.Split(" ".ToCharArray, 2)
             Dim cmd = cmdParts(0).ToLower
@@ -21,7 +22,11 @@ Public Module ConsoleModule
                 Next
             ElseIf Manager.GetConsoleCommands.Keys.Contains(cmd) Then
                 'Todo: split arg on spaces, while respecting quotation marks
-                Dim t = Manager.GetConsoleCommands(cmd).MainAsync({arg})
+                Dim args As New List(Of String)
+                For Each item As Text.RegularExpressions.Match In paramRegex.Matches(arg)
+                    args.Add(item.Value)
+                Next
+                Dim t = Manager.GetConsoleCommands(cmd).MainAsync(args.ToArray)
                 t.Wait()
             Else
                 Console.WriteLine(String.Format("""{0}"" is not a recognizable command.", cmd))

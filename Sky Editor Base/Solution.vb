@@ -358,9 +358,45 @@ Public Class Solution
         Return From p In GetAllProjects() Where p.Name.ToLower = Name.ToLower
     End Function
 
-    Public Overridable Function Build() As Task
-        Return Task.CompletedTask
+    Public Overridable Function GetProjectsToBuild() As IEnumerable(Of Project)
+        Return Me.GetAllProjects
     End Function
+
+    Public Overridable Async Function Build() As Task
+        Dim toBuild As New Dictionary(Of Project, Boolean)
+
+        For Each item In GetProjectsToBuild()
+            If Not item.HasCircularReferences(Me) Then
+                toBuild.Add(item, False)
+            Else
+                PluginHelper.Writeline("Project " & item.Name & " has a circular reference.  Skipping its compilation.", LineType.Error)
+            End If
+        Next
+
+        For Each item In toBuild
+            'If this project has not been built
+            If Not item.Value Then
+                'Then build the project, but build its dependencies first
+                Await BuildProjects(toBuild, item.Key)
+            End If
+        Next
+
+        PluginHelper.SetLoadingStatusFinished()
+    End Function
+
+    Private Async Function BuildProjects(ToBuild As Dictionary(Of Project, Boolean), CurrentProject As Project) As Task
+        Dim built As Integer = (From v In ToBuild.Values Where v = True).Count
+        PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Building projects... ({0} of {1})"), built, ToBuild.Count), built / ToBuild.Count)
+
+        For Each item In CurrentProject.GetReferences(Me)
+            Await BuildProjects(ToBuild, item)
+        Next
+        If Not ToBuild(CurrentProject) Then
+            Await CurrentProject.Build(Me)
+            ToBuild(CurrentProject) = True
+        End If
+    End Function
+
 
 #Region "Create New"
     ''' <summary>

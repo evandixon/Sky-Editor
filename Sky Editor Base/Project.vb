@@ -130,7 +130,40 @@ Public Class Project
     ''' <returns></returns>
     Public Property Filename As String
 
-    Public Property Settings As Dictionary(Of String, Object)
+    Protected Property Settings As Dictionary(Of String, Object)
+
+    Protected Property Setting(SettingName As String) As Object
+        Get
+            If Settings.ContainsKey(SettingName) Then
+                Return Settings(SettingName)
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(value As Object)
+            If Settings.ContainsKey(SettingName) Then
+                Settings(SettingName) = value
+            Else
+                Settings.Add(SettingName, value)
+            End If
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' List of all projects in the current solution this project references.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property ProjectReferences As List(Of String)
+        Get
+            If Setting("ProjectReferences") Is Nothing Then
+                Setting("ProjectReferences") = New List(Of String)
+            End If
+            Return Setting("ProjectReferences")
+        End Get
+        Set(value As List(Of String))
+            Setting("ProjectReferences") = value
+        End Set
+    End Property
 #End Region
 
 #Region "Events"
@@ -398,7 +431,7 @@ Public Class Project
         Return PluginManager.GetInstance.IOFiltersString
     End Function
 
-    Public Overridable Function AddExistingFile(ParentProjectPath As String, FilePath As String) As Task
+    Public Overridable Sub AddExistingFile(ParentProjectPath As String, FilePath As String)
         Dim item = GetProjectItemByPath(ParentProjectPath)
         Dim filename = IO.Path.GetFileName(FilePath)
         If item IsNot Nothing Then
@@ -427,8 +460,7 @@ Public Class Project
         Else
             Throw New IO.DirectoryNotFoundException("Cannot add a file at the given path: " & ParentProjectPath)
         End If
-        Return Task.CompletedTask
-    End Function
+    End Sub
 
     Public Overridable Function CanDeleteFile(FilePath As String) As Boolean
         Return (GetProjectItemByPath(FilePath) IsNot Nothing)
@@ -451,32 +483,60 @@ Public Class Project
         End If
     End Sub
 
-    Public Property Setting(SettingName As String) As Object
-        Get
-            If Settings.ContainsKey(SettingName) Then
-                Return Settings(SettingName)
-            Else
-                Return Nothing
-            End If
-        End Get
-        Set(value As Object)
-            If Settings.ContainsKey(SettingName) Then
-                Settings(SettingName) = value
-            Else
-                Settings.Add(SettingName, value)
-            End If
-        End Set
-    End Property
-
     Public Overridable Function Build(Solution As Solution) As Task
         Return Task.CompletedTask
+    End Function
+
+    Public Overridable Function CanBuild(Solution As Solution) As Boolean
+        Return False
     End Function
 
     Public Overridable Function GetRootDirectory() As String
         Return IO.Path.GetDirectoryName(Me.Filename)
     End Function
 
+    Public Function GetReferences(Solution As Solution) As IEnumerable(Of Project)
+        Dim out As New List(Of Project)
+        For Each item In ProjectReferences
+            Dim p = Solution.GetProjectsByName(item).FirstOrDefault
+            If p IsNot Nothing Then
+                out.Add(p)
+            End If
+        Next
+        Return out
+    End Function
 
+    ''' <summary>
+    ''' Returns whether or not this project contains a circular reference back to itself.
+    ''' It does not detect whether other projects this one references have their own circular references.
+    ''' </summary>
+    ''' <param name="Solution"></param>
+    ''' <returns></returns>
+    Public Function HasCircularReferences(Solution As Solution) As Boolean
+        Dim tree As New List(Of Project)
+        FillReferenceTree(Solution, tree, Me)
+        Return tree.Contains(Me)
+    End Function
+
+    ''' <summary>
+    ''' Fills Tree with all the references of the current item.
+    ''' Stops if the last item added is the current instance of project.
+    ''' </summary>
+    ''' <param name="Solution"></param>
+    ''' <param name="Tree"></param>
+    ''' <param name="CurrentItem"></param>
+    Private Sub FillReferenceTree(Solution As Solution, Tree As List(Of Project), CurrentItem As Project)
+        For Each item In CurrentItem.GetReferences(Solution)
+            Tree.Add(item)
+            If item Is Me Then
+                Exit Sub
+            Else
+                If Not CurrentItem.HasCircularReferences(Solution) Then
+                    FillReferenceTree(Solution, Tree, item)
+                End If
+            End If
+        Next
+    End Sub
 
 #Region "Open"
     ''' <summary>

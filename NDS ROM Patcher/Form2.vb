@@ -26,7 +26,7 @@ Public Class Form2
             IO.Directory.CreateDirectory(modTempDirectory)
         End If
 
-        Dim modFiles = IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.dsmod", IO.SearchOption.TopDirectoryOnly)
+        Dim modFiles = IO.Directory.GetFiles(IO.Path.Combine(currentDirectory, "Mods"), "*.mod", IO.SearchOption.TopDirectoryOnly)
         Dim completed As Integer = 0
 
         lblStatus.Text = "Unpacking Mods..."

@@ -5,6 +5,24 @@ Namespace Projects
     Public Class BaseRomProject
         Inherits SkyEditorBase.Project
 
+        Public Property RomSystem As String
+            Get
+                Return Setting("System")
+            End Get
+            Set(value As String)
+                Setting("System") = value
+            End Set
+        End Property
+
+        Public Property GameCode As String
+            Get
+                Return Setting("GameCode")
+            End Get
+            Set(value As String)
+                Setting("GameCode") = value
+            End Set
+        End Property
+
         Public Overrides Function CanCreateDirectory(Path As String) As Boolean
             Return False
         End Function

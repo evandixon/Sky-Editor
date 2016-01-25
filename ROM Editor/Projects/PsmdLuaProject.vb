@@ -6,7 +6,7 @@ Namespace Projects
             Await MyBase.Initialize(Solution)
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
-            Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "Scripts")
+            Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory)
             Dim filesToOpen As New List(Of String)
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Decompiling Scripts..."))
@@ -39,38 +39,48 @@ Namespace Projects
             '    done += 1
             'Next
 
+            'PluginHelper.SetLoadingStatusFinished()
+
+            'Me.CreateDirectory("", "Scripts")
+            'For Each item In filesToOpen
+
+            '    Dim pathParts = item.ToLower.Replace(Me.GetRootDirectory.ToLower, "").Replace("\", "/").TrimStart("/").Split("/")
+            '    Dim parentPath As New Text.StringBuilder
+            '    For count = 0 To pathParts.Length - 3
+            '        parentPath.Append(pathParts(count))
+            '        parentPath.Append("/")
+            '    Next
+            '    Dim immediateParentDir = pathParts(pathParts.Length - 2)
+            '    Dim parentPathString = parentPath.ToString.TrimEnd("/")
+            '    'ensure the directory exists
+            '    CreateDirectory(parentPathString, immediateParentDir)
+
+            '    Me.AddExistingFile(parentPathString & "/" & immediateParentDir, item)
+
+            '    ''Create project directory if it doesn't exist
+            '    'Dim projDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/").Replace(IO.Path.GetFileName(item), "")
+            '    'If Not CurrentProject.Files.ContainsKey(projDir) Then
+            '    '    CurrentProject.CreateDirectory(projDir)
+            '    'End If
+            '    ''Add file to project
+            '    'CurrentProject.OpenFile(item, "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/"), False)
+            'Next
+            Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Opening Files..."))
+            Await f2.RunForEachSync(Function(Item As String) As Task
+                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "")
+                                        Me.CreateDirectory(d)
+                                        Me.AddExistingFile(d, Item)
+                                        Return Task.CompletedTask
+                                    End Function, filesToOpen)
             PluginHelper.SetLoadingStatusFinished()
-
-            Me.CreateDirectory("", "Scripts")
-            For Each item In filesToOpen
-
-                Dim pathParts = item.ToLower.Replace(Me.GetRootDirectory.ToLower, "").Replace("\", "/").TrimStart("/").Split("/")
-                Dim parentPath As New Text.StringBuilder
-                For count = 0 To pathParts.Length - 3
-                    parentPath.Append(pathParts(count))
-                    parentPath.Append("/")
-                Next
-                Dim immediateParentDir = pathParts(pathParts.Length - 2)
-                Dim parentPathString = parentPath.ToString.TrimEnd("/")
-                'ensure the directory exists
-                CreateDirectory(parentPathString, immediateParentDir)
-
-                Await Me.AddExistingFile(parentPathString & "/" & immediateParentDir, item)
-
-                ''Create project directory if it doesn't exist
-                'Dim projDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/").Replace(IO.Path.GetFileName(item), "")
-                'If Not CurrentProject.Files.ContainsKey(projDir) Then
-                '    CurrentProject.CreateDirectory(projDir)
-                'End If
-                ''Add file to project
-                'CurrentProject.OpenFile(item, "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/"), False)
-            Next
 
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
-            Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory, "Scripts")
+            Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory)
+
+            Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Compiling Scripts..."))
             Await f.RunForEach(Async Function(Item As String) As Task
@@ -81,7 +91,7 @@ Namespace Projects
                                        Dim dest = Item.Replace(scriptSource, scriptDestination)
                                        Await PluginHelper.RunProgram(PluginHelper.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""")
                                    End If
-                               End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
+                               End Function, toCompile)
             Await MyBase.Build(Solution)
         End Function
 

@@ -19,7 +19,7 @@ Namespace Projects
 
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
-            Await f.RunForEach(Async Function(Item As String) As Task
+            Await f.RunForEach(Function(Item As String) As Task
                                    Using b As New FileFormats.CteImage(Item)
                                        Dim image = b.ContainedImage
                                        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
@@ -31,7 +31,8 @@ Namespace Projects
 
                                        Dim internalDir = IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "")
                                        Me.CreateDirectory(internalDir)
-                                       Await Me.AddExistingFile(internalDir, newFilename)
+                                       Me.AddExistingFile(internalDir, newFilename)
+                                       Return Task.CompletedTask
                                    End Using
                                End Function, backFiles)
 

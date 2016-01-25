@@ -72,7 +72,7 @@ Namespace Projects
             Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
             personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
             personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"))
-            Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
+            Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
             PluginHelper.StopLoading()
         End Function
 

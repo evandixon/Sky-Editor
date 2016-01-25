@@ -202,7 +202,6 @@
     <Compile Include="PluginHelper.vb" />
     <Compile Include="PluginManager.vb" />
     <Compile Include="Project.vb" />
-    <Compile Include="ProjectOld.vb" />
     <Compile Include="Redistribution\PluginInfo.vb" />
     <Compile Include="Solution.vb" />
     <Compile Include="Utilities\AsyncFileCopier.vb" />

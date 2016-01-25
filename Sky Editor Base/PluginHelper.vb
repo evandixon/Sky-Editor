@@ -366,12 +366,6 @@ Public Class PluginHelper
         IO.Directory.Delete(DirectoryPath, True)
     End Sub
 
-#Region "Reflection Helpers"
-    Public Shared Function IsMethodOverridden(Method As MethodInfo) As Boolean
-        Return Not (Method.GetBaseDefinition = Method)
-    End Function
-#End Region
-
     ''' <summary>
     ''' Shows the application's underlying console to the user.
     ''' </summary>
