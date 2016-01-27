@@ -13,32 +13,32 @@ Public Class ThreeDSPatcherCore
     End Sub
 
     Public Overrides Async Function RunPatch(Mods As IEnumerable(Of ModJson), Optional DestinationPath As String = Nothing) As Task
+        Dim args = Environment.GetCommandLineArgs
         Dim currentDirectory = Environment.CurrentDirectory
         Dim ROMDirectory = IO.Path.Combine(currentDirectory, "Tools", "ndstemp")
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools", "modstemp")
         Dim modsDirectory = IO.Path.Combine(currentDirectory, "mods")
+        Dim output As String = IO.Path.Combine(currentDirectory, "Tools", "PatchedROM.3ds")
+        Dim outputCia As String = IO.Path.Combine(currentDirectory, "Tools", "PatchedROM.cia")
         Dim j As New JavaScriptSerializer
         Dim info As ModpackInfo = j.Deserialize(Of ModpackInfo)(IO.File.ReadAllText(IO.Path.Combine(currentDirectory, "Mods", "Modpack Info")))
 
-        Dim hansMode As Boolean
-        If IO.Path.GetFileName(SelectedFilename).Replace("/", "\").Trim("\").ToLower.Replace(".bin", "").EndsWith("romfs") Then
-            hansMode = True
-        Else
-            hansMode = False
-        End If
+        Dim hansMode As Boolean = args.Contains("-hans")
 
         'Extract the NDS ROM
-        RaiseProgressChanged(0, "Extracting the 3DS ROM...")
-        If Not IO.Directory.Exists(ROMDirectory) Then
-            IO.Directory.CreateDirectory(ROMDirectory)
-        End If
+        If IO.File.Exists(SelectedFilename) Then
+            RaiseProgressChanged(0, "Extracting the 3DS ROM...")
+            If Not IO.Directory.Exists(ROMDirectory) Then
+                IO.Directory.CreateDirectory(ROMDirectory)
+            End If
 
-        If hansMode Then
-            Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
-            Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
-            Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
-            Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
-            If IO.File.Exists(SelectedFilename) Then
+            'Is the input a romfs.bin?
+            If SelectedFilename.ToLower.EndsWith(".romfs") OrElse SelectedFilename.ToLower.EndsWith("romfs.bin") Then
+                hansMode = True
+                Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
+                Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
+                Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
+                Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
                 'It's a romfs.bin file
 
                 If Not IO.Directory.Exists(ROMDirectory) Then
@@ -65,39 +65,37 @@ Public Class ThreeDSPatcherCore
 
                 Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
             Else
-                'WARNING: untested, possibly redundant
-                'It's a romfs directory
-
-                Dim files As New List(Of Task)
-                For Each item In IO.Directory.GetFiles(SelectedFilename, "*", IO.SearchOption.AllDirectories)
-                    Dim source = item
-                    Dim dest = item.Replace(SelectedFilename, ROMDirectory)
-                    files.Add(Task.Run(New Action(Sub()
-                                                      If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
-                                                          IO.Directory.CreateDirectory(dest)
-                                                      End If
-                                                      IO.File.Copy(source, dest, True)
-                                                  End Sub)))
-                Next
-                Await Task.WhenAll(files)
+                'We're dealing with a .3DS file
+                Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
+                Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
+                Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
+                Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
+                Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
+                'Unpack portions
+                Await ProcessHelper.RunCTRTool($"-p --exheader=""{exHeaderPath}"" ""{SelectedFilename}""")
+                Await ProcessHelper.RunCTRTool($"-p --exefs=""{exefsPath}"" ""{SelectedFilename}""")
+                Await ProcessHelper.RunCTRTool($"-p --romfs=""{romfsPath}"" ""{SelectedFilename}""")
+                'Unpack romfs
+                Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+                'Unpack exefs
+                Await ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
+                IO.File.Delete(exefsPath)
+                IO.File.Delete(romfsPath)
             End If
-        Else
-            'We're dealing with a .3DS file
-            Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
-            Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
-            Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
-            Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
-            Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
-            'Unpack portions
-            Await ProcessHelper.RunCTRTool($"-p --exheader=""{exHeaderPath}"" ""{SelectedFilename}""")
-            Await ProcessHelper.RunCTRTool($"-p --exefs=""{exefsPath}"" ""{SelectedFilename}""")
-            Await ProcessHelper.RunCTRTool($"-p --romfs=""{romfsPath}"" ""{SelectedFilename}""")
-            'Unpack romfs
-            Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
-            'Unpack exefs
-            Await ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
-            IO.File.Delete(exefsPath)
-            IO.File.Delete(romfsPath)
+        ElseIf IO.Directory.Exists(SelectedFilename) Then
+            RaiseProgressChanged(0, "Copying Files...")
+            Dim tasks As New List(Of Task)
+            For Each item In IO.Directory.GetFiles(SelectedFilename, "*", IO.SearchOption.AllDirectories)
+                Dim item2 = item
+                tasks.Add(Task.Run(Sub()
+                                       Dim dest As String = item.Replace(SelectedFilename, ROMDirectory)
+                                       If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                           IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                                       End If
+                                       IO.File.Copy(item, dest, True)
+                                   End Sub))
+            Next
+            Await Task.WhenAll(tasks)
         End If
 
         'Apply the Mods
@@ -143,25 +141,26 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
             If destination IsNot Nothing Then
                 Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
                 Dim romfsPath = IO.Path.Combine(ROMDirectory, "romfsRepacked.bin")
-                Dim romfsTrimmedPath = IO.Path.Combine(ROMDirectory, "romfsRepackedTrimmed.bin")
+                Dim romfsTrimmedPath = romfsPath 'IO.Path.Combine(ROMDirectory, "romfsRepackedTrimmed.bin")
                 Dim hansName As String = info.Name.Replace(" ", "").Replace("é", "e")
-                Dim shortName As String = info.shortname
+                Dim shortName As String = info.ShortName
 
                 'Repack romfs
                 Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
                                      $"-romfs ""{romfsDir}"" ""{romfsPath}""")
 
-                'Trim the first part of the romfs
-                Const HansRomfsTrim As Integer = &H1000
-                Using source As New IO.FileStream(romfsPath, IO.FileMode.Open, IO.FileAccess.ReadWrite)
-                    Using dest As New IO.FileStream(romfsTrimmedPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite)
-                        dest.SetLength(source.Length - HansRomfsTrim)
-                        source.Seek(HansRomfsTrim, IO.SeekOrigin.Begin)
-                        dest.Seek(0, IO.SeekOrigin.Begin)
-                        source.CopyTo(dest)
-                        dest.Flush()
-                        End Using
-                    End Using
+                'Apparently this isn't needed anymore, although I haven't been able to successfully test this
+                ''Trim the first part of the romfs
+                'Const HansRomfsTrim As Integer = &H1000
+                'Using source As New IO.FileStream(romfsPath, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+                '    Using dest As New IO.FileStream(romfsTrimmedPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite)
+                '        dest.SetLength(source.Length - HansRomfsTrim)
+                '        source.Seek(HansRomfsTrim, IO.SeekOrigin.Begin)
+                '        dest.Seek(0, IO.SeekOrigin.Begin)
+                '        source.CopyTo(dest)
+                '        dest.Flush()
+                '    End Using
+                'End Using
 
                 'Copy the files
                 If Not IO.Directory.Exists(destination) Then
@@ -227,7 +226,7 @@ ShowFolderDialog3DS: If d.ShowDialog = DialogResult.OK Then
                 RaiseProgressChanged(1, "Patching canceled by user")
             End If
 
-        Else
+        Else '.3DS mode
             'Choose an output file
             If DestinationPath Is Nothing Then
 ShowSaveDialog3DS: Dim s As New SaveFileDialog
@@ -245,20 +244,44 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
 
             'If output file chosen, repack then copy
             If destination IsNot Nothing Then
-                If destination.ToLower.EndsWith(".cia") Then
-                    'Todo: output to cia
-                    MessageBox.Show("Cia conversion is currently not supported.  Exporting as a .3DS file.  It is recommended to rename the output file once conversion is complete.")
-                End If
-                'Else
-                'Output to .3DS
+                'Output to .3DS first
                 Dim exeFS As String = IO.Path.Combine(ROMDirectory, "exefs")
                 Dim romFS As String = IO.Path.Combine(ROMDirectory, "romfs")
                 Dim exHeader As String = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
-                Dim output As String = IO.Path.Combine(currentDirectory, "PatchedROM.3ds")
+
+                'To save lots of time, we're NOT going to compress code.bin
+                'Because of this, we must update the exHeader to not expect a compressed code.bin
+                Using f As New IO.FileStream(exHeader, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+                    f.Seek(&HD, IO.SeekOrigin.Begin)
+                    Dim sciD = f.ReadByte
+
+                    sciD = sciD And &HFE 'We want to set bit 1 to 0 to avoid using a compressed code.bin
+
+
+                    If destination.ToLower.EndsWith(".cia") Then
+                        'If we're going to build a cia later, let's go ahead and update the exheader.
+                        sciD = sciD Or 2
+                    End If
+
+
+                    f.Seek(&HD, IO.SeekOrigin.Begin)
+                    f.WriteByte(sciD)
+                    f.Flush()
+                End Using
+
+                'Run 3DS Builder
                 Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
-                                     $"""{exeFS}"" ""{romFS}"" ""{exHeader}"" ""{output}""")
-                IO.File.Copy(IO.Path.Combine(currentDirectory, "PatchedROM.3ds"), destination, True)
-                'End If
+                                     $"""{exeFS}"" ""{romFS}"" ""{exHeader}"" ""{output}""", True) 'Add -compressCode to compress code.bin
+
+
+                If destination.ToLower.EndsWith(".cia") Then
+                    Await CiaConversion.ConvertToCia(output, outputCia)
+                    IO.File.Delete(output)
+                    IO.File.Copy(outputCia, destination, True)
+                Else
+                    IO.File.Copy(output, destination, True)
+                End If
+
                 RaiseProgressChanged(1, "Ready")
             Else
                 RaiseProgressChanged(1, "Patching canceled by user")
@@ -267,7 +290,8 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
 
         'Cleanup
         If IO.Directory.Exists(ROMDirectory) Then IO.Directory.Delete(ROMDirectory, True)
-        If IO.File.Exists(IO.Path.Combine(currentDirectory, "PatchedROM.3ds")) Then IO.File.Delete(IO.Path.Combine(currentDirectory, "PatchedROM.3ds"))
+        If IO.File.Exists(output) Then IO.File.Delete(output)
+        If IO.File.Exists(outputCia) Then IO.File.Delete(outputCia)
     End Function
 
     Public Overrides Function SupportsMod(ModToCheck As ModJson) As Boolean

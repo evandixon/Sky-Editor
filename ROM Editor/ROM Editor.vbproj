@@ -95,6 +95,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />
@@ -194,6 +195,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="App.ico" />
+    <Content Include="ROM Editor\3DS Builder.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ROM Editor\farc\image_2d.txt" />
     <Content Include="ROM Editor\ffmpeg\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -225,7 +229,13 @@
     <Content Include="ROM Editor\lua\wlua5.1.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ROM Editor\makerom.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ROM Editor\PSMD English Soundtrack.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROM Editor\rom_tool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROM Editor\unluac.jar">

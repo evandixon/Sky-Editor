@@ -17,11 +17,27 @@ Public Class NDSPatcherCore
         Dim modTempDirectory = IO.Path.Combine(currentDirectory, "Tools/modstemp")
 
         'Extract the NDS ROM
-        RaiseProgressChanged(0, "Extracting the NDS ROM...")
-        If Not IO.Directory.Exists(ROMDirectory) Then
-            IO.Directory.CreateDirectory(ROMDirectory)
+        If IO.File.Exists(SelectedFilename) Then
+            RaiseProgressChanged(0, "Extracting the NDS ROM...")
+            If Not IO.Directory.Exists(ROMDirectory) Then
+                IO.Directory.CreateDirectory(ROMDirectory)
+            End If
+            Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SelectedFilename, ROMDirectory))
+        Else
+            RaiseProgressChanged(0, "Copying Files...")
+            Dim tasks As New List(Of Task)
+            For Each item In IO.Directory.GetFiles(SelectedFilename, "*", IO.SearchOption.AllDirectories)
+                Dim item2 = item
+                tasks.Add(Task.Run(Sub()
+                                       Dim dest As String = item.Replace(SelectedFilename, ROMDirectory)
+                                       If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                                           IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                                       End If
+                                       IO.File.Copy(item, dest, True)
+                                   End Sub))
+            Next
+            Await Task.WhenAll(tasks)
         End If
-        Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/ndstool.exe"), String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", SelectedFilename, ROMDirectory))
 
         'Apply the Mods
         Const RepackMessage As String = "Repacking the ROM..."

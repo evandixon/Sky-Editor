@@ -106,6 +106,11 @@ Namespace Projects
                     Setting("GameCode") = threeDS.TitleID
                     threeDS.Dispose()
             End Select
+
+            Dim filename = Me.GetProjectItemByPath("/BaseRom").GetFilename
+            DeleteFile("/BaseRom")
+            IO.File.Delete(filename)
+
             PluginHelper.SetLoadingStatusFinished()
         End Sub
 

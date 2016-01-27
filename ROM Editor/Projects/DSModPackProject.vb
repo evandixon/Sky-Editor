@@ -24,6 +24,43 @@ Namespace Projects
             End Set
         End Property
 
+        Public Property Output3DSFile As Boolean
+            Get
+                If Me.Setting("Output3DSFile") Is Nothing Then
+                    Me.Setting("Output3DSFile") = True
+                End If
+                Return Me.Setting("Output3DSFile")
+            End Get
+            Set(value As Boolean)
+                Me.Setting("Output3DSFile") = value
+            End Set
+        End Property
+
+        Public Property OutputCIAFile As Boolean
+            Get
+                If Me.Setting("OutputCIAFile") Is Nothing Then
+                    Me.Setting("OutputCIAFile") = False
+                End If
+                Return Me.Setting("OutputCIAFile")
+            End Get
+            Set(value As Boolean)
+                Me.Setting("OutputCIAFile") = value
+            End Set
+        End Property
+
+        Public Property OutputHans As Boolean
+            Get
+                If Me.Setting("OutputHans") Is Nothing Then
+                    Me.Setting("OutputHans") = False
+                End If
+                Return Me.Setting("OutputHans")
+            End Get
+            Set(value As Boolean)
+                Me.Setting("OutputHans") = value
+            End Set
+        End Property
+
+
         ''' <summary>
         ''' Gets the directory non-project mods are stored in.
         ''' </summary>
@@ -56,7 +93,8 @@ Namespace Projects
 
         Public Overridable Function GetBaseRomFilename(Solution As Solution) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
-            Return p.GetProjectItemByPath("/BaseRom").GetFilename
+            Return p.GetRawFilesDir
+            ' Return p.GetProjectItemByPath("/BaseRom").GetFilename
         End Function
 
         Public Overrides Function CanBuild(Solution As Solution) As Boolean
@@ -72,9 +110,16 @@ Namespace Projects
             Dim modpackToolsPatchersDir = GetPatchersDir()
             Dim modsSourceDir = GetSourceModsDir()
 
-            If Not IO.Directory.Exists(modpackDir) Then
-                IO.Directory.CreateDirectory(modpackDir)
+            If IO.Directory.Exists(modpackDir) Then
+                'Clear the files that are currently in the modpack directory
+                For Each item In IO.Directory.GetFiles(modpackDir, "*", IO.SearchOption.AllDirectories)
+                    IO.File.Delete(item)
+                Next
+                IO.Directory.Delete(modpackDir, True)
             End If
+            IO.Directory.CreateDirectory(modpackDir)
+
+
             If Not IO.Directory.Exists(modpackModsDir) Then
                 IO.Directory.CreateDirectory(modpackModsDir)
             End If
@@ -87,14 +132,14 @@ Namespace Projects
             If Not IO.Directory.Exists(modsSourceDir) Then
                 IO.Directory.CreateDirectory(modsSourceDir)
             End If
-            If Not IO.Directory.Exists(OutputDir) Then
-                IO.Directory.CreateDirectory(OutputDir)
+            If IO.Directory.Exists(OutputDir) Then
+                'Clear the files that are currently in the output directory
+                For Each item In IO.Directory.GetFiles(OutputDir, "*", IO.SearchOption.AllDirectories)
+                    IO.File.Delete(item)
+                Next
+                IO.Directory.Delete(OutputDir, True)
             End If
-
-            'Clear the files that are currently in the modpack directory
-            For Each item In IO.Directory.GetFiles(modpackDir)
-                IO.File.Delete(item)
-            Next
+            IO.Directory.CreateDirectory(OutputDir)
 
             'Copy external mods
             For Each item In IO.Directory.GetFiles(modsSourceDir)
@@ -160,6 +205,8 @@ Namespace Projects
                 Case "3DS"
                     '-Copy ctrtool
                     IO.File.Copy(PluginHelper.GetResourceName("ctrtool.exe"), IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
+                    IO.File.Copy(PluginHelper.GetResourceName("makerom.exe"), IO.Path.Combine(GetToolsDir, "makerom.exe"), True)
+                    IO.File.Copy(PluginHelper.GetResourceName("rom_tool.exe"), IO.Path.Combine(GetToolsDir, "rom_tool.exe"), True)
                     IO.File.Copy(PluginHelper.GetResourceName("3DS Builder.exe"), IO.Path.Combine(GetToolsDir, "3DS Builder.exe"), True)
                 Case "NDS"
                     '-Copy ndstool
@@ -176,7 +223,16 @@ Namespace Projects
         Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task
             Select Case Solution.Setting("System")
                 Case "3DS"
-                    Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.3ds")), False)
+                    If Output3DSFile Then
+                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.3ds")), False)
+                    End If
+                    If OutputCIAFile Then
+                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.cia")), False)
+                    End If
+                    If OutputHans Then
+                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}"" -hans", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "Hans SD")), False)
+                    End If
+                    'Todo: enable outputting to hans
                 Case "NDS"
                     Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.nds")), False)
             End Select
