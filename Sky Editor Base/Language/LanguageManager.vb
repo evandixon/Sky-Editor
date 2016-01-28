@@ -48,12 +48,12 @@ Namespace Language
             RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
 
-        Public Sub SaveAll(Filename As String) Implements iSavable.Save
-            Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
-            f.ContainedObject = Languages
-            f.Save(Filename)
-            RaiseEvent FileSaved(Me, New EventArgs)
-        End Sub
+        'Public Sub SaveAll(Filename As String) Implements ISavableAs.Save
+        '    Dim f As New ObjectFile(Of Dictionary(Of String, LanguageFile))
+        '    f.ContainedObject = Languages
+        '    f.Save(Filename)
+        '    RaiseEvent FileSaved(Me, New EventArgs)
+        'End Sub
         Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
             Return ".skylangpack"
         End Function

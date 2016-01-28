@@ -7,7 +7,7 @@ Public Class GenericFile
     'Implements iCreatableFile 'Excluded because this might not apply to children
     'Implements iOpenableFile
     Implements iOnDisk
-    Implements iSavable
+    Implements ISavableAs
     Private _tempname As String
     Private _tempFilename As String
     Dim _fileReader As IO.FileStream
@@ -214,7 +214,7 @@ Public Class GenericFile
     Protected Overridable Sub PreSave()
 
     End Sub
-    Public Overridable Sub Save(Destination As String) Implements iSavable.Save
+    Public Overridable Sub Save(Destination As String) Implements ISavableAs.Save
         PreSave()
         FileReader.Seek(0, IO.SeekOrigin.Begin)
         FileReader.Flush()

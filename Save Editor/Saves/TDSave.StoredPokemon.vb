@@ -72,7 +72,7 @@ Namespace Saves
             Implements iMDPkmGender
             Implements iMDPkmMetFloor
             Implements iPkmAttack
-            Implements iSavable
+            Implements ISavableAs
             Implements iOnDisk
             Implements iOpenableFile
 
@@ -280,7 +280,7 @@ Namespace Saves
                 Save(Filename)
             End Sub
 
-            Public Sub Save(Filename As String) Implements iSavable.Save
+            Public Sub Save(Filename As String) Implements ISavableAs.Save
                 Dim toSave As New BinaryFile()
                 toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
                 toSave.Bits.Bits.AddRange(Me.Bits)

@@ -1,8 +1,10 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
 
 Public Class Project
     Implements IDisposable
+    Implements iSavable
 
 #Region "Child Classes"
     Private Class SettingValue
@@ -171,6 +173,7 @@ Public Class Project
     Public Event DirectoryDeleted(sender As Object, e As EventArguments.DirectoryDeletedEventArgs)
     Public Event FileAdded(sender As Object, e As EventArguments.ProjectFileAddedEventArgs)
     Public Event FileRemoved(sender As Object, e As EventArguments.ProjectFileRemovedEventArgs)
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
 #End Region
 
 #Region "Create New"
@@ -339,7 +342,7 @@ Public Class Project
             parentPath.Append("/")
         Next
         Dim parentPathString = parentPath.ToString.TrimEnd("/")
-        CreateDirectory(parentPathString, pathParts.last)
+        CreateDirectory(parentPathString, pathParts.Last)
     End Sub
 
     ''' <summary>
@@ -620,7 +623,7 @@ Public Class Project
 #End Region
 
 #Region "Save"
-    Public Sub Save()
+    Public Sub Save() Implements iSavable.Save
         Dim file As New ProjectFile
         file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
         file.Name = Me.Name
@@ -632,6 +635,7 @@ Public Class Project
         Next
         file.Files = GetProjectDictionary(ProjectNode, "")
         Utilities.Json.SerializeToFile(Filename, file)
+        RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
     Private Function GetProjectDictionary(ProjectNode As ProjectItem, CurrentPath As String) As Dictionary(Of String, FileValue)
@@ -692,5 +696,9 @@ Public Class Project
         ' TODO: uncomment the following line if Finalize() is overridden above.
         ' GC.SuppressFinalize(Me)
     End Sub
+
+    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+        Return ".skyproj"
+    End Function
 #End Region
 End Class

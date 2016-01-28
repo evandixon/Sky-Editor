@@ -80,7 +80,7 @@ Namespace Saves
             Implements iMDPkmMetFloor
             Implements iMDPkmIQ
             Implements iPkmAttack
-            Implements iSavable
+            Implements ISavableAs
             Implements iOnDisk
             Implements iOpenableFile
             Public Const Length As Integer = 362
@@ -292,7 +292,7 @@ Namespace Saves
                 Save(Filename)
             End Sub
 
-            Public Sub Save(Filename As String) Implements iSavable.Save
+            Public Sub Save(Filename As String) Implements ISavableAs.Save
                 Dim toSave As New BinaryFile()
                 toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
                 'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned

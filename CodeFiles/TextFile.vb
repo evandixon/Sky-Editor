@@ -6,7 +6,7 @@ Public Class TextFile
     Implements iOpenableFile
     Implements iOnDisk
     Implements iGenericFile
-    Implements iSavable
+    Implements ISavableAs
     Implements iNamed
     Implements iModifiable
     Implements ITextFile
@@ -54,7 +54,7 @@ Public Class TextFile
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
-    Public Sub Save(Filename As String) Implements iSavable.Save
+    Public Sub Save(Filename As String) Implements ISavableAs.Save
         IO.File.WriteAllText(Filename, Text)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub

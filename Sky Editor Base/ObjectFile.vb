@@ -4,7 +4,7 @@ Public Class ObjectFile(Of T)
     'Inherits GenericFile
     Implements iNamed
     Implements iOpenableFile
-    Implements iSavable
+    Implements ISavableAs
     Implements iOnDisk
     Implements iCreatableFile
     Implements iContainer(Of T)
@@ -65,7 +65,7 @@ Public Class ObjectFile(Of T)
 
 #Region "iSaveableFile support"
 
-    Public Sub Save(Filename As String) Implements Interfaces.iSavable.Save
+    Public Sub Save(Filename As String) Implements Interfaces.ISavableAs.Save
         Dim c As New JsonContainer(Of T)
         c.ContainedObject = Me.ContainedObject
         c.ContainedTypeName = Me.GetType.AssemblyQualifiedName 'GetType(T).AssemblyQualifiedName

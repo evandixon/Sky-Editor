@@ -86,7 +86,7 @@ Public Class SettingsSet
     End Sub
 End Class
 Public Class SettingsManager
-    Implements Interfaces.iSavable
+    Implements Interfaces.ISavableAs
     Implements iModifiable
     Implements iNamed
     Private Shared _settingsManager As SettingsManager
@@ -144,7 +144,7 @@ Public Class SettingsManager
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
-    Public Sub Save(Filename As String) Implements iSavable.Save
+    Public Sub Save(Filename As String) Implements ISavableAs.Save
         Dim f As New ObjectFile(Of SettingsSet)
         f.ContainedObject = Settings
         f.Save(Filename)

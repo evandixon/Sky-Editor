@@ -9,11 +9,6 @@
         ''' </summary>
         Sub Save()
         ''' <summary>
-        ''' Saves the class to the given filename.
-        ''' </summary>
-        ''' <param name="Filename"></param>
-        Sub Save(Filename As String)
-        ''' <summary>
         ''' Raised when the file is saved.
         ''' </summary>
         ''' <param name="sender"></param>

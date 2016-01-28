@@ -5,10 +5,10 @@ Namespace MenuActions
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Interfaces.iSavable)}
+            Return {GetType(Interfaces.ISavableAs)}
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As Interfaces.iSavable In Targets
+            For Each item As Interfaces.ISavableAs In Targets
                 SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(item.DefaultExtension))
                 If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                     item.Save(SaveFileDialog1.FileName)

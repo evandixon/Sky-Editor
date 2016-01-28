@@ -128,8 +128,8 @@ Public Class DocumentTab
 
 #Region "Methods"
     Public Sub SaveFile(Filename As String)
-        If TypeOf Document Is iSavable Then
-            DirectCast(Document, iSavable).Save(Filename)
+        If TypeOf Document Is ISavableAs Then
+            DirectCast(Document, ISavableAs).Save(Filename)
         End If
     End Sub
     Public Sub SaveFile()

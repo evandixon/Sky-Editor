@@ -1,8 +1,10 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
 
 Public Class Solution
     Implements IDisposable
+    Implements iSavable
 
 #Region "Child Classes"
     Private Class SettingValue
@@ -136,6 +138,7 @@ Public Class Solution
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Public Event Created(sender As Object, e As EventArgs)
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
 #End Region
 
     Private Sub RaiseCreated()
@@ -527,7 +530,7 @@ Public Class Solution
 #End Region
 
 #Region "Save"
-    Public Sub Save()
+    Public Sub Save() Implements iSavable.Save
         Dim file As New SolutionFile
         file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
         file.Name = Me.Name
@@ -541,6 +544,7 @@ Public Class Solution
         Next
         file.Projects = GetProjectDictionary(SolutionNode, "")
         Utilities.Json.SerializeToFile(Filename, file)
+        RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
     Private Function GetProjectDictionary(ProjectNode As SolutionItem, CurrentPath As String) As Dictionary(Of String, String)
@@ -611,4 +615,7 @@ Public Class Solution
         Return PluginHelper.GetLanguageItem(Me.GetType.FullName)
     End Function
 
+    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+        Return ".skysln"
+    End Function
 End Class

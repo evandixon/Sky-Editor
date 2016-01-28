@@ -30,7 +30,11 @@ Public Class ObjectWindow
 
         If TypeOf _objectToEdit Is iSavable Then
             menuFileSave.Visibility = Visibility.Visible
-            menuFileSaveAs.Visibility = Visibility.Visible
+            If TypeOf _objectToEdit Is ISavableAs Then
+                menuFileSaveAs.Visibility = Visibility.Visible
+            Else
+                menuFileSaveAs.Visibility = Visibility.Collapsed
+            End If
         Else
             menuFileSave.Visibility = Visibility.Collapsed
             menuFileSaveAs.Visibility = Visibility.Collapsed
@@ -102,7 +106,7 @@ Public Class ObjectWindow
     End Sub
 
     Private Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
-        If TypeOf ObjectToEdit Is iSavable Then
+        If TypeOf ObjectToEdit Is ISavableAs Then
             Dim s As New SaveFileDialog
             Dim ext As String = DirectCast(ObjectToEdit, iSavable).DefaultExtension.Trim("*").Trim(".")
             If _manager.IOFilters.ContainsKey(ext) Then
@@ -111,7 +115,7 @@ Public Class ObjectWindow
                 s.Filter = "All Files (*.*)|*.*"
             End If
             If s.ShowDialog Then
-                DirectCast(ObjectToEdit, iSavable).Save(s.FileName)
+                DirectCast(ObjectToEdit, ISavableAs).Save(s.FileName)
                 If TypeOf ObjectToEdit Is iOnDisk Then
                     DirectCast(ObjectToEdit, iOnDisk).Filename = s.FileName
                 End If
