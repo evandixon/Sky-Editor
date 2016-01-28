@@ -16,6 +16,7 @@
                     <MenuItem x:Name="menuCreateFile" Header="Create File" />
                     <MenuItem x:Name="menuAddExistingFile" Header="Add Existing File"/>
                     <MenuItem x:Name="menuDelete" Header="Delete" />
+                    <MenuItem x:Name="menuProperties" Header="Properties"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

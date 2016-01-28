@@ -207,6 +207,7 @@ Public Class SolutionExplorer
         menuCreateFile.Visibility = Visibility.Collapsed
         menuAddExistingFile.Visibility = Visibility.Collapsed
         menuDelete.Visibility = Visibility.Collapsed
+        menuProperties.Visibility = Visibility.Collapsed
 
         'Detect supported actions
         If e.NewValue IsNot Nothing AndAlso TypeOf e.NewValue Is TreeViewItem Then
@@ -228,6 +229,11 @@ Public Class SolutionExplorer
                         menuDelete.Visibility = Visibility.Visible
                     End If
 
+                    If tag.IsRoot Then
+                        'Then we've selected the project
+                        menuProperties.Visibility = Visibility.Visible
+                    End If
+
                 ElseIf tag.ParentProject IsNot Nothing AndAlso tag.IsProjectRoot Then
                     'Then we're at the root of the project
                     If tag.ParentSolution.CanDeleteProject(tag.ParentPath & "/" & tag.Name) Then
@@ -245,6 +251,8 @@ Public Class SolutionExplorer
                     If tag.ParentProject.CanAddExistingFile(tag.ParentPath) Then
                         menuAddExistingFile.Visibility = Visibility.Visible
                     End If
+
+                    menuProperties.Visibility = Visibility.Visible
 
                 ElseIf tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                     'Then we're at the project level
@@ -613,4 +621,14 @@ Public Class SolutionExplorer
         End If
     End Sub
 
+    Private Sub menuProperties_Click(sender As Object, e As RoutedEventArgs) Handles menuProperties.Click
+        If tvSolution.SelectedItem IsNot Nothing Then
+            Dim tag As NodeTag = DirectCast(tvSolution.SelectedItem, TreeViewItem).Tag
+            If tag.IsRoot Then
+                PluginHelper.RequestFileOpen(tag.ParentSolution, False)
+            ElseIf tag.IsProjectRoot Then
+                PluginHelper.RequestFileOpen(tag.ParentProject, False)
+            End If
+        End If
+    End Sub
 End Class
