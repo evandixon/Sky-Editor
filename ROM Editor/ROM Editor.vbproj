@@ -188,75 +188,75 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <None Include="ROM Editor\desmume-0.9.11-win32.zip">
+    <None Include="ROMEditor\desmume-0.9.11-win32.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ROM Editor\desmume-0.9.11-win64.zip">
+    <None Include="ROMEditor\desmume-0.9.11-win64.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="App.ico" />
-    <Content Include="ROM Editor\3DS Builder.exe">
+    <Content Include="ROMEditor\3DS Builder.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\farc\image_2d.txt" />
-    <Content Include="ROM Editor\ffmpeg\ffmpeg.exe">
+    <Content Include="ROMEditor\farc\image_2d.txt" />
+    <Content Include="ROMEditor\ffmpeg\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\bin2c5.1.exe">
+    <Content Include="ROMEditor\lua\bin2c5.1.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\lua5.1.dll">
+    <Content Include="ROMEditor\lua\lua5.1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\lua5.1.exe">
+    <Content Include="ROMEditor\lua\lua5.1.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\lua51.dll">
+    <Content Include="ROMEditor\lua\lua51.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\luac5.1.exe">
+    <Content Include="ROMEditor\lua\luac5.1.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcm80.dll">
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcm80.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcp80.dll">
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcp80.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\msvcr80.dll">
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcr80.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\wlua5.1.exe">
+    <Content Include="ROMEditor\lua\wlua5.1.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\makerom.exe">
+    <Content Include="ROMEditor\makerom.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\PSMD English Soundtrack.txt">
+    <Content Include="ROMEditor\PSMD English Soundtrack.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\rom_tool.exe">
+    <Content Include="ROMEditor\rom_tool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\unluac.jar">
+    <Content Include="ROMEditor\unluac.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\COPYING">
+    <Content Include="ROMEditor\vgmstream\COPYING">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\g7221-siren7_14_G719_license_agreement.doc">
+    <Content Include="ROMEditor\vgmstream\g7221-siren7_14_G719_license_agreement.doc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\libogg-1.1.3.COPYING">
+    <Content Include="ROMEditor\vgmstream\libogg-1.1.3.COPYING">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\libvorbis-1.2.0.COPYING">
+    <Content Include="ROMEditor\vgmstream\libvorbis-1.2.0.COPYING">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\mpg123-1.4.3.COPYING">
+    <Content Include="ROMEditor\vgmstream\mpg123-1.4.3.COPYING">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\lua\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest">
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -275,59 +275,59 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ROM Editor\ctrtool.exe">
+    <Content Include="ROMEditor\ctrtool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\dsicontool.exe">
+    <Content Include="ROMEditor\dsicontool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\facenames.txt">
+    <Content Include="ROMEditor\facenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\Language\English.txt">
+    <Content Include="ROMEditor\Language\English.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\ndstool.exe">
+    <Content Include="ROMEditor\ndstool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\pk3DS.exe">
+    <Content Include="ROMEditor\pk3DS.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\pokenames.txt">
+    <Content Include="ROMEditor\pokenames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\ppmd_kaoutil.exe">
+    <Content Include="ROMEditor\ppmd_kaoutil.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\ppmd_kaoutil.txt" />
-    <Content Include="ROM Editor\ppmd_pxcomp.exe">
+    <Content Include="ROMEditor\ppmd_kaoutil.txt" />
+    <Content Include="ROMEditor\ppmd_pxcomp.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\ppmd_unpx.exe">
+    <Content Include="ROMEditor\ppmd_unpx.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\g7221-gen-lic.txt">
+    <Content Include="ROMEditor\vgmstream\g7221-gen-lic.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\in_vgmstream.dll">
+    <Content Include="ROMEditor\vgmstream\in_vgmstream.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\libg7221_decode.dll">
+    <Content Include="ROMEditor\vgmstream\libg7221_decode.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\libmpg123-0.dll">
+    <Content Include="ROMEditor\vgmstream\libmpg123-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\libvorbis.dll">
+    <Content Include="ROMEditor\vgmstream\libvorbis.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\readme.txt">
+    <Content Include="ROMEditor\vgmstream\readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\vgmstream\test.exe">
+    <Content Include="ROMEditor\vgmstream\test.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ROM Editor\xdelta\xdelta3.exe">
+    <Content Include="ROMEditor\xdelta\xdelta3.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -435,7 +435,7 @@ Public Class Project
         Return PluginManager.GetInstance.IOFiltersString
     End Function
 
-    Public Overridable Sub AddExistingFile(ParentProjectPath As String, FilePath As String)
+    Public Overridable Async Function AddExistingFile(ParentProjectPath As String, FilePath As String) As Task
         Dim item = GetProjectItemByPath(ParentProjectPath)
         Dim filename = IO.Path.GetFileName(FilePath)
         If item IsNot Nothing Then
@@ -445,13 +445,18 @@ Public Class Project
                 Dim projItem As New ProjectItem(Me)
                 projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
-                'Await Task.Run(New Action(Sub()
+                PluginHelper.SetLoadingStatus("Copying file...")
+
                 Dim source = FilePath
                 Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))
-                If Not source.Replace("\", "/").ToLower = dest.Replace("\", "/").ToLower Then
-                    IO.File.Copy(FilePath, dest, True)
-                End If
-                'End Sub))
+
+                Await Task.Run(New Action(Sub()
+                                              If Not source.Replace("\", "/").ToLower = dest.Replace("\", "/").ToLower Then
+                                                  IO.File.Copy(FilePath, dest, True)
+                                              End If
+                                          End Sub))
+
+                PluginHelper.SetLoadingStatusFinished()
 
                 projItem.Name = IO.Path.GetFileName(projItem.Filename)
                 item.Children.Add(projItem)
@@ -464,7 +469,7 @@ Public Class Project
         Else
             Throw New IO.DirectoryNotFoundException("Cannot add a file at the given path: " & ParentProjectPath)
         End If
-    End Sub
+    End Function
 
     Public Overridable Function CanDeleteFile(FilePath As String) As Boolean
         Return (GetProjectItemByPath(FilePath) IsNot Nothing)

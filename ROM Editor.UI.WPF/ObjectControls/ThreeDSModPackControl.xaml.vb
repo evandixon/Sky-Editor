@@ -1,52 +1,46 @@
-﻿Imports System.Windows.Controls
-Imports ROMEditor
-Imports SkyEditorBase
+﻿Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace ObjectControls
-    Public Class NDSModSrcEditor
-        Inherits UserControl
-        Implements Interfaces.iObjectControl
+    Public Class ThreeDSModPackControl
+        Implements iObjectControl
         Public Sub RefreshDisplay()
-            With GetEditingObject() '(Of Mods.ModSourceContainer)()
-                txtModName.Text = .ModName
-                txtAuthor.Text = .Author
-                txtDescription.Text = .Description
-                txtUpdateUrl.Text = .UpdateURL
-                txtVersion.Text = .Version
-                'txtDependenciesBefore.Text = .DependenciesBefore
-                'txtDependenciesAfter.Text = .DependenciesAfter
+            With GetEditingObject(Of Projects.DSModPackProject)() '(Of Mods.ModSourceContainer)()
+                chb3DS.IsChecked = .Output3DSFile
+                chbCIA.IsChecked = .OutputCIAFile
+                chbHANS.IsChecked = .OutputHans
             End With
             IsModified = False
         End Sub
 
         Public Sub UpdateObject()
-            With GetEditingObject() '(Of Mods.ModSourceContainer)()
-                .ModName = txtModName.Text
-                .Author = txtAuthor.Text
-                .Description = txtDescription.Text
-                .UpdateURL = txtUpdateUrl.Text
-                .Version = txtVersion.Text
-                '.DependenciesBefore = txtDependenciesBefore.Text
-                '.DependenciesAfter = txtDependenciesAfter.Text
+            With GetEditingObject(Of Projects.DSModPackProject)()
+                .Output3DSFile = chb3DS.IsChecked
+                .OutputCIAFile = chbCIA.IsChecked
+                .OutputHans = chbHANS.IsChecked
             End With
         End Sub
 
+        Private Sub ThreeDSModPackControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+            Me.Header = PluginHelper.GetLanguageItem("3DS Build Options")
+        End Sub
+
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-            Return {} '{GetType(Mods.ModSourceContainer)}
+            Return {GetType(Projects.DSModPackProject)}
         End Function
 
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
-            Return 1
+            Return 2
         End Function
 
-        Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Modpack Info")
+
+        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chb3DS.Checked, chbCIA.Checked, chbHANS.Checked
+            IsModified = True
         End Sub
 
 #Region "IObjectControl Support"
         Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
-            Return True
+            Return DirectCast(Obj, Projects.DSModPackProject).GetBaseRomSystem(PluginManager.GetInstance.CurrentSolution) = "3DS"
         End Function
 
         Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
@@ -135,4 +129,5 @@ Namespace ObjectControls
         Dim _isModified As Boolean
 #End Region
     End Class
+
 End Namespace

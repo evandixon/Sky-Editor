@@ -49,7 +49,7 @@ Friend Class WpfCoreMod
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSave))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAs))
         Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveSolution))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAll))
+        'Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAll))
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsSettings))
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsLanguage))
         Manager.RegisterMenuActionType(GetType(MenuActions.SolutionBuild))

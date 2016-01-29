@@ -23,6 +23,24 @@ Namespace FileFormats
         Public eulaVersion As UInt16, reserved As UInt16
         Public defaultFrame As UInt32, cecId As UInt32
     End Class
+    Public Enum smdhTitleID
+        Japanese = 0
+        English = 1
+        French = 2
+        German = 3
+        Italian = 4
+        Spanish = 5
+        SimplifiedChinese = 6
+        Korean = 7
+        Dutch = 8
+        Portuguese = 9
+        Russian = 10
+        TraditionalChinese = 11
+        Unused1 = 12
+        Unused2 = 13
+        Unused3 = 14
+        Unused4 = 15
+    End Enum
     Public Class SMDH
         Private file As FileStream
 

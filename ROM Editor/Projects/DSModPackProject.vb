@@ -97,6 +97,18 @@ Namespace Projects
             ' Return p.GetProjectItemByPath("/BaseRom").GetFilename
         End Function
 
+        Public Overridable Function GetBaseRomSystem(Solution As Solution) As String
+            Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
+            Return p.RomSystem
+        End Function
+        Public Overridable Function GetBaseGameCode(Solution As Solution) As String
+            Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
+            Return p.GameCode
+        End Function
+        Public Overridable Function GetLocalSmdhPath() As String
+            Return IO.Path.Combine(GetRootDirectory, "Modpack.smdh")
+        End Function
+
         Public Overrides Function CanBuild(Solution As Solution) As Boolean
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return (p IsNot Nothing)
@@ -189,6 +201,12 @@ Namespace Projects
 
             CopyPatcherProgram(Solution)
 
+            'Update modpack info
+            Me.Info.GameCode = GetBaseGameCode(Solution)
+            Me.Info.System = GetBaseRomSystem(Solution)
+            If IO.File.Exists(GetLocalSmdhPath) Then
+                IO.File.Copy(GetLocalSmdhPath, IO.Path.Combine(modpackModsDir, "Modpack.smdh"), True)
+            End If
             IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Me.Info))
 
             '-Zip it
@@ -201,7 +219,7 @@ Namespace Projects
         End Function
 
         Public Overridable Sub CopyPatcherProgram(Solution As Solution)
-            Select Case Solution.Setting("System")
+            Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     '-Copy ctrtool
                     IO.File.Copy(PluginHelper.GetResourceName("ctrtool.exe"), IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
@@ -221,7 +239,7 @@ Namespace Projects
         End Sub
 
         Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task
-            Select Case Solution.Setting("System")
+            Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     If Output3DSFile Then
                         Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.3ds")), False)

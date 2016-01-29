@@ -117,6 +117,10 @@ Namespace Projects
         Public Overridable Function GetRawFilesDir() As String
             Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Raw Files")
         End Function
+
+        Public Overridable Function GetIconPath() As String
+            Return IO.Path.Combine(GetRawFilesDir, "exefs", "icon.bin")
+        End Function
     End Class
 
 End Namespace
