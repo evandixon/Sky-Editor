@@ -15,6 +15,7 @@ Public Class SettingsEditor
 
         chbDebugLanguagePlaceholders.IsChecked = GetEditingObject(Of SettingsManager).Settings.DebugLanguagePlaceholders
         chbVerbose.IsChecked = GetEditingObject(Of SettingsManager).Settings.VerboseOutput
+        IsModified = False
     End Sub
 
     Public Sub UpdateObject()
@@ -23,7 +24,7 @@ Public Class SettingsEditor
         GetEditingObject(Of SettingsManager).Settings.VerboseOutput = chbVerbose.IsChecked
     End Sub
 
-    Private Sub chbDebugLanguagePlaceholders_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked
+    Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked
         IsModified = True
     End Sub
 
@@ -44,6 +45,14 @@ Public Class SettingsEditor
     End Function
 
 #Region "IObjectControl Support"
+    Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
+        Return True
+    End Function
+
+    Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
+        Return False
+    End Function
+
     ''' <summary>
     ''' Called when Header is changed.
     ''' </summary>

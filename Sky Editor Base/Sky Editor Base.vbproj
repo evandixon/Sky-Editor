@@ -193,6 +193,8 @@
     <Compile Include="Interfaces\iSavable.vb" />
     <Compile Include="Interfaces\ISavableAs.vb" />
     <Compile Include="Interfaces\ITargetedControl.vb" />
+    <Compile Include="Internal\AssemblyReflectionManager.vb" />
+    <Compile Include="Internal\AssemblyReflectionProxy.vb" />
     <Compile Include="Language\LanguageFile.vb" />
     <Compile Include="Language\LanguageItem.vb" />
     <Compile Include="Language\LanguageItemList.vb" />

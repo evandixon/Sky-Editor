@@ -3,6 +3,7 @@ Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditorBase.EventArguments
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorBase.Internal
 Imports SkyEditorBase.Redistribution
 Imports SkyEditorBase.Utilities
 
@@ -43,42 +44,130 @@ Public Class PluginManager
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.PluginFolder = PluginFolder
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
+        Me.FailedPluginLoads = New List(Of String)
         PluginHelper.PluginManagerInstance = Me
     End Sub
     Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
         LoadPlugins(PluginFolder, CoreMod)
     End Sub
     Public Sub LoadPlugins(FromFolder As String, CoreMod As iSkyEditorPlugin)
+        Dim Assemblies As New List(Of Assembly)
         'Me.PluginFolder = FromFolder
         If IO.Directory.Exists(FromFolder) Then
             Dim assemblyPaths As New List(Of String)
-            assemblyPaths.AddRange(IO.Directory.GetFiles(FromFolder, "*_plg.dll"))
-            assemblyPaths.AddRange(IO.Directory.GetFiles(FromFolder, "*_plg.exe"))
-            For Each plugin In assemblyPaths
-                PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
-                Dim a As Assembly = Assembly.LoadFrom(plugin)
-                Try
-                    Dim types As Type() = a.GetTypes
-                    For Each item In types
-                        Dim IsPlugin As Boolean = False
-                        For Each intface As Type In item.GetInterfaces
-                            If intface Is GetType(iSkyEditorPlugin) Then
-                                IsPlugin = True
-                            End If
-                        Next
-                        If IsPlugin Then
-                            Dim Plg As iSkyEditorPlugin = a.CreateInstance(item.ToString)
-                            Plugins.Add(Plg)
-                            Assemblies.Add(a)
-                        End If
-                    Next
-                Catch ex As System.Reflection.ReflectionTypeLoadException
-                    PluginHelper.Writeline("Fatal error: System.Reflection.ReflectionTypeLoadException.", PluginHelper.LineType.Error)
-                    PluginHelper.Writeline("Unable to load.  Deleting plugin and restarting program.", PluginHelper.LineType.Error)
-                    PluginHelper.Writeline("Details: " & ex.ToString, PluginHelper.LineType.Error)
-                    Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
-                End Try
+
+            'Load plugins from settings
+            For Each item In SettingsManager.Instance.Settings.Plugins
+                assemblyPaths.Add(IO.Path.Combine(FromFolder, item))
             Next
+
+            'Load others if in development mode
+            If SettingsManager.Instance.Settings.DevelopmentMode Then
+                For Each item In IO.Directory.GetFiles(FromFolder, "*.dll")
+                    If Not assemblyPaths.Contains(item) Then
+                        assemblyPaths.Add(item)
+                    End If
+                Next
+                For Each item In IO.Directory.GetFiles(FromFolder, "*.exe")
+                    If Not assemblyPaths.Contains(item) Then
+                        assemblyPaths.Add(item)
+                    End If
+                Next
+            End If
+
+            'For Each plugin In assemblyPaths
+            '    PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
+            '    Dim reflectionAssembly As Assembly = Nothing
+            '    Try
+            '        reflectionAssembly = Assembly.ReflectionOnlyLoadFrom(plugin)
+            '    Catch ex As System.Reflection.ReflectionTypeLoadException
+            '        'If we can't load an assembly, then it's not a valid plugin.
+            '        'Since we're loading plugins, we're going to just ignore it, since it may be a dependency for another plugin.
+            '        'We will, however, log this.  In the future, I'll probably warn the user or something.  Maybe mark it for deletion at a later time.
+            '        If SettingsManager.Instance.Settings.Plugins.Contains(plugin.Replace(FromFolder, "").TrimStart("\")) Then
+            '            FailedPluginLoads.Add(plugin)
+            '        End If
+
+            '        'In the past, invalid plugins would be deleted.
+            '        'PluginHelper.Writeline("Fatal error: System.Reflection.ReflectionTypeLoadException.", PluginHelper.LineType.Error)
+            '        'PluginHelper.Writeline("Unable to load.  Deleting plugin and restarting program.", PluginHelper.LineType.Error)
+            '        'PluginHelper.Writeline("Details: " & ex.ToString, PluginHelper.LineType.Error)
+            '        'Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
+            '    End Try
+
+            '    If reflectionAssembly Is Nothing OrElse reflectionAssembly.FullName = Assembly.GetCallingAssembly.FullName OrElse reflectionAssembly.FullName = Assembly.GetEntryAssembly.FullName OrElse reflectionAssembly.FullName = Assembly.GetExecutingAssembly.FullName Then
+            '        'Then this is a duplicate assembly.  Or something invalid.
+            '    Else
+            '        'Now that the assembly has been loaded, let's find out if it actually is a plugin.
+            '        If reflectionAssembly IsNot Nothing Then
+            '            Dim types As Type() = reflectionAssembly.GetTypes
+            '            Dim assemblyActual As Assembly = Nothing 'Let's not fully load the assembly unless we want to keep it around
+
+            '            For Each item In types
+            '                Dim IsPlugin As Boolean = False
+
+            '                'Look for the plugin interface
+            '                For Each intface As Type In item.GetInterfaces
+            '                    If intface Is GetType(iSkyEditorPlugin) Then
+            '                        IsPlugin = True
+            '                        Exit For
+            '                    End If
+            '                Next
+
+            '                'If we found the plugin interface, then we can load the assembly
+            '                If IsPlugin Then
+            '                    If assemblyActual IsNot Nothing Then
+            '                        assemblyActual = Assembly.LoadFrom(plugin)
+            '                    End If
+
+            '                    Dim Plg As iSkyEditorPlugin = item.GetConstructor({})?.Invoke({})
+            '                    If Plg IsNot Nothing Then
+            '                        Plugins.Add(assemblyActual.CreateInstance(item.FullName))
+            '                    End If
+            '                End If
+            '            Next
+
+            '            If assemblyActual IsNot Nothing Then
+            '                Assemblies.Add(assemblyActual)
+            '            End If
+            '        End If
+
+            '    End If
+            'Next
+
+            Dim coreAssemblyName = CoreMod.GetType.Assembly.FullName
+
+            'We're going to load these assemblies into another appdomain, so we don't accidentally create duplicates, and so we don't keep any unneeded assemblies loaded for the life of the application.
+            Using reflectionManager As New AssemblyReflectionManager
+                For Each item In assemblyPaths
+                    reflectionManager.LoadAssembly(item, "PluginManagerAnalysis")
+                    Dim pluginInfoNames As List(Of String) =
+                        reflectionManager.Reflect(item,
+                                                  Function(a As Assembly, Args() As Object) As List(Of String)
+                                                      Dim out As New List(Of String)
+
+                                                      If Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse a.FullName = Assembly.GetExecutingAssembly.FullName OrElse a.FullName = Args(0)) Then
+                                                          For Each t As Type In a.GetTypes
+                                                              Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
+                                                              If isPlg Then
+                                                                  out.Add(t.FullName)
+                                                              End If
+                                                          Next
+                                                      End If
+
+                                                      Return out
+                                                  End Function, coreAssemblyName)
+
+                    If pluginInfoNames.Count > 0 Then
+                        'Then we want to keep this assembly
+                        Dim assemblyActual = Assembly.LoadFrom(item)
+                        Assemblies.Add(assemblyActual)
+                        For Each plg In pluginInfoNames
+                            Plugins.Add(assemblyActual.CreateInstance(plg))
+                        Next
+                    End If
+                Next
+            End Using 'The reflection appdomain will be unloaded on dispose
 
             CoreMod.Load(Me)
 
@@ -88,13 +177,6 @@ Public Class PluginManager
                 item.Load(Me)
             Next
             For Each item In Assemblies
-                'Load languages
-                If IO.Directory.Exists(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language")) Then
-                    For Each lang In IO.Directory.GetFiles(IO.Path.Combine(PluginHelper.GetResourceDirectory(item.GetName.Name), "Language"), "*.txt")
-                        Language.LanguageManager.ImportLanguageFile(lang, item.GetName.Name.Replace("_plg", ""))
-                        'IO.File.Delete(lang)
-                    Next
-                End If
                 'Load types
                 Dim types As Type() = item.GetTypes
                 For Each actualType In types
@@ -150,14 +232,6 @@ Public Class PluginManager
     Public Property GameTypes As New Dictionary(Of String, String)
 
     ''' <summary>
-    ''' List of all the plugins' assembly names.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property Assemblies As New List(Of Assembly)
-
-    ''' <summary>
     ''' List of all loaded iSkyEditorPlugins that are loaded.
     ''' </summary>
     ''' <value></value>
@@ -174,9 +248,14 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Public Property PluginFiles As New Dictionary(Of String, List(Of String))
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
-    Public Property DirectoryTypeDetectors As New List(Of directoryTypeDetector)
+    Public Property DirectoryTypeDetectors As New List(Of DirectoryTypeDetector)
     Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property PluginFolder As String
+    ''' <summary>
+    ''' Gets a list of assemblies that failed to be loaded as plugins, while being registered as such.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property FailedPluginLoads As List(Of String)
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
     Private WithEvents _currentSolutoin As Solution
@@ -209,7 +288,9 @@ Public Class PluginManager
         If TempIOFilters Is Nothing Then
             TempIOFilters = New Dictionary(Of String, String)
         End If
-        TempIOFilters.Add(FileExtension, FileFormatName)
+        If Not TempIOFilters.ContainsKey(FileExtension) Then
+            TempIOFilters.Add(FileExtension, FileFormatName)
+        End If
         IOFilters = TempIOFilters
     End Sub
 
@@ -494,7 +575,7 @@ Public Class PluginManager
         Dim out As New Dictionary(Of String, ConsoleCommandAsync)
         For Each item As ConsoleCommandAsync In GetRegisteredObjects(GetType(ConsoleCommandAsync))
             If Not out.ContainsKey(item.CommandName) Then
-                out.Add(item.commandname, item)
+                out.Add(item.CommandName, item)
             End If
         Next
         Return out
@@ -675,39 +756,75 @@ Public Class PluginManager
     ''' <summary>
     ''' Returns a list of iObjectControl that edit the given ObjectToEdit.
     ''' </summary>
+    ''' <param name="ObjectToEdit">Object the iObjectControl should edit.</param>
+    ''' <param name="RequestedTabTypes">Limits what types of iObjectControl should be returned.  If the iObjectControl is not of any type in this IEnumerable, it will not be used.  If empty or nothing, no constraints will be applied, which is not recommended because the iObjectControl could be made for a different environment (for example, a Windows Forms user control being used in a WPF environment).</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetRefreshedTabs(ObjectToEdit As Object) As List(Of iObjectControl)
+    Public Function GetRefreshedTabs(ObjectToEdit As Object, RequestedTabTypes As IEnumerable(Of Type)) As IEnumerable(Of iObjectControl)
         If ObjectToEdit Is Nothing Then
             Throw New ArgumentNullException(NameOf(ObjectToEdit))
         End If
-
-        Dim tabs As New List(Of iObjectControl)
-        For Each etab In (From e In GetObjectControls() Order By e.GetSortOrder(ObjectToEdit.GetType, True) Ascending)
-            Dim isMatch = False
-            If Not isMatch Then
-                For Each t In etab.GetSupportedTypes
-                    If ObjectToEdit IsNot Nothing AndAlso ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
-                        isMatch = True
+        Dim objType = ObjectToEdit.GetType
+        Dim allTabs As New List(Of iObjectControl)
+        For Each etab In (From e In GetObjectControls() Order By e.GetSortOrder(objType, True) Ascending)
+            Dim isMatch = True
+            'Check to see if the tab itself is supported
+            For Each t In RequestedTabTypes
+                If Not ReflectionHelpers.IsOfType(etab, t) Then
+                    isMatch = False
+                    Exit For
+                End If
+            Next
+            'Check to see if the tab support the type of the given object
+            Dim supportedTypes = etab.GetSupportedTypes
+            If isMatch Then
+                isMatch = supportedTypes.Count > 0
+            End If
+            If isMatch Then
+                For Each t In supportedTypes
+                    If ObjectToEdit Is Nothing OrElse Not ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
+                        isMatch = False
                         Exit For
                     End If
                 Next
             End If
+            'Check to see if the tab support the object itself
             If isMatch Then
-                Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
-                t.EditingObject = ObjectToEdit
-                tabs.Add(t)
+                isMatch = etab.SupportsObject(ObjectToEdit)
+            End If
+            'This is a supported tab.  We're adding it!
+            If isMatch Then
+                etab.EditingObject = ObjectToEdit
+                allTabs.Add(etab)
+                'Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
+                't.EditingObject = ObjectToEdit
+                'tabs.Add(t)
             End If
         Next
-        'Dim out As New List(Of TabItem)
-        'For Each item In tabs
-        '    Dim t As New TabItem
-        '    item.Margin = New Thickness(0, 0, 0, 0)
-        '    t.Content = item
-        '    item.ParentTabItem = t
-        '    out.Add(t)
-        'Next
-        Return tabs
+
+        Dim backupTabs As New List(Of iObjectControl)
+        Dim notBackup As New List(Of iObjectControl)
+
+        'Sort the backup vs non-backup tabs
+        For Each item In allTabs
+            If item.IsBackupControl(ObjectToEdit) Then
+                backupTabs.Add(item)
+            Else
+                notBackup.Add(item)
+            End If
+        Next
+
+        'And use the non-backup ones if available
+        If notBackup.Count > 0 Then
+            Return notBackup
+        Else
+            Dim toUse = (From b In backupTabs Order By b.GetSortOrder(objType, True)).FirstOrDefault
+            If toUse Is Nothing Then
+                Return {}
+            Else
+                Return {toUse}
+            End If
+        End If
     End Function
 
     Public Function GetFileType(File As GenericFile) As Type
@@ -775,7 +892,7 @@ Public Class PluginManager
         If matches.Count = 0 Then
             For Each item In GetDetectableFileTypes()
                 Dim instance As iDetectableFileType = item.GetConstructor({}).Invoke({})
-                If instance.isoftype(File) Then
+                If instance.IsOfType(File) Then
                     matches.Add(item)
                 End If
             Next

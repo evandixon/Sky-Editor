@@ -5,9 +5,9 @@ Namespace MenuActions
     Public Class FileSave
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
-        'Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-        '    Return {GetType(Interfaces.iSavable)}
-        'End Function
+        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
+            Return {GetType(Interfaces.iSavable)}
+        End Function
         'Public Overrides Function SupportsObject(Obj As Object) As Boolean
         '    Return Not TypeOf Obj Is Solution AndAlso Not TypeOf Obj Is Project
         'End Function
@@ -30,6 +30,8 @@ Namespace MenuActions
                             Else
                                 sav.Save()
                             End If
+                        Else
+                            sav.Save()
                         End If
                     Else
                         sav.Save()

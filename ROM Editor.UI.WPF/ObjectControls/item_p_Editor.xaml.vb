@@ -115,6 +115,14 @@ Namespace ObjectControls
         End Function
 
 #Region "IObjectControl Support"
+        Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
+            Return True
+        End Function
+
+        Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
+            Return False
+        End Function
+
         ''' <summary>
         ''' Called when Header is changed.
         ''' </summary>

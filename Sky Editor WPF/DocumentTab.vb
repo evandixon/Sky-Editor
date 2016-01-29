@@ -29,11 +29,10 @@ Public Class DocumentTab
                 RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
             End If
 
-            'Todo: make a better way of omitting tabs with less a than 0 sort order
             If value IsNot Nothing Then
-                Dim tabs = _manager.GetRefreshedTabs(value)
+                Dim tabs = _manager.GetRefreshedTabs(value, {GetType(UserControl)})
                 Dim ucTabs = (From t In tabs Where Utilities.ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
-                Dim count = ucTabs.Count - (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
+                Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
                 If count > 1 Then
                     Dim tabControl As New TabControl
                     tabControl.TabStripPlacement = Controls.Dock.Left
@@ -43,8 +42,8 @@ Public Class DocumentTab
                     Next
                     Me.Content = tabControl
 
-                ElseIf Count = 1 Then
-                    Dim control = (From t In ucTabs Where t.GetSortOrder(value.GetType, True) >= 0).First
+                ElseIf count = 1 Then
+                    Dim control = ucTabs.First '(From t In ucTabs Where t.GetSortOrder(value.GetType, True) >= 0).First
                     Me.Content = control
                     AddHandler control.IsModifiedChanged, AddressOf File_FileModified
                 Else

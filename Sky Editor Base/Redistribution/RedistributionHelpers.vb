@@ -67,49 +67,50 @@ Namespace Redistribution
         ''' <param name="PluginName">Name of the plugin to pack.  Pass in Nothing to pack all loaded plugins.</param>
         ''' <remarks></remarks>
         Public Shared Sub PackPlugins(Manager As PluginManager, PluginName As String)
-            Dim PluginNames As New List(Of String)
-            If String.IsNullOrWhiteSpace(PluginName) Then
-                For Each item In Manager.Assemblies
-                    PluginNames.Add(IO.Path.GetFileName(ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)))
-                Next
-            Else
-                PluginNames.Add(PluginName)
-            End If
-            For Each item In PluginNames
-                Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp")
-                Dim ToCopy As New List(Of String)
-                ToCopy.Add(PluginHelper.GetResourceDirectory(item.Replace(".dll", "").Replace(".exe", "")))
-                ToCopy.Add(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", item))
-                If Manager.PluginFiles.ContainsKey(item.Replace(".dll", "").Replace(".exe", "")) Then
-                    ToCopy.AddRange(Manager.PluginFiles(item.Replace(".dll", "").Replace(".exe", "")))
-                End If
-                If IO.Directory.Exists(tempDir) Then
-                    IO.Directory.Delete(tempDir, True)
-                End If
-                IO.Directory.CreateDirectory(tempDir)
-                For Each file In ToCopy
-                    If IO.File.Exists(file) Then
-                        IO.File.Copy(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
-                    Else
-                        'It's probably a directory.
-                        If IO.Directory.Exists(file) Then
-                            Throw New NotImplementedException
-                            'My.Computer.FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
-                            'Else
-                            'Guess not.
-                        End If
-                    End If
-                Next
-                Dim z As New FastZip
-                z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item.Replace(".dll", "").Replace(".exe", "") & ".zip"), tempDir, True, ".*", ".*")
-                PluginHelper.Writeline("Packed plugin " & item, PluginHelper.LineType.Message)
-            Next
-            Dim l = Language.LanguageManager.Instance
-            l.LoadAllLanguages()
-            l.SaveAll()
-            For Each item In l.Languages.Keys
-                IO.File.Copy(l.Languages(item).Filename, IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item & ".language"), True)
-            Next
+            Throw New NotImplementedException
+            'Dim PluginNames As New List(Of String)
+            'If String.IsNullOrWhiteSpace(PluginName) Then
+            '    For Each item In Manager.Assemblies
+            '        PluginNames.Add(IO.Path.GetFileName(ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)))
+            '    Next
+            'Else
+            '    PluginNames.Add(PluginName)
+            'End If
+            'For Each item In PluginNames
+            '    Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp")
+            '    Dim ToCopy As New List(Of String)
+            '    ToCopy.Add(PluginHelper.GetResourceDirectory(item.Replace(".dll", "").Replace(".exe", "")))
+            '    ToCopy.Add(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", item))
+            '    If Manager.PluginFiles.ContainsKey(item.Replace(".dll", "").Replace(".exe", "")) Then
+            '        ToCopy.AddRange(Manager.PluginFiles(item.Replace(".dll", "").Replace(".exe", "")))
+            '    End If
+            '    If IO.Directory.Exists(tempDir) Then
+            '        IO.Directory.Delete(tempDir, True)
+            '    End If
+            '    IO.Directory.CreateDirectory(tempDir)
+            '    For Each file In ToCopy
+            '        If IO.File.Exists(file) Then
+            '            IO.File.Copy(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+            '        Else
+            '            'It's probably a directory.
+            '            If IO.Directory.Exists(file) Then
+            '                Throw New NotImplementedException
+            '                'My.Computer.FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+            '                'Else
+            '                'Guess not.
+            '            End If
+            '        End If
+            '    Next
+            '    Dim z As New FastZip
+            '    z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item.Replace(".dll", "").Replace(".exe", "") & ".zip"), tempDir, True, ".*", ".*")
+            '    PluginHelper.Writeline("Packed plugin " & item, PluginHelper.LineType.Message)
+            'Next
+            'Dim l = Language.LanguageManager.Instance
+            'l.LoadAllLanguages()
+            'l.SaveAll()
+            'For Each item In l.Languages.Keys
+            '    IO.File.Copy(l.Languages(item).Filename, IO.Path.Combine(Environment.CurrentDirectory, "PluginDist", item & ".language"), True)
+            'Next
         End Sub
 
         ''' <summary>
@@ -255,44 +256,45 @@ Namespace Redistribution
             Return pending
         End Function
         Public Shared Function UpdatePlugins(Manager As PluginManager, Plugins As List(Of PluginInfo)) As Boolean
-            Dim c As New Net.WebClient
-            Dim restart As Boolean = False
-            For Each p In RequiredPlugins(Plugins)
-                Dim assemblyName As String = Nothing
-                Dim exists As Boolean = False
-                Dim outdated As Boolean = True
+            Throw New NotImplementedException
+            'Dim c As New Net.WebClient
+            'Dim restart As Boolean = False
+            'For Each p In RequiredPlugins(Plugins)
+            '    Dim assemblyName As String = Nothing
+            '    Dim exists As Boolean = False
+            '    Dim outdated As Boolean = True
 
-                If p.Type = PluginInfo.PluginType.Code Then
-                    For Each item In Manager.Assemblies
-                        If ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".dll", "").Replace(".exe", "") = p.Name Then
-                            exists = True
-                            assemblyName = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)
-                            If ReflectionHelpers.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
-                                outdated = False
-                            End If
-                        End If
-                    Next
-                ElseIf p.Type = PluginInfo.PluginType.Language Then
+            '    If p.Type = PluginInfo.PluginType.Code Then
+            '        For Each item In Manager.Assemblies
+            '            If ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".dll", "").Replace(".exe", "") = p.Name Then
+            '                exists = True
+            '                assemblyName = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder)
+            '                If ReflectionHelpers.GetAssemblyVersion(item).CompareTo(p.GetVersion) >= 0 Then
+            '                    outdated = False
+            '                End If
+            '            End If
+            '        Next
+            '    ElseIf p.Type = PluginInfo.PluginType.Language Then
 
-                    With Language.LanguageManager.Instance
-                        .EnsureLanguageLoaded(p.Name)
-                        If CInt(p.VersionString) <= .Languages(p.Name).ContainedObject.Revision Then
-                            outdated = False
-                        End If
-                    End With
-                End If
+            '        With Language.LanguageManager.Instance
+            '            .EnsureLanguageLoaded(p.Name)
+            '            If CInt(p.VersionString) <= .Languages(p.Name).ContainedObject.Revision Then
+            '                outdated = False
+            '            End If
+            '        End With
+            '    End If
 
-                If outdated Then
-                    If exists AndAlso assemblyName IsNot Nothing Then
-                        PluginHelper.Writeline("Deleting plugin " & assemblyName)
-                        DeletePlugin(Manager, assemblyName)
-                    End If
-                    PluginHelper.Writeline("Downloading plugin " & p.Name)
-                    c.DownloadFile(p.DownloadUrl, IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, IO.Path.GetFileName(p.DownloadUrl)))
-                    restart = True
-                End If
-            Next
-            Return restart
+            '    If outdated Then
+            '        If exists AndAlso assemblyName IsNot Nothing Then
+            '            PluginHelper.Writeline("Deleting plugin " & assemblyName)
+            '            DeletePlugin(Manager, assemblyName)
+            '        End If
+            '        PluginHelper.Writeline("Downloading plugin " & p.Name)
+            '        c.DownloadFile(p.DownloadUrl, IO.Path.Combine(PluginHelper.PluginsToInstallDirectory, IO.Path.GetFileName(p.DownloadUrl)))
+            '        restart = True
+            '    End If
+            'Next
+            'Return restart
         End Function
         Public Shared Function ParsePluginInfo(PluginInfoText As String) As List(Of PluginInfo)
             Return Utilities.Json.Deserialize(Of List(Of PluginInfo))(PluginInfoText)
@@ -306,28 +308,29 @@ Namespace Redistribution
             Return ParsePluginInfo(c.DownloadString(InfoUrl))
         End Function
         Public Shared Function GeneratePluginInfoString(Manager As PluginManager, WebDirectory As String) As String
-            Dim plugins As New List(Of PluginInfo)
-            For Each item In Manager.Assemblies
-                Dim info As New PluginInfo
-                info.Type = PluginInfo.PluginType.Code
-                info.VersionString = ReflectionHelpers.GetAssemblyVersion(item).ToString
-                info.Name = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "")
-                info.Dependencies = New List(Of PluginInfo)
-                info.DownloadUrl = IO.Path.Combine(WebDirectory, ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "") & ".zip").Replace("\", "/")
-                plugins.Add(info)
-            Next
-            Dim l = Language.LanguageManager.Instance
-            l.LoadAllLanguages()
-            For Each item In l.Languages.Keys
-                Dim info As New PluginInfo
-                info.Type = PluginInfo.PluginType.Language
-                info.VersionString = l.Languages(item).ContainedObject.Revision.ToString
-                info.Name = item
-                info.Dependencies = New List(Of PluginInfo)
-                info.DownloadUrl = IO.Path.Combine(WebDirectory, item & ".language").Replace("\", "/")
-                plugins.Add(info)
-            Next
-            Return SerializePluginInfo(plugins)
+            Throw New NotImplementedException
+            'Dim plugins As New List(Of PluginInfo)
+            'For Each item In Manager.Assemblies
+            '    Dim info As New PluginInfo
+            '    info.Type = PluginInfo.PluginType.Code
+            '    info.VersionString = ReflectionHelpers.GetAssemblyVersion(item).ToString
+            '    info.Name = ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "")
+            '    info.Dependencies = New List(Of PluginInfo)
+            '    info.DownloadUrl = IO.Path.Combine(WebDirectory, ReflectionHelpers.GetAssemblyFileName(item, Manager.PluginFolder).Replace(".exe", "").Replace(".dll", "") & ".zip").Replace("\", "/")
+            '    plugins.Add(info)
+            'Next
+            'Dim l = Language.LanguageManager.Instance
+            'l.LoadAllLanguages()
+            'For Each item In l.Languages.Keys
+            '    Dim info As New PluginInfo
+            '    info.Type = PluginInfo.PluginType.Language
+            '    info.VersionString = l.Languages(item).ContainedObject.Revision.ToString
+            '    info.Name = item
+            '    info.Dependencies = New List(Of PluginInfo)
+            '    info.DownloadUrl = IO.Path.Combine(WebDirectory, item & ".language").Replace("\", "/")
+            '    plugins.Add(info)
+            'Next
+            'Return SerializePluginInfo(plugins)
         End Function
         Public Shared Sub GeneratePluginDownloadDir(Manager As PluginManager, WebDirectory As String)
             PackPlugins(Manager, Nothing)

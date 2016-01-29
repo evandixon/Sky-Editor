@@ -24,10 +24,7 @@ Public Class PluginInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        Manager.RegisterIOFilter("*.txt", "Text Files")
-        Manager.RegisterIOFilter("*.lua", "Lua Script Files")
-        Manager.RegisterFileTypeDetector(AddressOf DetectFileType)
-        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "AurelienRibon.Ui.SyntaxHighlightBox.dll"))
+
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
@@ -37,14 +34,4 @@ Public Class PluginInfo
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 
     End Sub
-
-    Public Shared Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
-        If File.OriginalFilename.ToLower.EndsWith(".txt") Then
-            Return {GetType(TextFile)}
-        ElseIf File.OriginalFilename.ToLower.EndsWith(".lua")
-            Return {GetType(LuaCodeFile)}
-        Else
-            Return {}
-        End If
-    End Function
 End Class

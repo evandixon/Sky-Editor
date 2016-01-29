@@ -6,6 +6,7 @@ Namespace Tabs
     Public Class ActivePokemonTab
         Inherits UserControl
         Implements iObjectControl
+
         Public Sub RefreshDisplay()
             lbActivePokemon.Items.Clear()
             For Each apkm In GetEditingObject(Of iParty).GetPokemon
@@ -107,6 +108,14 @@ Namespace Tabs
         ''' <returns></returns>
         Protected Function GetEditingObject() As Object
             Return _editingObject
+        End Function
+
+        Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
+            Return True
+        End Function
+
+        Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
+            Return False
         End Function
 
         ''' <summary>

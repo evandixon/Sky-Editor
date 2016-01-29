@@ -42,7 +42,8 @@ Public Class Project
         Dim _file As Object
         Public Function GetFile() As Object
             If _file Is Nothing Then
-                Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename)
+                Dim f = GetFilename()
+
                 If IO.File.Exists(f) Then
                     If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
                         _file = PluginManager.GetInstance.OpenObject(f)
@@ -61,7 +62,7 @@ Public Class Project
         End Function
 
         Public Function GetFilename() As String
-            Return IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename)
+            Return IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename.TrimStart("\"))
         End Function
 
         Public Sub New(Project As Project)

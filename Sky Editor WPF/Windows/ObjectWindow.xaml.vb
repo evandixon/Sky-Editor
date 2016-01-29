@@ -18,7 +18,7 @@ Public Class ObjectWindow
     End Property
     Public Sub RefreshDisplay()
         tcTabs.Items.Clear()
-        For Each item In UiHelper.GenerateObjectTabs(_manager.GetRefreshedTabs(_objectToEdit))
+        For Each item In UiHelper.GenerateObjectTabs(_manager.GetRefreshedTabs(_objectToEdit, {GetType(UserControl)}))
             tcTabs.Items.Add(item)
         Next
 
