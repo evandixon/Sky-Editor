@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
 
@@ -32,6 +33,8 @@ Public Class Project
 
     Public Class ProjectItem
         Implements IDisposable
+        Implements IComparable(Of ProjectItem)
+
         Dim _p As Project
         Public Property IsDirectory As Boolean
         Public Property Name As String
@@ -63,6 +66,10 @@ Public Class Project
 
         Public Function GetFilename() As String
             Return IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename.TrimStart("\"))
+        End Function
+
+        Public Function CompareTo(other As ProjectItem) As Integer Implements IComparable(Of ProjectItem).CompareTo
+            Return Me.Name.CompareTo(other.Name)
         End Function
 
         Public Sub New(Project As Project)
@@ -242,7 +249,7 @@ Public Class Project
                     Throw New IO.DirectoryNotFoundException("The given path does not exist in the project.")
                 End If
             Next
-
+            current.Children.Sort()
             Return current.Children
         End If
     End Function

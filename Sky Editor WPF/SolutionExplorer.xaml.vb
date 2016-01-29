@@ -1,4 +1,5 @@
 ﻿Imports SkyEditorBase.Interfaces
+Imports SkyEditorWPF
 
 Public Class SolutionExplorer
     Implements ITargetedControl
@@ -15,6 +16,16 @@ Public Class SolutionExplorer
             IsRoot = False
             IsProjectRoot = False
         End Sub
+    End Class
+
+    Private Class TreeViewComparer
+        Implements IComparer(Of TreeViewItem)
+
+        Public Function Compare(x As TreeViewItem, y As TreeViewItem) As Integer Implements IComparer(Of TreeViewItem).Compare
+            Dim t1 = DirectCast(x.Tag, NodeTag)
+            Dim t2 = DirectCast(y.Tag, NodeTag)
+            Return t1.Name.CompareTo(t2.Name)
+        End Function
     End Class
 
     Public Sub New()
@@ -126,6 +137,8 @@ Public Class SolutionExplorer
         Dim n As New TreeViewItem
         If Item.IsDirectory Then
             n.Header = "[Dir] " & Item.Name
+            Item.Children.Sort()
+
             For Each child In Item.Children
                 n.Items.Add(GetNode(Solution, child, Path & "/" & Item.Name))
             Next
@@ -168,6 +181,7 @@ Public Class SolutionExplorer
         Dim n As New TreeViewItem
         If Item.IsDirectory Then
             n.Header = "[Dir] " & Item.Name
+            Item.Children.Sort()
             For Each child In Item.Children
                 n.Items.Add(GetNode(Solution, Project, child, Path & "/" & Item.Name))
             Next
@@ -274,11 +288,11 @@ Public Class SolutionExplorer
                     End If
 
                     If tag.ParentProject.CanDeleteDirectory(tag.ParentPath & "/" & tag.Name) Then
-                            menuDelete.Visibility = Visibility.Visible
-                        End If
-                    Else
-                        'Then we're somewhere else?
+                        menuDelete.Visibility = Visibility.Visible
                     End If
+                Else
+                    'Then we're somewhere else?
+                End If
             End If
         End If
 
@@ -392,9 +406,9 @@ Public Class SolutionExplorer
                     Else
                         'Then we're somewhere else?
                     End If
-            End If
+                End If
 
-        End If
+            End If
         End If
     End Sub
 
@@ -432,7 +446,18 @@ Public Class SolutionExplorer
             n.ParentSolution = sender
             n.ParentPath = e.ParentPath
             t.Tag = n
-            parent.Items.Add(t)
+            'Sort the items when we add them
+            Dim items As New List(Of TreeViewItem)
+            For Each item In parent.Items
+                items.Add(item)
+            Next
+            items.Add(t)
+            items.Sort(New TreeViewComparer)
+
+            parent.Items.Clear()
+            For Each item In items
+                parent.Items.Add(item)
+            Next
         End If
     End Sub
 
@@ -450,7 +475,18 @@ Public Class SolutionExplorer
             n.ParentPath = e.ParentPath
             n.ParentProject = e.Project
             t.Tag = n
-            parent.Items.Add(t)
+            'Sort the items when we add them
+            Dim items As New List(Of TreeViewItem)
+            For Each item In parent.Items
+                items.Add(item)
+            Next
+            items.Add(t)
+            items.Sort(New TreeViewComparer)
+
+            parent.Items.Clear()
+            For Each item In items
+                parent.Items.Add(item)
+            Next
 
             ProjectRegistry.Add(e.Project, t)
 
@@ -554,7 +590,18 @@ Public Class SolutionExplorer
                                   n.ParentPath = e.ParentPath
                                   n.ParentProject = sender
                                   t.Tag = n
-                                  parent.Items.Add(t)
+                                  'Sort the items when we add them
+                                  Dim items As New List(Of TreeViewItem)
+                                  For Each item In parent.Items
+                                      items.Add(item)
+                                  Next
+                                  items.Add(t)
+                                  items.Sort(New TreeViewComparer)
+
+                                  parent.Items.Clear()
+                                  For Each item In items
+                                      parent.Items.Add(item)
+                                  Next
                               End If
                           End Sub)
     End Sub
@@ -572,7 +619,19 @@ Public Class SolutionExplorer
                                   n.ParentPath = e.ParentPath
                                   n.ParentProject = sender
                                   t.Tag = n
-                                  parent.Items.Add(t)
+
+                                  'Sort the items when we add them
+                                  Dim items As New List(Of TreeViewItem)
+                                  For Each item In parent.Items
+                                      items.Add(item)
+                                  Next
+                                  items.Add(t)
+                                  items.Sort(New TreeViewComparer)
+
+                                  parent.Items.Clear()
+                                  For Each item In items
+                                      parent.Items.Add(item)
+                                  Next
                               End If
                           End Sub)
     End Sub

@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
 
@@ -28,7 +29,7 @@ Public Class Solution
 
     Public Class SolutionItem
         Implements IDisposable
-
+        Implements IComparable(Of SolutionItem)
         Public Property IsDirectory As Boolean
         Public Property Name As String
         Public Property Project As Project
@@ -36,6 +37,10 @@ Public Class Solution
         Public Sub New()
             Children = New List(Of SolutionItem)
         End Sub
+
+        Public Function CompareTo(other As SolutionItem) As Integer Implements IComparable(Of SolutionItem).CompareTo
+            Return Me.Name.CompareTo(other.Name)
+        End Function
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls
@@ -164,7 +169,7 @@ Public Class Solution
                     Throw New IO.DirectoryNotFoundException("The given path does not exist in the solution.")
                 End If
             Next
-
+            current.Children.Sort()
             Return current.Children
         End If
     End Function

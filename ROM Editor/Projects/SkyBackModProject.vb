@@ -32,7 +32,7 @@ Namespace Projects
                                        End If
                                        image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
                                        IO.File.Copy(newFilename, newFilename & ".original")
-                                       Me.AddExistingFile("Backgrounds", newFilename)
+                                       Await Me.AddExistingFile("Backgrounds", newFilename)
                                    End Using
                                End Function, backFiles)
         End Function
