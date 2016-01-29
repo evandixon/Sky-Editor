@@ -8,8 +8,8 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <CheckBox x:Name="chb3DS" Content="Build 3DS" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="chbCIA" Content="Build CIA" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="chbHANS" Content="Build HANS" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chbCIA" Content="Build CIA" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+        <CheckBox x:Name="chbHANS" Content="Build HANS" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </UserControl>

@@ -118,7 +118,7 @@ Public Class ThreeDSPatcherCore
         Dim destination As String = Nothing
 
         If Not hansMode AndAlso DestinationPath Is Nothing Then
-            If MessageBox.Show("Would you like to output to HANS?  (Say no to output to .3DS or .CIA)", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+            If MessageBox.Show("Would you like to output to HANS?  (Say no to output to .3DS)", "DS ROM Patcher", MessageBoxButtons.YesNo) = DialogResult.Yes Then '(Say no to output to .3DS or .CIA)
                 hansMode = True
             End If
         End If
@@ -274,13 +274,13 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
                                      $"""{exeFS}"" ""{romFS}"" ""{exHeader}"" ""{output}""", True) 'Add -compressCode to compress code.bin
 
 
-                If destination.ToLower.EndsWith(".cia") Then
-                    Await CiaConversion.ConvertToCia(output, outputCia)
-                    IO.File.Delete(output)
-                    IO.File.Copy(outputCia, destination, True)
-                Else
-                    IO.File.Copy(output, destination, True)
-                End If
+                'If destination.ToLower.EndsWith(".cia") Then
+                '    Await CiaConversion.ConvertToCia(output, outputCia)
+                '    IO.File.Delete(output)
+                '    IO.File.Copy(outputCia, destination, True)
+                'Else
+                '    IO.File.Copy(output, destination, True)
+                'End If
 
                 RaiseProgressChanged(1, "Ready")
             Else
