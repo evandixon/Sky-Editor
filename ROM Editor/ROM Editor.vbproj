@@ -160,6 +160,7 @@
     <Compile Include="Projects\SkyBackModProject.vb" />
     <Compile Include="Projects\SkyStarterModProject.vb" />
     <Compile Include="Projects\PsmdLuaProject.vb" />
+    <Compile Include="Roms\Cxi3DSRom.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />

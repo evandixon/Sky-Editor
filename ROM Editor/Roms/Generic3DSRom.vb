@@ -10,7 +10,7 @@ Namespace Roms
             Return "*.3ds"
         End Function
 
-        Public Function IsOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
+        Public Overridable Function IsOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
             If File.Length > 104 Then
                 Dim e As New System.Text.ASCIIEncoding
                 Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
@@ -24,7 +24,7 @@ Namespace Roms
             End Get
         End Property
 
-        Public ReadOnly Property TitleID As String Implements iPackedRom.GameCode
+        Public Overridable ReadOnly Property TitleID As String Implements iPackedRom.GameCode
             Get
                 Return Conversion.Hex(BitConverter.ToUInt64(RawData(&H108, 8), 0)).PadLeft(16, "0"c)
             End Get

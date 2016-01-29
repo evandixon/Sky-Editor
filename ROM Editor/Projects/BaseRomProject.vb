@@ -79,9 +79,12 @@ Namespace Projects
                         n.Dispose()
                     Else
                         Dim three As New Roms.Generic3DSRom
+                        Dim cxi As New Roms.Cxi3DSRom
                         If three.IsOfType(f) Then
                             mode = "3ds"
                             three.Dispose()
+                        ElseIf cxi.IsOfType(f) Then
+                            mode = "cxi"
                         Else
                             'This file is invalid, and we'll delete it.
                             DeleteFile("/BaseRom")
@@ -101,6 +104,12 @@ Namespace Projects
                     nds.Dispose()
                 Case "3ds"
                     Dim threeDS As New Roms.Generic3DSRom(e.FullFilename)
+                    Await threeDS.Unpack(GetRawFilesDir)
+                    Setting("System") = "3DS"
+                    Setting("GameCode") = threeDS.TitleID
+                    threeDS.Dispose()
+                Case "cxi"
+                    Dim threeDS As New Roms.Cxi3DSRom(e.FullFilename)
                     Await threeDS.Unpack(GetRawFilesDir)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID
