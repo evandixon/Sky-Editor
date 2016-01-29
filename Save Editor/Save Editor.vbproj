@@ -8,7 +8,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>SaveEditor</RootNamespace>
-    <AssemblyName>SaveEditor_plg</AssemblyName>
+    <AssemblyName>SaveEditor</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <TargetFrameworkProfile />
@@ -40,7 +40,7 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>..\bin\Debug\Resources\Plugins\</OutputPath>
-    <DocumentationFile>SaveEditor_plg.xml</DocumentationFile>
+    <DocumentationFile>SaveEditor.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Prefer32Bit>false</Prefer32Bit>
@@ -55,7 +55,7 @@
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\Resources\Plugins\</OutputPath>
-    <DocumentationFile>SaveEditor_plg.xml</DocumentationFile>
+    <DocumentationFile>SaveEditor.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Prefer32Bit>false</Prefer32Bit>

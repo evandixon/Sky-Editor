@@ -7,7 +7,7 @@
     <ProjectGuid>{F05C12E8-EAB7-4B9E-A8D2-D21B80C1A646}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>ROMEditor</RootNamespace>
-    <AssemblyName>ROM Editor_plg</AssemblyName>
+    <AssemblyName>ROMEditor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -23,7 +23,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\bin\Debug\Resources\Plugins\</OutputPath>
-    <DocumentationFile>ROM Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>ROMEditor.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -35,7 +35,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\Resources\Plugins\</OutputPath>
-    <DocumentationFile>ROM Editor_plg.xml</DocumentationFile>
+    <DocumentationFile>ROMEditor.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
