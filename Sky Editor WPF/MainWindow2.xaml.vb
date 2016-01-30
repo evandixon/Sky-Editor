@@ -54,9 +54,14 @@ Public Class MainWindow2
     Private Function GetMenuActionTargets() As IEnumerable(Of Object)
         Dim targets As New List(Of Object)
 
-        'Add the current project to the targets if supported
+        'Add the current solution to the targets if supported
         If _manager.CurrentSolution IsNot Nothing Then
             targets.Add(_manager.CurrentSolution)
+        End If
+
+        'Add the current project
+        If _manager.CurrentProject IsNot Nothing Then
+            targets.Add(_manager.CurrentProject)
         End If
 
         Dim currentDocumentObject = GetSelectedDocumentObject()
@@ -72,6 +77,11 @@ Public Class MainWindow2
         'Add the current project to the targets if supported
         If _manager.CurrentSolution IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentSolution) Then
             targets.Add(_manager.CurrentSolution)
+        End If
+
+        'Add the current project if supported
+        If _manager.CurrentProject IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentProject) Then
+            targets.Add(_manager.CurrentProject)
         End If
 
         If Action.TargetAll Then
@@ -219,6 +229,14 @@ Public Class MainWindow2
                               Dim t = GetMenuActionTargets()
                               UiHelper.UpdateMenuItemVisibility(t, menuMain)
                               UpdateTargetedControlTargets(t)
+                              RemoveWelcomePage()
+                          End Sub)
+    End Sub
+
+    Private Sub _manager_ProjectChanged(sender As Object, e As EventArgs) Handles _manager.CurrentProjectChanged
+        Dispatcher.Invoke(Sub()
+                              Dim t = GetMenuActionTargets()
+                              UiHelper.UpdateMenuItemVisibility(t, menuMain)
                               RemoveWelcomePage()
                           End Sub)
     End Sub

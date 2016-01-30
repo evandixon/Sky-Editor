@@ -135,7 +135,6 @@
     <Compile Include="Mods\GenericSkyMod.vb" />
     <Compile Include="FileFormats\Overlay13.vb" />
     <Compile Include="FileFormats\waza_p.vb" />
-    <Compile Include="DeSmuMe.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -189,12 +188,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <None Include="ROMEditor\desmume-0.9.11-win32.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ROMEditor\desmume-0.9.11-win64.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="App.ico" />
     <Content Include="ROMEditor\3DS Builder.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -272,6 +272,9 @@ Public Class SolutionExplorer
 
                     menuProperties.Visibility = Visibility.Visible
 
+                    'Update the current project
+                    PluginManager.GetInstance.CurrentProject = tag.ParentProject
+
                 ElseIf tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                     'Then we're at the project level
 
@@ -294,6 +297,10 @@ Public Class SolutionExplorer
                     If tag.ParentProject.CanDeleteDirectory(tag.ParentPath & "/" & tag.Name) Then
                         menuDelete.Visibility = Visibility.Visible
                     End If
+
+                    'Update the current project
+                    PluginManager.GetInstance.CurrentProject = tag.ParentProject
+
                 Else
                     'Then we're somewhere else?
                 End If

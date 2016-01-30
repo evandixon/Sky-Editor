@@ -258,7 +258,7 @@ Public Class PluginManager
     Private Property FailedPluginLoads As List(Of String)
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
-    Private WithEvents _currentSolutoin As Solution
+
     Public Property CurrentSolution As Solution
         Get
             Return _currentSolutoin
@@ -269,6 +269,18 @@ Public Class PluginManager
             RaiseEvent SolutionChanged(Me, New EventArgs)
         End Set
     End Property
+    Private WithEvents _currentSolutoin As Solution
+
+    Public Property CurrentProject As Project
+        Get
+            Return _currentProject
+        End Get
+        Set(value As Project)
+            _currentProject = value
+            RaiseEvent CurrentProjectChanged(Me, New EventArgs)
+        End Set
+    End Property
+    Private WithEvents _currentProject As Project
 #End Region
 
 #Region "Delegates"
@@ -618,6 +630,7 @@ Public Class PluginManager
     Public Event ProjectModified(sender As Object, e As EventArgs)
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
     Public Event SolutionChanged(sender As Object, e As EventArgs)
+    Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
 #End Region
 
 #Region "Event Handlers"
