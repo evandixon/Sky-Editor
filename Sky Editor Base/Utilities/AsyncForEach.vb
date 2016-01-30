@@ -126,10 +126,10 @@ Namespace Utilities
             Dim tasks As New List(Of Task)
             _opMax = Collection.Count
             For Each item In Collection
-                Await Task.Run(New Action(Sub()
-                                              DelegateSub(item)
-                                              OperationsCompleted += 1
-                                          End Sub))
+                Await Task.Run(Async Function() As Task
+                                   Await DelegateSub(item)
+                                   OperationsCompleted += 1
+                               End Function)
             Next
         End Function
 

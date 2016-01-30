@@ -442,7 +442,7 @@ Public Class Project
         Return PluginManager.GetInstance.IOFiltersString
     End Function
 
-    Public Overridable Async Function AddExistingFile(ParentProjectPath As String, FilePath As String) As Task
+    Public Overridable Async Function AddExistingFile(ParentProjectPath As String, FilePath As String, Optional ShowLoadingStatus As Boolean = True) As Task
         Dim item = GetProjectItemByPath(ParentProjectPath)
         Dim filename = IO.Path.GetFileName(FilePath)
         If item IsNot Nothing Then
@@ -452,7 +452,7 @@ Public Class Project
                 Dim projItem As New ProjectItem(Me)
                 projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
-                PluginHelper.SetLoadingStatus("Copying file...")
+                If ShowLoadingStatus Then PluginHelper.SetLoadingStatus("Copying file...")
 
                 Dim source = FilePath
                 Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))
@@ -463,7 +463,7 @@ Public Class Project
                                               End If
                                           End Sub))
 
-                PluginHelper.SetLoadingStatusFinished()
+                If ShowLoadingStatus Then PluginHelper.SetLoadingStatusFinished()
 
                 projItem.Name = IO.Path.GetFileName(projItem.Filename)
                 item.Children.Add(projItem)

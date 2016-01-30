@@ -24,7 +24,11 @@ Public Class SolutionExplorer
         Public Function Compare(x As TreeViewItem, y As TreeViewItem) As Integer Implements IComparer(Of TreeViewItem).Compare
             Dim t1 = DirectCast(x.Tag, NodeTag)
             Dim t2 = DirectCast(y.Tag, NodeTag)
-            Return t1.Name.CompareTo(t2.Name)
+            If t1.IsDirectory = t2.IsDirectory Then
+                Return t1.Name.CompareTo(t2.Name)
+            Else
+                Return t2.IsDirectory.CompareTo(t1.IsDirectory)
+            End If
         End Function
     End Class
 
@@ -560,7 +564,7 @@ Public Class SolutionExplorer
     Private Function GetProjectNode(Project As Project, Path As String) As TreeViewItem
         Dim node As TreeViewItem = GetProjectRootNode(Project)
 
-        If node IsNot Nothing Then
+        If node IsNot Nothing AndAlso Not String.IsNullOrEmpty(Path) Then
             Dim pathArr = Path.Replace("\", "/").TrimStart("/").Split("/")
             For count = 0 To pathArr.Length - 1
                 Dim i = count
@@ -569,7 +573,31 @@ Public Class SolutionExplorer
                     node = q
                 Else
                     'In this case, there is not a node at the given path.
-                    Exit For
+                    'So we'll add one
+
+                    Dim t As New TreeViewItem
+                    t.Header = "[Dir] " & pathArr(i)
+                    Dim n As New NodeTag
+                    n.Name = pathArr(i)
+                    n.IsDirectory = True
+                    n.ParentSolution = DirectCast(node.Tag, NodeTag).ParentSolution
+                    n.ParentPath = pathArr(i)
+                    n.ParentProject = Project
+                    t.Tag = n
+                    'Sort the items when we add them
+                    Dim items As New List(Of TreeViewItem)
+                    For Each item In node.Items
+                        items.Add(item)
+                    Next
+                    items.Add(t)
+                    items.Sort(New TreeViewComparer)
+
+                    node.Items.Clear()
+                    For Each item In items
+                        node.Items.Add(item)
+                    Next
+
+                    node = t
                 End If
             Next
         End If
@@ -668,14 +696,16 @@ Public Class SolutionExplorer
             Dim tag As NodeTag = DirectCast(tvSolution.SelectedItem, TreeViewItem).Tag
             If tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                 Dim projItem = tag.ParentProject.GetProjectItemByPath(tag.ParentPath & "/" & tag.Name)
-                Dim obj = projItem.GetFile
-                If obj Is Nothing Then
-                    Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
-                    If Not IO.File.Exists(f) Then
-                        MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("Unable to find file at ""{0}""."), f))
+                If projItem IsNot Nothing Then
+                    Dim obj = projItem?.GetFile
+                    If obj Is Nothing Then
+                        Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
+                        If Not IO.File.Exists(f) Then
+                            MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("Unable to find file at ""{0}""."), f))
+                        End If
                     End If
+                    PluginHelper.RequestFileOpen(obj, False)
                 End If
-                PluginHelper.RequestFileOpen(obj, False)
             End If
         End If
     End Sub

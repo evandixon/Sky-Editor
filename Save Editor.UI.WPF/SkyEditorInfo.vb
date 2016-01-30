@@ -22,8 +22,8 @@ Public Class SkyEditorInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        Manager.RegisterMenuActionType(GetType(MenuActions.ImportSdf))
-        Manager.RegisterMenuActionType(GetType(MenuActions.OpenSdfSave))
+        'Manager.RegisterMenuActionType(GetType(MenuActions.ImportSdf))
+        'Manager.RegisterMenuActionType(GetType(MenuActions.OpenSdfSave))
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String

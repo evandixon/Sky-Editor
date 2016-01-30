@@ -22,55 +22,12 @@ Namespace Projects
 
                                    filesToOpen.Add(dest)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
-            'Dim toConvert = IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories)
-            'Dim done As Integer = 0
-            'For Each item In toConvert
-            '    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Converting Scripts... {0} of {1}"), done, toConvert.Length), done / toConvert.Length)
-            '    Dim unlua As New unluac(item)
-            '    Dim script As String = Await unlua.Decompile
-            '    Dim dest = item.Replace(scriptSource, scriptDestination)
-            '    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
-            '        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
-            '    End If
-            '    IO.File.WriteAllText(dest, script)
-            '    IO.File.WriteAllText(dest & ".original", script)
 
-            '    filesToOpen.Add(dest)
-            '    done += 1
-            'Next
-
-            'PluginHelper.SetLoadingStatusFinished()
-
-            'Me.CreateDirectory("", "Scripts")
-            'For Each item In filesToOpen
-
-            '    Dim pathParts = item.ToLower.Replace(Me.GetRootDirectory.ToLower, "").Replace("\", "/").TrimStart("/").Split("/")
-            '    Dim parentPath As New Text.StringBuilder
-            '    For count = 0 To pathParts.Length - 3
-            '        parentPath.Append(pathParts(count))
-            '        parentPath.Append("/")
-            '    Next
-            '    Dim immediateParentDir = pathParts(pathParts.Length - 2)
-            '    Dim parentPathString = parentPath.ToString.TrimEnd("/")
-            '    'ensure the directory exists
-            '    CreateDirectory(parentPathString, immediateParentDir)
-
-            '    Me.AddExistingFile(parentPathString & "/" & immediateParentDir, item)
-
-            '    ''Create project directory if it doesn't exist
-            '    'Dim projDir = "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/").Replace(IO.Path.GetFileName(item), "")
-            '    'If Not CurrentProject.Files.ContainsKey(projDir) Then
-            '    '    CurrentProject.CreateDirectory(projDir)
-            '    'End If
-            '    ''Add file to project
-            '    'CurrentProject.OpenFile(item, "Mods/" & IO.Path.GetFileNameWithoutExtension(Filename) & "/Scripts" & item.Replace(scriptDestination, "").Replace("\", "/"), False)
-            'Next
-            Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Opening Files..."))
-            Await f2.RunForEachSync(Function(Item As String) As Task
+            Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
+            Await f2.RunForEachSync(Async Function(Item As String) As Task
                                         Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "")
                                         Me.CreateDirectory(d)
-                                        Me.AddExistingFile(d, Item)
-                                        Return Task.CompletedTask
+                                        Await Me.AddExistingFile(d, Item, False)
                                     End Function, filesToOpen)
             PluginHelper.SetLoadingStatusFinished()
 
