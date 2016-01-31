@@ -24,6 +24,12 @@ Public Class SkyEditorInfo
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         'Manager.RegisterMenuActionType(GetType(MenuActions.ImportSdf))
         'Manager.RegisterMenuActionType(GetType(MenuActions.OpenSdfSave))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.AvalonDock.dll"))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.AvalonDock.Aero.dll"))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.AvalonDock.Metro.dll"))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.AvalonDock.VS2010.dll"))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.DataGrid.dll"))
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "Xceed.Wpf.Toolkit.dll"))
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String

@@ -22,22 +22,23 @@ Namespace Utilities
             Dim tasks As New List(Of Task)
             FileCopyCompleted = 0
             _fileCopyMax = files.Length
+            For Each item In files
+                Dim dest = item.Replace(SourceDirectory, DestinationDirectory)
+                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                End If
+            Next
             For count = 0 To files.Count - 1
                 Dim fileIndex As Integer = count
-                Dim t As New Task(New Action(Sub()
-                                                 Dim item = files(fileIndex)
-                                                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(item.Replace(SourceDirectory, DestinationDirectory))) Then
-                                                     IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(item.Replace(SourceDirectory, DestinationDirectory)))
-                                                 End If
-                                                 IO.File.Copy(item, item.Replace(SourceDirectory, DestinationDirectory))
-                                                 FileCopyCompleted += 1
-                                             End Sub))
-                t.Start()
+                Dim t = Task.Run(New Action(Sub()
+                                                Dim item = files(fileIndex)
+                                                Dim dest = item.Replace(SourceDirectory, DestinationDirectory)
+                                                IO.File.Copy(item, dest, True)
+                                                FileCopyCompleted += 1
+                                            End Sub))
                 tasks.Add(t)
             Next
-            Await Task.Run(New Action(Sub()
-                                          Task.WaitAll(tasks.ToArray)
-                                      End Sub))
+            Await Task.WhenAll(tasks)
         End Function
         Private Property FileCopyCompleted As Integer
             Get
@@ -52,9 +53,13 @@ Namespace Utilities
         Private _fileCopyMax As Integer
         Private Sub UpdatePortraitFixLoading(Completed As Integer, Max As Integer)
             If Completed < Max Then
-                If SetLoadingStatus Then PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), PluginHelper.GetLanguageItem("Copying Files..."), Completed, Max), Completed / Max)
+                If SetLoadingStatus Then
+                    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), PluginHelper.GetLanguageItem("Copying Files..."), Completed, Max), Completed / Max)
+                End If
             Else
-                If SetLoadingStatusOnFinish Then PluginHelper.SetLoadingStatusFinished()
+                If SetLoadingStatusOnFinish Then
+                    PluginHelper.SetLoadingStatusFinished()
+                End If
             End If
         End Sub
     End Class

@@ -24,7 +24,7 @@ Public Class PluginInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-
+        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "ICSharpCode.AvalonEdit.dll"))
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution

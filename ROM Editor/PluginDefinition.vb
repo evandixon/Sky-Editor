@@ -92,7 +92,6 @@ Public Class PluginDefinition
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Tagging.dll"))
-        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "zlib.net.dll"))
 
         Manager.RegisterMenuActionType(GetType(MenuActions.PsmdSoundtrackMenuAction))
         Manager.RegisterMenuActionType(GetType(MenuActions.CteImageExport))

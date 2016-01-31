@@ -53,11 +53,11 @@ Namespace Utilities
             _opMax = Collection.Count
             For Each item In Collection
                 Dim item2 = item 'Needed because we're running a lambda in a for statement.
-                Dim tTask As New Task(New Action(Sub()
-                                                     DelegateSub(item2)
-                                                     OperationsCompleted += 1
-                                                 End Sub))
-                tTask.Start()
+                Dim tTask = Task.Run(New Action(Sub()
+                                                    DelegateSub(item2)
+                                                    OperationsCompleted += 1
+                                                End Sub))
+                'tTask.Start()
                 tasks.Add(tTask)
             Next
             Await Task.WhenAll(tasks)

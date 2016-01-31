@@ -16,15 +16,15 @@ Public Class StartupHelpers
     ''' Starts the console core.
     ''' Will shut down the current application when complete.
     ''' </summary>
-    Public Shared Sub StartConsole()
+    Public Shared Async Function StartConsole() As Task
         Dim manager As PluginManager = PluginManager.GetInstance
         manager.LoadPlugins(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
-        ConsoleModule.ConsoleMain(manager)
+        Await ConsoleModule.ConsoleMain(manager)
 
         Application.Current.Shutdown()
-    End Sub
+    End Function
     Public Shared Async Function RunWPFStartupSequence() As Task
         Await RunWPFStartupSequence(New WpfCoreMod)
     End Function
@@ -40,7 +40,7 @@ Public Class StartupHelpers
         'Run the program
         Dim args = Environment.GetCommandLineArgs
         If args.Contains("-console") Then
-            StartupHelpers.StartConsole()
+            Await StartupHelpers.StartConsole()
         Else
             Dim manager As PluginManager = PluginManager.GetInstance
             manager.LoadPlugins(CoreMod)

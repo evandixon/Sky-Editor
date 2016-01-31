@@ -41,6 +41,7 @@ Public Class PluginManager
     ''' <remarks></remarks>
     Private Sub New(PluginFolder As String)
         Me.CurrentSolution = Nothing
+        assemblies = New List(Of Assembly)
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.PluginFolder = PluginFolder
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
@@ -51,7 +52,6 @@ Public Class PluginManager
         LoadPlugins(PluginFolder, CoreMod)
     End Sub
     Public Sub LoadPlugins(FromFolder As String, CoreMod As iSkyEditorPlugin)
-        Dim Assemblies As New List(Of Assembly)
         'Me.PluginFolder = FromFolder
         If IO.Directory.Exists(FromFolder) Then
             Dim assemblyPaths As New List(Of String)
@@ -74,66 +74,6 @@ Public Class PluginManager
                     End If
                 Next
             End If
-
-            'For Each plugin In assemblyPaths
-            '    PluginHelper.Writeline("Opening plugin " & IO.Path.GetFileName(plugin))
-            '    Dim reflectionAssembly As Assembly = Nothing
-            '    Try
-            '        reflectionAssembly = Assembly.ReflectionOnlyLoadFrom(plugin)
-            '    Catch ex As System.Reflection.ReflectionTypeLoadException
-            '        'If we can't load an assembly, then it's not a valid plugin.
-            '        'Since we're loading plugins, we're going to just ignore it, since it may be a dependency for another plugin.
-            '        'We will, however, log this.  In the future, I'll probably warn the user or something.  Maybe mark it for deletion at a later time.
-            '        If SettingsManager.Instance.Settings.Plugins.Contains(plugin.Replace(FromFolder, "").TrimStart("\")) Then
-            '            FailedPluginLoads.Add(plugin)
-            '        End If
-
-            '        'In the past, invalid plugins would be deleted.
-            '        'PluginHelper.Writeline("Fatal error: System.Reflection.ReflectionTypeLoadException.", PluginHelper.LineType.Error)
-            '        'PluginHelper.Writeline("Unable to load.  Deleting plugin and restarting program.", PluginHelper.LineType.Error)
-            '        'PluginHelper.Writeline("Details: " & ex.ToString, PluginHelper.LineType.Error)
-            '        'Redistribution.RedistributionHelpers.DeletePlugin(Me, IO.Path.GetFileName(plugin))
-            '    End Try
-
-            '    If reflectionAssembly Is Nothing OrElse reflectionAssembly.FullName = Assembly.GetCallingAssembly.FullName OrElse reflectionAssembly.FullName = Assembly.GetEntryAssembly.FullName OrElse reflectionAssembly.FullName = Assembly.GetExecutingAssembly.FullName Then
-            '        'Then this is a duplicate assembly.  Or something invalid.
-            '    Else
-            '        'Now that the assembly has been loaded, let's find out if it actually is a plugin.
-            '        If reflectionAssembly IsNot Nothing Then
-            '            Dim types As Type() = reflectionAssembly.GetTypes
-            '            Dim assemblyActual As Assembly = Nothing 'Let's not fully load the assembly unless we want to keep it around
-
-            '            For Each item In types
-            '                Dim IsPlugin As Boolean = False
-
-            '                'Look for the plugin interface
-            '                For Each intface As Type In item.GetInterfaces
-            '                    If intface Is GetType(iSkyEditorPlugin) Then
-            '                        IsPlugin = True
-            '                        Exit For
-            '                    End If
-            '                Next
-
-            '                'If we found the plugin interface, then we can load the assembly
-            '                If IsPlugin Then
-            '                    If assemblyActual IsNot Nothing Then
-            '                        assemblyActual = Assembly.LoadFrom(plugin)
-            '                    End If
-
-            '                    Dim Plg As iSkyEditorPlugin = item.GetConstructor({})?.Invoke({})
-            '                    If Plg IsNot Nothing Then
-            '                        Plugins.Add(assemblyActual.CreateInstance(item.FullName))
-            '                    End If
-            '                End If
-            '            Next
-
-            '            If assemblyActual IsNot Nothing Then
-            '                Assemblies.Add(assemblyActual)
-            '            End If
-            '        End If
-
-            '    End If
-            'Next
 
             Dim coreAssemblyName = CoreMod.GetType.Assembly.FullName
 
@@ -241,7 +181,7 @@ Public Class PluginManager
 
     ''' <summary>
     ''' Dictionary containing all files needed by each plugin.
-    ''' Excludes Assembly_plg.dll and /Assembly/, as these can be inferred by the assembly name of the plugin.
+    ''' Excludes Assembly.dll and /Assembly/, as these can be inferred by the assembly name of the plugin.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
@@ -258,7 +198,7 @@ Public Class PluginManager
     Private Property FailedPluginLoads As List(Of String)
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
-
+    Friend Property Assemblies As List(Of Assembly)
     Public Property CurrentSolution As Solution
         Get
             Return _currentSolutoin

@@ -4,10 +4,9 @@ Namespace MenuActions
     Public Class DevConsole
         Inherits MenuAction
 
-        Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
+        Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             PluginHelper.ShowConsole()
-            ConsoleMain(PluginManager.GetInstance)
-            Return Task.CompletedTask
+            Await ConsoleMain(PluginManager.GetInstance)
         End Function
 
         Public Sub New()
