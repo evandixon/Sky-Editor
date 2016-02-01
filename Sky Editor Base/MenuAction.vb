@@ -62,7 +62,7 @@ Public MustInherit Class MenuAction
         _alwaysVisible = False
         ActionPath = New List(Of String)
         For Each item In Path.Split(SeparatorCharacter)
-            If TranslateItems Then
+            If Not TranslateItems Then
                 ActionPath.Add(item)
             Else
                 ActionPath.Add(PluginHelper.GetLanguageItem(item, DefaultTranslationValue, Assembly.GetCallingAssembly.GetName.FullName))

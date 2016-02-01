@@ -44,7 +44,7 @@ Namespace Projects
             Dim projDir = GetRootDirectory()
 
             'Convert Languages
-            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting languages..."))
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Converting languages..."))
             Dim languageDictionary As New Dictionary(Of String, String)
             languageDictionary.Add("text_e.str", "English")
             languageDictionary.Add("text_f.str", "Français")
@@ -67,13 +67,13 @@ Namespace Projects
             Next
 
             'Convert Personality Test
-            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Converting Personality Test"))
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Converting Personality Test"))
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
             personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
             personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"))
             Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
-            PluginHelper.StopLoading()
+            PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task

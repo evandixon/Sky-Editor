@@ -109,6 +109,15 @@ Public Class LanguageEditor
         Return 0
     End Function
 
+    Private Sub LanguageEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        Me.Header = PluginHelper.GetLanguageItem("Language Editor")
+        btnAddLangItem.Content = PluginHelper.GetLanguageItem("Add")
+        btnNewLang.Content = PluginHelper.GetLanguageItem("New")
+        lblChangeWarning.Content = PluginHelper.GetLanguageItem("SettingChangeWarning", "Changes may not be applied until the program has been restarted.")
+        lblKey.Content = PluginHelper.GetLanguageItem("Key:")
+        lblValue.Content = PluginHelper.GetLanguageItem("Value:")
+    End Sub
+
 #Region "IObjectControl Support"
     Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
         Return True

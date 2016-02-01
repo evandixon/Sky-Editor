@@ -48,6 +48,17 @@ Public Class SolutionExplorer
         menuCreateFile.Visibility = Visibility.Collapsed
         menuDelete.Visibility = Visibility.Collapsed
         menuContext.Visibility = Visibility.Collapsed
+        menuOpen.Visibility = Visibility.Collapsed
+        menuProperties.Visibility = Visibility.Collapsed
+        menuAddExistingFile.Visibility = Visibility.Collapsed
+
+        menuAddFolder.Header = PluginHelper.GetLanguageItem("Add Folder")
+        menuCreateProject.Header = PluginHelper.GetLanguageItem("Create Project")
+        menuCreateFile.Header = PluginHelper.GetLanguageItem("Create File")
+        menuDelete.Header = PluginHelper.GetLanguageItem("Delete")
+        menuOpen.Header = PluginHelper.GetLanguageItem("Open")
+        menuProperties.Header = PluginHelper.GetLanguageItem("Properties")
+        menuAddExistingFile.Header = PluginHelper.GetLanguageItem("Add Existing File")
     End Sub
 
     Public Property Header As String Implements ITargetedControl.Header

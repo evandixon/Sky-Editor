@@ -20,7 +20,7 @@
         <TextBox x:Name="txtKey" Height="64" Margin="10,41,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"  Grid.Column="2"/>
         <Label x:Name="lblValue" Content="Value:" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"  Grid.Column="2"/>
         <TextBox x:Name="txtValue" Margin="10,141,10,42" TextWrapping="Wrap" Text=""  Grid.Column="2"/>
-        <Label x:Name="lblChangeWarning" Content="Changes will not be applied until the program has been restarted." Margin="10,0,10,10" Height="27" VerticalAlignment="Bottom"  Grid.Column="2"/>
+        <Label x:Name="lblChangeWarning" Content="Changes may not be applied until the program has been restarted." Margin="10,0,10,10" Height="27" VerticalAlignment="Bottom"  Grid.Column="2"/>
         <Button x:Name="btnNewLang" Content="New" Margin="0,27,5,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
         <Button x:Name="btnAddLangItem" Content="Add" Margin="0,0,5,5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
     </Grid>

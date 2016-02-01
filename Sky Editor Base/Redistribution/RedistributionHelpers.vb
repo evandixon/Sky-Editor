@@ -164,7 +164,7 @@ Namespace Redistribution
         Public Shared Sub InstallPendingPlugins()
             'Dim a = GetAssemblies()
             Dim PluginNames As New List(Of String)
-            For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*_plg.zip")
+            For Each item In IO.Directory.GetFiles(PluginHelper.PluginsToInstallDirectory, "*.zip")
                 PluginNames.Add(IO.Path.GetFileName(item))
             Next
             For Each item In PluginNames

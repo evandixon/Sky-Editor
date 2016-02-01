@@ -1,5 +1,6 @@
 ﻿Imports System.Windows
 Imports System.Windows.Controls
+Imports SaveEditor.Interfaces
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -66,11 +67,11 @@ Namespace Controls
         End Property
 
         Public Sub RefreshDisplay()
-            Attack = EditingObject
+            Attack = GetEditingObject(Of iMDActiveAttack)()
         End Sub
 
         Public Sub UpdateObject()
-            EditingObject = Attack
+            Me.SetEditingObject(Attack)
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles cbMove.SelectionChanged,
@@ -138,6 +139,10 @@ Namespace Controls
         Protected Function GetEditingObject(Of T)() As T
             Return PluginHelper.Cast(Of T)(_editingObject)
         End Function
+
+        Protected Sub SetEditingObject(Of T)(Value As T)
+            PluginHelper.CastUpdate(Of T)(_editingObject, Value)
+        End Sub
 
         ''' <summary>
         ''' Returns the current EditingObject.

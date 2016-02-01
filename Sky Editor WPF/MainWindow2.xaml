@@ -27,7 +27,7 @@
                 <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup x:Name="toolbarPaneBottom">
-                            <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output" IsVisible="False">
+                            <ad:LayoutAnchorable x:Name="toolbarOutput" Title="Output" IsVisible="False" CanHide="False">
                                 <TextBox x:Name="txtOutput" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>

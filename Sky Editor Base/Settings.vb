@@ -112,10 +112,11 @@ Public Class SettingsManager
         ''' •Enables use of Redistribution Helpers, which helps with packaging plugins, or the application as a whole.</remarks>
         Public Property DevelopmentMode As Boolean
             Get
-                If Setting("DevMode") Is Nothing Then
-                    Setting("DevMode") = True
-                End If
-                Return Setting("DevMode")
+                'If Setting("DevMode") Is Nothing Then
+                '    Setting("DevMode") = True
+                'End If
+                'Return Setting("DevMode")
+                Return True
             End Get
             Set(value As Boolean)
                 Setting("DevMode") = value
@@ -156,7 +157,7 @@ Public Class SettingsManager
             DefaultLanguage = "English"
             UpdatePlugins = True
             DebugLanguagePlaceholders = False
-            PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4PluginsAlpha/plugins.json"
+            PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4BetaPlugins/plugins.json"
             VerboseOutput = False
         End Sub
         Friend Sub New(File As SettingsFile)
@@ -178,7 +179,7 @@ Public Class SettingsManager
                 DefaultLanguage = "English"
                 UpdatePlugins = True
                 DebugLanguagePlaceholders = False
-                PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4PluginsAlpha/plugins.json"
+                PluginUpdateUrl = "http://dl.uniquegeeks.net/SkyEditor4BetaPlugins/plugins.json"
                 VerboseOutput = False
             End If
         End Sub

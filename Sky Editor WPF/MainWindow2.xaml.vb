@@ -128,10 +128,14 @@ Public Class MainWindow2
 
 #Region "Form"
     Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        'Set Language items
+        Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Alpha " & Assembly.GetExecutingAssembly.GetName.Version.ToString
+        toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
+        lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
+
+        'Load
         OpenFileDialog1 = New Forms.OpenFileDialog
         SaveFileDialog1 = New Forms.SaveFileDialog
-
-        Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Alpha " & Assembly.GetExecutingAssembly.GetName.Version.ToString
 
         _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
 

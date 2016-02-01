@@ -53,7 +53,7 @@ Namespace Projects
             '        Await Me.AddExistingFile(internalDir, item)
             '    End Using
             'Next
-            PluginHelper.StopLoading()
+            PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task

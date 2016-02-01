@@ -24,16 +24,18 @@ Namespace Projects
             Dim k As New Kaomado(IO.Path.Combine(GetRawFilesDir, "data", "FONT", "kaomado.kao"))
             Await Kaomado.RunUnpack(IO.Path.Combine(GetRawFilesDir, "data", "FONT", "kaomado.kao"), portraitDir)
             Await k.ApplyMissingPortraitFix(portraitDir)
-            Dim toAdd = IO.Directory.GetFiles(portraitDir, "*", IO.SearchOption.AllDirectories)
 
-            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Opening Files..."))
-            Await f.RunForEachSync(Function(Item As String) As Task
-                                       Dim d = IO.Path.GetDirectoryName(Item).Replace(rootDir, "")
-                                       Me.CreateDirectory(d)
-                                       Me.AddExistingFile(d, Item)
-                                       Return Task.CompletedTask
-                                   End Function, toAdd)
-            PluginHelper.SetLoadingStatusFinished()
+            ''We don't really need to add the files to the project.  It will save time to skip this.
+            'Dim toAdd = IO.Directory.GetFiles(portraitDir, "*", IO.SearchOption.AllDirectories)
+
+            'Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Opening Files..."))
+            'Await f.RunForEachSync(Function(Item As String) As Task
+            '                           Dim d = IO.Path.GetDirectoryName(Item).Replace(rootDir, "")
+            '                           Me.CreateDirectory(d)
+            '                           Me.AddExistingFile(d, Item)
+            '                           Return Task.CompletedTask
+            '                       End Function, toAdd)
+            'PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task

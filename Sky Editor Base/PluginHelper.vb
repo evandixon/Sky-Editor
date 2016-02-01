@@ -178,11 +178,11 @@ Public Class PluginHelper
         p.BeginOutputReadLine()
 
         If ShowLoadingWindow Then
-            StartLoading(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
+            SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
 
             Await WaitForProcess(p)
 
-            StopLoading()
+            SetLoadingStatusFinished()
             RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
             p.Dispose()
             Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
@@ -241,39 +241,39 @@ Public Class PluginHelper
     Private Shared _loadingShown As Boolean = False
     Private Shared _loadingDefinitions As New Dictionary(Of String, LoadingMessageChangedEventArgs)
 
-    ''' <summary>
-    ''' Shows a loading window until the same function calls StopLoading.
-    ''' </summary>
-    ''' <param name="Message">The message to be displayed while loading.  This message will not be translated so you should translate it on your end.</param>
-    ''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
-    ''' <remarks></remarks>
-    Public Shared Sub StartLoading(Message As String, Optional Progress As Single? = Nothing, <CallerMemberName> Optional CallerName As String = Nothing)
-        If _loadingDefinitions.ContainsKey(CallerName) Then
-            If Progress.HasValue Then
-                _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message, Progress)
-            Else
-                _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message)
-            End If
-        Else
-            If Progress.HasValue Then
-                _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
-            Else
-                _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
-            End If
-        End If
-        MakeLoadingVisibleorNot()
-    End Sub
-    ''' <summary>
-    ''' Closes the loading window shown from StartLoading
-    ''' </summary>
-    ''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
-    ''' <remarks></remarks>
-    Public Shared Sub StopLoading(<CallerMemberName> Optional CallerName As String = Nothing)
-        If _loadingDefinitions.ContainsKey(CallerName) Then
-            _loadingDefinitions.Remove(CallerName)
-            MakeLoadingVisibleorNot()
-        End If
-    End Sub
+    '''' <summary>
+    '''' Shows a loading window until the same function calls StopLoading.
+    '''' </summary>
+    '''' <param name="Message">The message to be displayed while loading.  This message will not be translated so you should translate it on your end.</param>
+    '''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
+    '''' <remarks></remarks>
+    'Public Shared Sub StartLoading(Message As String, Optional Progress As Single? = Nothing, <CallerMemberName> Optional CallerName As String = Nothing)
+    '    If _loadingDefinitions.ContainsKey(CallerName) Then
+    '        If Progress.HasValue Then
+    '            _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message, Progress)
+    '        Else
+    '            _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message)
+    '        End If
+    '    Else
+    '        If Progress.HasValue Then
+    '            _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
+    '        Else
+    '            _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
+    '        End If
+    '    End If
+    '    MakeLoadingVisibleorNot()
+    'End Sub
+    '''' <summary>
+    '''' Closes the loading window shown from StartLoading
+    '''' </summary>
+    '''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
+    '''' <remarks></remarks>
+    'Public Shared Sub StopLoading(<CallerMemberName> Optional CallerName As String = Nothing)
+    '    If _loadingDefinitions.ContainsKey(CallerName) Then
+    '        _loadingDefinitions.Remove(CallerName)
+    '        MakeLoadingVisibleorNot()
+    '    End If
+    'End Sub
     Private Shared Sub MakeLoadingVisibleorNot()
         Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
         Dim isShowing As Boolean = _loadingShown

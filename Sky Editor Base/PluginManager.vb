@@ -688,7 +688,7 @@ Public Class PluginManager
     ''' <param name="ObjectToEdit"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetObjectControl(ObjectToEdit As Object) As iObjectControl
+    <Obsolete> Public Function GetObjectControl(ObjectToEdit As Object) As iObjectControl
         Dim out As iObjectControl = Nothing
         If ObjectToEdit IsNot Nothing Then
             For Each item In (From o In GetObjectControls() Order By o.GetSortOrder(ObjectToEdit.GetType, False) Descending)

@@ -452,7 +452,7 @@ Public Class Project
                 Dim projItem As New ProjectItem(Me)
                 projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
-                If ShowLoadingStatus Then PluginHelper.SetLoadingStatus("Copying file...")
+                If ShowLoadingStatus Then PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying file..."))
 
                 Dim source = FilePath
                 Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))

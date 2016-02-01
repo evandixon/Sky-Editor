@@ -14,6 +14,7 @@ Public Class TargetedToolWindow
             Me.Title = value.Header
             Me.IsVisible = value.IsVisible
             Me.Content = value
+            Me.CanHide = False
         End Set
     End Property
     Private WithEvents _containedControl As ITargetedControl

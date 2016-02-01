@@ -57,18 +57,20 @@ Public Class StartupHelpers
                 l.Show()
 
                 Try
-                    PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Updating plugins..."))
+                    PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Updating plugins..."))
                     If Await Task.Run(Function() As Boolean
                                           Return RedistributionHelpers.DownloadAllPlugins(manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
                                       End Function) Then
-                        PluginHelper.StopLoading()
+                        PluginHelper.SetLoadingStatusFailed()
                         manager.Dispose()
                         RedistributionHelpers.RequestRestartProgram()
                         Application.Current.Shutdown()
                     End If
-                    PluginHelper.StopLoading()
+                    PluginHelper.SetLoadingStatusFinished()
+                Catch ex As Net.WebException
+                    'Do nothing, we simply won't update the plugins
                 Catch ex As Exception
-                    PluginHelper.StopLoading()
+                    PluginHelper.SetLoadingStatusFinished()
                     PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
                 End Try
                 l.Visibility = Visibility.Collapsed

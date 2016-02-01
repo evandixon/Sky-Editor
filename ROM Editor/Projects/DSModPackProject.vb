@@ -122,15 +122,7 @@ Namespace Projects
             Dim modpackToolsPatchersDir = GetPatchersDir()
             Dim modsSourceDir = GetSourceModsDir()
 
-            If IO.Directory.Exists(modpackDir) Then
-                'Clear the files that are currently in the modpack directory
-                For Each item In IO.Directory.GetFiles(modpackDir, "*", IO.SearchOption.AllDirectories)
-                    IO.File.Delete(item)
-                Next
-                IO.Directory.Delete(modpackDir, True)
-            End If
-            IO.Directory.CreateDirectory(modpackDir)
-
+            Await Utilities.FileSystem.ReCreateDirectory(modpackDir)
 
             If Not IO.Directory.Exists(modpackModsDir) Then
                 IO.Directory.CreateDirectory(modpackModsDir)
@@ -144,14 +136,8 @@ Namespace Projects
             If Not IO.Directory.Exists(modsSourceDir) Then
                 IO.Directory.CreateDirectory(modsSourceDir)
             End If
-            If IO.Directory.Exists(OutputDir) Then
-                'Clear the files that are currently in the output directory
-                For Each item In IO.Directory.GetFiles(OutputDir, "*", IO.SearchOption.AllDirectories)
-                    IO.File.Delete(item)
-                Next
-                IO.Directory.Delete(OutputDir, True)
-            End If
-            IO.Directory.CreateDirectory(OutputDir)
+
+            Await Utilities.FileSystem.ReCreateDirectory(OutputDir)
 
             'Copy external mods
             For Each item In IO.Directory.GetFiles(modsSourceDir)
@@ -213,7 +199,7 @@ Namespace Projects
             Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
 
             'Apply patch
-            PluginHelper.StartLoading(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))
 
             Await ApplyPatchAsync(Solution)
         End Function
