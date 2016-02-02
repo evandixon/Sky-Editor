@@ -722,7 +722,7 @@ Public Class SolutionExplorer
                             MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("Unable to find file at ""{0}""."), f))
                         End If
                     End If
-                    PluginHelper.RequestFileOpen(obj, False)
+                    PluginHelper.RequestFileOpen(obj, tag.ParentProject)
                 End If
             End If
         End If
@@ -734,7 +734,7 @@ Public Class SolutionExplorer
             If tag.IsRoot Then
                 PluginHelper.RequestFileOpen(tag.ParentSolution, False)
             ElseIf tag.IsProjectRoot Then
-                PluginHelper.RequestFileOpen(tag.ParentProject, False)
+                PluginHelper.RequestFileOpen(tag.ParentProject, tag.ParentProject)
             End If
         End If
     End Sub

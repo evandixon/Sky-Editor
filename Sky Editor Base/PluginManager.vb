@@ -46,7 +46,11 @@ Public Class PluginManager
         Me.PluginFolder = PluginFolder
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         Me.FailedPluginLoads = New List(Of String)
+        Me.OpenedFiles = New Dictionary(Of Object, Project)
         PluginHelper.PluginManagerInstance = Me
+
+        AddHandler PluginHelper.FileOpenRequested, AddressOf _pluginHelper_FileOpened
+        AddHandler PluginHelper.FileClosed, AddressOf _pluginHelper_FileClosed
     End Sub
     Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
         LoadPlugins(PluginFolder, CoreMod)
@@ -198,6 +202,12 @@ Public Class PluginManager
     Private Property FailedPluginLoads As List(Of String)
     Private Property MenuItems As List(Of MenuItemInfo)
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
+
+    ''' <summary>
+    ''' Matches opened files to their parent projects
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property OpenedFiles As Dictionary(Of Object, Project)
     Friend Property Assemblies As List(Of Assembly)
     Public Property CurrentSolution As Solution
         Get
@@ -555,6 +565,19 @@ Public Class PluginManager
         Return output
     End Function
 
+    ''' <summary>
+    ''' Returns the file's parent project, if it exists.
+    ''' </summary>
+    ''' <param name="File">File of which to get the parent project.  Must be an open file, otherwise the function will return Nothing.</param>
+    ''' <returns></returns>
+    Public Function GetOpenedFileProject(File As Object) As Project
+        If Me.OpenedFiles.ContainsKey(File) Then
+            Return Me.OpenedFiles(File)
+        Else
+            Return Nothing
+        End If
+    End Function
+
 #End Region
 
 #Region "Events"
@@ -588,6 +611,18 @@ Public Class PluginManager
 
     Private Sub _currentProject_Modified(sender As Object, e As EventArgs) ' Handles _currentProject.Modified
         RaiseEvent ProjectModified(sender, e)
+    End Sub
+
+    Private Sub _pluginHelper_FileOpened(sender As Object, e As EventArguments.FileOpenedEventArguments)
+        If Not Me.OpenedFiles.ContainsKey(e.File) Then
+            Me.OpenedFiles.Add(e.File, e.ParentProject)
+        End If
+    End Sub
+
+    Private Sub _pluginHelper_FileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
+        If Me.OpenedFiles.ContainsKey(e.File) Then
+            Me.OpenedFiles.Remove(e.File)
+        End If
     End Sub
 
 #End Region

@@ -95,6 +95,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleCommands\ImportFunctionList.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
@@ -255,6 +256,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeFiles\CodeFiles.vbproj">
+      <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
+      <Name>CodeFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Save Editor\Save Editor.vbproj">
       <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
       <Name>Save Editor</Name>

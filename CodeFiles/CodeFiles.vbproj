@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeExtraData.vb" />
+    <Compile Include="CodeExtraDataFile.vb" />
     <Compile Include="CodeFile.vb" />
     <Compile Include="CodeHighlightRule.vb" />
     <Compile Include="FunctionDocumentation.vb" />

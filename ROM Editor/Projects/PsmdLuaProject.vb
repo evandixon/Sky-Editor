@@ -1,7 +1,10 @@
-﻿Imports SkyEditorBase
+﻿Imports CodeFiles
+Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
         Inherits GenericModProject
+        Implements CodeFiles.ICodeProject
+
         Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
@@ -58,6 +61,19 @@ Namespace Projects
 
         Public Overrides Function GetSupportedGameCodes() As IEnumerable(Of String)
             Return {GameStrings.GTICode, GameStrings.PSMDCode}
+        End Function
+
+        Public Function GetExtraData(Code As CodeFile) As CodeExtraData Implements ICodeProject.GetExtraData
+            Dim filenameTemplate = PluginHelper.GetResourceName("Code/psmdLuaInfo-{0}.fdd")
+            Dim filenameCurrent = String.Format(filenameTemplate, SettingsManager.Instance.Settings.CurrentLanguage)
+            Dim filenameDefault = String.Format(filenameTemplate, SettingsManager.Instance.Settings.DefaultLanguage)
+            If IO.File.Exists(filenameCurrent) Then
+                Return New CodeExtraDataFile(filenameCurrent)
+            ElseIf IO.File.Exists(filenameDefault) Then
+                Return New CodeExtraDataFile(filenameDefault)
+            Else
+                Return New CodeExtraDataFile
+            End If
         End Function
     End Class
 

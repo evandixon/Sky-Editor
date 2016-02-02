@@ -26,19 +26,21 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceName(Path As String) As String
-        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
+        Dim fullPath = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Assembly.GetCallingAssembly.GetName.Name, Path)
+        Dim baseDir = IO.Path.GetDirectoryName(fullPath)
         If Not IO.Directory.Exists(baseDir) Then
             IO.Directory.CreateDirectory(baseDir)
         End If
-        Return IO.Path.Combine(baseDir, Path)
+        Return fullPath
     End Function
 
     Public Shared Function GetResourceName(Path As String, Plugin As String) As String
-        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Plugin.Replace("_plg", ""))
+        Dim fullPath = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Plugin, Path)
+        Dim baseDir = IO.Path.GetDirectoryName(fullPath)
         If Not IO.Directory.Exists(baseDir) Then
             IO.Directory.CreateDirectory(baseDir)
         End If
-        Return IO.Path.Combine(baseDir, Path)
+        Return fullPath
     End Function
     ''' <summary>
     ''' Returns your plugin's resource directory as managed by Sky Editor.
@@ -328,11 +330,20 @@ Public Class PluginHelper
     Public Shared Event ConsoleLineWritten(sender As Object, e As ConsoleLineWrittenEventArgs)
 #End Region
 
-#Region "Open File"
+#Region "Open/Close File"
     Public Shared Event FileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
+    Public Shared Event FileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
+    Public Shared Sub RaiseFileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
+        RaiseEvent FileClosed(sender, e)
+    End Sub
     Public Shared Sub RequestFileOpen(File As Object, DisposeOnClose As Boolean)
         If File IsNot Nothing Then
             RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+        End If
+    End Sub
+    Public Shared Sub RequestFileOpen(File As Object, ParentProject As Project)
+        If File IsNot Nothing Then
+            RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
         End If
     End Sub
 #End Region
@@ -348,23 +359,6 @@ Public Class PluginHelper
         Dim f As New Utilities.AsyncFileCopier
         Await f.CopyDirectory(SourceDirectory, DestinationDirectory)
     End Function
-
-    ''' <summary>
-    ''' Deletes the given directory and everything inside it.
-    ''' </summary>
-    ''' <param name="DirectoryPath"></param>
-    Public Shared Sub DeleteDirectory(DirectoryPath As String)
-        'Delete the files
-        For Each item In IO.Directory.GetFiles(DirectoryPath, "*", IO.SearchOption.AllDirectories)
-            If IO.File.Exists(item) Then IO.File.Delete(item)
-        Next
-        'Delete the directories
-        For Each item In IO.Directory.GetDirectories(DirectoryPath, "*", IO.SearchOption.AllDirectories)
-            If IO.Directory.Exists(item) Then DeleteDirectory(item)
-        Next
-        'Delete the target directory
-        IO.Directory.Delete(DirectoryPath, True)
-    End Sub
 
     ''' <summary>
     ''' Shows the application's underlying console to the user.

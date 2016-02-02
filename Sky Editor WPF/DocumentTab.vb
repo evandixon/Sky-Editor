@@ -102,12 +102,18 @@ Public Class DocumentTab
                 e.Cancel = True
             Else
                 If TypeOf _document Is IDisposable Then
+                    PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
                     DirectCast(_document, IDisposable).Dispose()
+                Else
+                    PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
                 End If
             End If
         Else
             If TypeOf _document Is IDisposable Then
+                PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
                 DirectCast(_document, IDisposable).Dispose()
+            Else
+                PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
             End If
         End If
     End Sub

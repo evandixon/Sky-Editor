@@ -16,12 +16,12 @@ Public Class AvalonEditControl
 
         Dim highlighter As New AvalonCodeHighlighter(GetEditingObject(Of CodeFile).GetCodeHighlightRules)
 
-        'Dim p = PluginManager.GetInstance.CurrentProject
-        'If p IsNot Nothing AndAlso TypeOf p Is ICodeProject Then
-        '    extraData = DirectCast(p, ICodeProject).GetExtraData(GetEditingObject(Of CodeFile))
-        'Else
-        extraData = New DebugExtraData
-        'End If
+        Dim p = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
+        If p IsNot Nothing AndAlso TypeOf p Is ICodeProject Then
+            extraData = DirectCast(p, ICodeProject).GetExtraData(GetEditingObject(Of CodeFile))
+        Else
+            extraData = New DebugExtraData
+        End If
 
         If extraData IsNot Nothing AndAlso extraData.AdditionalHighlightRules IsNot Nothing Then
             highlighter.AddRuleSet("Project Rules", extraData.AdditionalHighlightRules)
@@ -53,8 +53,8 @@ Public Class AvalonEditControl
             If extraData.GetAutoCompleteChars.Contains(e.Text) Then
                 autoComplete = New CompletionWindow(txtCode.TextArea)
                 With autoComplete.CompletionList.CompletionData
-                    For Each item In extraData.GetAutoCompleteData("")
-                        .Add(New AutoCompleteData(item))
+                    For Each item In extraData.GetAutoCompleteData(GetLastPart(" "))
+                        .Add(New AutoCompleteData(item, extraData.GetAutoCompleteChars))
                     Next
                 End With
                 autoComplete.Show()
@@ -69,6 +69,15 @@ Public Class AvalonEditControl
             End If
         End If
     End Sub
+
+    Private Function GetLastPart(PrecedingChar As String)
+        Dim partStart = txtCode.Text.LastIndexOf(PrecedingChar, txtCode.CaretOffset)
+        If partStart = -1 Then
+            partStart = 0
+        End If
+        Dim part As String = txtCode.Text.Substring(partStart + PrecedingChar.Length, txtCode.CaretOffset - partStart).Trim
+        Return part
+    End Function
 
     Private Sub autoComplete_Closed(sender As Object, e As EventArgs) Handles autoComplete.Closed
         autoComplete = Nothing

@@ -164,6 +164,7 @@
     <Compile Include="ConsoleCommandAsync.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="EventArguments\FileAddedEventArguments.vb" />
+    <Compile Include="EventArguments\FileClosedEventArgs.vb" />
     <Compile Include="EventArguments\FileOpenedEventArgs.vb" />
     <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\HeaderUpdatedEventArgs.vb" />

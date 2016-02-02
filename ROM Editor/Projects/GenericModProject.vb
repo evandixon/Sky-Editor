@@ -267,10 +267,7 @@ Namespace Projects
                 actions.UpdateUrl = Homepage
 
                 '-Copy and write files
-                If IO.Directory.Exists(modTemp) Then
-                    PluginHelper.DeleteDirectory(modTemp)
-                End If
-                IO.Directory.CreateDirectory(modTemp)
+                Await Utilities.FileSystem.ReCreateDirectory(modTemp)
 
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), SkyEditorBase.Utilities.Json.Serialize(actions))
 

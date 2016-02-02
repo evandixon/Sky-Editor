@@ -29,8 +29,16 @@ Public Class AutoCompleteData
         textArea.Document.Replace(completionSegment, Me.Text)
     End Sub
 
-    Public Sub New(Info As FunctionDocumentation)
-        Me.Text = Info.FunctionName
+    Public Sub New(Info As FunctionDocumentation, SeparatorChars As List(Of Char))
+        Dim part As New Text.StringBuilder
+        For Each c In Info.FunctionName.ToCharArray
+            If SeparatorChars.Contains(c) Then
+                part = New Text.StringBuilder
+            Else
+                part.Append(c)
+            End If
+        Next
+        Me.Text = part.ToString
         Me.Description = Info.FunctionDescription
     End Sub
 End Class
