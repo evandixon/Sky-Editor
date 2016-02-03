@@ -279,7 +279,7 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
                 '    IO.File.Delete(output)
                 '    IO.File.Copy(outputCia, destination, True)
                 'Else
-                '    IO.File.Copy(output, destination, True)
+                IO.File.Copy(output, destination, True)
                 'End If
 
                 RaiseProgressChanged(1, "Ready")
