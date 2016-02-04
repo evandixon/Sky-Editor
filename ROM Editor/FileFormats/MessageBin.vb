@@ -17,6 +17,13 @@ Namespace FileFormats
             Public Overrides Function ToString() As String
                 Return BitConverter.ToInt32(BitConverter.GetBytes(Hash), 0).ToString & ": " & Entry
             End Function
+            Public Function GetStringBytes() As Byte()
+                Dim output As New List(Of Byte)
+                output.AddRange(Text.UnicodeEncoding.Unicode.GetBytes(Entry))
+                output.Add(0)
+                output.Add(0)
+                Return output.ToArray
+            End Function
         End Class
 
         ''' <summary>
@@ -62,6 +69,40 @@ Namespace FileFormats
         End Sub
 
         Public Overrides Sub Save(Destination As String)
+            Me.RelativePointers.Clear()
+            'Sir0 header pointers
+            Me.RelativePointers.Add(4)
+            Me.RelativePointers.Add(4)
+
+            'Generate sections
+            Dim stringSection As New List(Of Byte)
+            Dim infoSection As New List(Of Byte)
+            For Each item In From s In Strings Order By s.Hash Ascending
+                infoSection.AddRange(BitConverter.GetBytes(16 + stringSection.Count))
+                infoSection.AddRange(BitConverter.GetBytes(item.Hash))
+                infoSection.AddRange(BitConverter.GetBytes(item.Unknown))
+                stringSection.AddRange(item.GetStringBytes)
+            Next
+
+            'Add pointers
+            Me.RelativePointers.Add(stringSection.Count + 8)
+            For count = 0 To Strings.Count - 2
+                Me.RelativePointers.Add(&HC)
+            Next
+
+            'Write sections to file
+            Me.Length = 16 + stringSection.Count + infoSection.Count
+            Me.RawData(16, stringSection.Count) = stringSection.ToArray
+            Me.RawData(16 + stringSection.Count, infoSection.Count) = infoSection.ToArray
+
+            'Update header
+            Dim headerBytes As New List(Of Byte)
+            headerBytes.AddRange(BitConverter.GetBytes(Strings.Count))
+            headerBytes.AddRange(BitConverter.GetBytes(16 + stringSection.Count))
+            Me.Header = headerBytes.ToArray
+            Me.RelativePointers.Add(&H10)
+
+            'Let the general SIR0 stuff happen
             MyBase.Save(Destination)
         End Sub
 
