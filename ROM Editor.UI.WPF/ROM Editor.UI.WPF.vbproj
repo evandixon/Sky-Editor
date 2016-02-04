@@ -139,6 +139,12 @@
     <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
       <DependentUpon>item_p_Editor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\MessageBinEditor.xaml.vb">
+      <DependentUpon>MessageBinEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\MessageBinEntryEditor.xaml.vb">
+      <DependentUpon>MessageBinEntryEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\ModpackInfoControl.xaml.vb">
       <DependentUpon>ModpackInfoControl.xaml</DependentUpon>
     </Compile>
@@ -147,6 +153,9 @@
     </Compile>
     <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\PsmdLuaLangIntegration.xaml.vb">
+      <DependentUpon>PsmdLuaLangIntegration.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\ThreeDSModPackControl.xaml.vb">
       <DependentUpon>ThreeDSModPackControl.xaml</DependentUpon>
@@ -189,6 +198,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ObjectControls\MessageBinEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\MessageBinEntryEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ObjectControls\ModpackInfoControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,6 +217,10 @@
     <Page Include="ObjectControls\PersonalityTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ObjectControls\PsmdLuaLangIntegration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ObjectControls\ThreeDSModPackControl.xaml">
       <SubType>Designer</SubType>
@@ -215,6 +236,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeFiles\CodeFiles.vbproj">
+      <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
+      <Name>CodeFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ROM Editor\ROM Editor.vbproj">
       <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
       <Name>ROM Editor</Name>

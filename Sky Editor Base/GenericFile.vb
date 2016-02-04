@@ -160,6 +160,16 @@ Public Class GenericFile
         End Set
     End Property
 
+    Public Property UInt(Index As Long) As UInteger
+        Get
+            Return BitConverter.ToUInt32(RawData(Index, 4), 0)
+        End Get
+        Set(value As UInteger)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 4) = bytes
+        End Set
+    End Property
+
     Public Property Length As Long
         Get
             Return FileReader.Length

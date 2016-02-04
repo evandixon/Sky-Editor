@@ -11,6 +11,7 @@ Namespace FileFormats
             Public Property DataOffset As Integer
             Public Property DataLength As Integer
             Public Property Filename As String
+            Public Property FilenamePointer As UInteger
             Public Overrides Function ToString() As String
                 If Filename IsNot Nothing Then
                     Return Filename
@@ -32,16 +33,17 @@ Namespace FileFormats
         End Sub
         Private Sub ProcessData()
             FileData = New List(Of FileInfo)
-            DataOffset = Me.Int(Me.HeaderOffset + &H0)
-            FileCount = Me.Int(Me.HeaderOffset + &H4)
-            Sir0Fat5Type = Me.Int(Me.HeaderOffset + &H8)
+            DataOffset = BitConverter.ToInt32(Header, 0)
+            FileCount = BitConverter.ToInt32(Header, 4)
+            Sir0Fat5Type = BitConverter.ToInt32(Header, 8)
 
             For count = 0 To FileCount - 1
                 Dim info As New FileInfo
                 info.Index = count
-                Dim filenameOffset = Me.Int(DataOffset + count * 12 + 0)
+                Dim filenameOffset = Me.UInt(DataOffset + count * 12 + 0)
                 info.DataOffset = Me.Int(DataOffset + count * 12 + 4)
                 info.DataLength = Me.Int(DataOffset + count * 12 + 8)
+                info.FilenamePointer = filenameOffset
                 If Sir0Fat5Type = 0 Then
                     'We're inferring the length based on the offset of the next filename
                     Dim filenameLength = Me.Int(DataOffset + (count + 1) * 12 + 0) - filenameOffset
@@ -51,6 +53,18 @@ Namespace FileFormats
                 End If
                 FileData.Add(info)
             Next
+        End Sub
+
+        Public Function GetBytes() As Byte()
+            Dim output As New List(Of Byte)
+
+
+            Throw New NotImplementedException
+
+        End Function
+
+        Public Sub New()
+            FileData = New List(Of FileInfo)
         End Sub
 
         Public Sub New(RawData As Byte())

@@ -1,4 +1,5 @@
-﻿Imports CodeFiles
+﻿Imports System.Text.RegularExpressions
+Imports CodeFiles
 Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
@@ -8,8 +9,27 @@ Namespace Projects
         Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
+            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Extracting Language Files..."))
+            Dim languageNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)\.bin", RegexOptions.IgnoreCase)
+            Dim languageFileNames = IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*.bin", IO.SearchOption.TopDirectoryOnly)
+            For Each item In languageFileNames
+                Dim lang = "default"
+
+                Dim match = languageNameRegex.Match(item)
+                If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
+                    lang = match.Groups(1).Value
+                End If
+
+                Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
+                Await Utilities.FileSystem.ReCreateDirectory(destDir)
+
+                Dim farc As New FileFormats.FarcF5
+                farc.OpenFile(item)
+                Await farc.Extract(destDir)
+            Next
+
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
-            Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory)
+            Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")
             Dim filesToOpen As New List(Of String)
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Decompiling Scripts..."))
@@ -28,17 +48,16 @@ Namespace Projects
 
             Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
             Await f2.RunForEachSync(Async Function(Item As String) As Task
-                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "")
+                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
                                         Me.CreateDirectory(d)
                                         Await Me.AddExistingFile(d, Item, False)
                                     End Function, filesToOpen)
             PluginHelper.SetLoadingStatusFinished()
-
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
-            Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory)
+            Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory, "script")
 
             Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
@@ -56,7 +75,14 @@ Namespace Projects
         End Function
 
         Public Overrides Function GetFilesToCopy() As IEnumerable(Of String)
-            Return {IO.Path.Combine("romfs", "script")}
+            Return {IO.Path.Combine("romfs", "script"),
+                IO.Path.Combine("romfs", "message_en.bin"),
+                IO.Path.Combine("romfs", "message_fr.bin"),
+                IO.Path.Combine("romfs", "message_ge.bin"),
+                IO.Path.Combine("romfs", "message_it.bin"),
+                IO.Path.Combine("romfs", "message_sp.bin"),
+                IO.Path.Combine("romfs", "message_us.bin"),
+                IO.Path.Combine("romfs", "message.bin")}
         End Function
 
         Public Overrides Function GetSupportedGameCodes() As IEnumerable(Of String)

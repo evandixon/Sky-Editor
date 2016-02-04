@@ -12,7 +12,11 @@ Public Class ObjectControlPlaceholder
     Dim _object As Object
     Public Property ObjectToEdit As Object
         Get
-            Return DirectCast(Content, iObjectControl).EditingObject
+            If Content Is Nothing Then
+                Return Nothing
+            Else
+                Return DirectCast(Content, iObjectControl).EditingObject
+            End If
         End Get
         Set(value As Object)
             If _object IsNot Nothing AndAlso TypeOf _object Is iModifiable Then

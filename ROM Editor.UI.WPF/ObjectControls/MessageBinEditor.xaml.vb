@@ -1,100 +1,52 @@
-﻿Imports System.Windows
-Imports System.Windows.Controls
-Imports System.Windows.Input
-Imports CodeFiles
-Imports ICSharpCode.AvalonEdit.CodeCompletion
+﻿Imports System.Windows.Controls
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
-Public Class AvalonEditControl
+Public Class MessageBinEditor
     Implements iObjectControl
 
-    Dim extraData As CodeExtraData
-    Private WithEvents autoComplete As CompletionWindow
-
     Public Sub RefreshDisplay()
-        txtCode.ShowLineNumbers = True
-
-        Dim highlighter As New AvalonCodeHighlighter(GetEditingObject(Of CodeFile).GetCodeHighlightRules)
-
-        Dim p = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
-        If p IsNot Nothing AndAlso TypeOf p Is ICodeProject Then
-            extraData = DirectCast(p, ICodeProject).GetExtraData(GetEditingObject(Of CodeFile))
-        Else
-            extraData = New DebugExtraData
-        End If
-
-        If extraData IsNot Nothing AndAlso extraData.AdditionalHighlightRules IsNot Nothing Then
-            highlighter.AddRuleSet("Project Rules", extraData.AdditionalHighlightRules)
-        End If
-
-        txtCode.SyntaxHighlighting = highlighter
-        txtCode.Text = GetEditingObject(Of CodeFile).Text
+        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
+            lstEntries.Items.Clear()
+            For Each item In .Strings
+                lstEntries.Items.Add(item)
+            Next
+            If lstEntries.Items.Count > 0 Then
+                lstEntries.SelectedIndex = 0
+            End If
+        End With
         IsModified = False
     End Sub
+
     Public Sub UpdateObject()
-        GetEditingObject(Of CodeFile).Text = txtCode.Text
+        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
+            .Strings.Clear()
+            For Each item In lstEntries.Items
+                .Strings.Add(item)
+            Next
+        End With
     End Sub
 
-    Private Sub txtCode_TextChanged(sender As Object, e As EventArgs) Handles txtCode.TextChanged
-        IsModified = True
+    Private Sub lstEntries_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstEntries.SelectionChanged
+        Dim current As FileFormats.MessageBin.StringEntry = placeEntry.ObjectToEdit
+        If e.RemovedItems IsNot Nothing AndAlso e.RemovedItems.Count > 0 AndAlso current IsNot Nothing Then
+            lstEntries.Items(lstEntries.Items.IndexOf(e.RemovedItems(0))) = current
+        End If
+        If e.AddedItems IsNot Nothing AndAlso e.AddedItems.Count > 0 Then
+            placeEntry.ObjectToEdit = e.AddedItems(0)
+        End If
     End Sub
 
     Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-        'Return {GetType(TextFile)}
-        Return {GetType(CodeFile)}
+        Return {GetType(ROMEditor.FileFormats.MessageBin)} '{GetType(Mods.ModSourceContainer)}
     End Function
 
     Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
-        Return 0
+        Return 1
     End Function
 
-    Private Sub txtCode_TextEntered(sender As Object, e As TextCompositionEventArgs)
-        If extraData IsNot Nothing Then
-            If extraData.GetAutoCompleteChars.Contains(e.Text) Then
-                autoComplete = New CompletionWindow(txtCode.TextArea)
-                With autoComplete.CompletionList.CompletionData
-                    For Each item In extraData.GetAutoCompleteData(GetLastPart(" "))
-                        .Add(New AutoCompleteData(item, extraData.GetAutoCompleteChars))
-                    Next
-                End With
-                autoComplete.Show()
-            End If
-        End If
-    End Sub
-
-    Private Sub txtCode_TextEntering(sender As Object, e As TextCompositionEventArgs)
-        If autoComplete IsNot Nothing AndAlso e.Text.Length > 0 Then
-            If Not Char.IsLetterOrDigit(e.Text(0)) Then
-                autoComplete.CompletionList.RequestInsertion(e)
-            End If
-        End If
-    End Sub
-
-    Private Function GetLastPart(PrecedingChar As String)
-        Dim partStart = txtCode.Text.LastIndexOf(PrecedingChar, txtCode.CaretOffset)
-        If partStart = -1 Then
-            partStart = 0
-        End If
-        Dim part As String = txtCode.Text.Substring(partStart + PrecedingChar.Length, txtCode.CaretOffset - partStart).Trim
-        Return part
-    End Function
-
-    Private Sub autoComplete_Closed(sender As Object, e As EventArgs) Handles autoComplete.Closed
-        autoComplete = Nothing
-    End Sub
-
-    Private Sub AvalonEditControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Code")
-    End Sub
-
-    Public Sub New()
-        ' This call is required by the designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-        AddHandler txtCode.TextArea.TextEntering, AddressOf txtCode_TextEntering
-        AddHandler txtCode.TextArea.TextEntered, AddressOf txtCode_TextEntered
+    Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        Me.Header = PluginHelper.GetLanguageItem("Message")
     End Sub
 
 #Region "IObjectControl Support"

@@ -96,6 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleCommands\ImportFunctionList.vb" />
+    <Compile Include="ConsoleCommands\MessageFarcFilenameAnalysis.vb" />
+    <Compile Include="FileFormats\PokemonDataInfo.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
@@ -194,6 +196,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ROMEditor\farc\image_2d.txt" />
+    <Content Include="ROMEditor\farc\message.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_en.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_fr.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_ge.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_it.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_sp.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ROMEditor\farc\message_us.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ROMEditor\ffmpeg\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

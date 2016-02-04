@@ -25,7 +25,7 @@ Public Module ConsoleModule
                 'Todo: split arg on spaces, while respecting quotation marks
                 Dim args As New List(Of String)
                 For Each item As Text.RegularExpressions.Match In paramRegex.Matches(arg)
-                    args.Add(item.Value)
+                    args.Add(item.Value.Trim(""""))
                 Next
                 Dim command = (From c In Manager.GetConsoleCommands Where String.Compare(c.Key, cmd, True, Globalization.CultureInfo.InvariantCulture) = 0 Select c.Value).FirstOrDefault '(cmd).MainAsync(args.ToArray)
                 Try
