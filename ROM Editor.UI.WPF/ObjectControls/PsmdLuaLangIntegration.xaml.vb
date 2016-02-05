@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Controls
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorWPF
 
 Public Class PsmdLuaLangIntegration
     Implements iObjectControl
@@ -28,10 +29,9 @@ Public Class PsmdLuaLangIntegration
     End Sub
 
     Public Sub UpdateObject()
-        'Do nothing, for now
-        'With GetEditingObject(Of CodeFiles.LuaCodeFile)()
-
-        'End With
+        For Each item As TabItem In tcTabs.Items
+            DirectCast(DirectCast(item.Content, ObjectControlPlaceholder).ObjectToEdit, FileFormats.MessageBin).Save()
+        Next
     End Sub
 
     Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes

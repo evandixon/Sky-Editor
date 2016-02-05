@@ -5,8 +5,8 @@ Namespace FileFormats
     Public Class Sir0
         Inherits GenericFile
         Implements iOpenableFile
-        Private Property HeaderOffset As Integer
-        Private Property PointerOffset As Integer
+        Protected Property HeaderOffset As Integer
+        Protected Property PointerOffset As Integer
         Private ReadOnly Property PointerLength As Integer
             Get
                 Return Length - PointerOffset
@@ -32,6 +32,7 @@ Namespace FileFormats
         Public Overrides Sub Save(Destination As String)
             'The header and relative pointers must be set by child classes
 
+            Me.RawData(0, 4) = {&H53, &H49, &H52, &H30}
 
             'Update subheader length
             Dim oldLength = Me.Length 'the new header offset
@@ -40,7 +41,7 @@ Namespace FileFormats
             Me.HeaderOffset = oldLength
 
             'Update subHeader
-            RawData(HeaderOffset, HeaderLength) = Header
+            RawData(HeaderOffset, Header.Length) = Header
 
             'Pad the footer
             While Not Length Mod 16 = 0

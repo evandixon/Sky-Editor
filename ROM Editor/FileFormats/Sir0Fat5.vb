@@ -55,13 +55,39 @@ Namespace FileFormats
             Next
         End Sub
 
-        Public Function GetBytes() As Byte()
-            Dim output As New List(Of Byte)
+        Public Overrides Sub Save(Destination As String)
+            'Only works for files without filenames
+
+            'Reset pointers
+            Me.RelativePointers.Clear()
+            Me.RelativePointers.Add(4)
+            Me.RelativePointers.Add(4)
+
+            'Generate data
+            Dim data As New List(Of Byte)
+            For Each item In FileData
+                data.AddRange(BitConverter.GetBytes(item.FilenamePointer))
+                data.AddRange(BitConverter.GetBytes(item.DataOffset))
+                data.AddRange(BitConverter.GetBytes(item.DataLength))
+            Next
+
+            'Write data
+            Me.Length = 16 + data.Count
+            Me.RawData(16, data.Count) = data.ToArray
+
+            'Generate header, and let the base class write it
+            Dim headerData As New List(Of Byte)
+            headerData.AddRange(BitConverter.GetBytes(&H10)) 'Data offset
+            headerData.AddRange(BitConverter.GetBytes(FileData.Count))
+            headerData.AddRange(BitConverter.GetBytes(1)) 'Marks that we're not actually using filenames
+
+            Me.Header = headerData.ToArray
 
 
-            Throw New NotImplementedException
+            Me.RelativePointers.Add(data.Count + 8)
+            MyBase.Save(Destination)
+        End Sub
 
-        End Function
 
         Public Sub New()
             FileData = New List(Of FileInfo)

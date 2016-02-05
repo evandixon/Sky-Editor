@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports System.Threading.Tasks
 Imports SkyEditorBase.Interfaces
 Public Class GenericFile
     Implements IDisposable
@@ -228,24 +229,30 @@ Public Class GenericFile
         PreSave()
         FileReader.Seek(0, IO.SeekOrigin.Begin)
         FileReader.Flush()
-        If IO.File.Exists(Filename) Then
-            IO.File.Copy(Filename, Destination, True)
-        Else
-            Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
-                FileReader.CopyTo(dest)
-            End Using
+        If Not String.IsNullOrEmpty(Destination) Then
+            If IO.File.Exists(Filename) Then
+                IO.File.Copy(Filename, Destination, True)
+            Else
+                Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
+                    FileReader.CopyTo(dest)
+                End Using
+            End If
         End If
+
         If String.IsNullOrEmpty(OriginalFilename) Then
             OriginalFilename = Destination
         End If
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
     Public Overridable Sub Save() Implements iSavable.Save
-        PreSave()
-        FileReader.Seek(0, IO.SeekOrigin.Begin)
-        FileReader.Flush()
-        If Not Filename = OriginalFilename Then IO.File.Copy(Filename, OriginalFilename, True)
-        RaiseEvent FileSaved(Me, New EventArgs)
+        Save(Me.OriginalFilename)
+        'PreSave()
+        'FileReader.Seek(0, IO.SeekOrigin.Begin)
+        'FileReader.Flush()
+        'If Not Filename = OriginalFilename AndAlso Not String.IsNullOrEmpty(OriginalFilename) Then
+        '    IO.File.Copy(Filename, OriginalFilename, True)
+        'End If
+        'RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
     ''' <summary>
@@ -283,6 +290,40 @@ Public Class GenericFile
         Loop Until c = vbNullChar
         Return s.ToString
     End Function
+
+    ''' <summary>
+    ''' Appends the given file contents to the end of this file.
+    ''' </summary>
+    ''' <param name="Filename">Path of the file to add to the end of this one.</param>
+    ''' <returns></returns>
+    Public Async Function AppendFile(Filename As String) As Task
+        Using f As New IO.FileStream(Filename, IO.FileMode.Open, IO.FileAccess.Read)
+            Dim oldLength = Me.Length
+            Me.Length += f.Length
+            Me.FileReader.Seek(oldLength, IO.SeekOrigin.Begin)
+            Await f.CopyToAsync(Me.FileReader)
+        End Using
+    End Function
+
+    ''' <summary>
+    ''' Appends the given file contents to the end of this file.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Async Function AppendFile(File As GenericFile) As Task
+        Dim oldLength = Me.Length
+        Me.Length += File.Length
+        Me.FileReader.Seek(oldLength, IO.SeekOrigin.Begin)
+        File.FileReader.Seek(0, IO.SeekOrigin.Begin)
+        Await File.FileReader.CopyToAsync(Me.FileReader)
+    End Function
+
+    Public Sub Append(Data As Byte())
+        Dim oldLength = Me.Length
+        Dim count = Data.Count
+        Me.Length += count
+        RawData(oldLength, count) = Data
+        Me.FileReader.Flush()
+    End Sub
 #End Region
 
 #Region "IDisposable Support"

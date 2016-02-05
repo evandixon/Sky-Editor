@@ -35,7 +35,7 @@ Namespace FileFormats
             If hash IsNot Nothing Then
                 Dim info = (From i In Header.FileData Where i.FilenamePointer = hash).FirstOrDefault
                 If info IsNot Nothing Then
-                    Return RawData(info.DataOffset, info.DataLength)
+                    Return RawData(info.DataOffset + DataOffset, info.DataLength)
                 Else
                     Return Nothing
                 End If
@@ -65,7 +65,7 @@ Namespace FileFormats
         ''' Extracts the FARC to the given directory.
         ''' </summary>
         ''' <param name="Directory">Directory to extract the FARC to.</param>
-        Public Async Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
+        Public Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
             Dim asyncFor As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Extracting files..."))
             Dim dic As Dictionary(Of UInteger, String)
             If UseDictionary Then
@@ -73,26 +73,30 @@ Namespace FileFormats
             Else
                 dic = New Dictionary(Of UInteger, String)
             End If
-            Await asyncFor.RunFor(Sub(Count As Integer)
-                                      Dim filename As String
-                                      Dim fileHash As UInteger = Header.FileData(Count).FilenamePointer
-                                      If dic.ContainsKey(fileHash) Then
-                                          filename = dic(fileHash)
-                                      Else
-                                          filename = fileHash.ToString 'Count.ToString
-                                      End If
-                                      IO.File.WriteAllBytes(IO.Path.Combine(Directory, filename), GetFileData(Count))
-                                      'Using f As New IO.FileStream(IO.Path.Combine(Directory, filename), IO.FileMode.OpenOrCreate)
-                                      '    ReadData(Count, f, True)
-                                      'End Using
-                                  End Sub, 0, FileCount - 1, 1)
+            For count = 0 To FileCount - 1
+                Dim filename As String
+                Dim fileHash As UInteger = Header.FileData(count).FilenamePointer
+                If dic.ContainsKey(fileHash) Then
+                    filename = dic(fileHash)
+                Else
+                    filename = fileHash.ToString 'Count.ToString
+                End If
+                IO.File.WriteAllBytes(IO.Path.Combine(Directory, filename), GetFileData(count))
+            Next
+            Return Task.CompletedTask
+            'Await asyncFor.RunFor(Sub(Count As Integer)
+
+            '                          'Using f As New IO.FileStream(IO.Path.Combine(Directory, filename), IO.FileMode.OpenOrCreate)
+            '                          '    ReadData(Count, f, True)
+            '                          'End Using
+            '                      End Sub, 0, FileCount - 1, 1)
         End Function
 
         ''' <summary>
         ''' Gets a dictionary matching file indexes to file names.
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetFileDictionary() As Dictionary(Of UInteger, String)
+        Private Function GetFileDictionary() As Dictionary(Of UInteger, String)
             Dim out As New Dictionary(Of UInteger, String)
             Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Me.OriginalFilename) & ".txt"))
             If IO.File.Exists(resourceFile) Then
@@ -123,10 +127,120 @@ Namespace FileFormats
             Header = New Sir0Fat5(Me.RawData(sir0Offset, sir0Length))
         End Sub
 
-        Public Shared Async Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task
+        Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task
+            If IO.File.Exists(DestinationFarcFilename) Then
+                IO.File.Delete(DestinationFarcFilename)
+            End If
+
+            'Only works for FARC files that lack filenames
             Dim header As New Sir0Fat5
-            Dim files = IO.Directory.GetFiles(SourceDirectory)
-            Throw New NotImplementedException
+            header.CreateFile("")
+            Dim fileNames = IO.Directory.GetFiles(SourceDirectory)
+            'Dim fileData As New GenericFile({})
+            Dim fileData As New List(Of Byte)
+            Dim filenameDic = GetReverseFileDictionary(DestinationFarcFilename)
+
+            For Each item In From kv In filenameDic Order By kv.Value
+                Dim entry As New Sir0Fat5.FileInfo
+                entry.DataOffset = fileData.Count
+                entry.FilenamePointer = item.Value
+                Dim current = IO.File.ReadAllBytes(IO.Path.Combine(SourceDirectory, item.Key))
+                entry.DataLength = current.Length
+                'Using file As New GenericFile(IO.Path.Combine(SourceDirectory, item.Key), True)
+                '    entry.DataLength = file.Length
+                '    Await fileData.AppendFile(file)
+                'End Using
+                fileData.AddRange(current)
+
+                header.FileData.Add(entry)
+            Next
+
+            'For Each item In fileNames
+            '    If filenameDic.ContainsKey(IO.Path.GetFileNameWithoutExtension(item)) Then
+
+            '        Dim entry As New Sir0Fat5.FileInfo
+            '        entry.DataOffset = fileData.Length
+            '        entry.FilenamePointer = filenameDic(IO.Path.GetFileNameWithoutExtension(item))
+
+            '        Using file As New GenericFile(item, True)
+            '            entry.DataLength = file.Length
+            '            Await fileData.AppendFile(file)
+            '        End Using
+
+            '        header.FileData.Add(entry)
+
+            '    Else
+            '        Throw New IndexOutOfRangeException(String.Format("No file hash can be found for filename ""{0}"".", IO.Path.GetFileNameWithoutExtension(item)))
+            '    End If
+            'Next
+
+            Dim tempName As String = Guid.NewGuid.ToString
+            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"))
+            header.Dispose()
+            Dim headerData = IO.File.ReadAllBytes(PluginHelper.GetResourceName(tempName & ".tmp"))
+            IO.File.Delete(PluginHelper.GetResourceName(tempName & ".tmp"))
+
+            Dim archiveBytes As New List(Of Byte)
+            'Dim archive As New FarcF5
+            'archive.CreateFile("")
+            'archive.Length = &H80 '+ header.Length + fileData.Length
+            'archive.RawData(0, 4) = {&H46, &H41, &H52, &H43} 'Magic: FARC
+            'archive.Int(4) = 0 'Unknown value
+            'archive.Int(8) = 0 'Unknown value
+            'archive.Int(&HC) = 2 'Unknown value
+            'archive.Int(&H10) = 0 'Unknown value
+            'archive.Int(&H14) = 0 'Unknown, usually 0
+            'archive.Int(&H18) = 7 'Unknown, usually 7
+            'archive.Int(&H1C) = &H77EA3CA4 'Unknown
+            'archive.Int(&H20) = 5 'SIR0 version
+            'archive.Int(&H24) = &H80 'SIR0 offset, always 0x80
+            'archive.Int(&H28) = headerData.Length
+            'archive.Int(&H2C) = &H80 + headerData.Length 'Data offset
+            'archive.Int(&H30) = fileData.Count
+
+            'archive.Append(headerData)
+            'archive.Append(fileData.ToArray)
+            'archive.Save(DestinationFarcFilename)
+
+            archiveBytes.AddRange({&H46, &H41, &H52, &H43}) 'Magic: FARC)
+            archiveBytes.AddRange(BitConverter.GetBytes(0)) '0x4
+            archiveBytes.AddRange(BitConverter.GetBytes(0)) '0x8
+            archiveBytes.AddRange(BitConverter.GetBytes(2)) '0xC
+            archiveBytes.AddRange(BitConverter.GetBytes(0)) '0x10
+            archiveBytes.AddRange(BitConverter.GetBytes(0)) '0x14
+            archiveBytes.AddRange(BitConverter.GetBytes(7)) '0x18
+            archiveBytes.AddRange(BitConverter.GetBytes(&H77EA3CA4)) '0x1C
+            archiveBytes.AddRange(BitConverter.GetBytes(5)) '0x20
+            archiveBytes.AddRange(BitConverter.GetBytes(&H80)) '0x24
+            archiveBytes.AddRange(BitConverter.GetBytes(headerData.Length)) '0x28
+            archiveBytes.AddRange(BitConverter.GetBytes(&H80 + headerData.Length)) '0x2C
+            archiveBytes.AddRange(BitConverter.GetBytes(fileData.Count)) '0x30
+
+            For count = 0 To &H4C - 1
+                archiveBytes.Add(0)
+            Next
+
+            archiveBytes.AddRange(headerData)
+            archiveBytes.AddRange(fileData.ToArray)
+
+            IO.File.WriteAllBytes(DestinationFarcFilename, archiveBytes.ToArray)
+
+
+            'archive.Dispose()
+            Return Task.CompletedTask
+        End Function
+
+        Private Shared Function GetReverseFileDictionary(Filename As String) As Dictionary(Of String, UInteger)
+            Dim out As New Dictionary(Of String, UInteger)
+            Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Filename) & ".txt"))
+            If IO.File.Exists(resourceFile) Then
+                Dim i As New BasicIniFile
+                i.OpenFile(resourceFile)
+                For Each item In i.Entries
+                    out.Add(item.Value, CUInt(item.Key))
+                Next
+            End If
+            Return out
         End Function
 
 #Region "IDisposable Support"
@@ -137,7 +251,7 @@ Namespace FileFormats
             MyBase.Dispose(True)
 
             If Not Me.disposedValue Then
-                If disposing Then
+                If disposing AndAlso Header IsNot Nothing Then
                     Header.Dispose()
                 End If
 

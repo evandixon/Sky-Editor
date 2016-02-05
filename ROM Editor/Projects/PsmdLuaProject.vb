@@ -13,7 +13,7 @@ Namespace Projects
             Dim languageNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)\.bin", RegexOptions.IgnoreCase)
             Dim languageFileNames = IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*.bin", IO.SearchOption.TopDirectoryOnly)
             For Each item In languageFileNames
-                Dim lang = "default"
+                Dim lang = "jp"
 
                 Dim match = languageNameRegex.Match(item)
                 If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
@@ -56,6 +56,13 @@ Namespace Projects
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
+
+            For Each item In IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
+                Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(item) & ".bin"
+                Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
+                Await FileFormats.FarcF5.Pack(item, newFilePath)
+            Next
+
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory, "script")
 

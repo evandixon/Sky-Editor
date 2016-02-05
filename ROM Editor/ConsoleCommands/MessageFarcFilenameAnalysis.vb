@@ -69,7 +69,7 @@ Namespace ConsoleCommands
                     Console.WriteLine($"Unable to find file ""{Arguments(0)}"".")
                 End If
             Else
-                Console.WriteLine("Usage: MessageFarcFilenameAnalysis [farcFile] [extractedDirectory]")
+                Console.WriteLine("Usage: MessageFarcFilenameAnalysis <farcFile> <extractedDirectory>")
             End If
         End Function
     End Class
