@@ -1,4 +1,5 @@
-﻿Imports System.Threading.Tasks
+﻿Imports System.ComponentModel
+Imports System.Threading.Tasks
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
@@ -6,6 +7,7 @@ Imports SkyEditorBase.PluginHelper
 Public Class Project
     Implements IDisposable
     Implements iSavable
+    Implements INotifyPropertyChanged
 
 #Region "Child Classes"
     Private Class SettingValue
@@ -174,6 +176,38 @@ Public Class Project
             Setting("ProjectReferences") = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' The progress of the current project's build.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property BuildProgress As Single
+        Get
+            Return _buildProgress
+        End Get
+        Set(value As Single)
+            _buildProgress = value
+            RaiseEvent BuildStatusChanged(Me, New EventArguments.ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BuildProgress)))
+        End Set
+    End Property
+    Private _buildProgress As Single
+
+    ''' <summary>
+    ''' The current task in the current project's build.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property BuildStatusMessage As String
+        Get
+            Return _buildStatusMessage
+        End Get
+        Set(value As String)
+            _buildStatusMessage = value
+            RaiseEvent BuildStatusChanged(Me, New EventArguments.ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BuildStatusMessage)))
+        End Set
+    End Property
+    Private _buildStatusMessage As String
 #End Region
 
 #Region "Events"
@@ -182,6 +216,8 @@ Public Class Project
     Public Event FileAdded(sender As Object, e As EventArguments.ProjectFileAddedEventArgs)
     Public Event FileRemoved(sender As Object, e As EventArguments.ProjectFileRemovedEventArgs)
     Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
+    Public Event BuildStatusChanged(sender As Object, e As EventArguments.ProjectBuildStatusChanged)
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 #End Region
 
 #Region "Create New"
@@ -547,7 +583,7 @@ Public Class Project
             If item Is Me Then
                 Exit Sub
             Else
-                If Not CurrentItem.HasCircularReferences(Solution) Then
+                If Not item.HasCircularReferences(Solution) Then
                     FillReferenceTree(Solution, Tree, item)
                 End If
             End If

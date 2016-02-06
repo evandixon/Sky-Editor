@@ -202,6 +202,9 @@ Namespace Projects
                 Dim patchers As New List(Of FilePatcher)
                 Dim actions As New ModJson
 
+                Me.BuildProgress = 0
+                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Analyzing files...")
+
                 Await Task.Run(New Action(Sub()
                                               'Create the mod
                                               '-Analyze files (find out what's changed)
@@ -271,6 +274,9 @@ Namespace Projects
 
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), SkyEditorBase.Utilities.Json.Serialize(actions))
 
+                Me.BuildProgress = 0
+                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch...")
+
                 For Each item In actions.ToAdd
                     'Todo: remove item from toAdd if no longer exists
                     If IO.File.Exists(IO.Path.Combine(sourceRoot, item)) Then
@@ -338,6 +344,8 @@ Namespace Projects
                 End If
                 SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
             Next
+            Me.BuildProgress = 1
+            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
         End Function
 
         Public Sub New()

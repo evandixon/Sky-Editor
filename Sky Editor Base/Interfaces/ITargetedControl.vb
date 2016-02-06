@@ -13,7 +13,7 @@
         Event HeaderChanged(sender As Object, e As EventArguments.HeaderUpdatedEventArgs)
         Event VisibilityChanged(sender As Object, e As EventArguments.VisibilityUpdatedEventArgs)
         Property Header As String
-        Property IsVisible As String
+        Property IsVisible As Boolean
 
         ''' <summary>
         ''' Returns whether or not the ITargetedControl should start, by default, collapsed.

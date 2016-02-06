@@ -144,6 +144,8 @@ Public Class Solution
     ''' <param name="e"></param>
     Public Event Created(sender As Object, e As EventArgs)
     Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
+    Public Event SolutionBuildStarted(sender As Object, e As EventArgs)
+    Public Event SolutionBuildCompleted(sender As Object, e As EventArgs)
 #End Region
 
     Private Sub RaiseCreated()
@@ -371,7 +373,9 @@ Public Class Solution
     End Function
 
     Public Overridable Async Function Build() As Task
+        RaiseEvent SolutionBuildStarted(Me, New EventArgs)
         Dim toBuild As New Dictionary(Of Project, Boolean)
+        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."))
 
         For Each item In GetProjectsToBuild()
             If Not item.HasCircularReferences(Me) Then
@@ -381,27 +385,33 @@ Public Class Solution
             End If
         Next
 
-        For Each item In toBuild
+        For count = 0 To toBuild.Keys.Count - 1
+            Dim key = toBuild.Keys(count)
             'If this project has not been built
-            If Not item.Value Then
+            If Not toBuild(key) Then
                 'Then build the project, but build its dependencies first
-                Await BuildProjects(toBuild, item.Key)
+                Await BuildProjects(toBuild, key)
             End If
         Next
 
         PluginHelper.SetLoadingStatusFinished()
+        RaiseEvent SolutionBuildCompleted(Me, New EventArgs)
     End Function
 
     Private Async Function BuildProjects(ToBuild As Dictionary(Of Project, Boolean), CurrentProject As Project) As Task
         Dim built As Integer = (From v In ToBuild.Values Where v = True).Count
         PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Building projects... ({0} of {1})"), built, ToBuild.Count), built / ToBuild.Count)
 
+        Dim buildTasks As New List(Of Task)
         For Each item In CurrentProject.GetReferences(Me)
-            Await BuildProjects(ToBuild, item)
+            buildTasks.Add(BuildProjects(ToBuild, item))
         Next
+        Await Task.WhenAll(buildTasks)
+
         If Not ToBuild(CurrentProject) Then
-            Await CurrentProject.Build(Me)
+            'Todo: make sure we won't get here twice, with all the async stuff going on
             ToBuild(CurrentProject) = True
+            Await CurrentProject.Build(Me)
         End If
     End Function
 

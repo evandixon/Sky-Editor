@@ -75,12 +75,15 @@ Namespace Projects
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
-
-            For Each item In IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-                Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(item) & ".bin"
+            Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
+            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files...")
+            For count = 0 To dirs.Length - 1
+                Me.BuildProgress = count / dirs.Length
+                Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
                 Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
-                Await FileFormats.FarcF5.Pack(item, newFilePath)
+                Await FileFormats.FarcF5.Pack(dirs(count), newFilePath)
             Next
+            Me.BuildProgress = 1
 
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory, "script")
@@ -88,6 +91,13 @@ Namespace Projects
             Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Compiling Scripts..."))
+            f.SetLoadingStatus = False
+            f.SetLoadingStatusOnFinish = False
+            Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)
+                                        Me.BuildStatusMessage = e.Message
+                                        Me.BuildProgress = e.Progress
+                                    End Sub
+            AddHandler f.LoadingStatusChanged, onProgressChanged
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Dim sourceText = IO.File.ReadAllText(Item)
                                    Dim sourceOrig = IO.File.ReadAllText(Item & ".original")
@@ -97,6 +107,7 @@ Namespace Projects
                                        Await PluginHelper.RunProgram(PluginHelper.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""")
                                    End If
                                End Function, toCompile)
+            RemoveHandler f.LoadingStatusChanged, onProgressChanged
             Await MyBase.Build(Solution)
         End Function
 

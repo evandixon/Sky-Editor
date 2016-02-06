@@ -169,9 +169,11 @@
     <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\HeaderUpdatedEventArgs.vb" />
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
+    <Compile Include="EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="EventArguments\PluginLoadingEventArgs.vb" />
     <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
+    <Compile Include="EventArguments\ProjectBuildStatusChanged.vb" />
     <Compile Include="EventArguments\ProjectFileAddedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectFileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovedEventArgs.vb" />

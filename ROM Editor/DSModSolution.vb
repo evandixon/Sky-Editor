@@ -103,23 +103,24 @@ Public Class DSModSolution
             Me.Setting("System") = info.System
             Me.Setting("GameCode") = info.GameCode
         End If
-        Dim modPacks As New List(Of DSModPackProject)
-        Dim allProjects As New List(Of Project)(Me.GetAllProjects)
-        Dim built As Integer = 0
-        For Each item In allProjects
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."), built / allProjects.Count)
-            If TypeOf item Is DSModPackProject Then
-                modPacks.Add(item)
-            Else
-                Await item.Build(Me)
-                built += 1
-            End If
-        Next
-        For Each item In modPacks
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."), built / allProjects.Count)
-            Await item.Build(Me)
-            built += 1
-        Next
-        PluginHelper.SetLoadingStatusFinished()
+        Await MyBase.Build()
+        'Dim modPacks As New List(Of DSModPackProject)
+        'Dim allProjects As New List(Of Project)(Me.GetAllProjects)
+        'Dim built As Integer = 0
+        'For Each item In allProjects
+        '    PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."), built / allProjects.Count)
+        '    If TypeOf item Is DSModPackProject Then
+        '        modPacks.Add(item)
+        '    Else
+        '        Await item.Build(Me)
+        '        built += 1
+        '    End If
+        'Next
+        'For Each item In modPacks
+        '    PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."), built / allProjects.Count)
+        '    Await item.Build(Me)
+        '    built += 1
+        'Next
+        'PluginHelper.SetLoadingStatusFinished()
     End Function
 End Class

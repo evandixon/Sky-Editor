@@ -73,11 +73,11 @@ Public Class SolutionExplorer
     End Property
     Dim _header As String
 
-    Private Property ITargetedControl_IsVisible As String Implements ITargetedControl.IsVisible
+    Private Property ITargetedControl_IsVisible As Boolean Implements ITargetedControl.IsVisible
         Get
             Return _isVisible
         End Get
-        Set(value As String)
+        Set(value As Boolean)
             _isVisible = value
             RaiseEvent VisibilityChanged(Me, New EventArguments.VisibilityUpdatedEventArgs With {.IsVisible = value})
         End Set

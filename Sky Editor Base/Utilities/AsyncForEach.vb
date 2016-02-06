@@ -1,4 +1,6 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase.EventArguments
+
 Namespace Utilities
     ''' <summary>
     ''' Runs each item in a For statement asynchronously.
@@ -8,6 +10,7 @@ Namespace Utilities
         Public Delegate Sub ForItem(i As Integer)
         Public Delegate Sub ForEachItem(Of T)(i As T)
         Public Delegate Function ForEachItemAsync(Of T)(i As T) As Task
+        Public Event LoadingStatusChanged(sender As Object, e As LoadingStatusChangedEventArgs)
 
         Public Sub New(ProgressMessage As String)
             SetLoadingStatus = True
@@ -97,7 +100,12 @@ Namespace Utilities
                     taskList.Add(tTask)
                 Else
                     'Then we must wait for another task to complete
-                    Await Task.WhenAny(taskList)
+                    If taskList.Count > 0 Then
+                        Await Task.WhenAny(taskList)
+                    Else
+                        'Then something's wrong.  Some tasks must have completed without decrementing runningTasks?
+                        Exit While
+                    End If
                     'Remove completed tasks
                     For count = taskList.Count - 1 To 0 Step -1
                         Dim item = taskList(count)
@@ -146,10 +154,15 @@ Namespace Utilities
         Private _opMax As Integer
         Private Sub ReportProgress(Completed As Integer, Max As Integer)
             If Completed < Max Then
-                If SetLoadingStatus Then PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), ProgressMessage, Completed, Max), Completed / Max)
+                If SetLoadingStatus Then
+                    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), ProgressMessage, Completed, Max), Completed / Max)
+                End If
             Else
-                If SetLoadingStatusOnFinish Then PluginHelper.SetLoadingStatusFinished()
+                If SetLoadingStatusOnFinish Then
+                    PluginHelper.SetLoadingStatusFinished()
+                End If
             End If
+            RaiseEvent LoadingStatusChanged(Me, New LoadingStatusChangedEventArgs With {.Complete = (Completed >= Max), .Completed = Completed, .Message = ProgressMessage, .Progress = Completed / Max, .Total = Max})
         End Sub
     End Class
 End Namespace

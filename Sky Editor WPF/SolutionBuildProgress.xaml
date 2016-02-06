@@ -1,0 +1,22 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SkyEditorWPF"
+             xmlns:SkyEditorBase="clr-namespace:SkyEditorBase;assembly=SkyEditorBase" x:Class="SolutionBuildProgress"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DataGrid x:Name="dataGrid">
+            <DataGrid.DataContext>
+                <SkyEditorBase:Project/>
+            </DataGrid.DataContext>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name"/>
+                <DataGridTextColumn Header="Progress" Binding="{Binding BuildProgress, BindsDirectlyToSource=True}"/>
+                <DataGridTextColumn Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

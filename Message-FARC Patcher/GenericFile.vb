@@ -4,7 +4,7 @@ Public Class GenericFile
     Implements IDisposable
     Private _tempname As String
     Private _tempFilename As String
-    Dim _fileReader As IO.FileStream
+    Dim _fileReader As IO.Stream
     Dim _makeTempCopy As Boolean
     Dim _openReadOnly As Boolean
 
@@ -46,11 +46,12 @@ Public Class GenericFile
     ''' <param name="Name">Name (not path) of the file.  Include the extension if applicable.</param>
     Public Overridable Sub CreateFile(Name As String) 'Implements iCreatableFile.CreateFile
         _tempname = Guid.NewGuid.ToString()
-        IO.File.WriteAllBytes(_tempname & ".tmp", {})
+        'IO.File.WriteAllBytes(_tempname & ".tmp", {})
         Me.Filename = _tempname & ".tmp"
         _tempFilename = _tempname & ".tmp"
         Me.OriginalFilename = String.Empty
         Me.Name = Name
+        Me._fileReader = New IO.MemoryStream
     End Sub
 
     ''' <summary>
@@ -96,7 +97,7 @@ Public Class GenericFile
 #End Region
 
 #Region "Properties"
-    Public ReadOnly Property FileReader As IO.FileStream
+    Public ReadOnly Property FileReader As IO.Stream
         Get
             If _fileReader Is Nothing Then
                 If _openReadOnly Then
@@ -219,7 +220,7 @@ Public Class GenericFile
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
     Public Overridable Sub Save()
-        Save(Me.OriginalFilename)
+
     End Sub
 
     ''' <summary>

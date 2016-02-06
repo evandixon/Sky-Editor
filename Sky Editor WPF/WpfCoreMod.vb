@@ -67,6 +67,7 @@ Friend Class WpfCoreMod
 
         'Register provided types
         Manager.RegisterType(GetType(ITargetedControl), GetType(SolutionExplorer))
+        Manager.RegisterType(GetType(ITargetedControl), GetType(SolutionBuildProgress))
         Manager.RegisterType(GetType(iObjectControl), GetType(LanguageEditor))
         Manager.RegisterType(GetType(iObjectControl), GetType(SettingsEditor))
     End Sub

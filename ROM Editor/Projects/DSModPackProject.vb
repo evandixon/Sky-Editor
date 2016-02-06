@@ -199,9 +199,13 @@ Namespace Projects
             Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
 
             'Apply patch
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Applying patch", "Applying patch..."))
+            Me.BuildProgress = 0.9
+            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Applying patch", "Applying patch...")
 
             Await ApplyPatchAsync(Solution)
+
+            Me.BuildProgress = 1
+            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
         End Function
 
         Public Overridable Sub CopyPatcherProgram(Solution As Solution)
