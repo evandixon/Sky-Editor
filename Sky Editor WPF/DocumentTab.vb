@@ -116,6 +116,15 @@ Public Class DocumentTab
                 PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
             End If
         End If
+        If TypeOf Me.Content Is TabControl Then
+            For Each item As TabItem In (DirectCast(Me.Content, TabControl)).Items
+                If TypeOf item.Content Is IDisposable Then
+                    DirectCast(item.Content, IDisposable).Dispose()
+                End If
+            Next
+        ElseIf TypeOf Me.Content Is IDisposable Then
+            DirectCast(Me.Content, IDisposable).Dispose()
+        End If
     End Sub
     Private Sub File_FileModified(sender As Object, e As EventArgs)
         If TypeOf sender Is iObjectControl Then

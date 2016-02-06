@@ -6,6 +6,25 @@ Namespace Projects
         Inherits GenericModProject
         Implements CodeFiles.ICodeProject
 
+        Public Overrides Function GetCustomFilePatchers() As IEnumerable(Of FilePatcher)
+            Dim patchers = New List(Of FilePatcher)
+            If patchers Is Nothing Then
+                patchers = New List(Of FilePatcher)
+            End If
+            Dim MSPatcher As New FilePatcher()
+            With MSPatcher
+                .CreatePatchProgram = "MessageFARCPatcher.exe"
+                .CreatePatchArguments = "-c ""{0}"" ""{1}"" ""{2}"""
+                .ApplyPatchProgram = "MessageFARCPatcher.exe"
+                .ApplyPatchArguments = "-a ""{0}"" ""{1}"" ""{2}"""
+                .MergeSafe = True
+                .PatchExtension = "msgFarcT5"
+                .FilePath = ".*message_?.*\.bin"
+            End With
+            patchers.Add(MSPatcher)
+            Return patchers
+        End Function
+
         Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 

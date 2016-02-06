@@ -19,7 +19,27 @@ Namespace FileFormats
             End Function
             Public Function GetStringBytes() As Byte()
                 Dim output As New List(Of Byte)
-                output.AddRange(Text.UnicodeEncoding.Unicode.GetBytes(Entry))
+                Dim skip As Integer = 0
+                For count = 0 To Entry.Length - 1
+                    If skip > 0 Then
+                        skip -= 1
+                    Else
+                        Dim item = Entry(count)
+                        If Not item = vbCr Then
+                            If item = "\"c AndAlso Entry.Length > count + 4 Then
+                                Dim escapeString1 As String = Entry(count + 1) & Entry(count + 2)
+                                Dim escapeString2 As String = Entry(count + 3) & Entry(count + 4)
+                                If Utilities.Hex.IsHex(escapeString1) AndAlso Utilities.Hex.IsHex(escapeString2) Then
+                                    output.Add(Byte.Parse(escapeString2, Globalization.NumberStyles.HexNumber))
+                                    output.Add(Byte.Parse(escapeString1, Globalization.NumberStyles.HexNumber))
+                                    skip += 4
+                                End If
+                            Else
+                                output.AddRange(Text.Encoding.Unicode.GetBytes(item))
+                            End If
+                        End If
+                    End If
+                Next
                 output.Add(0)
                 output.Add(0)
                 Return output.ToArray
@@ -52,16 +72,27 @@ Namespace FileFormats
                 Dim doEnd As Boolean = False
                 Do
                     cRaw = RawData(stringPointer + j * 2, 2)
-                    Dim c = e.GetString(cRaw)
+
                     'TODO: parse escape characters, as described in these posts:
                     'http://projectpokemon.org/forums/showthread.php?46904-Pokemon-Super-Mystery-Dungeon-And-PMD-GTI-Research-And-Utilities&p=211018&viewfull=1#post211018
                     'http://projectpokemon.org/forums/showthread.php?46904-Pokemon-Super-Mystery-Dungeon-And-PMD-GTI-Research-And-Utilities&p=210986&viewfull=1#post210986
-                    If (SkyEditorBase.Utilities.GenericArrayOperations(Of Byte).ArraysEqual(cRaw, {0, 0})) Then
-                        doEnd = True
-                    Else
-                        s.Append(c)
+
+                    If cRaw(1) >= 128 Then 'Most significant bit is set
+                        s.Append("\")
+                        s.Append(Conversion.Hex(cRaw(1)).PadLeft(2, "0"c))
+                        s.Append(Conversion.Hex(cRaw(0)).PadLeft(2, "0"c))
                         j += 1
+                    Else
+                        Dim c = e.GetString(cRaw)
+
+                        If (SkyEditorBase.Utilities.GenericArrayOperations(Of Byte).ArraysEqual(cRaw, {0, 0})) Then
+                            doEnd = True
+                        Else
+                            s.Append(c)
+                            j += 1
+                        End If
                     End If
+
                 Loop Until doEnd
 
                 Strings.Add(New StringEntry With {.Hash = stringHash, .Entry = s.ToString.Trim, .Unknown = unk})

@@ -215,6 +215,7 @@
     <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Language\LanguageManager.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
+    <Compile Include="Utilities\Hex.vb" />
     <Compile Include="Utilities\Json.vb" />
     <Compile Include="Utilities\ReflectionHelpers.vb" />
     <Compile Include="Utilities\ResourceDictionary.vb" />

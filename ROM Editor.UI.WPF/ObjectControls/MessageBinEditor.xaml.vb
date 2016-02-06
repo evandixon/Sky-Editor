@@ -24,6 +24,9 @@ Public Class MessageBinEditor
             For Each item In lstEntries.Items
                 .Strings.Add(item)
             Next
+            If lstEntries.SelectedItem IsNot Nothing Then
+                lstEntries.Items(lstEntries.SelectedIndex) = placeEntry.ObjectToEdit
+            End If
         End With
     End Sub
 
@@ -138,5 +141,24 @@ Public Class MessageBinEditor
         End Set
     End Property
     Dim _isModified As Boolean
+
+    Private Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
+        Dim entry As New FileFormats.MessageBin.StringEntry
+        entry.Entry = ""
+
+        Dim pendingID As UInteger = 1 'Set an arbitrary ID
+RedoCheck:
+        'And make sure nothing else has the same ID
+        For Each item As FileFormats.MessageBin.StringEntry In lstEntries.Items
+            If item.Hash = pendingID Then
+                'If something else is using the ID, then increment 1 by and start the collision check again
+                pendingID += 1
+                GoTo RedoCheck
+            End If
+        Next
+
+        entry.Hash = pendingID
+        lstEntries.Items.Add(entry)
+    End Sub
 #End Region
 End Class

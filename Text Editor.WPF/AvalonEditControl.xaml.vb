@@ -17,12 +17,12 @@ Public Class AvalonEditControl
 
         Dim highlighter As New AvalonCodeHighlighter(GetEditingObject(Of CodeFile).GetCodeHighlightRules)
 
-        Dim p = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
-        If p IsNot Nothing AndAlso TypeOf p Is ICodeProject Then
-            extraData = DirectCast(p, ICodeProject).GetExtraData(GetEditingObject(Of CodeFile))
-        Else
-            extraData = New DebugExtraData
-        End If
+        'Dim p = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
+        'If p IsNot Nothing AndAlso TypeOf p Is ICodeProject Then
+        '    extraData = DirectCast(p, ICodeProject).GetExtraData(GetEditingObject(Of CodeFile))
+        'Else
+        extraData = New DebugExtraData
+        'End If
 
         If extraData IsNot Nothing AndAlso extraData.AdditionalHighlightRules IsNot Nothing Then
             highlighter.AddRuleSet("Project Rules", extraData.AdditionalHighlightRules)

@@ -65,7 +65,7 @@ Public Class Project
         End Function
 
         Public Function GetFilename() As String
-            Return IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename.TrimStart("\"))
+            Return IO.Path.Combine(IO.Path.GetDirectoryName(_p.Filename), Filename?.TrimStart("\"))
         End Function
 
         Public Function CompareTo(other As ProjectItem) As Integer Implements IComparable(Of ProjectItem).CompareTo
