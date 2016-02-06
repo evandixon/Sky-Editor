@@ -126,6 +126,23 @@ Namespace Saves
             End Set
         End Property
 
+        Public Property OriginalPlayer As Integer
+            Get
+                Return Bits.Int(&HBE, 0, 2)
+            End Get
+            Set(value As Integer)
+                Bits.Int(&HBE, 0, 2) = value
+            End Set
+        End Property
+        Public Property OriginalPartner As Integer
+            Get
+                Return Bits.Int(&HC0, 0, 2)
+            End Get
+            Set(value As Integer)
+                Bits.Int(&HC0, 0, 2) = value
+            End Set
+        End Property
+
 #Region "Settings"
         ''' <summary>
         ''' Gets or sets the type of window frame used in the game.  Must be 1-5.
