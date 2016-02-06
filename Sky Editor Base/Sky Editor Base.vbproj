@@ -213,6 +213,7 @@
     <Compile Include="Utilities\AsyncFileCopier.vb" />
     <Compile Include="Utilities\AsyncForEach.vb" />
     <Compile Include="Utilities\AsyncHelpers.vb" />
+    <Compile Include="Utilities\CurrentUser.vb" />
     <Compile Include="Utilities\FileSystem.vb" />
     <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Language\LanguageManager.vb" />
