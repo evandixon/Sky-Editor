@@ -11,17 +11,17 @@
     <Grid>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
             <Label x:Name="lblGeneral_TeamName" HorizontalAlignment="Left" Width="170">Team Name:</Label>
-            <TextBox x:Name="txtGeneral_TeamName" HorizontalContentAlignment="Right" />
+            <TextBox x:Name="txtGeneral_TeamName"  />
             <Label x:Name="lblGeneral_HeldMoney" HorizontalAlignment="Left" Width="170">Held Money:</Label>
-            <xctk:IntegerUpDown x:Name="numGeneral_HeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <xctk:IntegerUpDown x:Name="numGeneral_HeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" />
             <Label x:Name="lblGeneral_SpEpisodeHeldMoney" HorizontalAlignment="Left" Width="170" Content="Sp. Episode Money:" />
-            <xctk:IntegerUpDown x:Name="numGeneral_SpEpisodeHeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <xctk:IntegerUpDown x:Name="numGeneral_SpEpisodeHeldMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" />
             <Label x:Name="lblGeneral_StoredMoney" HorizontalAlignment="Left" Width="170">Stored Money:</Label>
-            <xctk:IntegerUpDown x:Name="numGeneral_StoredMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <xctk:IntegerUpDown x:Name="numGeneral_StoredMoney" Minimum="0" Maximum="99999" VerticalContentAlignment="Top" />
             <Label x:Name="lblGeneral_Adventures" HorizontalAlignment="Left" Width="170">Adventures:</Label>
-            <xctk:IntegerUpDown x:Name="numGeneral_Adventures" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <xctk:IntegerUpDown x:Name="numGeneral_Adventures" VerticalContentAlignment="Top" />
             <Label x:Name="lblGeneral_RankPoints" HorizontalAlignment="Left" Width="170">Rank Points:</Label>
-            <xctk:IntegerUpDown x:Name="numGeneral_RankPoints" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" />
+            <xctk:IntegerUpDown x:Name="numGeneral_RankPoints" VerticalContentAlignment="Top" />
         </UniformGrid>
     </Grid>
 </UserControl>

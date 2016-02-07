@@ -105,12 +105,46 @@ Namespace Saves
         ''' Used in-game for special episodes.
         ''' </summary>
         ''' <returns></returns>
-        Public Property OriginalPlayer As Integer
+        Public Property OriginalPlayerID As Integer
             Get
-                Return Bits.Int(&HBE, 0, 2)
+                Dim i = Bits.Int(&HBE, 0, 16)
+                If i > 600 Then
+                    i -= 600
+                End If
+                Return i
             End Get
             Set(value As Integer)
-                Bits.Int(&HBE, 0, 2) = value
+                Dim f = OriginalPlayerIsFemale
+                Bits.Int(&HBE, 0, 16) = value
+                OriginalPlayerIsFemale = f
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the original player gender.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayerIsFemale As Boolean
+            Get
+                Dim i = Bits.Int(&HBE, 0, 16)
+                Return (i > 600)
+            End Get
+            Set(value As Boolean)
+                Dim i = Bits.Int(&HBE, 0, 16)
+                If i > 600 Then
+                    If value Then
+                        'do nothing
+                    Else
+                        Bits.Int(&HBE, 0, 16) -= 600
+                    End If
+                Else
+                    If value Then
+                        Bits.Int(&HBE, 0, 16) += 600
+                    Else
+                        'do nothing
+                    End If
+                End If
             End Set
         End Property
 
@@ -119,12 +153,46 @@ Namespace Saves
         ''' Used in-game for special episodes.
         ''' </summary>
         ''' <returns></returns>
-        Public Property OriginalPartner As Integer
+        Public Property OriginalPartnerID As Integer
             Get
-                Return Bits.Int(&HC0, 0, 2)
+                Dim i = Bits.Int(&HC0, 0, 16)
+                If i > 600 Then
+                    i -= 600
+                End If
+                Return i
             End Get
             Set(value As Integer)
-                Bits.Int(&HC0, 0, 2) = value
+                Dim f = OriginalPlayerIsFemale
+                Bits.Int(&HC0, 0, 16) = value
+                OriginalPlayerIsFemale = f
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the original partner gender.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartnerIsFemale As Boolean
+            Get
+                Dim i = Bits.Int(&HC0, 0, 16)
+                Return (i > 600)
+            End Get
+            Set(value As Boolean)
+                Dim i = Bits.Int(&HC0, 0, 16)
+                If i > 600 Then
+                    If value Then
+                        'do nothing
+                    Else
+                        Bits.Int(&HC0, 0, 16) -= 600
+                    End If
+                Else
+                    If value Then
+                        Bits.Int(&HC0, 0, 16) += 600
+                    Else
+                        'do nothing
+                    End If
+                End If
             End Set
         End Property
 

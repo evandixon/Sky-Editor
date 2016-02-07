@@ -59,7 +59,7 @@ Namespace Tabs
         End Function
 
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
-            Return 5
+            Return 6
         End Function
 
 #Region "IObjectControl Support"
