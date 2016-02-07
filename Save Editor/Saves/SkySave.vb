@@ -99,6 +99,62 @@ Namespace Saves
                 Bits.Int(0, Offsets.ExplorerRank, 32) = value
             End Set
         End Property
+
+        ''' <summary>
+        ''' Gets or sets the original player Pokemon.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayer As Integer
+            Get
+                Return Bits.Int(&HBE, 0, 2)
+            End Get
+            Set(value As Integer)
+                Bits.Int(&HBE, 0, 2) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the original partner Pokemon.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartner As Integer
+            Get
+                Return Bits.Int(&HC0, 0, 2)
+            End Get
+            Set(value As Integer)
+                Bits.Int(&HC0, 0, 2) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the original player name.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayerName As String
+            Get
+                Return Bits.StringPMD(&H13F, 0, 10)
+            End Get
+            Set(value As String)
+                Bits.StringPMD(&H13F, 0, 10) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the original partner name.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartnerName As String
+            Get
+                Return Bits.StringPMD(&H149, 0, 10)
+            End Get
+            Set(value As String)
+                Bits.StringPMD(&H149, 0, 10) = value
+            End Set
+        End Property
 #End Region
 
         Public Property HeldMoney As Integer
@@ -123,23 +179,6 @@ Namespace Saves
             End Get
             Set(value As Integer)
                 Bits.Int(0, Offsets.StoredMoney, 24) = value
-            End Set
-        End Property
-
-        Public Property OriginalPlayer As Integer
-            Get
-                Return Bits.Int(&HBE, 0, 2)
-            End Get
-            Set(value As Integer)
-                Bits.Int(&HBE, 0, 2) = value
-            End Set
-        End Property
-        Public Property OriginalPartner As Integer
-            Get
-                Return Bits.Int(&HC0, 0, 2)
-            End Get
-            Set(value As Integer)
-                Bits.Int(&HC0, 0, 2) = value
             End Set
         End Property
 
