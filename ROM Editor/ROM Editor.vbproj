@@ -98,6 +98,7 @@
     <Compile Include="ConsoleCommands\ImportFunctionList.vb" />
     <Compile Include="ConsoleCommands\MessageFarcFilenameAnalysis.vb" />
     <Compile Include="ConsoleCommands\PackFarc.vb" />
+    <Compile Include="ConsoleCommands\PSMDLangSearch.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
