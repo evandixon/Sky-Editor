@@ -32,7 +32,13 @@ Module Module1
                                     'Now to check to see if any strings are different, using a compare similar to outside these using statements
 
                                     For Each editedStringEntry In editedMsg.Strings
-                                        Dim sourceStringEntry = (From s In sourceMsg.Strings Where s.Hash = editedStringEntry.Hash).FirstOrDefault
+                                        Dim sourceStringEntry As MessageBin.StringEntry = Nothing '= (From s In sourceMsg.Strings Where s.Hash = editedStringEntry.Hash).FirstOrDefault
+                                        For Each item In sourceMsg.Strings
+                                            If item.Hash = editedStringEntry.Hash Then
+                                                sourceStringEntry = item
+                                                Exit For
+                                            End If
+                                        Next
                                         If sourceStringEntry IsNot Nothing Then
                                             'We've found corresponding strings.  NOW for the actual compare
 

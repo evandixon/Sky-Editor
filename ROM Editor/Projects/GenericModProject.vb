@@ -240,36 +240,36 @@ Namespace Projects
                                    Dim completed As Integer = 0
                                    '-Compute the hashes
                                    For count = 0 To hashToCalcSource.Count - 1
-                                           Dim c = count
-                                           tasks.Add(Task.Run(New Action(Sub()
-                                                                             Using h = MD5.Create
-                                                                                 Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
-                                                                                 Using source = IO.File.OpenRead(IO.Path.Combine(sourceRoot, hashToCalcSource(c).TrimStart("\")))
-                                                                                     sourceFiles(hashToCalcSource(c)) = h.ComputeHash(source)
-                                                                                 End Using
-                                                                                 completed += 1
+                                       Dim c = count
+                                       tasks.Add(Task.Run(New Action(Sub()
+                                                                         Using h = MD5.Create
+                                                                             Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
+                                                                             Using source = IO.File.OpenRead(IO.Path.Combine(sourceRoot, hashToCalcSource(c).TrimStart("\")))
+                                                                                 sourceFiles(hashToCalcSource(c)) = h.ComputeHash(source)
                                                                              End Using
-                                                                         End Sub)))
-                                       Next
+                                                                             completed += 1
+                                                                         End Using
+                                                                     End Sub)))
+                                   Next
 
-                                       For count = 0 To hashToCalcDest.Count - 1
-                                           Dim c = count
-                                           tasks.Add(Task.Run(New Action(Sub()
-                                                                             Using h = MD5.Create
-                                                                                 Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
-                                                                                 Using dest = IO.File.OpenRead(IO.Path.Combine(currentFiles, hashToCalcDest(c).TrimStart("\")))
-                                                                                     destFiles(hashToCalcDest(c)) = h.ComputeHash(dest)
-                                                                                 End Using
-                                                                                 completed += 1
+                                   For count = 0 To hashToCalcDest.Count - 1
+                                       Dim c = count
+                                       tasks.Add(Task.Run(New Action(Sub()
+                                                                         Using h = MD5.Create
+                                                                             Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
+                                                                             Using dest = IO.File.OpenRead(IO.Path.Combine(currentFiles, hashToCalcDest(c).TrimStart("\")))
+                                                                                 destFiles(hashToCalcDest(c)) = h.ComputeHash(dest)
                                                                              End Using
-                                                                         End Sub)))
-                                       Next
+                                                                             completed += 1
+                                                                         End Using
+                                                                     End Sub)))
+                                   Next
 
-                                       Await Task.WhenAll(tasks)
+                                   Await Task.WhenAll(tasks)
 
 
 
-                                       Me.BuildProgress = 0
+                                   Me.BuildProgress = 0
                                    Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Comparing files")
                                    '-Analyze the differences
                                    For Each item In destFiles.Keys
@@ -282,7 +282,7 @@ Namespace Projects
                                            Else
                                                'Possible actions: update, rename
                                                If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                                   actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
+                                                   actions.ToRename.Add(item, (From s In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(s.Value, destFiles(item)) Take 1 Select s.Key).ToList(0))
                                                Else
                                                    actions.ToUpdate.Add(item)
                                                End If
@@ -290,7 +290,7 @@ Namespace Projects
                                        Else
                                            'Possible actions: add, rename
                                            If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                               actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
+                                               actions.ToRename.Add(item, (From d In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(d.Value, destFiles(item)) Take 1 Select d.Key).ToList(0))
                                            Else
                                                If Me.SupportsAdd Then
                                                    actions.ToAdd.Add(item)
@@ -336,69 +336,77 @@ Namespace Projects
                     End If
                 Next
 
-                For count = 0 To actions.ToUpdate.Count - 1
-                    Dim item = actions.ToUpdate(count)
+                Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Generating patch"))
+                f.SetLoadingStatus = False
+                f.SetLoadingStatusOnFinish = False
+                Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)
+                                            Me.BuildStatusMessage = e.Message
+                                            Me.BuildProgress = e.Progress
+                                        End Sub
+                AddHandler f.LoadingStatusChanged, onProgressChanged
 
-                    Me.BuildProgress = count / actions.ToUpdate.Count
-                    Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch")
+                Await f.RunForEach(Of String)(Async Function(Item As String) As Task
+                                                  Dim patchMade As Boolean = False
+                                                  'Detect and use appropriate patching program
+                                                  For Each patcher In Me.GetCustomFilePatchers
+                                                      Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
+                                                      If reg.IsMatch(Item) Then
+                                                          If patcher IsNot Nothing AndAlso Not patchers.Contains(patcher) Then
+                                                              patchers.Add(patcher)
+                                                          End If
+                                                          If Not IO.Directory.Exists(IO.Path.Combine(modTempFiles, Item.Trim("\"))) Then
+                                                              IO.Directory.CreateDirectory(IO.Path.Combine(modTempFiles, Item.Trim("\")))
+                                                          End If
 
-                    Dim patchMade As Boolean = False
-                        'Detect and use appropriate patching program
-                        For Each patcher In Me.GetCustomFilePatchers
-                            Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
-                            If reg.IsMatch(item) Then
-                                patchers.Add(patcher)
-                                If Not IO.Directory.Exists(IO.Path.Combine(modTempFiles, item.Trim("\"))) Then
-                                    IO.Directory.CreateDirectory(IO.Path.Combine(modTempFiles, item.Trim("\")))
-                                End If
+                                                          Dim oldF As String = IO.Path.Combine(sourceRoot, Item.Trim("\"))
+                                                          Dim newF As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
+                                                          Dim patchFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
 
-                                Dim oldF As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
-                                Dim newF As String = IO.Path.Combine(currentFiles, item.Trim("\"))
-                                Dim patchFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
-
-                                Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
-                                patchMade = True
-                                Exit For
-                            End If
-                        Next
-                        If Not patchMade Then
-                            'Use xdelta for all other file types
-                            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\")))) Then
-                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\"))))
-                            End If
-                            Dim oldFile As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
-                            Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
-                            Dim newFile As String = IO.Path.Combine(currentFiles, item.Trim("\"))
-                            Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
-                            Dim deltaFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & ".xdelta")
-                            Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
-                            IO.File.Copy(oldFile, oldFileTemp, True)
-                            IO.File.Copy(newFile, newFileTemp, True)
-                            Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                            Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
-                            IO.File.Copy(deltaFileTemp, deltaFile)
-                            IO.File.Delete(deltaFileTemp)
-                            IO.File.Delete(oldFileTemp)
-                            IO.File.Delete(newFileTemp)
-                        End If
-                    Next
-                    '-Copy Patcher programs for non-standard file formats
-                    'XDelta will be copied with the modpack
-                    If Not IO.Directory.Exists(modTempTools) Then
-                        IO.Directory.CreateDirectory(modTempTools)
-                    End If
-                    For Each item In patchers
-                        IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
-                    Next
-                    Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
-
-                    '-Zip Mod
-                    If Not IO.Directory.Exists(modOutput) Then
-                        IO.Directory.CreateDirectory(modOutput)
-                    End If
-                    SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
+                                                          Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
+                                                          patchMade = True
+                                                          Exit For
+                                                      End If
+                                                  Next
+                                                  If Not patchMade Then
+                                                      'Use xdelta for all other file types
+                                                      If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, Item.Trim("\")))) Then
+                                                          IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, Item.Trim("\"))))
+                                                      End If
+                                                      Dim oldFile As String = IO.Path.Combine(sourceRoot, Item.Trim("\"))
+                                                      Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
+                                                      Dim newFile As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
+                                                      Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
+                                                      Dim deltaFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & ".xdelta")
+                                                      Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
+                                                      IO.File.Copy(oldFile, oldFileTemp, True)
+                                                      IO.File.Copy(newFile, newFileTemp, True)
+                                                      Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
+                                                      Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
+                                                      IO.File.Copy(deltaFileTemp, deltaFile)
+                                                      IO.File.Delete(deltaFileTemp)
+                                                      IO.File.Delete(oldFileTemp)
+                                                      IO.File.Delete(newFileTemp)
+                                                  End If
+                                              End Function, actions.ToUpdate)
+                '-Copy Patcher programs for non-standard file formats
+                'XDelta will be copied with the modpack
+                If Not IO.Directory.Exists(modTempTools) Then
+                    IO.Directory.CreateDirectory(modTempTools)
+                End If
+                For Each item In patchers
+                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
                 Next
-                Me.BuildProgress = 1
+                Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
+
+                '-Zip Mod
+                If Not IO.Directory.Exists(modOutput) Then
+                    IO.Directory.CreateDirectory(modOutput)
+                End If
+                SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
+
+
+            Next
+            Me.BuildProgress = 1
             Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
         End Function
 

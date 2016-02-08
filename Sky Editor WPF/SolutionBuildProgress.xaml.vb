@@ -77,8 +77,10 @@ Public Class SolutionBuildProgress
     End Sub
 
     Private Sub Project_BuildStatusChanged(sender As Object, e As EventArguments.ProjectBuildStatusChanged)
-        If Not dataGrid.Items.Contains(sender) Then
-            dataGrid.Items.Add(sender)
-        End If
+        Dispatcher.Invoke(New Action(Sub()
+                                         If Not dataGrid.Items.Contains(sender) Then
+                                             dataGrid.Items.Add(sender)
+                                         End If
+                                     End Sub))
     End Sub
 End Class
