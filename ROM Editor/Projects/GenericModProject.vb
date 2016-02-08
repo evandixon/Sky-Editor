@@ -202,64 +202,115 @@ Namespace Projects
                 Dim patchers As New List(Of FilePatcher)
                 Dim actions As New ModJson
 
-                Me.BuildProgress = 0
-                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Analyzing files...")
-
-                Await Task.Run(New Action(Sub()
-                                              'Create the mod
-                                              '-Analyze files (find out what's changed)
-                                              Dim sourceFiles As New Dictionary(Of String, Byte())
-                                              Using hash = MD5.Create
-                                                  For Each file In IO.Directory.GetFiles(sourceRoot, "*", IO.SearchOption.AllDirectories)
-                                                      sourceFiles.Add(file.Replace(sourceRoot, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
-                                                  Next
-                                              End Using
-
-                                              Dim destFiles As New Dictionary(Of String, Byte())
-                                              Using hash = MD5.Create
-                                                  For Each file In IO.Directory.GetFiles(currentFiles, "*", IO.SearchOption.AllDirectories)
-                                                      destFiles.Add(file.Replace(currentFiles, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
-                                                  Next
-                                              End Using
+                Await Task.Run(Async Function() As Task
+                                   Me.BuildProgress = 0
+                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Analyzing files")
+                                   'Create the mod
+                                   '-Find all the files
+                                   Dim sourceFiles As New Dictionary(Of String, Byte())
+                                   For Each file In IO.Directory.GetFiles(sourceRoot, "*", IO.SearchOption.AllDirectories)
+                                       'sourceFiles.Add(file.Replace(sourceRoot, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
+                                       sourceFiles.Add(file.Replace(sourceRoot, "").ToLower, {})
+                                   Next
 
 
-                                              For Each item In destFiles.Keys
-                                                  Dim originalFilename As String = ""
-                                                  Dim existsSource As Boolean = sourceFiles.ContainsKey(item)
-                                                  If existsSource Then
-                                                      'Possible actions: rename, update, none
-                                                      If Utilities.GenericArrayOperations(Of Byte).ArraysEqual(sourceFiles(item), destFiles(item)) Then
-                                                          'Do Nothing
-                                                      Else
-                                                          'Possible actions: update, rename
-                                                          If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                                              actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
-                                                          Else
-                                                              actions.ToUpdate.Add(item)
-                                                          End If
-                                                      End If
-                                                  Else
-                                                      'Possible actions: add, rename
-                                                      If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                                          actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
-                                                      Else
-                                                          If Me.SupportsAdd Then
-                                                              actions.ToAdd.Add(item)
-                                                          End If
-                                                      End If
-                                                  End If
-                                              Next
+                                   Dim destFiles As New Dictionary(Of String, Byte())
+                                   For Each file In IO.Directory.GetFiles(currentFiles, "*", IO.SearchOption.AllDirectories)
+                                       'destFiles.Add(file.Replace(currentFiles, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
+                                       destFiles.Add(file.Replace(currentFiles, "").ToLower, {})
+                                   Next
 
-                                              If Me.SupportsDelete Then
-                                                  For Each item In sourceFiles.Keys
-                                                      Dim existsDest As Boolean = destFiles.ContainsKey(item)
-                                                      If Not existsDest Then
-                                                          'Possible actions: delete (rename would have been detected in above iteration)
-                                                          actions.ToDelete.Add(item)
-                                                      End If
-                                                  Next
-                                              End If
-                                          End Sub))
+                                   '-Analyze files
+                                   '(Only calculate hashes for files that exist on both sides, to save on time
+                                   Dim hashToCalcSource As New List(Of String)
+                                   Dim hashToCalcDest As New List(Of String)
+                                   For Each destFile In destFiles.Keys
+                                       For Each sourceFile In sourceFiles.Keys
+                                           If String.Equals(destFile, sourceFile, StringComparison.InvariantCultureIgnoreCase) Then
+                                               hashToCalcSource.Add(sourceFile)
+                                               hashToCalcDest.Add(destFile)
+                                           End If
+                                       Next
+                                   Next
+
+                                   Me.BuildProgress = 0
+                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Computing hashes")
+
+                                   Dim tasks As New List(Of Task)
+                                   Dim completed As Integer = 0
+                                   '-Compute the hashes
+                                   Using hash = MD5.Create
+                                       For count = 0 To hashToCalcSource.Count - 1
+                                           Dim c = count
+                                           tasks.Add(Task.Run(New Action(Sub()
+                                                                             Using h = MD5.Create
+                                                                                 Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
+                                                                                 Using source = IO.File.OpenRead(IO.Path.Combine(sourceRoot, hashToCalcSource(c).TrimStart("\")))
+                                                                                     sourceFiles(hashToCalcSource(c)) = h.ComputeHash(source)
+                                                                                 End Using
+                                                                                 completed += 1
+                                                                             End Using
+                                                                         End Sub)))
+                                       Next
+
+                                       For count = 0 To hashToCalcDest.Count - 1
+                                           Dim c = count
+                                           tasks.Add(Task.Run(New Action(Sub()
+                                                                             Using h = MD5.Create
+                                                                                 Me.BuildProgress = completed / (hashToCalcSource.Count + hashToCalcDest.Count)
+                                                                                 Using dest = IO.File.OpenRead(IO.Path.Combine(currentFiles, hashToCalcDest(c).TrimStart("\")))
+                                                                                     destFiles(hashToCalcDest(c)) = h.ComputeHash(dest)
+                                                                                 End Using
+                                                                                 completed += 1
+                                                                             End Using
+                                                                         End Sub)))
+                                       Next
+
+                                       Await Task.WhenAll(tasks)
+                                   End Using
+
+
+
+                                   Me.BuildProgress = 0
+                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Comparing files")
+                                   '-Analyze the differences
+                                   For Each item In destFiles.Keys
+                                       Dim originalFilename As String = ""
+                                       Dim existsSource As Boolean = sourceFiles.ContainsKey(item)
+                                       If existsSource Then
+                                           'Possible actions: rename, update, none
+                                           If Utilities.GenericArrayOperations(Of Byte).ArraysEqual(sourceFiles(item), destFiles(item)) Then
+                                               'Do Nothing
+                                           Else
+                                               'Possible actions: update, rename
+                                               If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
+                                                   actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
+                                               Else
+                                                   actions.ToUpdate.Add(item)
+                                               End If
+                                           End If
+                                       Else
+                                           'Possible actions: add, rename
+                                           If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
+                                               actions.ToRename.Add(item, (From f In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(f.Value, destFiles(item)) Take 1 Select f.Key).ToList(0))
+                                           Else
+                                               If Me.SupportsAdd Then
+                                                   actions.ToAdd.Add(item)
+                                               End If
+                                           End If
+                                       End If
+                                   Next
+
+                                   If Me.SupportsDelete Then
+                                       For Each item In sourceFiles.Keys
+                                           Dim existsDest As Boolean = destFiles.ContainsKey(item)
+                                           If Not existsDest Then
+                                               'Possible actions: delete (rename would have been detected in above iteration)
+                                               actions.ToDelete.Add(item)
+                                           End If
+                                       Next
+                                   End If
+                               End Function)
 
 
                 actions.DependenciesBefore = ModDependenciesBefore
@@ -275,7 +326,7 @@ Namespace Projects
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), SkyEditorBase.Utilities.Json.Serialize(actions))
 
                 Me.BuildProgress = 0
-                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch...")
+                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch")
 
                 For Each item In actions.ToAdd
                     'Todo: remove item from toAdd if no longer exists
@@ -287,64 +338,69 @@ Namespace Projects
                     End If
                 Next
 
-                For Each item In actions.ToUpdate
+                For count = 0 To actions.ToUpdate.Count - 1
+                    Dim item = actions.ToUpdate(count)
+
+                    Me.BuildProgress = count / actions.ToUpdate.Count
+                    Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch")
+
                     Dim patchMade As Boolean = False
-                    'Detect and use appropriate patching program
-                    For Each patcher In Me.GetCustomFilePatchers
-                        Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
-                        If reg.IsMatch(item) Then
-                            patchers.Add(patcher)
-                            If Not IO.Directory.Exists(IO.Path.Combine(modTempFiles, item.Trim("\"))) Then
-                                IO.Directory.CreateDirectory(IO.Path.Combine(modTempFiles, item.Trim("\")))
+                        'Detect and use appropriate patching program
+                        For Each patcher In Me.GetCustomFilePatchers
+                            Dim reg As New Regex(patcher.FilePath, RegexOptions.IgnoreCase)
+                            If reg.IsMatch(item) Then
+                                patchers.Add(patcher)
+                                If Not IO.Directory.Exists(IO.Path.Combine(modTempFiles, item.Trim("\"))) Then
+                                    IO.Directory.CreateDirectory(IO.Path.Combine(modTempFiles, item.Trim("\")))
+                                End If
+
+                                Dim oldF As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
+                                Dim newF As String = IO.Path.Combine(currentFiles, item.Trim("\"))
+                                Dim patchFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
+
+                                Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
+                                patchMade = True
+                                Exit For
                             End If
-
-                            Dim oldF As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
-                            Dim newF As String = IO.Path.Combine(currentFiles, item.Trim("\"))
-                            Dim patchFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
-
-                            Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
-                            patchMade = True
-                            Exit For
+                        Next
+                        If Not patchMade Then
+                            'Use xdelta for all other file types
+                            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\")))) Then
+                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\"))))
+                            End If
+                            Dim oldFile As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
+                            Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
+                            Dim newFile As String = IO.Path.Combine(currentFiles, item.Trim("\"))
+                            Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
+                            Dim deltaFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & ".xdelta")
+                            Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
+                            IO.File.Copy(oldFile, oldFileTemp, True)
+                            IO.File.Copy(newFile, newFileTemp, True)
+                            Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
+                            Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
+                            IO.File.Copy(deltaFileTemp, deltaFile)
+                            IO.File.Delete(deltaFileTemp)
+                            IO.File.Delete(oldFileTemp)
+                            IO.File.Delete(newFileTemp)
                         End If
                     Next
-                    If Not patchMade Then
-                        'Use xdelta for all other file types
-                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\")))) Then
-                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.Trim("\"))))
-                        End If
-                        Dim oldFile As String = IO.Path.Combine(sourceRoot, item.Trim("\"))
-                        Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
-                        Dim newFile As String = IO.Path.Combine(currentFiles, item.Trim("\"))
-                        Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
-                        Dim deltaFile As String = IO.Path.Combine(modTempFiles, item.Trim("\") & ".xdelta")
-                        Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
-                        IO.File.Copy(oldFile, oldFileTemp, True)
-                        IO.File.Copy(newFile, newFileTemp, True)
-                        Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                        Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
-                        IO.File.Copy(deltaFileTemp, deltaFile)
-                        IO.File.Delete(deltaFileTemp)
-                        IO.File.Delete(oldFileTemp)
-                        IO.File.Delete(newFileTemp)
+                    '-Copy Patcher programs for non-standard file formats
+                    'XDelta will be copied with the modpack
+                    If Not IO.Directory.Exists(modTempTools) Then
+                        IO.Directory.CreateDirectory(modTempTools)
                     End If
-                Next
-                '-Copy Patcher programs for non-standard file formats
-                'XDelta will be copied with the modpack
-                If Not IO.Directory.Exists(modTempTools) Then
-                    IO.Directory.CreateDirectory(modTempTools)
-                End If
-                For Each item In patchers
-                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
-                Next
-                Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
+                    For Each item In patchers
+                        IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
+                    Next
+                    Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
 
-                '-Zip Mod
-                If Not IO.Directory.Exists(modOutput) Then
-                    IO.Directory.CreateDirectory(modOutput)
-                End If
-                SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
-            Next
-            Me.BuildProgress = 1
+                    '-Zip Mod
+                    If Not IO.Directory.Exists(modOutput) Then
+                        IO.Directory.CreateDirectory(modOutput)
+                    End If
+                    SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
+                Next
+                Me.BuildProgress = 1
             Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
         End Function
 

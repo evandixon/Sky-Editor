@@ -76,7 +76,7 @@ Namespace Projects
 
         Public Overrides Async Function Build(Solution As Solution) As Task
             Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files...")
+            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
             For count = 0 To dirs.Length - 1
                 Me.BuildProgress = count / dirs.Length
                 Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
