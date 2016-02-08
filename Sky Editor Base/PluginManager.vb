@@ -85,22 +85,33 @@ Public Class PluginManager
             Using reflectionManager As New AssemblyReflectionManager
                 For Each item In assemblyPaths
                     reflectionManager.LoadAssembly(item, "PluginManagerAnalysis")
-                    Dim pluginInfoNames As List(Of String) =
-                        reflectionManager.Reflect(item,
-                                                  Function(a As Assembly, Args() As Object) As List(Of String)
-                                                      Dim out As New List(Of String)
 
-                                                      If Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse a.FullName = Assembly.GetExecutingAssembly.FullName OrElse a.FullName = Args(0)) Then
-                                                          For Each t As Type In a.GetTypes
-                                                              Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
-                                                              If isPlg Then
-                                                                  out.Add(t.FullName)
-                                                              End If
-                                                          Next
-                                                      End If
+                    Dim pluginInfoNames As New List(Of String)
 
-                                                      Return out
-                                                  End Function, coreAssemblyName)
+                    Try
+                        pluginInfoNames =
+                            reflectionManager.Reflect(item,
+                                                      Function(a As Assembly, Args() As Object) As List(Of String)
+                                                          Dim out As New List(Of String)
+
+                                                          If a IsNot Nothing AndAlso Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse a.FullName = Assembly.GetExecutingAssembly.FullName OrElse a.FullName = Args(0)) Then
+                                                              For Each t As Type In a.GetTypes
+                                                                  Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
+                                                                  If isPlg Then
+                                                                      out.Add(t.FullName)
+                                                                  End If
+                                                              Next
+                                                          End If
+
+                                                          Return out
+                                                      End Function, coreAssemblyName)
+                    Catch ex As Reflection.ReflectionTypeLoadException
+                        'If we fail here, then the assembly is NOT a valid plugin, so we won't load it.
+                        Console.WriteLine(ex.ToString)
+                    Catch ex As io.FileNotFoundException
+                        'If we fail here, then the assembly is missing some of its references, meaning it's not a valid plugin.
+                        Console.WriteLine(ex.ToString)
+                    End Try
 
                     If pluginInfoNames.Count > 0 Then
                         'Then we want to keep this assembly
@@ -152,6 +163,7 @@ Public Class PluginManager
                 Next
             Next
         End If
+        RaiseEvent PluginLoadComplete(Me, New EventArgs)
     End Sub
 #End Region
 
@@ -503,7 +515,9 @@ Public Class PluginManager
         Dim output As New List(Of Object)
 
         For Each item In GetRegisteredTypes(BaseType)
-            output.Add(item.GetConstructor({}).Invoke({}))
+            If item.GetConstructor({}) IsNot Nothing Then
+                output.Add(item.GetConstructor({}).Invoke({}))
+            End If
         Next
 
         Return output
@@ -594,6 +608,7 @@ Public Class PluginManager
     Public Event MenuActionAdded(sender As Object, e As MenuActionAddedEventArgs)
     Public Event SolutionChanged(sender As Object, e As EventArgs)
     Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
+    Public Event PluginLoadComplete(sender As Object, e As EventArgs)
 #End Region
 
 #Region "Event Handlers"
@@ -938,6 +953,10 @@ Public Class PluginManager
                 If CurrentSolution IsNot Nothing Then
                     CurrentSolution.Dispose()
                 End If
+
+                For Each item In Plugins
+                    item.UnLoad(Me)
+                Next
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
