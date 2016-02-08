@@ -369,7 +369,7 @@ Public Class Solution
     End Function
 
     Public Overridable Function GetProjectsToBuild() As IEnumerable(Of Project)
-        Return Me.GetAllProjects
+        Return From p In Me.GetAllProjects Where p.CanBuild(Me)
     End Function
 
     Public Overridable Async Function Build() As Task
@@ -399,11 +399,8 @@ Public Class Solution
     End Function
 
     Private Async Function BuildProjects(ToBuild As Dictionary(Of Project, Boolean), CurrentProject As Project) As Task
-        Dim built As Integer = (From v In ToBuild.Values Where v = True).Count
-        PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Building projects... ({0} of {1})"), built, ToBuild.Count), built / ToBuild.Count)
-
         Dim buildTasks As New List(Of Task)
-        For Each item In CurrentProject.GetReferences(Me)
+        For Each item In From p In CurrentProject.GetReferences(Me) Where p.CanBuild(Me)
             buildTasks.Add(BuildProjects(ToBuild, item))
         Next
         Await Task.WhenAll(buildTasks)
@@ -411,9 +408,15 @@ Public Class Solution
         If Not ToBuild(CurrentProject) Then
             'Todo: make sure we won't get here twice, with all the async stuff going on
             ToBuild(CurrentProject) = True
+            UpdateBuildLoadingStatus(ToBuild)
             Await CurrentProject.Build(Me)
         End If
     End Function
+
+    Private Sub UpdateBuildLoadingStatus(toBuild As Dictionary(Of Project, Boolean))
+        Dim built As Integer = (From v In toBuild.Values Where v = True).Count
+        PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Building projects... ({0} of {1})"), built, toBuild.Count), built / toBuild.Count)
+    End Sub
 
 
 #Region "Create New"

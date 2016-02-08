@@ -104,7 +104,7 @@ Namespace Projects
 
                                    If Not sourceText = sourceOrig Then
                                        Dim dest = Item.Replace(scriptSource, scriptDestination)
-                                       Await PluginHelper.RunProgram(PluginHelper.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""")
+                                       Await PluginHelper.RunProgram(PluginHelper.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""", False)
                                    End If
                                End Function, toCompile)
             RemoveHandler f.LoadingStatusChanged, onProgressChanged
