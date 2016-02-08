@@ -239,8 +239,7 @@ Namespace Projects
                                    Dim tasks As New List(Of Task)
                                    Dim completed As Integer = 0
                                    '-Compute the hashes
-                                   Using hash = MD5.Create
-                                       For count = 0 To hashToCalcSource.Count - 1
+                                   For count = 0 To hashToCalcSource.Count - 1
                                            Dim c = count
                                            tasks.Add(Task.Run(New Action(Sub()
                                                                              Using h = MD5.Create
@@ -267,11 +266,10 @@ Namespace Projects
                                        Next
 
                                        Await Task.WhenAll(tasks)
-                                   End Using
 
 
 
-                                   Me.BuildProgress = 0
+                                       Me.BuildProgress = 0
                                    Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Comparing files")
                                    '-Analyze the differences
                                    For Each item In destFiles.Keys
