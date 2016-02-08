@@ -14,7 +14,13 @@
             </DataGrid.DataContext>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name"/>
-                <DataGridTextColumn Header="Progress" Binding="{Binding BuildProgress, BindsDirectlyToSource=True}"/>
+                <DataGridTemplateColumn Header="Progress">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                           <ProgressBar Value="{Binding BuildProgress}" Minimum="0" Maximum="1"/> 
+                        </DataTemplate>                        
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status"/>
             </DataGrid.Columns>
         </DataGrid>
