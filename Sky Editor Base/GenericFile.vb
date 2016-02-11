@@ -151,7 +151,12 @@ Public Class GenericFile
         End Set
     End Property
 
-    Public Property Int(Index As Long) As Integer
+    ''' <summary>
+    ''' Gets a 32 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int32(Index As Long) As Integer
         Get
             Return BitConverter.ToInt32(RawData(Index, 4), 0)
         End Get
@@ -161,13 +166,48 @@ Public Class GenericFile
         End Set
     End Property
 
-    Public Property UInt(Index As Long) As UInteger
+    ''' <summary>
+    ''' Gets a 32 bit unsingned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt32(Index As Long) As UInteger
         Get
             Return BitConverter.ToUInt32(RawData(Index, 4), 0)
         End Get
         Set(value As UInteger)
             Dim bytes = BitConverter.GetBytes(value)
             RawData(Index, 4) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets a 64 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int64(Index As Long) As Long
+        Get
+            Return BitConverter.ToInt64(RawData(Index, 8), 0)
+        End Get
+        Set(value As Long)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 8) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets a 64 bit unsingned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt64(Index As Long) As ULong
+        Get
+            Return BitConverter.ToUInt64(RawData(Index, 8), 0)
+        End Get
+        Set(value As ULong)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 8) = bytes
         End Set
     End Property
 
