@@ -200,27 +200,27 @@ Public Class GenericFile
     Protected Overridable Sub PreSave()
 
     End Sub
-    Public Overridable Sub Save(Destination As String)
-        PreSave()
-        FileReader.Seek(0, IO.SeekOrigin.Begin)
-        FileReader.Flush()
-        If Not String.IsNullOrEmpty(Destination) Then
-            If IO.File.Exists(Filename) Then
-                IO.File.Copy(Filename, Destination, True)
-            Else
-                Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
-                    FileReader.CopyTo(dest)
-                End Using
-            End If
-        End If
+    'Public Overridable Sub Save(Destination As String)
+    '    PreSave()
+    '    FileReader.Seek(0, IO.SeekOrigin.Begin)
+    '    FileReader.Flush()
+    '    If Not String.IsNullOrEmpty(Destination) Then
+    '        If IO.File.Exists(Filename) Then
+    '            IO.File.Copy(Filename, Destination, True)
+    '        Else
+    '            Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
+    '                FileReader.CopyTo(dest)
+    '            End Using
+    '        End If
+    '    End If
 
-        If String.IsNullOrEmpty(OriginalFilename) Then
-            OriginalFilename = Destination
-        End If
-        RaiseEvent FileSaved(Me, New EventArgs)
-    End Sub
+    '    If String.IsNullOrEmpty(OriginalFilename) Then
+    '        OriginalFilename = Destination
+    '    End If
+    '    RaiseEvent FileSaved(Me, New EventArgs)
+    'End Sub
     Public Overridable Sub Save()
-
+        FileReader.Flush()
     End Sub
 
     ''' <summary>

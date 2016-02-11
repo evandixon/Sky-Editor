@@ -372,16 +372,17 @@ Namespace Projects
                                                       If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, Item.Trim("\")))) Then
                                                           IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, Item.Trim("\"))))
                                                       End If
+                                                      Dim tmpVal As String = Guid.NewGuid.ToString
                                                       Dim oldFile As String = IO.Path.Combine(sourceRoot, Item.Trim("\"))
-                                                      Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "oldFile.bin")
+                                                      Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"oldFile-{tmpVal}.bin")
                                                       Dim newFile As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
-                                                      Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "newFile.bin")
+                                                      Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"newFile-{tmpVal}.bin")
                                                       Dim deltaFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & ".xdelta")
-                                                      Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), "patch.xdelta")
+                                                      Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"patch-{tmpVal}.xdelta")
                                                       IO.File.Copy(oldFile, oldFileTemp, True)
                                                       IO.File.Copy(newFile, newFileTemp, True)
                                                       Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                                                      Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", "oldFile.bin", "newFile.bin", "patch.xdelta"), False)
+                                                      Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", $"oldFile-{tmpVal}.bin", $"newFile-{tmpVal}.bin", $"patch-{tmpVal}.xdelta"), False)
                                                       IO.File.Copy(deltaFileTemp, deltaFile)
                                                       IO.File.Delete(deltaFileTemp)
                                                       IO.File.Delete(oldFileTemp)

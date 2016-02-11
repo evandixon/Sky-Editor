@@ -40,13 +40,13 @@ Namespace FileFormats
             For count = 0 To FileCount - 1
                 Dim info As New FileInfo
                 info.Index = count
-                Dim filenameOffset = Me.UInt(DataOffset + count * 12 + 0)
-                info.DataOffset = Me.Int(DataOffset + count * 12 + 4)
-                info.DataLength = Me.Int(DataOffset + count * 12 + 8)
+                Dim filenameOffset = Me.UInt32(DataOffset + count * 12 + 0)
+                info.DataOffset = Me.Int32(DataOffset + count * 12 + 4)
+                info.DataLength = Me.Int32(DataOffset + count * 12 + 8)
                 info.FilenamePointer = filenameOffset
                 If Sir0Fat5Type = 0 Then
                     'We're inferring the length based on the offset of the next filename
-                    Dim filenameLength = Me.Int(DataOffset + (count + 1) * 12 + 0) - filenameOffset
+                    Dim filenameLength = Me.Int32(DataOffset + (count + 1) * 12 + 0) - filenameOffset
                     info.Filename = Me.ReadUnicodeString(filenameOffset, filenameLength / 2)
                 Else
                     info.Filename = Hex(filenameOffset).PadLeft(8, "0"c)

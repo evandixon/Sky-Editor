@@ -99,6 +99,10 @@
     <Compile Include="ConsoleCommands\MessageFarcFilenameAnalysis.vb" />
     <Compile Include="ConsoleCommands\PackFarc.vb" />
     <Compile Include="ConsoleCommands\PSMDLangSearch.vb" />
+    <Compile Include="FileFormats\CTR\Level3Header.vb" />
+    <Compile Include="FileFormats\CTR\RomFs.vb" />
+    <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
+    <Compile Include="FileFormats\FixedPokemon.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />

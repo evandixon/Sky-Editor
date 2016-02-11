@@ -116,11 +116,11 @@ Namespace FileFormats
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
 
-            Dim sir0Type = Me.Int(&H20)
-            Dim sir0Offset = Me.Int(&H24)
-            Dim sir0Length = Me.Int(&H28)
-            DataOffset = Me.Int(&H2C)
-            Dim datLength = Me.Int(&H30)
+            Dim sir0Type = Me.Int32(&H20)
+            Dim sir0Offset = Me.Int32(&H24)
+            Dim sir0Length = Me.Int32(&H28)
+            DataOffset = Me.Int32(&H2C)
+            Dim datLength = Me.Int32(&H30)
 
             'Todo: use another class for another sir0 type
             'This code is for sir0 type 5

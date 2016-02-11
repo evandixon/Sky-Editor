@@ -38,7 +38,62 @@ Namespace FileFormats
             Public Property MinEvolveLevel As Byte
             Public Property Unk96 As UInt16
             Public Function ToBytes() As Byte()
+                Dim out As New List(Of Byte)
+                'Unknown 1-F
+                Dim unk1 = Me.Unk1toF
+                For count = 0 To &HF
+                    out.Add(unk1(count))
+                Next
 
+                'The 26 moves
+                For count = 0 To 25
+                    out.AddRange(BitConverter.GetBytes(Moves(count)))
+                Next
+
+                'The 26 move levels
+                For count = 0 To 25
+                    out.AddRange(BitConverter.GetBytes(MoveLevels(count)))
+                Next
+
+                'Properties
+                out.AddRange(BitConverter.GetBytes(Unk5E))
+                out.AddRange(BitConverter.GetBytes(Unk60))
+                out.AddRange(BitConverter.GetBytes(DexNumber))
+                out.AddRange(BitConverter.GetBytes(Unk66))
+                out.AddRange(BitConverter.GetBytes(Category))
+                out.AddRange(BitConverter.GetBytes(ListNumber1))
+                out.AddRange(BitConverter.GetBytes(ListNumber2))
+                out.AddRange(BitConverter.GetBytes(Unk6E))
+                out.AddRange(BitConverter.GetBytes(BaseHP))
+                out.AddRange(BitConverter.GetBytes(BaseAttack))
+                out.AddRange(BitConverter.GetBytes(BaseSpAttack))
+                out.AddRange(BitConverter.GetBytes(BaseDefense))
+                out.AddRange(BitConverter.GetBytes(BaseSpeed))
+                out.AddRange(BitConverter.GetBytes(EntryNumber))
+                out.AddRange(BitConverter.GetBytes(EvolvesFromEntry))
+                out.AddRange(BitConverter.GetBytes(ExpTableNumber))
+
+                'Unknown data
+                For count = 0 To &HA
+                    out.Add(Unk82(count))
+                Next
+
+                'More properties
+                out.Add(Ability1)
+                out.Add(Ability2)
+                out.Add(AbilityHidden)
+                out.Add(Type1)
+                out.Add(Type2)
+
+                out.Add(Me.Unk91(0))
+                out.Add(Me.Unk91(1))
+                out.Add(Me.Unk91(2))
+
+                out.Add(IsMegaEvolution)
+                out.Add(MinEvolveLevel)
+                out.AddRange(BitConverter.GetBytes(Unk96))
+
+                Return out.ToArray
             End Function
             Public Sub New(RawData As Byte())
                 'The unknown data

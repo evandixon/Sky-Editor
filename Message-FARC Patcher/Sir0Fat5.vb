@@ -50,7 +50,7 @@
         Next
     End Sub
 
-    Public Overrides Sub Save(Destination As String)
+    Public Overrides Sub Save()
         'Only works for files without filenames
 
         'Reset pointers
@@ -80,7 +80,7 @@
 
 
         Me.RelativePointers.Add(data.Count + 8)
-        MyBase.Save(Destination)
+        MyBase.Save()
     End Sub
 
 

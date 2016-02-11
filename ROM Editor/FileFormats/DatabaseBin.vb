@@ -14,12 +14,12 @@ Namespace FileFormats
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Dim total As New Text.StringBuilder
             Using f As New GenericFile(Filename, True)
-                Dim subHeaderPointer = f.Int(4)
-                Dim stringPointerOffset = f.Int(subHeaderPointer + 4)
-                Dim numEntries = f.Int(subHeaderPointer + 8) * 4
+                Dim subHeaderPointer = f.Int32(4)
+                Dim stringPointerOffset = f.Int32(subHeaderPointer + 4)
+                Dim numEntries = f.Int32(subHeaderPointer + 8) * 4
 
                 For count = 0 To numEntries - 1
-                    Dim entryPointer = f.Int(stringPointerOffset + count * 4)
+                    Dim entryPointer = f.Int32(stringPointerOffset + count * 4)
 
                     If entryPointer > 0 Then
                         Dim s As New Text.StringBuilder()

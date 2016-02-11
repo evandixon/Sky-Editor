@@ -58,9 +58,9 @@ Public Class FarcF5
         header.CreateFile("")
         Dim fileNames = IO.Directory.GetFiles(SourceDirectory)
         Dim fileData As New List(Of Byte)
-
+        Dim orderedNames = (From f In fileNames Order By UInt32.Parse(IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileName(f)), Globalization.NumberStyles.HexNumber) Ascending)
         'While the file names are probably already in order, it's VERY important that the FARC files are in order by hash, ascending.
-        For Each item In (From f In fileNames Order By UInt32.Parse(IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileName(f)), Globalization.NumberStyles.HexNumber) Ascending)
+        For Each item In orderedNames
             Dim entry As New Sir0Fat5.FileInfo
             entry.DataOffset = fileData.Count
             entry.FilenamePointer = UInt32.Parse(IO.Path.GetFileNameWithoutExtension(item), Globalization.NumberStyles.HexNumber)

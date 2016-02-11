@@ -24,7 +24,7 @@
         MyBase.OpenFile(Filename)
         ProcessData()
     End Sub
-    Public Overrides Sub Save(Destination As String)
+    Public Overrides Sub Save()
         'The header and relative pointers must be set by child classes
 
         Me.RawData(0, 4) = {&H53, &H49, &H52, &H30}
@@ -76,7 +76,7 @@
             Length += 1
         End While
 
-        MyBase.Save(Destination)
+        MyBase.Save()
 
         'Saving multiple times like this will make the second time fail, because the file length is changing.  
         'In Sky Editor, we'd change the file length back.  However, in this utility, Save will only be called once, so this is not necessary.

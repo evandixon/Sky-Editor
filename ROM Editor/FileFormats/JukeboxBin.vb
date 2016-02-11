@@ -22,20 +22,20 @@ Namespace FileFormats
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Using f As New GenericFile(Filename, True)
-                Dim subHeaderPointer = f.Int(4)
-                Dim jukeboxPointerOffset = f.Int(subHeaderPointer + 0)
-                Dim numEntries = f.Int(subHeaderPointer + 4)
+                Dim subHeaderPointer = f.Int32(4)
+                Dim jukeboxPointerOffset = f.Int32(subHeaderPointer + 0)
+                Dim numEntries = f.Int32(subHeaderPointer + 4)
 
                 For count = 0 To numEntries - 1
-                    Dim filenamePointer As Integer = f.Int(jukeboxPointerOffset + count * 36 + 0)
-                    Dim u2 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 4)
-                    Dim u3 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 8)
-                    Dim unlockPointer As Integer = f.Int(jukeboxPointerOffset + count * 36 + 12)
-                    Dim unk5 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 16)
-                    Dim unk6 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 20)
-                    Dim unk7 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 24)
-                    Dim unk8 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 28)
-                    Dim unk9 As Integer = f.Int(jukeboxPointerOffset + count * 36 + 32)
+                    Dim filenamePointer As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 0)
+                    Dim u2 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 4)
+                    Dim u3 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 8)
+                    Dim unlockPointer As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 12)
+                    Dim unk5 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 16)
+                    Dim unk6 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 20)
+                    Dim unk7 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 24)
+                    Dim unk8 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 28)
+                    Dim unk9 As Integer = f.Int32(jukeboxPointerOffset + count * 36 + 32)
 
                     Dim e As New JukeboxEntry
                     e.Filename = f.ReadUnicodeString(filenamePointer)
