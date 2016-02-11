@@ -245,6 +245,14 @@ Public Class MainWindow2
                           End Sub)
     End Sub
 
+    Private Sub dockingManager_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles dockingManager.MouseUp
+        For Each item In toolbarPaneBottom.Children
+            If item.IsAutoHidden Then
+                item.IsActive = False
+            End If
+        Next
+    End Sub
+
     Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged
         If e.PropertyName = "SelectedContent" AndAlso _manager IsNot Nothing Then 'docPane.SelectedContent 
             Dim t = GetMenuActionTargets()

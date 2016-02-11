@@ -194,6 +194,17 @@ Public Class DocumentTab
                         DirectCast(_document, IDisposable).Dispose()
                     End If
                 End If
+                If Me.Content IsNot Nothing Then
+                    If TypeOf Me.Content Is IDisposable Then
+                        DirectCast(Me.Content, IDisposable).Dispose()
+                    ElseIf TypeOf Me.Content Is TabControl Then
+                        For Each item As TabItem In (DirectCast(Me.Content, TabControl)).Items
+                            If TypeOf item.Content Is IDisposable Then
+                                DirectCast(item.Content, IDisposable).Dispose()
+                            End If
+                        Next
+                    End If
+                End If
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
