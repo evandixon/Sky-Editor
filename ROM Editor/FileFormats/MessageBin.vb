@@ -83,6 +83,25 @@ Namespace FileFormats
             Next
         End Sub
 
+        Public Sub OpenFileOnlyIDs(Filename As String)
+            MyBase.OpenFile(Filename)
+
+            Dim stringCount As Integer = BitConverter.ToInt32(Header, 0)
+            Dim stringInfoPointer As Integer = BitConverter.ToInt32(Header, 4)
+
+            For i = 0 To stringCount - 1
+                Dim stringPointer As Integer = BitConverter.ToInt32(RawData(stringInfoPointer + i * 12 + &H0, 4), 0)
+                Dim stringHash As UInteger = BitConverter.ToUInt32(RawData(stringInfoPointer + i * 12 + &H4, 4), 0)
+                Dim unk As UInt32 = BitConverter.ToUInt32(RawData(stringInfoPointer + i * 12 + &H8, 4), 0)
+
+                'We're skipping reading the string, since this function only loads the IDs
+
+                Dim newEntry = New MessageBinStringEntry With {.Hash = stringHash, .Entry = "", .Unknown = unk}
+                AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
+                Strings.Add(newEntry)
+            Next
+        End Sub
+
         Private Sub Entry_PropertyChanged(sender As Object, e As EventArgs)
             If Strings.Contains(sender) Then
                 RaiseModified()
@@ -132,6 +151,12 @@ Namespace FileFormats
 
         Public Sub New()
             MyBase.New
+            Strings = New ObservableCollection(Of MessageBinStringEntry)
+        End Sub
+
+        Public Sub New(OpenReadOnly As Boolean)
+            Me.New
+            IsReadOnly = OpenReadOnly
             Strings = New ObservableCollection(Of MessageBinStringEntry)
         End Sub
     End Class

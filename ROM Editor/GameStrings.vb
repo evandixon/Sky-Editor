@@ -38,8 +38,8 @@ Public Class GameStrings
     Public Const PokemonYCode = "0004000000055E00"
     Public Const ORCode = "000400000011C400"
     Public Const ASCode = "000400000011C500"
-    Public Const GTICode = "00040000000BA800"
-    Public Const PSMDCode = "0004000000174600"
+    Public Const GTICode = "00040000000BA(8|9)00"
+    Public Const PSMDCode = "0004000000(1746|149B)00"
 
     Public Const SkyCode = "C2S."
 End Class

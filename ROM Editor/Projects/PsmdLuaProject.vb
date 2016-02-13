@@ -26,7 +26,7 @@ Namespace Projects
         '    Return patchers
         'End Function
 
-        Private Property LanguageIDs As ConcurrentDictionary(Of String, ConcurrentBag(Of UInteger))
+        Private Property LanguageIDDictionary As ConcurrentDictionary(Of UInteger, Boolean)
 
         ''' <summary>
         ''' Gets the task that loads the Language file IDs, to avoid duplicate keys.
@@ -48,8 +48,8 @@ Namespace Projects
 
             'Validate the ID
 Validate:
-            For Each lang In LanguageIDs.Keys
-                If LanguageIDs(lang).Contains(newID) Then
+            For Each item In LanguageIDDictionary.Keys
+                If item = newID AndAlso LanguageIDDictionary(item) = True Then
                     'Then this ID is in use.  Increment by 1 and try again
                     newID += 1
                     GoTo Validate
@@ -57,40 +57,36 @@ Validate:
             Next
 
             'the ID must be valid.  Let's register it.
-            For Each lang In LanguageIDs.Keys
-                LanguageIDs(lang).Add(newID)
-            Next
+            LanguageIDDictionary(newID) = True
 
             Return newID
         End Function
 
         Private Sub LoadLanguageIDs()
             'Load language IDs
-            Dim langDirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-            Dim f1 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Loading languages"))
-            _languageLoadTask = f1.RunForEach(Async Function(Item As String)
-                                                  Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
+            Dim dir = IO.Path.Combine(Me.GetRootDirectory, "Languages")
+            If IO.Directory.Exists(dir) Then
+                Dim langDirs = IO.Directory.GetDirectories(dir)
+                Dim f1 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Loading languages"))
+                _languageLoadTask = f1.RunForEach(Async Function(Item As String)
+                                                      Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
 
-                                                  If Not LanguageIDs.ContainsKey(lang) Then
-                                                      LanguageIDs(lang) = New ConcurrentBag(Of UInteger)
-                                                  End If
+                                                      Dim f2 As New Utilities.AsyncFor
+                                                      Await f2.RunForEach(Sub(File As String)
+                                                                              Using msg As New FileFormats.MessageBin(True)
+                                                                                  msg.OpenFileOnlyIDs(File)
 
-                                                  Dim f2 As New Utilities.AsyncFor
-                                                  Await f2.RunForEach(Sub(File As String)
-                                                                          Using msg As New FileFormats.MessageBin
-                                                                              msg.OpenFile(File)
-
-                                                                              For Each entry In msg.Strings
-                                                                                  'If LanguageIDs(lang).Contains(entry.Hash) Then
-                                                                                  '    'Todo: throw an error of some sort
-                                                                                  'Else
-                                                                                  LanguageIDs(lang).Add(entry.Hash)
-                                                                                  'End If
-                                                                              Next
-                                                                          End Using
-                                                                      End Sub, IO.Directory.GetFiles(Item))
-                                              End Function, langDirs, langDirs.Count)
-
+                                                                                  For Each entry In msg.Strings
+                                                                                      'If LanguageIDs(lang).Contains(entry.Hash) Then
+                                                                                      '    'Todo: throw an error of some sort
+                                                                                      'Else
+                                                                                      LanguageIDDictionary(entry.Hash) = True
+                                                                                      'End If
+                                                                                  Next
+                                                                              End Using
+                                                                          End Sub, IO.Directory.GetFiles(Item))
+                                                  End Function, langDirs, langDirs.Count)
+            End If
         End Sub
 
         Private Sub GenericModProject_ProjectOpened(sender As Object, e As EventArgs) Handles Me.ProjectOpened
@@ -111,16 +107,27 @@ Validate:
                     lang = match.Groups(1).Value
                 End If
 
-                If Not LanguageIDs.ContainsKey(lang) Then
-                    LanguageIDs(lang) = New ConcurrentBag(Of UInteger)
-                End If
-
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
                 Await Utilities.FileSystem.ReCreateDirectory(destDir)
 
                 Dim farc As New FileFormats.FarcF5
                 farc.OpenFile(item)
                 Await farc.Extract(destDir)
+            Next
+
+            Dim languageDirNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)", RegexOptions.IgnoreCase)
+            Dim languageDirFilenames = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*", IO.SearchOption.TopDirectoryOnly)
+            For Each item In languageDirFilenames
+                Dim lang = "en"
+
+                Dim match = languageDirNameRegex.Match(item)
+                If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
+                    lang = match.Groups(1).Value
+                End If
+
+                Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
+                Await Utilities.FileSystem.ReCreateDirectory(destDir)
+                Await Utilities.FileSystem.CopyDirectory(item, destDir, True)
             Next
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
@@ -190,15 +197,34 @@ Validate:
             Await MyBase.Build(Solution)
         End Function
 
-        Public Overrides Function GetFilesToCopy() As IEnumerable(Of String)
-            Return {IO.Path.Combine("romfs", "script"),
-                IO.Path.Combine("romfs", "message_en.bin"),
-                IO.Path.Combine("romfs", "message_fr.bin"),
-                IO.Path.Combine("romfs", "message_ge.bin"),
-                IO.Path.Combine("romfs", "message_it.bin"),
-                IO.Path.Combine("romfs", "message_sp.bin"),
-                IO.Path.Combine("romfs", "message_us.bin"),
-                IO.Path.Combine("romfs", "message.bin")}
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+            Dim project As Project = Solution.GetProjectsByName(BaseRomProjectName).FirstOrDefault
+            If project IsNot Nothing AndAlso TypeOf project Is BaseRomProject Then
+                Dim code = DirectCast(project, BaseRomProject).GameCode
+                Dim psmd As New Regex(GameStrings.PSMDCode)
+                Dim gti As New Regex(GameStrings.GTICode)
+                If psmd.IsMatch(code) Then
+                    Return {IO.Path.Combine("romfs", "script"),
+                            IO.Path.Combine("romfs", "message_en.bin"),
+                            IO.Path.Combine("romfs", "message_fr.bin"),
+                            IO.Path.Combine("romfs", "message_ge.bin"),
+                            IO.Path.Combine("romfs", "message_it.bin"),
+                            IO.Path.Combine("romfs", "message_sp.bin"),
+                            IO.Path.Combine("romfs", "message_us.bin"),
+                            IO.Path.Combine("romfs", "message.bin")}
+                ElseIf gti.IsMatch(code) Then
+                    Return {IO.Path.Combine("romfs", "script"),
+                            IO.Path.Combine("romfs", "message_fr"),
+                            IO.Path.Combine("romfs", "message_ge"),
+                            IO.Path.Combine("romfs", "message_it"),
+                            IO.Path.Combine("romfs", "message_sp"),
+                            IO.Path.Combine("romfs", "message")}
+                Else
+                    Return {IO.Path.Combine("romfs", "script")}
+                End If
+            Else
+                    Return {IO.Path.Combine("romfs", "script")}
+            End If
         End Function
 
         Public Overrides Function GetSupportedGameCodes() As IEnumerable(Of String)
@@ -220,7 +246,7 @@ Validate:
 
         Public Sub New()
             MyBase.New
-            LanguageIDs = New ConcurrentDictionary(Of String, ConcurrentBag(Of UInteger))
+            LanguageIDDictionary = New ConcurrentDictionary(Of UInteger, Boolean)
         End Sub
     End Class
 

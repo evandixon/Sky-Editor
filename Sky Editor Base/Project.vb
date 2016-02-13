@@ -7,6 +7,7 @@ Imports SkyEditorBase.PluginHelper
 Public Class Project
     Implements IDisposable
     Implements iSavable
+    Implements iModifiable
     Implements INotifyPropertyChanged
 
 #Region "Child Classes"
@@ -225,6 +226,7 @@ Public Class Project
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Public Event ProjectOpened(sender As Object, e As EventArgs)
+    Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
 #End Region
 
 #Region "Create New"
@@ -721,6 +723,14 @@ Public Class Project
     End Function
 #End Region
 
+    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+        Return ".skyproj"
+    End Function
+
+    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        RaiseEvent Modified(Me, New EventArgs)
+    End Sub
+
     Public Sub New()
         Settings = New Dictionary(Of String, Object)
         ProjectNode = New ProjectItem(Me) With {.Name = "Project", .IsDirectory = True}
@@ -757,9 +767,5 @@ Public Class Project
         ' TODO: uncomment the following line if Finalize() is overridden above.
         ' GC.SuppressFinalize(Me)
     End Sub
-
-    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
-        Return ".skyproj"
-    End Function
 #End Region
 End Class

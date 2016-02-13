@@ -6,6 +6,7 @@ Imports SkyEditorBase.PluginHelper
 Public Class Solution
     Implements IDisposable
     Implements iSavable
+    Implements iModifiable
 
 #Region "Child Classes"
     Private Class SettingValue
@@ -146,6 +147,7 @@ Public Class Solution
     Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
     Public Event SolutionBuildStarted(sender As Object, e As EventArgs)
     Public Event SolutionBuildCompleted(sender As Object, e As EventArgs)
+    Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
 #End Region
 
     Private Sub RaiseCreated()
@@ -302,6 +304,8 @@ Public Class Solution
             If q Is Nothing Then
                 Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
                 item.Children.Add(New SolutionItem With {.IsDirectory = False, .Name = ProjectName, .Project = p})
+                AddHandler p.Modified, AddressOf Project_Modified
+                RaiseModified()
                 RaiseEvent ProjectAdded(Me, New EventArguments.ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
             Else
                 'There's already a project here
@@ -328,6 +332,8 @@ Public Class Solution
         Dim child = (From c In parent.Children Where c.Name.ToLower = pathParts.Last.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
         If child IsNot Nothing Then
             RaiseEvent ProjectRemoving(Me, New EventArguments.ProjectRemovingEventArgs With {.Project = child.Project})
+            RemoveHandler child.Project.Modified, AddressOf Project_Modified
+            RaiseModified()
             parent.Children.Remove(child)
             child.Dispose()
             RaiseEvent ProjectRemoved(Me, New EventArguments.ProjectRemovedEventArgs With {.DirectoryName = pathParts.Last, .ParentPath = parentPathString, .FullPath = ProjectPath})
@@ -459,7 +465,7 @@ Public Class Solution
         Dim output As Solution = SolutionType.GetConstructor({}).Invoke({})
         output.Filename = IO.Path.Combine(dir, SolutionName & ".skysln")
         output.Name = SolutionName
-
+        output.IsModified = True
         output.RaiseCreated()
 
         Return output
@@ -533,6 +539,7 @@ Public Class Solution
                 If item.Value IsNot Nothing Then
                     newNode.IsDirectory = False
                     newNode.Project = Project.OpenProjectFile(IO.Path.Combine(IO.Path.GetDirectoryName(Filename), item.Value.Replace("/", "\").TrimStart("\")))
+                    AddHandler newNode.Project.Modified, AddressOf Project_Modified
                 Else
                     newNode.IsDirectory = True
                     newNode.Project = Nothing
@@ -636,4 +643,17 @@ Public Class Solution
     Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
         Return ".skysln"
     End Function
+
+    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        IsModified = True
+        RaiseEvent Modified(Me, New EventArgs)
+    End Sub
+
+    Private Sub Project_Modified(sender As Object, e As EventArgs)
+        RaiseModified()
+    End Sub
+
+    Private Sub Solution_FileSaved(sender As Object, e As EventArgs) Handles Me.FileSaved
+        IsModified = False
+    End Sub
 End Class

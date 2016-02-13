@@ -420,8 +420,7 @@ Public Class SolutionExplorer
                 Dim t = DirectCast(node.Tag, NodeTag)
                 Dim w As New Forms.OpenFileDialog
                 w.Filter = t.ParentProject.GetImportIOFilter(t.ParentPath)
-                If w.ShowDialog Then
-
+                If w.ShowDialog = Forms.DialogResult.OK Then
                     If t.ParentProject IsNot Nothing Then
                         'Then we're at the project level
                         t.ParentProject.AddExistingFile(t.ParentPath, w.FileName)

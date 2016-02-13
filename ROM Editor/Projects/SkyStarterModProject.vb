@@ -5,7 +5,7 @@ Namespace Projects
     Public Class SkyStarterModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy() As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("overlay", "overlay_0013.bin"),
                     IO.Path.Combine("data", "MESSAGE", "text_e.str"),
                     IO.Path.Combine("data", "MESSAGE", "text_f.str"),

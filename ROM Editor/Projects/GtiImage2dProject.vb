@@ -8,7 +8,7 @@ Namespace Projects
             Return {GameStrings.GTICode}
         End Function
 
-        Public Overrides Function GetFilesToCopy() As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("romfs", "bg"), IO.Path.Combine("romfs", "font"), IO.Path.Combine("romfs", "image_2d")}
         End Function
 

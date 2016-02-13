@@ -13,6 +13,15 @@ Public Class GenericFile
     Private _tempFilename As String
     Dim _fileReader As IO.FileStream
     Dim _makeTempCopy As Boolean
+
+    Public Property IsReadOnly As Boolean
+        Get
+            Return _openReadOnly
+        End Get
+        Protected Set(ByVal value As Boolean)
+            _openReadOnly = value
+        End Set
+    End Property
     Dim _openReadOnly As Boolean
 
 #Region "Constructors"

@@ -117,7 +117,7 @@ Namespace FileFormats
             Next
 
             'Remove the header and pointer sections, because it will be reconstructed on save
-            Me.Length = Me.Length - Me.PointerLength - Me.HeaderLength
+            If Not Me.isreadonly Then Me.Length = Me.Length - Me.PointerLength - Me.HeaderLength
         End Sub
 
         Public Sub New()
@@ -129,6 +129,11 @@ Namespace FileFormats
             MyBase.New(RawData)
             RelativePointers = New List(Of Integer)
             ProcessData()
+        End Sub
+
+        Public Sub New(Filename As String, OpenReadOnly As Boolean)
+            MyBase.New(Filename, OpenReadOnly)
+            RelativePointers = New List(Of Integer)
         End Sub
     End Class
 End Namespace

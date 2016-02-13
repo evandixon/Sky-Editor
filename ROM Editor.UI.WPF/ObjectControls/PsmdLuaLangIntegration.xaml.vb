@@ -12,8 +12,20 @@ Public Class PsmdLuaLangIntegration
             Dim messageFiles As New Dictionary(Of String, FileFormats.MessageBin)
             For Each item In IO.Directory.GetDirectories(IO.Path.Combine(.GetRootDirectory, "Languages"), "*", IO.SearchOption.TopDirectoryOnly)
                 Dim msgfile = New FileFormats.MessageBin
-                msgfile.OpenFile(IO.Path.Combine(item, IO.Path.GetFileNameWithoutExtension(GetEditingObject(Of CodeFiles.LuaCodeFile).Filename)))
-                messageFiles.Add(IO.Path.GetFileName(item), msgfile)
+                Dim filename = IO.Path.Combine(item, IO.Path.GetFileNameWithoutExtension(GetEditingObject(Of CodeFiles.LuaCodeFile).Filename))
+
+                Dim exists As Boolean = False
+                If IO.File.Exists(filename) Then
+                    exists = True
+                ElseIf IO.File.Exists(filename & ".bin") Then
+                    filename &= ".bin"
+                    exists = True
+                End If
+
+                If exists Then
+                    msgfile.OpenFile(filename)
+                    messageFiles.Add(IO.Path.GetFileName(item), msgfile)
+                End If
             Next
 
             tcTabs.Items.Clear()

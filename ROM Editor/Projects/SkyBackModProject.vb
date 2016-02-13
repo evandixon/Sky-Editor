@@ -4,7 +4,7 @@ Namespace Projects
     Public Class SkyBackModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy() As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("data", "BACK")}
         End Function
 

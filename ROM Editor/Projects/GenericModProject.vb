@@ -109,7 +109,7 @@ Namespace Projects
         ''' If empty, will copy everything.
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Function GetFilesToCopy() As IEnumerable(Of String)
+        Public Overridable Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {}
         End Function
 
@@ -162,7 +162,7 @@ Namespace Projects
 
         Public Overridable Async Function Initialize(Solution As Solution) As Task
             If Me.ProjectReferences.Count > 0 Then
-                Dim filesToCopy = Me.GetFilesToCopy
+                Dim filesToCopy = Me.GetFilesToCopy(Solution, Me.ProjectReferences(0))
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
                 If filesToCopy.Count > 0 Then
                     Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
