@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TabControl x:Name="tcTabs"/>
+        <TabControl x:Name="tcTabs" Margin="0,0,0,31"/>
+        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Width="100"/>
     </Grid>
 </UserControl>

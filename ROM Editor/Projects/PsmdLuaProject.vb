@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.Collections.Concurrent
+Imports System.Text.RegularExpressions
 Imports CodeFiles
 Imports SkyEditorBase
 Namespace Projects
@@ -25,6 +26,77 @@ Namespace Projects
         '    Return patchers
         'End Function
 
+        Private Property LanguageIDs As ConcurrentDictionary(Of String, ConcurrentBag(Of UInteger))
+
+        ''' <summary>
+        ''' Gets the task that loads the Language file IDs, to avoid duplicate keys.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property LanguageLoadTask As Task
+            Get
+                Return _languageLoadTask
+            End Get
+        End Property
+        Dim _languageLoadTask As Task
+
+        Public Async Function GetNewLanguageID() As Task(Of UInteger)
+            Dim newID As Integer = 0
+
+            If LanguageLoadTask IsNot Nothing Then
+                Await LanguageLoadTask
+            End If
+
+            'Validate the ID
+Validate:
+            For Each lang In LanguageIDs.Keys
+                If LanguageIDs(lang).Contains(newID) Then
+                    'Then this ID is in use.  Increment by 1 and try again
+                    newID += 1
+                    GoTo Validate
+                End If
+            Next
+
+            'the ID must be valid.  Let's register it.
+            For Each lang In LanguageIDs.Keys
+                LanguageIDs(lang).Add(newID)
+            Next
+
+            Return newID
+        End Function
+
+        Private Sub LoadLanguageIDs()
+            'Load language IDs
+            Dim langDirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
+            Dim f1 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Loading languages"))
+            _languageLoadTask = f1.RunForEach(Async Function(Item As String)
+                                                  Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
+
+                                                  If Not LanguageIDs.ContainsKey(lang) Then
+                                                      LanguageIDs(lang) = New ConcurrentBag(Of UInteger)
+                                                  End If
+
+                                                  Dim f2 As New Utilities.AsyncFor
+                                                  Await f2.RunForEach(Sub(File As String)
+                                                                          Using msg As New FileFormats.MessageBin
+                                                                              msg.OpenFile(File)
+
+                                                                              For Each entry In msg.Strings
+                                                                                  'If LanguageIDs(lang).Contains(entry.Hash) Then
+                                                                                  '    'Todo: throw an error of some sort
+                                                                                  'Else
+                                                                                  LanguageIDs(lang).Add(entry.Hash)
+                                                                                  'End If
+                                                                              Next
+                                                                          End Using
+                                                                      End Sub, IO.Directory.GetFiles(Item))
+                                              End Function, langDirs, langDirs.Count)
+
+        End Sub
+
+        Private Sub GenericModProject_ProjectOpened(sender As Object, e As EventArgs) Handles Me.ProjectOpened
+            LoadLanguageIDs()
+        End Sub
+
         Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
@@ -37,6 +109,10 @@ Namespace Projects
                 Dim match = languageNameRegex.Match(item)
                 If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
                     lang = match.Groups(1).Value
+                End If
+
+                If Not LanguageIDs.ContainsKey(lang) Then
+                    LanguageIDs(lang) = New ConcurrentBag(Of UInteger)
                 End If
 
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
@@ -71,6 +147,7 @@ Namespace Projects
                                         Me.CreateDirectory(d)
                                         Await Me.AddExistingFile(d, Item, False)
                                     End Function, filesToOpen)
+            LoadLanguageIDs()
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
@@ -140,6 +217,11 @@ Namespace Projects
                 Return New CodeExtraDataFile
             End If
         End Function
+
+        Public Sub New()
+            MyBase.New
+            LanguageIDs = New ConcurrentDictionary(Of String, ConcurrentBag(Of UInteger))
+        End Sub
     End Class
 
 End Namespace

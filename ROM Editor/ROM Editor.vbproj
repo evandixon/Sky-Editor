@@ -103,6 +103,7 @@
     <Compile Include="FileFormats\CTR\RomFs.vb" />
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
     <Compile Include="FileFormats\FixedPokemon.vb" />
+    <Compile Include="FileFormats\MessageBinStringEntry.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />

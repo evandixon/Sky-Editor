@@ -218,6 +218,13 @@ Public Class Project
     Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
     Public Event BuildStatusChanged(sender As Object, e As EventArguments.ProjectBuildStatusChanged)
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+    ''' <summary>
+    ''' Raised when the project has been opened.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event ProjectOpened(sender As Object, e As EventArgs)
 #End Region
 
 #Region "Create New"
@@ -260,6 +267,9 @@ Public Class Project
         Dim output As Project = ProjectType.GetConstructor({}).Invoke({})
         output.Filename = IO.Path.Combine(dir, ProjectName & ".skyproj")
         output.Name = ProjectName
+
+        Dim projFile As New ProjectFile With {.Name = ProjectName, .AssemblyQualifiedTypeName = ProjectType.AssemblyQualifiedName}
+        output.LoadProjectFile(projFile)
 
         Return output
     End Function
@@ -668,6 +678,8 @@ Public Class Project
                 PluginHelper.Writeline("Duplicate project detected: " & path.Last & ".  Not loading it.")
             End If
         Next
+
+        RaiseEvent ProjectOpened(Me, New EventArgs)
     End Sub
 #End Region
 

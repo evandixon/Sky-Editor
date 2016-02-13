@@ -12,6 +12,10 @@ Namespace Utilities
         Public Delegate Function ForEachItemAsync(Of T)(i As T) As Task
         Public Event LoadingStatusChanged(sender As Object, e As LoadingStatusChangedEventArgs)
 
+        Public Sub New()
+            SetLoadingStatus = False
+            SetLoadingStatusOnFinish = False
+        End Sub
         Public Sub New(ProgressMessage As String)
             SetLoadingStatus = True
             SetLoadingStatusOnFinish = True

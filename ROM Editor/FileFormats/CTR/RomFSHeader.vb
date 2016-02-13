@@ -50,11 +50,11 @@
             End Set
         End Property
 
-        Public ReadOnly Property BodyOffset As ULong
-            Get
+        'Public ReadOnly Property BodyOffset As ULong
+        '    Get
 
-            End Get
-        End Property
+        '    End Get
+        'End Property
 
         Public ReadOnly Property BodySize As ULong
             Get

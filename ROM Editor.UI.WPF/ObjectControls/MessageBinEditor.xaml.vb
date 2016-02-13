@@ -1,16 +1,33 @@
-﻿Imports System.Windows.Controls
+﻿Imports System.Collections.ObjectModel
+Imports System.ComponentModel
+Imports System.Timers
+Imports System.Windows.Controls
+Imports ROMEditor.FileFormats
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class MessageBinEditor
     Implements iObjectControl
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        searchTimer = New Timers.Timer(500)
+        cancelSearch = False
+    End Sub
+
+    Private WithEvents searchTimer As Timers.Timer
+    Private cancelSearch As Boolean
+    Private searchTask As Task
+
     Public Sub RefreshDisplay()
         With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
-            lstEntries.Items.Clear()
-            For Each item In .Strings
-                lstEntries.Items.Add(item)
-            Next
+            AddHandler .EntryAdded, AddressOf OnMsgItemAdded
+            AddHandler .FileModified, AddressOf OnObjModified
+            lstEntries.ItemsSource = .Strings
             If lstEntries.Items.Count > 0 Then
                 lstEntries.SelectedIndex = 0
             End If
@@ -19,29 +36,84 @@ Public Class MessageBinEditor
     End Sub
 
     Public Sub UpdateObject()
-        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
-            .Strings.Clear()
-            For Each item In lstEntries.Items
-                .Strings.Add(item)
-            Next
-            If lstEntries.SelectedItem IsNot Nothing Then
-                lstEntries.Items(lstEntries.SelectedIndex) = placeEntry.ObjectToEdit
-            End If
-        End With
+
     End Sub
 
-    Private Sub lstEntries_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstEntries.SelectionChanged
-        Dim current As FileFormats.MessageBin.StringEntry = placeEntry.ObjectToEdit
-        If e.RemovedItems IsNot Nothing AndAlso e.RemovedItems.Count > 0 AndAlso current IsNot Nothing Then
-            lstEntries.Items(lstEntries.Items.IndexOf(e.RemovedItems(0))) = current
+    Private Sub OnMsgItemAdded(sender As Object, e As MessageBin.EntryAddedEventArgs)
+        lstEntries.SelectedIndex = lstEntries.Items.IndexOf((From i As MessageBinStringEntry In lstEntries.ItemsSource Where i.Hash = e.NewID).First)
+    End Sub
+
+    Private Sub txtSearch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtSearch.TextChanged
+        cancelSearch = True
+        searchTimer.Stop()
+        searchTimer.Start()
+    End Sub
+
+
+    Private Async Sub searchTimer_Elapsed(sender As Object, e As ElapsedEventArgs) Handles searchTimer.Elapsed
+        searchTimer.Stop()
+        Dim searchText As String = ""
+        Dispatcher.Invoke(Sub()
+                              searchText = txtSearch.Text
+                          End Sub)
+        'Wait for the current task to stop itself
+        If searchTask IsNot Nothing Then
+            Await searchTask
         End If
-        If e.AddedItems IsNot Nothing AndAlso e.AddedItems.Count > 0 Then
-            placeEntry.ObjectToEdit = e.AddedItems(0)
+        'Start a new async task
+        searchTask = Task.Run(New Action(Sub()
+                                             RunSearch(searchText)
+                                         End Sub))
+    End Sub
+
+    Private Sub RunSearch(SearchText As String)
+        cancelSearch = False
+        If String.IsNullOrEmpty(SearchText) Then
+            Dispatcher.Invoke(Sub()
+                                  lstEntries.ItemsSource = GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+                              End Sub)
+        Else
+            Dim results As New ObservableCollection(Of MessageBinStringEntry)
+            Dispatcher.Invoke(Sub()
+                                  lstEntries.ItemsSource = results
+                              End Sub)
+
+            Dim searchTerms = SearchText.Split(" ")
+
+            For Each item In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+                If cancelSearch = True Then
+                    'If we get here, the search textbox has been changed.  If that happens while we're searching, we'll stop searching
+                    Exit For
+                End If
+
+                For Each term In searchTerms
+                    Dim isMatch As Boolean = False
+
+                    If item.Hash.ToString.Contains(term) Then
+                        isMatch = True
+                    ElseIf item.HashSigned.ToString.Contains(term) Then
+                        isMatch = True
+                    ElseIf item.Entry.ToString.ToLower.Contains(term.ToLower) Then
+                        isMatch = True
+                    End If
+
+                    If isMatch Then
+                        Dispatcher.Invoke(Sub()
+                                              results.Add(item)
+                                          End Sub)
+                        Exit For
+                    End If
+                Next
+            Next
         End If
+    End Sub
+
+    Private Sub OnObjModified(sender As Object, e As EventArgs)
+        IsModified = True
     End Sub
 
     Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-        Return {GetType(ROMEditor.FileFormats.MessageBin)} '{GetType(Mods.ModSourceContainer)}
+        Return {GetType(ROMEditor.FileFormats.MessageBin)}
     End Function
 
     Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
@@ -49,7 +121,9 @@ Public Class MessageBinEditor
     End Function
 
     Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Message")
+        If Not DesignerProperties.GetIsInDesignMode(Me) Then
+            Me.Header = PluginHelper.GetLanguageItem("Message")
+        End If
     End Sub
 
 #Region "IObjectControl Support"
@@ -142,23 +216,5 @@ Public Class MessageBinEditor
     End Property
     Dim _isModified As Boolean
 
-    Private Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
-        Dim entry As New FileFormats.MessageBin.StringEntry
-        entry.Entry = ""
-
-        Dim pendingID As UInteger = 1 'Set an arbitrary ID
-RedoCheck:
-        'And make sure nothing else has the same ID
-        For Each item As FileFormats.MessageBin.StringEntry In lstEntries.Items
-            If item.Hash = pendingID Then
-                'If something else is using the ID, then increment 1 by and start the collision check again
-                pendingID += 1
-                GoTo RedoCheck
-            End If
-        Next
-
-        entry.Hash = pendingID
-        lstEntries.Items.Add(entry)
-    End Sub
 #End Region
 End Class

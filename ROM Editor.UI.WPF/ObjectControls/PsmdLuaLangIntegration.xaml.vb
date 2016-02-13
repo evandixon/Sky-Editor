@@ -21,6 +21,7 @@ Public Class PsmdLuaLangIntegration
                 Dim t As New TabItem
                 t.Header = item.Key
                 Dim p As New SkyEditorWPF.ObjectControlPlaceholder
+                AddHandler p.Modified, AddressOf Me.OnModified
                 t.Content = p
                 p.ObjectToEdit = item.Value
                 tcTabs.Items.Add(t)
@@ -50,6 +51,25 @@ Public Class PsmdLuaLangIntegration
     Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
         Return PluginManager.GetInstance.GetOpenedFileProject(Obj) IsNot Nothing
     End Function
+
+    Private Sub OnModified(sender As Object, e As EventArgs)
+        IsModified = True
+    End Sub
+
+    Private Async Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
+        Dim p As Projects.PsmdLuaProject = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
+        Dim oldText As String = btnAdd.Content
+        If Not p.LanguageLoadTask.IsCompleted Then
+            btnAdd.IsEnabled = False
+            btnAdd.Content = String.Format(PluginHelper.GetLanguageItem("LoadingButtonText", "{0} (Loading)"), oldText)
+        End If
+        Dim id As UInteger = Await p.GetNewLanguageID
+        For Each item As TabItem In tcTabs.Items
+            DirectCast(DirectCast(item.Content, ObjectControlPlaceholder).ObjectToEdit, FileFormats.MessageBin).AddBlankEntry(id)
+        Next
+        btnAdd.IsEnabled = True
+        btnAdd.Content = oldText
+    End Sub
 
 #Region "IObjectControl Support"
 
@@ -138,6 +158,9 @@ Public Class PsmdLuaLangIntegration
     End Property
     Dim _isModified As Boolean
 
+
+#End Region
+
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 
@@ -149,7 +172,7 @@ Public Class PsmdLuaLangIntegration
                 If tcTabs IsNot Nothing Then
                     For Each item As TabItem In tcTabs.Items
                         If item.Content IsNot Nothing AndAlso TypeOf item.Content Is ObjectControlPlaceholder Then
-                            DirectCast(item.Content, ObjectControlPlaceholder).dispose
+                            DirectCast(item.Content, ObjectControlPlaceholder).Dispose()
                         End If
                     Next
                 End If
@@ -175,6 +198,7 @@ Public Class PsmdLuaLangIntegration
         ' TODO: uncomment the following line if Finalize() is overridden above.
         ' GC.SuppressFinalize(Me)
     End Sub
+
 #End Region
-#End Region
+
 End Class

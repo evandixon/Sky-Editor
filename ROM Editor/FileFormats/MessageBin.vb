@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase
+﻿Imports System.Collections.ObjectModel
+Imports System.ComponentModel
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats
@@ -9,48 +11,28 @@ Namespace FileFormats
     Public Class MessageBin
         Inherits Sir0
         Implements iOpenableFile
+        Implements ComponentModel.INotifyPropertyChanged
 
-        Public Class StringEntry
-            Public Property Entry As String
-            Public Property Hash As UInteger
-            Public Property Unknown As UInteger
-            Public Overrides Function ToString() As String
-                Return BitConverter.ToInt32(BitConverter.GetBytes(Hash), 0).ToString & ": " & Entry
-            End Function
-            Public Function GetStringBytes() As Byte()
-                Dim output As New List(Of Byte)
-                Dim skip As Integer = 0
-                For count = 0 To Entry.Length - 1
-                    If skip > 0 Then
-                        skip -= 1
-                    Else
-                        Dim item = Entry(count)
-                        If Not item = vbCr Then
-                            If item = "\"c AndAlso Entry.Length > count + 4 Then
-                                Dim escapeString1 As String = Entry(count + 1) & Entry(count + 2)
-                                Dim escapeString2 As String = Entry(count + 3) & Entry(count + 4)
-                                If Utilities.Hex.IsHex(escapeString1) AndAlso Utilities.Hex.IsHex(escapeString2) Then
-                                    output.Add(Byte.Parse(escapeString2, Globalization.NumberStyles.HexNumber))
-                                    output.Add(Byte.Parse(escapeString1, Globalization.NumberStyles.HexNumber))
-                                    skip += 4
-                                End If
-                            Else
-                                output.AddRange(Text.Encoding.Unicode.GetBytes(item))
-                            End If
-                        End If
-                    End If
-                Next
-                output.Add(0)
-                output.Add(0)
-                Return output.ToArray
-            End Function
+        Public Class EntryAddedEventArgs
+            Inherits EventArgs
+
+            Public Property NewID As UInteger
         End Class
 
         ''' <summary>
         ''' Matches string hashes to the strings contained in the file.
         ''' </summary>
         ''' <returns>The games' scripts refer to the strings by this hash.</returns>
-        Public Property Strings As List(Of StringEntry) ' Dictionary(Of Integer, String)
+        Public Property Strings As ObservableCollection(Of MessageBinStringEntry) ' Dictionary(Of Integer, String)
+
+        Public Sub AddBlankEntry(ID As UInteger)
+            Dim newEntry = New MessageBinStringEntry With {.Hash = ID}
+            AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
+            Strings.Add(newEntry)
+            RaiseModified()
+            RaiseEvent EntryAdded(Me, New EntryAddedEventArgs With {.NewID = ID})
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Strings)))
+        End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
@@ -95,8 +77,16 @@ Namespace FileFormats
 
                 Loop Until doEnd
 
-                Strings.Add(New StringEntry With {.Hash = stringHash, .Entry = s.ToString.Trim, .Unknown = unk})
+                Dim newEntry = New MessageBinStringEntry With {.Hash = stringHash, .Entry = s.ToString.Trim, .Unknown = unk}
+                AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
+                Strings.Add(newEntry)
             Next
+        End Sub
+
+        Private Sub Entry_PropertyChanged(sender As Object, e As EventArgs)
+            If Strings.Contains(sender) Then
+                RaiseModified()
+            End If
         End Sub
 
         Public Overrides Sub Save(Destination As String)
@@ -137,9 +127,12 @@ Namespace FileFormats
             MyBase.Save(Destination)
         End Sub
 
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+        Public Event EntryAdded(sender As Object, e As EntryAddedEventArgs)
+
         Public Sub New()
             MyBase.New
-            Strings = New List(Of StringEntry)
+            Strings = New ObservableCollection(Of MessageBinStringEntry)
         End Sub
     End Class
 End Namespace

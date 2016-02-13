@@ -5,17 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ROMEditor.UI.WPF"
              xmlns:sky="clr-namespace:SkyEditorWPF;assembly=SkyEditor"
+             xmlns:FileFormats="clr-namespace:ROMEditor.FileFormats;assembly=ROMEditor"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="50*"/>
-        </Grid.ColumnDefinitions>
-        <ListBox x:Name="lstEntries" Grid.Column="0" Margin="0,0,0,31"/>
-        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
-        <sky:ObjectControlPlaceholder x:Name="placeEntry" Grid.Column="2" />
-        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Width="75"/>
+        <Label Content="Search: " HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSearch" VerticalAlignment="Top" Margin="56,6,10,0"/>
+        <DataGrid x:Name="lstEntries" Margin="0,32,0,0" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding HashSigned}" Header="ID" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Entry}" Header="Entry">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="AcceptsReturn" Value="true"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.DataContext>
+                <FileFormats:MessageBinStringEntry/>
+            </DataGrid.DataContext>
+        </DataGrid>
     </Grid>
 </UserControl>

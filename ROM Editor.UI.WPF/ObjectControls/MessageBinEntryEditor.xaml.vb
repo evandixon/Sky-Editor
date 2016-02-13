@@ -5,20 +5,22 @@ Public Class MessageBinEntryEditor
     Implements iObjectControl
 
     Public Sub RefreshDisplay()
-        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin.StringEntry)()
-            txtRaw.Text = .Entry
-        End With
+        'With GetEditingObject(Of ROMEditor.FileFormats.MessageBinStringEntry)()
+        '    txtRaw.Text = .Entry
+        'End With
+        'txtRaw.SetBinding(New DependencyProperty(), "Entry")
+        Me.DataContext = GetEditingObject()
         IsModified = False
     End Sub
 
     Public Sub UpdateObject()
-        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin.StringEntry)()
-            .Entry = txtRaw.Text
-        End With
+        'With GetEditingObject(Of ROMEditor.FileFormats.MessageBinStringEntry)()
+        '    .Entry = txtRaw.Text
+        'End With
     End Sub
 
     Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-        Return {GetType(ROMEditor.FileFormats.MessageBin.StringEntry)} '{GetType(Mods.ModSourceContainer)}
+        Return {} '{GetType(ROMEditor.FileFormats.MessageBinStringEntry)} '{GetType(Mods.ModSourceContainer)}
     End Function
 
     Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder

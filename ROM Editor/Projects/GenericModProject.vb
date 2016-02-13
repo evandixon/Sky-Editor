@@ -5,6 +5,7 @@ Namespace Projects
     Public Class GenericModProject
         Inherits Project
 
+#Region "Project Settings"
         Public Property ModName As String
             Get
                 Return Setting("ModName")
@@ -67,7 +68,9 @@ Namespace Projects
                 Setting("Dependencies-After") = value
             End Set
         End Property
+#End Region
 
+#Region "Project Type Properties"
         Public Overrides Function CanCreateDirectory(Path As String) As Boolean
             Return False
         End Function
@@ -87,9 +90,15 @@ Namespace Projects
         Public Overrides Function CanDeleteFile(FilePath As String) As Boolean
             Return False
         End Function
+
         Public Overridable Function GetSupportedGameCodes() As IEnumerable(Of String)
             Return {".*"}
         End Function
+
+        Public Overrides Function CanBuild(Solution As Solution) As Boolean
+            Return True
+        End Function
+#End Region
 
         Public Overridable Function GetCustomFilePatchers() As IEnumerable(Of FilePatcher)
             Return {}
@@ -112,16 +121,20 @@ Namespace Projects
             Return False
         End Function
 
+#Region "File Paths"
         Public Overridable Function GetRawFilesSourceDir(Solution As Solution, SourceProjectName As String) As String
             Dim baseRomProject As BaseRomProject = Solution.GetProjectsByName(SourceProjectName).FirstOrDefault
             Return baseRomProject.GetRawFilesDir
         End Function
+
         Public Overridable Function GetModRootOutputDir() As String
             Return IO.Path.Combine(GetRootDirectory, "Output")
         End Function
+
         Public Overridable Function GetModOutputDir(SourceProjectName As String)
             Return IO.Path.Combine(GetModRootOutputDir, SourceProjectName)
         End Function
+
         Public Overridable Function GetModOutputFilename(SourceProjectName As String)
             Return IO.Path.Combine(GetModOutputDir(SourceProjectName), ModName & ".mod")
         End Function
@@ -129,9 +142,12 @@ Namespace Projects
         Public Overridable Function GetRawFilesDir() As String
             Return IO.Path.Combine(GetRootDirectory, "Raw Files")
         End Function
+
         Public Overridable Function GetModTempDir() As String
             Return IO.Path.Combine(GetRootDirectory, "Mod Files")
         End Function
+#End Region
+
 
         Private Function DictionaryContainsValue(Dictionary As Dictionary(Of String, Byte()), Value As Byte()) As Boolean
             Dim out As Boolean = False
@@ -178,10 +194,6 @@ Namespace Projects
                     IO.Directory.CreateDirectory(GetRawFilesDir)
                 End If
             End If
-        End Function
-
-        Public Overrides Function CanBuild(Solution As Solution) As Boolean
-            Return True
         End Function
 
         ''' <summary>
