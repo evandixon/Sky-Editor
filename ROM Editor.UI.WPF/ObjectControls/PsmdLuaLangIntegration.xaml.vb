@@ -71,7 +71,7 @@ Public Class PsmdLuaLangIntegration
     Private Async Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
         Dim p As Projects.PsmdLuaProject = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
         Dim oldText As String = btnAdd.Content
-        If Not p.LanguageLoadTask.IsCompleted Then
+        If Not p.IsLanguageLoaded Then
             btnAdd.IsEnabled = False
             btnAdd.Content = String.Format(PluginHelper.GetLanguageItem("LoadingButtonText", "{0} (Loading)"), oldText)
         End If

@@ -39,12 +39,23 @@ Namespace Projects
         End Property
         Dim _languageLoadTask As Task
 
+        Public Function IsLanguageLoaded() As Boolean
+            Return LanguageLoadTask IsNot Nothing AndAlso LanguageLoadTask.IsCompleted
+        End Function
+
         Public Async Function GetNewLanguageID() As Task(Of UInteger)
+            'Note: with the current system of logging every ID in use, excessively large numbers of IDs in use will cause the computer to run out of memory.
+            'If this happens, we won't be able to store the IDs in memory, and we will instead need to check everything one file at a time.
+            'Chances are this won't be a problem.  GTI contains something over 5,000,000 strings.  Just the IDs will take about 20MB of RAM, which should be easy to come by.
+            'This could only be a problem because the range of IDs is 0 to UInt32.MaxValue, and besides storage space, there's no technical limitations to having that many strings.
+
             Dim newID As Integer = 0
 
-            If LanguageLoadTask IsNot Nothing Then
-                Await LanguageLoadTask
+            If LanguageLoadTask Is Nothing Then
+                LoadLanguageIDs()
             End If
+
+            Await LanguageLoadTask
 
             'Validate the ID
 Validate:
@@ -90,7 +101,7 @@ Validate:
         End Sub
 
         Private Sub GenericModProject_ProjectOpened(sender As Object, e As EventArgs) Handles Me.ProjectOpened
-            LoadLanguageIDs()
+            'LoadLanguageIDs()
         End Sub
 
         Public Overrides Async Function Initialize(Solution As Solution) As Task
@@ -154,22 +165,43 @@ Validate:
                                         Me.CreateDirectory(d)
                                         Await Me.AddExistingFile(d, Item, False)
                                     End Function, filesToOpen)
-            LoadLanguageIDs()
+
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Public Overrides Async Function Build(Solution As Solution) As Task
-            Await Task.Run(Async Function() As Task
-                               Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-                               Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
-                               For count = 0 To dirs.Length - 1
-                                   Me.BuildProgress = count / dirs.Length
-                                   Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
-                                   Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
-                                   Await FileFormats.FarcF5.Pack(dirs(count), newFilePath)
-                               Next
-                               Me.BuildProgress = 1
-                           End Function)
+            Dim farcMode As Boolean = False
+
+            If IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*").Length > 0 Then
+                farcMode = True
+            End If
+
+            If farcMode Then
+                Await Task.Run(Async Function() As Task
+                                   Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
+                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
+                                   For count = 0 To dirs.Length - 1
+                                       Me.BuildProgress = count / dirs.Length
+                                       Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
+                                       Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
+                                       Await FileFormats.FarcF5.Pack(dirs(count), newFilePath)
+                                   Next
+                                   Me.BuildProgress = 1
+                               End Function)
+            Else
+                'Then we're in GTI directory mode
+                Await Task.Run(Async Function() As Task
+                                   Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
+                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
+                                   For count = 0 To dirs.Length - 1
+                                       Me.BuildProgress = count / dirs.Length
+                                       Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count))
+                                       Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_en", "")))
+                                       Await Utilities.FileSystem.CopyDirectory(dirs(count), newFilePath)
+                                   Next
+                                   Me.BuildProgress = 1
+                               End Function)
+            End If
 
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptSource As String = IO.Path.Combine(Me.GetRootDirectory, "script")
