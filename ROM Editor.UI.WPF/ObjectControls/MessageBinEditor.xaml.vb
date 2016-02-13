@@ -40,7 +40,11 @@ Public Class MessageBinEditor
     End Sub
 
     Private Sub OnMsgItemAdded(sender As Object, e As MessageBin.EntryAddedEventArgs)
-        lstEntries.SelectedIndex = lstEntries.Items.IndexOf((From i As MessageBinStringEntry In lstEntries.ItemsSource Where i.Hash = e.NewID).First)
+        Dim addedEntry = (From i As MessageBinStringEntry In lstEntries.ItemsSource Where i.Hash = e.NewID).FirstOrDefault
+        If addedEntry IsNot Nothing Then
+            lstEntries.SelectedIndex = lstEntries.Items.IndexOf(addedEntry)
+            lstEntries.ScrollIntoView(addedEntry)
+        End If
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtSearch.TextChanged
@@ -82,13 +86,15 @@ Public Class MessageBinEditor
 
             For Each item In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
                 If cancelSearch = True Then
-                    'If we get here, the search textbox has been changed.  If that happens while we're searching, we'll stop searching
+                    'If we get here, the search textbox has been changed, so we'll stop searching
                     Exit For
                 End If
 
+                Dim isMatch As Boolean
                 For Each term In searchTerms
-                    Dim isMatch As Boolean = False
+                    isMatch = False 'For every term, we'll set isMatch to false
 
+                    'The entry must match every term
                     If item.Hash.ToString.Contains(term) Then
                         isMatch = True
                     ElseIf item.HashSigned.ToString.Contains(term) Then
@@ -97,13 +103,17 @@ Public Class MessageBinEditor
                         isMatch = True
                     End If
 
-                    If isMatch Then
-                        Dispatcher.Invoke(Sub()
-                                              results.Add(item)
-                                          End Sub)
+                    'If any terms aren't a match, then we don't use this entry
+                    If Not isMatch Then
                         Exit For
                     End If
                 Next
+
+                If isMatch Then
+                    Dispatcher.Invoke(Sub()
+                                          results.Add(item)
+                                      End Sub)
+                End If
             Next
         End If
     End Sub
