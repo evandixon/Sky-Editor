@@ -1,4 +1,5 @@
-﻿Imports ROMEditor.Projects
+﻿Imports System.Text.RegularExpressions
+Imports ROMEditor.Projects
 Imports SkyEditorBase
 Namespace MenuActions
     Public Class PsmdSoundtrackMenuAction
@@ -10,7 +11,8 @@ Namespace MenuActions
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
             If TypeOf Obj Is BaseRomProject Then
-                Return DirectCast(Obj, BaseRomProject).RomSystem = "3DS" AndAlso DirectCast(Obj, BaseRomProject).GameCode = GameStrings.PSMDCode
+                Dim psmd As New Regex(GameStrings.PSMDCode)
+                Return DirectCast(Obj, BaseRomProject).RomSystem = "3DS" AndAlso psmd.IsMatch(DirectCast(Obj, BaseRomProject).GameCode)
             Else
                 Return False
             End If
