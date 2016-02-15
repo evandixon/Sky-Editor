@@ -76,7 +76,7 @@ Public Class StartupHelpers
                 l.Visibility = Visibility.Collapsed
             End If
 
-            Dim m As New MainWindow2(manager)
+            Dim m As New UI.MainWindow(manager)
             m.Show()
             If l IsNot Nothing Then
                 l.Close()

@@ -1,8 +1,8 @@
 ﻿'From http://www.codeproject.com/Articles/453778/Loading-Assemblies-from-Anywhere-into-a-New-AppDom
 Imports System.Reflection
 
-Namespace Internal
-    Friend Class AssemblyReflectionManager
+Namespace Utilities
+    Public Class AssemblyReflectionManager
         Implements IDisposable
 
         Public Sub New()

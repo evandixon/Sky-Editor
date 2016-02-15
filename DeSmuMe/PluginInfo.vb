@@ -18,7 +18,7 @@ Public Class PluginInfo
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return ""
+            Return PluginHelper.GetLanguageItem("DeSmuMe Integration")
         End Get
     End Property
 

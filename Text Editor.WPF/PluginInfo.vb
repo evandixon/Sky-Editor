@@ -19,7 +19,7 @@ Public Class PluginInfo
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return "Text Editor"
+            Return PluginHelper.GetLanguageItem("Text Editor (WPF)")
         End Get
     End Property
 

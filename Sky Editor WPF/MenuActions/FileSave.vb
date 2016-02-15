@@ -46,7 +46,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Save"), PluginHelper.GetLanguageItem("Save _File")})
             SaveFileDialog1 = New Forms.SaveFileDialog
-            AlwaysVisible = True
+            'AlwaysVisible = True
         End Sub
     End Class
 End Namespace

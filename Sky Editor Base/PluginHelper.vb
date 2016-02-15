@@ -80,6 +80,27 @@ Public Class PluginHelper
         End If
         Return d
     End Function
+
+    ''' <summary>
+    ''' Gets absolute paths of all the assemblies in the plugin directory.
+    ''' Not all of these are guarenteed to be supported plugins.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Shared Function GetPluginAssemblies() As List(Of String)
+        Dim FromFolder = IO.Path.Combine(RootResourceDirectory, "Plugins")
+        Dim assemblyPaths As New List(Of String)
+        For Each item In IO.Directory.GetFiles(FromFolder, "*.dll")
+            If Not assemblyPaths.Contains(item) Then
+                assemblyPaths.Add(item)
+            End If
+        Next
+        For Each item In IO.Directory.GetFiles(FromFolder, "*.exe")
+            If Not assemblyPaths.Contains(item) Then
+                assemblyPaths.Add(item)
+            End If
+        Next
+        Return assemblyPaths
+    End Function
 #End Region
 
 #Region "Translation"

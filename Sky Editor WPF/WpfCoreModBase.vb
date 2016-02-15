@@ -25,5 +25,6 @@ Public MustInherit Class WpfCoreModBase
 
     Private Shared Sub RestartApplication()
         Windows.Forms.Application.Restart()
+        Application.Current.Shutdown(1)
     End Sub
 End Class

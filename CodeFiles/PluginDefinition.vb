@@ -18,7 +18,7 @@ Public Class PluginDefinition
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return ""
+            Return PluginHelper.GetLanguageItem("Code Files")
         End Get
     End Property
 

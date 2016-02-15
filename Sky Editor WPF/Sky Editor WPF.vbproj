@@ -127,10 +127,15 @@
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
     <Compile Include="MenuActions\SolutionBuild.vb" />
+    <Compile Include="MenuActions\ToolsPlugins.vb" />
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectTab.vb" />
     <Compile Include="SearchableDropDown.vb" />
-    <Compile Include="SettingsEditor.xaml.vb">
+    <Compile Include="UI\PluginControl.xaml.vb">
+      <DependentUpon>PluginControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PluginUiElement.vb" />
+    <Compile Include="UI\SettingsEditor.xaml.vb">
       <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="MenuActions\DevConsole.vb" />
@@ -143,28 +148,28 @@
     <Compile Include="MenuActions\FileSaveAs.vb" />
     <Compile Include="MenuActions\ToolsLanguage.vb" />
     <Compile Include="MenuActions\ToolsSettings.vb" />
-    <Compile Include="SolutionBuildProgress.xaml.vb">
+    <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfCoreMod.vb" />
-    <Compile Include="AddLanguageItem.xaml.vb">
+    <Compile Include="UI\AddLanguageItem.xaml.vb">
       <DependentUpon>AddLanguageItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Application.xaml.vb">
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LanguageEditor.xaml.vb">
+    <Compile Include="UI\LanguageEditor.xaml.vb">
       <DependentUpon>LanguageEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SolutionExplorer.xaml.vb">
+    <Compile Include="UI\SolutionExplorer.xaml.vb">
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="StartupHelpers.vb" />
     <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="ToolWindow.vb" />
     <Compile Include="UiHelper.vb" />
-    <Compile Include="WelcomeTabContent.xaml.vb">
+    <Compile Include="UI\WelcomeTabContent.xaml.vb">
       <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
@@ -176,7 +181,7 @@
     <Compile Include="Windows\GameTypeSelector.xaml.vb">
       <DependentUpon>GameTypeSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow2.xaml.vb">
+    <Compile Include="UI\MainWindow2.xaml.vb">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewFileWindow.xaml.vb">
@@ -256,27 +261,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SettingsEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="AddLanguageItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="LanguageEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SolutionBuildProgress.xaml">
+    <Page Include="UI\PluginControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SolutionExplorer.xaml">
+    <Page Include="UI\SettingsEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\AddLanguageItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\LanguageEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SolutionBuildProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WelcomeTabContent.xaml">
+    <Page Include="UI\SolutionExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\WelcomeTabContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -292,7 +301,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow2.xaml">
+    <Page Include="UI\MainWindow2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -323,5 +332,6 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -28,7 +28,7 @@ Public Class ObjectControlPlaceholder
             If TypeOf value Is iModifiable Then
                 AddHandler DirectCast(value, iModifiable).Modified, AddressOf OnModified
             End If
-            Dim objControl = PluginHelper.PluginManagerInstance.GetObjectControl(value)
+            Dim objControl = PluginHelper.PluginManagerInstance.GetObjectControl(value, {GetType(UserControl)})
             Content = objControl
             objControl.EditingObject = value
             'With DirectCast(Content, iObjectControl)

@@ -112,11 +112,10 @@ Public Class SettingsManager
         ''' •Enables use of Redistribution Helpers, which helps with packaging plugins, or the application as a whole.</remarks>
         Public Property DevelopmentMode As Boolean
             Get
-                'If Setting("DevMode") Is Nothing Then
-                '    Setting("DevMode") = True
-                'End If
-                'Return Setting("DevMode")
-                Return True
+                If Setting("DevMode") Is Nothing Then
+                    Setting("DevMode") = True
+                End If
+                Return Setting("DevMode")
             End Get
             Set(value As Boolean)
                 Setting("DevMode") = value

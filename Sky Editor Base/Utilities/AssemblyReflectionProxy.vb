@@ -1,8 +1,8 @@
 ﻿'Credit to Marius Bancila for figuring this out
 'http://www.codeproject.com/Articles/453778/Loading-Assemblies-from-Anywhere-into-a-New-AppDom
 Imports System.Reflection
-Namespace Internal
-    Friend Class AssemblyReflectionProxy
+Namespace Utilities
+    Public Class AssemblyReflectionProxy
         Inherits MarshalByRefObject
 
         Private Property AssemblyPath As String

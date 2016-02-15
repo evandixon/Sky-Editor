@@ -11,7 +11,7 @@ Public Class SkyEditorInfo
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return "Sky Editor"
+            Return PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon Save Editor")
         End Get
     End Property
 

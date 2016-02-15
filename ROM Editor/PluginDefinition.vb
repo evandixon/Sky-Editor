@@ -63,7 +63,7 @@ Public Class PluginDefinition
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return "Generic ROM Editor"
+            Return PluginHelper.GetLanguageItem("ROM Editor")
         End Get
     End Property
 

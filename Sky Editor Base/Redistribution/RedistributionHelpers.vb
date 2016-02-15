@@ -62,7 +62,7 @@ Namespace Redistribution
         End Sub
 
         ''' <summary>
-        ''' Packs all plugins into one archive per plugin, or only one if PluginName is not nothing.
+        ''' Packs all plugins into one archive per plugin, or only one plugin if PluginName is not nothing.
         ''' </summary>
         ''' <param name="Manager"></param>
         ''' <param name="PluginName">Name of the plugin to pack.  Pass in Nothing to pack all loaded plugins.</param>

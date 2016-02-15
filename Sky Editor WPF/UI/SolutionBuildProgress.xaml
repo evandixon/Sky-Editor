@@ -1,10 +1,10 @@
-﻿<UserControl
+﻿<UserControl x:Class="UI.SolutionBuildProgress"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SkyEditorWPF"
-             xmlns:SkyEditorBase="clr-namespace:SkyEditorBase;assembly=SkyEditorBase" x:Class="SolutionBuildProgress"
+             xmlns:SkyEditorBase="clr-namespace:SkyEditorBase;assembly=SkyEditorBase"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -13,15 +13,15 @@
                 <SkyEditorBase:Project/>
             </DataGrid.DataContext>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name"/>
-                <DataGridTemplateColumn Header="Progress">
+                <DataGridTextColumn Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Progress" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                            <ProgressBar Value="{Binding BuildProgress}" Minimum="0" Maximum="1"/> 
                         </DataTemplate>                        
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status"/>
+                <DataGridTextColumn Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
