@@ -50,9 +50,9 @@ Public Class StartupHelpers
                 checkForUpdates = False
             End If
 
-            Dim l As SkyEditorWindows.BackgroundTaskWait = Nothing
+            Dim l As UI.BackgroundTaskWait = Nothing
             If checkForUpdates Then
-                l = New SkyEditorWindows.BackgroundTaskWait
+                l = New UI.BackgroundTaskWait
                 l.ChangeMessage(PluginHelper.GetLanguageItem("Updating plugins..."))
                 l.Show()
 

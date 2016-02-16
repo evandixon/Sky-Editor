@@ -4,7 +4,7 @@
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             Dim m = PluginManager.GetInstance
-            Dim newSol As New NewSolutionWindow(m)
+            Dim newSol As New UI.NewSolutionWindow(m)
             If newSol.ShowDialog Then
                 m.CurrentSolution = Solution.CreateSolution(newSol.SelectedLocation, newSol.SelectedName, newSol.SelectedSolution.GetType)
             End If

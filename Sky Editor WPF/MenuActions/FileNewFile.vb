@@ -6,7 +6,7 @@ Namespace MenuActions
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             Dim _manager = PluginManager.GetInstance
-            Dim w As New SkyEditorWindows.NewFileWindow()
+            Dim w As New UI.NewFileWindow()
             Dim games As New Dictionary(Of String, Type)
             For Each item In _manager.GetCreatableFiles
                 games.Add(PluginHelper.GetLanguageItem(item.Name), item)

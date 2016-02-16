@@ -326,7 +326,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New SkyEditorWindows.NewNameWindow(PluginHelper.GetLanguageItem("What should the folder be named?"), PluginHelper.GetLanguageItem("New Folder"))
+                    Dim w As New UI.NewNameWindow(PluginHelper.GetLanguageItem("What should the folder be named?"), PluginHelper.GetLanguageItem("New Folder"))
                     If w.ShowDialog Then
 
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
@@ -358,7 +358,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New SkyEditorWindows.NewFileWindow
+                    Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath)
                         types.Add(PluginHelper.GetLanguageItem(item.Name), item)
@@ -388,7 +388,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New SkyEditorWindows.NewFileWindow
+                    Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath)
                         types.Add(PluginHelper.GetLanguageItem(item.Name), item)

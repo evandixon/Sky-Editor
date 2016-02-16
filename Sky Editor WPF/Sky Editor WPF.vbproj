@@ -121,7 +121,6 @@
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCommands\PackAll.vb" />
     <Compile Include="ConsoleCommands\UpdateAll.vb" />
-    <Compile Include="ConsoleCommands\Zip.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />

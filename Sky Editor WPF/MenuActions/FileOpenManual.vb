@@ -8,7 +8,7 @@ Namespace MenuActions
             Dim _manager = PluginManager.GetInstance
             OpenFileDialog1.Filter = _manager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                Dim w As New SkyEditorWindows.GameTypeSelector()
+                Dim w As New UI.GameTypeSelector()
                 Dim games As New Dictionary(Of String, Type)
                 For Each item In _manager.GetOpenableFiles
                     games.Add(PluginHelper.GetLanguageItem(item.FullName), item)

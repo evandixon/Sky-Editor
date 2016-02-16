@@ -79,7 +79,7 @@ Namespace UI
         End Sub
 
         Private Sub btnNewLang_Click(sender As Object, e As RoutedEventArgs) Handles btnNewLang.Click
-            Dim newDialog As New SkyEditorWindows.NewNameWindow(PluginHelper.GetLanguageItem("NewLanguageMessage", "What is the name of the language you want to add?"), PluginHelper.GetLanguageItem("NewLanguageTitle"))
+            Dim newDialog As New UI.NewNameWindow(PluginHelper.GetLanguageItem("NewLanguageMessage", "What is the name of the language you want to add?"), PluginHelper.GetLanguageItem("NewLanguageTitle"))
             If newDialog.ShowDialog Then
                 If Not GetEditingObject(Of LanguageManager).Languages.ContainsKey(newDialog.SelectedName) Then
                     GetEditingObject(Of LanguageManager).EnsureLanguageLoaded(newDialog.SelectedName)

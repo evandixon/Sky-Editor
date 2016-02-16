@@ -1,6 +1,7 @@
 ﻿Imports SkyEditorBase
 Imports SaveEditor.Interfaces
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorWPF.UI
 
 Namespace Tabs
     Public Class ActivePokemonTab
@@ -42,7 +43,7 @@ Namespace Tabs
         End Sub
         Sub ShowActivePkmEditDialog()
             If lbActivePokemon.SelectedIndex > -1 Then
-                Dim w As New SkyEditorWPF.ObjectWindow
+                Dim w As New ObjectWindow
                 w.ObjectToEdit = lbActivePokemon.SelectedItem
                 w.ShowDialog()
                 lbActivePokemon.SelectedItem = w.ObjectToEdit
