@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Threading
 
-Namespace SkyEditorWindows
+Namespace UI
     Public Class BackgroundTaskWait
         Private WithEvents _timer As Timers.Timer
         Private tempMessage As String
@@ -10,7 +10,7 @@ Namespace SkyEditorWindows
             Me.Show()
         End Sub
         Public Sub ChangeMessage(Message As String)
-            lblMessage.Dispatcher.Invoke(Dispatcherpriority.Background, New Action(Sub()
+            lblMessage.Dispatcher.Invoke(DispatcherPriority.Background, New Action(Sub()
                                                                                        lblMessage.Content = Message
                                                                                    End Sub))
         End Sub

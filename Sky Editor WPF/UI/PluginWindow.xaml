@@ -1,4 +1,4 @@
-﻿<Window x:Class="PluginWindow"
+﻿<Window x:Class="UI.PluginWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Plugin Manager" Height="341" Width="428">

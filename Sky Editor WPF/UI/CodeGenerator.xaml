@@ -1,4 +1,4 @@
-﻿<Window x:Class="SkyEditorWindows.CodeGenerator"
+﻿<Window x:Class="UI.CodeGenerator"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Action Replay DS Code Generator" Height="512.464" Width="674.77">

@@ -1,4 +1,4 @@
-﻿<Window x:Class="SkyEditorWindows.BackgroundTaskWait"
+﻿<Window x:Class="UI.BackgroundTaskWait"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Background Task" Height="122" Width="375" Icon="/SkyEditorBase;component/favicon.ico" ResizeMode="NoResize">

@@ -1,4 +1,4 @@
-﻿Namespace SkyEditorWindows
+﻿Namespace UI
     Public Class NewNameWindow
         Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
             DialogResult = True

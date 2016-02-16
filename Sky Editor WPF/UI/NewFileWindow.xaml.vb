@@ -1,4 +1,4 @@
-﻿Namespace SkyEditorWindows
+﻿Namespace UI
     Public Class NewFileWindow
         Inherits Window
 
@@ -18,7 +18,7 @@
 
         Public ReadOnly Property SelectedName As String
             Get
-                Return txtName.text
+                Return txtName.Text
             End Get
         End Property
 

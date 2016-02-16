@@ -172,31 +172,31 @@
     <Compile Include="UI\WelcomeTabContent.xaml.vb">
       <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\BackgroundTaskWait.xaml.vb">
+    <Compile Include="UI\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CodeGenerator.xaml.vb">
+    <Compile Include="UI\CodeGenerator.xaml.vb">
       <DependentUpon>CodeGenerator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\GameTypeSelector.xaml.vb">
+    <Compile Include="UI\GameTypeSelector.xaml.vb">
       <DependentUpon>GameTypeSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainWindow2.xaml.vb">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\NewFileWindow.xaml.vb">
+    <Compile Include="UI\NewFileWindow.xaml.vb">
       <DependentUpon>NewFileWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\NewNameWindow.xaml.vb">
+    <Compile Include="UI\NewNameWindow.xaml.vb">
       <DependentUpon>NewNameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\NewSolutionWindow.xaml.vb">
+    <Compile Include="UI\NewSolutionWindow.xaml.vb">
       <DependentUpon>NewSolutionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ObjectWindow.xaml.vb">
+    <Compile Include="UI\ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\PluginWindow.xaml.vb">
+    <Compile Include="UI\PluginWindow.xaml.vb">
       <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfCoreModBase.vb" />
@@ -289,15 +289,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\BackgroundTaskWait.xaml">
+    <Page Include="UI\BackgroundTaskWait.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\CodeGenerator.xaml">
+    <Page Include="UI\CodeGenerator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\GameTypeSelector.xaml">
+    <Page Include="UI\GameTypeSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -305,23 +305,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\NewFileWindow.xaml">
+    <Page Include="UI\NewFileWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\NewNameWindow.xaml">
+    <Page Include="UI\NewNameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\NewSolutionWindow.xaml">
+    <Page Include="UI\NewSolutionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ObjectWindow.xaml">
+    <Page Include="UI\ObjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\PluginWindow.xaml">
+    <Page Include="UI\PluginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -332,6 +332,8 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Windows\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
