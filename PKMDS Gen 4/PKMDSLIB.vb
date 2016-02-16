@@ -7999,7 +7999,6 @@ As String
         Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
             fs.Seek(&H12DC, SeekOrigin.Begin)
             fs.Read(datBUF, 0, 4)
-            fs.Close()
         End Using
 
         Dim CmpData() As Byte = New Byte() {&HFE, &HCA, &HEF, &HBE}
@@ -8059,8 +8058,6 @@ As String
                 Else
                     s = RawDeserialize(bR.ReadBytes(fs.Length), s.GetType)
                 End If
-                bR.Close()
-                fs.Close()
             End Using
         End Using
         s.GetBlocks(True, IgnoreErr)
@@ -8078,8 +8075,6 @@ As String
                 Else
                     PKM = RawDeserialize(bR.ReadBytes(fs.Length), PKM.GetType)
                 End If
-                bR.Close()
-                fs.Close()
             End Using
         End Using
         If _Convert Then _
@@ -11676,8 +11671,6 @@ As String
         Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
             Using bR As New BinaryReader(fs)
                 Data = bR.ReadBytes(fs.Length)
-                bR.Close()
-                fs.Close()
             End Using
         End Using
         Dim BlockData(&HFFF) As Byte
@@ -19065,10 +19058,6 @@ As String
                 mRevPKMFont.Remove(dPair.Key)
             Next
 
-        End Sub
-
-        Protected Overrides Sub Finalize()
-            MyBase.Finalize()
         End Sub
 
     End Class

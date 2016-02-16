@@ -17,7 +17,7 @@ Namespace UI
         End Property
         Dim _header As String
 
-        Private Property ITargetedControl_IsVisible As Boolean Implements ITargetedControl.IsVisible
+        Protected Property ITargetedControl_IsVisible As Boolean Implements ITargetedControl.IsVisible
             Get
                 Return _isVisible
             End Get

@@ -82,7 +82,7 @@ Public Class Solution
 #End Region
     End Class
 
-    Public Class ProjectAlreadyExistsException
+    <Serializable> Public Class ProjectAlreadyExistsException
         Inherits Exception
         Public Sub New()
             MyBase.New
