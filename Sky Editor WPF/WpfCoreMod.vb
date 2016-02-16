@@ -63,7 +63,6 @@ Friend Class WpfCoreMod
 
         'Console Commands
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.DistPrep))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.Zip))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.UpdateAll))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.PackAll))
 
