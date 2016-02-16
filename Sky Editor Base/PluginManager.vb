@@ -744,7 +744,7 @@ Public Class PluginManager
             'Look for a supported Object Control
             For Each item In (From o In GetObjectControls() Order By o.GetSortOrder(ObjectToEdit.GetType, False) Descending)
                 'We're only looking for the first non-backup control
-                If out Is Nothing AndAlso Not out.IsBackupControl(ObjectToEdit) Then
+                If out Is Nothing OrElse out.IsBackupControl(ObjectToEdit) Then
                     'Check to see if the control supports what we want to edit
                     For Each t In item.GetSupportedTypes
                         If ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
