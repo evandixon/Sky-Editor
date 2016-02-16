@@ -147,15 +147,13 @@ Validate:
 
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Decompiling Scripts..."))
             Await f.RunForEach(Async Function(Item As String) As Task
-                                   Dim unlua As New unluac(Item)
-                                   Dim script As String = Await unlua.Decompile
                                    Dim dest = Item.Replace(scriptSource, scriptDestination)
                                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
                                        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
                                    End If
-                                   IO.File.WriteAllText(dest, script)
-                                   IO.File.WriteAllText(dest & ".original", script)
 
+                                   Await unluac.DecompileToFile(Item, dest)
+                                   IO.File.Copy(dest, dest & ".original")
                                    filesToOpen.Add(dest)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
 

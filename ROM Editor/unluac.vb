@@ -39,4 +39,9 @@ Public Class unluac
 
     Private WithEvents Instance As Process
     Private Property Output As New Text.StringBuilder
+
+    Public Shared Async Function DecompileToFile(SourceFilename As String, DestinationFilename As String) As Task
+        Dim un As New unluac(SourceFilename)
+        IO.File.WriteAllText(DestinationFilename, Await un.Decompile)
+    End Function
 End Class
