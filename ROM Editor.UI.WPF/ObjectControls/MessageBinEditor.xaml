@@ -9,12 +9,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Label Content="Search: " HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="lblSearch" Content="Search: " HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSearch" VerticalAlignment="Top" Margin="56,6,10,0"/>
         <DataGrid x:Name="lstEntries" Margin="0,32,0,0" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding HashSigned}" Header="ID" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Entry}" Header="Entry">
+                <DataGridTextColumn x:Name="columnID" Binding="{Binding HashSigned}" Header="ID" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="columnEntry" Binding="{Binding Entry}" Header="Entry">
                     <DataGridTextColumn.EditingElementStyle>
                         <Style TargetType="TextBox">
                             <Setter Property="AcceptsReturn" Value="true"/>

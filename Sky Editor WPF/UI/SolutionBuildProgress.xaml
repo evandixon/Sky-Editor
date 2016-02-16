@@ -13,15 +13,15 @@
                 <SkyEditorBase:Project/>
             </DataGrid.DataContext>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name" IsReadOnly="True"/>
-                <DataGridTemplateColumn Header="Progress" IsReadOnly="True">
+                <DataGridTextColumn x:Name="columnName" Binding="{Binding Name, BindsDirectlyToSource=True}" Header="Project Name" IsReadOnly="True"/>
+                <DataGridTemplateColumn x:Name="columnProgress" Header="Progress" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                            <ProgressBar Value="{Binding BuildProgress}" Minimum="0" Maximum="1"/> 
                         </DataTemplate>                        
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="columnStatus" Binding="{Binding BuildStatusMessage, BindsDirectlyToSource=True}" Header="Status" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

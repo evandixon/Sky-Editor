@@ -7,6 +7,16 @@ Public Class PsmdLuaLangIntegration
     Implements iObjectControl
     Implements IDisposable
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        Me.Header = PluginHelper.GetLanguageItem("Message")
+        btnAdd.Content = PluginHelper.GetLanguageItem("Add")
+    End Sub
+
     Public Sub RefreshDisplay()
         With PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject) 'GetEditingObject(Of CodeFiles.LuaCodeFile)()
             Dim messageFiles As New Dictionary(Of String, FileFormats.MessageBin)
@@ -55,10 +65,6 @@ Public Class PsmdLuaLangIntegration
     Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
         Return 1
     End Function
-
-    Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Message")
-    End Sub
 
     Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
         Return PluginManager.GetInstance.GetOpenedFileProject(Obj) IsNot Nothing

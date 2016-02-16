@@ -133,6 +133,10 @@ Public Class MessageBinEditor
     Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not DesignerProperties.GetIsInDesignMode(Me) Then
             Me.Header = PluginHelper.GetLanguageItem("Message")
+            columnID.Header = PluginHelper.GetLanguageItem("ID")
+            columnEntry.Header = PluginHelper.GetLanguageItem("Entry")
+            lblSearch.Content = PluginHelper.GetLanguageItem("Search: ")
+
         End If
     End Sub
 
