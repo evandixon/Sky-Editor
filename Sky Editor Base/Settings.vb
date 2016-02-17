@@ -58,7 +58,7 @@ Public Class SettingsManager
         Public Property UpdatePlugins As Boolean
             Get
                 If Setting("UpdatePlugins") Is Nothing Then
-                    Setting("UpdatePlugins") = True
+                    Setting("UpdatePlugins") = False
                 End If
                 Return Setting("UpdatePlugins")
             End Get
