@@ -83,7 +83,7 @@ Public Class PluginManager
             Dim supportedPlugins = ReflectionHelpers.GetSupportedPlugins(assemblyPaths, CoreAssemblyName)
             For Each item In supportedPlugins
                 Dim assemblyActual = Assembly.LoadFrom(item)
-                Assemblies.Add(assemblyActual)
+                    Assemblies.Add(assemblyActual)
                 For Each plg In From t In assemblyActual.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
                     Plugins.Add(plg.GetConstructor({}).Invoke({}))
                 Next
@@ -105,39 +105,48 @@ Public Class PluginManager
             For Each item In Plugins
                 item.Load(Me)
             Next
-            For Each item In Assemblies
-                'Load types
-                Dim types As Type() = item.GetTypes
-                For Each actualType In types
-                    'Check to see if this type inherits from one we're looking for
-                    For Each registeredType In TypeRegistery.Keys
-                        If ReflectionHelpers.IsOfType(actualType, registeredType) Then
-                            If TypeRegistery(registeredType) Is Nothing Then
-                                TypeRegistery(registeredType) = New List(Of Type)
-                            End If
-                            If Not TypeRegistery(registeredType).Contains(actualType) Then
-                                TypeRegistery(registeredType).Add(actualType)
-                            End If
-                        End If
-                    Next
 
-                    'Do the same for each interface
-                    For Each i In actualType.GetInterfaces
-                        For Each registeredType In TypeRegistery.Keys
-                            If ReflectionHelpers.IsOfType(i, registeredType) Then
-                                If TypeRegistery(registeredType) Is Nothing Then
-                                    TypeRegistery(registeredType) = New List(Of Type)
-                                End If
-                                If Not TypeRegistery(registeredType).Contains(actualType) Then
-                                    TypeRegistery(registeredType).Add(actualType)
-                                End If
-                            End If
-                        Next
-                    Next
-                Next
+            LoadTypes(CoreMod.GetType.Assembly)
+            LoadTypes(Assembly.GetCallingAssembly)
+
+            For Each item In Assemblies
+                LoadTypes(item)
             Next
         End If
         RaiseEvent PluginLoadComplete(Me, New EventArgs)
+    End Sub
+
+    Private Sub LoadTypes(Item As Assembly)
+        'Load types
+
+        Dim types As Type() = Item.GetTypes
+        For Each actualType In types
+            'Check to see if this type inherits from one we're looking for
+            For Each registeredType In TypeRegistery.Keys
+                If ReflectionHelpers.IsOfType(actualType, registeredType) Then
+                    If TypeRegistery(registeredType) Is Nothing Then
+                        TypeRegistery(registeredType) = New List(Of Type)
+                    End If
+                    If Not TypeRegistery(registeredType).Contains(actualType) Then
+                        TypeRegistery(registeredType).Add(actualType)
+                    End If
+                End If
+            Next
+
+            'Do the same for each interface
+            For Each i In actualType.GetInterfaces
+                For Each registeredType In TypeRegistery.Keys
+                    If ReflectionHelpers.IsOfType(i, registeredType) Then
+                        If TypeRegistery(registeredType) Is Nothing Then
+                            TypeRegistery(registeredType) = New List(Of Type)
+                        End If
+                        If Not TypeRegistery(registeredType).Contains(actualType) Then
+                            TypeRegistery(registeredType).Add(actualType)
+                        End If
+                    End If
+                Next
+            Next
+        Next
     End Sub
 #End Region
 
@@ -573,7 +582,9 @@ Public Class PluginManager
         Dim output As New List(Of iObjectControl)
 
         For Each item In GetRegisteredTypes(GetType(iObjectControl))
-            output.Add(item.GetConstructor({}).Invoke({}))
+            If item.GetConstructor({}) IsNot Nothing Then
+                output.Add(item.GetConstructor({}).Invoke({}))
+            End If
         Next
 
         Return output

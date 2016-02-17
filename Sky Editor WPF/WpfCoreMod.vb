@@ -35,10 +35,6 @@ Friend Class WpfCoreMod
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))
         Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
         Manager.RegisterTypeRegister(GetType(ITargetedControl))
-
-        Manager.RegisterType(GetType(Solution), GetType(Solution))
-        Manager.RegisterType(GetType(Project), GetType(Project))
-
         Manager.RegisterDefaultFileTypeDetectors()
         'End CoreMod stuff
 
@@ -55,23 +51,12 @@ Friend Class WpfCoreMod
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsLanguage))
         Manager.RegisterMenuActionType(GetType(MenuActions.ToolsPlugins))
         Manager.RegisterMenuActionType(GetType(MenuActions.SolutionBuild))
-        Manager.RegisterMenuActionType(GetType(MenuActions.DevConsole))
 
-        'Manager.OpenableFiles.Add(GetType(ExecutableFile))
+        If SettingsManager.Instance.Settings.DevelopmentMode Then
+            Manager.RegisterMenuActionType(GetType(MenuActions.DevConsole))
+        End If
 
         Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
-
-        'Console Commands
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.DistPrep))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.UpdateAll))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.PackAll))
-
-        'Register provided types
-        Manager.RegisterType(GetType(ITargetedControl), GetType(SolutionExplorer))
-        Manager.RegisterType(GetType(ITargetedControl), GetType(SolutionBuildProgress))
-        Manager.RegisterType(GetType(iObjectControl), GetType(LanguageEditor))
-        Manager.RegisterType(GetType(iObjectControl), GetType(SettingsEditor))
-        Manager.RegisterType(GetType(iObjectControl), GetType(PluginControl))
     End Sub
 
 End Class
