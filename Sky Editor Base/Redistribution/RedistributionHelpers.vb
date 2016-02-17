@@ -1,6 +1,8 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Threading.Tasks
 Imports ICSharpCode.SharpZipLib.Zip
+Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Utilities
 
 Namespace Redistribution
@@ -60,6 +62,62 @@ Namespace Redistribution
         '    Dim z As New FastZip
         '    z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "Sky Editor Archives", ArchiveName & ".zip"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp"), True, ".*", ".*")
         'End Sub
+
+        ''' <summary>
+        ''' Packs the given plugin into a zip file.
+        ''' </summary>
+        ''' <param name="Manager"></param>
+        ''' <param name="PluginFilename">File path of the assembly containing the plugin.</param>
+        ''' <param name="DestinationFilename">File path of the zip to create.</param>
+        ''' <returns></returns>
+        Public Shared Async Function PackPlugin(Manager As PluginManager, PluginFilename As String, DestinationFilename As String) As Task
+            Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
+            Dim ToCopy As New List(Of String)
+            Dim filename = IO.Path.GetFileNameWithoutExtension(PluginFilename)
+
+            'Prepare the plugin for distribution
+            Dim plg = (From p In Manager.Plugins Where p.GetType.Assembly.Location = PluginFilename).FirstOrDefault
+            If plg IsNot Nothing Then
+                plg.PrepareForDistribution()
+            Else
+                'Then the assembly isn't currently loaded.  In this case, we'll load it and tell it to prepare for distribution.
+                Using reflector As New Utilities.AssemblyReflectionManager
+                    reflector.LoadAssembly(PluginFilename, "PackPlugin")
+                    reflector.Reflect(PluginFilename, Function(CurrentAssembly As Assembly, Args() As Object) As Object
+                                                          For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+                                                              Dim info As iSkyEditorPlugin = result.GetConstructor({}).Invoke({})
+                                                              info.PrepareForDistribution()
+                                                          Next
+                                                          Return Nothing
+                                                      End Function)
+                End Using
+            End If
+
+            'Find the files we should pack
+            ToCopy.Add(PluginFilename.Replace(".dll", "").Replace(".exe", ""))
+            ToCopy.Add(PluginFilename)
+            If Manager.PluginFiles.ContainsKey(filename) Then
+                ToCopy.AddRange(Manager.PluginFiles(filename))
+            End If
+
+            'Copy temporary files
+            Await Utilities.FileSystem.ReCreateDirectory(tempDir)
+            For Each file In ToCopy
+                If IO.File.Exists(file) Then
+                    IO.File.Copy(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+                Else
+                    'It's probably a directory.
+                    If IO.Directory.Exists(file) Then
+                        Await FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir))
+                        'Else
+                        'Guess not.  Do nothing.
+                    End If
+                End If
+            Next
+
+            'Then zip it
+            Utilities.Zip.Zip(tempDir, DestinationFilename)
+        End Function
 
         ''' <summary>
         ''' Packs all plugins into one archive per plugin, or only one plugin if PluginName is not nothing.

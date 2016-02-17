@@ -13,16 +13,21 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="0*" />
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="0,0,0,33">
+        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="0,0,0,33" SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled"/>
-                <DataGridTextColumn Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="Name" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Author}" ClipboardContentBinding="{x:Null}" Header="Author" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled"/>
+                <DataGridTextColumn x:Name="colName" Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="Name" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="colAuthor" Binding="{Binding Author}" ClipboardContentBinding="{x:Null}" Header="Author" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="colFilename" Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" IsReadOnly="True"/>
             </DataGrid.Columns>
             <DataGrid.DataContext>
                 <local1:PluginUiElement/>
             </DataGrid.DataContext>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="menuSave" Header="_Save"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
         <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
         <Button x:Name="btnApply" Content="Apply" HorizontalAlignment="Left" Margin="10,0,0,8" VerticalAlignment="Bottom" Width="75"/>

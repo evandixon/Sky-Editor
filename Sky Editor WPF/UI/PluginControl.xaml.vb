@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Windows.Forms
 Imports SkyEditorBase.Interfaces
 
 Namespace UI
@@ -59,7 +60,7 @@ Namespace UI
                 Next
                 SettingsManager.Instance.Settings.Plugins = plugins
                 SettingsManager.Instance.Save()
-                If MessageBox.Show(PluginHelper.GetLanguageItem("You need to restart the program to save your changes.  Do you want to restart now?"), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                If MessageBox.Show(PluginHelper.GetLanguageItem("You need to restart the program to save your changes.  Do you want to restart now?"), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButtons.YesNo) = DialogResult.Yes Then
                     Redistribution.RedistributionHelpers.RequestRestartProgram()
                 End If
             End If
@@ -68,6 +69,12 @@ Namespace UI
 
         Private Sub SettingsEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Plugins")
+            colEnabled.Header = PluginHelper.GetLanguageItem("Enabled")
+            colName.Header = PluginHelper.GetLanguageItem("Name")
+            colAuthor.Header = PluginHelper.GetLanguageItem("Author")
+            colFilename.Header = PluginHelper.GetLanguageItem("Filename")
+            menuSave.Header = PluginHelper.GetLanguageItem("_Save")
+            btnApply.Content = PluginHelper.GetLanguageItem("Apply")
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
@@ -77,6 +84,24 @@ Namespace UI
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
             Return 0
         End Function
+
+        Private Sub menuSave_Click(sender As Object, e As RoutedEventArgs) Handles menuSave.Click
+            If gridPlugins.SelectedItem IsNot Nothing Then
+                Dim s As New SaveFileDialog
+                s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
+                If s.ShowDialog = DialogResult.OK Then
+                    Redistribution.RedistributionHelpers.PackPlugin(GetEditingObject(Of PluginManager), DirectCast(gridPlugins.SelectedItem, PluginUiElement).Filename, s.FileName)
+                End If
+            End If
+        End Sub
+
+        Private Sub gridPlugins_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles gridPlugins.SelectionChanged
+            If gridPlugins.SelectedItem IsNot Nothing Then
+                menuSave.Visibility = Visibility.Visible
+            Else
+                menuSave.Visibility = Visibility.Collapsed
+            End If
+        End Sub
 
 #Region "IObjectControl Support"
         Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
