@@ -1,5 +1,6 @@
 ﻿Imports ROMEditor
 Imports SkyEditorBase
+Imports SkyEditorWPF.UI
 
 Public Class RomSelector
     Public Overloads Function ShowDialog(Roms As List(Of String)) As Boolean
@@ -41,7 +42,7 @@ Public Class RomSelector
     End Sub
 
     Private Sub RomSelector_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
-        SkyEditorWPF.UiHelper.TranslateForm(Me)
+        UiHelper.TranslateForm(Me)
         If lvRoms.Items.Count = 1 Then
             lvRoms.SelectedIndex = 0
             OnOK()

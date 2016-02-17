@@ -3,6 +3,7 @@ Imports ROMEditor.FileFormats
 Imports SkyEditorBase.Interfaces
 Imports System.Windows.Controls
 Imports ROMEditor
+Imports SkyEditorWPF.UI
 
 Namespace ObjectControls
     Public Class PersonalityTest
@@ -294,7 +295,7 @@ Namespace ObjectControls
         Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
             ReportModified = False
             'Me.Header = "Personality Test"
-            SkyEditorWPF.UiHelper.TranslateForm(Me)
+            UiHelper.TranslateForm(Me)
             For Each count In SaveEditor.Lists.SkyPokemon.Keys
                 Dim item As String = SaveEditor.Lists.SkyPokemon(count)
                 cbPartner01.Items.Add(item)

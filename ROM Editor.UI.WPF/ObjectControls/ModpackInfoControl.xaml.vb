@@ -3,6 +3,7 @@ Imports System.Windows.Controls
 Imports ROMEditor
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
+Imports SkyEditorWPF.UI
 
 Namespace ObjectControls
     Public Class ModpackInfoControl
@@ -29,7 +30,7 @@ Namespace ObjectControls
         End Sub
 
         Private Sub ModpackInfoControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            SkyEditorWPF.UiHelper.TranslateForm(Me)
+            UiHelper.TranslateForm(Me)
         End Sub
 
         Private Sub TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtAuthor.TextChanged, txtGameCode.TextChanged, txtName.TextChanged, txtVersion.TextChanged

@@ -117,19 +117,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ChildControls.vb" />
+    <Compile Include="UI\ChildControls.vb" />
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCommands\PackAll.vb" />
     <Compile Include="ConsoleCommands\UpdateAll.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
-    <Compile Include="DocumentTab.vb" />
+    <Compile Include="UI\DocumentTab.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
     <Compile Include="MenuActions\SolutionBuild.vb" />
     <Compile Include="MenuActions\ToolsPlugins.vb" />
-    <Compile Include="ObjectControlPlaceholder.vb" />
-    <Compile Include="ObjectTab.vb" />
-    <Compile Include="SearchableDropDown.vb" />
+    <Compile Include="UI\ObjectControlPlaceholder.vb" />
+    <Compile Include="UI\ObjectTab.vb" />
+    <Compile Include="UI\SearchableDropDown.vb" />
     <Compile Include="UI\PluginControl.xaml.vb">
       <DependentUpon>PluginControl.xaml</DependentUpon>
     </Compile>
@@ -165,9 +165,9 @@
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="StartupHelpers.vb" />
-    <Compile Include="TargetedToolWindow.vb" />
-    <Compile Include="ToolWindow.vb" />
-    <Compile Include="UiHelper.vb" />
+    <Compile Include="UI\TargetedToolWindow.vb" />
+    <Compile Include="UI\ToolWindow.vb" />
+    <Compile Include="UI\UiHelper.vb" />
     <Compile Include="UI\WelcomeTabContent.xaml.vb">
       <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>

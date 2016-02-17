@@ -2,6 +2,7 @@
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF
+Imports SkyEditorWPF.UI
 
 Public Class PsmdLuaLangIntegration
     Implements iObjectControl
@@ -42,7 +43,7 @@ Public Class PsmdLuaLangIntegration
             For Each item In messageFiles
                 Dim t As New TabItem
                 t.Header = item.Key
-                Dim p As New SkyEditorWPF.ObjectControlPlaceholder
+                Dim p As New ObjectControlPlaceholder
                 AddHandler p.Modified, AddressOf Me.OnModified
                 t.Content = p
                 p.ObjectToEdit = item.Value
