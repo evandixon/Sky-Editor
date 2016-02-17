@@ -1,2 +1,0 @@
-﻿game_data
-0x0009: Held Money
