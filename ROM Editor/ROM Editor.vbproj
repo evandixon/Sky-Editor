@@ -102,6 +102,7 @@
     <Compile Include="FileFormats\CTR\Level3Header.vb" />
     <Compile Include="FileFormats\CTR\RomFs.vb" />
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
+    <Compile Include="FileFormats\Experience.vb" />
     <Compile Include="FileFormats\FixedPokemon.vb" />
     <Compile Include="FileFormats\MessageBinStringEntry.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
