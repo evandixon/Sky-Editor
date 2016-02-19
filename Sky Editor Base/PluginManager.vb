@@ -922,8 +922,8 @@ Public Class PluginManager
 
         If matches.Count = 0 Then
             For Each item In GetDetectableFileTypes()
-                Dim instance As iDetectableFileType = item.GetConstructor({}).Invoke({})
-                If instance.IsOfType(File) Then
+                Dim instance As iDetectableFileType = item.GetConstructor({})?.Invoke({})
+                If instance IsNot Nothing AndAlso instance.IsOfType(File) Then
                     matches.Add(item)
                 End If
             Next
