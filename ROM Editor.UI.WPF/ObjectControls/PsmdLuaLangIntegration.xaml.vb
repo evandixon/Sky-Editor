@@ -43,10 +43,10 @@ Public Class PsmdLuaLangIntegration
             For Each item In messageFiles
                 Dim t As New TabItem
                 t.Header = item.Key
-                Dim p As New ObjectControlPlaceholder
-                AddHandler p.Modified, AddressOf Me.OnModified
+                Dim p As New MessageBinEditor
+                AddHandler p.IsModifiedChanged, AddressOf Me.OnModified
                 t.Content = p
-                p.ObjectToEdit = item.Value
+                p.EditingObject = item.Value
                 tcTabs.Items.Add(t)
             Next
         End With
@@ -55,7 +55,7 @@ Public Class PsmdLuaLangIntegration
 
     Public Sub UpdateObject()
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, ObjectControlPlaceholder).ObjectToEdit, FileFormats.MessageBin).Save()
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, FileFormats.MessageBin).Save()
         Next
     End Sub
 
@@ -84,10 +84,21 @@ Public Class PsmdLuaLangIntegration
         End If
         Dim id As UInteger = Await p.GetNewLanguageID
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, ObjectControlPlaceholder).ObjectToEdit, FileFormats.MessageBin).AddBlankEntry(id)
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, FileFormats.MessageBin).AddBlankEntry(id)
         Next
         btnAdd.IsEnabled = True
         btnAdd.Content = oldText
+    End Sub
+
+    Private Sub btnSciptSort_Click(sender As Object, e As RoutedEventArgs) Handles btnSciptSort.Click
+        Dim numberRegex As New Text.RegularExpressions.Regex("\-?[0-9]+")
+        Dim matches As New List(Of Integer)
+        For Each item As Text.RegularExpressions.Match In numberRegex.Matches(GetEditingObject(Of CodeFiles.LuaCodeFile).Text)
+            matches.Add(CInt(item.Value))
+        Next
+        For Each item As TabItem In tcTabs.Items
+            DirectCast(item.Content, MessageBinEditor).Sort(matches)
+        Next
     End Sub
 
 #Region "IObjectControl Support"
@@ -192,6 +203,8 @@ Public Class PsmdLuaLangIntegration
                     For Each item As TabItem In tcTabs.Items
                         If item.Content IsNot Nothing AndAlso TypeOf item.Content Is ObjectControlPlaceholder Then
                             DirectCast(item.Content, ObjectControlPlaceholder).Dispose()
+                        ElseIf item.Content IsNot Nothing AndAlso TypeOf item.Content Is MessageBinEditor AndAlso DirectCast(item.Content, MessageBinEditor).EditingObject IsNot Nothing AndAlso TypeOf DirectCast(item.Content, MessageBinEditor).EditingObject Is IDisposable Then
+                            DirectCast(item.Content, MessageBinEditor).EditingObject.Dispose()
                         End If
                     Next
                 End If

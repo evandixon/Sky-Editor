@@ -39,6 +39,27 @@ Public Class MessageBinEditor
 
     End Sub
 
+    Public Sub Sort(Keys As List(Of Integer))
+        Task.Run(New Action(Sub()
+                                DoSort(Keys)
+                            End Sub))
+    End Sub
+
+    Private Sub DoSort(Keys As List(Of Integer))
+        Dim results As New ObservableCollection(Of MessageBinStringEntry)
+        Dispatcher.Invoke(Sub()
+                              lstEntries.ItemsSource = results
+                          End Sub)
+        For Each item In Keys
+            Dim entry = (From s In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings Where s.HashSigned = item).FirstOrDefault
+            If entry IsNot Nothing Then
+                Dispatcher.Invoke(Sub()
+                                      results.Add(entry)
+                                  End Sub)
+            End If
+        Next
+    End Sub
+
     Private Sub OnMsgItemAdded(sender As Object, e As MessageBin.EntryAddedEventArgs)
         Dim addedEntry = (From i As MessageBinStringEntry In lstEntries.ItemsSource Where i.Hash = e.NewID).FirstOrDefault
         If addedEntry IsNot Nothing Then

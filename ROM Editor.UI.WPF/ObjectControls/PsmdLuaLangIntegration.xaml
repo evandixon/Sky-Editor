@@ -9,5 +9,6 @@
     <Grid>
         <TabControl x:Name="tcTabs" Margin="0,0,0,31"/>
         <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Width="100"/>
+        <Button x:Name="btnSciptSort" Content="Script Sort" HorizontalAlignment="Left" Margin="115,0,0,6" VerticalAlignment="Bottom" Width="100"/>
     </Grid>
 </UserControl>
