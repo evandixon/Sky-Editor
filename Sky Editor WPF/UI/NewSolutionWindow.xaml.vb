@@ -5,6 +5,8 @@ Namespace UI
 
         Dim _folderBrowser As FolderBrowserDialog
         Private Sub btnOk_Click(sender As Object, e As RoutedEventArgs) Handles btnOk.Click
+            SettingsManager.Instance.Settings.Setting("LastSolutionDirectory") = txtLocation.Text
+            SettingsManager.Instance.Save()
             DialogResult = True
             Me.Close()
         End Sub
@@ -35,6 +37,9 @@ Namespace UI
         Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Title = PluginHelper.GetLanguageItem("New Solution")
             UiHelper.TranslateForm(Me)
+            If SettingsManager.Instance.Settings.Setting("LastSolutionDirectory") IsNot Nothing Then
+                txtLocation.Text = SettingsManager.Instance.Settings.Setting("LastSolutionDirectory")
+            End If
         End Sub
 
         Public Property SelectedName As String
