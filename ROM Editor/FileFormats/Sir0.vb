@@ -23,7 +23,9 @@ Namespace FileFormats
             End Get
         End Property
         Protected Property Header As Byte()
-        Protected Property RelativePointers As List(Of Integer)
+        Public Property RelativePointers As List(Of Integer)
+
+        Protected Property ResizeFileOnLoad As Boolean
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
@@ -89,6 +91,7 @@ Namespace FileFormats
         End Sub
 
         Private Sub ProcessData()
+            RelativePointers = New List(Of Integer)
             HeaderOffset = Me.Int32(&H4)
             PointerOffset = Me.Int32(&H8)
             Header = RawData(HeaderOffset, HeaderLength)
@@ -117,23 +120,22 @@ Namespace FileFormats
             Next
 
             'Remove the header and pointer sections, because it will be reconstructed on save
-            If Not Me.isreadonly Then Me.Length = Me.Length - Me.PointerLength - Me.HeaderLength
+            If Not Me.IsReadOnly AndAlso ResizeFileOnLoad Then Me.Length = Me.Length - Me.PointerLength - Me.HeaderLength
         End Sub
 
         Public Sub New()
             MyBase.New
+            ResizeFileOnLoad = True
             RelativePointers = New List(Of Integer)
         End Sub
 
         Public Sub New(RawData As Byte())
             MyBase.New(RawData)
-            RelativePointers = New List(Of Integer)
             ProcessData()
         End Sub
 
         Public Sub New(Filename As String, OpenReadOnly As Boolean)
             MyBase.New(Filename, OpenReadOnly)
-            RelativePointers = New List(Of Integer)
         End Sub
     End Class
 End Namespace
