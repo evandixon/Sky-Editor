@@ -23,7 +23,7 @@ Public Class PluginInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-        Manager.RegisterMenuActionType(GetType(MenuActions.ProjectRun))
+        'Manager.RegisterMenuActionType(GetType(MenuActions.ProjectRun))
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution

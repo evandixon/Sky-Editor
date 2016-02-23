@@ -22,6 +22,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_New"), PluginHelper.GetLanguageItem("_File")})
             AlwaysVisible = True
+            SortOrder = 1
         End Sub
     End Class
 End Namespace

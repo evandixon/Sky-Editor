@@ -35,26 +35,9 @@ Friend Class WpfCoreMod
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))
         Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
         Manager.RegisterTypeRegister(GetType(ITargetedControl))
+        Manager.RegisterTypeRegister(GetType(MenuAction))
         Manager.RegisterDefaultFileTypeDetectors()
         'End CoreMod stuff
-
-        'Menu Items
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileNewFile))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileNewSolution))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileOpenAuto))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileOpenManual))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileSave))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAs))
-        Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveSolution))
-        'Manager.RegisterMenuActionType(GetType(MenuActions.FileSaveAll))
-        Manager.RegisterMenuActionType(GetType(MenuActions.ToolsSettings))
-        Manager.RegisterMenuActionType(GetType(MenuActions.ToolsLanguage))
-        Manager.RegisterMenuActionType(GetType(MenuActions.ToolsPlugins))
-        Manager.RegisterMenuActionType(GetType(MenuActions.SolutionBuild))
-
-        If SettingsManager.Instance.Settings.DevelopmentMode Then
-            Manager.RegisterMenuActionType(GetType(MenuActions.DevConsole))
-        End If
 
         Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
     End Sub

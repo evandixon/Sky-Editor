@@ -25,6 +25,7 @@ Namespace MenuActions
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Open"), PluginHelper.GetLanguageItem("Open (Let me _Choose Game)")})
             AlwaysVisible = True
             OpenFileDialog1 = New Forms.OpenFileDialog
+            SortOrder = 4
         End Sub
     End Class
 End Namespace

@@ -24,7 +24,9 @@ Namespace MenuActions
             Next
         End Function
         Public Sub New()
-            MyBase.New("Testing/ExtractFarc")
+            MyBase.New("Dev/ExtractFarc", TranslateItems:=True)
+            DevOnly = True
+            SortOrder = 10
         End Sub
     End Class
 End Namespace

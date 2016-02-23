@@ -1,7 +1,7 @@
 ﻿Imports System.Threading.Tasks
 
 Namespace MenuActions
-    Public Class ToolsLanguage
+    Public Class DevLanguage
         Inherits MenuAction
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
             Return True
@@ -13,8 +13,10 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Tools"), PluginHelper.GetLanguageItem("_Language Editor")})
+            MyBase.New({PluginHelper.GetLanguageItem("_Development"), PluginHelper.GetLanguageItem("_Language Editor")})
             AlwaysVisible = True
+            SortOrder = 10
+            DevOnly = True
         End Sub
     End Class
 End Namespace

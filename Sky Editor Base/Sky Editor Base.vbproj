@@ -181,6 +181,7 @@
     <Compile Include="EventArguments\DirectoryCreatedEventArgs.vb" />
     <Compile Include="EventArguments\DirectoryDeletedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovingEventArgs.vb" />
+    <Compile Include="EventArguments\TypeRegisteredEventArguments.vb" />
     <Compile Include="EventArguments\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="ExecutableFile.vb" />
     <Compile Include="Interfaces\iContainer.vb" />

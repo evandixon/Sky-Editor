@@ -19,6 +19,7 @@ Namespace MenuActions
             MyBase.New({PluginHelper.GetLanguageItem("_Image"), PluginHelper.GetLanguageItem("_Import Image")})
             OpenFileDialog1 = New Windows.Forms.OpenFileDialog
             OpenFileDialog1.Filter = "PNG Images (*.png)|*.png|Bitmap Images (*.bmp)|*.bmp|All Files (*.*)|*.*"
+            SortOrder = 12
         End Sub
     End Class
 End Namespace

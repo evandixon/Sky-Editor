@@ -23,6 +23,7 @@ Namespace MenuActions
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Open"), PluginHelper.GetLanguageItem("Open (_Auto-Detect Game)")})
             AlwaysVisible = True
             OpenFileDialog1 = New Forms.OpenFileDialog
+            SortOrder = 3
         End Sub
     End Class
 End Namespace

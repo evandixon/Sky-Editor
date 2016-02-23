@@ -16,6 +16,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_Tools"), PluginHelper.GetLanguageItem("_Settings")})
             AlwaysVisible = True
+            SortOrder = 8
         End Sub
     End Class
 End Namespace

@@ -32,6 +32,35 @@ Public MustInherit Class MenuAction
     Dim _alwaysVisible As Boolean
 
     ''' <summary>
+    ''' True to be visible only when Development Mode is enabled and normal visibility conditions are satisfied.
+    ''' False to be visibile as normal.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DevOnly As Boolean
+        Get
+            Return _devOnly
+        End Get
+        Protected Set(value As Boolean)
+            _devOnly = value
+        End Set
+    End Property
+    Dim _devOnly As Boolean
+
+    ''' <summary>
+    ''' Order in which menu items are sorted
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property SortOrder As Decimal
+        Get
+            Return _sortOrder
+        End Get
+        Protected Set(value As Decimal)
+            _sortOrder = value
+        End Set
+    End Property
+    Dim _sortOrder As Decimal
+
+    ''' <summary>
     ''' IEnumerable of types the action can be performed with.
     ''' If empty, can be performed on any type.
     ''' </summary>
@@ -56,10 +85,14 @@ Public MustInherit Class MenuAction
         _alwaysVisible = False
         ActionPath = New List(Of String)
         ActionPath.AddRange(Path)
+        DevOnly = False
+        SortOrder = 0
     End Sub
 
     Public Sub New(Path As String, Optional SeparatorCharacter As Char = "/"c, Optional TranslateItems As Boolean = False, Optional DefaultTranslationValue As String = Nothing)
         _alwaysVisible = False
+        DevOnly = False
+        SortOrder = 0
         ActionPath = New List(Of String)
         For Each item In Path.Split(SeparatorCharacter)
             If Not TranslateItems Then

@@ -6,6 +6,11 @@ Namespace UI
     Public Class PluginControl
         Implements iObjectControl
         Public Sub RefreshDisplay()
+            'Because this may take a moment or two, we're running it asynchronously
+            Task.Run(New Action(AddressOf DoRefreshDisplay))
+        End Sub
+
+        Private Sub DoRefreshDisplay()
             Dim uiElements As New List(Of PluginUiElement)
             With GetEditingObject(Of PluginManager)()
                 Dim supportedAssemblyPaths = Utilities.ReflectionHelpers.GetSupportedPlugins(PluginHelper.GetPluginAssemblies, .CoreAssemblyName)
@@ -37,7 +42,9 @@ Namespace UI
             For Each item In uiElements
                 AddHandler item.Modified, AddressOf OnItemModified
             Next
-            gridPlugins.ItemsSource = uiElements
+            Dispatcher.Invoke(Sub()
+                                  gridPlugins.ItemsSource = uiElements
+                              End Sub)
             IsModified = False
         End Sub
 

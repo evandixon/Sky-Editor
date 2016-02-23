@@ -10,8 +10,10 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New("Console", "/", True)
+            MyBase.New("_Development/_Console", "/", True)
             AlwaysVisible = True
+            SortOrder = 11
+            DevOnly = True
         End Sub
     End Class
 End Namespace

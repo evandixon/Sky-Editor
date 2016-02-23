@@ -28,6 +28,7 @@ Namespace MenuActions
             MyBase.New({PluginHelper.GetLanguageItem("_Image"), PluginHelper.GetLanguageItem("_Export Image")})
             SaveFileDialog1 = New Windows.Forms.SaveFileDialog
             SaveFileDialog1.Filter = "PNG Images (*.png)|*.png|Bitmap Images (*.bmp)|*.bmp"
+            SortOrder = 11
         End Sub
     End Class
 End Namespace

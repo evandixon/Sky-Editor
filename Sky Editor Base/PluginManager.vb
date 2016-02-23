@@ -124,12 +124,7 @@ Public Class PluginManager
             'Check to see if this type inherits from one we're looking for
             For Each registeredType In TypeRegistery.Keys
                 If ReflectionHelpers.IsOfType(actualType, registeredType) Then
-                    If TypeRegistery(registeredType) Is Nothing Then
-                        TypeRegistery(registeredType) = New List(Of Type)
-                    End If
-                    If Not TypeRegistery(registeredType).Contains(actualType) Then
-                        TypeRegistery(registeredType).Add(actualType)
-                    End If
+                    RegisterType(registeredType, actualType)
                 End If
             Next
 
@@ -137,12 +132,7 @@ Public Class PluginManager
             For Each i In actualType.GetInterfaces
                 For Each registeredType In TypeRegistery.Keys
                     If ReflectionHelpers.IsOfType(i, registeredType) Then
-                        If TypeRegistery(registeredType) Is Nothing Then
-                            TypeRegistery(registeredType) = New List(Of Type)
-                        End If
-                        If Not TypeRegistery(registeredType).Contains(actualType) Then
-                            TypeRegistery(registeredType).Add(actualType)
-                        End If
+                        RegisterType(registeredType, actualType)
                     End If
                 Next
             Next
@@ -297,7 +287,7 @@ Public Class PluginManager
     ''' Registers a Menu Action for use with creating custom menu items.
     ''' </summary>
     ''' <param name="ActionType">Type of the menu action to be registered.</param>
-    Public Sub RegisterMenuActionType(ActionType As Type)
+    Protected Sub RegisterMenuActionType(ActionType As Type)
         If ActionType Is Nothing Then
             Throw New ArgumentNullException(NameOf(ActionType))
         End If
@@ -308,6 +298,10 @@ Public Class PluginManager
         'While we're registering the type, we need an instance to get extra information, like where to put it
         Dim ActionInstance As MenuAction = ActionType.GetConstructor({}).Invoke({})
 
+        If ActionInstance.DevOnly AndAlso Not SettingsManager.Instance.Settings.DevelopmentMode Then
+            'Then this menu item is not supported.
+            Exit Sub
+        End If
 
         'Generate the MenuItem
         If MenuItems Is Nothing Then
@@ -321,11 +315,15 @@ Public Class PluginManager
             Dim current As MenuItemInfo
             If parent.Any Then
                 current = parent.First
+                If current.ActionTypes.Count = 0 Then
+                    current.SortOrder = Math.Min(current.SortOrder, ActionInstance.SortOrder)
+                End If
             Else
                 Dim m As New MenuItemInfo
                 m.Header = ActionInstance.ActionPath(0)
                 m.Children = New List(Of MenuItemInfo)
                 m.ActionTypes = New List(Of Type)
+                m.SortOrder = ActionInstance.SortOrder
                 If ActionInstance.ActionPath.Count = 1 Then
                     m.ActionTypes.Add(ActionType)
                 End If
@@ -339,10 +337,14 @@ Public Class PluginManager
                 parent = From m As MenuItemInfo In current.Children Where m.Header = ActionInstance.ActionPath(index)
                 If parent.Any Then
                     current = parent.First
+                    If current.ActionTypes.Count = 0 Then
+                        current.SortOrder = Math.Min(current.SortOrder, ActionInstance.SortOrder)
+                    End If
                 Else
                     Dim m As New MenuItemInfo
                     m.Header = ActionInstance.ActionPath(count)
                     m.Children = New List(Of MenuItemInfo)
+                    m.SortOrder = ActionInstance.SortOrder
                     If count = 0 Then
                         MenuItems.Add(m)
                     Else
@@ -366,6 +368,7 @@ Public Class PluginManager
                     Dim m As New MenuItemInfo
                     m.Children = New List(Of MenuItemInfo)
                     m.Header = ActionInstance.ActionPath.Last
+                    m.SortOrder = ActionInstance.SortOrder
                     m.ActionTypes = New List(Of Type)
                     m.ActionTypes.Add(ActionType)
                     current.Children.Add(m)
@@ -442,10 +445,21 @@ Public Class PluginManager
         If Type Is Nothing Then
             Throw New ArgumentNullException(NameOf(Type))
         End If
+        If Type.GetConstructor({}) Is Nothing Then
+            'We only want types with default constructors.
+            'This also helps weed out Generic Types, MustInherit Classes, and Interfaces.
+            Exit Sub
+        End If
 
+        'Ensure that TypeRegistry contains the key.
         RegisterTypeRegister(Register)
 
-        TypeRegistery(Register).Add(Type)
+        'Duplicates make can cause minor issues
+        If Not TypeRegistery(Register).Contains(Type) Then
+            TypeRegistery(Register).Add(Type)
+        End If
+
+        RaiseEvent TypeRegistered(Me, New TypeRegisteredEventArgs With {.BaseType = Register, .RegisteredType = Type})
     End Sub
 #End Region
 
@@ -620,6 +634,13 @@ Public Class PluginManager
     Public Event SolutionChanged(sender As Object, e As EventArgs)
     Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
     Public Event PluginLoadComplete(sender As Object, e As EventArgs)
+
+    ''' <summary>
+    ''' Raised when a type is added into the type registry.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event TypeRegistered(sender As Object, e As TypeRegisteredEventArgs)
 #End Region
 
 #Region "Event Handlers"
@@ -648,6 +669,12 @@ Public Class PluginManager
     Private Sub _pluginHelper_FileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
         If Me.OpenedFiles.ContainsKey(e.File) Then
             Me.OpenedFiles.Remove(e.File)
+        End If
+    End Sub
+
+    Private Sub PluginManager_TypeRegistered(sender As Object, e As TypeRegisteredEventArgs) Handles Me.TypeRegistered
+        If e.BaseType.IsEquivalentTo(GetType(MenuAction)) Then
+            RegisterMenuActionType(e.RegisteredType)
         End If
     End Sub
 
@@ -796,7 +823,17 @@ Public Class PluginManager
         End If
         Dim objType = ObjectToEdit.GetType
         Dim allTabs As New List(Of iObjectControl)
-        For Each etab In (From e In GetObjectControls() Order By e.GetSortOrder(objType, True) Ascending)
+
+        'This is our cache of reference-only object controls.
+        'We use this to find out which object controls support the given object.
+        'It's a static variable because we're likely going to be calling GetRefreshedTabs multiple times,
+        'So we'll only have to take a little more time the first time we run this
+        Static objControls As List(Of iObjectControl) = Nothing
+        If objControls Is Nothing Then
+            objControls = GetObjectControls()
+        End If
+
+        For Each etab In (From e In objControls Order By e.GetSortOrder(objType, True) Ascending)
             Dim isMatch = False
             'Check to see if the tab itself is supported
             'It must be one of the types in RequestedTabTypes
@@ -825,11 +862,12 @@ Public Class PluginManager
             End If
             'This is a supported tab.  We're adding it!
             If isMatch Then
-                etab.EditingObject = ObjectToEdit
-                allTabs.Add(etab)
-                'Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
-                't.EditingObject = ObjectToEdit
-                'tabs.Add(t)
+                'etab.EditingObject = ObjectToEdit
+                'allTabs.Add(etab)
+                'Create another instance of etab, since etab is our cached, search-only instance.
+                Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
+                t.EditingObject = ObjectToEdit
+                allTabs.Add(t)
             End If
         Next
 

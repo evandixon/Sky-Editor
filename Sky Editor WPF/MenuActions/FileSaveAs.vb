@@ -19,6 +19,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Save"), PluginHelper.GetLanguageItem("Save File _As...")})
             SaveFileDialog1 = New Forms.SaveFileDialog
+            SortOrder = 6
         End Sub
     End Class
 End Namespace

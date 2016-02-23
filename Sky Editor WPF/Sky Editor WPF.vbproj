@@ -139,13 +139,12 @@
     </Compile>
     <Compile Include="MenuActions\DevConsole.vb" />
     <Compile Include="MenuActions\FileNewFile.vb" />
-    <Compile Include="MenuActions\FileNewProject.vb" />
     <Compile Include="MenuActions\FileOpenAuto.vb" />
     <Compile Include="MenuActions\FileOpenManual.vb" />
     <Compile Include="MenuActions\FileSave.vb" />
     <Compile Include="MenuActions\FileSaveAll.vb" />
     <Compile Include="MenuActions\FileSaveAs.vb" />
-    <Compile Include="MenuActions\ToolsLanguage.vb" />
+    <Compile Include="MenuActions\DevLanguage.vb" />
     <Compile Include="MenuActions\ToolsSettings.vb" />
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>

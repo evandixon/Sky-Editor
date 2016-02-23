@@ -105,6 +105,7 @@ Namespace MenuActions
 
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("Utilities"), PluginHelper.GetLanguageItem("Export Soundtrack")})
+            SortOrder = 10
         End Sub
     End Class
 

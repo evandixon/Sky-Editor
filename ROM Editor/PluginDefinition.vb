@@ -93,11 +93,6 @@ Public Class PluginDefinition
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
         Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Tagging.dll"))
 
-        Manager.RegisterMenuActionType(GetType(MenuActions.PsmdSoundtrackMenuAction))
-        Manager.RegisterMenuActionType(GetType(MenuActions.CteImageExport))
-        Manager.RegisterMenuActionType(GetType(MenuActions.CteImageImport))
-        Manager.RegisterMenuActionType(GetType(MenuActions.ExtractFarc))
-
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon X"), GameStrings.PokemonXCode)

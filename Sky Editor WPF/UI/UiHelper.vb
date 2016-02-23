@@ -52,7 +52,7 @@ Namespace UI
 
             Dim output As New List(Of MenuItem)
 
-            For Each item In MenuItemInfo
+            For Each item In From m In MenuItemInfo Order By m.SortOrder, m.Header
                 Dim m As New MenuItem
                 m.Header = item.Header
                 m.Tag = New List(Of MenuAction)

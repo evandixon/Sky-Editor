@@ -23,6 +23,7 @@ Namespace MenuActions
 
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_Solution"), PluginHelper.GetLanguageItem("_Build")})
+            SortOrder = 8
         End Sub
     End Class
 End Namespace

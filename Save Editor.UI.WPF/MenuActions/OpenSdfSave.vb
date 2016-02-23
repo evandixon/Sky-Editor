@@ -16,10 +16,12 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New("_SDF/_Open", "/"c, True)
+            MyBase.New("_Development/_Open", "/"c, True)
             AlwaysVisible = True
 
             dialog = New FolderBrowserDialog
+            DevOnly = True
+            SortOrder = 21
         End Sub
 
 #Region "IDisposable Support"
