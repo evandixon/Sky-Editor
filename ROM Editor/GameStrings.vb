@@ -39,7 +39,7 @@ Public Class GameStrings
     Public Const ORCode = "000400000011C400"
     Public Const ASCode = "000400000011C500"
     Public Const GTICode = "00040000000(BA8|BA9|950)00"
-    Public Const PSMDCode = "0004000000(1746|149B)00"
+    Public Const PSMDCode = "0004000000(1744|1746|149B)00"
 
     Public Const SkyCode = "C2S."
 End Class
