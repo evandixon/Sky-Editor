@@ -132,8 +132,6 @@ Namespace UI
             OpenFileDialog1 = New Forms.OpenFileDialog
             SaveFileDialog1 = New Forms.SaveFileDialog
 
-            _manager.RegisterIOFilter("*.skyproj", PluginHelper.GetLanguageItem("Sky Editor Project File"))
-
             ShowWelcomePage()
 
             _toolWindows = New List(Of ITargetedControl)
