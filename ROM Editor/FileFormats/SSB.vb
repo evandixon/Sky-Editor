@@ -98,7 +98,7 @@ Namespace FileFormats
                 Dim dataBlockOffset As Integer = f.Position + 2
 
                 'Todo: correct this invalid check
-                If f.Length > (dataBlockOffset + sizeEnglish * 2 + f.Int16(dataBlockOffset) * 2) Then
+                If f.Length > (dataBlockOffset + f.Int16(dataBlockOffset) * 2 + sizeEnglish * 2 + f.Int16(dataBlockOffset) * 2) Then
                     'Then it's probably a multi-lang script.
                     isMultiLang = True
                 End If
