@@ -25,13 +25,13 @@ Public Class GenericFile
     Dim _openReadOnly As Boolean
 
 #Region "Constructors"
-    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
+
     Public Sub New(Filename As String)
         _makeTempCopy = True
         _openReadOnly = False
         OpenFile(Filename)
     End Sub
-    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
+
     Public Sub New(Filename As String, OpenReadOnly As Boolean)
         _makeTempCopy = Not OpenReadOnly
         _openReadOnly = OpenReadOnly
@@ -161,6 +161,36 @@ Public Class GenericFile
     End Property
 
     ''' <summary>
+    ''' Gets a 16 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int16(Index As Long) As Short
+        Get
+            Return BitConverter.ToInt16(RawData(Index, 2), 0)
+        End Get
+        Set(value As Short)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 2) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets a 16 bit unsigned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt16(Index As Long) As UShort
+        Get
+            Return BitConverter.ToUInt16(RawData(Index, 2), 0)
+        End Get
+        Set(value As UShort)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 2) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Gets a 32 bit signed little endian int starting at the given index.
     ''' </summary>
     ''' <param name="Index"></param>
@@ -228,6 +258,8 @@ Public Class GenericFile
             FileReader.SetLength(value)
         End Set
     End Property
+
+    Public Property Position As ULong
     '''' <summary>
     '''' Gets or sets a string representation of the file.
     '''' When setting, will overwrite all data in the file.
@@ -270,7 +302,7 @@ Public Class GenericFile
 
 #End Region
 
-#Region "Methods"
+#Region "Functions"
     Protected Overridable Sub PreSave()
 
     End Sub
@@ -373,6 +405,16 @@ Public Class GenericFile
         RawData(oldLength, count) = Data
         Me.FileReader.Flush()
     End Sub
+
+    ''' <summary>
+    ''' Reads an unsigned 16 bit integer at the current position, and increments the current position by 2.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function NextUInt16() As UInt16
+        Dim out = UInt16(Position)
+        Position += 2
+        Return out
+    End Function
 #End Region
 
 #Region "IDisposable Support"
