@@ -372,6 +372,20 @@ Public Class GenericFile
         Return s.ToString
     End Function
 
+    Public Function ReadNullTerminatedString(Offset As Integer, e As Text.Encoding) As String
+        Dim out As New Text.StringBuilder
+        Dim pos = Offset
+        Dim c As Byte
+        Do
+            c = RawData(pos)
+            If Not c = 0 Then
+                out.Append(e.GetString({c}))
+            End If
+            pos += 1
+        Loop Until c = 0
+        Return out.ToString
+    End Function
+
     ''' <summary>
     ''' Appends the given file contents to the end of this file.
     ''' </summary>

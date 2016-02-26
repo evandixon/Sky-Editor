@@ -2,11 +2,11 @@
 Imports System.ComponentModel
 Imports System.Timers
 Imports System.Windows.Controls
-Imports ROMEditor.FileFormats
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
-Public Class MessageBinEditor
+Public Class SSBStringDictionaryEditor
+    Inherits UserControl
     Implements iObjectControl
 
     Public Sub New()
@@ -22,50 +22,22 @@ Public Class MessageBinEditor
     Private WithEvents searchTimer As Timers.Timer
     Private cancelSearch As Boolean
     Private searchTask As Task
+    Private mainSource As ObservableCollection(Of KeyValuePair(Of Integer, String))
 
     Public Sub RefreshDisplay()
-        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
-            AddHandler .EntryAdded, AddressOf OnMsgItemAdded
-            AddHandler .FileModified, AddressOf OnObjModified
-            lstEntries.ItemsSource = .Strings
-            If lstEntries.Items.Count > 0 Then
-                lstEntries.SelectedIndex = 0
-            End If
-        End With
+        mainSource = New ObservableCollection(Of KeyValuePair(Of Integer, String))
+        For Each item In GetEditingObject(Of Dictionary(Of Integer, String))()
+            mainSource.Add(item)
+        Next
+        lstEntries.ItemsSource = mainSource
         IsModified = False
     End Sub
 
     Public Sub UpdateObject()
-
-    End Sub
-
-    Public Sub Sort(Keys As List(Of Integer))
-        Task.Run(New Action(Sub()
-                                DoSort(Keys)
-                            End Sub))
-    End Sub
-
-    Private Sub DoSort(Keys As List(Of Integer))
-        Dim results As New ObservableCollection(Of MessageBinStringEntry)
-        Dispatcher.Invoke(Sub()
-                              lstEntries.ItemsSource = results
-                          End Sub)
-        For Each item In Keys
-            Dim entry = (From s In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings Where s.HashSigned = item).FirstOrDefault
-            If entry IsNot Nothing Then
-                Dispatcher.Invoke(Sub()
-                                      results.Add(entry)
-                                  End Sub)
-            End If
+        GetEditingObject(Of Dictionary(Of Integer, String)).Clear()
+        For Each item In mainSource
+            GetEditingObject(Of Dictionary(Of Integer, String)).Add(item.Key, item.Value)
         Next
-    End Sub
-
-    Private Sub OnMsgItemAdded(sender As Object, e As MessageBin.EntryAddedEventArgs)
-        Dim addedEntry = (From i As MessageBinStringEntry In lstEntries.ItemsSource Where i.Hash = e.NewID).FirstOrDefault
-        If addedEntry IsNot Nothing Then
-            lstEntries.SelectedIndex = lstEntries.Items.IndexOf(addedEntry)
-            lstEntries.ScrollIntoView(addedEntry)
-        End If
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtSearch.TextChanged
@@ -95,17 +67,17 @@ Public Class MessageBinEditor
         cancelSearch = False
         If String.IsNullOrEmpty(SearchText) Then
             Dispatcher.Invoke(Sub()
-                                  lstEntries.ItemsSource = GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+                                  lstEntries.ItemsSource = mainSource
                               End Sub)
         Else
-            Dim results As New ObservableCollection(Of MessageBinStringEntry)
+            Dim results As New ObservableCollection(Of KeyValuePair(Of Integer, String))
             Dispatcher.Invoke(Sub()
                                   lstEntries.ItemsSource = results
                               End Sub)
 
             Dim searchTerms = SearchText.Split(" ")
 
-            For Each item In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+            For Each item In mainSource
                 If cancelSearch = True Then
                     'If we get here, the search textbox has been changed, so we'll stop searching
                     Exit For
@@ -116,11 +88,9 @@ Public Class MessageBinEditor
                     isMatch = False 'For every term, we'll set isMatch to false
 
                     'The entry must match every term
-                    If item.Hash.ToString.Contains(term) Then
+                    If item.Key.ToString.Contains(term) Then
                         isMatch = True
-                    ElseIf item.HashSigned.ToString.Contains(term) Then
-                        isMatch = True
-                    ElseIf item.Entry.ToString.ToLower.Contains(term.ToLower) Then
+                    ElseIf item.Value.ToLower.Contains(term.ToLower) Then
                         isMatch = True
                     End If
 
@@ -143,22 +113,30 @@ Public Class MessageBinEditor
         IsModified = True
     End Sub
 
-    Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-        Return {GetType(ROMEditor.FileFormats.MessageBin)}
-    End Function
-
-    Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
-        Return 1
-    End Function
-
-    Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not DesignerProperties.GetIsInDesignMode(Me) Then
-            Me.Header = PluginHelper.GetLanguageItem("Message")
+            Me.Header = EditingLanguage
             columnID.Header = PluginHelper.GetLanguageItem("ID")
             columnEntry.Header = PluginHelper.GetLanguageItem("Entry")
             lblSearch.Content = PluginHelper.GetLanguageItem("Search: ")
         End If
     End Sub
+
+    Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
+        Return {GetType(Dictionary(Of Integer, String))}
+    End Function
+
+    Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
+        Return 0
+    End Function
+
+    Public Sub AddItem(ID As Integer)
+        Dim newItem As New KeyValuePair(Of Integer, String)(ID, "")
+        mainSource.Add(newItem)
+        lstEntries.ScrollIntoView(newItem)
+    End Sub
+
+    Public Property EditingLanguage As String
 
 #Region "IObjectControl Support"
     Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
@@ -249,6 +227,5 @@ Public Class MessageBinEditor
         End Set
     End Property
     Dim _isModified As Boolean
-
 #End Region
 End Class

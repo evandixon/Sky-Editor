@@ -157,6 +157,12 @@
     <Compile Include="ObjectControls\PsmdLuaLangIntegration.xaml.vb">
       <DependentUpon>PsmdLuaLangIntegration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\SSBStringDictionaryEditor.xaml.vb">
+      <DependentUpon>SSBStringDictionaryEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\SSBStringEditor.xaml.vb">
+      <DependentUpon>SSBStringEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\ThreeDSModPackControl.xaml.vb">
       <DependentUpon>ThreeDSModPackControl.xaml</DependentUpon>
     </Compile>
@@ -219,6 +225,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\PsmdLuaLangIntegration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\SSBStringDictionaryEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\SSBStringEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -164,7 +164,18 @@ Namespace Projects
             If Me.ProjectReferences.Count > 0 Then
                 Dim filesToCopy = Me.GetFilesToCopy(Solution, Me.ProjectReferences(0))
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
-                If filesToCopy.Count > 0 Then
+                If filesToCopy.Count = 1 Then
+                    Dim source As String = IO.Path.Combine(sourceRoot, filesToCopy(0))
+                    If IO.File.Exists(source) Then
+                        Dim dest As String = IO.Path.Combine(GetRawFilesDir, source)
+                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
+                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
+                        End If
+                        IO.File.Copy(source, dest, True)
+                    ElseIf IO.Directory.Exists(source) Then
+                        Await Utilities.FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, True)
+                    End If
+                ElseIf filesToCopy.Count > 0 Then
                     Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
                     Await a.RunForEach(Sub(Item As String)
                                            Dim source As String = IO.Path.Combine(sourceRoot, Item)
@@ -186,11 +197,11 @@ Namespace Projects
                                            End If
                                        End Sub, filesToCopy)
                 Else
-                    Await PluginHelper.CopyDirectory(sourceRoot, GetRawFilesDir)
+                    Await Utilities.FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, True)
                 End If
-            Else
-                'Since there's no source project, we'll leave it up to the user to supply the needed files.
-                If Not IO.Directory.Exists(GetRawFilesDir) Then
+                Else
+                    'Since there's no source project, we'll leave it up to the user to supply the needed files.
+                    If Not IO.Directory.Exists(GetRawFilesDir) Then
                     IO.Directory.CreateDirectory(GetRawFilesDir)
                 End If
             End If
@@ -221,15 +232,15 @@ Namespace Projects
                                    '-Find all the files
                                    Dim sourceFiles As New Dictionary(Of String, Byte())
                                    For Each file In IO.Directory.GetFiles(sourceRoot, "*", IO.SearchOption.AllDirectories)
-                                       'sourceFiles.Add(file.Replace(sourceRoot, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
                                        sourceFiles.Add(file.Replace(sourceRoot, "").ToLower, {})
                                    Next
 
 
                                    Dim destFiles As New Dictionary(Of String, Byte())
                                    For Each file In IO.Directory.GetFiles(currentFiles, "*", IO.SearchOption.AllDirectories)
-                                       'destFiles.Add(file.Replace(currentFiles, "").ToLower, hash.ComputeHash(IO.File.OpenRead(file)))
-                                       destFiles.Add(file.Replace(currentFiles, "").ToLower, {})
+                                       If Not file.ToLower.EndsWith(".skyproj") Then 'In case the raw files are stored in the project root
+                                           destFiles.Add(file.Replace(currentFiles, "").ToLower, {})
+                                       End If
                                    Next
 
                                    '-Analyze files

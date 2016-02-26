@@ -138,6 +138,7 @@
     <Compile Include="FileFormats\item_p.vb" />
     <Compile Include="FileFormats\Kaomado.vb" />
     <Compile Include="FileFormats\LanguageString.vb" />
+    <Compile Include="Projects\ExplorersScriptModProject.vb" />
     <Compile Include="Projects\GenericModProject.vb" />
     <Compile Include="Java.vb" />
     <Compile Include="FileFormats\CteImage.vb" />

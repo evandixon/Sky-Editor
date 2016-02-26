@@ -376,11 +376,6 @@ Public Class PluginHelper
     End Sub
 #End Region
 
-    Public Shared Async Function CopyDirectory(SourceDirectory As String, DestinationDirectory As String) As Task
-        Dim f As New Utilities.AsyncFileCopier
-        Await f.CopyDirectory(SourceDirectory, DestinationDirectory)
-    End Function
-
     ''' <summary>
     ''' Shows the application's underlying console to the user.
     ''' </summary>

@@ -2,8 +2,9 @@
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats
-    Partial Class SSB
+    Partial Public Class SSB
         Implements iOpenableFile
+        Implements iDetectableFileType
 
         Public Class CommandDefinition
             Public Property CommandID As Integer
@@ -77,6 +78,7 @@ Namespace FileFormats
         Public Property German As New Dictionary(Of Integer, String)
         Public Property Italian As New Dictionary(Of Integer, String)
         Public Property Spanish As New Dictionary(Of Integer, String)
+        Public Property isMultiLang As Boolean
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Using f As New GenericFile(Filename, True)
@@ -94,13 +96,14 @@ Namespace FileFormats
                 Dim sizeItalian As Integer = 0
                 Dim sizeSpanish As Integer = 0
 
-                Dim isMultiLang As Boolean = False
                 Dim dataBlockOffset As Integer = f.Position + 2
 
                 'Todo: correct this invalid check
                 If f.Length > (dataBlockOffset + f.Int16(dataBlockOffset) * 2 + sizeEnglish * 2 + f.Int16(dataBlockOffset) * 2) Then
                     'Then it's probably a multi-lang script.
                     isMultiLang = True
+                Else
+                    ismultilang = False
                 End If
 
                 If isMultiLang Then
@@ -164,47 +167,62 @@ Namespace FileFormats
                 'Load Strings
 
                 Dim stringStart = dataBlockOffset + stringTableOffset * 2
-                LoadStringList(numConstants, stringStart, f, Constants)
+                LoadStringList(numConstants, stringStart, f, Constants, True)
 
-                stringStart += sizeConstants * 2
-                LoadStringList(numStrings, stringStart, f, English)
+                'Dim e = Text.Encoding.GetEncoding("Windows-1252")
+                'Dim stringPosition As Integer = stringStart
+                'For count = 0 To numConstants - 1
+                '    Dim s = f.ReadNullTerminatedString(stringPosition, e)
+                '    stringPosition += s.Length
+                '    Constants.Add(count + 1, s)
+                'Next
+
+                stringStart = dataBlockOffset + stringTableOffset * 2 + sizeConstants * 2
+
+                LoadStringList(numStrings, stringStart, f, English, False)
 
                 If isMultiLang Then
                     stringStart = stringStart + sizeEnglish * 2
-                    LoadStringList(numStrings, stringStart, f, French)
+                    LoadStringList(numStrings, stringStart, f, French, False)
 
                     stringStart += sizeFrench * 2
-                    LoadStringList(numStrings, stringStart, f, German)
+                    LoadStringList(numStrings, stringStart, f, German, False)
 
                     stringStart += sizeGerman * 2
-                    LoadStringList(numStrings, stringStart, f, Italian)
+                    LoadStringList(numStrings, stringStart, f, Italian, False)
 
-                    stringStart += sizeSpanish * 2
-                    LoadStringList(numStrings, stringStart, f, Spanish)
+                    stringStart += sizeItalian * 2
+                    LoadStringList(numStrings, stringStart, f, Spanish, False)
                 End If
 
                 Console.Write("")
             End Using
         End Sub
 
-        Private Sub LoadStringList(numStrings As Integer, stringStart As Integer, f As GenericFile, currentDictionary As Dictionary(Of Integer, String))
+        Private Sub LoadStringList(numStrings As Integer, stringStart As Integer, f As GenericFile, currentDictionary As Dictionary(Of Integer, String), IsContantTable As Boolean)
+            'Dim e = Text.Encoding.GetEncoding("Windows-1252")
+            'Dim currentString As New Text.StringBuilder
+            'Dim stringPosition As Integer = stringStart '+ 2 * numStrings
+            'Dim currentStringNumber = 1
+            'For count = 0 To numStrings - 2
+            '    Dim s = f.ReadNullTerminatedString(stringStart + f.UInt16(stringPosition), e)
+            '    stringPosition += 2 's.Length + 1 '+1 includes the null character
+            '    currentDictionary.Add(currentStringNumber, s)
+            '    currentStringNumber += 1
+            'Next
+            'If numStrings > 0 Then
+            '    'The last string pointer doesn't seem to behave normally in all cases
+            '    currentDictionary.Add(currentStringNumber, f.ReadNullTerminatedString(stringStart + f.UInt16(stringPosition), e))
+            'End If
             Dim e = Text.Encoding.GetEncoding("Windows-1252")
-            Dim currentString As New Text.StringBuilder
-            Dim stringPosition As Integer = stringStart + 2 * numStrings
-            Dim currentStringNumber = 1
+            Dim stringPosition As Integer = stringStart
+            If Not IsContantTable Then
+                stringPosition += 2 * numStrings
+            End If
             For count = 0 To numStrings - 1
-                Dim c As Byte
-                Do
-                    c = f.RawData(stringPosition)
-                    If c = 0 Then
-                        currentDictionary.Add(currentStringNumber, currentString.ToString)
-                        currentString = New Text.StringBuilder
-                        currentStringNumber += 1
-                    Else
-                        currentString.Append(e.GetString({c}))
-                    End If
-                    stringPosition += 1
-                Loop Until c = 0
+                Dim s = f.ReadNullTerminatedString(stringPosition, e)
+                stringPosition += s.Length + 1
+                currentDictionary.Add(count + 1, s)
             Next
         End Sub
 
@@ -288,6 +306,11 @@ Namespace FileFormats
                 Console.Write("")
             End Using
         End Sub
+
+        Public Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
+            'Todo: actually look at the file contents to verify its integrity
+            Return File.OriginalFilename.ToLower.EndsWith(".ssb")
+        End Function
     End Class
 End Namespace
 
