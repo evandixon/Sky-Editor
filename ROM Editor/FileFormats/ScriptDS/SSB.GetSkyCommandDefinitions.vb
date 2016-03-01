@@ -1,4 +1,4 @@
-﻿Namespace FileFormats
+﻿Namespace FileFormats.ScriptDS
     Partial Class SSB
         Protected Shared Function GetSkyCommandDefinitions() As List(Of CommandDefinition)
             Dim out As New List(Of CommandDefinition)
@@ -34,7 +34,7 @@
             out.Add(New CommandDefinition(&H01D, 2))
             out.Add(New CommandDefinition(&H01E, 1))
             out.Add(New CommandDefinition(&H01F, 1))
-            out.Add(New CommandDefinition(&H020, 3))
+            out.Add(New CommandDefinition(&H020, 3, "SOUND:FadeInBgm"))
             out.Add(New CommandDefinition(&H021, 0))
             out.Add(New CommandDefinition(&H022, 2))
             out.Add(New CommandDefinition(&H023, 1))
@@ -152,7 +152,7 @@
             out.Add(New CommandDefinition(&H093, 1))
             out.Add(New CommandDefinition(&H094, 1))
             out.Add(New CommandDefinition(&H095, 0))
-            out.Add(New CommandDefinition(&H096, 0))
+            out.Add(New CommandDefinition(&H096, 0)) 'pausescript
             out.Add(New CommandDefinition(&H097, 0))
             out.Add(New CommandDefinition(&H098, 1))
             out.Add(New CommandDefinition(&H099, 2))
@@ -160,11 +160,11 @@
             out.Add(New CommandDefinition(&H09B, 0))
             out.Add(New CommandDefinition(&H09C, 1))
             out.Add(New CommandDefinition(&H09D, 1))
-            out.Add(New CommandDefinition(&H09E, 1))
+            out.Add(New DecimalParamCommandDefinition(&H09E, 1, "WINDOW:Monologue"))
             out.Add(New CommandDefinition(&H09F, 2))
-            out.Add(New CommandDefinition(&H0A0, 1))
+            out.Add(New DecimalParamCommandDefinition(&H0A0, 1, "WINDOW:SysMsg"))
             out.Add(New CommandDefinition(&H0A1, 0))
-            out.Add(New CommandDefinition(&H0A2, 0))
+            out.Add(New CommandDefinition(&H0A2, 0)) 'deletepicspeak
             out.Add(New CommandDefinition(&H0A3, 1))
             out.Add(New CommandDefinition(&H0A4, 3))
             out.Add(New CommandDefinition(&H0A5, 3))
@@ -172,11 +172,11 @@
             out.Add(New CommandDefinition(&H0A7, 1))
             out.Add(New CommandDefinition(&H0A8, 2))
             out.Add(New CommandDefinition(&H0A9, 1))
-            out.Add(New CommandDefinition(&H0AA, 2))
+            out.Add(New CommandDefinition(&H0AA, 2)) ', "msgChoice"))
             out.Add(New CommandDefinition(&H0AB, 3))
-            out.Add(New CommandDefinition(&H0AC, 1))
-            out.Add(New CommandDefinition(&H0AD, 1))
-            out.Add(New CommandDefinition(&H0AE, 1))
+            out.Add(New CommandDefinition(&H0AC, 1)) ', "msgHeroType"))
+            out.Add(New CommandDefinition(&H0AD, 1)) ', "msgPartnerType"))
+            out.Add(New DecimalParamCommandDefinition(&H0AE, 1, "WINDOW:Talk"))
             out.Add(New CommandDefinition(&H0AF, 3))
             out.Add(New CommandDefinition(&H0B0, 2))
             'out.Add(New CommandDefinition(&H0B1, 0))'Unknown
@@ -298,7 +298,7 @@
             'out.Add(New CommandDefinition(&H125, 0))'Unknown
             out.Add(New CommandDefinition(&H126, 3))
             out.Add(New CommandDefinition(&H127, 1))
-            out.Add(New CommandDefinition(&H128, 0))
+            out.Add(New CommandDefinition(&H128, 0, "SOUND:StopBgm"))
             out.Add(New CommandDefinition(&H129, 0))
             out.Add(New CommandDefinition(&H12A, 1))
             out.Add(New CommandDefinition(&H12B, 1))
@@ -345,7 +345,7 @@
             out.Add(New CommandDefinition(&H154, 2))
             out.Add(New CommandDefinition(&H155, 5))
             out.Add(New CommandDefinition(&H156, 1))
-            out.Add(New CommandDefinition(&H157, 1))
+            out.Add(New CommandDefinition(&H157, 1, "TASK:Sleep"))
             out.Add(New CommandDefinition(&H158, 0))
             out.Add(New CommandDefinition(&H159, 0))
             out.Add(New CommandDefinition(&H15A, 0))

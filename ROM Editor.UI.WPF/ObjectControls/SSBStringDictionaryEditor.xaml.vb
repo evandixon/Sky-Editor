@@ -9,6 +9,32 @@ Public Class SSBStringDictionaryEditor
     Inherits UserControl
     Implements iObjectControl
 
+    Public Class KVPWrapper
+        Implements INotifyPropertyChanged
+
+        Public Property Key As Integer
+            Get
+                Return _key
+            End Get
+            Set(value As Integer)
+                _key = value
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Key)))
+            End Set
+        End Property
+        Dim _key As Integer
+        Public Property Value As String
+            Get
+                Return _value
+            End Get
+            Set(value As String)
+                _value = value
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Me.Value)))
+            End Set
+        End Property
+        Dim _value As String
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    End Class
+
     Public Sub New()
 
         ' This call is required by the designer.
@@ -22,12 +48,14 @@ Public Class SSBStringDictionaryEditor
     Private WithEvents searchTimer As Timers.Timer
     Private cancelSearch As Boolean
     Private searchTask As Task
-    Private mainSource As ObservableCollection(Of KeyValuePair(Of Integer, String))
+    Private mainSource As ObservableCollection(Of KVPWrapper)
 
     Public Sub RefreshDisplay()
-        mainSource = New ObservableCollection(Of KeyValuePair(Of Integer, String))
+        mainSource = New ObservableCollection(Of KVPWrapper)
         For Each item In GetEditingObject(Of Dictionary(Of Integer, String))()
-            mainSource.Add(item)
+            Dim n = New KVPWrapper With {.Key = item.Key, .Value = item.Value}
+            AddHandler n.PropertyChanged, AddressOf Me.OnObjModified
+            mainSource.Add(n)
         Next
         lstEntries.ItemsSource = mainSource
         IsModified = False
@@ -70,7 +98,7 @@ Public Class SSBStringDictionaryEditor
                                   lstEntries.ItemsSource = mainSource
                               End Sub)
         Else
-            Dim results As New ObservableCollection(Of KeyValuePair(Of Integer, String))
+            Dim results As New ObservableCollection(Of KVPWrapper)
             Dispatcher.Invoke(Sub()
                                   lstEntries.ItemsSource = results
                               End Sub)
@@ -131,7 +159,8 @@ Public Class SSBStringDictionaryEditor
     End Function
 
     Public Sub AddItem(ID As Integer)
-        Dim newItem As New KeyValuePair(Of Integer, String)(ID, "")
+        Dim newItem As New KVPWrapper With {.Key = ID, .Value = ""}
+        AddHandler newItem.PropertyChanged, AddressOf Me.OnObjModified
         mainSource.Add(newItem)
         lstEntries.ScrollIntoView(newItem)
     End Sub

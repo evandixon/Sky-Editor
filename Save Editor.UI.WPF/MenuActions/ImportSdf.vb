@@ -15,7 +15,7 @@
 
         Public Sub New()
             MyBase.New("_Development/_Import SDF Saves", "/", True)
-            Me.AlwaysVisible = True
+            Me.AlwaysVisible = False
 
             FolderBrowserDialog1 = New Forms.FolderBrowserDialog
             FolderBrowserDialog1.Description = SkyEditorBase.PluginHelper.GetLanguageItem("Please select your SD Card")

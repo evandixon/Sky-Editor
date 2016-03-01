@@ -3,54 +3,23 @@ Imports ROMEditor.FileFormats.ScriptDS
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
-Public Class SSBStringEditor
+Public Class SSBScriptEditor
     Inherits UserControl
     Implements iObjectControl
     Public Sub RefreshDisplay()
         With GetEditingObject(Of SSB)()
-            Dim editors As New List(Of SSBStringDictionaryEditor)
-            editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).English, .EditingLanguage = "English"})
-            If .isMultiLang Then
-                editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).French, .EditingLanguage = "Français"})
-                editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).German, .EditingLanguage = "Deutsche"})
-                editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Italian, .EditingLanguage = "Italiano"})
-                editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Spanish, .EditingLanguage = "Español"})
-            End If
-            editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Constants, .EditingLanguage = PluginHelper.GetLanguageItem("Constants")})
-            tcTabs.Items.Clear()
-            For Each item In editors
-                tcTabs.Items.Add(New TabItem With {.Content = item, .Header = item.EditingLanguage})
-            Next
+            txtScript.Text = .GetText
         End With
-    End Sub
-
-    Private Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
-        For Each item In tcTabs.Items
-            Dim h = DirectCast(item, TabItem).Header
-
-            ''I originally wanted to exclude Constants, but to make things easier, I'm going to allow adding Constants.
-            ''I'll take care to remove unreferenced strings when recompiling
-            'If Not h = PluginHelper.GetLanguageItem("Constants") Then
-
-            'It would be a good idea to make sure the ID doesn't conflict with other languages, but this should be OK.
-            Dim newID = GetEditingObject(Of SSB).English.Keys.Max + 1
-            DirectCast(DirectCast(item, TabItem).Content, SSBStringDictionaryEditor).AddItem(newID)
-
-            'End If
-        Next
     End Sub
 
     Public Sub UpdateObject()
         With GetEditingObject(Of SSB)()
-            For Each item As TabItem In tcTabs.Items
-                Dim editor = DirectCast(item.Content, SSBStringDictionaryEditor)
-                editor.UpdateObject()
-            Next
+
         End With
     End Sub
 
     Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Strings")
+        Me.Header = PluginHelper.GetLanguageItem("Script")
     End Sub
 
     Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes

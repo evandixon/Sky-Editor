@@ -166,14 +166,14 @@ Namespace Projects
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
                 If filesToCopy.Count = 1 Then
                     Dim source As String = IO.Path.Combine(sourceRoot, filesToCopy(0))
+                    Dim dest As String = IO.Path.Combine(GetRawFilesDir, filesToCopy(0))
                     If IO.File.Exists(source) Then
-                        Dim dest As String = IO.Path.Combine(GetRawFilesDir, source)
                         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
                             IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
                         End If
                         IO.File.Copy(source, dest, True)
                     ElseIf IO.Directory.Exists(source) Then
-                        Await Utilities.FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, True)
+                        Await Utilities.FileSystem.CopyDirectory(source, dest, True)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
                     Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
@@ -238,8 +238,9 @@ Namespace Projects
 
                                    Dim destFiles As New Dictionary(Of String, Byte())
                                    For Each file In IO.Directory.GetFiles(currentFiles, "*", IO.SearchOption.AllDirectories)
-                                       If Not file.ToLower.EndsWith(".skyproj") Then 'In case the raw files are stored in the project root
-                                           destFiles.Add(file.Replace(currentFiles, "").ToLower, {})
+                                       Dim part = file.Replace(currentFiles, "").ToLower
+                                       If Not file.ToLower.EndsWith(".skyproj") AndAlso Not part.StartsWith("\output") AndAlso Not part.StartsWith("\mod files") Then 'In case the raw files are stored in the project root
+                                           destFiles.Add(part, {})
                                        End If
                                    Next
 

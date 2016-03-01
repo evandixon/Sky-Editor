@@ -16,8 +16,8 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New("_Development/_Open", "/"c, True)
-            AlwaysVisible = True
+            MyBase.New("_Development/_Open SDF", "/"c, True)
+            AlwaysVisible = False
 
             dialog = New FolderBrowserDialog
             DevOnly = True

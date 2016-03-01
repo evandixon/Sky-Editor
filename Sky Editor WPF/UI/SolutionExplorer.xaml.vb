@@ -52,7 +52,7 @@ Namespace UI
             menuProperties.Visibility = Visibility.Collapsed
             menuAddExistingFile.Visibility = Visibility.Collapsed
 
-            menuAddFolder.Header = PluginHelper.GetLanguageItem("Add Folder")
+            menuAddFolder.Header = PluginHelper.GetLanguageItem("Create Folder")
             menuCreateProject.Header = PluginHelper.GetLanguageItem("Create Project")
             menuCreateFile.Header = PluginHelper.GetLanguageItem("Create File")
             menuDelete.Header = PluginHelper.GetLanguageItem("Delete")

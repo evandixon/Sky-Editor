@@ -108,8 +108,13 @@
     <Compile Include="FileFormats\FlowData.vb" />
     <Compile Include="FileFormats\MessageBinStringEntry.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
+    <Compile Include="FileFormats\ScriptDS\Command.vb" />
+    <Compile Include="FileFormats\ScriptDS\CommandDefinition.vb" />
+    <Compile Include="FileFormats\ScriptDS\CommandGroup.vb" />
+    <Compile Include="FileFormats\ScriptDS\DecimalParamCommandDefinition.vb" />
+    <Compile Include="FileFormats\ScriptDS\SSA.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
-    <Compile Include="FileFormats\SSB.vb" />
+    <Compile Include="FileFormats\ScriptDS\SSB.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />
@@ -193,7 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="FileFormats\SSB.GetSkyCommandDefinitions.vb" />
+    <Compile Include="FileFormats\ScriptDS\SSB.GetSkyCommandDefinitions.vb" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

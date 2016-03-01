@@ -157,6 +157,9 @@
     <Compile Include="ObjectControls\PsmdLuaLangIntegration.xaml.vb">
       <DependentUpon>PsmdLuaLangIntegration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\SSBScriptEditor.xaml.vb">
+      <DependentUpon>SSBScriptEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\SSBStringDictionaryEditor.xaml.vb">
       <DependentUpon>SSBStringDictionaryEditor.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\PsmdLuaLangIntegration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\SSBScriptEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
