@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Tabs.PKMGeneralTab"
+﻿<local:ObjectControl x:Class="Tabs.PKMGeneralTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -41,4 +41,4 @@
             <xctk:IntegerUpDown x:Name="numSpeed" />-->
         </UniformGrid>
     </Grid>
-</UserControl>
+</local:ObjectControl>
