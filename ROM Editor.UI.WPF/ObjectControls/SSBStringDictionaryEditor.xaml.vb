@@ -250,9 +250,9 @@ Public Class SSBStringDictionaryEditor
         Set(value As Boolean)
             Dim oldValue As Boolean = _isModified
             _isModified = value
-            If Not oldValue = _isModified Then
-                RaiseEvent IsModifiedChanged(Me, New EventArgs)
-            End If
+            'If Not oldValue = _isModified Then
+            RaiseEvent IsModifiedChanged(Me, New EventArgs)
+            'End If
         End Set
     End Property
     Dim _isModified As Boolean

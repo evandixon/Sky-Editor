@@ -263,6 +263,7 @@ Namespace FileFormats.ScriptDS
             out.AddRange(italianTable)
             out.AddRange(spanishTable)
             IO.File.WriteAllBytes(Filename, out.ToArray)
+            RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
         Private Function GenerateStringTable(SourceDictionary As Dictionary(Of Integer, String), sizeConstantsWords As UShort) As List(Of Byte)
             Dim e = Text.Encoding.GetEncoding("Windows-1252")
@@ -271,7 +272,7 @@ Namespace FileFormats.ScriptDS
             Dim offset As UShort = SourceDictionary.Values.Count * 2 + sizeConstantsWords * 2 'Looks like this is the only thing in Bytes and not Words.
             For Each item In SourceDictionary.Values
                 pointerSection.AddRange(BitConverter.GetBytes(offset))
-                Dim buffer = e.GetBytes(item)
+                Dim buffer = e.GetBytes(item.Replace(vbCrLf, vbLf))
                 stringSection.AddRange(buffer)
                 stringSection.Add(0)
                 offset += buffer.Length + 1

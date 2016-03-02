@@ -10,18 +10,29 @@ Public Class SSBStringEditor
         With GetEditingObject(Of SSB)()
             Dim editors As New List(Of SSBStringDictionaryEditor)
             editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).English, .EditingLanguage = "English"})
+            AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
             If .isMultiLang Then
                 editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).French, .EditingLanguage = "Français"})
+                AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
                 editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).German, .EditingLanguage = "Deutsche"})
+                AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
                 editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Italian, .EditingLanguage = "Italiano"})
+                AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
                 editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Spanish, .EditingLanguage = "Español"})
+                AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
             End If
             editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Constants, .EditingLanguage = PluginHelper.GetLanguageItem("Constants")})
+            AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
             tcTabs.Items.Clear()
             For Each item In editors
                 tcTabs.Items.Add(New TabItem With {.Content = item, .Header = item.EditingLanguage})
             Next
+
         End With
+    End Sub
+
+    Private Sub OnObjModified(sender As Object, e As EventArgs)
+        IsModified = True
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click

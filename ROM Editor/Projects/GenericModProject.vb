@@ -245,16 +245,17 @@ Namespace Projects
                                    Next
 
                                    '-Analyze files
-                                   '(Only calculate hashes for files that exist on both sides, to save on time
+                                   '(Only calculate hashes for files that exist on both sides, to save on time)
+                                   'Todo: figure out a faster way of doing this; it's absurdly slow for large numbers of files
                                    Dim hashToCalcSource As New List(Of String)
                                    Dim hashToCalcDest As New List(Of String)
-                                   For Each destFile In destFiles.Keys
-                                       For Each sourceFile In sourceFiles.Keys
-                                           If String.Equals(destFile, sourceFile, StringComparison.InvariantCultureIgnoreCase) Then
-                                               hashToCalcSource.Add(sourceFile)
-                                               hashToCalcDest.Add(destFile)
-                                           End If
-                                       Next
+                                   For i = 0 To destFiles.Keys.Count - 1
+                                       Dim destFile = destFiles.Keys(i)
+                                       If sourceFiles.Keys.Contains(destFiles.Keys(i)) Then
+                                           hashToCalcSource.Add(destFile)
+                                           hashToCalcDest.Add(destFile)
+                                           Me.BuildProgress = ((i) / (destFiles.Keys.Count))
+                                       End If
                                    Next
 
                                    Me.BuildProgress = 0
