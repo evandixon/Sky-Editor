@@ -15,7 +15,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_Development"), PluginHelper.GetLanguageItem("_Language Editor")})
             AlwaysVisible = True
-            SortOrder = 10
+            SortOrder = 10.2
             DevOnly = True
         End Sub
     End Class

@@ -20,7 +20,7 @@
             FolderBrowserDialog1 = New Forms.FolderBrowserDialog
             FolderBrowserDialog1.Description = SkyEditorBase.PluginHelper.GetLanguageItem("Please select your SD Card")
             DevOnly = True
-            SortOrder = 20
+            SortOrder = 10.7
         End Sub
 
 #Region "IDisposable Support"

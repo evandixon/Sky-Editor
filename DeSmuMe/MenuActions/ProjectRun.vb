@@ -24,7 +24,7 @@ Namespace MenuActions
 
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_Project"), PluginHelper.GetLanguageItem("_Run")})
-            SortOrder = 9
+            SortOrder = 2.2
         End Sub
     End Class
 End Namespace

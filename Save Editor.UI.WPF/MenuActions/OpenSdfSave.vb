@@ -21,7 +21,7 @@ Namespace MenuActions
 
             dialog = New FolderBrowserDialog
             DevOnly = True
-            SortOrder = 21
+            SortOrder = 10.6
         End Sub
 
 #Region "IDisposable Support"

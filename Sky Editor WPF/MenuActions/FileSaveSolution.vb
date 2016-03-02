@@ -15,7 +15,7 @@
 
         Public Sub New()
             MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Save"), PluginHelper.GetLanguageItem("Save _Solution")})
-            SortOrder = 7
+            SortOrder = 1.33
         End Sub
     End Class
 End Namespace

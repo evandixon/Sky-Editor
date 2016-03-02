@@ -26,7 +26,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New("Dev/ExtractFarc", TranslateItems:=True)
             DevOnly = True
-            SortOrder = 10
+            SortOrder = 10.5
         End Sub
     End Class
 End Namespace

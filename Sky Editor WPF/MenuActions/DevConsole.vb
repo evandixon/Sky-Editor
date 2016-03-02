@@ -12,7 +12,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New("_Development/_Console", "/", True)
             AlwaysVisible = True
-            SortOrder = 11
+            SortOrder = 10.1
             DevOnly = True
         End Sub
     End Class

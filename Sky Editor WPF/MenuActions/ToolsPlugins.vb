@@ -10,7 +10,7 @@
         Public Sub New()
             MyBase.New("_Tools/_Plugins", TranslateItems:=True)
             Me.AlwaysVisible = True
-            SortOrder = 9
+            SortOrder = 3.2
         End Sub
     End Class
 End Namespace
