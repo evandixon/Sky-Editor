@@ -723,7 +723,10 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Function OpenObject(Filename As String) As Object
         If IO.File.Exists(Filename) Then
-            Return OpenFile(New GenericFile(Filename, True))
+            Dim g As New GenericFile
+            g.IsReadOnly = True
+            g.OpenFile(Filename)
+            Return OpenFile(g)
         Else
             If IO.Directory.Exists(Filename) Then
                 Return OpenDirectory(New IO.DirectoryInfo(Filename))
@@ -743,7 +746,9 @@ Public Class PluginManager
             'Reopen the file without being readonly
             Dim filename = File.OriginalFilename
             File.Dispose()
-            Return New GenericFile(File.OriginalFilename, False)
+            Dim g As New GenericFile
+            g.OpenFile(File.OriginalFilename)
+            Return g
         Else
             Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
             out.OpenFile(File.OriginalFilename)

@@ -30,7 +30,7 @@ Namespace Roms
             End Get
         End Property
 
-        Public Async Function Unpack(Optional DestinationDirectory As String = Nothing) As Task Implements iPackedRom.Unpack
+        Public Async Function Unpack(DestinationDirectory As String) As Task Implements iPackedRom.Unpack
             If DestinationDirectory Is Nothing Then
                 DestinationDirectory = IO.Path.Combine(PluginHelper.GetResourceName(IO.Path.GetFileNameWithoutExtension(Me.Filename)))
             End If
@@ -66,9 +66,6 @@ Namespace Roms
             MyBase.New()
         End Sub
 
-        Public Sub New(Filename As String)
-            MyBase.New(Filename, True)
-        End Sub
         Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
         End Sub

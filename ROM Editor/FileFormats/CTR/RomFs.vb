@@ -12,7 +12,9 @@ Namespace FileFormats.CTR
         Protected Property Header As RomFSHeader
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            Using f As New GenericFile(Filename, True)
+            Using f As New GenericFile
+                f.IsReadOnly = True
+                f.OpenFile(Filename)
                 Header = New RomFSHeader(f.RawData(0, &H60))
 
 

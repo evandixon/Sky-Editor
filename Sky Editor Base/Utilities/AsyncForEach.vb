@@ -78,7 +78,7 @@ Namespace Utilities
         ''' <param name="Collection"></param>
         ''' <param name="BatchSize">Number of tasks to run at once.  Must be at least 1.  Defaults to Environment.ProcessorCount.</param>
         ''' <returns></returns>
-        Public Async Function RunForEach(Of T)(DelegateFunction As ForEachItemAsync(Of T), Collection As IEnumerable(Of T), Optional BatchSize As Integer? = Nothing) As Task
+        Public Async Function RunForEach(Of T)(DelegateFunction As ForEachItemAsync(Of T), Collection As IEnumerable(Of T), Optional BatchSize As Integer? = Nothing, Optional RunSynchronously As Boolean = False) As Task
             If Not BatchSize.HasValue OrElse BatchSize < 1 Then
                 BatchSize = Environment.ProcessorCount
             End If
@@ -101,7 +101,11 @@ Namespace Utilities
                                              OperationsCompleted += 1
                                              runningTasks -= 1
                                          End Function)
-                    taskList.Add(tTask)
+                    If RunSynchronously Then
+                        Await tTask
+                    Else
+                        taskList.Add(tTask)
+                    End If
                 Else
                     'Then we must wait for another task to complete
                     If taskList.Count > 0 Then

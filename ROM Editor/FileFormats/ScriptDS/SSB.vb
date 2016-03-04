@@ -56,7 +56,10 @@ Namespace FileFormats.ScriptDS
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Me.Filename = Filename
-            Using f As New GenericFile(Filename, True)
+            Using f As New GenericFile
+                f.IsReadOnly = True
+                f.OpenFile(Filename)
+
                 f.Position = 0
                 Dim numConstants As Integer = f.NextUInt16
                 Dim numStrings As Integer = f.NextUInt16

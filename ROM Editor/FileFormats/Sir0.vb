@@ -128,15 +128,6 @@ Namespace FileFormats
             ResizeFileOnLoad = True
             RelativePointers = New List(Of Integer)
         End Sub
-
-        Public Sub New(RawData As Byte())
-            MyBase.New(RawData)
-            ProcessData()
-        End Sub
-
-        Public Sub New(Filename As String, OpenReadOnly As Boolean)
-            MyBase.New(Filename, OpenReadOnly)
-        End Sub
     End Class
 End Namespace
 

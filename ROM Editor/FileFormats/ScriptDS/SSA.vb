@@ -18,7 +18,10 @@ Namespace FileFormats.ScriptDS
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Me.Filename = Filename
 
-            Using f As New GenericFile(Filename, True)
+            Using f As New GenericFile
+                f.IsReadOnly = True
+                f.OpenFile(Filename)
+
                 f.Position = 0
                 Dim numGroups = f.NextUInt16
                 Dim dataOffset = f.NextUInt16 'Length of non-groups/start of groups (Z)

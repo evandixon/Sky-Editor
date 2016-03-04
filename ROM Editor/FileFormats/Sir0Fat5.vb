@@ -93,11 +93,6 @@ Namespace FileFormats
             FileData = New List(Of FileInfo)
         End Sub
 
-        Public Sub New(RawData As Byte())
-            MyBase.New(RawData)
-            ProcessData()
-        End Sub
-
     End Class
 End Namespace
 

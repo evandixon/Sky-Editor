@@ -9,7 +9,7 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item As Roms.GenericNDSRom In Targets
-                Await item.ExtractFiles("extractNDStest")
+                Await item.Unpack("extractNDStest")
             Next
         End Function
         Public Sub New()

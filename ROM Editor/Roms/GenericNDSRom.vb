@@ -9,79 +9,23 @@ Namespace Roms
         Implements SkyEditorBase.Interfaces.iDetectableFileType
         Implements iPackedRom
 
-#Region "Constructors"
-        Sub New()
-            MyBase.New()
-            _unpackTask = New Task(Of Boolean)(Function()
-                                                   Return True
-                                               End Function)
-            _unpackTask.Start()
-        End Sub
-
-        Sub New(Filename As String)
-            MyBase.New(Filename, True)
-            _unpackTask = Nothing
-        End Sub
-        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
-            _unpackTask = Nothing
-        End Sub
-#End Region
-
-#Region "GenericSave Stuff"
-        'Public Overrides Function DefaultSaveID() As String
-        '    Return GameStrings.GenericNDSRom
-        'End Function
         Public Overrides Function DefaultExtension() As String
             Return "*.nds"
         End Function
+
+#Region "Constructors"
+        Sub New()
+            MyBase.New()
+            Me.EnableInMemoryLoad = True
+        End Sub
+
+        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+            MyBase.OpenFile(Filename)
+        End Sub
 #End Region
 
+
 #Region "ROM Stuff"
-        Private _unpackTask As Task(Of Boolean)
-        Public ReadOnly Property IsUnpacked
-            Get
-                Return _unpackTask IsNot Nothing AndAlso _unpackTask.IsCompleted
-            End Get
-        End Property
-        Public ReadOnly Property IsUnpacking
-            Get
-                Return _unpackTask IsNot Nothing
-            End Get
-        End Property
-        Public Async Function EnsureUnpacked() As Task(Of Boolean)
-            If Not IsUnpacked Then
-                If Not IsUnpacking Then
-                    _unpackTask = Unpack()
-                End If
-                Return Await _unpackTask
-            Else
-                Return True
-            End If
-        End Function
-        Public Async Function Unpack(Optional DestinationDirectory As String = Nothing) As Task Implements iPackedRom.Unpack
-            If IsUnpacking Then
-                PluginHelper.Writeline("Something failed, unpack called when currently unpacking.")
-            End If
-            Dim romDirectory As String
-            If DestinationDirectory Is Nothing Then
-                romDirectory = IO.Path.Combine(PluginHelper.GetResourceDirectory, Name)
-            Else
-                romDirectory = DestinationDirectory
-            End If
-
-            If IO.Directory.Exists(romDirectory) Then
-                Try
-                    IO.Directory.Delete(romDirectory, True)
-                Catch ex As IOException
-                    PluginHelper.Writeline(ex.ToString)
-                End Try
-            End If
-
-            IO.Directory.CreateDirectory(romDirectory)
-            Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
-                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, romDirectory))
-        End Function
         Public Async Function RePack(NewFileName As String) As Task Implements iPackedRom.RePack
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
             If Not IO.Directory.Exists(romDirectory) Then
@@ -94,17 +38,8 @@ Namespace Roms
             Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                                   String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, Name)))
         End Function
-        ''' <summary>
-        ''' Repacks the rom and runs it.  Running only works if .nds files are associated with an emulator.
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public Async Function RunRom() As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
-            Await RePack(romDirectory & "\" & Name & ".nds")
-            PluginHelper.Writeline("Running ROM...")
-            Process.Start(romDirectory & Name & ".nds")
-        End Function
-        Public Overrides Async Sub Save()
+
+        <Obsolete> Public Overrides Async Sub Save()
             Dim romDirectory As String = PluginHelper.GetResourceDirectory
             Await RePack(romDirectory & "\" & Name & ".nds")
         End Sub
@@ -485,34 +420,98 @@ Namespace Roms
             End While
             Return subTables
         End Function
-        Public Async Function ExtractFiles(TargetDir As String) As Task
+        ''' <summary>
+        ''' Extracts the files contained within the ROMs.
+        ''' Extractions either run synchronously or asynchrounously, depending on the value of IsThreadSafe.
+        ''' </summary>
+        ''' <param name="TargetDir">Directory to store the extracted files.</param>
+        ''' <returns></returns>
+        <Obsolete("Incomplete.")> Public Async Function Unpack(TargetDir As String) As Task Implements iPackedRom.Unpack
             Dim fat = GetFAT()
+
+            'Set up extraction dependencies
             CurrentExtractProgress = 0
             CurrentExtractMax = fat.Count
             SetLoadingExtractProgress = True
             ExtractionTasks = New ConcurrentBag(Of Task)
-            StartExtractFiles(fat, GetFNT, TargetDir)
+
+            'Ensure directory exists
+            If Not IO.Directory.Exists(TargetDir) Then
+                IO.Directory.CreateDirectory(TargetDir)
+            End If
+
+            'Start extracting
+            '-Header
+            Dim headerTask = Task.Run(New Action(Sub()
+                                                     IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "header.bin"), RawData(0, &H200))
+                                                 End Sub))
+            If Me.IsThreadSafe Then
+                ExtractionTasks.Add(headerTask)
+            Else
+                Await headerTask
+            End If
+
+            '-Arm9
+            Dim arm9Task = Task.Run(New Action(Sub()
+                                                   IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm9.bin"), RawData(Me.Arm9RomOffset, Me.Arm9Size))
+                                               End Sub))
+            If Me.IsThreadSafe Then
+                ExtractionTasks.Add(arm9Task)
+            Else
+                Await arm9Task
+            End If
+
+            '-Arm9
+            Dim arm7Task = Task.Run(New Action(Sub()
+                                                   IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm7.bin"), RawData(Me.Arm7RomOffset, Me.Arm7Size))
+                                               End Sub))
+            If Me.IsThreadSafe Then
+                ExtractionTasks.Add(arm7Task)
+            Else
+                Await arm7Task
+            End If
+
+            'Todo: extract arm9 overlay table (y9.bin)
+            'Todo: extract arm7 overlay table (y7.bin)
+            'Todo: extract overlays
+            'Todo: extract banner.bin
+            Await StartExtractFiles(fat, GetFNT, TargetDir)
+            'Wait for everything to finish
             Await Task.WhenAll(ExtractionTasks)
             PluginHelper.SetLoadingStatusFinished()
         End Function
-        Private Sub StartExtractFiles(FAT As List(Of FileAllocationEntry), Root As FilenameTable, TargetDir As String)
+        ''' <summary>
+        ''' Queues file extraction tasks if the file is thread safe, otherwise, extracts files one at a time.
+        ''' </summary>
+        ''' <param name="FAT"></param>
+        ''' <param name="Root"></param>
+        ''' <param name="TargetDir"></param>
+        ''' <returns></returns>
+        Private Async Function StartExtractFiles(FAT As List(Of FileAllocationEntry), Root As FilenameTable, TargetDir As String) As Task
             Dim dest As String = IO.Path.Combine(TargetDir, Root.Name)
             Dim f As New SkyEditorBase.Utilities.AsyncFor
-            ExtractionTasks.Add(f.RunForEach(Sub(Item As FilenameTable)
-                                                 If Item.IsDirectory Then
-                                                     StartExtractFiles(FAT, Item, dest)
-                                                 Else
-                                                     Dim entry = FAT(Item.FileIndex)
-                                                     Dim parentDir = IO.Path.GetDirectoryName(IO.Path.Combine(dest, Item.Name))
-                                                     If Not IO.Directory.Exists(parentDir) Then
-                                                         IO.Directory.CreateDirectory(parentDir)
-                                                     End If
-                                                     IO.File.WriteAllBytes(IO.Path.Combine(dest, Item.Name), RawData(entry.Offset, entry.EndAddress - entry.Offset))
-                                                     Console.WriteLine("Extracted " & IO.Path.Combine(dest, Item.Name))
-                                                     System.Threading.Interlocked.Increment(CurrentExtractProgress)
-                                                 End If
-                                             End Sub, Root.Children))
-        End Sub
+            Dim task = (f.RunForEach(Async Function(Item As FilenameTable) As Task
+                                         If Item.IsDirectory Then
+                                             Await StartExtractFiles(FAT, Item, dest)
+                                         Else
+                                             Dim entry = FAT(Item.FileIndex)
+                                             Dim parentDir = IO.Path.GetDirectoryName(IO.Path.Combine(dest, Item.Name))
+                                             If Not IO.Directory.Exists(parentDir) Then
+                                                 IO.Directory.CreateDirectory(parentDir)
+                                             End If
+                                             IO.File.WriteAllBytes(IO.Path.Combine(dest, Item.Name), RawData(entry.Offset, entry.EndAddress - entry.Offset))
+                                             Console.WriteLine("Extracted " & IO.Path.Combine(dest, Item.Name))
+                                             System.Threading.Interlocked.Increment(CurrentExtractProgress)
+                                         End If
+                                     End Function, Root.Children, Integer.MaxValue, Not Me.IsThreadSafe))
+            If Me.IsThreadSafe Then
+                'Then let it keep running while we go and add more
+                ExtractionTasks.Add(task)
+            Else
+                'If it's not thread safe, then we must wait until it's finished, in order to avoid weirdness.
+                Await task
+            End If
+        End Function
         Private Property CurrentExtractProgress As Integer
             Get
                 Return _extractProgress
@@ -542,7 +541,11 @@ Namespace Roms
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
-                    If _unpackTask IsNot Nothing Then _unpackTask.Dispose()
+                    If ExtractionTasks IsNot Nothing Then
+                        For Each item In ExtractionTasks
+                            item.Dispose()
+                        Next
+                    End If
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

@@ -29,8 +29,9 @@ Namespace FileFormats
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Const entryLength = &HC
             Const tableLength = &H4C0
-            Using f As New GenericFile(Filename, True)
-
+            Using f As New GenericFile
+                f.IsReadOnly = True
+                f.OpenFile(Filename)
                 For tableCount = 0 To (f.Length / tableLength)
                     Dim localEntries As New List(Of ExperienceEntry)
                     For entryCount = 0 To 99 '100 entries

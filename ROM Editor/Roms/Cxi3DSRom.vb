@@ -22,8 +22,5 @@ Namespace Roms
             MyBase.New
         End Sub
 
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-        End Sub
     End Class
 End Namespace

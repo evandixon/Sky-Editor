@@ -124,7 +124,9 @@ Namespace FileFormats
 
             'Todo: use another class for another sir0 type
             'This code is for sir0 type 5
-            Header = New Sir0Fat5(Me.RawData(sir0Offset, sir0Length))
+            Header = New Sir0Fat5
+            Header.EnableInMemoryLoad = True
+            Header.CreateFile("", Me.RawData(sir0Offset, sir0Length))
         End Sub
 
         Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task

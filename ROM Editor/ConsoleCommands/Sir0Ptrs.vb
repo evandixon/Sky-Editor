@@ -8,7 +8,9 @@ Namespace ConsoleCommands
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
                     Dim pointers As New Dictionary(Of UInt32, UInt32)
-                    Using f As New FileFormats.Sir0(Arguments(0), True)
+                    Using f As New FileFormats.Sir0
+                        f.IsReadOnly = True
+                        f.OpenFile(Arguments(0))
                         Dim offset As UInt32 = 0
                         For Each item In f.RelativePointers
                             offset += item

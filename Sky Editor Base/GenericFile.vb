@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports System.Threading.Tasks
+Imports Microsoft.VisualBasic.Devices
 Imports SkyEditorBase.Interfaces
 Public Class GenericFile
     Implements IDisposable
@@ -17,41 +18,69 @@ Public Class GenericFile
         Get
             Return _openReadOnly
         End Get
-        Protected Set(ByVal value As Boolean)
+        Set(ByVal value As Boolean)
             _openReadOnly = value
         End Set
     End Property
     Dim _openReadOnly As Boolean
 
+    ''' <summary>
+    ''' Determines whether or not the file will be loaded into memory completely, or located on disk.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property EnableInMemoryLoad As Boolean
+
+    Public Property EnableShadowCopy As Boolean
+        Get
+            If _enableShadowCopy.HasValue Then
+                Return _enableShadowCopy
+            Else
+                Return Not IsReadOnly
+            End If
+        End Get
+        Set(value As Boolean)
+            _enableShadowCopy = value
+        End Set
+    End Property
+    Dim _enableShadowCopy As Boolean?
+
+    Public ReadOnly Property IsThreadSafe As Boolean
+        Get
+            Return InMemoryFile IsNot Nothing
+        End Get
+    End Property
+
+
     Private Property InMemoryFile As Byte()
 
-#Region "Constructors"
-
-    Public Sub New(Filename As String, OpenReadOnly As Boolean)
-        _openReadOnly = OpenReadOnly
-        OpenFile(Filename)
-    End Sub
     Public Sub New()
         _openReadOnly = False
+        EnableInMemoryLoad = False 'This is an opt-in setting
+        _enableShadowCopy = Nothing
     End Sub
-    <Obsolete> Public Sub New(RawData As Byte())
-        Me.New
-        CreateFile("")
-        Length = RawData.Length
-        Me.RawData = RawData
-    End Sub
-#End Region
+
 
     ''' <summary>
     ''' Creates a new file with the given name.
     ''' </summary>
     ''' <param name="Name">Name (not path) of the file.  Include the extension if applicable.</param>
     Public Overridable Sub CreateFile(Name As String) 'Implements iCreatableFile.CreateFile
+        CreateFile(Name, {})
+    End Sub
+
+    Public Overridable Sub CreateFile(Name As String, FileContents As Byte())
+        'Generate a temporary filename
         _tempname = Guid.NewGuid.ToString()
-        IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), {})
-        Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
         _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
-        Me.OriginalFilename = String.Empty
+        'Load the file if applicable
+        If EnableInMemoryLoad Then
+            Me.InMemoryFile = FileContents
+        Else
+            IO.File.WriteAllBytes(_tempFilename, FileContents)
+            'The file reader will be initialized when it's first needed
+        End If
+        Me.Filename = _tempFilename
+        Me.OriginalFilename = _tempFilename
         Me.Name = Name
     End Sub
 
@@ -60,29 +89,33 @@ Public Class GenericFile
     ''' </summary>
     ''' <param name="Filename"></param>
     Public Overridable Sub OpenFile(Filename As String) ' Implements iOpenableFile.OpenFile
-        If SettingsManager.Instance.Settings.ExtravagantRamMode Then
+        Dim info As New IO.FileInfo(Filename)
+        If (EnableInMemoryLoad AndAlso (New ComputerInfo).AvailablePhysicalMemory > (info.Length + 500 * 1024 * 1024)) Then
+            'Load the file into memory if it's enabled and it will fit into RAM, with 500MB left over, just in case.
             Me.OriginalFilename = Filename
             Me.Filename = Filename
             InMemoryFile = IO.File.ReadAllBytes(Filename)
         Else
-            If Not IsReadOnly Then
+            'The file will be read from disk.  The only concern is whether or not we want to make a shadow copy.
+            If EnableShadowCopy Then
                 _tempname = Guid.NewGuid.ToString()
+                _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
                 Me.OriginalFilename = Filename
                 If IO.File.Exists(Filename) Then
-                    IO.File.Copy(Filename, PluginHelper.GetResourceName(_tempname & ".tmp"))
+                    IO.File.Copy(Filename, _tempFilename)
                 Else
-                    IO.File.WriteAllText(PluginHelper.GetResourceName(_tempname & ".tmp"), "")
+                    'If the file doesn't exist, we'll create a file.
+                    IO.File.WriteAllBytes(_tempFilename, {})
                 End If
-                _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
-                Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
+                Me.Filename = _tempFilename
             Else
                 Me.OriginalFilename = Filename
                 Me.Filename = Filename
             End If
+            'The file stream will be initialized when it's needed.
         End If
     End Sub
 
-#Region "GenericFile Support"
     Public Property Filename As String
     Public Property OriginalFilename As String Implements iOnDisk.Filename
     Public Property Name As String Implements iNamed.Name
@@ -101,7 +134,6 @@ Public Class GenericFile
     Public Overridable Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
         Return ""
     End Function
-#End Region
 
 #Region "Properties"
     Protected ReadOnly Property FileReader As IO.Stream

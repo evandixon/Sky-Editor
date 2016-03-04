@@ -64,29 +64,8 @@ Namespace FileFormats
 
             MyBase.OpenFile(Filename)
         End Sub
-        Public Sub New(RawData As Byte())
-            MyBase.New(RawData)
-            'Throw New NotImplementedException
-            '_tempname = Guid.NewGuid.ToString()
-            'IO.File.WriteAllBytes(PluginHelper.GetResourceName(_tempname & ".tmp"), RawData)
-            'Me.Filename = PluginHelper.GetResourceName(_tempname & ".tmp")
-            'Me.OriginalFilename = Filename
+        Public Sub New()
+
         End Sub
-        ' ''' <summary>
-        ' ''' Creates a new instance of the decompressed file, given the decompressed data
-        ' ''' </summary>
-        ' ''' <param name="OriginalFilename"></param>
-        ' ''' <remarks></remarks>
-        'Protected Sub New(OriginalFilename As String)
-        '    Me.RawData = IO.File.ReadAllBytes(OriginalFilename.Replace("/", "\").Replace(".bgp", ".decompressed").Replace(IO.Path.GetDirectoryName(OriginalFilename), IO.Path.GetDirectoryName(OriginalFilename) & "\Decompressed"))
-        'End Sub
-        ' ''' <summary>
-        ' ''' Creates a new instance of the decompressed file, but it must already be decompressed
-        ' ''' </summary>
-        ' ''' <param name="RawData"></param>
-        ' ''' <remarks></remarks>
-        'Public Sub New(RawData As Byte())
-        '    Me.RawData = RawData
-        'End Sub
     End Class
 End Namespace

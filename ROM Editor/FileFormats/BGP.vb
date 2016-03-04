@@ -303,7 +303,9 @@ Namespace FileFormats
             For Each b In chunks
                 FileOutput.Add(b)
             Next
-            Return New BGP(FileOutput.ToArray)
+            Dim out As New BGP
+            out.CreateFile("", FileOutput.ToArray)
+            Return out
         End Function
 
         Dim _image As Bitmap
@@ -378,12 +380,8 @@ Namespace FileFormats
             MyBase.New(Filename)
         End Sub
 
-        Public Sub New(RawData As Byte())
-            MyBase.New(RawData)
-        End Sub
-
         Public Sub New()
-            MyBase.New({})
+
         End Sub
     End Class
 End Namespace

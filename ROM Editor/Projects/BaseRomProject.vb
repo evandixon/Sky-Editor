@@ -98,19 +98,24 @@ Namespace Projects
             PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Unpacking..."))
             Select Case mode
                 Case "nds"
-                    Dim nds As New Roms.GenericNDSRom(e.FullFilename)
+                    Dim nds As New Roms.GenericNDSRom()
+                    nds.OpenFile(e.FullFilename)
                     Await nds.Unpack(GetRawFilesDir)
                     Setting("System") = "NDS"
                     Setting("GameCode") = nds.GameCode
                     nds.Dispose()
                 Case "3ds"
-                    Dim threeDS As New Roms.Generic3DSRom(e.FullFilename)
+                    Dim threeDS As New Roms.Generic3DSRom
+                    threeDS.IsReadOnly = True
+                    threeDS.OpenFile(e.FullFilename)
                     Await threeDS.Unpack(GetRawFilesDir)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID
                     threeDS.Dispose()
                 Case "cxi"
-                    Dim threeDS As New Roms.Cxi3DSRom(e.FullFilename)
+                    Dim threeDS As New Roms.Cxi3DSRom
+                    threeDS.IsReadOnly = True
+                    threeDS.OpenFile(e.FullFilename)
                     Await threeDS.Unpack(GetRawFilesDir)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID

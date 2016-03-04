@@ -13,7 +13,9 @@ Namespace FileFormats
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Dim total As New Text.StringBuilder
-            Using f As New GenericFile(Filename, True)
+            Using f As New GenericFile
+                f.IsReadOnly = True
+                f.OpenFile(Filename)
                 Dim subHeaderPointer = f.Int32(4)
                 Dim stringPointerOffset = f.Int32(subHeaderPointer + 4)
                 Dim numEntries = f.Int32(subHeaderPointer + 8) * 4
