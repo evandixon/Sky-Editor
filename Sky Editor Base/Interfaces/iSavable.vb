@@ -3,7 +3,6 @@
     ''' Marks a class that supports saving.
     ''' </summary>
     Public Interface iSavable
-        Function DefaultExtension() As String
         ''' <summary>
         ''' Saves the class to the last filename.
         ''' </summary>

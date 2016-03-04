@@ -110,7 +110,7 @@ Namespace FileFormats
         End Function
 
         Public Sub New()
-            MyBase.New(False)
+            MyBase.New()
         End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile

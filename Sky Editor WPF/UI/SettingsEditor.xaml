@@ -11,6 +11,7 @@
         <CheckBox x:Name="chbDebugLanguagePlaceholders" Content="Enable Development Language Placeholders" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="chbVerbose" Content="Enable Verbose Output" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="chbDevelopment" Content="Enable Development Mode" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chbRAM" Content="Enable Extravagant RAM Mode (Experimental and Unstable)" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label" Content="Changes will not be applied until the program has been restarted." HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

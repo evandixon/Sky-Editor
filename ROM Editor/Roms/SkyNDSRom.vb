@@ -30,10 +30,10 @@ Namespace Roms
             Await EnsureUnpacked()
             Return New LanguageString(PluginHelper.GetResourceName(Name & "\data\message\text_e.str"))
         End Function
-        Public Async Function GetItemP() As Task(Of item_p)
-            Await EnsureUnpacked()
-            Return New item_p(PluginHelper.GetResourceName(Name & "\data\balance\item_p.bin"))
-        End Function
+        'Public Async Function GetItemP() As Task(Of item_p)
+        '    Await EnsureUnpacked()
+        '    Return New item_p(PluginHelper.GetResourceName(Name & "\data\balance\item_p.bin"))
+        'End Function
         Public Async Function GetWazaP() As Task(Of waza_p)
             Await EnsureUnpacked()
             Return New waza_p(PluginHelper.GetResourceName(Name & "/data/balance/waza_p.bin"))

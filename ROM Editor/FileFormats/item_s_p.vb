@@ -37,10 +37,6 @@ Namespace FileFormats
 
         Public Property Items As List(Of Item)
 
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-            InitItems()
-        End Sub
         Private Sub InitItems()
             Items = New List(Of Item)
             If Length >= 16 Then

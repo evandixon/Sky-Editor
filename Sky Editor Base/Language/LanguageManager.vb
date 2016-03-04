@@ -54,9 +54,6 @@ Namespace Language
         '    f.Save(Filename)
         '    RaiseEvent FileSaved(Me, New EventArgs)
         'End Sub
-        Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
-            Return ".skylangpack"
-        End Function
 #End Region
 
         Public Property Languages As Dictionary(Of String, LanguageFile)

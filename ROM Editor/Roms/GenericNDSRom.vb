@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Collections.Concurrent
+Imports System.IO
 Imports SkyEditorBase
 
 Namespace Roms
@@ -373,6 +374,47 @@ Namespace Roms
             End Sub
         End Class
 
+        Private Class DirectoryMainTable
+            Public Property SubTableOffset As Integer
+            Public Property FirstSubTableFileID As UInt16
+            ''' <summary>
+            ''' If this is the root directory, will contain the number of child directories.
+            ''' Otherwise, the ID of the parent directory.
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property ParentDir As UInt16
+            Public Sub New(RawData As Byte())
+                SubTableOffset = BitConverter.ToUInt32(RawData, 0)
+                FirstSubTableFileID = BitConverter.ToUInt16(RawData, 4)
+                ParentDir = BitConverter.ToUInt16(RawData, 6)
+            End Sub
+        End Class
+
+        Private Class FNTSubTable
+            Public Property Length As Byte
+            Public Property Name As String
+            Public Property SubDirectoryID As UInt16 'Only for directories
+            Public Property ParentFileID As UInt16
+        End Class
+
+        Private Class FilenameTable
+            Public Property Name As String
+            Public Property FileIndex As Integer
+            Public ReadOnly Property IsDirectory As Boolean
+                Get
+                    Return FileIndex < 0
+                End Get
+            End Property
+            Public Property Children As List(Of FilenameTable)
+            Public Overrides Function ToString() As String
+                Return Name
+            End Function
+            Public Sub New()
+                FileIndex = -1
+                Children = New List(Of FilenameTable)
+            End Sub
+        End Class
+
         Private Function GetFAT() As List(Of FileAllocationEntry)
             Dim out As New List(Of FileAllocationEntry)
             For count = FileAllocationTableOffset To FileAllocationTableOffset + FileAllocationTableSize - 1 Step 8
@@ -384,6 +426,111 @@ Namespace Roms
             Return out
         End Function
 
+        Private Function GetFNT() As FilenameTable
+            Dim root As New DirectoryMainTable(RawData(Me.FilenameTableOffset, 8))
+            Dim rootDirectories As New List(Of DirectoryMainTable)
+            'In the root entry, ParentDir means number of directories
+            For count = 8 To root.SubTableOffset - 1 Step 8
+                rootDirectories.Add(New DirectoryMainTable(RawData(Me.FilenameTableOffset + count, 8)))
+            Next
+            'Todo: read the relationship between directories and files
+            Dim out As New FilenameTable
+            out.Name = "Data"
+            BuildFNT(out, root, rootDirectories)
+            Return out
+        End Function
+        Private Sub BuildFNT(ParentFNT As FilenameTable, root As DirectoryMainTable, Directories As List(Of DirectoryMainTable))
+            For Each item In ReadFNTSubTable(root.SubTableOffset, root.FirstSubTableFileID)
+                Dim child As New FilenameTable With {.Name = item.Name}
+                ParentFNT.Children.Add(child)
+                If item.Length > 128 Then
+                    BuildFNT(child, Directories((item.SubDirectoryID And &HFFF) - 1), Directories)
+                Else
+                    child.FileIndex = item.ParentFileID
+                End If
+            Next
+        End Sub
+        Private Function ReadFNTSubTable(RootSubTableOffset As Integer, ByVal ParentFileID As Integer) As List(Of FNTSubTable)
+            Dim subTables As New List(Of FNTSubTable)
+            Dim offset = RootSubTableOffset + Me.FilenameTableOffset
+            Dim length As Integer = RawData(offset)
+            While length > 0
+                If length > 128 Then
+                    'Then it's a sub directory
+                    'Read the string
+                    Dim buffer As Byte() = RawData(offset + 1, length - 128)
+                    Dim s = Text.Encoding.ASCII.GetString(buffer)
+                    'Read sub directory ID
+                    Dim subDirID As UInt16 = Me.UInt16(offset + 1 + length - 128)
+                    'Add the result to the list
+                    subTables.Add(New FNTSubTable With {.Length = length, .Name = s, .SubDirectoryID = subDirID})
+                    'Increment the offset
+                    offset += length - 128 + 1 + 2
+                ElseIf length < 128 Then
+                    'Then it's a file
+                    'Read the string
+                    Dim buffer As Byte() = RawData(offset + 1, length)
+                    Dim s = Text.Encoding.ASCII.GetString(buffer)
+                    'Add the result to the list
+                    subTables.Add(New FNTSubTable With {.Length = length, .Name = s, .ParentFileID = ParentFileID})
+                    ParentFileID += 1
+                    'Increment the offset
+                    offset += length + 1
+                Else
+                    'Reserved.  I'm not sure what to do here.
+                    Throw New NotSupportedException("Subtable length of 0x80 not supported.")
+                End If
+
+                length = RawData(offset)
+            End While
+            Return subTables
+        End Function
+        Public Async Function ExtractFiles(TargetDir As String) As Task
+            Dim fat = GetFAT()
+            CurrentExtractProgress = 0
+            CurrentExtractMax = fat.Count
+            SetLoadingExtractProgress = True
+            ExtractionTasks = New ConcurrentBag(Of Task)
+            StartExtractFiles(fat, GetFNT, TargetDir)
+            Await Task.WhenAll(ExtractionTasks)
+            PluginHelper.SetLoadingStatusFinished()
+        End Function
+        Private Sub StartExtractFiles(FAT As List(Of FileAllocationEntry), Root As FilenameTable, TargetDir As String)
+            Dim dest As String = IO.Path.Combine(TargetDir, Root.Name)
+            Dim f As New SkyEditorBase.Utilities.AsyncFor
+            ExtractionTasks.Add(f.RunForEach(Sub(Item As FilenameTable)
+                                                 If Item.IsDirectory Then
+                                                     StartExtractFiles(FAT, Item, dest)
+                                                 Else
+                                                     Dim entry = FAT(Item.FileIndex)
+                                                     Dim parentDir = IO.Path.GetDirectoryName(IO.Path.Combine(dest, Item.Name))
+                                                     If Not IO.Directory.Exists(parentDir) Then
+                                                         IO.Directory.CreateDirectory(parentDir)
+                                                     End If
+                                                     IO.File.WriteAllBytes(IO.Path.Combine(dest, Item.Name), RawData(entry.Offset, entry.EndAddress - entry.Offset))
+                                                     Console.WriteLine("Extracted " & IO.Path.Combine(dest, Item.Name))
+                                                     System.Threading.Interlocked.Increment(CurrentExtractProgress)
+                                                 End If
+                                             End Sub, Root.Children))
+        End Sub
+        Private Property CurrentExtractProgress As Integer
+            Get
+                Return _extractProgress
+            End Get
+            Set(value As Integer)
+                _extractProgress = value
+                If SetLoadingExtractProgress Then
+                    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Extracting NDS ROM... ({0} of {1})"), value, CurrentExtractMax), GetExtractionProgress)
+                End If
+            End Set
+        End Property
+        Dim _extractProgress As Integer
+        Private Property CurrentExtractMax As Integer
+        Private Property SetLoadingExtractProgress As Boolean
+        Private Property ExtractionTasks As ConcurrentBag(Of Task)
+        Public Function GetExtractionProgress() As Single
+            Return CurrentExtractProgress / CurrentExtractMax
+        End Function
 #End Region
 
 #Region "IDisposable Support"

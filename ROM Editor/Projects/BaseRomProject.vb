@@ -71,7 +71,8 @@ Namespace Projects
             End If
 
             If mode Is Nothing Then
-                Using f As New GenericFile(e.FullFilename)
+                Using f As New GenericFile
+                    f.OpenFile(e.FullFilename)
                     'Then we have to detect the ROM type
                     Dim n As New Roms.GenericNDSRom
                     If n.IsFileOfType(f) Then

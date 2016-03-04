@@ -84,6 +84,8 @@ Public Class PluginDefinition
         Manager.RegisterFileTypeDetector(AddressOf FileFormatDetector)
 
         Manager.RegisterTypeRegister(GetType(GenericModProject))
+        Manager.RegisterTypeRegister(GetType(Flashcart.GenericFlashcart))
+        Manager.RegisterTypeRegister(GetType(Flashcart.FileCollection))
 
         'Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
         'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)

@@ -6,6 +6,7 @@
         ''' </summary>
         ''' <param name="Filename"></param>
         Overloads Sub Save(Filename As String)
+        Function DefaultExtension() As String
     End Interface
 
 End Namespace

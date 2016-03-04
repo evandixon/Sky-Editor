@@ -640,7 +640,7 @@ Public Class Solution
         Return PluginHelper.GetLanguageItem(Me.GetType.FullName)
     End Function
 
-    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+    Public Function DefaultExtension() As String 'Implements ISavableAs.DefaultExtension
         Return ".skysln"
     End Function
 

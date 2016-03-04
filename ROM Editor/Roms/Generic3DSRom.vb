@@ -63,7 +63,7 @@ Namespace Roms
         End Function
 
         Public Sub New()
-            MyBase.New(False)
+            MyBase.New()
         End Sub
 
         Public Sub New(Filename As String)

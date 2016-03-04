@@ -263,7 +263,7 @@ Namespace Saves
 
             Public Property Filename As String Implements iOnDisk.Filename
 
-            Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+            Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
                 Return ".tdpkm"
             End Function
 

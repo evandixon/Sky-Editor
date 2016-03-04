@@ -2,6 +2,7 @@
 Imports System.ComponentModel
 Imports System.Timers
 Imports System.Windows.Controls
+Imports System.Windows.Forms
 Imports ROMEditor.FileFormats
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
@@ -157,4 +158,11 @@ Public Class MessageBinEditor
         End If
     End Sub
 
+    Private Sub btnExport_Click(sender As Object, e As RoutedEventArgs) Handles btnExport.Click
+        Dim f As New SaveFileDialog
+        f.Filter = "HTML Files (*.htm)|*.htm|All Files (*.*)|*.*"
+        'If f.ShowDialog = DialogResult.OK Then
+
+        'End If
+    End Sub
 End Class

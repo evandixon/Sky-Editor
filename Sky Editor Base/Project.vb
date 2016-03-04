@@ -723,7 +723,7 @@ Public Class Project
     End Function
 #End Region
 
-    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+    Public Function DefaultExtension() As String ' Implements iSavableAs.DefaultExtension
         Return ".skyproj"
     End Function
 

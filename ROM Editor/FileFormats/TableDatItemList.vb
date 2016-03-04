@@ -12,10 +12,6 @@ Namespace FileFormats
             End Sub
         End Structure
         Public Property Items As List(Of TableDatItem)
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-            InitItems()
-        End Sub
         Private Sub InitItems()
             Items = New List(Of TableDatItem)
             If Length >= 2 Then

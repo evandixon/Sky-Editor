@@ -15,6 +15,7 @@ Namespace UI
             chbDevelopment.IsChecked = GetEditingObject(Of SettingsManager).Settings.DevelopmentMode
             chbDebugLanguagePlaceholders.IsChecked = GetEditingObject(Of SettingsManager).Settings.DebugLanguagePlaceholders
             chbVerbose.IsChecked = GetEditingObject(Of SettingsManager).Settings.VerboseOutput
+            chbRAM.IsChecked = GetEditingObject(Of SettingsManager).Settings.ExtravagantRamMode
             IsModified = False
         End Sub
 
@@ -23,9 +24,10 @@ Namespace UI
             GetEditingObject(Of SettingsManager).Settings.CurrentLanguage = comboBox.SelectedItem
             GetEditingObject(Of SettingsManager).Settings.VerboseOutput = chbVerbose.IsChecked
             GetEditingObject(Of SettingsManager).Settings.DevelopmentMode = chbDevelopment.IsChecked
+            GetEditingObject(Of SettingsManager).Settings.ExtravagantRamMode = chbRAM.IsChecked
         End Sub
 
-        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked
+        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked, chbRAM.Checked
             IsModified = True
         End Sub
 

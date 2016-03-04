@@ -115,6 +115,15 @@
     <Compile Include="FileFormats\ScriptDS\SSA.vb" />
     <Compile Include="FileFormats\Smdh.vb" />
     <Compile Include="FileFormats\ScriptDS\SSB.vb" />
+    <Compile Include="Flashcart\FileCollection.vb" />
+    <Compile Include="Flashcart\FileCollectionContainer.vb" />
+    <Compile Include="Flashcart\FlashcartInfoFile.vb" />
+    <Compile Include="Flashcart\FlashcartManager.vb" />
+    <Compile Include="Flashcart\FlashcartNDSRom.vb" />
+    <Compile Include="Flashcart\GenericFlashcart.vb" />
+    <Compile Include="Flashcart\NDSFlashcart.vb" />
+    <Compile Include="Flashcart\NDSRomCollection.vb" />
+    <Compile Include="MenuActions\ExtractNDS.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />

@@ -274,7 +274,7 @@ Namespace Saves
                 Return Lists.SkyLocations
             End Function
 
-            Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+            Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
                 Return ".skypkm"
             End Function
 

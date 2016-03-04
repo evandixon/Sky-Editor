@@ -158,10 +158,6 @@ Namespace FileFormats
         Public Sub New()
             MyBase.New
         End Sub
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-            ProcessRawData()
-        End Sub
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             ProcessRawData()

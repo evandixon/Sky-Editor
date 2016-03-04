@@ -26,5 +26,6 @@
                 <FileFormats:MessageBinStringEntry/>
             </DataGrid.DataContext>
         </DataGrid>
+        <Button x:Name="btnExport" Content="Export" HorizontalAlignment="Left" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="75" Visibility="Collapsed"/>
     </Grid>
 </sky:ObjectControl>

@@ -283,7 +283,7 @@ Namespace FileFormats.ScriptDS
             Return out
         End Function
 
-        Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+        Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
             Return ".ssb"
         End Function
 

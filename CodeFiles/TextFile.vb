@@ -59,7 +59,7 @@ Public Class TextFile
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
-    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+    Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
         Return ".txt"
     End Function
 End Class

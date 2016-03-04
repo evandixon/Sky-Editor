@@ -12,7 +12,8 @@ Public Class BinaryFile
     End Sub
 
     Public Sub New(Filename As String)
-        MyBase.New(Filename)
+        MyBase.New()
+        OpenFile(Filename)
     End Sub
 
     Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile

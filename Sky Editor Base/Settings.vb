@@ -1,6 +1,6 @@
 ﻿Imports SkyEditorBase.Interfaces
 Public Class SettingsManager
-    Implements Interfaces.ISavableAs
+    Implements Interfaces.iSavable
     Implements iModifiable
     Implements iNamed
     Friend Class SettingsValue
@@ -138,6 +138,23 @@ Public Class SettingsManager
             End Set
         End Property
 
+        ''' <summary>
+        ''' If this is enabled, things usually read from file streams will be loaded into RAM.
+        ''' This may increase performance, while eating up loads of RAM.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property ExtravagantRamMode As Boolean
+            Get
+                If Setting("ExtravagantRamMode") Is Nothing Then
+                    Setting("ExtravagantRamMode") = False
+                End If
+                Return Setting("ExtravagantRamMode")
+            End Get
+            Set(value As Boolean)
+                Setting("ExtravagantRamMode") = value
+            End Set
+        End Property
+
         Friend Function Serialize() As String
             Dim settingsItems As New Dictionary(Of String, SettingsValue)
             For Each item In Settings
@@ -230,7 +247,7 @@ Public Class SettingsManager
         End Set
     End Property
 
-    Public Function DefaultExtension() As String Implements iSavable.DefaultExtension
+    Public Function DefaultExtension() As String 'Implements iSavable.DefaultExtension
         Return ".skysettings"
     End Function
 
@@ -238,7 +255,7 @@ Public Class SettingsManager
         Save(SettingsFilename)
     End Sub
 
-    Public Sub Save(Filename As String) Implements ISavableAs.Save
+    Public Sub Save(Filename As String) 'Implements ISavableAs.Save
         IO.File.WriteAllText(Filename, Settings.Serialize)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
