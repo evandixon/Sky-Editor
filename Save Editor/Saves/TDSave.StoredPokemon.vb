@@ -268,7 +268,8 @@ Namespace Saves
             End Function
 
             Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-                Dim toOpen As New BinaryFile(Filename)
+                Dim toOpen As New BinaryFile
+                toOpen.OpenFile(Filename)
                 Me.Bits = toOpen.Bits.Bits
                 For i = 1 To 8 - (Length Mod 8)
                     Me.Bits.RemoveAt(Me.Bits.Count - 1)

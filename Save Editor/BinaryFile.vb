@@ -11,11 +11,6 @@ Public Class BinaryFile
         Bits = New Binary(0)
     End Sub
 
-    Public Sub New(Filename As String)
-        MyBase.New()
-        OpenFile(Filename)
-    End Sub
-
     Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
         MyBase.OpenFile(Filename)
         Bits = New Binary(0)

@@ -10,7 +10,8 @@
             End If
             For Each item In IO.Directory.GetFiles(SourceDir)
                 Try
-                    Using c As New FileFormats.CteImage(item)
+                    Using c As New FileFormats.CteImage
+                        c.OpenFile(item)
                         c.ContainedImage.Save(item & ".png", Drawing.Imaging.ImageFormat.Png)
                         Console.WriteLine("Converted " & item)
                     End Using

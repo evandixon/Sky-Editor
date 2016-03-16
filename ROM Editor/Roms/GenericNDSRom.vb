@@ -426,7 +426,7 @@ Namespace Roms
         ''' </summary>
         ''' <param name="TargetDir">Directory to store the extracted files.</param>
         ''' <returns></returns>
-        <Obsolete("Incomplete.")> Public Async Function Unpack(TargetDir As String) As Task Implements iPackedRom.Unpack
+        <Obsolete("Incomplete.")> Public Async Function Unpack(TargetDir As String) As Task
             Dim fat = GetFAT()
 
             'Set up extraction dependencies
@@ -479,6 +479,26 @@ Namespace Roms
             'Wait for everything to finish
             Await Task.WhenAll(ExtractionTasks)
             PluginHelper.SetLoadingStatusFinished()
+        End Function
+        <Obsolete> Public Async Function UnpackWithNDSTool(TargetDir As String) As Task Implements iPackedRom.Unpack
+            Dim romDirectory As String
+            If TargetDir Is Nothing Then
+                romDirectory = IO.Path.Combine(PluginHelper.GetResourceDirectory, Name)
+            Else
+                romDirectory = TargetDir
+            End If
+
+            If IO.Directory.Exists(romDirectory) Then
+                Try
+                    IO.Directory.Delete(romDirectory, True)
+                Catch ex As IOException
+                    PluginHelper.Writeline(ex.ToString)
+                End Try
+            End If
+
+            IO.Directory.CreateDirectory(romDirectory)
+            Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
+                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, romDirectory))
         End Function
         ''' <summary>
         ''' Queues file extraction tasks if the file is thread safe, otherwise, extracts files one at a time.
@@ -543,7 +563,9 @@ Namespace Roms
                     ' TODO: dispose managed state (managed objects).
                     If ExtractionTasks IsNot Nothing Then
                         For Each item In ExtractionTasks
-                            item.Dispose()
+                            If item.Status = TaskStatus.RanToCompletion OrElse item.Status = TaskStatus.Faulted OrElse item.Status = TaskStatus.Canceled Then
+                                item.Dispose()
+                            End If
                         Next
                     End If
                 End If

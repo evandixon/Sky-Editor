@@ -9,13 +9,13 @@ Namespace Saves
         Public Sub New()
             MyBase.New()
         End Sub
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-            Bits = New Binary()
-            For count As Integer = 0 To Length - 1
-                Bits.AppendByte(RawData(count))
-            Next
-        End Sub
+        'Public Sub New(Filename As String)
+        '    MyBase.New(Filename)
+        '    Bits = New Binary()
+        '    For count As Integer = 0 To Length - 1
+        '        Bits.AppendByte(RawData(count))
+        '    Next
+        'End Sub
         Public Overrides Sub OpenFile(Filename As String) Implements SkyEditorBase.Interfaces.iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
         End Sub

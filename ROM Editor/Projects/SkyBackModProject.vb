@@ -24,7 +24,8 @@ Namespace Projects
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
 
             Await f.RunForEach(Async Function(Item As String) As Task
-                                   Using b As New FileFormats.BGP(Item)
+                                   Using b As New FileFormats.BGP
+                                       b.OpenFile(Item)
                                        Dim image = Await b.GetImage
                                        Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then

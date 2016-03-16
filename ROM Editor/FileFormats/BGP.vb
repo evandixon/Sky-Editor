@@ -371,17 +371,6 @@ Namespace FileFormats
                 Return IO.Path.GetFileNameWithoutExtension(OriginalFilename)
             End Get
         End Property
-        
-        Public Shared Shadows Async Function FromFilename(Filename As String) As Task(Of BGP)
-            Await RunDecompress(Filename)
-            Return New BGP(Filename)
-        End Function
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-        End Sub
 
-        Public Sub New()
-
-        End Sub
     End Class
 End Namespace

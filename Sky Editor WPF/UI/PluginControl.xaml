@@ -8,12 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="0*" />
-        </Grid.ColumnDefinitions>
-        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="0,0,0,33" SelectionMode="Single">
+        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled"/>
                 <DataGridTextColumn x:Name="colName" Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="Name" IsReadOnly="True"/>
@@ -29,7 +24,5 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
-        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
-        <Button x:Name="btnApply" Content="Apply" HorizontalAlignment="Left" Margin="10,0,0,8" VerticalAlignment="Bottom" Width="75"/>
-    </Grid>
+        </Grid>
 </UserControl>

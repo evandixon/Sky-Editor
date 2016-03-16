@@ -14,7 +14,8 @@ Namespace Saves
         Public Overrides Sub OpenFile(SdfDirectory As String)
             MyBase.OpenFile(SdfDirectory)
 
-            GameData = New GTIGameData(Me.GetFilePath("game_data"))
+            GameData = New GTIGameData
+            GameData.OpenFile(Me.GetFilePath("game_data"))
         End Sub
     End Class
 

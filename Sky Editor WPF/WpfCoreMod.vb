@@ -39,6 +39,8 @@ Friend Class WpfCoreMod
         Manager.RegisterDefaultFileTypeDetectors()
         'End CoreMod stuff
 
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
+
         Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
     End Sub
 

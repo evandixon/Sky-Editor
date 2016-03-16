@@ -20,7 +20,8 @@ Namespace Projects
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
             Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
             Await f.RunForEach(Function(Item As String) As Task
-                                   Using b As New FileFormats.CteImage(Item)
+                                   Using b As New FileFormats.CteImage
+                                       b.OpenFile(Item)
                                        Dim image = b.ContainedImage
                                        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
@@ -84,7 +85,8 @@ Namespace Projects
                 End If
 
                 If includeInPack Then
-                    Dim img As New FileFormats.CteImage(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"))
+                    Dim img As New FileFormats.CteImage
+                    img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"))
                     img.ContainedImage = Drawing.Image.FromFile(background)
                     img.Save()
                     img.Dispose()

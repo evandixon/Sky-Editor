@@ -16,7 +16,7 @@ Namespace UI
                 Dim supportedAssemblyPaths = Utilities.ReflectionHelpers.GetSupportedPlugins(PluginHelper.GetPluginAssemblies, .CoreAssemblyName)
                 For Each item In .Plugins
                     Dim assemblyPath As String = item.GetType.Assembly.Location
-                    uiElements.Add(New PluginUiElement With {.IsEnabled = True, .Author = item.PluginAuthor, .Name = item.PluginName, .Credits = item.Credits, .Filename = assemblyPath})
+                    uiElements.Add(New PluginUiElement With {.IsEnabled = True, .Author = item.PluginAuthor, .Name = item.PluginName, .Credits = item.Credits, .Filename = assemblyPath, .ContainedDefinition = item})
                     supportedAssemblyPaths.Remove(assemblyPath)
                 Next
                 'Now to look at the plugins that aren't loaded
@@ -52,27 +52,27 @@ Namespace UI
             IsModified = True
         End Sub
 
-        Private Sub btnApply_Click(sender As Object, e As RoutedEventArgs) Handles btnApply.Click
-            If gridPlugins.ItemsSource IsNot Nothing Then 'Just in case
-                Dim plugins = SettingsManager.Instance.Settings.Plugins
-                For Each item As PluginUiElement In gridPlugins.ItemsSource
-                    Dim filenamePart = item.Filename.Replace(PluginManager.GetInstance.PluginFolder, "").TrimStart("\")
-                    If item.IsEnabled Then
-                        If Not plugins.Contains(filenamePart) Then
-                            plugins.Add(filenamePart)
-                        End If
-                    Else
-                        plugins.Remove(filenamePart)
-                    End If
-                Next
-                SettingsManager.Instance.Settings.Plugins = plugins
-                SettingsManager.Instance.Save()
-                If MessageBox.Show(PluginHelper.GetLanguageItem("You need to restart the program to save your changes.  Do you want to restart now?"), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButtons.YesNo) = DialogResult.Yes Then
-                    Redistribution.RedistributionHelpers.RequestRestartProgram()
-                End If
-            End If
-            IsModified = False
-        End Sub
+        'Private Sub btnApply_Click(sender As Object, e As RoutedEventArgs) Handles btnApply.Click
+        '    If gridPlugins.ItemsSource IsNot Nothing Then 'Just in case
+        '        Dim plugins = SettingsManager.Instance.Settings.Plugins
+        '        For Each item As PluginUiElement In gridPlugins.ItemsSource
+        '            Dim filenamePart = item.Filename.Replace(PluginManager.GetInstance.PluginFolder, "").TrimStart("\")
+        '            If item.IsEnabled Then
+        '                If Not plugins.Contains(filenamePart) Then
+        '                    plugins.Add(filenamePart)
+        '                End If
+        '            Else
+        '                plugins.Remove(filenamePart)
+        '            End If
+        '        Next
+        '        SettingsManager.Instance.Settings.Plugins = plugins
+        '        SettingsManager.Instance.Save()
+        '        If MessageBox.Show(PluginHelper.GetLanguageItem("You need to restart the program to save your changes.  Do you want to restart now?"), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButtons.YesNo) = DialogResult.Yes Then
+        '            Redistribution.RedistributionHelpers.RequestRestartProgram()
+        '        End If
+        '    End If
+        '    IsModified = False
+        'End Sub
 
         Private Sub SettingsEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = PluginHelper.GetLanguageItem("Plugins")
@@ -81,7 +81,6 @@ Namespace UI
             colAuthor.Header = PluginHelper.GetLanguageItem("Author")
             colFilename.Header = PluginHelper.GetLanguageItem("Filename")
             menuSave.Header = PluginHelper.GetLanguageItem("_Save")
-            btnApply.Content = PluginHelper.GetLanguageItem("Apply")
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
@@ -93,11 +92,11 @@ Namespace UI
         End Function
 
         Private Sub menuSave_Click(sender As Object, e As RoutedEventArgs) Handles menuSave.Click
-            If gridPlugins.SelectedItem IsNot Nothing Then
+            If gridPlugins.SelectedItem IsNot Nothing AndAlso DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition IsNot Nothing Then
                 Dim s As New SaveFileDialog
                 s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
                 If s.ShowDialog = DialogResult.OK Then
-                    Redistribution.RedistributionHelpers.PackPlugin(GetEditingObject(Of PluginManager), DirectCast(gridPlugins.SelectedItem, PluginUiElement).Filename, s.FileName)
+                    Redistribution.RedistributionHelpers.PackPlugin(GetEditingObject(Of PluginManager), DirectCast(gridPlugins.SelectedItem, PluginUiElement).Filename, s.FileName, DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition)
                 End If
             End If
         End Sub

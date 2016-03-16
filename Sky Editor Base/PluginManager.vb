@@ -10,6 +10,7 @@ Imports SkyEditorBase.Utilities
 Public Class PluginManager
     Implements IDisposable
     Implements iNamed
+
 #Region "Constructors"
     ''' <summary>
     ''' Returns an instance of PluginManager, or returns nothing if an instance has not been created.
@@ -30,89 +31,90 @@ Public Class PluginManager
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub New()
-        Me.New(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins"))
-    End Sub
-
-    ''' <summary>
-    ''' Creates a new PluginManager given the folder plugin files are stored in.
-    ''' Plugins should end in _plg.dll or _plg.exe,  Ex. MyPlugin_plg.dll
-    ''' </summary>
-    ''' <param name="PluginFolder"></param>
-    ''' <remarks></remarks>
-    Private Sub New(PluginFolder As String)
         Me.CurrentSolution = Nothing
         Assemblies = New List(Of Assembly)
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
-        Me.PluginFolder = PluginFolder
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         Me.FailedPluginLoads = New List(Of String)
         Me.OpenedFiles = New Dictionary(Of Object, Project)
-        PluginHelper.PluginManagerInstance = Me
 
         AddHandler PluginHelper.FileOpenRequested, AddressOf _pluginHelper_FileOpened
         AddHandler PluginHelper.FileClosed, AddressOf _pluginHelper_FileClosed
     End Sub
     Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
-        LoadPlugins(PluginFolder, CoreMod)
-    End Sub
-    Public Sub LoadPlugins(FromFolder As String, CoreMod As iSkyEditorPlugin)
         'Me.PluginFolder = FromFolder
-        If IO.Directory.Exists(FromFolder) Then
-            Dim assemblyPaths As New List(Of String)
-            Dim saveAssemblies As Boolean = False
+        Dim devAssemblyPaths As New List(Of String)
+        Dim saveAssemblies As Boolean = False
 
-            'Load plugins from settings
-            For Each item In SettingsManager.Instance.Settings.Plugins
-                assemblyPaths.Add(IO.Path.Combine(FromFolder, item))
-            Next
+        ''Load plugins from settings
+        'For Each item In SettingsManager.Instance.Settings.Plugins
+        '    assemblyPaths.Add(IO.Path.Combine(FromFolder, item))
+        'Next
 
-            'Load others if in development mode, or if there are no plugins
-            If SettingsManager.Instance.Settings.DevelopmentMode OrElse assemblyPaths.Count = 0 Then
-                saveAssemblies = True
-                assemblyPaths.Clear()
-                Dim available = PluginHelper.GetPluginAssemblies
-                For Each item In available
-                    If Not assemblyPaths.Contains(item) Then
-                        assemblyPaths.Add(item)
-                    End If
-                Next
-            End If
-
-            CoreAssemblyName = CoreMod.GetType.Assembly.FullName
-
-            Dim supportedPlugins = ReflectionHelpers.GetSupportedPlugins(assemblyPaths, CoreAssemblyName)
-            For Each item In supportedPlugins
-                Dim assemblyActual = Assembly.LoadFrom(item)
-                    Assemblies.Add(assemblyActual)
-                For Each plg In From t In assemblyActual.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
-                    Plugins.Add(plg.GetConstructor({}).Invoke({}))
-                Next
-            Next
-
-            'If we found searched for plugins, then save the paths to the settings
-            If saveAssemblies Then
-                SettingsManager.Instance.Settings.Plugins.Clear()
-                For Each item In supportedPlugins
-                    SettingsManager.Instance.Settings.Plugins.Add(item.Replace(FromFolder, "").TrimStart("\"))
-                    SettingsManager.Instance.Save()
-                Next
-            End If
-
-            CoreMod.Load(Me)
-
-            RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
-
-            For Each item In Plugins
-                item.Load(Me)
-            Next
-
-            LoadTypes(CoreMod.GetType.Assembly)
-            LoadTypes(Assembly.GetCallingAssembly)
-
-            For Each item In Assemblies
-                LoadTypes(item)
+        'If we're in dev mode, then load plugins from the dev directory
+        If SettingsManager.Instance.Settings.DevelopmentMode Then
+            saveAssemblies = True
+            Dim available = PluginHelper.GetPluginAssemblies
+            For Each item In available
+                If Not devAssemblyPaths.Contains(item) Then
+                    devAssemblyPaths.Add(item)
+                End If
             Next
         End If
+
+        'Register plugin extension type, since we're about to use it to load more plugins
+        Me.RegisterTypeRegister(GetType(Extensions.ExtensionType))
+        Me.RegisterType(GetType(Extensions.ExtensionType), GetType(Extensions.PluginExtensionType))
+
+        'Note the core assembly name, so we don't accidentally try to load it again (seeing that it's already in the AppDomain).
+        CoreAssemblyName = CoreMod.GetType.Assembly.FullName
+
+        Dim supportedPlugins As New List(Of String)
+        supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(devAssemblyPaths, CoreAssemblyName))
+
+        'Look at the plugin extensions to find plugins.
+        Dim pluginExtType As New Extensions.PluginExtensionType
+        For Each item In pluginExtType.GetInstalledExtensions
+            Dim extAssemblies As New List(Of String)
+            For Each file In item.ExtensionFiles
+                extAssemblies.Add(IO.Path.Combine(pluginExtType.GetExtensionDirectory(item), file))
+            Next
+            'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.dll"))
+            'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.exe"))
+            supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(extAssemblies, CoreAssemblyName))
+        Next
+
+        For Each item In supportedPlugins
+            Dim assemblyActual = Assembly.LoadFrom(item)
+            Assemblies.Add(assemblyActual)
+            For Each plg In From t In assemblyActual.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+                Plugins.Add(plg.GetConstructor({}).Invoke({}))
+            Next
+        Next
+
+        ''If we found searched for plugins, then save the paths to the settings
+        'If saveAssemblies Then
+        '    SettingsManager.Instance.Settings.Plugins.Clear()
+        '    For Each item In supportedPlugins
+        '        SettingsManager.Instance.Settings.Plugins.Add(item.Replace(FromFolder, "").TrimStart("\"))
+        '        SettingsManager.Instance.Save()
+        '    Next
+        'End If
+
+        CoreMod.Load(Me)
+
+        RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
+
+        For Each item In Plugins
+            item.Load(Me)
+        Next
+
+        LoadTypes(CoreMod.GetType.Assembly)
+        LoadTypes(Assembly.GetCallingAssembly)
+
+        For Each item In Assemblies
+            LoadTypes(item)
+        Next
         RaiseEvent PluginLoadComplete(Me, New EventArgs)
     End Sub
 

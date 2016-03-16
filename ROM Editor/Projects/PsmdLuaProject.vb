@@ -100,13 +100,7 @@ Validate:
             End If
         End Sub
 
-        Private Sub GenericModProject_ProjectOpened(sender As Object, e As EventArgs) Handles Me.ProjectOpened
-            'LoadLanguageIDs()
-        End Sub
-
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
-
+        Private Async Function StartExtractLanguages() As Task
             PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Extracting Language Files..."))
             Dim languageNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)\.bin", RegexOptions.IgnoreCase)
             Dim languageFileNames = IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*.bin", IO.SearchOption.TopDirectoryOnly)
@@ -140,6 +134,33 @@ Validate:
                 Await Utilities.FileSystem.ReCreateDirectory(destDir)
                 Await Utilities.FileSystem.CopyDirectory(item, destDir, True)
             Next
+        End Function
+
+        Private _languageExtractTask As Task
+        ''' <summary>
+        ''' Extracts the language files.
+        ''' If called multiple times, only extracts once.
+        ''' </summary>
+        ''' <returns></returns>
+        Protected Function ExtractLanguages() As Task
+            If _languageExtractTask Is Nothing Then
+                _languageExtractTask = StartExtractLanguages()
+            End If
+            Return _languageExtractTask
+        End Function
+
+        Private Async Sub GenericModProject_ProjectOpened(sender As Object, e As EventArgs) Handles Me.ProjectOpened
+            'Fix bug from Beta 1
+            'Re-extract the language files if they don't exist
+            If IO.Directory.Exists(IO.Path.Combine(Me.GetRootDirectory, "Languages")) AndAlso IO.Directory.GetFiles(IO.Path.Combine(Me.GetRootDirectory, "Languages"), "*", IO.SearchOption.AllDirectories).Length = 0 Then
+                Await ExtractLanguages()
+            End If
+        End Sub
+
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
+            Await MyBase.Initialize(Solution)
+
+            Await ExtractLanguages()
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")

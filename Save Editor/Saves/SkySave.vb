@@ -8,9 +8,9 @@ Namespace Saves
         Public Sub New()
             MyBase.New
         End Sub
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-        End Sub
+        'Public Sub New(Filename As String)
+        '    MyBase.New(Filename)
+        'End Sub
         Protected Class Offsets
             Public Const BackupSaveStart As Integer = &HC800
             Public Const ChecksumEnd As Integer = &HB65A

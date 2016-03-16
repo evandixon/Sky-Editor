@@ -65,7 +65,7 @@ Namespace FileFormats
         ''' Extracts the FARC to the given directory.
         ''' </summary>
         ''' <param name="Directory">Directory to extract the FARC to.</param>
-        Public Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
+        Public Async Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
             Dim asyncFor As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Extracting files..."))
             Dim dic As Dictionary(Of UInteger, String)
             If UseDictionary Then
@@ -73,23 +73,18 @@ Namespace FileFormats
             Else
                 dic = New Dictionary(Of UInteger, String)
             End If
-            For count = 0 To FileCount - 1
-                Dim filename As String
-                Dim fileHash As UInteger = Header.FileData(count).FilenamePointer
-                If dic.ContainsKey(fileHash) Then
-                    filename = dic(fileHash)
-                Else
-                    filename = fileHash.ToString 'Count.ToString
-                End If
-                IO.File.WriteAllBytes(IO.Path.Combine(Directory, filename), GetFileData(count))
-            Next
-            Return Task.CompletedTask
-            'Await asyncFor.RunFor(Sub(Count As Integer)
-
-            '                          'Using f As New IO.FileStream(IO.Path.Combine(Directory, filename), IO.FileMode.OpenOrCreate)
-            '                          '    ReadData(Count, f, True)
-            '                          'End Using
-            '                      End Sub, 0, FileCount - 1, 1)
+            'Extract the files.
+            'Async if thread safe, sync otherwise
+            Await asyncFor.RunFor(Sub(Count As Integer)
+                                      Dim filename As String
+                                      Dim fileHash As UInteger = Header.FileData(Count).FilenamePointer
+                                      If dic.ContainsKey(fileHash) Then
+                                          filename = dic(fileHash)
+                                      Else
+                                          filename = fileHash.ToString 'Count.ToString
+                                      End If
+                                      IO.File.WriteAllBytes(IO.Path.Combine(Directory, filename), GetFileData(Count))
+                                  End Sub, 0, FileCount - 1, 1, Me.IsThreadSafe)
         End Function
 
         ''' <summary>
@@ -111,6 +106,7 @@ Namespace FileFormats
 
         Public Sub New()
             MyBase.New()
+            Me.EnableInMemoryLoad = True
         End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile

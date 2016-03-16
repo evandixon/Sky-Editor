@@ -25,6 +25,13 @@ Namespace FileFormats
         Protected Property DataOffset As Integer
         Protected Property Sir0Fat5Type As Integer
         Public Property FileData As List(Of FileInfo)
+        Public Overrides Sub CreateFile(Name As String, FileContents() As Byte)
+            MyBase.CreateFile(Name, FileContents)
+
+            If FileContents.Length > 0 Then
+                ProcessData()
+            End If
+        End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)

@@ -123,22 +123,6 @@ Public Class SettingsManager
         End Property
 
         ''' <summary>
-        ''' List of assembly paths, relative to the application's plugin directory, of plugins to be loaded.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property Plugins As List(Of String)
-            Get
-                If Setting("Plugins") Is Nothing Then
-                    Setting("Plugins") = New List(Of String)
-                End If
-                Return Setting("Plugins")
-            End Get
-            Set(value As List(Of String))
-                Setting("Plugins") = value
-            End Set
-        End Property
-
-        ''' <summary>
         ''' If this is enabled, things usually read from file streams will be loaded into RAM.
         ''' This may increase performance, while eating up loads of RAM.
         ''' </summary>

@@ -152,13 +152,5 @@ Namespace FileFormats
                 Return out
             End If
         End Function
-
-        Public Sub New()
-            MyBase.New
-        End Sub
-        Public Sub New(Filename As String)
-            Me.New
-            OpenFile(Filename)
-        End Sub
     End Class
 End Namespace

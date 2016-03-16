@@ -58,7 +58,8 @@ Namespace Projects
             End If
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key)) Then
-                    Using langString = New FileFormats.LanguageString(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key))
+                    Using langString = New FileFormats.LanguageString()
+                        langString.OpenFile(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key))
                         Dim langList As New ObjectFile(Of List(Of String))
                         langList.ContainedObject = langString.Items
                         langList.Save(IO.Path.Combine(projDir, "Languages", item.Value))

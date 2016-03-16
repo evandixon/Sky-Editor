@@ -26,6 +26,13 @@ Namespace FileFormats
         Public Property RelativePointers As List(Of Integer)
 
         Protected Property ResizeFileOnLoad As Boolean
+        Public Overrides Sub CreateFile(Name As String, FileContents() As Byte)
+            MyBase.CreateFile(Name, FileContents)
+
+            If FileContents.Length > 0 Then
+                ProcessData()
+            End If
+        End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)

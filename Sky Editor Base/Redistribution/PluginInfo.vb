@@ -12,7 +12,7 @@
         Public Property VersionString As String
 
         ''' <summary>
-        ''' Minimum required version of the plugin.
+        ''' Minimum required version of the plugin.  Can be used to force updates.
         ''' </summary>
         ''' <returns></returns>
         Public Property MinVersionString As String

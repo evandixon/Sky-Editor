@@ -1,5 +1,5 @@
 ﻿Namespace MenuActions
-    Public Class ToolsPlugins
+    Public Class DevPlugins
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
@@ -8,9 +8,10 @@
         End Function
 
         Public Sub New()
-            MyBase.New("_Tools/_Plugins", TranslateItems:=True)
+            MyBase.New("_Development/_Plugins", TranslateItems:=True)
             Me.AlwaysVisible = True
-            SortOrder = 3.2
+            Me.DevOnly = False
+            SortOrder = 10.3
         End Sub
     End Class
 End Namespace

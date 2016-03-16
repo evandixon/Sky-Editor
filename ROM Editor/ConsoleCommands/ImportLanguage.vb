@@ -7,7 +7,8 @@ Namespace ConsoleCommands
         Public Overrides Sub Main(Arguments() As String)
             Dim LanguageStringPath = Arguments(0)
             Dim formatRegex As New Text.RegularExpressions.Regex("\[.+\]")
-            Dim ls As New FileFormats.LanguageString(LanguageStringPath)
+            Dim ls As New FileFormats.LanguageString
+            ls.OpenFile(LanguageStringPath)
             Dim languagechar As String = IO.Path.GetFileNameWithoutExtension(LanguageStringPath).Replace("text_", "")
             Dim language As String
             Select Case languagechar

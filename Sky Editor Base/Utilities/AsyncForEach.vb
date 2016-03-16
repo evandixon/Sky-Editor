@@ -40,17 +40,20 @@ Namespace Utilities
         ''' <returns></returns>
         Public Property ProgressMessage As String
 
-        Public Async Function RunFor(DelegateSub As ForItem, StartValue As Integer, EndValue As Integer, StepCount As Integer) As Task
+        Public Async Function RunFor(DelegateSub As ForItem, StartValue As Integer, EndValue As Integer, StepCount As Integer, Optional RunAsynchronously As Boolean = True) As Task
             Dim tasks As New List(Of Task)
             _opMax = (EndValue - StartValue) / StepCount
             For i As Integer = StartValue To EndValue Step StepCount
                 Dim i2 = i 'Needed because we're running a lambda in a for statement.
-                Dim t As New Task(New Action(Sub()
-                                                 DelegateSub(i2)
-                                                 OperationsCompleted += 1
-                                             End Sub))
-                t.Start()
-                tasks.Add(t)
+                Dim t = Task.Run(New Action(Sub()
+                                                DelegateSub(i2)
+                                                OperationsCompleted += 1
+                                            End Sub))
+                If RunAsynchronously Then
+                    Await t
+                Else
+                    tasks.Add(t)
+                End If
             Next
             Await Task.WhenAll(tasks)
         End Function

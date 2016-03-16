@@ -40,6 +40,8 @@ Friend Class ConsoleCoreMod
 
         'Manager.OpenableFiles.Add(GetType(ExecutableFile))
 
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
+
         Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
 
         'Console Commands

@@ -100,10 +100,10 @@ Namespace Utilities
         ''' <summary>
         ''' Returns a list of the plugin paths that are valid .Net assemblies that contain an iPlugin.
         ''' </summary>
-        ''' <param name="PluginPaths"></param>
-        ''' <param name="CoreAssemblyName">Name of the core assembly, usually the Entry assembly.</param>
+        ''' <param name="PluginPaths">Full paths of the plugin assemblies to analyse.</param>
+        ''' <param name="CoreAssemblyName">Name of the core assembly, usually the Entry assembly.  Assemblies with this name are not supported, to avoid loading duplicates.</param>
         ''' <returns></returns>
-        Public Shared Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), CoreAssemblyName As String) As List(Of String)
+        Public Shared Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), Optional CoreAssemblyName As String = Nothing) As List(Of String)
             Dim supportedList As New List(Of String)
             'We're going to load these assemblies into another appdomain, so we don't accidentally create duplicates, and so we don't keep any unneeded assemblies loaded for the life of the application.
             Using reflectionManager As New AssemblyReflectionManager
@@ -118,7 +118,12 @@ Namespace Utilities
                                                       Function(a As Assembly, Args() As Object) As List(Of String)
                                                           Dim out As New List(Of String)
 
-                                                          If a IsNot Nothing AndAlso Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse a.FullName = Assembly.GetExecutingAssembly.FullName OrElse a.FullName = Args(0)) Then
+                                                          If a IsNot Nothing AndAlso
+                                                            Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse
+                                                                    (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse
+                                                                    a.FullName = Assembly.GetExecutingAssembly.FullName OrElse
+                                                                    (Args(0) IsNot Nothing AndAlso a.FullName = Args(0))
+                                                                    ) Then
                                                               For Each t As Type In a.GetTypes
                                                                   Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
                                                                   If isPlg Then

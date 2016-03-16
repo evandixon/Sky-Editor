@@ -6,9 +6,6 @@ Namespace Saves
         Public Sub New()
             MyBase.New()
         End Sub
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-        End Sub
         Public Overrides Sub OpenFile(Filename As String)
             MyBase.OpenFile(Filename)
             originalChecksum = CalculateChecksum()

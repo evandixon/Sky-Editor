@@ -27,7 +27,7 @@ Namespace UI
             GetEditingObject(Of SettingsManager).Settings.ExtravagantRamMode = chbRAM.IsChecked
         End Sub
 
-        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked, chbRAM.Checked
+        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked, chbRAM.Checked, chbDebugLanguagePlaceholders.Unchecked, chbDevelopment.Unchecked, chbVerbose.Unchecked, chbRAM.Unchecked
             IsModified = True
         End Sub
 

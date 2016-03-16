@@ -126,7 +126,7 @@
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
     <Compile Include="MenuActions\SolutionBuild.vb" />
-    <Compile Include="MenuActions\ToolsPlugins.vb" />
+    <Compile Include="MenuActions\DevPlugins.vb" />
     <Compile Include="UI\ObjectControl.vb" />
     <Compile Include="UI\ObjectControlPlaceholder.vb" />
     <Compile Include="UI\ObjectTab.vb" />

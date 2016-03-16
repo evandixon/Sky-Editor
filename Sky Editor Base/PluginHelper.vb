@@ -10,14 +10,6 @@ Imports SkyEditorBase.Interfaces
 ''' <remarks></remarks>
 Public Class PluginHelper
 
-    ''' <summary>
-    ''' Contains a reference to the last PluginManager created.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Shared Property PluginManagerInstance As PluginManager
-
 #Region "Resources"
     ''' <summary>
     ''' Combines the given path with your plugin's resource directory.
@@ -82,23 +74,34 @@ Public Class PluginHelper
     End Function
 
     ''' <summary>
+    ''' Gets the directory plugins are stored when in dev mode.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Shared Function DevPluginDirectory() As String
+        Return IO.Path.Combine(RootResourceDirectory, "Plugins")
+    End Function
+
+
+    ''' <summary>
     ''' Gets absolute paths of all the assemblies in the plugin directory.
     ''' Not all of these are guarenteed to be supported plugins.
     ''' </summary>
     ''' <returns></returns>
     Public Shared Function GetPluginAssemblies() As List(Of String)
-        Dim FromFolder = IO.Path.Combine(RootResourceDirectory, "Plugins")
+        Dim FromFolder = DevPluginDirectory()
         Dim assemblyPaths As New List(Of String)
-        For Each item In IO.Directory.GetFiles(FromFolder, "*.dll")
-            If Not assemblyPaths.Contains(item) Then
-                assemblyPaths.Add(item)
-            End If
-        Next
-        For Each item In IO.Directory.GetFiles(FromFolder, "*.exe")
-            If Not assemblyPaths.Contains(item) Then
-                assemblyPaths.Add(item)
-            End If
-        Next
+        If IO.Directory.Exists(FromFolder) Then
+            For Each item In IO.Directory.GetFiles(FromFolder, "*.dll")
+                If Not assemblyPaths.Contains(item) Then
+                    assemblyPaths.Add(item)
+                End If
+            Next
+            For Each item In IO.Directory.GetFiles(FromFolder, "*.exe")
+                If Not assemblyPaths.Contains(item) Then
+                    assemblyPaths.Add(item)
+                End If
+            Next
+        End If
         Return assemblyPaths
     End Function
 #End Region
@@ -135,59 +138,27 @@ Public Class PluginHelper
 
 #Region "Program Running"
     ''' <summary>
-    ''' Posted by brendan at http://stackoverflow.com/questions/9996709/read-console-process-output
+    ''' 
     ''' </summary>
     ''' <param name="sendingProcess"></param>
     ''' <param name="outLine"></param>
-    ''' <remarks></remarks>
+    ''' <remarks>Posted by brendan at http://stackoverflow.com/questions/9996709/read-console-process-output</remarks>
     Private Shared Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
         ' Collect the sort command output.
         If Not String.IsNullOrEmpty(outLine.Data) Then
             PluginHelper.Writeline(outLine.Data, LineType.ConsoleOutput)
         End If
     End Sub
+
     ''' <summary>
-    ''' Runs the specified program synchronously, capturing console output.
-    ''' Returns true when the program exits.
+    ''' Runs the specified program, capturing console output, and waits for it to complete.
     ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <param name="Arguments"></param>
+    ''' <param name="Filename">Filename of the executable to run.</param>
+    ''' <param name="Arguments">Arguments to pass to the process.</param>
     ''' <remarks></remarks>
-    Public Shared Sub RunProgramSync(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True)
+    Public Shared Async Function RunProgram(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True) As Task
         Writeline(String.Format(PluginHelper.GetLanguageItem("Executing {0} {1}", "Executing {0} {1}"), Filename, Arguments))
-        Dim p As New Process()
-        p.StartInfo.FileName = Filename
-        p.StartInfo.Arguments = Arguments
-        p.StartInfo.RedirectStandardOutput = True
-        p.StartInfo.UseShellExecute = False
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        p.StartInfo.CreateNoWindow = True
-        AddHandler p.OutputDataReceived, AddressOf OutputHandler
-        p.Start()
-        p.BeginOutputReadLine()
-
-        If ShowLoadingWindow Then
-            SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
-
-            p.WaitForExit()
-
-
-            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-        Else
-            p.WaitForExit()
-        End If
-        p.Dispose()
-        Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
-    End Sub
-    ''' <summary>
-    ''' Runs the specified program, capturing console output.
-    ''' Returns true when the program exits.
-    ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <param name="Arguments"></param>
-    ''' <remarks></remarks>
-    Public Shared Async Function RunProgram(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True) As Task(Of Boolean)
-        Writeline(String.Format(PluginHelper.GetLanguageItem("Executing {0} {1}", "Executing {0} {1}"), Filename, Arguments))
+        'Set up the process
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -197,39 +168,42 @@ Public Class PluginHelper
         p.StartInfo.CreateNoWindow = True
         p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(Filename)
         AddHandler p.OutputDataReceived, AddressOf OutputHandler
+
+        'Start the process
         p.Start()
         p.BeginOutputReadLine()
 
+        'Wait for the process to close
         If ShowLoadingWindow Then
             SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
-
             Await WaitForProcess(p)
-
             SetLoadingStatusFinished()
-            RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-            p.Dispose()
-            Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
         Else
-            If Await WaitForProcess(p) Then
-                RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
-                p.Dispose()
-                Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
-            End If
+            Await WaitForProcess(p)
         End If
-        Return True
+
+        'Clean up
+        RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
+        p.Dispose()
+        Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
     End Function
 
-    Private Shared Async Function WaitForProcess(p As Process) As Task(Of Boolean)
-        Return Await Task.Run(Function()
-                                  p.WaitForExit()
-                                  Return True
-                              End Function)
+    ''' <summary>
+    ''' Waits for the given process to exit.
+    ''' </summary>
+    ''' <param name="p">The process for which to wait.</param>
+    ''' <returns></returns>
+    Private Shared Async Function WaitForProcess(p As Process) As Task
+        Await Task.Run(Sub()
+                           p.WaitForExit()
+                       End Sub)
     End Function
+
     ''' <summary>
     ''' Runs the specified program without waiting for it to complete.
     ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <param name="Arguments"></param>
+    ''' <param name="Filename">Filename of the executable to run.</param>
+    ''' <param name="Arguments">Arguments to pass to the process.</param>
     ''' <remarks></remarks>
     Public Shared Sub RunProgramInBackground(Filename As String, Arguments As String)
         Writeline(String.Format(PluginHelper.GetLanguageItem("(Async) Executing ""{0}"" ""{1}"""), Filename, Arguments))
@@ -264,53 +238,6 @@ Public Class PluginHelper
     Private Shared _loadingShown As Boolean = False
     Private Shared _loadingDefinitions As New Dictionary(Of String, LoadingMessageChangedEventArgs)
 
-    '''' <summary>
-    '''' Shows a loading window until the same function calls StopLoading.
-    '''' </summary>
-    '''' <param name="Message">The message to be displayed while loading.  This message will not be translated so you should translate it on your end.</param>
-    '''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
-    '''' <remarks></remarks>
-    'Public Shared Sub StartLoading(Message As String, Optional Progress As Single? = Nothing, <CallerMemberName> Optional CallerName As String = Nothing)
-    '    If _loadingDefinitions.ContainsKey(CallerName) Then
-    '        If Progress.HasValue Then
-    '            _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message, Progress)
-    '        Else
-    '            _loadingDefinitions(CallerName) = New LoadingMessageChangedEventArgs(Message)
-    '        End If
-    '    Else
-    '        If Progress.HasValue Then
-    '            _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message, Progress))
-    '        Else
-    '            _loadingDefinitions.Add(CallerName, New LoadingMessageChangedEventArgs(Message))
-    '        End If
-    '    End If
-    '    MakeLoadingVisibleorNot()
-    'End Sub
-    '''' <summary>
-    '''' Closes the loading window shown from StartLoading
-    '''' </summary>
-    '''' <param name="CallerName">Name of the calling function.  Do not provide this, it will be filled automatically if you pass Nothing.</param>
-    '''' <remarks></remarks>
-    'Public Shared Sub StopLoading(<CallerMemberName> Optional CallerName As String = Nothing)
-    '    If _loadingDefinitions.ContainsKey(CallerName) Then
-    '        _loadingDefinitions.Remove(CallerName)
-    '        MakeLoadingVisibleorNot()
-    '    End If
-    'End Sub
-    Private Shared Sub MakeLoadingVisibleorNot()
-        Dim shouldShow As Boolean = (_loadingDefinitions.Count > 0)
-        Dim isShowing As Boolean = _loadingShown
-
-        If shouldShow Then
-            If _loadingDefinitions.Count > 1 Then
-                RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Loading", "Loading...")))
-            ElseIf _loadingDefinitions.Count = 1 Then
-                RaiseEvent LoadingMessageChanged(Nothing, _loadingDefinitions.Values(0))
-            End If
-        Else
-            RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
-        End If
-    End Sub
     Public Shared Event LoadingMessageChanged(sender As Object, e As LoadingMessageChangedEventArgs)
     Public Shared Sub SetLoadingStatus(Message As String, Progress As Single)
         RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(Message, Progress))

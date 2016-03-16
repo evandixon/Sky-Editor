@@ -63,6 +63,52 @@ Namespace Redistribution
         '    z.CreateZip(IO.Path.Combine(Environment.CurrentDirectory, "Sky Editor Archives", ArchiveName & ".zip"), IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp"), True, ".*", ".*")
         'End Sub
 
+        Public Shared Function GetAssemblyDependencies(SourceAssembly As Assembly) As List(Of String)
+            Dim out As New List(Of String)
+            Dim devAssemblyPaths = PluginHelper.GetPluginAssemblies
+
+            'Get the Sky Editor Plugin's resource directory
+            Dim resourceDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(SourceAssembly.Location), IO.Path.GetFileNameWithoutExtension(SourceAssembly.Location))
+            If IO.Directory.Exists(resourceDirectory) Then
+                out.Add(resourceDirectory)
+            End If
+
+            'Get regional resources
+            Dim resourcesName = IO.Path.GetFileNameWithoutExtension(SourceAssembly.Location) & ".resources.dll"
+            For Each item In IO.Directory.GetDirectories(IO.Path.GetDirectoryName(SourceAssembly.Location))
+                If IO.File.Exists(IO.Path.Combine(item, resourcesName)) Then
+                    out.Add(IO.Path.Combine(item, resourcesName))
+                End If
+            Next
+
+            'Look at the dependencies
+            For Each reference In SourceAssembly.GetReferencedAssemblies
+                Dim isLocal As Boolean = False
+                'Try to find the filename of this reference
+                For Each source In devAssemblyPaths
+                    Dim name = AssemblyName.GetAssemblyName(source)
+                    If reference.FullName = name.FullName Then
+                        If Not out.Contains(source) Then
+                            out.Add(source)
+                            isLocal = True
+                            Exit For
+                        End If
+                    End If
+                Next
+
+                If isLocal Then
+                    'Try to find the references of this reference
+                    Dim q = (From a In AppDomain.CurrentDomain.GetAssemblies Where a.FullName = reference.FullName).FirstOrDefault
+
+                    If q IsNot Nothing Then
+                        out.AddRange(GetAssemblyDependencies(q))
+                    End If
+                End If
+            Next
+
+            Return out
+        End Function
+
         ''' <summary>
         ''' Packs the given plugin into a zip file.
         ''' </summary>
@@ -70,7 +116,7 @@ Namespace Redistribution
         ''' <param name="PluginFilename">File path of the assembly containing the plugin.</param>
         ''' <param name="DestinationFilename">File path of the zip to create.</param>
         ''' <returns></returns>
-        Public Shared Async Function PackPlugin(Manager As PluginManager, PluginFilename As String, DestinationFilename As String) As Task
+        Public Shared Async Function PackPlugin(Manager As PluginManager, PluginFilename As String, DestinationFilename As String, PluginDef As iSkyEditorPlugin) As Task
             Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
             Dim ToCopy As New List(Of String)
             Dim filename = IO.Path.GetFileNameWithoutExtension(PluginFilename)
@@ -85,8 +131,8 @@ Namespace Redistribution
                     reflector.LoadAssembly(PluginFilename, "PackPlugin")
                     reflector.Reflect(PluginFilename, Function(CurrentAssembly As Assembly, Args() As Object) As Object
                                                           For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
-                                                              Dim info As iSkyEditorPlugin = result.GetConstructor({}).Invoke({})
-                                                              info.PrepareForDistribution()
+                                                              Dim def As iSkyEditorPlugin = result.GetConstructor({}).Invoke({})
+                                                              def.PrepareForDistribution()
                                                           Next
                                                           Return Nothing
                                                       End Function)
@@ -94,11 +140,19 @@ Namespace Redistribution
             End If
 
             'Find the files we should pack
-            ToCopy.Add(PluginFilename.Replace(".dll", "").Replace(".exe", ""))
+            'ToCopy.Add(PluginFilename.Replace(".dll", "").Replace(".exe", ""))
             ToCopy.Add(PluginFilename)
-            If Manager.PluginFiles.ContainsKey(filename) Then
-                ToCopy.AddRange(Manager.PluginFiles(filename))
-            End If
+            'If Manager.PluginFiles.ContainsKey(filename) Then
+            '    ToCopy.AddRange(Manager.PluginFiles(filename))
+            'End If
+
+            'Try to detect dependencies.
+            Dim plgAssembly = PluginDef.GetType.Assembly
+            For Each item In GetAssemblyDependencies(plgAssembly)
+                If Not ToCopy.Contains(item) Then
+                    ToCopy.Add(item)
+                End If
+            Next
 
             'Copy temporary files
             Await Utilities.FileSystem.ReCreateDirectory(tempDir)
@@ -115,8 +169,20 @@ Namespace Redistribution
                 End If
             Next
 
+            'Create the extension info file
+            Dim info As New Extensions.ExtensionInfo
+            info.Author = PluginDef.PluginAuthor
+            info.Description = ""
+            info.ExtensionTypeName = GetType(Extensions.PluginExtensionType).AssemblyQualifiedName
+            info.IsEnabled = True
+            info.Name = PluginDef.PluginName
+            info.Version = PluginDef.GetType.Assembly.GetName.Version.ToString
+            info.ExtensionFiles.Add(IO.Path.GetFileName(plgAssembly.Location))
+            info.Save(IO.Path.Combine(tempDir, "info.skyext"))
+
             'Then zip it
             Utilities.Zip.Zip(tempDir, DestinationFilename)
+            Await Utilities.FileSystem.DeleteDirectory(tempDir)
         End Function
 
         ''' <summary>

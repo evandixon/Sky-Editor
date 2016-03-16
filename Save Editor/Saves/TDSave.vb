@@ -8,13 +8,13 @@ Namespace Saves
         Public Sub New()
             MyBase.New()
         End Sub
-        Public Sub New(Filename As String)
-            MyBase.New(Filename)
-            Bits = New Binary()
-            For count As Integer = 0 To Length - 1
-                Bits.AppendByte(RawData(count))
-            Next
-        End Sub
+        'Public Sub New(Filename As String)
+        '    MyBase.New(Filename)
+        '    Bits = New Binary()
+        '    For count As Integer = 0 To Length - 1
+        '        Bits.AppendByte(RawData(count))
+        '    Next
+        'End Sub
         Protected Class Offsets
             Public Const ChecksumEnd As Integer = &HDC7B
             Public Const BackupSaveStart As Integer = &H10000

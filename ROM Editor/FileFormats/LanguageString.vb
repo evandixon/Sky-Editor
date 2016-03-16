@@ -56,10 +56,6 @@ Namespace FileFormats
             Items = New List(Of String)
             CreateFile("")
         End Sub
-        Public Sub New(Filename As String)
-            Me.New
-            OpenFile(Filename)
-        End Sub
 
         Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)

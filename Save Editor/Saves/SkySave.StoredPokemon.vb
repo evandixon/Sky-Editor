@@ -279,7 +279,8 @@ Namespace Saves
             End Function
 
             Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-                Dim toOpen As New BinaryFile(Filename)
+                Dim toOpen As New BinaryFile
+                toOpen.OpenFile(Filename)
                 Me.Bits = toOpen.Bits.Bits
                 'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
                 For i = 1 To 8 - (Length Mod 8)

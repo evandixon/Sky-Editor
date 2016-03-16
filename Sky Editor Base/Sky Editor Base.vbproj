@@ -162,6 +162,7 @@
     <Compile Include="BasicIniFile.vb" />
     <Compile Include="ConsoleCommand.vb" />
     <Compile Include="ConsoleCommandAsync.vb" />
+    <Compile Include="ConsoleCommands\InstallExtension.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="EventArguments\FileAddedEventArguments.vb" />
     <Compile Include="EventArguments\FileClosedEventArgs.vb" />
@@ -184,6 +185,12 @@
     <Compile Include="EventArguments\TypeRegisteredEventArguments.vb" />
     <Compile Include="EventArguments\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="ExecutableFile.vb" />
+    <Compile Include="Extensions\ExtensionHelper.vb" />
+    <Compile Include="Extensions\ExtensionInfo.vb" />
+    <Compile Include="Extensions\ExtensionInstallResult.vb" />
+    <Compile Include="Extensions\ExtensionType.vb" />
+    <Compile Include="Extensions\ExtensionUninstallResult.vb" />
+    <Compile Include="Extensions\PluginExtensionType.vb" />
     <Compile Include="Interfaces\iContainer.vb" />
     <Compile Include="Interfaces\iCreatableFile.vb" />
     <Compile Include="Interfaces\iDetectableFileType.vb" />
