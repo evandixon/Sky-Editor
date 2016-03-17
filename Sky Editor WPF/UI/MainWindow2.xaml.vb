@@ -124,7 +124,7 @@ Namespace UI
 #Region "Form"
         Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             'Set Language items
-            Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Alpha " & Assembly.GetExecutingAssembly.GetName.Version.ToString
+            Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Beta " & Assembly.GetExecutingAssembly.GetName.Version.ToString
             toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
             lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
 
