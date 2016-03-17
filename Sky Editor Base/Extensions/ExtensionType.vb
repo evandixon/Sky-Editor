@@ -18,6 +18,11 @@ Namespace Extensions
             End Get
         End Property
 
+        ''' <summary>
+        ''' Gets the directory that the extension files are stored in.
+        ''' </summary>
+        ''' <param name="Extension">The info file of the extension.</param>
+        ''' <returns></returns>
         Public Overridable Function GetExtensionDirectory(Extension As ExtensionInfo)
             Return IO.Path.Combine(PluginHelper.RootResourceDirectory, "Extensions", InternalName, Extension.ID)
         End Function
@@ -27,12 +32,16 @@ Namespace Extensions
         ''' </summary>
         ''' <returns></returns>
         Public Overridable Function GetInstalledExtensions() As IEnumerable(Of ExtensionInfo)
-            Dim filename = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Extensions", InternalName, "info.skyextlst")
-            If IO.File.Exists(filename) Then
-                Return Utilities.Json.DeserializeFromFile(Of List(Of ExtensionInfo))(filename)
-            Else
-                Return {}
+            Dim extDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Extensions", InternalName)
+            Dim out As New List(Of ExtensionInfo)
+            If IO.Directory.Exists(extDir) Then
+                For Each item In IO.Directory.GetDirectories(extDir)
+                    If IO.File.Exists(IO.Path.Combine(item, "info.skyext")) Then
+                        out.Add(ExtensionInfo.Open(IO.Path.Combine(item, "info.skyext")))
+                    End If
+                Next
             End If
+            Return out
         End Function
 
         ''' <summary>
@@ -41,19 +50,6 @@ Namespace Extensions
         ''' <param name="TempDir">Temporary directory that contains the extension's files.</param>
         Public Overridable Async Function InstallExtension(Extension As ExtensionInfo, TempDir As String) As Task(Of ExtensionInstallResult)
             Await Utilities.FileSystem.CopyDirectory(TempDir, GetExtensionDirectory(Extension))
-            Dim filename = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Extensions", InternalName, "info.skyextlst")
-            If IO.File.Exists(filename) Then
-                Dim installed = Utilities.Json.DeserializeFromFile(Of List(Of ExtensionInfo))(filename)
-                installed.Add(Extension)
-                Utilities.Json.SerializeToFile(filename, installed)
-            Else
-                Dim installed As New List(Of ExtensionInfo)
-                installed.Add(Extension)
-                If Not IO.Directory.Exists(IO.Path.GetDirectoryName(filename)) Then
-                    IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(filename))
-                End If
-                Utilities.Json.SerializeToFile(filename, installed)
-            End If
             Return ExtensionInstallResult.Success
         End Function
 

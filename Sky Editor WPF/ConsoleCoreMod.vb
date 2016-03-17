@@ -40,14 +40,10 @@ Friend Class ConsoleCoreMod
 
         'Manager.OpenableFiles.Add(GetType(ExecutableFile))
 
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
-
         Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
 
         'Console Commands
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.DistPrep))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.UpdateAll))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(ConsoleCommands.PackAll))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
     End Sub
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
 

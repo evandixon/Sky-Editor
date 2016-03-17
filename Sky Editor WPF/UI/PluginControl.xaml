@@ -1,28 +1,28 @@
-﻿<UserControl
+﻿<local:ObjectControl x:Class="UI.PluginControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SkyEditorWPF"
-             xmlns:local1="clr-namespace:SkyEditorWPF.UI" x:Class="UI.PluginControl"
+             xmlns:local="clr-namespace:SkyEditorWPF.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single">
+    <Grid Margin="0,0,0,32">
+        <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Extended">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled"/>
+                <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled" Visibility="Collapsed"/>
                 <DataGridTextColumn x:Name="colName" Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="Name" IsReadOnly="True"/>
                 <DataGridTextColumn x:Name="colAuthor" Binding="{Binding Author}" ClipboardContentBinding="{x:Null}" Header="Author" IsReadOnly="True"/>
                 <DataGridTextColumn x:Name="colFilename" Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" IsReadOnly="True"/>
             </DataGrid.Columns>
             <DataGrid.DataContext>
-                <local1:PluginUiElement/>
+                <local:PluginUiElement/>
             </DataGrid.DataContext>
-            <DataGrid.ContextMenu>
+            <!--<DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="menuSave" Header="_Save"/>
                 </ContextMenu>
-            </DataGrid.ContextMenu>
+            </DataGrid.ContextMenu>-->
         </DataGrid>
-        </Grid>
-</UserControl>
+        <Button x:Name="btnCreateExtension" Content="Create Extension" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="133" Margin="10,0,0,-25" />
+    </Grid>
+</local:ObjectControl>

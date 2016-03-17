@@ -91,10 +91,6 @@ Public Class PluginDefinition
         'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
         'Manager.RegisterConsoleCommand("gzip", New ConsoleCommands.Gzip)
 
-        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.AutoInfo.dll"))
-        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Common.dll"))
-        Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "IdSharp.Tagging.dll"))
-
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
         GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon X"), GameStrings.PokemonXCode)

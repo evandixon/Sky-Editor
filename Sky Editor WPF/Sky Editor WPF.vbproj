@@ -119,14 +119,15 @@
     </ApplicationDefinition>
     <Compile Include="UI\ChildControls.vb" />
     <Compile Include="ConsoleCommands\DistPrep.vb" />
-    <Compile Include="ConsoleCommands\PackAll.vb" />
-    <Compile Include="ConsoleCommands\UpdateAll.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
     <Compile Include="UI\DocumentTab.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
     <Compile Include="MenuActions\SolutionBuild.vb" />
     <Compile Include="MenuActions\DevPlugins.vb" />
+    <Compile Include="UI\ExtensionInfoControl.xaml.vb">
+      <DependentUpon>ExtensionInfoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ObjectControl.vb" />
     <Compile Include="UI\ObjectControlPlaceholder.vb" />
     <Compile Include="UI\ObjectTab.vb" />
@@ -260,6 +261,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\ExtensionInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\PluginControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

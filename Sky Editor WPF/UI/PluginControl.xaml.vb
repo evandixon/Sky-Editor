@@ -1,11 +1,10 @@
-﻿Imports System.Reflection
-Imports System.Windows.Forms
-Imports SkyEditorBase.Interfaces
+﻿Imports System.Windows.Forms
+Imports SkyEditorBase.Redistribution
 
 Namespace UI
     Public Class PluginControl
-        Implements iObjectControl
-        Public Sub RefreshDisplay()
+        Inherits ObjectControl
+        Public Overrides Sub RefreshDisplay()
             'Because this may take a moment or two, we're running it asynchronously
             Task.Run(New Action(AddressOf DoRefreshDisplay))
         End Sub
@@ -16,26 +15,27 @@ Namespace UI
                 Dim supportedAssemblyPaths = Utilities.ReflectionHelpers.GetSupportedPlugins(PluginHelper.GetPluginAssemblies, .CoreAssemblyName)
                 For Each item In .Plugins
                     Dim assemblyPath As String = item.GetType.Assembly.Location
-                    uiElements.Add(New PluginUiElement With {.IsEnabled = True, .Author = item.PluginAuthor, .Name = item.PluginName, .Credits = item.Credits, .Filename = assemblyPath, .ContainedDefinition = item})
+                    uiElements.Add(New PluginUiElement With {.IsEnabled = False, .Author = item.PluginAuthor, .Name = item.PluginName, .Credits = item.Credits, .Filename = assemblyPath, .ContainedDefinition = item})
                     supportedAssemblyPaths.Remove(assemblyPath)
                 Next
-                'Now to look at the plugins that aren't loaded
-                Using manager As New Utilities.AssemblyReflectionManager
-                    For Each item In supportedAssemblyPaths
-                        manager.LoadAssembly(item, "PluginControl")
-                        Dim elements = manager.Reflect(item, Function(CurrentAssembly As Assembly, Args() As Object) As List(Of PluginUiElement)
-                                                                 Dim out As New List(Of PluginUiElement)
-                                                                 For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
-                                                                     Dim info As iSkyEditorPlugin = result.GetConstructor({}).Invoke({})
-                                                                     out.Add(New PluginUiElement With {.IsEnabled = False, .Author = info.PluginAuthor, .Name = info.PluginName, .Credits = info.Credits, .Filename = Args(0)})
-                                                                 Next
-                                                                 Return out
-                                                             End Function, item)
-                        For Each element In elements
-                            uiElements.Add(New PluginUiElement With {.IsEnabled = False, .Author = element.Author, .Name = element.Name, .Credits = element.Credits, .Filename = element.Filename})
-                        Next
-                    Next
-                End Using
+
+                ''Now to look at the plugins that aren't loaded
+                'Using manager As New Utilities.AssemblyReflectionManager
+                '    For Each item In supportedAssemblyPaths
+                '        manager.LoadAssembly(item, "PluginControl")
+                '        Dim elements = manager.Reflect(item, Function(CurrentAssembly As Assembly, Args() As Object) As List(Of PluginUiElement)
+                '                                                 Dim out As New List(Of PluginUiElement)
+                '                                                 For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+                '                                                     Dim info As iSkyEditorPlugin = result.GetConstructor({}).Invoke({})
+                '                                                     out.Add(New PluginUiElement With {.IsEnabled = False, .Author = info.PluginAuthor, .Name = info.PluginName, .Credits = info.Credits, .Filename = Args(0)})
+                '                                                 Next
+                '                                                 Return out
+                '                                             End Function, item)
+                '        For Each element In elements
+                '            uiElements.Add(New PluginUiElement With {.IsEnabled = False, .Author = element.Author, .Name = element.Name, .Credits = element.Credits, .Filename = element.Filename})
+                '        Next
+                '    Next
+                'End Using
 
             End With
 
@@ -80,125 +80,55 @@ Namespace UI
             colName.Header = PluginHelper.GetLanguageItem("Name")
             colAuthor.Header = PluginHelper.GetLanguageItem("Author")
             colFilename.Header = PluginHelper.GetLanguageItem("Filename")
-            menuSave.Header = PluginHelper.GetLanguageItem("_Save")
+            btnCreateExtension.Content = PluginHelper.GetLanguageItem("Create Extension")
+            'menuSave.Header = PluginHelper.GetLanguageItem("_Save")
         End Sub
 
-        Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
+        Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
             Return {GetType(PluginManager)}
         End Function
 
-        Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
+        Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer
             Return 0
         End Function
 
-        Private Sub menuSave_Click(sender As Object, e As RoutedEventArgs) Handles menuSave.Click
-            If gridPlugins.SelectedItem IsNot Nothing AndAlso DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition IsNot Nothing Then
+        'Private Sub menuSave_Click(sender As Object, e As RoutedEventArgs) Handles menuSave.Click
+        '    If gridPlugins.SelectedItem IsNot Nothing AndAlso DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition IsNot Nothing Then
+        '        Dim s As New SaveFileDialog
+        '        s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
+        '        If s.ShowDialog = DialogResult.OK Then
+        '            Redistribution.RedistributionHelpers.PackPlugin(GetEditingObject(Of PluginManager), DirectCast(gridPlugins.SelectedItem, PluginUiElement).Filename, s.FileName, DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition)
+        '        End If
+        '    End If
+        'End Sub
+
+        Private Async Sub btnCreateExtension_Click(sender As Object, e As RoutedEventArgs) Handles btnCreateExtension.Click
+            Dim plugins As New List(Of Interfaces.iSkyEditorPlugin)
+            For Each item As PluginUiElement In gridPlugins.SelectedItems
+                plugins.Add(item.ContainedDefinition)
+            Next
+            If plugins.Count > 0 Then
+                Dim info As New SkyEditorBase.Extensions.ExtensionInfo
+                Dim o As New ObjectWindow
+                o.ObjectToEdit = info
+                o.ShowDialog()
                 Dim s As New SaveFileDialog
-                s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
-                If s.ShowDialog = DialogResult.OK Then
-                    Redistribution.RedistributionHelpers.PackPlugin(GetEditingObject(Of PluginManager), DirectCast(gridPlugins.SelectedItem, PluginUiElement).Filename, s.FileName, DirectCast(gridPlugins.SelectedItem, PluginUiElement).ContainedDefinition)
-                End If
+                    s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
+                    If s.ShowDialog = DialogResult.OK Then
+                        Await RedistributionHelpers.PackPlugins(plugins, s.FileName, info)
+                    End If
+                ' End If
             End If
         End Sub
 
-        Private Sub gridPlugins_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles gridPlugins.SelectionChanged
-            If gridPlugins.SelectedItem IsNot Nothing Then
-                menuSave.Visibility = Visibility.Visible
-            Else
-                menuSave.Visibility = Visibility.Collapsed
-            End If
-        End Sub
+        'Private Sub gridPlugins_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles gridPlugins.SelectionChanged
+        '    If gridPlugins.SelectedItem IsNot Nothing Then
+        '        menuSave.Visibility = Visibility.Visible
+        '    Else
+        '        menuSave.Visibility = Visibility.Collapsed
+        '    End If
+        'End Sub
 
-#Region "IObjectControl Support"
-        Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
-            Return True
-        End Function
-
-        Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
-            Return False
-        End Function
-
-        ''' <summary>
-        ''' Called when Header is changed.
-        ''' </summary>
-        Public Event HeaderUpdated As iObjectControl.HeaderUpdatedEventHandler Implements iObjectControl.HeaderUpdated
-
-        ''' <summary>
-        ''' Called when IsModified is changed.
-        ''' </summary>
-        Public Event IsModifiedChanged As iObjectControl.IsModifiedChangedEventHandler Implements iObjectControl.IsModifiedChanged
-
-        ''' <summary>
-        ''' Returns the value of the Header.  Only used when the iObjectControl is behaving as a tab.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property Header As String Implements iObjectControl.Header
-            Get
-                Return _header
-            End Get
-            Set(value As String)
-                Dim oldValue = _header
-                _header = value
-                RaiseEvent HeaderUpdated(Me, New EventArguments.HeaderUpdatedEventArgs(oldValue, value))
-            End Set
-        End Property
-        Dim _header As String
-
-        ''' <summary>
-        ''' Returns the current EditingObject, after casting it to type T.
-        ''' </summary>
-        ''' <typeparam name="T"></typeparam>
-        ''' <returns></returns>
-        Protected Function GetEditingObject(Of T)() As T
-            Return PluginHelper.Cast(Of T)(_editingObject)
-        End Function
-
-        ''' <summary>
-        ''' Returns the current EditingObject.
-        ''' It is recommended to use GetEditingObject(Of T), since it returns iContainter(Of T).Item if the EditingObject implements that interface.
-        ''' </summary>
-        ''' <returns></returns>
-        Protected Function GetEditingObject() As Object
-            Return _editingObject
-        End Function
-
-        ''' <summary>
-        ''' The way to get the EditingObject from outside this class.  Refreshes the display on set, and updates the object on get.
-        ''' Calling this from inside this class could result in a stack overflow, especially if called from UpdateObject, so use GetEditingObject or GetEditingObject(Of T) instead.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property EditingObject As Object Implements iObjectControl.EditingObject
-            Get
-                'UpdateObject()
-                Return _editingObject
-            End Get
-            Set(value As Object)
-                _editingObject = value
-                RefreshDisplay()
-            End Set
-        End Property
-        Dim _editingObject As Object
-
-        ''' <summary>
-        ''' Whether or not the EditingObject has been modified without saving.
-        ''' Set to true when the user changes anything in the GUI.
-        ''' Set to false when the object is saved, or if the user undoes every change.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property IsModified As Boolean Implements iObjectControl.IsModified
-            Get
-                Return _isModified
-            End Get
-            Set(value As Boolean)
-                Dim oldValue As Boolean = _isModified
-                _isModified = value
-                If Not oldValue = _isModified Then
-                    RaiseEvent IsModifiedChanged(Me, New EventArgs)
-                End If
-            End Set
-        End Property
-        Dim _isModified As Boolean
-#End Region
     End Class
 
 End Namespace

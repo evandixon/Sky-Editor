@@ -152,42 +152,24 @@ Public Class PluginManager
     Public Property IOFilters As New Dictionary(Of String, String)
 
     ''' <summary>
-    ''' Matches the save ID using the given game name.
-    '''
-    ''' Key: Game Type
-    ''' Value: Save Type
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property GameTypes As New Dictionary(Of String, String)
-
-    ''' <summary>
     ''' List of all loaded iSkyEditorPlugins that are loaded.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Plugins As New List(Of iSkyEditorPlugin)
-
-    ''' <summary>
-    ''' Dictionary containing all files needed by each plugin.
-    ''' Excludes Assembly.dll and /Assembly/, as these can be inferred by the assembly name of the plugin.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property PluginFiles As New Dictionary(Of String, List(Of String))
     Public Property FileTypeDetectors As New List(Of FileTypeDetector)
     Public Property DirectoryTypeDetectors As New List(Of DirectoryTypeDetector)
-    Public Property SaveTypes As New Dictionary(Of String, Type)
     Public Property PluginFolder As String
+
     ''' <summary>
     ''' Gets a list of assemblies that failed to be loaded as plugins, while being registered as such.
     ''' </summary>
     ''' <returns></returns>
     Private Property FailedPluginLoads As List(Of String)
+
     Private Property MenuItems As List(Of MenuItemInfo)
+
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
 
     ''' <summary>
@@ -201,6 +183,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Public Property Assemblies As List(Of Assembly)
+
     Public Property CurrentSolution As Solution
         Get
             Return _currentSolutoin
@@ -267,22 +250,6 @@ Public Class PluginManager
             TempIOFilters.Add(FileExtension, FileFormatName)
         End If
         IOFilters = TempIOFilters
-    End Sub
-
-    ''' <summary>
-    ''' Registers a save game format using the given information.
-    ''' </summary>
-    ''' <param name="GameName">Name of the specific game this format is for.  Include a relevant extension if applicable (Ex: "Pokemon X.nds", "My Game.gba", "Something Else.exe", etc).  Should be human readable, in English.</param>
-    ''' <param name="SaveName">Human readable English identifier for the kind of save format this game uses.  If the given SaveFormat is used for another game, this should be the same for both games.  Do not include an extension.  (Ex: "Pokemon X/Y", "My Game", "Something Else")</param>
-    ''' <param name="ContainerType">Type that represents the save file format.  Given Type should inherit SkyEditorBase.GenericSave</param>
-    ''' <remarks></remarks>
-    Public Sub RegisterSaveGameFormat(GameName As String, SaveName As String, ContainerType As Type)
-        If Not GameTypes.ContainsKey(GameName) Then
-            GameTypes.Add(GameName, SaveName)
-        End If
-        If Not SaveTypes.ContainsKey(SaveName) Then
-            SaveTypes.Add(SaveName, ContainerType)
-        End If
     End Sub
 
     ''' <summary>
@@ -401,21 +368,6 @@ Public Class PluginManager
 
     Public Sub RegisterDirectoryTypeDetector(Detector As DirectoryTypeDetector)
         DirectoryTypeDetectors.Add(Detector)
-    End Sub
-
-    ''' <summary>
-    ''' Registers the given File Path as being a resource used by the calling plugin.
-    ''' This should be used for files in the same directory as the plugin, that are a strict requirement of functionality for your plugin.
-    ''' Example: IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll")
-    ''' </summary>
-    ''' <param name="FilePath">If the file is in the same directory as your plugin, use something like IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll")</param>
-    ''' <remarks></remarks>
-    Public Sub RegisterResourceFile(FilePath As String)
-        Dim plugin As String = Assembly.GetCallingAssembly.GetName.Name
-        If Not PluginFiles.ContainsKey(plugin) Then
-            PluginFiles.Add(plugin, New List(Of String))
-        End If
-        PluginFiles(plugin).Add(FilePath)
     End Sub
 
     ''' <summary>

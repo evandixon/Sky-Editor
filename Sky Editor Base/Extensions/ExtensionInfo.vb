@@ -27,6 +27,11 @@
         Public Sub New()
             ID = Guid.NewGuid.ToString
             ExtensionFiles = New List(Of String)
+            Name = ""
+            Description = ""
+            Author = ""
+            Version = ""
+            IsEnabled = True
         End Sub
     End Class
 
