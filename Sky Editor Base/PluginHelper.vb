@@ -18,16 +18,11 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceName(Path As String) As String
-        Dim fullPath = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Assembly.GetCallingAssembly.GetName.Name, Path)
-        Dim baseDir = IO.Path.GetDirectoryName(fullPath)
-        If Not IO.Directory.Exists(baseDir) Then
-            IO.Directory.CreateDirectory(baseDir)
-        End If
-        Return fullPath
+        Return GetResourceName(Path, Assembly.GetCallingAssembly.GetName.Name)
     End Function
 
     Public Shared Function GetResourceName(Path As String, Plugin As String) As String
-        Dim fullPath = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins/", Plugin, Path)
+        Dim fullPath = IO.Path.Combine(GetResourceDirectory(Plugin), Path)
         Dim baseDir = IO.Path.GetDirectoryName(fullPath)
         If Not IO.Directory.Exists(baseDir) Then
             IO.Directory.CreateDirectory(baseDir)
@@ -41,18 +36,18 @@ Public Class PluginHelper
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetResourceDirectory() As String
-        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", Assembly.GetCallingAssembly.GetName.Name.Replace("_plg", ""))
-        If Not IO.Directory.Exists(baseDir) Then
-            IO.Directory.CreateDirectory(baseDir)
-        End If
-        Return baseDir
+        Return GetResourceDirectory(Assembly.GetCallingAssembly.GetName.Name)
     End Function
     Public Shared Function GetResourceDirectory(AssemblyName As String) As String
-        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", AssemblyName.Replace("_plg", ""))
-        If Not IO.Directory.Exists(baseDir) Then
+        Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", AssemblyName)
+        If IO.Directory.Exists(baseDir) Then
+            Return baseDir
+        ElseIf IO.Directory.Exists(IO.Path.Combine(Environment.CurrentDirectory, AssemblyName)) Then
+            Return IO.Path.Combine(Environment.CurrentDirectory, AssemblyName)
+        Else
             IO.Directory.CreateDirectory(baseDir)
+            Return baseDir
         End If
-        Return baseDir
     End Function
 
     ''' <summary>
@@ -97,6 +92,18 @@ Public Class PluginHelper
                 End If
             Next
             For Each item In IO.Directory.GetFiles(FromFolder, "*.exe")
+                If Not assemblyPaths.Contains(item) Then
+                    assemblyPaths.Add(item)
+                End If
+            Next
+        Else
+            'If the "proper" plugin directory doesn't exist, we'll also load from the working directory (because plugins often reference SkyEditor.exe, which will be copied to the same directory).
+            For Each item In IO.Directory.GetFiles(Environment.CurrentDirectory, "*.dll")
+                If Not assemblyPaths.Contains(item) Then
+                    assemblyPaths.Add(item)
+                End If
+            Next
+            For Each item In IO.Directory.GetFiles(Environment.CurrentDirectory, "*.exe")
                 If Not assemblyPaths.Contains(item) Then
                     assemblyPaths.Add(item)
                 End If
