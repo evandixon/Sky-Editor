@@ -8026,7 +8026,8 @@ As String
     ''' <remarks></remarks>
     Public Shared Function OpenDPSaveFile(ByVal FileName As String, Optional ByVal IgnoreErr As Boolean = False) As DPSaveFile
         Dim s As New DPSaveFile
-        Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Try
             Using bR As New BinaryReader(fs)
                 If fs.Length = &H800A4 Then
                     fs.Seek(&HA4, SeekOrigin.Begin)
@@ -8034,10 +8035,12 @@ As String
                 Else
                     s = RawDeserialize(bR.ReadBytes(fs.Length), s.GetType)
                 End If
-                bR.Close()
-                fs.Close()
             End Using
-        End Using
+        Finally
+            If fs IsNot Nothing Then
+                fs.Dispose()
+            End If
+        End Try
         s.GetBlocks(True, IgnoreErr)
         Return s
     End Function
@@ -8050,7 +8053,8 @@ As String
     ''' <remarks></remarks>
     Public Shared Function OpenPtSaveFile(ByVal FileName As String, Optional ByVal IgnoreErr As Boolean = False) As PtSaveFile
         Dim s As New PtSaveFile
-        Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Try
             Using bR As New BinaryReader(fs)
                 If fs.Length = &H800A4 Then
                     fs.Seek(&HA4, SeekOrigin.Begin)
@@ -8059,7 +8063,11 @@ As String
                     s = RawDeserialize(bR.ReadBytes(fs.Length), s.GetType)
                 End If
             End Using
-        End Using
+        Finally
+            If fs IsNot Nothing Then
+                fs.Dispose()
+            End If
+        End Try
         s.GetBlocks(True, IgnoreErr)
         Return s
     End Function
@@ -10986,6 +10994,8 @@ As String
         Public Number As PCBoxes
         Public Name As String
         Public StoredPokemon() As Pokemon
+
+        <NonSerialized>
         Public Wallpaper As mWallpaper
 
         Public Sub New()
@@ -11668,11 +11678,16 @@ As String
         OpenRSESaveFile = New RSESaveFile
         Dim Blocks As New List(Of GBASaveBlock)
         Dim Data() As Byte
-        Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Try
             Using bR As New BinaryReader(fs)
                 Data = bR.ReadBytes(fs.Length)
             End Using
-        End Using
+        Finally
+            If fs IsNot Nothing Then
+                fs.Dispose()
+            End If
+        End Try
         Dim BlockData(&HFFF) As Byte
         Dim theBlock As New GBASaveBlock
         For i As Integer = 0 To &H1BFFF Step &H1000
@@ -11711,13 +11726,16 @@ As String
         OpenFRLGSaveFile = New FRLGSaveFile
         Dim Blocks As New List(Of GBASaveBlock)
         Dim Data() As Byte
-        Using fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(FileName, FileMode.Open, FileAccess.Read)
+        Try
             Using bR As New BinaryReader(fs)
                 Data = bR.ReadBytes(fs.Length)
-                bR.Close()
-                fs.Close()
             End Using
-        End Using
+        Finally
+            If fs IsNot Nothing Then
+                fs.Dispose()
+            End If
+        End Try
         Dim BlockData(&HFFF) As Byte
         Dim theBlock As New GBASaveBlock
         For i As Integer = 0 To &H1BFFF Step &H1000

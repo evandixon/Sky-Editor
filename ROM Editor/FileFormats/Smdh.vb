@@ -384,7 +384,8 @@ Namespace FileFormats
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
-                    SmallIcon.Dispose()
+                    If m_bigIcon IsNot Nothing Then m_bigIcon.Dispose()
+                    If m_smallIcon IsNot Nothing Then m_smallIcon.Dispose()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

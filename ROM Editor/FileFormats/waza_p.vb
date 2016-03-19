@@ -99,8 +99,5 @@ Namespace FileFormats
                 End Select
             End While
         End Sub
-        Public Sub New(Filename As String)
-            OpenFile(Filename)
-        End Sub
     End Class
 End Namespace

@@ -407,11 +407,16 @@ Partial Class PokemonLib
         End Function
 
         Public Sub SaveData(ByVal FileName As String)
-            Using fs As New FileStream(FileName, FileMode.Create, FileAccess.Write)
+            Dim fs As New FileStream(FileName, FileMode.Create, FileAccess.Write)
+            Try
                 Using bW As New BinaryWriter(fs)
                     bW.Write(SaveData)
                 End Using
-            End Using
+            Finally
+                If fs IsNot Nothing Then
+                    fs.Dispose()
+                End If
+            End Try
         End Sub
 
         Public Function SaveData() As Byte()

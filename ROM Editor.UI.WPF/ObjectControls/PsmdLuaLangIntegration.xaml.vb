@@ -7,12 +7,8 @@ Imports SkyEditorWPF.UI
 Public Class PsmdLuaLangIntegration
     Inherits ObjectControl
     Implements IDisposable
-    Public Sub New()
 
-        ' This call is required by the designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
+    Private Sub PsmdLuaLangIntegration_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Me.Header = PluginHelper.GetLanguageItem("Message")
         btnAdd.Content = PluginHelper.GetLanguageItem("Add")
     End Sub

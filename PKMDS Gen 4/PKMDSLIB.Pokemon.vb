@@ -1636,8 +1636,12 @@ Partial Class PokemonLib
             PPKK = RawDeserialize(data, PPKK.GetType)
             data = Nothing
             checksumbytes = Nothing
-            If Size <> 136 And Size <> 236 Then Size = 236
-            Using fs As New System.IO.FileStream(FileName, FileMode.Create, FileAccess.Write)
+            If Size <> 136 And Size <> 236 Then
+                Size = 236
+            End If
+
+            Dim fs As New System.IO.FileStream(FileName, FileMode.Create, FileAccess.Write)
+            Try
                 Using bW As New BinaryWriter(fs)
                     If Encrypt Then
                         bW.Write(EncryptPokemon(RawSerialize(PPKK)), 0, Size)
@@ -1645,7 +1649,11 @@ Partial Class PokemonLib
                         bW.Write(RawSerialize(PPKK), 0, Size)
                     End If
                 End Using
-            End Using
+            Finally
+                If fs IsNot Nothing Then
+                    fs.Dispose()
+                End If
+            End Try
             'Catch ex As Exception
             '    Console.WriteLine("Error " & Err.Number & ": " & ex.Message)
             'End Try
