@@ -1,57 +1,80 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.Devices
 
 Public Class GenericFile
     Implements IDisposable
     Private _tempname As String
     Private _tempFilename As String
     Dim _fileReader As IO.Stream
-    Dim _makeTempCopy As Boolean
+
+    Public Property IsReadOnly As Boolean
+        Get
+            Return _openReadOnly
+        End Get
+        Set(ByVal value As Boolean)
+            _openReadOnly = value
+        End Set
+    End Property
     Dim _openReadOnly As Boolean
 
-#Region "Constructors"
-    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
-    Public Sub New(Filename As String)
-        _makeTempCopy = True
-        _openReadOnly = False
-        OpenFile(Filename)
-    End Sub
-    <CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")>
-    Public Sub New(Filename As String, OpenReadOnly As Boolean)
-        _makeTempCopy = Not OpenReadOnly
-        _openReadOnly = OpenReadOnly
-        OpenFile(Filename)
-    End Sub
-    Public Sub New()
-        _makeTempCopy = True
-        _openReadOnly = False
-    End Sub
     ''' <summary>
-    ''' 
+    ''' Determines whether or not the file will be loaded into memory completely, or located on disk.
     ''' </summary>
-    ''' <param name="MakeTempCopy">Whether or not to make a background copy of a file when opening a file.</param>
-    Public Sub New(MakeTempCopy As Boolean)
-        _makeTempCopy = MakeTempCopy
+    ''' <returns></returns>
+    Public Property EnableInMemoryLoad As Boolean
+
+    Public Property EnableShadowCopy As Boolean
+        Get
+            If _enableShadowCopy.HasValue Then
+                Return _enableShadowCopy
+            Else
+                Return Not IsReadOnly
+            End If
+        End Get
+        Set(value As Boolean)
+            _enableShadowCopy = value
+        End Set
+    End Property
+    Dim _enableShadowCopy As Boolean?
+
+    Public ReadOnly Property IsThreadSafe As Boolean
+        Get
+            Return InMemoryFile IsNot Nothing
+        End Get
+    End Property
+
+
+    Private Property InMemoryFile As Byte()
+
+    Public Sub New()
+        _openReadOnly = False
+        EnableInMemoryLoad = False 'This is an opt-in setting
+        _enableShadowCopy = Nothing
     End Sub
-    Public Sub New(RawData As Byte())
-        Me.New
-        CreateFile("")
-        Length = RawData.Length
-        Me.RawData = RawData
-    End Sub
-#End Region
+
 
     ''' <summary>
     ''' Creates a new file with the given name.
     ''' </summary>
     ''' <param name="Name">Name (not path) of the file.  Include the extension if applicable.</param>
     Public Overridable Sub CreateFile(Name As String) 'Implements iCreatableFile.CreateFile
+        CreateFile(Name, {})
+    End Sub
+
+    Public Overridable Sub CreateFile(Name As String, FileContents As Byte())
+        'Generate a temporary filename
         _tempname = Guid.NewGuid.ToString()
-        'IO.File.WriteAllBytes(_tempname & ".tmp", {})
-        Me.Filename = _tempname & ".tmp"
-        _tempFilename = _tempname & ".tmp"
-        Me.OriginalFilename = String.Empty
+        _tempFilename = (_tempname & ".tmp")
+        'Load the file if applicable
+        If EnableInMemoryLoad Then
+            Me.InMemoryFile = FileContents
+        Else
+            IO.File.WriteAllBytes(_tempFilename, FileContents)
+            'The file reader will be initialized when it's first needed
+        End If
+        Me.Filename = _tempFilename
+        Me.OriginalFilename = _tempFilename
         Me.Name = Name
-        Me._fileReader = New IO.MemoryStream
     End Sub
 
     ''' <summary>
@@ -59,23 +82,33 @@ Public Class GenericFile
     ''' </summary>
     ''' <param name="Filename"></param>
     Public Overridable Sub OpenFile(Filename As String) ' Implements iOpenableFile.OpenFile
-        If _makeTempCopy Then
-            _tempname = Guid.NewGuid.ToString()
-            Me.OriginalFilename = Filename
-            If IO.File.Exists(Filename) Then
-                IO.File.Copy(Filename, _tempname & ".tmp")
-            Else
-                IO.File.WriteAllText(_tempname & ".tmp", "")
-            End If
-            _tempFilename = _tempname & ".tmp"
-            Me.Filename = _tempname & ".tmp"
-        Else
+        Dim info As New IO.FileInfo(Filename)
+        If (EnableInMemoryLoad AndAlso (New ComputerInfo).AvailablePhysicalMemory > (info.Length + 500 * 1024 * 1024)) Then
+            'Load the file into memory if it's enabled and it will fit into RAM, with 500MB left over, just in case.
             Me.OriginalFilename = Filename
             Me.Filename = Filename
+            InMemoryFile = IO.File.ReadAllBytes(Filename)
+        Else
+            'The file will be read from disk.  The only concern is whether or not we want to make a shadow copy.
+            If EnableShadowCopy Then
+                _tempname = Guid.NewGuid.ToString()
+                _tempFilename = (_tempname & ".tmp")
+                Me.OriginalFilename = Filename
+                If IO.File.Exists(Filename) Then
+                    IO.File.Copy(Filename, _tempFilename)
+                Else
+                    'If the file doesn't exist, we'll create a file.
+                    IO.File.WriteAllBytes(_tempFilename, {})
+                End If
+                Me.Filename = _tempFilename
+            Else
+                Me.OriginalFilename = Filename
+                Me.Filename = Filename
+            End If
+            'The file stream will be initialized when it's needed.
         End If
     End Sub
 
-#Region "GenericFile Support"
     Public Property Filename As String
     Public Property OriginalFilename As String
     Public Property Name As String
@@ -94,10 +127,9 @@ Public Class GenericFile
     Public Overridable Function DefaultExtension() As String
         Return ""
     End Function
-#End Region
 
 #Region "Properties"
-    Public ReadOnly Property FileReader As IO.Stream
+    Protected ReadOnly Property FileReader As IO.Stream
         Get
             If _fileReader Is Nothing Then
                 If _openReadOnly Then
@@ -106,46 +138,110 @@ Public Class GenericFile
                     _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
                 End If
             End If
+
             Return _fileReader
         End Get
     End Property
     Public Property RawData(Index As Long) As Byte
         Get
-            FileReader.Seek(Index, IO.SeekOrigin.Begin)
-            Dim b = FileReader.ReadByte
-            If b > -1 AndAlso b < 256 Then
-                Return b
+            If InMemoryFile IsNot Nothing Then
+                Return InMemoryFile(Index)
             Else
-                Throw New IndexOutOfRangeException("Index " & Index.ToString & " is out of range.  Length of file: " & _fileReader.Length.ToString)
+                FileReader.Seek(Index, IO.SeekOrigin.Begin)
+                Dim b = FileReader.ReadByte
+                If b > -1 AndAlso b < 256 Then
+                    Return b
+                Else
+                    Throw New IndexOutOfRangeException("Index " & Index.ToString & " is out of range.  Length of file: " & _fileReader.Length.ToString)
+                End If
             End If
         End Get
         Set(value As Byte)
-            FileReader.Seek(Index, IO.SeekOrigin.Begin)
-            FileReader.WriteByte(value)
+            If InMemoryFile IsNot Nothing Then
+                InMemoryFile(Index) = value
+            Else
+                FileReader.Seek(Index, IO.SeekOrigin.Begin)
+                FileReader.WriteByte(value)
+            End If
         End Set
     End Property
     Public Property RawData(Index As Long, Length As Long) As Byte()
         Get
             Dim output(Length - 1) As Byte
-            FileReader.Seek(Index, IO.SeekOrigin.Begin)
-            FileReader.Read(output, 0, Length)
+            If InMemoryFile IsNot Nothing Then
+                For i = 0 To Length - 1
+                    output(i) = RawData(Index + i)
+                Next
+            Else
+                FileReader.Seek(Index, IO.SeekOrigin.Begin)
+                FileReader.Read(output, 0, Length)
+            End If
             Return output
         End Get
         Set(value As Byte())
-            FileReader.Seek(Index, IO.SeekOrigin.Begin)
-            FileReader.Write(value, 0, Length)
+            If InMemoryFile IsNot Nothing Then
+                For i = 0 To Length - 1
+                    RawData(Index + i) = value(i)
+                Next
+            Else
+                FileReader.Seek(Index, IO.SeekOrigin.Begin)
+                FileReader.Write(value, 0, Length)
+            End If
         End Set
     End Property
     Public Property RawData() As Byte()
         Get
-            Return RawData(0, Length)
+            If InMemoryFile IsNot Nothing Then
+                Return InMemoryFile
+            Else
+                Return RawData(0, Length)
+            End If
         End Get
         Set(value As Byte())
-            RawData(0, Length) = value
+            If InMemoryFile IsNot Nothing Then
+                InMemoryFile = value
+            Else
+                RawData(0, Length) = value
+            End If
         End Set
     End Property
 
-    Public Property Int(Index As Long) As Integer
+    ''' <summary>
+    ''' Gets a 16 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int16(Index As Long) As Short
+        Get
+            Return BitConverter.ToInt16(RawData(Index, 2), 0)
+        End Get
+        Set(value As Short)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 2) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets a 16 bit unsigned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt16(Index As Long) As UShort
+        Get
+            Return BitConverter.ToUInt16(RawData(Index, 2), 0)
+        End Get
+        Set(value As UShort)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 2) = bytes
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets a 32 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int32(Index As Long) As Integer
         Get
             Return BitConverter.ToInt32(RawData(Index, 4), 0)
         End Get
@@ -155,7 +251,12 @@ Public Class GenericFile
         End Set
     End Property
 
-    Public Property UInt(Index As Long) As UInteger
+    ''' <summary>
+    ''' Gets a 32 bit unsingned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt32(Index As Long) As UInteger
         Get
             Return BitConverter.ToUInt32(RawData(Index, 4), 0)
         End Get
@@ -165,14 +266,73 @@ Public Class GenericFile
         End Set
     End Property
 
-    Public Property Length As Long
+    ''' <summary>
+    ''' Gets a 64 bit signed little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property Int64(Index As Long) As Long
         Get
-            Return FileReader.Length
+            Return BitConverter.ToInt64(RawData(Index, 8), 0)
         End Get
         Set(value As Long)
-            FileReader.SetLength(value)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 8) = bytes
         End Set
     End Property
+
+    ''' <summary>
+    ''' Gets a 64 bit unsingned little endian int starting at the given index.
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <returns></returns>
+    Public Property UInt64(Index As Long) As ULong
+        Get
+            Return BitConverter.ToUInt64(RawData(Index, 8), 0)
+        End Get
+        Set(value As ULong)
+            Dim bytes = BitConverter.GetBytes(value)
+            RawData(Index, 8) = bytes
+        End Set
+    End Property
+
+    Public Property Length As Long
+        Get
+            If InMemoryFile IsNot Nothing Then
+                Return InMemoryFile.Length
+            Else
+                Return FileReader.Length
+            End If
+        End Get
+        Set(value As Long)
+            If InMemoryFile IsNot Nothing Then
+                ReDim Preserve InMemoryFile(value - 1)
+            Else
+                FileReader.SetLength(value)
+            End If
+        End Set
+    End Property
+
+    Public Property Position As ULong
+    '''' <summary>
+    '''' Gets or sets a string representation of the file.
+    '''' When setting, will overwrite all data in the file.
+    '''' </summary>
+    '''' <returns></returns>
+    '<Obsolete("Awkward code.  Will drastically change in the future.")> Protected Property RawText As String
+    '    Get
+    '        Return IO.File.ReadAllText(Filename)
+    '    End Get
+    '    Set(value As String)
+    '        Dim buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(value)
+    '        If _fileReader Is Nothing Then
+    '            _fileReader = IO.File.Open(Filename, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite, IO.FileShare.Read)
+    '        End If
+    '        _fileReader.SetLength(buffer.Length)
+    '        _fileReader.Seek(0, IO.SeekOrigin.Begin)
+    '        _fileReader.Write(buffer, 0, buffer.Count)
+    '    End Set
+    'End Property
 #End Region
 
 #Region "Events"
@@ -196,31 +356,42 @@ Public Class GenericFile
 
 #End Region
 
-#Region "Methods"
+#Region "Functions"
     Protected Overridable Sub PreSave()
 
     End Sub
-    'Public Overridable Sub Save(Destination As String)
-    '    PreSave()
-    '    FileReader.Seek(0, IO.SeekOrigin.Begin)
-    '    FileReader.Flush()
-    '    If Not String.IsNullOrEmpty(Destination) Then
-    '        If IO.File.Exists(Filename) Then
-    '            IO.File.Copy(Filename, Destination, True)
-    '        Else
-    '            Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
-    '                FileReader.CopyTo(dest)
-    '            End Using
-    '        End If
-    '    End If
+    Public Overridable Sub Save(Destination As String)
+        PreSave()
+        If InMemoryFile IsNot Nothing Then
+            IO.File.WriteAllBytes(Destination, InMemoryFile)
+        Else
+            FileReader.Seek(0, IO.SeekOrigin.Begin)
+            FileReader.Flush()
+            If Not String.IsNullOrEmpty(Destination) Then
+                If IO.File.Exists(Filename) Then
+                    IO.File.Copy(Filename, Destination, True)
+                Else
+                    Using dest = IO.File.Open(Destination, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
+                        FileReader.CopyTo(dest)
+                    End Using
+                End If
+            End If
+        End If
 
-    '    If String.IsNullOrEmpty(OriginalFilename) Then
-    '        OriginalFilename = Destination
-    '    End If
-    '    RaiseEvent FileSaved(Me, New EventArgs)
-    'End Sub
+        If String.IsNullOrEmpty(OriginalFilename) Then
+            OriginalFilename = Destination
+        End If
+        RaiseEvent FileSaved(Me, New EventArgs)
+    End Sub
     Public Overridable Sub Save()
-        FileReader.Flush()
+        Save(Me.OriginalFilename)
+        'PreSave()
+        'FileReader.Seek(0, IO.SeekOrigin.Begin)
+        'FileReader.Flush()
+        'If Not Filename = OriginalFilename AndAlso Not String.IsNullOrEmpty(OriginalFilename) Then
+        '    IO.File.Copy(Filename, OriginalFilename, True)
+        'End If
+        'RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
     ''' <summary>
@@ -259,39 +430,29 @@ Public Class GenericFile
         Return s.ToString
     End Function
 
-    ''' <summary>
-    ''' Appends the given file contents to the end of this file.
-    ''' </summary>
-    ''' <param name="Filename">Path of the file to add to the end of this one.</param>
-    ''' <returns></returns>
-    Public Async Function AppendFile(Filename As String) As Task
-        Using f As New IO.FileStream(Filename, IO.FileMode.Open, IO.FileAccess.Read)
-            Dim oldLength = Me.Length
-            Me.Length += f.Length
-            Me.FileReader.Seek(oldLength, IO.SeekOrigin.Begin)
-            Await f.CopyToAsync(Me.FileReader)
-        End Using
+    Public Function ReadNullTerminatedString(Offset As Integer, e As Text.Encoding) As String
+        Dim out As New Text.StringBuilder
+        Dim pos = Offset
+        Dim c As Byte
+        Do
+            c = RawData(pos)
+            If Not c = 0 Then
+                out.Append(e.GetString({c}))
+            End If
+            pos += 1
+        Loop Until c = 0
+        Return out.ToString
     End Function
 
     ''' <summary>
-    ''' Appends the given file contents to the end of this file.
+    ''' Reads an unsigned 16 bit integer at the current position, and increments the current position by 2.
     ''' </summary>
     ''' <returns></returns>
-    Public Async Function AppendFile(File As GenericFile) As Task
-        Dim oldLength = Me.Length
-        Me.Length += File.Length
-        Me.FileReader.Seek(oldLength, IO.SeekOrigin.Begin)
-        File.FileReader.Seek(0, IO.SeekOrigin.Begin)
-        Await File.FileReader.CopyToAsync(Me.FileReader)
+    Public Function NextUInt16() As UInt16
+        Dim out = UInt16(Position)
+        Position += 2
+        Return out
     End Function
-
-    Public Sub Append(Data As Byte())
-        Dim oldLength = Me.Length
-        Dim count = Data.Count
-        Me.Length += count
-        RawData(oldLength, count) = Data
-        Me.FileReader.Flush()
-    End Sub
 #End Region
 
 #Region "IDisposable Support"

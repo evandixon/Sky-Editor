@@ -21,7 +21,10 @@ Module Module1
                     Dim editedFarc As New FarcF5
                     editedFarc.OpenFile(editedFile)
 
+                    'Dim report As New Text.StringBuilder
+
                     Dim patches As New PatchList
+                    Dim u = Text.UnicodeEncoding.Unicode
 
                     For Each edited In editedFarc.Header.FileData
                         Dim sourceDataItemHeader = (From d In sourceFarc.Header.FileData Where d.FilenamePointer = edited.FilenamePointer).FirstOrDefault
@@ -46,11 +49,23 @@ Module Module1
                                                 'Two string entries are different.  Log it.
 
                                                 patches.Patches.Add(New PatchList.PatchItem With {.FarcFileHash = edited.FilenamePointer, .StringID = editedStringEntry.Hash, .StringData = editedStringEntry.Entry})
+
+                                                'report.AppendLine(String.Format("Difference in file {0}, entry {1}:", edited.FilenamePointer, sourceStringEntry.Hash))
+                                                'report.AppendLine("Source: ")
+                                                'report.AppendLine(u.GetString(sourceStringEntry.Entry))
+                                                'report.AppendLine()
+                                                'report.AppendLine("Edited: ")
+                                                'report.AppendLine(u.GetString(editedStringEntry.Entry))
+                                                'report.AppendLine("-----------------------------------")
                                             End If
                                         Else
                                             'There's an entry in the edited file that's not in the source.
 
                                             patches.Patches.Add(New PatchList.PatchItem With {.FarcFileHash = edited.FilenamePointer, .StringID = editedStringEntry.Hash, .StringData = editedStringEntry.Entry})
+                                            'report.AppendLine(String.Format("Addition to file {0}, entry {1}:", edited.FilenamePointer, editedStringEntry.Hash))
+                                            'report.AppendLine("New Entry: ")
+                                            'report.AppendLine(u.GetString(editedStringEntry.Entry))
+                                            'report.AppendLine("-----------------------------------")
                                         End If
                                     Next
 
@@ -61,16 +76,21 @@ Module Module1
                             'This means we're going to add the WHOLE message file
 
                             Using editedMsg As New MessageBin(editedFarc.GetFileData(edited.FilenamePointer))
+                                'report.AppendLine(String.Format("New file {0}", edited.FilenamePointer))
                                 For Each editedStringEntry In editedMsg.Strings
                                     patches.Patches.Add(New PatchList.PatchItem With {.FarcFileHash = edited.FilenamePointer, .StringID = editedStringEntry.Hash, .StringData = editedStringEntry.Entry})
+                                    'report.AppendLine(String.Format("Addition {0}:", editedStringEntry.Hash))
+                                    'report.AppendLine(u.GetString(editedStringEntry.Entry))
+                                    'report.AppendLine("-----------------------------------")
                                 Next
+                                'report.AppendLine("-----------------------------------")
                             End Using
                         End If
                     Next
 
                     Dim j As New JavaScriptSerializer
                     IO.File.WriteAllText(patchFile, j.Serialize(patches))
-
+                    'IO.File.WriteAllText("report.txt", report.ToString)
                     sourceFarc.Dispose()
                     editedFarc.Dispose()
                 Case "-a"

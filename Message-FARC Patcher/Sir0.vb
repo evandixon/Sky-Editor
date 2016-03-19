@@ -32,7 +32,7 @@
         'Update subheader length
         Dim oldLength = Me.Length 'the new header offset
         Me.Length += Me.Header.Length 'Change the file length
-        Me.Int(&H4) = oldLength 'Update the header pointer
+        Me.Int32(&H4) = oldLength 'Update the header pointer
         Me.HeaderOffset = oldLength
 
         'Update subHeader
@@ -68,7 +68,7 @@
 
         oldLength = Me.Length
         Me.Length += pointerSection.Count
-        Me.Int(&H8) = oldLength
+        Me.Int32(&H8) = oldLength
         Me.PointerOffset = oldLength
         Me.RawData(oldLength, pointerSection.Count) = pointerSection.ToArray
 
@@ -84,8 +84,8 @@
     End Sub
 
     Private Sub ProcessData()
-        HeaderOffset = Me.Int(&H4)
-        PointerOffset = Me.Int(&H8)
+        HeaderOffset = Me.Int32(&H4)
+        PointerOffset = Me.Int32(&H8)
         Header = RawData(HeaderOffset, HeaderLength)
 
         Dim isConstructing As Boolean = False
@@ -118,10 +118,13 @@
     Public Sub New()
         MyBase.New
         RelativePointers = New List(Of Integer)
+        EnableInMemoryLoad = True
     End Sub
 
     Public Sub New(RawData As Byte())
-        MyBase.New(RawData)
+        MyBase.New
+        EnableInMemoryLoad = True
+        MyBase.CreateFile("", RawData)
         RelativePointers = New List(Of Integer)
         ProcessData()
     End Sub

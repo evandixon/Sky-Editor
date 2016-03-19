@@ -31,17 +31,17 @@ Public Class FarcF5
     End Sub
 
     Public Sub New()
-        MyBase.New(False)
+        EnableInMemoryLoad = True
     End Sub
 
     Public Overrides Sub OpenFile(Filename As String)
         MyBase.OpenFile(Filename)
 
-        Dim sir0Type = Me.Int(&H20)
-        Dim sir0Offset = Me.Int(&H24)
-        Dim sir0Length = Me.Int(&H28)
-        DataOffset = Me.Int(&H2C)
-        Dim datLength = Me.Int(&H30)
+        Dim sir0Type = Me.Int32(&H20)
+        Dim sir0Offset = Me.Int32(&H24)
+        Dim sir0Length = Me.Int32(&H28)
+        DataOffset = Me.Int32(&H2C)
+        Dim datLength = Me.Int32(&H30)
 
         'Todo: use another class for another sir0 type
         'This code is for sir0 type 5
@@ -58,12 +58,12 @@ Public Class FarcF5
         header.CreateFile("")
         Dim fileNames = IO.Directory.GetFiles(SourceDirectory)
         Dim fileData As New List(Of Byte)
-        Dim orderedNames = (From f In fileNames Order By UInt32.Parse(IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileName(f)), Globalization.NumberStyles.HexNumber) Ascending)
+        Dim orderedNames = (From f In fileNames Order By System.UInt32.Parse(IO.Path.GetFileNameWithoutExtension(IO.Path.GetFileName(f)), Globalization.NumberStyles.HexNumber) Ascending)
         'While the file names are probably already in order, it's VERY important that the FARC files are in order by hash, ascending.
         For Each item In orderedNames
             Dim entry As New Sir0Fat5.FileInfo
             entry.DataOffset = fileData.Count
-            entry.FilenamePointer = UInt32.Parse(IO.Path.GetFileNameWithoutExtension(item), Globalization.NumberStyles.HexNumber)
+            entry.FilenamePointer = System.UInt32.Parse(IO.Path.GetFileNameWithoutExtension(item), Globalization.NumberStyles.HexNumber)
             Dim current = IO.File.ReadAllBytes(item)
             entry.DataLength = current.Length
             fileData.AddRange(current)
