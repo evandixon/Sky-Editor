@@ -104,13 +104,9 @@ Namespace Language
 
         Private Function SearchLanguageItem(Language As String, Key As String, AssemblyName As String) As LanguageItem
             If Languages.ContainsKey(Language) Then
-                Dim q = From l In Languages(Language).ContainedObject.Items Where l.Key = Key Select l
+                Dim q = (From l In Languages(Language).ContainedObject.Items Where l.Key = Key Select l).FirstOrDefault
 
-                If q.Any Then
-                    Return q.First
-                Else
-                    Return Nothing
-                End If
+                Return q
             Else
                 Return Nothing
             End If
