@@ -92,7 +92,7 @@ Public MustInherit Class MenuAction
     Public Sub New(Path As String, Optional SeparatorCharacter As Char = "/"c, Optional TranslateItems As Boolean = False, Optional DefaultTranslationValue As String = Nothing)
         _alwaysVisible = False
         DevOnly = False
-        SortOrder = 0
+        SortOrder = Integer.MaxValue
         ActionPath = New List(Of String)
         For Each item In Path.Split(SeparatorCharacter)
             If Not TranslateItems Then
