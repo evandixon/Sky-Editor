@@ -420,7 +420,9 @@ Namespace Projects
                     IO.Directory.CreateDirectory(modTempTools)
                 End If
                 For Each item In patchers
-                    IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
+                    If item IsNot Nothing Then
+                        IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
+                    End If
                 Next
                 Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
 
