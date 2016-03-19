@@ -117,6 +117,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MenuActions\ToolsExtensions.vb" />
     <Compile Include="UI\ChildControls.vb" />
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
@@ -127,6 +128,9 @@
     <Compile Include="MenuActions\DevPlugins.vb" />
     <Compile Include="UI\ExtensionInfoControl.xaml.vb">
       <DependentUpon>ExtensionInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ExtensionManager.xaml.vb">
+      <DependentUpon>ExtensionManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ObjectControl.vb" />
     <Compile Include="UI\ObjectControlPlaceholder.vb" />
@@ -150,6 +154,9 @@
     <Compile Include="MenuActions\ToolsSettings.vb" />
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl1.xaml.vb">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="UI\AddLanguageItem.xaml.vb">
@@ -265,6 +272,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\ExtensionManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\PluginControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -328,6 +339,10 @@
     <Page Include="UI\PluginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControl1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

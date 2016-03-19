@@ -12,6 +12,7 @@
         Public Property Version As String
         Public Property IsEnabled As Boolean
         Public Property ExtensionFiles As List(Of String)
+        Public Property IsInstalled As Boolean
         Private Property Filename As String
         Public Function GetFilename() As String
             Return Filename

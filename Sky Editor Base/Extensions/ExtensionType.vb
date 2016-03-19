@@ -2,11 +2,13 @@
 
 Namespace Extensions
     Public MustInherit Class ExtensionType
+        Implements IExtensionCollection
+
         ''' <summary>
         ''' The user-friendly name of the extension type.
         ''' </summary>
         ''' <returns></returns>
-        Public MustOverride ReadOnly Property Name As String
+        Public MustOverride ReadOnly Property Name As String Implements IExtensionCollection.Name
 
         ''' <summary>
         ''' The internal name of the extension type used in paths.
@@ -31,17 +33,23 @@ Namespace Extensions
         ''' Lists the extensions that are currently installed.
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Function GetInstalledExtensions() As IEnumerable(Of ExtensionInfo)
+        Public Overridable Function GetInstalledExtensions() As IEnumerable(Of ExtensionInfo) Implements IExtensionCollection.GetExtensions
             Dim extDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Extensions", InternalName)
             Dim out As New List(Of ExtensionInfo)
             If IO.Directory.Exists(extDir) Then
                 For Each item In IO.Directory.GetDirectories(extDir)
                     If IO.File.Exists(IO.Path.Combine(item, "info.skyext")) Then
-                        out.Add(ExtensionInfo.Open(IO.Path.Combine(item, "info.skyext")))
+                        Dim e = ExtensionInfo.Open(IO.Path.Combine(item, "info.skyext"))
+                        e.IsInstalled = True
+                        out.Add(e)
                     End If
                 Next
             End If
             Return out
+        End Function
+
+        Private Function InstallExtension(Extension As ExtensionInfo) As Task(Of ExtensionInstallResult) Implements IExtensionCollection.InstallExtension
+            Throw New NotSupportedException("This IExtensionCollection lists extensions that are currently installed, not ones that can be installed, so this cannnot install extensions.")
         End Function
 
         ''' <summary>
@@ -57,9 +65,13 @@ Namespace Extensions
         ''' Uninstalls the given extension.
         ''' </summary>
         ''' <param name="Extension">Extension to uninstall</param>
-        Public Overridable Function UninstallExtension(Extension As ExtensionInfo) As Task(Of ExtensionUninstallResult)
+        Public Overridable Function UninstallExtension(Extension As ExtensionInfo) As Task(Of ExtensionUninstallResult) Implements IExtensionCollection.UninstallExtension
             Redistribution.RedistributionHelpers.ScheduleDelete(GetExtensionDirectory(Extension))
             Return Task.FromResult(ExtensionUninstallResult.RestartRequired)
+        End Function
+
+        Private Function GetChildCollections() As IEnumerable(Of IExtensionCollection) Implements IExtensionCollection.GetChildCollections
+            Return {}
         End Function
     End Class
 End Namespace

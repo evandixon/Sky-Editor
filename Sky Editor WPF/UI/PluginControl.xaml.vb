@@ -115,8 +115,8 @@ Namespace UI
                 Dim s As New SaveFileDialog
                     s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
                     If s.ShowDialog = DialogResult.OK Then
-                        Await RedistributionHelpers.PackPlugins(plugins, s.FileName, info)
-                    End If
+                    Await RedistributionHelpers.PackPlugins(plugins, s.FileName, o.ObjectToEdit)
+                End If
                 ' End If
             End If
         End Sub

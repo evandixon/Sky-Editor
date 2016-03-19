@@ -1,7 +1,16 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditorBase.Interfaces
 
 Namespace Extensions
     Public Class ExtensionHelper
+        Implements Interfaces.iNamed
+
+        Public ReadOnly Property Name As String Implements iNamed.Name
+            Get
+                Return PluginHelper.GetLanguageItem("Extensions")
+            End Get
+        End Property
+
         Public Shared Async Function InstallExtension(ExtensionZip As String) As Task(Of ExtensionInstallResult)
             Dim result As ExtensionInstallResult
             Dim tempDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Temp", IO.Path.GetFileNameWithoutExtension(ExtensionZip))
