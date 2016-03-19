@@ -155,9 +155,6 @@
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControl1.xaml.vb">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="UI\AddLanguageItem.xaml.vb">
       <DependentUpon>AddLanguageItem.xaml</DependentUpon>
@@ -202,9 +199,6 @@
     </Compile>
     <Compile Include="UI\ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\PluginWindow.xaml.vb">
-      <DependentUpon>PluginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfCoreModBase.vb" />
   </ItemGroup>
@@ -335,14 +329,6 @@
     <Page Include="UI\ObjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\PluginWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControl1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

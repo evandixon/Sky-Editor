@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SkyEditorWPF.UI"
              xmlns:Extensions="clr-namespace:SkyEditorBase.Extensions;assembly=SkyEditorBase" x:Class="UI.ExtensionManager"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <TreeView x:Name="tvCategories" Grid.Column="0"/>
         <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
-        <ListView x:Name="lvExtensions" Grid.Column="2">
+        <ListView x:Name="lvExtensions" Grid.Column="2" Margin="0,0,0,33">
             <ListView.DataContext>
                 <Extensions:ExtensionInfo/>
             </ListView.DataContext>
@@ -28,9 +28,11 @@
                         <TextBlock x:Name="lblVersion" Text="Version: "  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,52,0,0"/>
                         <TextBlock Text="{Binding Version}"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="75,52,0,0" />
                         <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,73,0,0" />
-                    </Grid>                    
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button x:Name="btnBrowse" Content="Browse..." Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,8" VerticalAlignment="Bottom" Width="75"/>
+        <Button x:Name="btnToggleInstall" Content="Install" Grid.Column="2" HorizontalAlignment="Left" Margin="90,0,0,8" VerticalAlignment="Bottom" Width="75" Visibility="Collapsed"/>
     </Grid>
 </local:ObjectControl>
