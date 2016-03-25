@@ -86,6 +86,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Badge.vb" />
+    <Compile Include="FriendCodeManager.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -106,9 +108,13 @@
     <Compile Include="PKMDSLIB.Pokemon.vb" />
     <Compile Include="PKMDSLIB.PtSaveFile.vb" />
     <Compile Include="PKMDSLIB.vb" />
+    <Compile Include="PKMFontConverter.vb" />
+    <Compile Include="PKMGenerator.vb" />
     <Compile Include="PKM_Slot.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PokePRNG.vb" />
+    <Compile Include="StorageBox.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
