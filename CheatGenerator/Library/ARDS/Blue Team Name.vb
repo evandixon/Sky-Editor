@@ -1,40 +1,39 @@
-﻿Imports SkyEditorBase.ARDS
-Imports SkyEditorBase.Interfaces
+﻿Imports CheatGenerator.ARDS
 
-Public Class RedTeamName
-    Implements SkyEditorBase.ARDS.CodeDefinition
+Public Class BlueTeamName
+    Implements CodeDefinition
 
-    Public ReadOnly Property Author As String Implements SkyEditorBase.ARDS.CodeDefinition.Author
+    Public ReadOnly Property Author As String Implements CodeDefinition.Author
         Get
             Return "Demonic722"
         End Get
     End Property
 
-    Public ReadOnly Property Category As String Implements SkyEditorBase.ARDS.CodeDefinition.Category
+    Public ReadOnly Property Category As String Implements CodeDefinition.Category
         Get
             Return "Misc."
         End Get
     End Property
 
-    Public ReadOnly Property Name As String Implements SkyEditorBase.ARDS.CodeDefinition.Name
+    Public ReadOnly Property Name As String Implements CodeDefinition.Name
         Get
             Return "Team Name"
         End Get
     End Property
 
-    Public ReadOnly Property SupportedGames As String() Implements SkyEditorBase.ARDS.CodeDefinition.SupportedGames
+    Public ReadOnly Property SupportedGames As String() Implements CodeDefinition.SupportedGames
         Get
-            Return {SaveEditor.GameStrings.RedGame}
+            Return {SaveEditor.GameStrings.BlueGame}
         End Get
     End Property
 
-    Public ReadOnly Property SupportedRegions As UShort Implements SkyEditorBase.ARDS.CodeDefinition.SupportedRegions
+    Public ReadOnly Property SupportedRegions As UShort Implements CodeDefinition.SupportedRegions
         Get
-            Return SkyEditorBase.ARDS.Region.US
+            Return Region.US
         End Get
     End Property
 
-    Public Overrides Function ToString() As String Implements SkyEditorBase.ARDS.CodeDefinition.ToString
+    Public Overrides Function ToString() As String Implements CodeDefinition.ToString
         Return Name
     End Function
 
@@ -51,24 +50,19 @@ Public Class RedTeamName
         'Dim Hex7 As String = Conversion.Hex(SaveEditor.Lists.StringEncodingInverse(n(7))).PadLeft(2, "0")
         'Dim Hex8 As String = Conversion.Hex(SaveEditor.Lists.StringEncodingInverse(n(8))).PadLeft(2, "0")
         'Dim Hex9 As String = Conversion.Hex(SaveEditor.Lists.StringEncodingInverse(n(9))).PadLeft(2, "0")
-        'Dim code As New SkyEditorBase.ARDS.CBAHelper.Code
-        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        'code.Add(New CBAHelper.Line(String.Format("82038C10 {0}", Hex1 & Hex0)))
-        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        'code.Add(New CBAHelper.Line(String.Format("82038C12 {0}", Hex3 & Hex2)))
-        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        'code.Add(New CBAHelper.Line(String.Format("82038C14 {0}", Hex5 & Hex4)))
-        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        'code.Add(New CBAHelper.Line(String.Format("82038C16 {0}", Hex7 & Hex6)))
-        'code.Add(CBAHelper.Line.IfButtonDown(ButtonActivator))
-        'code.Add(New CBAHelper.Line(String.Format("82038C18 {0}", Hex9 & Hex8)))
+        'Dim code As New SkyEditorBase.ARDS.CodeGeneratorHelper.Code
+        'code.Add(CodeGeneratorHelper.Line.IfButtonDown(ButtonActivator))
+        'code.Add(New CodeGeneratorHelper.Line(String.Format("0213C134 {0}", Hex3 & Hex2 & Hex1 & Hex0)))
+        'code.Add(New CodeGeneratorHelper.Line(String.Format("0213C138 {0}", Hex7 & Hex6 & Hex5 & Hex4)))
+        'code.Add(New CodeGeneratorHelper.Line(String.Format("1213C13C {0}", "0000" & Hex9 & Hex8)))
+        'code.Add(CodeGeneratorHelper.Line.MasterEnd)
         'Return code.ToString
         Return ""
     End Function
 
     Public ReadOnly Property SupportedCheatFormats As CheatFormat() Implements CodeDefinition.SupportedCheatFormats
         Get
-            Return {CheatFormat.CBA}
+            Return {CheatFormat.ARDS}
         End Get
     End Property
 End Class

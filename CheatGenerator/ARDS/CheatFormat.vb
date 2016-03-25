@@ -1,4 +1,6 @@
-﻿Namespace ARDS
+﻿Imports SkyEditorBase
+
+Namespace ARDS
     Public Class CheatFormat
         Public Property Name As String
         Public Property SupportedButtons As Button()

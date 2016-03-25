@@ -1,4 +1,6 @@
-﻿Namespace ARDS
+﻿Imports SkyEditorBase
+
+Namespace ARDS
 
     Public Class Button
         Public Property Name As String

@@ -1,4 +1,9 @@
-﻿Namespace UI
+﻿Imports System.Windows
+Imports System.Windows.Controls
+Imports CheatGenerator.ARDS
+Imports SkyEditorBase
+
+Namespace UI
     Public Class CodeGenerator
         Dim m As PluginManager
         Private Sub CodeGenerator_Loaded(sender As Object, e As EventArgs) Handles Me.ContentRendered
@@ -40,7 +45,7 @@
         End Sub
         Sub ReloadButtons()
             listActivators.Items.Clear()
-            For Each item In DirectCast(cbCodeType.SelectedItem, ARDS.CheatFormat).SupportedButtons
+            For Each item In DirectCast(cbCodeType.SelectedItem, CheatFormat).SupportedButtons
                 listActivators.Items.Add(item)
             Next
         End Sub
