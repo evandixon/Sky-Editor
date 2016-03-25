@@ -100,12 +100,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>..\bin\x86\Debug\</OutputPath>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>..\bin\x86\Release\</OutputPath>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -152,13 +152,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ARDS\Button.vb" />
-    <Compile Include="ARDS\CBAHelper.vb" />
-    <Compile Include="ARDS\CheatFormat.vb" />
-    <Compile Include="ARDS\CodeDefinitionV3.vb" />
-    <Compile Include="ARDS\CodeGeneratorHelper.vb" />
-    <Compile Include="ARDS\Manager.vb" />
-    <Compile Include="ARDS\Region.vb" />
     <Compile Include="BasicIniFile.vb" />
     <Compile Include="ConsoleCommand.vb" />
     <Compile Include="ConsoleCommandAsync.vb" />
@@ -312,4 +305,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>
