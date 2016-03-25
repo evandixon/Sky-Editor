@@ -41,6 +41,13 @@ Public Class PluginManager
         AddHandler PluginHelper.FileOpenRequested, AddressOf _pluginHelper_FileOpened
         AddHandler PluginHelper.FileClosed, AddressOf _pluginHelper_FileClosed
     End Sub
+#End Region
+
+#Region "Plugin Loading"
+    ''' <summary>
+    ''' Loads all available plugins using the given CoreMod.
+    ''' </summary>
+    ''' <param name="CoreMod"></param>
     Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
         'Me.PluginFolder = FromFolder
         Dim devAssemblyPaths As New List(Of String)
@@ -51,17 +58,6 @@ Public Class PluginManager
         '    assemblyPaths.Add(IO.Path.Combine(FromFolder, item))
         'Next
 
-        'If we're in dev mode, then load plugins from the dev directory
-        If SettingsManager.Instance.Settings.DevelopmentMode Then
-            saveAssemblies = True
-            Dim available = PluginHelper.GetPluginAssemblies
-            For Each item In available
-                If Not devAssemblyPaths.Contains(item) Then
-                    devAssemblyPaths.Add(item)
-                End If
-            Next
-        End If
-
         'Register plugin extension type, since we're about to use it to load more plugins
         Me.RegisterTypeRegister(GetType(Extensions.ExtensionType))
         Me.RegisterType(GetType(Extensions.ExtensionType), GetType(Extensions.PluginExtensionType))
@@ -70,7 +66,6 @@ Public Class PluginManager
         CoreAssemblyName = CoreMod.GetType.Assembly.FullName
 
         Dim supportedPlugins As New List(Of String)
-        supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(devAssemblyPaths, CoreAssemblyName))
 
         'Look at the plugin extensions to find plugins.
         Dim pluginExtType As New Extensions.PluginExtensionType
@@ -83,6 +78,18 @@ Public Class PluginManager
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.exe"))
             supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(extAssemblies, CoreAssemblyName))
         Next
+
+        'If we're in dev mode, or if we couldn't find any plugin extensions, then load plugins from the dev directory
+        If SettingsManager.Instance.Settings.DevelopmentMode OrElse supportedPlugins.Count = 0 Then
+            saveAssemblies = True
+            Dim available = PluginHelper.GetPluginAssemblies
+            For Each item In available
+                If Not devAssemblyPaths.Contains(item) Then
+                    devAssemblyPaths.Add(item)
+                End If
+            Next
+            supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(devAssemblyPaths, CoreAssemblyName))
+        End If
 
         For Each item In supportedPlugins
             Dim assemblyActual = Assembly.LoadFrom(item)
@@ -118,6 +125,10 @@ Public Class PluginManager
         RaiseEvent PluginLoadComplete(Me, New EventArgs)
     End Sub
 
+    ''' <summary>
+    ''' Looks at the given assembly and loads supported types into the type registry.
+    ''' </summary>
+    ''' <param name="Item"></param>
     Private Sub LoadTypes(Item As Assembly)
         'Load types
 
@@ -138,6 +149,25 @@ Public Class PluginManager
                     End If
                 Next
             Next
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Loads the given plugin.
+    ''' Should only be called from another plugin's load method.
+    ''' </summary>
+    ''' <param name="Plugin"></param>
+    Public Sub LoadPlugin(Plugin As iSkyEditorPlugin)
+        For Each item In Plugins
+            If item.GetType.IsEquivalentTo(Plugin.GetType) Then
+                'Then we already have this plugin loaded and should do nothing
+            Else
+                Plugin.Load(Me)
+                Dim a = Plugin.GetType.Assembly
+                If Not Assemblies.Contains(a) Then
+                    Assemblies.Add(a)
+                End If
+            End If
         Next
     End Sub
 #End Region
@@ -415,6 +445,7 @@ Public Class PluginManager
 
         RaiseEvent TypeRegistered(Me, New TypeRegisteredEventArgs With {.BaseType = Register, .RegisteredType = Type})
     End Sub
+
 #End Region
 
 #Region "Functions"

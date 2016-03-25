@@ -24,7 +24,8 @@ Public Class PluginDefinition
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-
+        'Load the plugin this one depends on
+        Manager.LoadPlugin(New ROMEditor.PluginDefinition)
     End Sub
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

@@ -19,12 +19,12 @@ Public Class PluginInfo
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Text Editor (WPF)")
+            Return PluginHelper.GetLanguageItem("Text Editor")
         End Get
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-
+        Manager.LoadPlugin(New CodeFiles.PluginDefinition)
     End Sub
 
     Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution

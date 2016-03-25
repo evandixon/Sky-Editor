@@ -11,7 +11,7 @@ Public Class SkyEditorInfo
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon Save Editor UI (WPF)")
+            Return PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon Save Editor")
         End Get
     End Property
 
@@ -22,7 +22,7 @@ Public Class SkyEditorInfo
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
-
+        Manager.LoadPlugin(New SaveEditor.SkyEditorInfo)
     End Sub
 
     Public Function DetectSaveType(File As GenericFile) As String
