@@ -4,7 +4,7 @@ Imports SkyEditorBase
 Namespace FileFormats
     Public Class MessageBinStringEntry
         Implements INotifyPropertyChanged
-
+        Friend Property Pointer As Integer
         Public Property Entry As String
             Get
                 Return _entry

@@ -9,18 +9,18 @@ Namespace FileFormats
             Public Property Exp As UInteger
             Public Property AddedHP As Byte
             Public Property AddedAttack As Byte
-            Public Property AddedDefense As Byte
             Public Property AddedSpAttack As Byte
+            Public Property AddedDefense As Byte
             Public Property AddedSpDefense As Byte
             Public Property AddedSpeed As Byte
             Public Sub New(RawData As Byte())
                 Exp = BitConverter.ToUInt32(RawData, 0)
-                AddedHP = RawData(5)
-                AddedAttack = RawData(6)
+                AddedHP = RawData(4)
+                AddedAttack = RawData(5)
+                AddedSpAttack = RawData(6)
                 AddedDefense = RawData(7)
-                AddedSpAttack = RawData(8)
-                AddedSpDefense = RawData(9)
-                AddedSpeed = RawData(10)
+                AddedSpDefense = RawData(8)
+                AddedSpeed = RawData(9)
             End Sub
         End Class
 

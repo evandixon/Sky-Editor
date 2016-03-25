@@ -68,6 +68,7 @@ Namespace FileFormats
                 out.AddRange(BitConverter.GetBytes(BaseAttack))
                 out.AddRange(BitConverter.GetBytes(BaseSpAttack))
                 out.AddRange(BitConverter.GetBytes(BaseDefense))
+                out.AddRange(BitConverter.GetBytes(BaseSpDefense))
                 out.AddRange(BitConverter.GetBytes(BaseSpeed))
                 out.AddRange(BitConverter.GetBytes(EntryNumber))
                 out.AddRange(BitConverter.GetBytes(EvolvesFromEntry))

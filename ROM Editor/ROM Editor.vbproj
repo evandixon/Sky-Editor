@@ -97,7 +97,9 @@
   <ItemGroup>
     <Compile Include="ConsoleCommands\ImportFunctionList.vb" />
     <Compile Include="ConsoleCommands\MessageFarcFilenameAnalysis.vb" />
+    <Compile Include="ConsoleCommands\NameListResearcher.vb" />
     <Compile Include="ConsoleCommands\PackFarc.vb" />
+    <Compile Include="ConsoleCommands\PokemonStatsCalculator.vb" />
     <Compile Include="ConsoleCommands\PSMDLangSearch.vb" />
     <Compile Include="ConsoleCommands\Sir0Ptrs.vb" />
     <Compile Include="FileFormats\CTR\Level3Header.vb" />
@@ -108,6 +110,7 @@
     <Compile Include="FileFormats\FlowData.vb" />
     <Compile Include="FileFormats\MessageBinStringEntry.vb" />
     <Compile Include="FileFormats\PokemonDataInfo.vb" />
+    <Compile Include="PsmdDir.vb" />
     <Compile Include="FileFormats\ScriptDS\Command.vb" />
     <Compile Include="FileFormats\ScriptDS\CommandDefinition.vb" />
     <Compile Include="FileFormats\ScriptDS\CommandGroup.vb" />
@@ -279,6 +282,7 @@
     <Content Include="ROMEditor\PSMD English Soundtrack.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ROMEditor\PSMD Pokemon Name Hashes.txt" />
     <Content Include="ROMEditor\rom_tool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

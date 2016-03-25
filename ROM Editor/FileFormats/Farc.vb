@@ -31,6 +31,7 @@ Namespace FileFormats
         Public Function GetFileData(Filename As String) As Byte()
             'Only works on Farc files without filenames.
             Dim dic = GetFileDictionary()
+
             Dim hash As UInteger? = (From kv In dic Where String.Compare(Filename, kv.Value, True, Globalization.CultureInfo.InvariantCulture) = 0 Select kv.Key).FirstOrDefault
             If hash IsNot Nothing Then
                 Dim info = (From i In Header.FileData Where i.FilenamePointer = hash).FirstOrDefault

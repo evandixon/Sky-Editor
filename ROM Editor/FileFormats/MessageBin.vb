@@ -34,9 +34,19 @@ Namespace FileFormats
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Strings)))
         End Sub
 
+        Public Overrides Sub CreateFile(Name As String, FileContents() As Byte)
+            MyBase.CreateFile(Name, FileContents)
+
+            ProcessData()
+        End Sub
+
         Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
 
+            ProcessData()
+        End Sub
+
+        Private Sub ProcessData()
             Dim stringCount As Integer = BitConverter.ToInt32(Header, 0)
             Dim stringInfoPointer As Integer = BitConverter.ToInt32(Header, 4)
 
@@ -77,7 +87,7 @@ Namespace FileFormats
 
                 Loop Until doEnd
 
-                Dim newEntry = New MessageBinStringEntry With {.Hash = stringHash, .Entry = s.ToString.Trim, .Unknown = unk}
+                Dim newEntry = New MessageBinStringEntry With {.Hash = stringHash, .Entry = s.ToString.Trim, .Unknown = unk, .Pointer = stringPointer}
                 AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
                 Strings.Add(newEntry)
             Next

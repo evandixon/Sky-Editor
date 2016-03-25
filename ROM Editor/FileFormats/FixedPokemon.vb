@@ -3,11 +3,19 @@
         Inherits Sir0
         Public Class PokemonEntry
             Private Property Data As Byte()
-            Public Property PokemonID As UInt16
+            Private Property AllWords As UInt16()
+            Public Property PokemonID As Int16
             Public Property Move1 As UInt16
             Public Property Move2 As UInt16
             Public Property Move3 As UInt16
             Public Property Move4 As UInt16
+            'Not currently used
+            Public Property AttackBoost As Byte '0x17
+            Public Property SpAttackBoost As Byte '0x18
+            Public Property DefenseBoost As Byte '0x19
+            Public Property SpDefenseBoost As Byte '0x1A
+            Public Property SpeedBoost As Byte '0x1B
+            'End not currently used
             Public Function GetBytes() As Byte()
                 Dim pid = BitConverter.GetBytes(PokemonID)
                 Dim m1 = BitConverter.GetBytes(Move1)
@@ -30,7 +38,13 @@
             Public Sub New(RawData As Byte())
                 Data = RawData
 
-                PokemonID = BitConverter.ToUInt16(RawData, 0)
+                ReDim Me.AllWords(24)
+
+                For count = 0 To RawData.Length - 2 Step 2
+                    AllWords(count / 2) = BitConverter.ToUInt16(RawData, count)
+                Next
+
+                PokemonID = BitConverter.ToInt16(RawData, 0)
                 Move1 = BitConverter.ToUInt16(RawData, 8)
                 Move2 = BitConverter.ToUInt16(RawData, &HA)
                 Move3 = BitConverter.ToUInt16(RawData, &HC)
@@ -49,13 +63,39 @@
 
         Public Property Entries As List(Of PokemonEntry)
 
+        ''' <summary>
+        ''' Gets the entries that define starter Pokemon (and sometimes their 2nd non-final form).
+        ''' </summary>
+        ''' <returns></returns>
+        Protected ReadOnly Property StarterEntries As List(Of PokemonEntry)
+            Get
+                Dim out As New List(Of PokemonEntry)
+
+                For count = 17 To 54
+                    out.Add(Entries(count))
+                Next
+
+                Return out
+            End Get
+        End Property
+
+        '''' <summary>
+        '''' Gets the entries that define the forms of Pokemon when evolved through harmony scarves.
+        '''' </summary>
+        '''' <returns></returns>
+        'Protected ReadOnly Property EvolvedEntries As List(Of PokemonEntry)
+        '    Get
+
+        '    End Get
+        'End Property
+
         Public Overrides Sub OpenFile(Filename As String)
             MyBase.OpenFile(Filename)
 
             Dim numEntries = BitConverter.ToUInt32(Me.Header, 0)
             'Unknown integer at 0x4
 
-            For count = 0 To numEntries - 1
+            For count = 0 To numEntries - 2 'Subtract 1 because we're talking indexes, subtract another it seems like it's 1 too high afterward, and I don't know why
                 Dim dataPointer = BitConverter.ToUInt32(Me.Header, 8 + count * 4)
                 Entries.Add(New PokemonEntry(Me.RawData(dataPointer, &H30)))
             Next
