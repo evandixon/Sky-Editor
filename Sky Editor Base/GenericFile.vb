@@ -442,17 +442,31 @@ Public Class GenericFile
     End Function
 
     Public Function ReadNullTerminatedString(Offset As Integer, e As Text.Encoding) As String
-        Dim out As New Text.StringBuilder
-        Dim pos = Offset
-        Dim c As Byte
-        Do
-            c = RawData(pos)
-            If Not c = 0 Then
-                out.Append(e.GetString({c}))
-            End If
-            pos += 1
-        Loop Until c = 0
-        Return out.ToString
+        If e Is Text.Encoding.Unicode Then
+            Dim out As New Text.StringBuilder
+            Dim pos = Offset
+            Dim c As Char
+            Do
+                c = e.GetString(RawData(pos, 2))
+                If Not c = vbNullChar Then
+                    out.Append(c)
+                End If
+                pos += 2
+            Loop Until c = vbnullchar
+            Return out.ToString
+        Else
+            Dim out As New Text.StringBuilder
+            Dim pos = Offset
+            Dim c As Byte
+            Do
+                c = RawData(pos)
+                If Not c = 0 Then
+                    out.Append(e.GetString({c}))
+                End If
+                pos += 1
+            Loop Until c = 0
+            Return out.ToString
+        End If
     End Function
 
     ''' <summary>
