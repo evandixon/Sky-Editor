@@ -179,9 +179,6 @@
     <Compile Include="UI\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\CodeGenerator.xaml.vb">
-      <DependentUpon>CodeGenerator.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\GameTypeSelector.xaml.vb">
       <DependentUpon>GameTypeSelector.xaml</DependentUpon>
     </Compile>
@@ -299,10 +296,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\BackgroundTaskWait.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\CodeGenerator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -113,12 +113,6 @@
     <Compile Include="Interfaces\iMDPkmIQ.vb" />
     <Compile Include="Interfaces\iMDPkmMetFloor.vb" />
     <Compile Include="Interfaces\iParty.vb" />
-    <Compile Include="Library\ARDS\Red BaseType.vb" />
-    <Compile Include="Library\ARDS\Red Held Money.vb" />
-    <Compile Include="Library\ARDS\Red Rescue Points.vb" />
-    <Compile Include="Library\ARDS\Red Stored Money.vb" />
-    <Compile Include="Library\ARDS\Red Team Name.vb" />
-    <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="ByteExtensions.vb" />
     <Compile Include="Saves\GTIGameData.vb" />
     <Compile Include="Saves\GTISave.vb" />
@@ -128,10 +122,6 @@
     <Compile Include="Checksums.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="Lists.vb" />
-    <Compile Include="Library\ARDS\Blue Held Money.vb" />
-    <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
-    <Compile Include="Library\ARDS\Blue Stored Money.vb" />
-    <Compile Include="Library\ARDS\Blue Team Name.vb" />
     <Compile Include="Saves\RBSave.HeldItem.vb" />
     <Compile Include="Saves\RBSave.StoredPokemon.vb" />
     <Compile Include="Saves\RBSave.vb" />

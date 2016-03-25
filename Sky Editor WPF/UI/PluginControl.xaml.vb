@@ -109,6 +109,10 @@ Namespace UI
             Next
             If plugins.Count > 0 Then
                 Dim info As New SkyEditorBase.Extensions.ExtensionInfo
+                Dim first = plugins.First
+                info.Name = first.PluginName
+                info.Author = first.PluginAuthor
+                info.Version = first.GetType.Assembly.GetName.Version.ToString
                 Dim o As New ObjectWindow
                 o.ObjectToEdit = info
                 o.ShowDialog()
