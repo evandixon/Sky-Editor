@@ -15,7 +15,7 @@ Public Module ConsoleModule
             If cmd = "exit" Then
                 Exit While
             ElseIf cmd = "help" Then
-                Console.WriteLine(PluginHelper.GetLanguageItem("The following commands are available:"))
+                Console.WriteLine(My.Resources.Language.ConsoleAvailableCommands)
                 Dim commands As New List(Of String)(Manager.GetConsoleCommands.Keys)
                 commands.Sort()
                 For Each item In commands
@@ -34,7 +34,7 @@ Public Module ConsoleModule
                     Console.WriteLine(ex.ToString)
                 End Try
             Else
-                Console.WriteLine(String.Format("""{0}"" is not a recognizable command.", cmd))
+                Console.WriteLine(String.Format(My.Resources.Language.ConsoleUnknownCommand, cmd))
             End If
         End While
     End Function

@@ -12,7 +12,7 @@
         End Function
 
         Public Sub New()
-            MyBase.New("_File/_New/_Solution", "/c", True)
+            MyBase.New({My.Resources.Language.MenuFile, My.Resources.Language.MenuFileNew, My.Resources.Language.MenuFileNewSolution})
             Me.AlwaysVisible = True
             SortOrder = 1.12
         End Sub

@@ -23,7 +23,7 @@ Namespace UI
                 If value.Header IsNot Nothing Then
                     Me.Header = value.Header
                 Else
-                    Me.Header = PluginHelper.GetLanguageItem(value.GetType.FullName)
+                    Me.Header = PluginHelper.GetTypeName(value.GetType)
                 End If
 
                 If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is iObjectControl Then

@@ -78,6 +78,11 @@
     <Compile Include="CodeGenerator.xaml.vb">
       <DependentUpon>CodeGenerator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Language.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Language.resx</DependentUpon>
+    </Compile>
     <Compile Include="Library\ARDS\Blue BaseType.vb" />
     <Compile Include="Library\ARDS\Blue Held Money.vb" />
     <Compile Include="Library\ARDS\Blue Rescue Points.vb" />
@@ -105,6 +110,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Language.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Language.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

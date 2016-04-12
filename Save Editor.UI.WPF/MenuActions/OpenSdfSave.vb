@@ -16,7 +16,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New("_Development/_Open SDF", "/"c, True)
+            MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevOpenSDF})
             AlwaysVisible = False
 
             dialog = New FolderBrowserDialog

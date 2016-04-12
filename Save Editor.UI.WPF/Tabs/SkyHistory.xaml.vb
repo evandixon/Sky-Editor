@@ -79,13 +79,7 @@ Namespace Tabs
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("History")
-            lblPlayerName.Content = PluginHelper.GetLanguageItem("Original Player Name:")
-            lblPlayerKind.Content = PluginHelper.GetLanguageItem("Original Player Pokemon:")
-            lblPartnerName.Content = PluginHelper.GetLanguageItem("Original Partner Name:")
-            lblPartnerKind.Content = PluginHelper.GetLanguageItem("Original Partner Pokemon:")
-            chbPlayerGender.Content = PluginHelper.GetLanguageItem("Is Female")
-            chbPartnerGender.Content = PluginHelper.GetLanguageItem("Is Female")
+            Me.Header = My.Resources.Language.History
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles txtPartnerName.TextChanged, txtPlayerName.TextChanged, cbPartner.SelectionChanged, cbPlayer.SelectionChanged

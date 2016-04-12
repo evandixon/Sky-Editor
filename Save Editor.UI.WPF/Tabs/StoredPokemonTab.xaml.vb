@@ -108,9 +108,7 @@ Namespace Tabs
         End Sub
 
         Private Sub StoredPokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Stored Pokemon")
-            btnShowAll.Content = PluginHelper.GetLanguageItem("Show All")
-            btnEditPokemon.Content = PluginHelper.GetLanguageItem("Edit")
+            Me.Header = My.Resources.Language.StoredPokemonTab
         End Sub
 
         Private Sub btnShowAll_Click(sender As Object, e As RoutedEventArgs) Handles btnShowAll.Click

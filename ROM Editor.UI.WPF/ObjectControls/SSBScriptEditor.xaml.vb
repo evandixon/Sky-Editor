@@ -19,7 +19,7 @@ Public Class SSBScriptEditor
     End Sub
 
     Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Script")
+        Me.Header = My.Resources.Language.Script
     End Sub
 
     Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)

@@ -9,6 +9,7 @@ Public Class Project
     Implements iSavable
     Implements iModifiable
     Implements INotifyPropertyChanged
+    Implements iNamed
 
 #Region "Child Classes"
     Private Class SettingValue
@@ -135,7 +136,7 @@ Public Class Project
     ''' The name of the solution.
     ''' </summary>
     ''' <returns></returns>
-    Public Property Name As String
+    Public Property Name As String Implements iNamed.Name
 
     ''' <summary>
     ''' The filename of the solution file.
@@ -208,6 +209,7 @@ Public Class Project
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BuildStatusMessage)))
         End Set
     End Property
+
     Private _buildStatusMessage As String
 #End Region
 
@@ -500,7 +502,7 @@ Public Class Project
                 Dim projItem As New ProjectItem(Me)
                 projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
-                If ShowLoadingStatus Then PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Copying file..."))
+                If ShowLoadingStatus Then PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingCopyingFile)
 
                 Dim source = FilePath
                 Dim dest = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))
@@ -522,7 +524,7 @@ Public Class Project
                 'Throw New ProjectAlreadyExistsException("A project with the name """ & ProjectName & """ already exists in the given path: " & ParentPath)
             End If
         Else
-            Throw New IO.DirectoryNotFoundException("Cannot add a file at the given path: " & ParentProjectPath)
+            Throw New IO.DirectoryNotFoundException(String.Format(My.Resources.Language.ErrorCantAddFile, ParentProjectPath))
         End If
     End Function
 

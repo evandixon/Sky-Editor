@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Threading
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Redistribution
 
@@ -30,7 +31,16 @@ Public Class StartupHelpers
         End Try
 
         'Run the program
-        Dim args = Environment.GetCommandLineArgs
+        Dim args As New List(Of String)
+        args.AddRange(Environment.GetCommandLineArgs())
+        If args.Contains("-culture") Then
+            Dim index = args.IndexOf("-culture")
+            If args.Count > index + 1 Then
+                Dim culture = args(index + 1)
+                Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(culture)
+                Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(culture)
+            End If
+        End If
         If args.Contains("-console") Then
             Await StartupHelpers.StartConsole()
         Else
@@ -85,12 +95,6 @@ Public Class StartupHelpers
                 'Something's keeping the file from being deleted.  It's probably still open.  It will get deleted the next time the program exits.
             End Try
         Next
-
-        'Save pending language changes
-        Dim languageManager = SkyEditorBase.Language.LanguageManager.Instance
-        If languageManager.AdditionsMade Then
-            languageManager.SaveAll()
-        End If
 
         SettingsManager.Instance.Save()
 

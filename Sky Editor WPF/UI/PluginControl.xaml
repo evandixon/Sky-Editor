@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SkyEditorWPF.UI"
+             xmlns:res="clr-namespace:SkyEditorWPF.My.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Margin="0,0,0,32">
         <DataGrid x:Name="gridPlugins" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Extended">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="Enabled" Visibility="Collapsed"/>
-                <DataGridTextColumn x:Name="colName" Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="Name" IsReadOnly="True"/>
-                <DataGridTextColumn x:Name="colAuthor" Binding="{Binding Author}" ClipboardContentBinding="{x:Null}" Header="Author" IsReadOnly="True"/>
-                <DataGridTextColumn x:Name="colFilename" Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn x:Name="colEnabled" Binding="{Binding IsEnabled}" ClipboardContentBinding="{x:Null}" Header="{x:Static res:Language.Enabled}" Visibility="Collapsed"/>
+                <DataGridTextColumn x:Name="colName" Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Header="{x:Static res:Language.Name}" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="colAuthor" Binding="{Binding Author}" ClipboardContentBinding="{x:Null}" Header="{x:Static res:Language.Author}" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="colFilename" Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="{x:Static res:Language.Filename}" IsReadOnly="True"/>
             </DataGrid.Columns>
             <DataGrid.DataContext>
                 <local:PluginUiElement/>
@@ -23,6 +24,6 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>-->
         </DataGrid>
-        <Button x:Name="btnCreateExtension" Content="Create Extension" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="133" Margin="10,0,0,-25" />
+        <Button x:Name="btnCreateExtension" Content="{x:Static res:Language.CreateExtension}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="133" Margin="10,0,0,-25" />
     </Grid>
 </local:ObjectControl>

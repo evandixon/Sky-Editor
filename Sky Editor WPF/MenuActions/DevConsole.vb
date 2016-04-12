@@ -10,7 +10,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New("_Development/_Console", "/", True)
+            MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevConsole})
             AlwaysVisible = True
             SortOrder = 10.1
             DevOnly = True

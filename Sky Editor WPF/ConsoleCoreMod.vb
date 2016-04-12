@@ -19,7 +19,7 @@ Friend Class ConsoleCoreMod
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Sky Editor Console")
+            Return My.Resources.Language.SkyEditorConsole
         End Get
     End Property
 
@@ -40,7 +40,7 @@ Friend Class ConsoleCoreMod
 
         'Manager.OpenableFiles.Add(GetType(ExecutableFile))
 
-        Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
+        Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
 
         'Console Commands
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))

@@ -20,8 +20,6 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each Project As BaseRomProject In Targets
-                Console.WriteLine("Starting conversion...")
-
                 Dim sourceDir As String = IO.Path.Combine(Project.GetRawFilesDir, "romfs", "sound", "stream")
                 Dim destDir As String = IO.Path.Combine(Project.GetRootDirectory, "Soundtrack")
 
@@ -36,12 +34,6 @@ Namespace MenuActions
                         End If
                     Next
                 End If
-                Console.WriteLine("Track names: " & trackNames.Count)
-                If trackNames.Count = 0 Then
-                    For Each item In IO.File.ReadAllLines(PluginHelper.GetResourceName("PSMD English Soundtrack.txt"))
-                        Console.WriteLine(item)
-                    Next
-                End If
 
                 If Not IO.Directory.Exists(destDir) Then
                     IO.Directory.CreateDirectory(destDir)
@@ -51,11 +43,10 @@ Namespace MenuActions
                     IO.File.Delete(item)
                 Next
 
-                PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Converting streams..."))
+                PluginHelper.SetLoadingStatus(My.Resources.Language.ConvertingStreams)
 
-                Dim f As New SkyEditorBase.Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting streams..."))
+                Dim f As New SkyEditorBase.Utilities.AsyncFor(My.Resources.Language.ConvertingStreams)
                 Await f.RunForEach(Async Function(Item As String) As Task
-                                       Console.WriteLine("Converting " & Item & " to wav.")
                                        Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
 
                                        'Create the wav
@@ -76,17 +67,14 @@ Namespace MenuActions
                                        Await vgmstream.RunVGMStream(source, destinationWav)
 
                                        'Convert to mp3
-                                       Console.WriteLine("Converting " & Item & " to mp3.")
                                        Await ffmpeg.ConvertToMp3(destinationWav, destinationMp3)
 
                                        IO.File.Delete(destinationWav)
 
-                                       Console.WriteLine("Tagging " & Item)
-
                                        ' Dim m = IdSharp.AudioInfo.AudioFile.Create(destinationMp3, True)
                                        Dim t As New IdSharp.Tagging.ID3v2.ID3v2Tag(destinationMp3)
-                                       t.Album = "Pokémon Super Mystery Dungeon"
-                                       t.Artist = "Chunsoft"
+                                       t.Album = My.Resources.Language.PSMDSoundTrackAlbum
+                                       t.Artist = My.Resources.Language.PSMDSoundTrackArtist
                                        t.Year = 2015
                                        Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
                                        If filenameParts.Count = 2 Then
@@ -98,13 +86,11 @@ Namespace MenuActions
                                        End If
                                        t.Save(destinationMp3)
                                    End Function, trackNames.Keys)
-
-                Console.WriteLine("Conversion complete!")
             Next
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("Utilities"), PluginHelper.GetLanguageItem("Export Soundtrack")})
+            MyBase.New({My.Resources.Language.MenuUtilities, My.Resources.Language.MenuUtilitiesExportSoundtrack})
             SortOrder = 4.1
         End Sub
     End Class

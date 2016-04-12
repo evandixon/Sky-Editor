@@ -25,9 +25,9 @@ Namespace MenuActions
             Return Task.CompletedTask
         End Function
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Image"), PluginHelper.GetLanguageItem("_Export Image")})
+            MyBase.New({My.Resources.Language.MenuImage, My.Resources.Language.MenuImageExport})
             SaveFileDialog1 = New Windows.Forms.SaveFileDialog
-            SaveFileDialog1.Filter = "PNG Images (*.png)|*.png|Bitmap Images (*.bmp)|*.bmp"
+            SaveFileDialog1.Filter = $"{My.Resources.Language.PNGImages} (*.png)|*.png|{My.Resources.Language.BitmapImages} (*.bmp)|*.bmp"
             SortOrder = 4.1
         End Sub
     End Class

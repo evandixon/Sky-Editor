@@ -14,7 +14,7 @@ Namespace MenuActions
                 Try
                     Await item.Build()
                 Catch ex As Exception
-                    MessageBox.Show(PluginHelper.GetLanguageItem("Failed to build solution.  See output for details."))
+                    MessageBox.Show(My.Resources.Language.SolutionBuildFailedSeeOutput)
                     PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
                     PluginHelper.SetLoadingStatusFailed()
                 End Try
@@ -22,7 +22,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Solution"), PluginHelper.GetLanguageItem("_Build")})
+            MyBase.New({My.Resources.Language.MenuSolution, My.Resources.Language.MenuSolutionBuild})
             SortOrder = 2.1
         End Sub
     End Class

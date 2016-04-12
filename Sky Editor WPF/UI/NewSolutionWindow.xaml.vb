@@ -35,8 +35,6 @@ Namespace UI
         End Sub
 
         Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Title = PluginHelper.GetLanguageItem("New Solution")
-            UiHelper.TranslateForm(Me)
             If SettingsManager.Instance.Settings.Setting("LastSolutionDirectory") IsNot Nothing Then
                 txtLocation.Text = SettingsManager.Instance.Settings.Setting("LastSolutionDirectory")
             End If

@@ -23,7 +23,7 @@ Namespace ObjectControls
         End Sub
 
         Private Sub ThreeDSModPackControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("3DS Build Options")
+            Me.Header = My.Resources.Language.ThreeDSBuildOptions
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)

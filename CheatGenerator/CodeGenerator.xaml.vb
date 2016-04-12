@@ -7,20 +7,10 @@ Namespace UI
     Public Class CodeGenerator
         Dim m As PluginManager
         Private Sub CodeGenerator_Loaded(sender As Object, e As EventArgs) Handles Me.ContentRendered
-            'Load Language
-            lbActivator.Content = PluginHelper.GetLanguageItem("Activator")
-            lbRegion.Content = PluginHelper.GetLanguageItem("Region")
-            lbCategory.Content = PluginHelper.GetLanguageItem("Category")
-            lbProperty.Content = PluginHelper.GetLanguageItem("Property")
-            lbAuthor.Content = PluginHelper.GetLanguageItem("Author")
-            lblCodeType.Content = PluginHelper.GetLanguageItem("CodeType", "Code Type")
-            lblGame.Content = PluginHelper.GetLanguageItem("Game")
-            Me.Title = PluginHelper.GetLanguageItem("CodeGeneratorTitle", "Cheat Code Generator")
-            btnGenerate.Content = PluginHelper.GetLanguageItem("Generate")
             If False Then 'm.CheatManager.CodeDefinitions.Count > 0 Then
                 LoadCodeTypes()
             Else
-                MessageBox.Show(PluginHelper.GetLanguageItem("Error_NoCheats", "You don't have any code generator plugins installed.  To use the code generator, put a supported plugin into ~/Resources/ and restart the program."))
+                MessageBox.Show(My.Resources.Language.ErrorNoCheats)
                 Me.Close()
             End If
         End Sub

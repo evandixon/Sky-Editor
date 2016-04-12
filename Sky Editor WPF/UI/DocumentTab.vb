@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports System.Globalization
+Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Namespace UI
@@ -50,7 +51,7 @@ Namespace UI
                     Else
                         'Nothing is registered to edit this object.
                         Dim label As New Label
-                        label.Content = String.Format(PluginHelper.GetLanguageItem("There are no UserControls for this object of type ""{0}""."), value.GetType.FullName)
+                        label.Content = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.NoAvailableUI, value.GetType.FullName)
                         Me.Content = label
                     End If
                 End If
@@ -99,7 +100,7 @@ Namespace UI
 #Region "Event Handlers"
         Private Sub DocumentTab_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
             If IsModified Then
-                If MessageBox.Show(PluginHelper.GetLanguageItem("Document Close Notification", "Are you sure you want to close this file?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
+                If MessageBox.Show(My.Resources.Language.DocumentCloseConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.No Then
                     e.Cancel = True
                 Else
                     If TypeOf _document Is IDisposable Then

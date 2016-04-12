@@ -119,6 +119,7 @@
     <Compile Include="Form2.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GenericFile.vb" />
     <Compile Include="ModFile.vb" />
     <Compile Include="ModJson.vb" />
     <Compile Include="ModpackInfo.vb" />

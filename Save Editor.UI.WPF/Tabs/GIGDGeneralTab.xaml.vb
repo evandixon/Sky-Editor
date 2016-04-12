@@ -21,7 +21,7 @@ Namespace Tabs
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("General")
+            Me.Header = My.Resources.Language.General
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles numGeneral_HeldMoney.ValueChanged, numCompanionHeldMoney.ValueChanged

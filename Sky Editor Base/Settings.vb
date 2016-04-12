@@ -222,13 +222,10 @@ Public Class SettingsManager
     End Property
     Dim _settings As SettingsSet
 
-    Public Property Name As String Implements iNamed.Name
+    Public ReadOnly Property Name As String Implements iNamed.Name
         Get
-            Return PluginHelper.GetLanguageItem("Settings")
+            Return My.Resources.Language.Settings
         End Get
-        Set(value As String)
-
-        End Set
     End Property
 
     Public Function DefaultExtension() As String 'Implements iSavable.DefaultExtension

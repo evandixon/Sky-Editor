@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ROMEditor.UI.WPF"
              xmlns:skywpf="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TabControl x:Name="tcTabs" Margin="0,0,0,31"/>
-        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Width="100"/>
-        <Button x:Name="btnSciptSort" Content="Script Sort" HorizontalAlignment="Left" Margin="115,0,0,6" VerticalAlignment="Bottom" Width="100" Visibility="Collapsed" IsEnabled="False"/>
+        <Button x:Name="btnAdd" Content="{x:Static res:Language.Add}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Width="100"/>
+        <Button x:Name="btnSciptSort" Content="{x:Static res:Language.ScriptSort}" HorizontalAlignment="Left" Margin="115,0,0,6" VerticalAlignment="Bottom" Width="100" Visibility="Collapsed" IsEnabled="False"/>
     </Grid>
 </skywpf:ObjectControl>

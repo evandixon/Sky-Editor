@@ -3,6 +3,7 @@ Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
 Imports SkyEditorBase.Interfaces
+Imports System.Resources
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -115,22 +116,41 @@ Public Class PluginHelper
 
 #Region "Translation"
     ''' <summary>
-    ''' Gets the text specified by the currently loaded language files.
+    ''' Gets the name of the given type if its contained assembly has its name in its localized resource file, or the full name of the type if it does not.
     ''' </summary>
-    ''' <param name="Key">The name of the language item to load.</param>
-    ''' <param name="DefaultValue">If the currently selected language and the English language files both do not contain the requested Key,
-    ''' this value will be returned and written to the English language files in your plugin's resource directory.
-    ''' If Nothing (or not provided), will be set to Key in the event it's needed.</param>
+    ''' <param name="type">Type of which to get the name.</param>
     ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Shared Function GetLanguageItem(Key As String, Optional DefaultValue As String = Nothing, Optional CallingAssembly As String = Nothing) As String
-        If CallingAssembly Is Nothing Then
-            CallingAssembly = Assembly.GetCallingAssembly.GetName.Name
+    Public Shared Function GetTypeName(type As Type) As String
+        Dim output As String = Nothing
+        Dim parent = type.Assembly
+        Dim manager As ResourceManager = Nothing
+        Dim resxNames As New List(Of String)(parent.GetManifestResourceNames)
+        'Dim q = From r In resxNames Where String.Compare(r, "language", True, Globalization.CultureInfo.InvariantCulture) = 0
+        'If q.Any Then
+        '    'Then look in this one first.
+        '    manager = New ResourceManager(q.First, parent)
+        'End If
+
+        'If manager IsNot Nothing Then
+        '    output = manager.GetString(type.FullName.Replace(".", "_"))
+        'End If
+
+        If output Is Nothing Then
+            'Then either the language resources doesn't exist, or does not contain what we're looking for.
+            'In either case, we'll look at the other resource files.
+            For Each item In resxNames
+                manager = New ResourceManager(item.Replace(".resources", ""), parent)
+                output = manager.GetString(type.FullName.Replace(".", "_"))
+                If output IsNot Nothing Then
+                    Exit For 'We found something.  Time to return it.
+                End If
+            Next
         End If
-        If SettingsManager.Instance.Settings.DebugLanguagePlaceholders Then
-            Return String.Format("[{0}]", Key)
+
+        If output IsNot Nothing Then
+            Return output
         Else
-            Return Language.LanguageManager.GetLanguageItem(Key, CallingAssembly, DefaultValue)
+            Return type.FullName
         End If
     End Function
 
@@ -164,7 +184,7 @@ Public Class PluginHelper
     ''' <param name="Arguments">Arguments to pass to the process.</param>
     ''' <remarks></remarks>
     Public Shared Async Function RunProgram(Filename As String, Arguments As String, Optional ShowLoadingWindow As Boolean = True) As Task
-        Writeline(String.Format(PluginHelper.GetLanguageItem("Executing {0} {1}", "Executing {0} {1}"), Filename, Arguments))
+        Writeline(String.Format(My.Resources.Language.ExecutingProgram, Filename, Arguments))
         'Set up the process
         Dim p As New Process()
         p.StartInfo.FileName = Filename
@@ -182,7 +202,7 @@ Public Class PluginHelper
 
         'Wait for the process to close
         If ShowLoadingWindow Then
-            SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("WaitingOnTask", "Waiting on {0}..."), IO.Path.GetFileName(Filename)))
+            SetLoadingStatus(String.Format(My.Resources.Language.WaitingOnProgram, IO.Path.GetFileName(Filename)))
             Await WaitForProcess(p)
             SetLoadingStatusFinished()
         Else
@@ -192,7 +212,7 @@ Public Class PluginHelper
         'Clean up
         RemoveHandler p.OutputDataReceived, AddressOf OutputHandler
         p.Dispose()
-        Writeline(String.Format(PluginHelper.GetLanguageItem("""{0}"" finished running."), p.StartInfo.FileName))
+        Writeline(String.Format(My.Resources.Language.ProgramFinished, p.StartInfo.FileName))
     End Function
 
     ''' <summary>
@@ -213,7 +233,7 @@ Public Class PluginHelper
     ''' <param name="Arguments">Arguments to pass to the process.</param>
     ''' <remarks></remarks>
     Public Shared Sub RunProgramInBackground(Filename As String, Arguments As String)
-        Writeline(String.Format(PluginHelper.GetLanguageItem("(Async) Executing ""{0}"" ""{1}"""), Filename, Arguments))
+        Writeline(String.Format(My.Resources.Language.ExecutingProgramAsync, Filename, Arguments))
         Dim p As New Process()
         p.StartInfo.FileName = Filename
         p.StartInfo.Arguments = Arguments
@@ -253,10 +273,10 @@ Public Class PluginHelper
         RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(Message))
     End Sub
     Public Shared Sub SetLoadingStatusFinished()
-        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(PluginHelper.GetLanguageItem("Ready"), 1))
+        RaiseEvent LoadingMessageChanged(Nothing, New LoadingMessageChangedEventArgs(My.Resources.Language.Ready, 1))
     End Sub
     Public Shared Sub SetLoadingStatusFailed()
-        SetLoadingStatus(PluginHelper.GetLanguageItem("Failed"), 0)
+        SetLoadingStatus(My.Resources.Language.Failed, 0)
     End Sub
 #End Region
 

@@ -30,7 +30,7 @@ Namespace ObjectControls
         End Sub
 
         Private Sub ModpackInfoControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            UiHelper.TranslateForm(Me)
+            Me.Header = My.Resources.Language.ModInfo
         End Sub
 
         Private Sub TextChanged(sender As Object, e As TextChangedEventArgs) Handles txtAuthor.TextChanged, txtGameCode.TextChanged, txtName.TextChanged, txtVersion.TextChanged

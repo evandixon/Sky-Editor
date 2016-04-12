@@ -4,9 +4,6 @@ Namespace ARDS
     Public Class CheatFormat
         Public Property Name As String
         Public Property SupportedButtons As Button()
-        Public Overrides Function ToString() As String
-            Return PluginHelper.GetLanguageItem(Name)
-        End Function
         Public Overrides Function Equals(obj As Object) As Boolean
             If TypeOf obj Is CheatFormat Then
                 Return Name.Equals(obj.name)

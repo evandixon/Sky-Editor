@@ -151,16 +151,16 @@ Public Class MessageBinEditor
 
     Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not DesignerProperties.GetIsInDesignMode(Me) Then
-            Me.Header = PluginHelper.GetLanguageItem("Message")
-            columnID.Header = PluginHelper.GetLanguageItem("ID")
-            columnEntry.Header = PluginHelper.GetLanguageItem("Entry")
-            lblSearch.Content = PluginHelper.GetLanguageItem("Search: ")
+            Me.Header = My.Resources.Language.Message
+            columnID.Header = My.Resources.Language.ID
+            columnEntry.Header = My.Resources.Language.Entry
+            lblSearch.Content = My.Resources.Language.Search
         End If
     End Sub
 
     Private Sub btnExport_Click(sender As Object, e As RoutedEventArgs) Handles btnExport.Click
         Dim f As New SaveFileDialog
-        f.Filter = "HTML Files (*.htm)|*.htm|All Files (*.*)|*.*"
+        f.Filter = $"{My.Resources.Language.HTMLFiles} (*.htm)|*.htm|{My.Resources.Language.AllFiles} (*.*)|*.*"
         'If f.ShowDialog = DialogResult.OK Then
 
         'End If

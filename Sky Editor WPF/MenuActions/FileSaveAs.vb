@@ -17,7 +17,7 @@ Namespace MenuActions
             Return Task.CompletedTask
         End Function
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Save"), PluginHelper.GetLanguageItem("Save File _As...")})
+            MyBase.New({My.Resources.Language.MenuFile, My.Resources.Language.MenuFileSave, My.Resources.Language.MenuFileSaveFileAs})
             SaveFileDialog1 = New Forms.SaveFileDialog
             SortOrder = 1.32
         End Sub

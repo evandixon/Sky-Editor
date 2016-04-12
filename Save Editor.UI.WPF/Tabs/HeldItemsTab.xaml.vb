@@ -91,7 +91,7 @@ Namespace Tabs
                 lbHeldItems.Items.Add(i)
                 IsModified = True
             Else
-                MessageBox.Show(PluginHelper.GetLanguageItem("Error_TooManyHeldItems", "You are holding the maximum number of items.  To add another, one must be deleted first."))
+                MessageBox.Show(My.Resources.Language.ErrorTooManyItems)
             End If
             'Me.Header = PluginHelper.GetLanguageItem("Inventory")
         End Sub
@@ -113,10 +113,7 @@ Namespace Tabs
         End Sub
 
         Private Sub HeldItemsTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Inventory")
-            btnHeldItemsAdd.Content = PluginHelper.GetLanguageItem("Add")
-            lbHeldItemsDelete.Header = PluginHelper.GetLanguageItem("Delete")
-            gbHeldBoxContent.Header = PluginHelper.GetLanguageItem("BoxContents")
+            Me.Header = My.Resources.Language.HeldItemsTabHeader
         End Sub
         Dim oldSlot As Integer = -1
         Dim isRefresh As Boolean = False

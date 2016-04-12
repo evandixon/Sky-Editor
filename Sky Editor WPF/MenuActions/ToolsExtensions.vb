@@ -8,7 +8,7 @@
         End Function
 
         Public Sub New()
-            MyBase.New("_Tools/_Extensions", "/"c, True)
+            MyBase.New({My.Resources.Language.MenuTools, My.Resources.Language.MenuToolsExtensions})
             AlwaysVisible = True
             SortOrder = 3.2
         End Sub

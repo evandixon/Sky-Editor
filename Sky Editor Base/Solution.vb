@@ -316,6 +316,26 @@ Public Class Solution
         End If
     End Sub
 
+    Public Overridable Sub AddExistingProject(ParentPath As String, ProjectFilename As String)
+        Dim item = GetSolutionItemByPath(ParentPath)
+        If item IsNot Nothing Then
+            Dim p As Project = Project.OpenProjectFile(ProjectFilename)
+            Dim q = (From c In item.Children Where c.Name.ToLower = p.Name.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+            If q Is Nothing Then
+                'Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
+                item.Children.Add(New SolutionItem With {.IsDirectory = False, .Name = p.Name, .Project = p})
+                AddHandler p.Modified, AddressOf Project_Modified
+                RaiseModified()
+                RaiseEvent ProjectAdded(Me, New EventArguments.ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
+            Else
+                'There's already a project here
+                Throw New ProjectAlreadyExistsException("A project with the name """ & p.Name & """ already exists in the given path: " & ParentPath)
+            End If
+        Else
+            Throw New IO.DirectoryNotFoundException("Cannot create a project at the given path: " & ParentPath)
+        End If
+    End Sub
+
     Public Overridable Function CanDeleteProject(ProjectPath As String) As Boolean
         Return (GetSolutionItemByPath(ProjectPath) IsNot Nothing)
     End Function
@@ -381,13 +401,13 @@ Public Class Solution
     Public Overridable Async Function Build() As Task
         RaiseEvent SolutionBuildStarted(Me, New EventArgs)
         Dim toBuild As New Dictionary(Of Project, Boolean)
-        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Building projects..."))
+        PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingBuildingProjects)
 
         For Each item In GetProjectsToBuild()
             If Not item.HasCircularReferences(Me) Then
                 toBuild.Add(item, False)
             Else
-                PluginHelper.Writeline("Project " & item.Name & " has a circular reference.  Skipping its compilation.", LineType.Error)
+                PluginHelper.Writeline(String.Format(My.Resources.Language.ErrorProjectCircularReference, item.Name), LineType.Error)
             End If
         Next
 
@@ -421,7 +441,7 @@ Public Class Solution
 
     Private Sub UpdateBuildLoadingStatus(toBuild As Dictionary(Of Project, Boolean))
         Dim built As Integer = (From v In toBuild.Values Where v = True).Count
-        PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Building projects... ({0} of {1})"), built, toBuild.Count), built / toBuild.Count)
+        PluginHelper.SetLoadingStatus(String.Format(My.Resources.Language.LoadingBuildingProjectsXofY, built, toBuild.Count), built / toBuild.Count)
     End Sub
 
 
@@ -637,7 +657,7 @@ Public Class Solution
 #End Region
 
     Public Overrides Function ToString() As String
-        Return PluginHelper.GetLanguageItem(Me.GetType.FullName)
+        Return PluginHelper.GetTypeName(Me.GetType)
     End Function
 
     Public Function DefaultExtension() As String 'Implements ISavableAs.DefaultExtension

@@ -50,7 +50,7 @@
     <DocumentationFile>SkyEditorBase.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -199,11 +199,13 @@
     <Compile Include="Interfaces\iSavable.vb" />
     <Compile Include="Interfaces\ISavableAs.vb" />
     <Compile Include="Interfaces\ITargetedControl.vb" />
+    <Compile Include="Language.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Language.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\AssemblyReflectionManager.vb" />
     <Compile Include="Utilities\AssemblyReflectionProxy.vb" />
-    <Compile Include="Language\LanguageFile.vb" />
-    <Compile Include="Language\LanguageItem.vb" />
-    <Compile Include="Language\LanguageItemList.vb" />
     <Compile Include="MenuAction.vb" />
     <Compile Include="MenuItemInfo.vb" />
     <Compile Include="ObjectFile.vb" />
@@ -219,7 +221,6 @@
     <Compile Include="Utilities\CurrentUser.vb" />
     <Compile Include="Utilities\FileSystem.vb" />
     <Compile Include="Utilities\GenericListItem.vb" />
-    <Compile Include="Language\LanguageManager.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
     <Compile Include="Utilities\Hex.vb" />
     <Compile Include="Utilities\Json.vb" />
@@ -265,6 +266,11 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Language.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Language.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="My Project\app.manifest" />

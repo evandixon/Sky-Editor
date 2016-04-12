@@ -14,7 +14,7 @@
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Save"), PluginHelper.GetLanguageItem("Save _Solution")})
+            MyBase.New({My.Resources.Language.MenuFile, My.Resources.Language.MenuFileSave, My.Resources.Language.MenuFileSaveSolution})
             SortOrder = 1.33
         End Sub
     End Class

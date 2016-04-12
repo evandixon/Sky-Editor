@@ -14,7 +14,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Tools"), PluginHelper.GetLanguageItem("_Settings")})
+            MyBase.New({My.Resources.Language.MenuTools, My.Resources.Language.menutoolsSettings})
             AlwaysVisible = True
             SortOrder = 3.1
         End Sub

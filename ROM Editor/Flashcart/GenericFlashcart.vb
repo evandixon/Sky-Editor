@@ -22,6 +22,7 @@ Namespace Flashcart
         Public Overridable Sub Initialize(Drive As IO.DriveInfo)
             Me.Drive = Drive
             Me.Name = Drive.VolumeLabel
+            Me.ID = Guid.NewGuid
         End Sub
 
         Public Overridable Sub Initialize(Drive As IO.DriveInfo, InfoFile As FlashcartInfoFile)

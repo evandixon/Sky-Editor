@@ -5,6 +5,8 @@ Namespace Saves
         Inherits SdfSave
         Implements iContainer(Of GTIGameData)
 
+        Public Const GTIMiniTitleID As String = "00000ba8"
+
         Public Property GameData As GTIGameData Implements iContainer(Of GTIGameData).Item
 
         Public Sub New()

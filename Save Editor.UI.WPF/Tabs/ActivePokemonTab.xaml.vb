@@ -25,8 +25,7 @@ Namespace Tabs
         End Sub
 
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Party")
-            btnEditActivePokemon.Content = PluginHelper.GetLanguageItem("Edit")
+            Me.Header = My.Resources.Language.ActivePokemonHeader
         End Sub
         Sub RefreshActivePKMDisplay()
             Dim pkms As New List(Of iMDPkm)

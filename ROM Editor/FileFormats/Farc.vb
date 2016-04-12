@@ -67,7 +67,7 @@ Namespace FileFormats
         ''' </summary>
         ''' <param name="Directory">Directory to extract the FARC to.</param>
         Public Async Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
-            Dim asyncFor As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Extracting files..."))
+            Dim asyncFor As New Utilities.AsyncFor(My.Resources.Language.FarcLoadingExtract)
             Dim dic As Dictionary(Of UInteger, String)
             If UseDictionary Then
                 dic = GetFileDictionary()

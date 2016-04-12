@@ -5,9 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:avalon="http://schemas.xceed.com/wpf/xaml/avalondock"
-             xmlns:local="clr-namespace:SkyEditorBase"
+             xmlns:res="clr-namespace:SkyEditorWPF.My.Resources"
              mc:Ignorable="d">
     <Grid>
-        <Label>Welcome to Sky Editor!  To begin, use File -> Open to open a supported save file.</Label>
+        <Label Content="{x:Static res:Language.WelcomeMessage}" />
     </Grid>
 </UserControl>

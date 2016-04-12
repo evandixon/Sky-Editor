@@ -4,19 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SkyEditorWPF"
+             xmlns:res="clr-namespace:SkyEditorWPF.My.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TreeView x:Name="tvSolution">
             <TreeView.ContextMenu>
                 <ContextMenu x:Name="menuContext">
-                    <MenuItem x:Name="menuOpen" Header="Open" />
-                    <MenuItem x:Name="menuAddFolder" Header="Create Folder" />
-                    <MenuItem x:Name="menuCreateProject" Header="Create Project" />
-                    <MenuItem x:Name="menuCreateFile" Header="Create File" />
-                    <MenuItem x:Name="menuAddExistingFile" Header="Add Existing File"/>
-                    <MenuItem x:Name="menuDelete" Header="Delete" />
-                    <MenuItem x:Name="menuProperties" Header="Properties"/>
+                    <MenuItem x:Name="menuOpen" Header="{x:Static res:Language.MenuFileOpen}" />
+                    <MenuItem x:Name="menuAddFolder" Header="{x:Static res:Language.MenuCreateFolder}" />
+                    <MenuItem x:Name="menuCreateProject" Header="{x:Static res:Language.MenuCreateProject}" />
+                    <MenuItem x:Name="menuCreateFile" Header="{x:Static res:Language.MenuCreateFile}" />
+                    <MenuItem x:Name="menuAddExistingProject" Header="{x:Static res:Language.MenuAddProject}"/>
+                    <MenuItem x:Name="menuAddExistingFile" Header="{x:Static res:Language.MenuAddFile}"/>
+                    <MenuItem x:Name="menuDelete" Header="{x:Static res:Language.MenuDelete}" />
+                    <MenuItem x:Name="menuProperties" Header="{x:Static res:Language.MenuProperties}"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

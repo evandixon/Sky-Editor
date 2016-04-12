@@ -126,6 +126,11 @@
     <Compile Include="Controls\MDAttack.xaml.vb">
       <DependentUpon>MDAttack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Language.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Language.resx</DependentUpon>
+    </Compile>
     <Compile Include="MenuActions\ImportSdf.vb" />
     <Compile Include="MenuActions\OpenSdfSave.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -188,6 +193,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Language.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Language.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

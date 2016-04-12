@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
+  <data name="BoldFemale" xml:space="preserve">
+    <value>Bold Female:</value>
+  </data>
+  <data name="BoldMale" xml:space="preserve">
+    <value>Bold Male:</value>
+  </data>
+  <data name="BraveFemale" xml:space="preserve">
+    <value>Brave Female:</value>
+  </data>
+  <data name="BraveMale" xml:space="preserve">
+    <value>Brave Male:</value>
+  </data>
+  <data name="CalmFemale" xml:space="preserve">
+    <value>Calm Female:</value>
+  </data>
+  <data name="CalmMale" xml:space="preserve">
+    <value>Calm Male:</value>
+  </data>
+  <data name="DocileFemale" xml:space="preserve">
+    <value>Docile Female:</value>
+  </data>
+  <data name="DocileMale" xml:space="preserve">
+    <value>Docile Male:</value>
+  </data>
+  <data name="Entry" xml:space="preserve">
+    <value>Entry</value>
+  </data>
+  <data name="HardyFemale" xml:space="preserve">
+    <value>Hardy Female:</value>
+  </data>
+  <data name="HardyMale" xml:space="preserve">
+    <value>Hardy Male:</value>
+  </data>
+  <data name="HastyFemale" xml:space="preserve">
+    <value>Hasty Female:</value>
+  </data>
+  <data name="HastyMale" xml:space="preserve">
+    <value>Hasty Male:</value>
+  </data>
+  <data name="HTMLFiles" xml:space="preserve">
+    <value>HTML Files</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ImpishFemale" xml:space="preserve">
+    <value>Impish Female:</value>
+  </data>
+  <data name="ImpishMale" xml:space="preserve">
+    <value>Impish Male:</value>
+  </data>
+  <data name="IsFemale" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="JollyFemale" xml:space="preserve">
+    <value>Jolly Female:</value>
+  </data>
+  <data name="JollyMale" xml:space="preserve">
+    <value>Jolly Male:</value>
+  </data>
+  <data name="LonelyFemale" xml:space="preserve">
+    <value>Lonely Female:</value>
+  </data>
+  <data name="LonelyMale" xml:space="preserve">
+    <value>Lonely Male:</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="NaiveFemale" xml:space="preserve">
+    <value>Naïve Female:</value>
+  </data>
+  <data name="NaiveMale" xml:space="preserve">
+    <value>Naïve Male:</value>
+  </data>
+  <data name="Partner01" xml:space="preserve">
+    <value>Partner 01:</value>
+  </data>
+  <data name="Partner02" xml:space="preserve">
+    <value>Partner 02:</value>
+  </data>
+  <data name="Partner03" xml:space="preserve">
+    <value>Partner 03:</value>
+  </data>
+  <data name="Partner04" xml:space="preserve">
+    <value>Partner 04:</value>
+  </data>
+  <data name="Partner05" xml:space="preserve">
+    <value>Partner 05:</value>
+  </data>
+  <data name="Partner06" xml:space="preserve">
+    <value>Partner 06:</value>
+  </data>
+  <data name="Partner07" xml:space="preserve">
+    <value>Partner 07:</value>
+  </data>
+  <data name="Partner08" xml:space="preserve">
+    <value>Partner 08:</value>
+  </data>
+  <data name="Partner09" xml:space="preserve">
+    <value>Partner 09:</value>
+  </data>
+  <data name="Partner10" xml:space="preserve">
+    <value>Partner 10:</value>
+  </data>
+  <data name="Partner11" xml:space="preserve">
+    <value>Partner 11:</value>
+  </data>
+  <data name="Partner12" xml:space="preserve">
+    <value>Partner 12:</value>
+  </data>
+  <data name="Partner13" xml:space="preserve">
+    <value>Partner 13:</value>
+  </data>
+  <data name="Partner14" xml:space="preserve">
+    <value>Partner 14:</value>
+  </data>
+  <data name="Partner15" xml:space="preserve">
+    <value>Partner 15:</value>
+  </data>
+  <data name="Partner16" xml:space="preserve">
+    <value>Partner 16:</value>
+  </data>
+  <data name="Partner17" xml:space="preserve">
+    <value>Partner 17:</value>
+  </data>
+  <data name="Partner18" xml:space="preserve">
+    <value>Partner 18:</value>
+  </data>
+  <data name="Partner19" xml:space="preserve">
+    <value>Partner 19:</value>
+  </data>
+  <data name="Partner20" xml:space="preserve">
+    <value>Partner 20:</value>
+  </data>
+  <data name="Partner21" xml:space="preserve">
+    <value>Partner 21:</value>
+  </data>
+  <data name="QuietFemale" xml:space="preserve">
+    <value>Quiet Female:</value>
+  </data>
+  <data name="QuietMale" xml:space="preserve">
+    <value>Quiet Male:</value>
+  </data>
+  <data name="QuirkyFemale" xml:space="preserve">
+    <value>Quirky Female:</value>
+  </data>
+  <data name="QuirkyMale" xml:space="preserve">
+    <value>Quirky Male:</value>
+  </data>
+  <data name="RashFemale" xml:space="preserve">
+    <value>Rash Female:</value>
+  </data>
+  <data name="RashMale" xml:space="preserve">
+    <value>Rash Male:</value>
+  </data>
+  <data name="RelaxedFemale" xml:space="preserve">
+    <value>Relaxed Female:</value>
+  </data>
+  <data name="RelaxedMale" xml:space="preserve">
+    <value>Relaxed Male:</value>
+  </data>
+  <data name="SassyFemale" xml:space="preserve">
+    <value>Sassy Female:</value>
+  </data>
+  <data name="SassyMale" xml:space="preserve">
+    <value>Sassy Male:</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search: </value>
+  </data>
+  <data name="TimidFemale" xml:space="preserve">
+    <value>Timid Female:</value>
+  </data>
+  <data name="TimidMale" xml:space="preserve">
+    <value>Timid Male:</value>
+  </data>
+  <data name="Partner" xml:space="preserve">
+    <value>Partner</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="ModInfo" xml:space="preserve">
+    <value>Mod Info</value>
+  </data>
+  <data name="ModpackInfo" xml:space="preserve">
+    <value>Modpack Info</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Constants" xml:space="preserve">
+    <value>Constants</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GameCode" xml:space="preserve">
+    <value>Game Code</value>
+  </data>
+  <data name="GenericLoading" xml:space="preserve">
+    <value>{0} (Loading)</value>
+  </data>
+  <data name="ModName" xml:space="preserve">
+    <value>Mod Name</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NDSRomFiles" xml:space="preserve">
+    <value>NDS ROM Files</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="PluginAuthor" xml:space="preserve">
+    <value>evandixon</value>
+  </data>
+  <data name="PluginCredits" xml:space="preserve">
+    <value>Rom Editor Credits:
+psy_commando (Pokemon portraits, most of the research)
+Grovyle91 (Language strings)
+evandixon (Personality test, bgp files)</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>ROM Editor UI (WPF)</value>
+  </data>
+  <data name="ROMSelector" xml:space="preserve">
+    <value>ROM Selector</value>
+  </data>
+  <data name="Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="ScriptSort" xml:space="preserve">
+    <value>Script Sort</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Short Name</value>
+  </data>
+  <data name="Strings" xml:space="preserve">
+    <value>Strings</value>
+  </data>
+  <data name="ThreeDSBuildOptions" xml:space="preserve">
+    <value>3DS Build Options</value>
+  </data>
+  <data name="UpdateUrl" xml:space="preserve">
+    <value>Update URL</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+</root>

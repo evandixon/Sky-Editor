@@ -8,7 +8,7 @@
         End Function
 
         Public Sub New()
-            MyBase.New("_Development/_Plugins", TranslateItems:=True)
+            MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevPlugins})
             Me.AlwaysVisible = True
             Me.DevOnly = False
             SortOrder = 10.3

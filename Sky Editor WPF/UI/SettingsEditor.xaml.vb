@@ -5,38 +5,18 @@ Namespace UI
         Implements iObjectControl
 
         Public Sub RefreshDisplay()
-            comboBox.Items.Clear()
-            SkyEditorBase.Language.LanguageManager.Instance.LoadAllLanguages()
-
-            For Each item In SkyEditorBase.Language.LanguageManager.Instance.Languages.Keys
-                comboBox.Items.Add(item)
-            Next
-            comboBox.SelectedItem = GetEditingObject(Of SettingsManager).Settings.CurrentLanguage
             chbDevelopment.IsChecked = GetEditingObject(Of SettingsManager).Settings.DevelopmentMode
-            chbDebugLanguagePlaceholders.IsChecked = GetEditingObject(Of SettingsManager).Settings.DebugLanguagePlaceholders
             chbVerbose.IsChecked = GetEditingObject(Of SettingsManager).Settings.VerboseOutput
-            chbRAM.IsChecked = GetEditingObject(Of SettingsManager).Settings.ExtravagantRamMode
             IsModified = False
         End Sub
 
         Public Sub UpdateObject()
-            GetEditingObject(Of SettingsManager).Settings.DebugLanguagePlaceholders = chbDebugLanguagePlaceholders.IsChecked
-            GetEditingObject(Of SettingsManager).Settings.CurrentLanguage = comboBox.SelectedItem
             GetEditingObject(Of SettingsManager).Settings.VerboseOutput = chbVerbose.IsChecked
             GetEditingObject(Of SettingsManager).Settings.DevelopmentMode = chbDevelopment.IsChecked
-            GetEditingObject(Of SettingsManager).Settings.ExtravagantRamMode = chbRAM.IsChecked
         End Sub
 
-        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDebugLanguagePlaceholders.Checked, chbDevelopment.Checked, chbVerbose.Checked, chbRAM.Checked, chbDebugLanguagePlaceholders.Unchecked, chbDevelopment.Unchecked, chbVerbose.Unchecked, chbRAM.Unchecked
+        Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDevelopment.Checked, chbVerbose.Checked, chbDevelopment.Unchecked, chbVerbose.Unchecked
             IsModified = True
-        End Sub
-
-        Private Sub comboBox_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles comboBox.SelectionChanged
-            IsModified = True
-        End Sub
-
-        Private Sub SettingsEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            UiHelper.TranslateForm(Me)
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes

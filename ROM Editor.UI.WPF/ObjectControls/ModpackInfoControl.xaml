@@ -4,18 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:skywpf="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="87,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtAuthor" HorizontalAlignment="Left" Height="23" Margin="87,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtVersion" HorizontalAlignment="Left" Height="23" Margin="87,94,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtGameCode" HorizontalAlignment="Left" Height="23" Margin="87,122,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="12,7,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="Author" HorizontalAlignment="Left" Margin="12,63,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="Version" HorizontalAlignment="Left" Margin="12,91,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label3" Content="Game Code" HorizontalAlignment="Left" Margin="12,119,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtShortName" HorizontalAlignment="Left" Height="23" Margin="87,38,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label_Copy" Content="Short Name" HorizontalAlignment="Left" Margin="12,35,0,0" VerticalAlignment="Top"/>
+        <UniformGrid Columns="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300">
+            <Label Content="{x:Static res:Language.Name}" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBox x:Name="txtName" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalContentAlignment="Top" />
+
+            <Label Content="{x:Static res:Language.ShortName}" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBox x:Name="txtShortName" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalContentAlignment="Top" />
+
+            <Label Content="{x:Static res:Language.Author}" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBox x:Name="txtAuthor" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalContentAlignment="Top" />
+
+            <Label Content="{x:Static res:Language.Version}" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBox x:Name="txtVersion" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalContentAlignment="Top" />
+
+            <Label Content="{x:Static res:Language.GameCode}" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBox x:Name="txtGameCode" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalContentAlignment="Top" />
+        </UniformGrid>
     </Grid>
 </skywpf:ObjectControl>

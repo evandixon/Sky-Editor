@@ -7,19 +7,19 @@ Public Class PluginDefinition
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return PluginHelper.GetLanguageItem("RomEditorCredits", "Rom Editor Credits:\n     psy_commando (Pokemon portraits, most of the research)\n     Grovyle91 (Language strings)\n     evandixon (Personality test, bgp files)")
+            Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
         Get
-            Return "evandixon"
+            Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("ROM Editor UI (WPF)")
+            Return My.Resources.Language.PluginName
         End Get
     End Property
 

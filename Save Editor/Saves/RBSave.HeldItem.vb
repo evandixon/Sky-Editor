@@ -153,7 +153,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            <Obsolete("Not implemented")> Public ReadOnly Property IsBox As Boolean Implements iItem.IsBox
+            <Obsolete("Not implemented; returns false so the rest of the code won't break")> Public ReadOnly Property IsBox As Boolean Implements iItem.IsBox
                 Get
                     Return False
                 End Get
@@ -242,7 +242,7 @@ Namespace Saves
         End Function
 
         Public Function HeldItemSlots() As ItemSlot() Implements iItemStorage.HeldItemSlots
-            Return {New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, SkyEditorBase.PluginHelper.GetLanguageItem("Toolbox"), GetItemDicitonary, Offsets.HeldItemNumber)}
+            Return {New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.RB_Toolbox, GetItemDicitonary, Offsets.HeldItemNumber)}
         End Function
     End Class
 

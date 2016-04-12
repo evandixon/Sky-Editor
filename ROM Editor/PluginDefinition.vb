@@ -51,19 +51,19 @@ Public Class PluginDefinition
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return PluginHelper.GetLanguageItem("RomEditorCredits", "Rom Editor Credits:\n     psy_commando (Pokemon portraits, most of the research)\n     Grovyle91 (Language strings)\n     evandixon (Personality test, bgp files)")
+            Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
         Get
-            Return "evandixon"
+            Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("ROM Editor")
+            Return My.Resources.Language.PluginName
         End Get
     End Property
 
@@ -76,9 +76,8 @@ Public Class PluginDefinition
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
-
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
-        Manager.RegisterIOFilter("*.img", "CTE Image Files")
+        Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
 
         Manager.RegisterFileTypeDetector(AddressOf AutoDetect3dsRom)
         Manager.RegisterFileTypeDetector(AddressOf FileFormatDetector)
@@ -91,12 +90,12 @@ Public Class PluginDefinition
         'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)
         'Manager.RegisterConsoleCommand("gzip", New ConsoleCommands.Gzip)
 
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Omega Ruby"), GameStrings.ORCode)
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Alpha Sapphire"), GameStrings.ASCode)
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon X"), GameStrings.PokemonXCode)
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Y"), GameStrings.PokemonYCode)
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon: Gates to Infinity"), GameStrings.GTICode)
-        GameCodeRegistry.RegisterGameCode(PluginHelper.GetLanguageItem("Pokémon Super Mystery Dungeon"), GameStrings.PSMDCode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_OR, GameStrings.ORCode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_AS, GameStrings.ASCode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_X, GameStrings.PokemonXCode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_Y, GameStrings.PokemonYCode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_GTI, GameStrings.GTICode)
+        GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_PSMD, GameStrings.PSMDCode)
     End Sub
 
     Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad

@@ -17,13 +17,19 @@ Namespace Utilities
         ''' <returns></returns>
         Public Property SetLoadingStatusOnFinish As Boolean
 
-        Public Async Function CopyDirectory(SourceDirectory As String, DestinationDirectory As String) As Task
-            Dim files = IO.Directory.GetFiles(SourceDirectory, "*", IO.SearchOption.AllDirectories)
+        ''' <summary>
+        ''' Asynchronously copies a directory.
+        ''' </summary>
+        ''' <param name="sourceDirectory">The directory to copy.</param>
+        ''' <param name="destinationDirectory">The new destination for the source directory.</param>
+        ''' <returns></returns>
+        Public Async Function CopyDirectory(sourceDirectory As String, destinationDirectory As String) As Task
+            Dim files = IO.Directory.GetFiles(sourceDirectory, "*", IO.SearchOption.AllDirectories)
             Dim tasks As New List(Of Task)
             FileCopyCompleted = 0
             _fileCopyMax = files.Length
             For Each item In files
-                Dim dest = item.Replace(SourceDirectory, DestinationDirectory)
+                Dim dest = item.Replace(sourceDirectory, destinationDirectory)
                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
                     IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(dest))
                 End If
@@ -32,7 +38,7 @@ Namespace Utilities
                 Dim fileIndex As Integer = count
                 Dim t = Task.Run(New Action(Sub()
                                                 Dim item = files(fileIndex)
-                                                Dim dest = item.Replace(SourceDirectory, DestinationDirectory)
+                                                Dim dest = item.Replace(sourceDirectory, destinationDirectory)
                                                 IO.File.Copy(item, dest, True)
                                                 FileCopyCompleted += 1
                                             End Sub))
@@ -54,7 +60,7 @@ Namespace Utilities
         Private Sub UpdatePortraitFixLoading(Completed As Integer, Max As Integer)
             If Completed < Max Then
                 If SetLoadingStatus Then
-                    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("CopyingFilesStatus", "{0} ({1} of {2})"), PluginHelper.GetLanguageItem("Copying Files..."), Completed, Max), Completed / Max)
+                    PluginHelper.SetLoadingStatus(String.Format(My.Resources.Language.GenericLoadingXofY, My.Resources.Language.LoadingCopyingFiles, Completed, Max), Completed / Max)
                 End If
             Else
                 If SetLoadingStatusOnFinish Then

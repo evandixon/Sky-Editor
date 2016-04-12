@@ -6,7 +6,7 @@ Public Class DSModSolution
     Inherits SkyEditorBase.Solution
 
     Public Overrides Function CanCreateDirectory(Path As String) As Boolean
-        Return False
+        Return True
     End Function
 
     Public Overrides Function CanCreateProject(Path As String) As Boolean
@@ -29,6 +29,7 @@ Public Class DSModSolution
                     End If
                 Next
             Next
+            matches.Add(GetType(DSModPackProject))
             Return matches
         End If
     End Function

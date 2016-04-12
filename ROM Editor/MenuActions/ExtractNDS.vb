@@ -13,7 +13,7 @@ Namespace MenuActions
             Next
         End Function
         Public Sub New()
-            MyBase.New("Testing/Extract NDS")
+            MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevExtractNDS})
         End Sub
     End Class
 

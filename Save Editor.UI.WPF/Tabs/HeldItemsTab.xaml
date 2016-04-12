@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="340">
     <Grid Margin="0,0,0,0">
@@ -21,14 +22,14 @@
         <ListBox x:Name="lbHeldItems" Margin="0,0,0,77" SelectionMode="Extended" Grid.ColumnSpan="2" Grid.Column="2">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="lbHeldItemsDelete" Header="Delete" />
+                    <MenuItem x:Name="lbHeldItemsDelete" Header="{x:Static res:Language.Delete}" />
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
         <local:SearchableDropDown x:Name="cbHeldItems" Margin="0,0,96,52" Height="20" VerticalAlignment="Bottom" Grid.Column="2" />
         <xctk:IntegerUpDown x:Name="numHeldItemsAddCount" HorizontalAlignment="Right" Margin="0,0,50,52" VerticalAlignment="Bottom" Minimum="0" Maximum="99" Value="0" Grid.Column="2" />
-        <Button x:Name="btnHeldItemsAdd" Content="Add" Margin="0,0,0,52" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="45" Grid.Column="2" />
-        <GroupBox x:Name="gbHeldBoxContent" Header="Box Contents" Height="47" VerticalAlignment="Bottom" Focusable="True" Grid.Column="2">
+        <Button x:Name="btnHeldItemsAdd" Content="{x:Static res:Language.Add}" Margin="0,0,0,52" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="45" Grid.Column="2" />
+        <GroupBox x:Name="gbHeldBoxContent" Header="{x:Static res:Language.BoxContents}" Height="47" VerticalAlignment="Bottom" Focusable="True" Grid.Column="2">
             <Grid Margin="0,0,0,0">
                 <local:SearchableDropDown x:Name="cbHeldItemsBoxContents" Height="20" VerticalAlignment="Top" Margin="0,0,56,0" />
                 <xctk:IntegerUpDown x:Name="numHeldItemsBoxContentsAddCount" Margin="0,0,10,0" VerticalAlignment="Top" Minimum="0" Maximum="99" Value="0" HorizontalAlignment="Right" Width="41" />

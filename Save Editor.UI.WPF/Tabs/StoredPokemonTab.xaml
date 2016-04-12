@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:skywpf="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Margin="0,0,0,0">
         <ListBox x:Name="lbPokemon" Margin="155,0,0,30" SelectionMode="Extended" />
-        <Button x:Name="btnEditPokemon" Content="Edit" Margin="0,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="45" />
+        <Button x:Name="btnEditPokemon" Content="{x:Static res:Language.Edit}" Margin="0,0,0,6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="45" />
         <ListBox x:Name="lbFriendArea" HorizontalAlignment="Left" Width="150" Margin="0,25,0,30" />
-        <Button x:Name="btnShowAll" Content="Show All" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" />
+        <Button x:Name="btnShowAll" Content="{x:Static res:Language.ShowAll}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" />
     </Grid>
 </skywpf:ObjectControl>

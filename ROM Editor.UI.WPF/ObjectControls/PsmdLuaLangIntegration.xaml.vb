@@ -9,8 +9,7 @@ Public Class PsmdLuaLangIntegration
     Implements IDisposable
 
     Private Sub PsmdLuaLangIntegration_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Message")
-        btnAdd.Content = PluginHelper.GetLanguageItem("Add")
+        Me.Header = My.Resources.Language.Message
     End Sub
 
     Public Overrides Sub RefreshDisplay()
@@ -75,7 +74,7 @@ Public Class PsmdLuaLangIntegration
         Dim oldText As String = btnAdd.Content
         If Not p.IsLanguageLoaded Then
             btnAdd.IsEnabled = False
-            btnAdd.Content = String.Format(PluginHelper.GetLanguageItem("LoadingButtonText", "{0} (Loading)"), oldText)
+            btnAdd.Content = String.Format(My.Resources.Language.GenericLoading, oldText)
         End If
         Dim id As UInteger = Await p.GetNewLanguageID
         For Each item As TabItem In tcTabs.Items

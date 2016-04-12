@@ -23,7 +23,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Project"), PluginHelper.GetLanguageItem("_Run")})
+            MyBase.New({My.Resources.language.MenuProject, My.Resources.Language.MenuProjectRun})
             SortOrder = 2.2
         End Sub
     End Class

@@ -37,13 +37,7 @@ Namespace Tabs
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Category_General", "General")
-            lblGeneral_Adventures.Content = PluginHelper.GetLanguageItem("Adventures", "Adventures:")
-            lblGeneral_HeldMoney.Content = PluginHelper.GetLanguageItem("General_HeldMoney", "Held Money:")
-            lblGeneral_SpEpisodeHeldMoney.Content = PluginHelper.GetLanguageItem("General_SpEpisodeHeldMoney", "Sp. Episode Held Money:")
-            lblGeneral_StoredMoney.Content = PluginHelper.GetLanguageItem("General_StoredMoney", "Stored Money:")
-            lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("General_TeamName", "Team Name:")
-            lblGeneral_RankPoints.Content = PluginHelper.GetLanguageItem("Rank Points", "Rank Points:")
+            Me.Header = My.Resources.Language.General
 
             numGeneral_Adventures.Maximum = Integer.MaxValue
             numGeneral_Adventures.Minimum = Integer.MinValue

@@ -252,7 +252,7 @@ Public Class PluginManager
 
     Private ReadOnly Property Name As String Implements iNamed.Name
         Get
-            Return PluginHelper.GetLanguageItem("Plugin Manager")
+            Return My.Resources.Language.PluginManager
         End Get
     End Property
 

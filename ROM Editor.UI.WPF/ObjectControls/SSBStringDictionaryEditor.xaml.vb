@@ -144,9 +144,6 @@ Public Class SSBStringDictionaryEditor
     Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not DesignerProperties.GetIsInDesignMode(Me) Then
             Me.Header = EditingLanguage
-            columnID.Header = PluginHelper.GetLanguageItem("ID")
-            columnEntry.Header = PluginHelper.GetLanguageItem("Entry")
-            lblSearch.Content = PluginHelper.GetLanguageItem("Search: ")
         End If
     End Sub
 

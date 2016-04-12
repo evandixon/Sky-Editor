@@ -16,6 +16,13 @@ Namespace Flashcart
             Next
             Return out
         End Function
+        Public Shared Sub CreateFlashcart(Drive As IO.DriveInfo, FlashcartType As Type)
+            Dim infoFilename As String = IO.Path.Combine(Drive.RootDirectory.FullName, "info.skyfci")
+            'Create it
+            Dim cart As GenericFlashcart = FlashcartType.GetConstructor({}).Invoke({})
+            cart.Initialize(Drive)
+            cart.Save()
+        End Sub
         Public Shared Function OpenFlashcart(Drive As IO.DriveInfo) As GenericFlashcart
             Dim output As GenericFlashcart = Nothing
             Dim infoFilename As String = IO.Path.Combine(Drive.RootDirectory.FullName, "info.skyfci")

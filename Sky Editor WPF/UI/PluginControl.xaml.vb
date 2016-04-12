@@ -75,13 +75,7 @@ Namespace UI
         'End Sub
 
         Private Sub SettingsEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Plugins")
-            colEnabled.Header = PluginHelper.GetLanguageItem("Enabled")
-            colName.Header = PluginHelper.GetLanguageItem("Name")
-            colAuthor.Header = PluginHelper.GetLanguageItem("Author")
-            colFilename.Header = PluginHelper.GetLanguageItem("Filename")
-            btnCreateExtension.Content = PluginHelper.GetLanguageItem("Create Extension")
-            'menuSave.Header = PluginHelper.GetLanguageItem("_Save")
+            Me.Header = My.Resources.Language.Plugins
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
@@ -117,8 +111,8 @@ Namespace UI
                 o.ObjectToEdit = info
                 o.ShowDialog()
                 Dim s As New SaveFileDialog
-                    s.Filter = $"{PluginHelper.GetLanguageItem("Zip Files")} (*.zip)|*.zip|{PluginHelper.GetLanguageItem("All Files")} (*.*)|*.*"
-                    If s.ShowDialog = DialogResult.OK Then
+                s.Filter = $"{My.Resources.Language.ZipFiles} (*.zip)|*.zip|{My.Resources.Language.AllFiles} (*.*)|*.*"
+                If s.ShowDialog = DialogResult.OK Then
                     Await RedistributionHelpers.PackPlugins(plugins, s.FileName, o.ObjectToEdit)
                 End If
                 ' End If

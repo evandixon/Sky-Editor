@@ -16,9 +16,9 @@ Namespace MenuActions
             Return Task.CompletedTask
         End Function
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_Image"), PluginHelper.GetLanguageItem("_Import Image")})
+            MyBase.New({My.Resources.Language.MenuImage, My.Resources.Language.MenuImageImport})
             OpenFileDialog1 = New Windows.Forms.OpenFileDialog
-            OpenFileDialog1.Filter = "PNG Images (*.png)|*.png|Bitmap Images (*.bmp)|*.bmp|All Files (*.*)|*.*"
+            OpenFileDialog1.Filter = $"{My.Resources.Language.PNGImages} (*.png)|*.png|{My.Resources.Language.BitmapImages} (*.bmp)|*.bmp|{My.Resources.Language.AllFiles} (*.*)|*.*"
             SortOrder = 4.2
         End Sub
     End Class

@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivePokemonHeader" xml:space="preserve">
+    <value>Party</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Adventures" xml:space="preserve">
+    <value>Adventures</value>
+  </data>
+  <data name="Attack" xml:space="preserve">
+    <value>Attack</value>
+  </data>
+  <data name="BaseType" xml:space="preserve">
+    <value>Base Type</value>
+  </data>
+  <data name="BoxContents" xml:space="preserve">
+    <value>Box Contents</value>
+  </data>
+  <data name="CurrentHP" xml:space="preserve">
+    <value>Current HP</value>
+  </data>
+  <data name="Defense" xml:space="preserve">
+    <value>Defense</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ErrorTooManyItems" xml:space="preserve">
+    <value>You are holding the maximum number of items.  To add another, one must be deleted first.</value>
+  </data>
+  <data name="Exp" xml:space="preserve">
+    <value>Exp</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Ginseng" xml:space="preserve">
+    <value>Ginseng</value>
+  </data>
+  <data name="HeldItemsTabHeader" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="HeldMoney" xml:space="preserve">
+    <value>Held Money</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="IQ" xml:space="preserve">
+    <value>IQ</value>
+  </data>
+  <data name="IsFemale" xml:space="preserve">
+    <value>Is Female</value>
+  </data>
+  <data name="IsSet" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="Linked" xml:space="preserve">
+    <value>Linked</value>
+  </data>
+  <data name="MaxHP" xml:space="preserve">
+    <value>Max HP</value>
+  </data>
+  <data name="MenuDev" xml:space="preserve">
+    <value>_Development</value>
+  </data>
+  <data name="MenuDevImportSDF" xml:space="preserve">
+    <value>_Import SDF Saves</value>
+  </data>
+  <data name="MenuDevOpenSDF" xml:space="preserve">
+    <value>_Open SDF</value>
+  </data>
+  <data name="MetAt" xml:space="preserve">
+    <value>Met At</value>
+  </data>
+  <data name="MetFloor" xml:space="preserve">
+    <value>Met Floor</value>
+  </data>
+  <data name="Moves" xml:space="preserve">
+    <value>Moves</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="OriginalPartnerGender" xml:space="preserve">
+    <value>Original Partner Gender</value>
+  </data>
+  <data name="OriginalPartnerName" xml:space="preserve">
+    <value>Original Partner Name</value>
+  </data>
+  <data name="OriginalPartnerPkm" xml:space="preserve">
+    <value>Original Partner Pokémon</value>
+  </data>
+  <data name="OriginalPlayerGender" xml:space="preserve">
+    <value>Original Player Gender</value>
+  </data>
+  <data name="OriginalPlayerName" xml:space="preserve">
+    <value>Original Player Name</value>
+  </data>
+  <data name="OriginalPlayerPkm" xml:space="preserve">
+    <value>Original Player Pokémon</value>
+  </data>
+  <data name="PleaseSelectSD" xml:space="preserve">
+    <value>Please select your SD Card</value>
+  </data>
+  <data name="PluginAuthor" xml:space="preserve">
+    <value>evandixon</value>
+  </data>
+  <data name="PluginCredits" xml:space="preserve">
+    <value>Sky Editor Credits:
+evandixon (General Research)
+matix2267 (Pokemon Structure, code for interacting with bits)
+Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)
+Prof. 9 (Team Name character encoding)
+Demonic722 (Misc RAM and save addresses)</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Pokémon Mystery Dungeon Save Editor</value>
+  </data>
+  <data name="Pokemon" xml:space="preserve">
+    <value>Pokémon</value>
+  </data>
+  <data name="PP" xml:space="preserve">
+    <value>PP</value>
+  </data>
+  <data name="QuicksavePokemonTabHeader" xml:space="preserve">
+    <value>Quicksave Pokémon</value>
+  </data>
+  <data name="RankPoints" xml:space="preserve">
+    <value>Rank Points</value>
+  </data>
+  <data name="RescuePoints" xml:space="preserve">
+    <value>Rescue Points</value>
+  </data>
+  <data name="Sealed" xml:space="preserve">
+    <value>Sealed</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="SpAttack" xml:space="preserve">
+    <value>Sp. Attack</value>
+  </data>
+  <data name="SpDefense" xml:space="preserve">
+    <value>Sp. Defense</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="SpEpisodeActivePokemonHeader" xml:space="preserve">
+    <value>Sp. Episode Party</value>
+  </data>
+  <data name="SpEpisodeHeldMoney" xml:space="preserve">
+    <value>Sp. Episode Held Money</value>
+  </data>
+  <data name="StoredItems" xml:space="preserve">
+    <value>Stored Items</value>
+  </data>
+  <data name="StoredMoney" xml:space="preserve">
+    <value>Stored Money</value>
+  </data>
+  <data name="StoredPokemonTab" xml:space="preserve">
+    <value>Stored Pokémon</value>
+  </data>
+  <data name="Switched" xml:space="preserve">
+    <value>Switched</value>
+  </data>
+  <data name="TeamName" xml:space="preserve">
+    <value>Team Name</value>
+  </data>
+  <data name="TransformedAsFemale" xml:space="preserve">
+    <value>Transformed as Female</value>
+  </data>
+  <data name="TransformedAsPkm" xml:space="preserve">
+    <value>Transformed as Pokémon</value>
+  </data>
+</root>

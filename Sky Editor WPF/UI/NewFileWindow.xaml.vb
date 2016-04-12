@@ -32,10 +32,6 @@
             If cbType.Items.Count > 0 Then cbType.SelectedIndex = 0
         End Sub
 
-        Private Sub GameTypeSelector_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Title = PluginHelper.GetLanguageItem("New File")
-            UiHelper.TranslateForm(Me)
-        End Sub
         Public Shadows Function ShowDialog() As Boolean
             Return MyBase.ShowDialog
         End Function

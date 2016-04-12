@@ -20,7 +20,7 @@ Friend Class ConsoleCoreMod
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Sky Editor Console")
+            Return My.Resources.Language.ConsolePluginName
         End Get
     End Property
 

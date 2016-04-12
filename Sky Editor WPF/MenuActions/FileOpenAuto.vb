@@ -20,7 +20,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({PluginHelper.GetLanguageItem("_File"), PluginHelper.GetLanguageItem("_Open"), PluginHelper.GetLanguageItem("Open (_Auto-Detect Game)")})
+            MyBase.New({My.Resources.Language.MenuFile, My.Resources.Language.MenuFileOpen, My.Resources.Language.MenuFileOpenAuto})
             AlwaysVisible = True
             OpenFileDialog1 = New Forms.OpenFileDialog
             SortOrder = 1.21

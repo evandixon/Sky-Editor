@@ -6,7 +6,7 @@ Namespace Extensions
 
         Public Overrides ReadOnly Property Name As String
             Get
-                Return PluginHelper.GetLanguageItem("Plugins")
+                Return My.Resources.Language.Plugins
             End Get
         End Property
 

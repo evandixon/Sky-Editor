@@ -14,12 +14,10 @@
             End Set
         End Property
 
-        Private Sub GameTypeSelector_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            UiHelper.TranslateForm(Me)
-        End Sub
         Public Shadows Function ShowDialog() As Boolean
             Return MyBase.ShowDialog
         End Function
+
         Public Sub New()
 
             ' This call is required by the designer.

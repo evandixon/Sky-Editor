@@ -29,7 +29,7 @@ Public Class MessageBinEntryEditor
     End Function
 
     Private Sub NDSModSrcEditor_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Message")
+        Me.Header = My.Resources.Language.Message
     End Sub
 
 End Class

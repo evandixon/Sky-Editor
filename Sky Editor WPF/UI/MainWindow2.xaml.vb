@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Globalization
 Imports System.Reflection
 Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
@@ -115,7 +116,7 @@ Namespace UI
                     Await Task.WhenAll(tasks)
                 End If
             Catch ex As Exception
-                MessageBox.Show(PluginHelper.GetLanguageItem("An error has occurred.  See output for details."))
+                MessageBox.Show(My.Resources.Language.GenericErrorSeeOutput)
                 PluginHelper.Writeline(ex.ToString, PluginHelper.LineType.Error)
                 PluginHelper.SetLoadingStatusFailed()
             End Try
@@ -124,9 +125,9 @@ Namespace UI
 #Region "Form"
         Private Sub MainWindow2_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             'Set Language items
-            Me.Title = PluginHelper.GetLanguageItem("Sky Editor") & " Beta " & Assembly.GetExecutingAssembly.GetName.Version.ToString
-            toolbarOutput.Title = PluginHelper.GetLanguageItem("Output")
-            lblStatus.Content = PluginHelper.GetLanguageItem("Ready")
+            Me.Title = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.MainTitle, My.Resources.Language.VersionBeta, Assembly.GetExecutingAssembly.GetName.Version.ToString)
+            toolbarOutput.Title = My.Resources.Language.Output
+            lblStatus.Content = My.Resources.Language.Ready
 
             'Load
             OpenFileDialog1 = New Forms.OpenFileDialog
@@ -180,7 +181,7 @@ Namespace UI
 
             Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentSolution IsNot Nothing AndAlso _manager.CurrentSolution.IsModified)
             If editsMade Then
-                If MessageBox.Show(PluginHelper.GetLanguageItem("Unsaved File Close Confirmation", "Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost."), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.No Then
+                If MessageBox.Show(My.Resources.Language.ExitConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.No Then
                     e.Cancel = True
                 End If
             End If
@@ -217,7 +218,7 @@ Namespace UI
         End Sub
 
         Private Sub OnExceptionThrown(sender As Object, e As EventArguments.ExceptionThrownEventArgs)
-            MessageBox.Show(PluginHelper.GetLanguageItem("GenericErrorMessage", "An error has occurred.  See output for details."))
+            MessageBox.Show(My.Resources.Language.GenericErrorSeeOutput)
             PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
         End Sub
 
@@ -266,7 +267,7 @@ Namespace UI
         Private Sub ShowWelcomePage()
             Dim l As New LayoutDocument
             l.Content = New WelcomeTabContent
-            l.Title = PluginHelper.GetLanguageItem("Welcome")
+            l.Title = My.Resources.Language.Welcome
             docPane.Children.Add(l)
         End Sub
         Private Sub RemoveWelcomePage()

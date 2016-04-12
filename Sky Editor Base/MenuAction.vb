@@ -86,21 +86,7 @@ Public MustInherit Class MenuAction
         ActionPath = New List(Of String)
         ActionPath.AddRange(Path)
         DevOnly = False
-        SortOrder = 0
-    End Sub
-
-    Public Sub New(Path As String, Optional SeparatorCharacter As Char = "/"c, Optional TranslateItems As Boolean = False, Optional DefaultTranslationValue As String = Nothing)
-        _alwaysVisible = False
-        DevOnly = False
         SortOrder = Integer.MaxValue
-        ActionPath = New List(Of String)
-        For Each item In Path.Split(SeparatorCharacter)
-            If Not TranslateItems Then
-                ActionPath.Add(item)
-            Else
-                ActionPath.Add(PluginHelper.GetLanguageItem(item, DefaultTranslationValue, Assembly.GetCallingAssembly.GetName.FullName))
-            End If
-        Next
     End Sub
 
 End Class

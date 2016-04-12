@@ -21,7 +21,7 @@ Namespace Projects
             Dim BACKdir As String = IO.Path.Combine(projectDir, "Backgrounds")
             Me.CreateDirectory("Backgrounds")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "BACK"), "*.bgp")
-            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
+            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
 
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New FileFormats.BGP

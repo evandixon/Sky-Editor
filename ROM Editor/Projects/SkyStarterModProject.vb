@@ -44,7 +44,7 @@ Namespace Projects
             Dim projDir = GetRootDirectory()
 
             'Convert Languages
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Converting languages..."))
+            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingLanguages)
             Dim languageDictionary As New Dictionary(Of String, String)
             languageDictionary.Add("text_e.str", "English")
             languageDictionary.Add("text_f.str", "Français")
@@ -68,7 +68,7 @@ Namespace Projects
             Next
 
             'Convert Personality Test
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Converting Personality Test"))
+            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingPersonalityTest)
             Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
             personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)

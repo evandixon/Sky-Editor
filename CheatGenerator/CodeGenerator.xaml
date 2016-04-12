@@ -1,29 +1,30 @@
 ﻿<Window x:Class="UI.CodeGenerator"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Action Replay DS Code Generator" Height="512.464" Width="674.77">
+    xmlns:res="clr-namespace:CheatGenerator.My.Resources"
+    Title="{x:Static res:Language.CodeGenerator}" Height="512.464" Width="674.77">
     <Grid>
         <UniformGrid Columns="2">
             <StackPanel>
                 <UniformGrid Columns="2" Rows="6" VerticalAlignment="Top">
-                    <Label x:Name="lblCodeType" VerticalAlignment="Top">Code Type</Label>
+                    <Label x:Name="lblCodeType" VerticalAlignment="Top" Content="{x:Static res:Language.CodeType}" />
                     <ComboBox x:Name="cbCodeType" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
-                    <Label x:Name="lbRegion" VerticalAlignment="Top">Region</Label>
+                    <Label x:Name="lbRegion" VerticalAlignment="Top" Content="{x:Static res:Language.Region}" />
                     <ComboBox x:Name="cbRegion" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
-                    <Label x:Name="lblGame" VerticalAlignment="Top">Game</Label>
+                    <Label x:Name="lblGame" VerticalAlignment="Top" Content="{x:Static res:Language.Game}" />
                     <ComboBox x:Name="cbGame" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
-                    <Label x:Name="lbCategory" VerticalAlignment="Top">Category</Label>
+                    <Label x:Name="lbCategory" VerticalAlignment="Top" Content="{x:Static res:Language.Category}" />
                     <ComboBox x:Name="cbCategory" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
-                    <Label x:Name="lbProperty" VerticalAlignment="Top">Property</Label>
+                    <Label x:Name="lbProperty" VerticalAlignment="Top" Content="{x:Static res:Language.PropertyLbl}" />
                     <ComboBox x:Name="cbProperty" Margin="0,4,0,0" Height="22" VerticalAlignment="Top" />
-                    <Label x:Name="lbAuthor" VerticalAlignment="Top">Author</Label>
+                    <Label x:Name="lbAuthor" VerticalAlignment="Top" Content="{x:Static res:Language.Author}" />
                     <Label x:Name="lbAuthorDynamic" VerticalAlignment="Top"></Label>
                 </UniformGrid>
                 <UniformGrid Columns="2" VerticalAlignment="Top" RenderTransformOrigin="0.496,1.215">
-                    <Label x:Name="lbActivator">Activator</Label>
+                    <Label x:Name="lbActivator" Content="{x:Static res:Language.Activator}"/>
                     <ListBox x:Name="listActivators" Height="275" Margin="-0.333,0" SelectionMode="Multiple"></ListBox>
                 </UniformGrid>
-                <Button x:Name="btnGenerate" Margin="67,0,67,0">Generate</Button>
+                <Button x:Name="btnGenerate" Margin="67,0,67,0" Content="{x:Static res:Language.Generate}" />
             </StackPanel>
             <TextBox x:Name="txtOut" IsReadOnly="True" FontFamily="Courier New" FontSize="16"></TextBox>
         </UniformGrid>

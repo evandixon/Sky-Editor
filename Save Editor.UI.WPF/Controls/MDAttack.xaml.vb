@@ -33,10 +33,10 @@ Namespace Controls
         End Property
 
         Private Sub SkyAttack_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            numGinseng.ToolTip = PluginHelper.GetLanguageItem("Ginseng")
-            chbLinked.Content = PluginHelper.GetLanguageItem("Linked")
-            chbSet.Content = PluginHelper.GetLanguageItem("Set")
-            chbSwitched.ToolTip = PluginHelper.GetLanguageItem("Switched")
+            numGinseng.ToolTip = My.Resources.Language.Ginseng
+            chbLinked.Content = My.Resources.Language.Linked
+            chbSet.Content = My.Resources.Language.IsSet
+            chbSwitched.ToolTip = My.Resources.Language.Switched
         End Sub
         Private Property SelectedMoveID As Integer
             Get

@@ -19,8 +19,7 @@ Namespace Tabs
         End Sub
 
         Private Sub GeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("General", "General")
-            lblGeneral_TeamName.Content = PluginHelper.GetLanguageItem("TeamName", "Team Name:")
+            Me.Header = My.Resources.Language.General
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles txtGeneral_TeamName.TextChanged

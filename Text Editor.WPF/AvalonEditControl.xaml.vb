@@ -85,7 +85,7 @@ Public Class AvalonEditControl
     End Sub
 
     Private Sub AvalonEditControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Code")
+        Me.Header = My.Resources.Language.Code
     End Sub
 
     Public Sub New()

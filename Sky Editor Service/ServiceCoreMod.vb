@@ -20,7 +20,7 @@ Friend Class ServiceCoreMod
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Sky Editor Service")
+            Return My.Resources.Language.ServicePluginName
         End Get
     End Property
 

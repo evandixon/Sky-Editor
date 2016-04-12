@@ -78,7 +78,7 @@ Validate:
             Dim dir = IO.Path.Combine(Me.GetRootDirectory, "Languages")
             If IO.Directory.Exists(dir) Then
                 Dim langDirs = IO.Directory.GetDirectories(dir)
-                Dim f1 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Loading languages"))
+                Dim f1 As New Utilities.AsyncFor(My.Resources.Language.LoadingLanguages)
                 _languageLoadTask = f1.RunForEach(Async Function(Item As String)
                                                       Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
 
@@ -101,7 +101,7 @@ Validate:
         End Sub
 
         Private Async Function StartExtractLanguages() As Task
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Extracting Language Files..."))
+            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingExtractingLanguages)
             Dim languageNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)\.bin", RegexOptions.IgnoreCase)
             Dim languageFileNames = IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*.bin", IO.SearchOption.TopDirectoryOnly)
             For Each item In languageFileNames
@@ -164,9 +164,9 @@ Validate:
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")
-            Dim filesToOpen As New List(Of String)
+            'Dim filesToOpen As New List(Of String)
 
-            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Decompiling Scripts..."))
+            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingDecompilingScripts)
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Dim dest = Item.Replace(scriptSource, scriptDestination)
                                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
@@ -175,15 +175,20 @@ Validate:
 
                                    Await unluac.DecompileToFile(Item, dest)
                                    IO.File.Copy(dest, dest & ".original")
-                                   filesToOpen.Add(dest)
+                                   'filesToOpen.Add(dest)
+
+                                   'Add the file to the project
+                                   Dim d = IO.Path.GetDirectoryName(dest).Replace(scriptDestination, "script")
+                                   Me.CreateDirectory(d)
+                                   Await Me.AddExistingFile(d, Item, False)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
 
-            Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
-            Await f2.RunForEachSync(Async Function(Item As String) As Task
-                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
-                                        Me.CreateDirectory(d)
-                                        Await Me.AddExistingFile(d, Item, False)
-                                    End Function, filesToOpen)
+            'Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
+            'Await f2.RunForEachSync(Async Function(Item As String) As Task
+            '                            Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
+            '                            Me.CreateDirectory(d)
+            '                            Await Me.AddExistingFile(d, Item, False)
+            '                        End Function, filesToOpen)
 
             PluginHelper.SetLoadingStatusFinished()
         End Function
@@ -198,7 +203,7 @@ Validate:
             If farcMode Then
                 Await Task.Run(Async Function() As Task
                                    Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingBuildingLanguageFiles
                                    For count = 0 To dirs.Length - 1
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
@@ -211,7 +216,7 @@ Validate:
                 'Then we're in GTI directory mode
                 Await Task.Run(Async Function() As Task
                                    Dim dirs = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRootDirectory, "Languages"))
-                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Building language files")
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingBuildingLanguageFiles
                                    For count = 0 To dirs.Length - 1
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count))
@@ -227,7 +232,7 @@ Validate:
 
             Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
-            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Compiling Scripts..."))
+            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingCompilingScripts)
             f.SetLoadingStatus = False
             f.SetLoadingStatusOnFinish = False
             Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)

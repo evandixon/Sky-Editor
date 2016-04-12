@@ -5,84 +5,35 @@ Public Class SkyEditorInfo
     Implements iSkyEditorPlugin
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
         Get
-            Return "evandixon"
+            Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("Pokémon Mystery Dungeon Save Editor")
+            Return My.Resources.Language.PluginName
         End Get
     End Property
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return "" 'PluginHelper.GetLanguageItem("SkyEditorPlgCredits", "Sky Editor Credits:\n     evandixon (General Research)\n     matix2267 (Pokemon Structure, code for interacting with bits)\n     Grovyle91 (Item Structure, IDs of Pokemon/Items/etc)\n     Prof. 9 (Team Name character encoding)\n     Demonic722 (Misc RAM and save addresses)")
+            Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         'Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
-        Manager.RegisterIOFilter("*.sav", PluginHelper.GetLanguageItem("Raw Save File"))
-        Manager.RegisterIOFilter("*.dsv", PluginHelper.GetLanguageItem("DeSmuMe Save File"))
-
-        'Manager.RegisterSaveGameFormat(GameStrings.BlueGame, GameStrings.RBSave, GetType(RBSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.RedGame, GameStrings.RBSave, GetType(RBSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.BlueGameEU, GameStrings.RBSaveEU, GetType(RBSaveEU))
-        'Manager.RegisterSaveGameFormat(GameStrings.RedGameEU, GameStrings.RBSave, GetType(RBSaveEU))
-        'Manager.RegisterSaveGameFormat(GameStrings.TimeGame, GameStrings.TDSave, GetType(TDSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.DarknessGame, GameStrings.TDSave, GetType(TDSave))
-        'Manager.RegisterSaveGameFormat(GameStrings.SkyGame, GameStrings.SkySave, GetType(SkySave))
-        'Manager.RegisterSaveGameFormat(GameStrings.MDGatesData, GameStrings.MDGatesData, GetType(GatesGameData))
-
-        'Manager.RegisterCodeGenerator(New BlueBaseType)
-        'Manager.RegisterCodeGenerator(New BlueHeldMoney)
-        'Manager.RegisterCodeGenerator(New BlueRescuePoints)
-        'Manager.RegisterCodeGenerator(New BlueStoredMoney)
-        'Manager.RegisterCodeGenerator(New BlueTeamName)
-
-        'Manager.RegisterCodeGenerator(New RedBaseType)
-        'Manager.RegisterCodeGenerator(New RedHeldMoney)
-        'Manager.RegisterCodeGenerator(New RedRescuePoints)
-        'Manager.RegisterCodeGenerator(New RedStoredMoney)
-        'Manager.RegisterCodeGenerator(New RedTeamName)
-
-        'Manager.RegisterResourceFile(IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", "xceed.wpf.toolkit.dll"))
-
+        Manager.RegisterIOFilter("*.sav", My.Resources.Language.RawSaveFile)
+        Manager.RegisterIOFilter("*.dsv", My.Resources.Language.DeSmuMeSaveFile)
 
         Manager.RegisterDirectoryTypeDetector(AddressOf Me.DirectoryDetector)
     End Sub
-
-    Public Function DetectSaveType(File As GenericFile) As String
-        Try
-            If File.Length > &HD Then
-                Select Case File.RawData(&HD)
-                    Case &H54
-                        Return GameStrings.TDSave
-                    Case &H53
-                        Return GameStrings.SkySave
-                    Case Else
-                        If (File.RawData(&H404) = &H50 AndAlso File.RawData(&H405) = &H4F AndAlso File.RawData(&H406) = &H4B AndAlso File.RawData(&H407) = &H45) Then
-                            Return GameStrings.RBSave
-                        ElseIf File.OriginalFilename.ToLower.EndsWith("00000ba8\game_data") Then
-                            Return GameStrings.MDGatesData
-                        Else
-                            Return Nothing
-                        End If
-                End Select
-            Else
-                Return Nothing
-            End If
-        Catch ex As Exception
-            Return Nothing
-        End Try
-    End Function
 
     Public Function DirectoryDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
         Dim s As New SdfSave(Directory.FullName)
         If s.IsValid Then
             Select Case s.MiniTitleId.ToLower
-                Case GameStrings.GTIMiniTitleID
+                Case GTISave.GTIMiniTitleID
                     Return {GetType(GTISave)}
                 Case Else
                     Return {GetType(SdfSave)}

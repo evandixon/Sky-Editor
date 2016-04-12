@@ -200,12 +200,12 @@ Namespace Projects
 
             'Apply patch
             Me.BuildProgress = 0.9
-            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Applying patch", "Applying patch...")
+            Me.BuildStatusMessage = My.Resources.Language.LoadingApplyingPatch
 
             Await ApplyPatchAsync(Solution)
 
             Me.BuildProgress = 1
-            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
         Public Overridable Sub CopyPatcherProgram(Solution As Solution)

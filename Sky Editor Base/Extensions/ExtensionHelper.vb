@@ -7,7 +7,7 @@ Namespace Extensions
 
         Public ReadOnly Property Name As String Implements iNamed.Name
             Get
-                Return PluginHelper.GetLanguageItem("Extensions")
+                Return My.Resources.Language.Extensions
             End Get
         End Property
 

@@ -5,32 +5,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d" d:DesignWidth="326" Height="371">
     <Grid>
         <UniformGrid Columns="2" Margin="0,0,0,0" VerticalAlignment="Top">
-            <Label x:Name="lblPkm">Pokemon</Label>
+            <Label x:Name="lblPkm" Content="{x:Static res:Language.Pokemon}" />
             <local:SearchableDropDown x:Name="cbPokemon" />
-            <Label x:Name="lblIsFemale">Is Female</Label>
+            <Label x:Name="lblIsFemale" Content="{x:Static res:Language.IsFemale}" />
             <CheckBox x:Name="chbIsFemale"></CheckBox>
-            <Label x:Name="lblPkm2">Transformed as Pokemon</Label>
+            <Label x:Name="lblPkm2" Content="{x:Static res:Language.TransformedAsPkm}" />
             <local:SearchableDropDown x:Name="cbPokemon2" />
-            <Label x:Name="lblIsFemale2">Transformed as Female</Label>
+            <Label x:Name="lblIsFemale2" Content="{x:Static res:Language.TransformedAsFemale}" />
             <CheckBox x:Name="chbIsFemale2"></CheckBox>
-            <Label x:Name="lblLevel">Level</Label>
+            <Label x:Name="lblLevel" Content="{x:Static res:Language.Level}" />
             <xctk:IntegerUpDown x:Name="numLevel" />
-            <Label x:Name="lblExp">Exp</Label>
+            <Label x:Name="lblExp" Content="{x:Static res:Language.Exp}" />
             <xctk:IntegerUpDown x:Name="numExp" />
-            <Label x:Name="lblCurrentHP">Current HP</Label>
+            <Label x:Name="lblCurrentHP" Content="{x:Static res:Language.CurrentHP}" />
             <xctk:IntegerUpDown x:Name="numCurrentHP" />
-            <Label x:Name="lblMaxHP">Max HP</Label>
+            <Label x:Name="lblMaxHP" Content="{x:Static res:Language.MaxHP}" />
             <xctk:IntegerUpDown x:Name="numMaxHP" />
-            <Label x:Name="lblAttack">Attack</Label>
+            <Label x:Name="lblAttack" Content="{x:Static res:Language.Attack}" />
             <xctk:IntegerUpDown x:Name="numAttack" />
-            <Label x:Name="lblSpAttack">Sp. Attack</Label>
+            <Label x:Name="lblSpAttack" Content="{x:Static res:Language.SpAttack}" />
             <xctk:IntegerUpDown x:Name="numSpAttack" />
-            <Label x:Name="lblDefense">Defense</Label>
+            <Label x:Name="lblDefense" Content="{x:Static res:Language.Defense}" />
             <xctk:IntegerUpDown x:Name="numDefense" />
-            <Label x:Name="lblSpDefense">Sp. Defense</Label>
+            <Label x:Name="lblSpDefense" Content="{x:Static res:Language.SpDefense}" />
             <xctk:IntegerUpDown x:Name="numSpDefense" />
             <!--<Label x:Name="lblSpeed">Speed</Label>
             <xctk:IntegerUpDown x:Name="numSpeed" />-->

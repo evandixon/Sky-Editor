@@ -18,7 +18,7 @@ Namespace Projects
             Dim backDir = GetRootDirectory()
 
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
-            Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Converting backgrounds..."))
+            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
             Await f.RunForEach(Function(Item As String) As Task
                                    Using b As New FileFormats.CteImage
                                        b.OpenFile(Item)

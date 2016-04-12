@@ -23,7 +23,7 @@ Public Class BlueBaseType
 
     Public ReadOnly Property SupportedGames As String() Implements CodeDefinition.SupportedGames
         Get
-            Return {SaveEditor.GameStrings.BlueGame}
+            Return {} 'SaveEditor.GameStrings.BlueGame}
         End Get
     End Property
 

@@ -6,19 +6,19 @@ Public Class PluginInfo
 
     Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
         Get
-            Return ""
+            Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
     Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
         Get
-            Return ""
+            Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
     Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
         Get
-            Return PluginHelper.GetLanguageItem("DeSmuMe Integration")
+            Return My.Resources.Language.PluginName
         End Get
     End Property
 

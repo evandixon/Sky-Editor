@@ -23,11 +23,11 @@
         End Sub
 
         Private Sub ExtensionInfoControl_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            lblAuthor.Content = PluginHelper.GetLanguageItem("Author")
-            lblName.Content = PluginHelper.GetLanguageItem("Name")
-            lblDescription.Content = PluginHelper.GetLanguageItem("Description")
-            lblVersion.Content = PluginHelper.GetLanguageItem("Version")
-            Me.Header = PluginHelper.GetLanguageItem("Extension Info")
+            lblAuthor.Content = My.Resources.Language.Author
+            lblName.Content = My.Resources.Language.Name
+            lblDescription.Content = My.Resources.Language.Description
+            lblVersion.Content = My.Resources.Language.Version
+            Me.Header = My.Resources.Language.ExtensionInfo
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)

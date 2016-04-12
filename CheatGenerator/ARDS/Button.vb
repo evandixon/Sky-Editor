@@ -5,9 +5,6 @@ Namespace ARDS
     Public Class Button
         Public Property Name As String
         Public Property ButtonValue As Integer
-        Public Overrides Function ToString() As String
-            Return PluginHelper.GetLanguageItem(Name)
-        End Function
         Public Overrides Function Equals(obj As Object) As Boolean
             If TypeOf obj Is Button Then
                 Return Name.Equals(obj.name)

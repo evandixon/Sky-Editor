@@ -47,11 +47,11 @@ Namespace Projects
         Public Overrides Function GetImportIOFilter(ParentProjectPath As String) As String
             Select Case Me.Setting("System")
                 Case "NDS"
-                    Return PluginHelper.GetLanguageItem("Nintendo DS Roms") & " (*.nds)|*.nds|" & PluginHelper.GetLanguageItem("All Files") & " (*.*)|*.*"
+                    Return $"{My.Resources.Language.NDSRomFile} (*.nds)|*.nds|{My.Resources.Language.AllFiles} (*.*)|*.*"
                 Case "3DS"
-                    Return PluginHelper.GetLanguageItem("Nintendo 3DS Roms") & " (*.3ds;*.3dz)|*.3ds;*.3dz|" & PluginHelper.GetLanguageItem("All Files") & " (*.*)|*.*"
+                    Return $"{My.Resources.Language.ThreeDSRomFile} (*.3ds;*.3dz)|*.3ds;*.3dz|{My.Resources.Language.AllFiles} (*.*)|*.*"
                 Case Else
-                    Return PluginHelper.GetLanguageItem("All Files") & " (*.*)|*.*"
+                    Return $"{My.Resources.Language.AllFiles} (*.*)|*.*"
             End Select
         End Function
 
@@ -95,7 +95,7 @@ Namespace Projects
                 End Using
             End If
 
-            PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Unpacking..."))
+            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             Select Case mode
                 Case "nds"
                     Dim nds As New Roms.GenericNDSRom()

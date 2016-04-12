@@ -6,7 +6,7 @@ Namespace Extensions
 
         Public ReadOnly Property Name As String Implements IExtensionCollection.Name
             Get
-                Return PluginHelper.GetLanguageItem("Installed")
+                Return My.Resources.Language.Installed
             End Get
         End Property
 

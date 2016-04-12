@@ -14,11 +14,11 @@
         End Function
 
         Public Sub New()
-            MyBase.New("_Development/_Import SDF Saves", "/", True)
+            MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevImportSDF})
             Me.AlwaysVisible = False
 
             FolderBrowserDialog1 = New Forms.FolderBrowserDialog
-            FolderBrowserDialog1.Description = SkyEditorBase.PluginHelper.GetLanguageItem("Please select your SD Card")
+            FolderBrowserDialog1.Description = My.Resources.Language.PleaseSelectSD
             DevOnly = True
             SortOrder = 10.7
         End Sub

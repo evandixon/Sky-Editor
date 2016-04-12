@@ -61,10 +61,7 @@ Namespace UI
             Return True
         End Function
         Private Sub SolutionExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Build Status")
-            columnName.Header = PluginHelper.GetLanguageItem("Project")
-            columnProgress.Header = PluginHelper.GetLanguageItem("Progress")
-            columnStatus.Header = PluginHelper.GetLanguageItem("Status")
+            Me.Header = My.Resources.Language.BuildStatus
         End Sub
         Private Sub Solution_BuildStarted(sender As Object, e As EventArgs)
             dataGrid.Items.Clear()

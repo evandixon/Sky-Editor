@@ -87,7 +87,7 @@ Namespace Tabs
         End Sub
 
         Private Sub PKMGeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("General")
+            Me.Header = My.Resources.Language.General
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles cbPokemon.SelectionChanged,

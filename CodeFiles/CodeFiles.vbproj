@@ -95,6 +95,11 @@
     <Compile Include="HighlightRule.vb" />
     <Compile Include="ICodeProject.vb" />
     <Compile Include="ITextFile.vb" />
+    <Compile Include="Language.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Language.resx</DependentUpon>
+    </Compile>
     <Compile Include="LuaCodeFile.vb" />
     <Compile Include="ParameterInfo.vb" />
     <Compile Include="ParameterSet.vb" />
@@ -118,6 +123,11 @@
     <Compile Include="WordHighlightRule.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Language.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Language.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

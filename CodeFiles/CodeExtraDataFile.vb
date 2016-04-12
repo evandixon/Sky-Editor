@@ -7,7 +7,8 @@ Imports SkyEditorBase.Utilities
 ''' </summary>
 Public Class CodeExtraDataFile
     Inherits CodeExtraData
-    Implements iCreatableFile
+    'Implements iCreatableFile
+    Implements iNamed
     Implements iOpenableFile
     Implements iOnDisk
     Implements ISavableAs
@@ -77,7 +78,7 @@ Public Class CodeExtraDataFile
         AutoCompleteChars = New List(Of Char)
     End Sub
 
-    Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
+    Public Sub CreateFile(Name As String) 'Implements iCreatableFile.CreateFile
         Database = New List(Of FunctionDocumentation)
         AutoCompleteChars = New List(Of Char)
     End Sub

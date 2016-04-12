@@ -21,7 +21,7 @@ Public Class SSBStringEditor
                 editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Spanish, .EditingLanguage = "Español"})
                 AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
             End If
-            editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Constants, .EditingLanguage = PluginHelper.GetLanguageItem("Constants")})
+            editors.Add(New SSBStringDictionaryEditor With {.EditingObject = GetEditingObject(Of SSB).Constants, .EditingLanguage = My.Resources.Language.Constants})
             AddHandler editors.Last.IsModifiedChanged, AddressOf OnObjModified
             tcTabs.Items.Clear()
             For Each item In editors
@@ -61,7 +61,7 @@ Public Class SSBStringEditor
     End Sub
 
     Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Header = PluginHelper.GetLanguageItem("Strings")
+        Me.Header = My.Resources.Language.Strings
     End Sub
 
     Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)

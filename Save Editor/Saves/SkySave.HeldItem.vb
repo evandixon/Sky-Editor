@@ -177,7 +177,7 @@ Namespace Saves
                     End If
                     If HeldBy > 0 Then
                         output.Append(" [")
-                        output.Append(PluginHelper.GetLanguageItem("Held by"))
+                        output.Append(My.Resources.Language.ItemToStringHeldBy)
                         output.Append(" ")
                         output.Append(HeldBy)
                         output.Append("]")
@@ -383,9 +383,9 @@ Namespace Saves
             Return True
         End Function
         Public Function HeldItemSlots() As ItemSlot() Implements iItemStorage.HeldItemSlots
-            Return {New ItemSlot(AddressOf GetStoredItems, AddressOf SetStoredItems, AddressOf NewStoredItem, SkyEditorBase.PluginHelper.GetLanguageItem("Stored Items"), GetItemDicitonary, 1000),
-                    New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, SkyEditorBase.PluginHelper.GetLanguageItem("Held Items"), GetItemDicitonary, 50),
-                    New ItemSlot(AddressOf SpEpisodeGetHeldItems, AddressOf SpEpisodeSetHeldItems, AddressOf NewHeldItem, SkyEditorBase.PluginHelper.GetLanguageItem("Sp. Episode Held Items"), GetItemDicitonary, 50)}
+            Return {New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.HeldItemsSlot, GetItemDicitonary, 50),
+                    New ItemSlot(AddressOf SpEpisodeGetHeldItems, AddressOf SpEpisodeSetHeldItems, AddressOf NewHeldItem, My.Resources.Language.EpisodeHeldItems, GetItemDicitonary, 50),
+                    New ItemSlot(AddressOf GetStoredItems, AddressOf SetStoredItems, AddressOf NewStoredItem, My.Resources.Language.StoredItemsSlot, GetItemDicitonary, 1000)}
         End Function
     End Class
 End Namespace

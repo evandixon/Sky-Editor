@@ -8,19 +8,19 @@ Friend Class WpfCoreMod
 
     Public Overrides ReadOnly Property Credits As String
         Get
-            Return ""
+            Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
     Public Overrides ReadOnly Property PluginAuthor As String
         Get
-            Return ""
+            Return My.Resources.Language.Author
         End Get
     End Property
 
     Public Overrides ReadOnly Property PluginName As String
         Get
-            Return PluginHelper.GetLanguageItem("Sky Editor WPF")
+            Return My.Resources.Language.PluginName
         End Get
     End Property
 
@@ -41,7 +41,7 @@ Friend Class WpfCoreMod
 
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
 
-        Manager.RegisterIOFilter("*.skysln", PluginHelper.GetLanguageItem("Sky Editor Solution"))
+        Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub
 
 End Class

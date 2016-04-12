@@ -25,7 +25,7 @@ Namespace Tabs
         End Sub
 
         Private Sub PkmMovesTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Moves")
+            Me.Header = My.Resources.Language.Moves
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles Attack1.Modified, Attack2.Modified, Attack3.Modified, Attack4.Modified

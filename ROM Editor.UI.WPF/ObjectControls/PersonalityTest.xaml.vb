@@ -291,7 +291,6 @@ Namespace ObjectControls
 
         Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
             'Me.Header = "Personality Test"
-            UiHelper.TranslateForm(Me)
             For Each count In SaveEditor.Lists.SkyPokemon.Keys
                 Dim item As String = SaveEditor.Lists.SkyPokemon(count)
                 cbPartner01.Items.Add(item)

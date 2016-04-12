@@ -151,21 +151,7 @@ Namespace Tabs
         End Sub
 
         Private Sub PKMGeneralTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("General")
-            lblPkm.Content = PluginHelper.GetLanguageItem("Pokémon")
-            lblIsFemale.Content = PluginHelper.GetLanguageItem("Is Female")
-            lblName.Content = PluginHelper.GetLanguageItem("Name")
-            lblLevel.Content = PluginHelper.GetLanguageItem("Level")
-            lblExp.Content = PluginHelper.GetLanguageItem("Experience")
-            lblMetAt.Content = PluginHelper.GetLanguageItem("Met At")
-            lblMetFloor.Content = PluginHelper.GetLanguageItem("Met Floor")
-            lblIQ.Content = PluginHelper.GetLanguageItem("IQ")
-            lblCurrentHP.Content = PluginHelper.GetLanguageItem("Current HP")
-            lblMaxHP.Content = PluginHelper.GetLanguageItem("Max HP")
-            lblAttack.Content = PluginHelper.GetLanguageItem("Attack")
-            lblSpAttack.Content = PluginHelper.GetLanguageItem("Sp. Attack")
-            lblDefense.Content = PluginHelper.GetLanguageItem("Defense")
-            lblSpDefense.Content = PluginHelper.GetLanguageItem("Sp. Defense")
+            Me.Header = My.Resources.Language.General
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles cbPokemon.SelectionChanged,

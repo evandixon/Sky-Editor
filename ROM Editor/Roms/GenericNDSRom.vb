@@ -299,6 +299,19 @@ Namespace Roms
         '170h    90h   Reserved (zero filled) (transferred, but not stored in RAM)
 #End Region
 
+#Region "Overlay"
+        Private Class OverlayTable
+            Public Property OverlayID As Integer
+            Public Property RamAddress As Integer 'Point at which to load
+            Public Property RamSize As Integer 'mount to load
+            Public Property BssSize As Integer 'Size of BSS data region
+            Public Property StaticInitStartAddress As Integer
+            Public Property StaticInitEndAddress As Integer
+            Public Property FileID As Integer
+            Public Property Reserved0 As Integer
+        End Class
+#End Region
+
 #Region "NitroRom Stuff"
         Private Class FileAllocationEntry
             Public Property Offset As Integer
@@ -461,7 +474,7 @@ Namespace Roms
                 Await arm9Task
             End If
 
-            '-Arm9
+            '-Arm7
             Dim arm7Task = Task.Run(New Action(Sub()
                                                    IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm7.bin"), RawData(Me.Arm7RomOffset, Me.Arm7Size))
                                                End Sub))
@@ -539,7 +552,7 @@ Namespace Roms
             Set(value As Integer)
                 _extractProgress = value
                 If SetLoadingExtractProgress Then
-                    PluginHelper.SetLoadingStatus(String.Format(PluginHelper.GetLanguageItem("Extracting NDS ROM... ({0} of {1})"), value, CurrentExtractMax), GetExtractionProgress)
+                    PluginHelper.SetLoadingStatus(String.Format(My.Resources.Language.LoadingExtractingNDSRomXofY, value, CurrentExtractMax), GetExtractionProgress)
                 End If
             End Set
         End Property

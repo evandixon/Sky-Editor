@@ -176,7 +176,7 @@ Namespace Projects
                         Await Utilities.FileSystem.CopyDirectory(source, dest, True)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
-                    Dim a As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Copying files", "Copying files..."))
+                    Dim a As New Utilities.AsyncFor(My.Resources.Language.LoadingCopyingFiles)
                     Await a.RunForEach(Sub(Item As String)
                                            Dim source As String = IO.Path.Combine(sourceRoot, Item)
                                            If IO.File.Exists(source) Then
@@ -227,7 +227,7 @@ Namespace Projects
 
                 Await Task.Run(Async Function() As Task
                                    Me.BuildProgress = 0
-                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Analyzing files")
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingAnalzingFIles
                                    'Create the mod
                                    '-Find all the files
                                    Dim sourceFiles As New Dictionary(Of String, Byte())
@@ -259,7 +259,7 @@ Namespace Projects
                                    Next
 
                                    Me.BuildProgress = 0
-                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Computing hashes")
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingComputingHashes
 
                                    Dim tasks As New List(Of Task)
                                    Dim completed As Integer = 0
@@ -295,7 +295,7 @@ Namespace Projects
 
 
                                    Me.BuildProgress = 0
-                                   Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Comparing files")
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingComparingFiles
                                    '-Analyze the differences
                                    For Each item In destFiles.Keys
                                        Dim originalFilename As String = ""
@@ -349,19 +349,21 @@ Namespace Projects
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), SkyEditorBase.Utilities.Json.Serialize(actions))
 
                 Me.BuildProgress = 0
-                Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Generating patch")
+                Me.BuildStatusMessage = My.Resources.Language.LoadingGeneratingPatch
 
+                '--Add files that were added
                 For Each item In actions.ToAdd
+                    Dim fileName = IO.Path.Combine(currentFiles, item.TrimStart("\"))
                     'Todo: remove item from toAdd if no longer exists
-                    If IO.File.Exists(IO.Path.Combine(sourceRoot, item)) Then
-                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item))) Then
-                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item)))
+                    If IO.File.Exists(fileName) Then
+                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.TrimStart("\")))) Then
+                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(modTempFiles, item.TrimStart("\"))))
                         End If
-                        IO.File.Copy(IO.Path.Combine(sourceRoot, item), IO.Path.Combine(modTempFiles, item), True)
+                        IO.File.Copy(fileName, IO.Path.Combine(modTempFiles, item.TrimStart("\")), True)
                     End If
                 Next
 
-                Dim f As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Generating patch"))
+                Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingGeneratingPatch)
                 f.SetLoadingStatus = False
                 f.SetLoadingStatusOnFinish = False
                 Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)
@@ -435,7 +437,7 @@ Namespace Projects
 
             Next
             Me.BuildProgress = 1
-            Me.BuildStatusMessage = PluginHelper.GetLanguageItem("Complete")
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
         Public Sub New()

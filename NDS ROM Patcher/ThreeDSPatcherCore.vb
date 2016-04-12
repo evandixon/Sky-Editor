@@ -6,7 +6,7 @@ Public Class ThreeDSPatcherCore
 
     Public Overrides Sub PromptFilePath()
         Dim o As New OpenFileDialog
-        o.Filter = "Supported Files (*.3ds;*.3dz;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
+        o.Filter = "Supported Files (*.3ds;*.3dz;*.cxi;romfs.bin)|*.3ds;*.3dz;romfs.bin|3DS DS Roms (*.3ds;*.3dz)|*.3ds;*.3dz|CXI Files (*.cxi)|*.cxi|Braindump romfs (romfs.bin)|romfs.bin|All Files (*.*)|*.*"
         If o.ShowDialog = DialogResult.OK Then
             SelectedFilename = o.FileName
         End If
@@ -65,22 +65,79 @@ Public Class ThreeDSPatcherCore
 
                 Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
             Else
+                Dim DestinationDirectory = ROMDirectory
+                Dim Filename = SelectedFilename
                 'We're dealing with a .3DS file
-                Dim exHeaderPath = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
-                Dim exefsPath = IO.Path.Combine(ROMDirectory, "DecryptedExeFS.bin")
-                Dim romfsPath = IO.Path.Combine(ROMDirectory, "DecryptedRomFS.bin")
-                Dim romfsDir = IO.Path.Combine(ROMDirectory, "romfs")
-                Dim exefsDir = IO.Path.Combine(ROMDirectory, "exefs")
+                '(Basically these variables are formatted as so: [item][bin/dir][path/task])
+                'Define paths
+                Dim exHeaderPath = IO.Path.Combine(DestinationDirectory, "DecryptedExHeader.bin")
+                Dim exefsBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedExeFS.bin")
+                Dim romfsBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedRomFS.bin")
+                Dim romfsDirPath = IO.Path.Combine(DestinationDirectory, "Romfs")
+                Dim exefsDirPath = IO.Path.Combine(DestinationDirectory, "Exefs")
+                Dim manualBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedManual.bin")
+                Dim manualDirPath = IO.Path.Combine(DestinationDirectory, "Manual")
+                Dim dlPlayBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedDownloadPlay.bin")
+                Dim dlPlayDirPath = IO.Path.Combine(DestinationDirectory, "DownloadPlay")
+                Dim n3dsUpdateBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedN3DSUpdate.bin")
+                Dim n3dsUpdateDirPath = IO.Path.Combine(DestinationDirectory, "N3DSUpdate")
+                Dim o3dsUpdateBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedO3DSUpdate.bin")
+                Dim o3dsUpdateDirPath = IO.Path.Combine(DestinationDirectory, "O3DSUpdate")
+                Dim onlineHeaderBinPath = IO.Path.Combine(DestinationDirectory, "OnlineHeader.bin")
+
                 'Unpack portions
-                Await ProcessHelper.RunCTRTool($"-p --exheader=""{exHeaderPath}"" ""{SelectedFilename}""")
-                Await ProcessHelper.RunCTRTool($"-p --exefs=""{exefsPath}"" ""{SelectedFilename}""")
-                Await ProcessHelper.RunCTRTool($"-p --romfs=""{romfsPath}"" ""{SelectedFilename}""")
+                Dim exheaderTask = ProcessHelper.RunCTRTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{Filename}""")
+                Dim exefsBinTask = ProcessHelper.RunCTRTool($"-p --ncch=0 --exefs=""{exefsBinPath}"" ""{Filename}""")
+                Dim romfsBinTask = ProcessHelper.RunCTRTool($"-p --ncch=0 --romfs=""{romfsBinPath}"" ""{Filename}""")
+                Dim manualBinTask = ProcessHelper.RunCTRTool($"-p --ncch=1 --romfs=""{manualBinPath}"" ""{Filename}"" --decompresscode")
+                Dim dlPlayBinTask = ProcessHelper.RunCTRTool($"-p --ncch=2 --romfs=""{dlPlayBinPath}"" ""{Filename}"" --decompresscode")
+                Dim n3dsUpdateBinTask = ProcessHelper.RunCTRTool($"-p --ncch=6 --romfs=""{n3dsUpdateBinPath}"" ""{Filename}"" --decompresscode")
+                Dim o3dsUpdateBinTask = ProcessHelper.RunCTRTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{Filename}"" --decompresscode")
+
+                'Save online header
+                Using f As New GenericFile
+                    f.OpenFile(SelectedFilename)
+                    IO.File.WriteAllBytes(onlineHeaderBinPath, f.RawData(&H1200, &H2E00))
+                End Using
+
+
                 'Unpack romfs
-                Await ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDir}"" ""{romfsPath}""")
+                Await romfsBinTask
+                Dim romfsDirTask = ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{romfsDirPath}"" ""{romfsBinPath}""")
+
                 'Unpack exefs
-                Await ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDir}"" ""{exefsPath}"" --decompresscode")
-                IO.File.Delete(exefsPath)
-                IO.File.Delete(romfsPath)
+                Await exefsBinTask
+                Dim exefsDirTask = ProcessHelper.RunCTRTool($"-t exefs --exefsdir=""{exefsDirPath}"" ""{exefsBinPath}"" --decompresscode")
+
+                'Unpack manual
+                Await manualBinTask
+                Dim manualDirTask = ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{manualDirPath}"" ""{manualBinPath}""")
+
+                'Unpack n3ds update
+                Await n3dsUpdateBinTask
+                Dim n3dsUpdateDirTask = ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{n3dsUpdateDirPath}"" ""{n3dsUpdateBinPath}""")
+
+                'Unpack o3ds update
+                Await o3dsUpdateBinTask
+                Dim o3dsUpdateDirTask = ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{o3dsUpdateDirPath}"" ""{o3dsUpdateBinPath}""")
+
+                'Unpack download play
+                Await dlPlayBinTask
+                Dim dlPlayDirTask = ProcessHelper.RunCTRTool($"-t romfs --romfsdir=""{dlPlayDirPath}"" ""{dlPlayBinPath}""")
+
+
+                Await romfsDirTask
+                Await exefsDirTask
+                Await manualDirTask
+                Await n3dsUpdateDirTask
+                Await dlPlayDirTask
+
+                DeleteFile(exefsBinPath)
+                DeleteFile(romfsBinPath)
+                DeleteFile(manualBinPath)
+                DeleteFile(dlPlayBinPath)
+                DeleteFile(n3dsUpdateBinPath)
+                DeleteFile(o3dsUpdateBinPath)
             End If
         ElseIf IO.Directory.Exists(SelectedFilename) Then
             RaiseProgressChanged(0, "Copying Files...")
@@ -248,6 +305,7 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
                 Dim exeFS As String = IO.Path.Combine(ROMDirectory, "exefs")
                 Dim romFS As String = IO.Path.Combine(ROMDirectory, "romfs")
                 Dim exHeader As String = IO.Path.Combine(ROMDirectory, "DecryptedExHeader.bin")
+                Dim onlineHeader As String = IO.Path.Combine(ROMDirectory, "OnlineHeader.bin")
 
                 'To save lots of time, we're NOT going to compress code.bin
                 'Because of this, we must update the exHeader to not expect a compressed code.bin
@@ -273,6 +331,14 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
                 Await ProcessHelper.RunProgram(IO.Path.Combine(currentDirectory, "Tools/3DS Builder.exe"),
                                      $"""{exeFS}"" ""{romFS}"" ""{exHeader}"" ""{output}""", True) 'Add -compressCode to compress code.bin
 
+                'Add the online header back
+                If IO.File.Exists(onlineHeader) Then
+                    Using f As New GenericFile
+                        f.OpenFile(output)
+                        f.RawData(&H1200, &H2E00) = IO.File.ReadAllBytes(onlineHeader)
+                    End Using
+                End If
+
 
                 'If destination.ToLower.EndsWith(".cia") Then
                 '    Await CiaConversion.ConvertToCia(output, outputCia)
@@ -289,12 +355,24 @@ ShowSaveDialog3DS: Dim s As New SaveFileDialog
         End If
 
         'Cleanup
-        If IO.Directory.Exists(ROMDirectory) Then IO.Directory.Delete(ROMDirectory, True)
-        If IO.File.Exists(output) Then IO.File.Delete(output)
-        If IO.File.Exists(outputCia) Then IO.File.Delete(outputCia)
+        If Not IO.File.Exists("nocleanup") Then
+            If IO.Directory.Exists(ROMDirectory) Then IO.Directory.Delete(ROMDirectory, True)
+            If IO.File.Exists(output) Then IO.File.Delete(output)
+            If IO.File.Exists(outputCia) Then IO.File.Delete(outputCia)
+        End If
     End Function
 
     Public Overrides Function SupportsMod(ModToCheck As ModJson) As Boolean
         Return True
     End Function
+
+    ''' <summary>
+    ''' Deletes the given file if it exists, and does nothing if it does not exist.
+    ''' </summary>
+    ''' <param name="Filename">Full path of the file to delete.</param>
+    Public Shared Sub DeleteFile(Filename As String)
+        If IO.File.Exists(Filename) Then
+            IO.File.Delete(Filename)
+        End If
+    End Sub
 End Class

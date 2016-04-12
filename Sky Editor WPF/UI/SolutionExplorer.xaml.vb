@@ -42,7 +42,7 @@ Namespace UI
         End Sub
 
         Private Sub SolutionExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            Me.Header = PluginHelper.GetLanguageItem("Solution Explorer")
+            Me.Header = My.Resources.Language.SolutionExplorer
             menuAddFolder.Visibility = Visibility.Collapsed
             menuCreateProject.Visibility = Visibility.Collapsed
             menuCreateFile.Visibility = Visibility.Collapsed
@@ -51,14 +51,7 @@ Namespace UI
             menuOpen.Visibility = Visibility.Collapsed
             menuProperties.Visibility = Visibility.Collapsed
             menuAddExistingFile.Visibility = Visibility.Collapsed
-
-            menuAddFolder.Header = PluginHelper.GetLanguageItem("Create Folder")
-            menuCreateProject.Header = PluginHelper.GetLanguageItem("Create Project")
-            menuCreateFile.Header = PluginHelper.GetLanguageItem("Create File")
-            menuDelete.Header = PluginHelper.GetLanguageItem("Delete")
-            menuOpen.Header = PluginHelper.GetLanguageItem("Open")
-            menuProperties.Header = PluginHelper.GetLanguageItem("Properties")
-            menuAddExistingFile.Header = PluginHelper.GetLanguageItem("Add Existing File")
+            menuAddExistingProject.Visibility = Visibility.Collapsed
         End Sub
 
         Public Property Header As String Implements ITargetedControl.Header
@@ -122,7 +115,7 @@ Namespace UI
                     Dim t As New NodeTag
                     t.ParentPath = ""
                     t.ParentSolution = sol
-                    t.IsDirectory = False
+                    t.IsDirectory = True
                     t.Name = sol.Name
                     t.IsRoot = True
                     n.Header = "[Solution] " & sol.Name
@@ -235,6 +228,7 @@ Namespace UI
             menuCreateProject.Visibility = Visibility.Collapsed
             menuCreateFile.Visibility = Visibility.Collapsed
             menuAddExistingFile.Visibility = Visibility.Collapsed
+            menuAddExistingProject.Visibility = Visibility.Collapsed
             menuDelete.Visibility = Visibility.Collapsed
             menuProperties.Visibility = Visibility.Collapsed
 
@@ -252,6 +246,7 @@ Namespace UI
 
                         If Not tag.IsProjectRoot AndAlso tag.ParentSolution.CanCreateProject(tag.ParentPath) Then
                             menuCreateProject.Visibility = Visibility.Visible
+                            menuAddExistingProject.Visibility = Visibility.Visible
                         End If
 
                         If tag.ParentSolution.CanDeleteDirectory(tag.ParentPath & "/" & tag.Name) Then
@@ -326,7 +321,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New UI.NewNameWindow(PluginHelper.GetLanguageItem("What should the folder be named?"), PluginHelper.GetLanguageItem("New Folder"))
+                    Dim w As New UI.NewNameWindow(My.Resources.Language.NewFolderQuestion, My.Resources.Language.NewFolder)
                     If w.ShowDialog Then
 
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
@@ -361,7 +356,7 @@ Namespace UI
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath)
-                        types.Add(PluginHelper.GetLanguageItem(item.Name), item)
+                        types.Add(PluginHelper.GetTypeName(item), item)
                     Next
                     w.AddGames(types.Keys)
                     If w.ShowDialog Then
@@ -391,7 +386,7 @@ Namespace UI
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath)
-                        types.Add(PluginHelper.GetLanguageItem(item.Name), item)
+                        types.Add(PluginHelper.GetTypeName(item), item)
                     Next
                     w.AddGames(types.Keys)
                     If w.ShowDialog Then
@@ -433,12 +428,38 @@ Namespace UI
             End If
         End Sub
 
+        <Obsolete("Needs updated IO Filter")> Private Sub menuAddExistingProject_Click(sender As Object, e As RoutedEventArgs) Handles menuAddExistingProject.Click
+            If tvSolution.SelectedItem IsNot Nothing Then
+                Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
+                If TypeOf node.Tag Is NodeTag Then
+                    Dim tag = DirectCast(node.Tag, NodeTag)
+                    Dim w As New Forms.OpenFileDialog
+                    w.Filter = "All Files (*.*)|*.*"
+                    If w.ShowDialog = Forms.DialogResult.OK Then
+
+                        If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
+                            'Then we're at the solution level
+                            If tag.IsRoot Then
+                                tag.ParentSolution.AddExistingProject("", w.FileName)
+                            Else
+                                tag.ParentSolution.AddExistingProject(tag.ParentPath & " / " & tag.Name, w.FileName)
+                            End If
+
+                        Else
+                            'Then we're somewhere else?
+                        End If
+                    End If
+
+                End If
+            End If
+        End Sub
+
         Private Sub menuDelete_Click(sender As Object, e As RoutedEventArgs) Handles menuDelete.Click
             If tvSolution.SelectedItem IsNot Nothing Then
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    If MessageBox.Show(PluginHelper.GetLanguageItem("Are you sure you want to delete this?"), PluginHelper.GetLanguageItem("Sky Editor"), MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                    If MessageBox.Show(My.Resources.Language.DeleteItemConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
                             'Then we're at the solution level
                             tag.ParentSolution.DeleteDirectory(tag.ParentPath & "/" & tag.Name)
@@ -718,7 +739,7 @@ Namespace UI
                         If obj Is Nothing Then
                             Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
                             If Not IO.File.Exists(f) Then
-                                MessageBox.Show(String.Format(PluginHelper.GetLanguageItem("Unable to find file at ""{0}""."), f))
+                                MessageBox.Show(String.Format(My.Resources.Language.ErrorCantFindFileAt, f))
                             End If
                         End If
                         PluginHelper.RequestFileOpen(obj, tag.ParentProject)

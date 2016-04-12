@@ -11,7 +11,7 @@ Namespace Utilities
         End Function
 
         Public Shared Async Function DeleteDirectoryContents(DirectoryName As String, Optional UpdateLoadingStatus As Boolean = False) As Task
-            Dim f As New AsyncFor(PluginHelper.GetLanguageItem("Deleting files..."))
+            Dim f As New AsyncFor(My.Resources.Language.LoadingDeletingFiles)
             f.SetLoadingStatus = UpdateLoadingStatus
             f.SetLoadingStatusOnFinish = UpdateLoadingStatus
 
@@ -62,5 +62,15 @@ Namespace Utilities
             Await DeleteDirectoryContents(DirectoryName, UpdateLoadingStatus)
             IO.Directory.Delete(DirectoryName, True)
         End Function
+
+        ''' <summary>
+        ''' Deletes the given file if it exists, and does nothing if it does not exist.
+        ''' </summary>
+        ''' <param name="Filename">Full path of the file to delete.</param>
+        Public Shared Sub DeleteFile(Filename As String)
+            If IO.File.Exists(Filename) Then
+                IO.File.Delete(Filename)
+            End If
+        End Sub
     End Class
 End Namespace

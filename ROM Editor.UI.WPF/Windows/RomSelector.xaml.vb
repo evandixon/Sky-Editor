@@ -22,7 +22,7 @@ Public Class RomSelector
             Me.Close()
         Else
             Dim x As New Windows.Forms.OpenFileDialog
-            x.Filter = "NDS Roms (*.nds)|*.nds|All Files (*.*)|*.*"
+            x.Filter = $"{My.Resources.Language.NDSRomFiles} (*.nds)|*.nds|{My.Resources.Language.AllFiles} (*.*)|*.*"
             If x.ShowDialog = Windows.Forms.DialogResult.OK Then
                 IO.File.Copy(x.FileName, file)
                 RomName = file
@@ -42,7 +42,6 @@ Public Class RomSelector
     End Sub
 
     Private Sub RomSelector_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
-        UiHelper.TranslateForm(Me)
         If lvRoms.Items.Count = 1 Then
             lvRoms.SelectedIndex = 0
             OnOK()

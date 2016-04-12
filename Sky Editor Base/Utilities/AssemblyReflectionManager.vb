@@ -15,32 +15,32 @@ Namespace Utilities
         Private Property LoadedAssemblies As Dictionary(Of String, AppDomain)
         Private Property Proxies As Dictionary(Of String, AssemblyReflectionProxy)
 
-        Public Sub LoadAssembly(AssemblyPath As String, DomainName As String)
-            If Not LoadedAssemblies.ContainsKey(AssemblyPath) Then
+        Public Sub LoadAssembly(assemblyPath As String, domainName As String)
+            If Not LoadedAssemblies.ContainsKey(assemblyPath) Then
 
                 Dim domain As AppDomain = Nothing
-                If MapDomains.ContainsKey(DomainName) Then
-                    domain = MapDomains(DomainName)
+                If MapDomains.ContainsKey(domainName) Then
+                    domain = MapDomains(domainName)
                 Else
-                    domain = CreateChildDomain(AppDomain.CurrentDomain, DomainName)
-                    MapDomains.Add(DomainName, domain)
+                    domain = CreateChildDomain(AppDomain.CurrentDomain, domainName)
+                    MapDomains.Add(domainName, domain)
                 End If
 
                 Dim proxyType As Type = GetType(AssemblyReflectionProxy)
                 If proxyType.Assembly IsNot Nothing Then
                     Dim proxy = domain.CreateInstanceFrom(proxyType.Assembly.Location, proxyType.FullName).Unwrap()
-                    proxy.LoadAssembly(AssemblyPath)
+                    proxy.LoadAssembly(assemblyPath)
 
-                    LoadedAssemblies.Add(AssemblyPath, domain)
-                    Proxies.Add(AssemblyPath, proxy)
+                    LoadedAssemblies.Add(assemblyPath, domain)
+                    Proxies.Add(assemblyPath, proxy)
                 End If
 
             End If
         End Sub
 
-        Public Sub UnloadAssembly(AssemblyPath As String)
-            If LoadedAssemblies.ContainsKey(AssemblyPath) AndAlso Proxies.ContainsKey(AssemblyPath) Then
-                Dim domain = LoadedAssemblies(AssemblyPath)
+        Public Sub UnloadAssembly(assemblyPath As String)
+            If LoadedAssemblies.ContainsKey(assemblyPath) AndAlso Proxies.ContainsKey(assemblyPath) Then
+                Dim domain = LoadedAssemblies(assemblyPath)
                 Dim count = (From a In LoadedAssemblies.Values Where a Is domain).Count
 
                 If count <> 1 Then
@@ -49,8 +49,8 @@ Namespace Utilities
                     MapDomains.Remove(domain.FriendlyName)
                     AppDomain.Unload(domain)
 
-                    LoadedAssemblies.Remove(AssemblyPath)
-                    Proxies.Remove(AssemblyPath)
+                    LoadedAssemblies.Remove(assemblyPath)
+                    Proxies.Remove(assemblyPath)
                 End If
             End If
         End Sub
