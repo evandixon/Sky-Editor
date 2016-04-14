@@ -37,6 +37,7 @@ Friend Class ConsoleCoreMod
         Manager.RegisterType(GetType(Project), GetType(Project))
 
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.GeneratePluginExtensions))
 
         Manager.RegisterDefaultFileTypeDetectors()
     End Sub

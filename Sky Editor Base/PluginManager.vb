@@ -37,6 +37,7 @@ Public Class PluginManager
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         Me.FailedPluginLoads = New List(Of String)
         Me.OpenedFiles = New Dictionary(Of Object, Project)
+        Me.DependantPlugins = New Dictionary(Of Assembly, List(Of Assembly))
 
         AddHandler PluginHelper.FileOpenRequested, AddressOf _pluginHelper_FileOpened
         AddHandler PluginHelper.FileClosed, AddressOf _pluginHelper_FileClosed
@@ -158,17 +159,27 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="Plugin"></param>
     Public Sub LoadPlugin(Plugin As iSkyEditorPlugin)
+        Dim a = Plugin.GetType.Assembly
         For Each item In Plugins
             If item.GetType.IsEquivalentTo(Plugin.GetType) Then
                 'Then we already have this plugin loaded and should do nothing
             Else
                 Plugin.Load(Me)
-                Dim a = Plugin.GetType.Assembly
+
                 If Not Assemblies.Contains(a) Then
                     Assemblies.Add(a)
                 End If
             End If
         Next
+
+        'Mark this plugin as a dependant
+        If Not DependantPlugins.ContainsKey(a) Then
+            DependantPlugins.Add(a, New List(Of Assembly))
+        End If
+        Dim caller = Assembly.GetCallingAssembly
+        If Not DependantPlugins(a).Contains(caller) Then
+            DependantPlugins(a).Add(caller)
+        End If
     End Sub
 #End Region
 
@@ -201,6 +212,13 @@ Public Class PluginManager
     Private Property MenuItems As List(Of MenuItemInfo)
 
     Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
+
+    ''' <summary>
+    ''' Matches plugin assemblies (key) to assemblies that depend on that assembly (value).
+    ''' If an assembly is a key, it is manually loaded by each of the assemblies in the value.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property DependantPlugins As Dictionary(Of Assembly, List(Of Assembly))
 
     ''' <summary>
     ''' Matches opened files to their parent projects
@@ -600,6 +618,15 @@ Public Class PluginManager
         Else
             Return Nothing
         End If
+    End Function
+
+    ''' <summary>
+    ''' Returns a boolean indicating whether or not the given assembly is a plugin assembly that is directly loaded by another plugin assembly.
+    ''' </summary>
+    ''' <param name="Assembly">Assembly in question</param>
+    ''' <returns></returns>
+    Public Function IsAssemblyDependant(Assembly As Assembly) As Boolean
+        Return DependantPlugins.ContainsKey(Assembly)
     End Function
 
 #End Region

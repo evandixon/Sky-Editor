@@ -155,6 +155,7 @@
     <Compile Include="BasicIniFile.vb" />
     <Compile Include="ConsoleCommand.vb" />
     <Compile Include="ConsoleCommandAsync.vb" />
+    <Compile Include="ConsoleCommands\GeneratePluginExtensions.vb" />
     <Compile Include="ConsoleCommands\InstallExtension.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
     <Compile Include="EventArguments\FileAddedEventArguments.vb" />

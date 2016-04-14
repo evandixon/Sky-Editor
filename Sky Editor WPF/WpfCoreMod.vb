@@ -40,6 +40,7 @@ Friend Class WpfCoreMod
         'End CoreMod stuff
 
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
+        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.GeneratePluginExtensions))
 
         Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub
