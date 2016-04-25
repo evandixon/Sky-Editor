@@ -9,10 +9,17 @@ Public Class Solution
     Implements iModifiable
 
 #Region "Child Classes"
+    ''' <summary>
+    ''' The value of a Solution Setting.
+    ''' </summary>
     Private Class SettingValue
         Public Property AssemblyQualifiedTypeName As String
         Public Property ValueJson As String
     End Class
+
+    ''' <summary>
+    ''' Models the solution file that's stored on disk.
+    ''' </summary>
     Private Class SolutionFile
         Public Property AssemblyQualifiedTypeName As String
         Public Property Name As String
@@ -28,6 +35,9 @@ Public Class Solution
         End Sub
     End Class
 
+    ''' <summary>
+    ''' Models a node in the solution TreeView.
+    ''' </summary>
     Public Class SolutionItem
         Implements IDisposable
         Implements IComparable(Of SolutionItem)

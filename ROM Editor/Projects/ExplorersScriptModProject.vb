@@ -20,7 +20,7 @@ Namespace Projects
             Dim sourceDir = GetRawFilesDir()
 
             Dim scriptFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "SCRIPT"), "*", IO.SearchOption.AllDirectories)
-            Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
+            Dim f2 As New Utilities.AsyncFor(My.Resources.Language.LoadingAddingFiles)
             Await f2.RunForEachSync(Async Function(Item As String) As Task
                                         Dim d = IO.Path.GetDirectoryName(Item).Replace(projectDir, "")
                                         Me.CreateDirectory(d)

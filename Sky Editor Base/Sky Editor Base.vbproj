@@ -5,17 +5,16 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F3E6313C-4337-4D20-B4E2-ED41420C9D05}</ProjectGuid>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>SkyEditorBase</RootNamespace>
     <AssemblyName>SkyEditorBase</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <PublishUrl>ftp://dl.uniquegeeks.net/SkyEditor4Alpha/</PublishUrl>
     <Install>true</Install>
@@ -145,11 +144,8 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicIniFile.vb" />
@@ -179,6 +175,7 @@
     <Compile Include="EventArguments\TypeRegisteredEventArguments.vb" />
     <Compile Include="EventArguments\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="ExecutableFile.vb" />
+    <Compile Include="Extensions\BasicOnlineExtensionCollection.vb" />
     <Compile Include="Extensions\ExtensionCollection.vb" />
     <Compile Include="Extensions\ExtensionHelper.vb" />
     <Compile Include="Extensions\ExtensionInfo.vb" />
@@ -240,7 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Linq" />
-    <Import Include="System.Xml.Linq" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
@@ -262,6 +258,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Language.fr.resx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

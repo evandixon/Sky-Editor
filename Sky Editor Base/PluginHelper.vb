@@ -22,12 +22,18 @@ Public Class PluginHelper
         Return GetResourceName(Path, Assembly.GetCallingAssembly.GetName.Name)
     End Function
 
-    Public Shared Function GetResourceName(Path As String, Plugin As String) As String
+    Public Shared Function GetResourceName(Path As String, Plugin As String, Optional ThrowIfCantCreateDirectory As Boolean = False) As String
         Dim fullPath = IO.Path.Combine(GetResourceDirectory(Plugin), Path)
         Dim baseDir = IO.Path.GetDirectoryName(fullPath)
-        If Not IO.Directory.Exists(baseDir) Then
-            IO.Directory.CreateDirectory(baseDir)
-        End If
+        Try
+            If Not IO.Directory.Exists(baseDir) Then
+                IO.Directory.CreateDirectory(baseDir)
+            End If
+        Catch ex As UnauthorizedAccessException
+            If ThrowIfCantCreateDirectory Then
+                Throw ex
+            End If
+        End Try
         Return fullPath
     End Function
     ''' <summary>
@@ -39,14 +45,20 @@ Public Class PluginHelper
     Public Shared Function GetResourceDirectory() As String
         Return GetResourceDirectory(Assembly.GetCallingAssembly.GetName.Name)
     End Function
-    Public Shared Function GetResourceDirectory(AssemblyName As String) As String
+    Public Shared Function GetResourceDirectory(AssemblyName As String, Optional ThrowIfCantCreateDirectory As Boolean = False) As String
         Dim baseDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Plugins", AssemblyName)
         If IO.Directory.Exists(baseDir) Then
             Return baseDir
         ElseIf IO.Directory.Exists(IO.Path.Combine(Environment.CurrentDirectory, AssemblyName)) Then
             Return IO.Path.Combine(Environment.CurrentDirectory, AssemblyName)
         Else
-            IO.Directory.CreateDirectory(baseDir)
+            Try
+                IO.Directory.CreateDirectory(baseDir)
+            Catch ex As UnauthorizedAccessException
+                If ThrowIfCantCreateDirectory Then
+                Throw ex
+            End If
+            End Try
             Return baseDir
         End If
     End Function
@@ -55,7 +67,7 @@ Public Class PluginHelper
     ''' Returns a the path of the root resource directory and creates it if it doesn't exist.
     ''' </summary>
     ''' <returns></returns>
-    Public Shared Function RootResourceDirectory() As String
+    Public Shared Function RootResourceDirectory(Optional ThrowIfCantCreateDirectory As Boolean = False) As String
         Dim d As String
         If ApplicationDeployment.IsNetworkDeployed Then
             'I'm choosing not to verify if the folder exists because I'm already going to check below.
@@ -63,7 +75,13 @@ Public Class PluginHelper
         Else
             d = IO.Path.Combine(Environment.CurrentDirectory & "\Resources")
             If Not IO.Directory.Exists(d) Then
-                IO.Directory.CreateDirectory(d)
+                Try
+                    IO.Directory.CreateDirectory(d)
+                Catch ex As UnauthorizedAccessException
+                    If ThrowIfCantCreateDirectory Then
+                        Throw ex
+                    End If
+                End Try
             End If
         End If
         Return d

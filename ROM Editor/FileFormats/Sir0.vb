@@ -5,27 +5,75 @@ Namespace FileFormats
     Public Class Sir0
         Inherits GenericFile
         Implements iOpenableFile
+
+        ''' <summary>
+        ''' The byte used to pad blocks that aren't divisible by 0x10.
+        ''' </summary>
+        ''' <returns></returns>
+        Protected Property PaddingByte As Byte
+
+        ''' <summary>
+        ''' Offset of the sub header
+        ''' </summary>
+        ''' <returns></returns>
         Protected Property HeaderOffset As Integer
+
+        ''' <summary>
+        ''' Offset of the pointers block
+        ''' </summary>
+        ''' <returns></returns>
         Protected Property PointerOffset As Integer
+
+        ''' <summary>
+        ''' Length of the pointers block
+        ''' </summary>
+        ''' <returns></returns>
         Private ReadOnly Property PointerLength As Integer
             Get
                 Return Length - PointerOffset
             End Get
         End Property
+
+        ''' <summary>
+        ''' Length of the sub header
+        ''' </summary>
+        ''' <returns></returns>
         Private ReadOnly Property HeaderLength As Integer
             Get
                 Return PointerOffset - HeaderOffset
             End Get
         End Property
+
+        ''' <summary>
+        ''' Length of the data block
+        ''' </summary>
+        ''' <returns></returns>
         Private ReadOnly Property DataLength As Integer
             Get
                 Return Length - 16 - HeaderLength - PointerLength
             End Get
         End Property
+
+        ''' <summary>
+        ''' Contents of the sub header
+        ''' </summary>
+        ''' <returns></returns>
         Protected Property Header As Byte()
+
+        ''' <summary>
+        ''' The decoded pointers in the pointers block.
+        ''' Each number is the number of bytes after the previous pointer in the file.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property RelativePointers As List(Of Integer)
 
+        ''' <summary>
+        ''' Whether or not to trim the pointers and sub header blocks after the file is loaded.
+        ''' If true, it is easier to append data to the data block.
+        ''' </summary>
+        ''' <returns></returns>
         Protected Property ResizeFileOnLoad As Boolean
+
         Public Overrides Sub CreateFile(Name As String, FileContents() As Byte)
             MyBase.CreateFile(Name, FileContents)
 
@@ -38,6 +86,7 @@ Namespace FileFormats
             MyBase.OpenFile(Filename)
             ProcessData()
         End Sub
+
         Public Overrides Sub Save(Destination As String)
             'The header and relative pointers must be set by child classes
 
@@ -132,6 +181,7 @@ Namespace FileFormats
 
         Public Sub New()
             MyBase.New
+            PaddingByte = &H0
             ResizeFileOnLoad = True
             RelativePointers = New List(Of Integer)
         End Sub

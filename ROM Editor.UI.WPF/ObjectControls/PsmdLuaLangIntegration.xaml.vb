@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Controls
+Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF
@@ -14,9 +15,9 @@ Public Class PsmdLuaLangIntegration
 
     Public Overrides Sub RefreshDisplay()
         With PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject) 'GetEditingObject(Of CodeFiles.LuaCodeFile)()
-            Dim messageFiles As New Dictionary(Of String, FileFormats.MessageBin)
+            Dim messageFiles As New Dictionary(Of String, MessageBin)
             For Each item In IO.Directory.GetDirectories(IO.Path.Combine(.GetRootDirectory, "Languages"), "*", IO.SearchOption.TopDirectoryOnly)
-                Dim msgfile = New FileFormats.MessageBin
+                Dim msgfile = New MessageBin
                 Dim filename = IO.Path.Combine(item, IO.Path.GetFileNameWithoutExtension(GetEditingObject(Of CodeFiles.LuaCodeFile).Filename))
 
                 Dim exists As Boolean = False
@@ -49,7 +50,7 @@ Public Class PsmdLuaLangIntegration
 
     Public Overrides Sub UpdateObject()
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, FileFormats.MessageBin).Save()
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).Save()
         Next
     End Sub
 
@@ -78,7 +79,7 @@ Public Class PsmdLuaLangIntegration
         End If
         Dim id As UInteger = Await p.GetNewLanguageID
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, FileFormats.MessageBin).AddBlankEntry(id)
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).AddBlankEntry(id)
         Next
         btnAdd.IsEnabled = True
         btnAdd.Content = oldText

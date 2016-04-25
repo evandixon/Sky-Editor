@@ -1,10 +1,6 @@
-﻿Imports System.Windows
-Imports System.Windows.Controls
-Imports ROMEditor
-Imports ROMEditor.FileFormats
-Imports ROMEditor.FileFormats.item_p
+﻿Imports System.Windows.Controls
+Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace ObjectControls
@@ -49,7 +45,7 @@ Namespace ObjectControls
 
         Public Property CurrentItem As item_p.Item
             Get
-                Dim x As New Item
+                Dim x As New item_p.Item
                 x.ID = numID.Value
                 x.BuyPrice = numBuyPrice.Value
                 x.SellPrice = numSellPrice.Value
@@ -65,7 +61,7 @@ Namespace ObjectControls
                 x.Index = CurrentIndex
                 Return x
             End Get
-            Set(value As FileFormats.item_p.Item)
+            Set(value As item_p.Item)
                 With value
                     numID.Value = .ID
                     numBuyPrice.Value = .BuyPrice

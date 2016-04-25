@@ -467,6 +467,7 @@ Namespace Roms
             '-Arm9
             Dim arm9Task = Task.Run(New Action(Sub()
                                                    IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm9.bin"), RawData(Me.Arm9RomOffset, Me.Arm9Size))
+                                                   'Todo: write additional 0xC bytes if the next 4 equal: 21 06 C0 DE
                                                End Sub))
             If Me.IsThreadSafe Then
                 ExtractionTasks.Add(arm9Task)
@@ -484,7 +485,7 @@ Namespace Roms
                 Await arm7Task
             End If
 
-            'Todo: extract arm9 overlay table (y9.bin)
+            'Todo: extract arm9 overlay table (y9.bin) with footer if applicable
             'Todo: extract arm7 overlay table (y7.bin)
             'Todo: extract overlays
             'Todo: extract banner.bin

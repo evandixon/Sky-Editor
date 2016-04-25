@@ -1,7 +1,4 @@
-﻿Imports System.Windows.Controls
-Imports ROMEditor.FileFormats.ScriptDS
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports ROMEditor.FileFormats.Explorers.Script
 Imports SkyEditorWPF.UI
 
 Public Class SSBScriptEditor

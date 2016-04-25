@@ -1,4 +1,6 @@
-﻿Namespace ConsoleCommands
+﻿Imports ROMEditor.FileFormats.PSMD
+
+Namespace ConsoleCommands
     Public Class BatchCteConvert
         Inherits SkyEditorBase.ConsoleCommand
 
@@ -10,7 +12,7 @@
             End If
             For Each item In IO.Directory.GetFiles(SourceDir)
                 Try
-                    Using c As New FileFormats.CteImage
+                    Using c As New CteImage
                         c.OpenFile(item)
                         c.ContainedImage.Save(item & ".png", Drawing.Imaging.ImageFormat.Png)
                         Console.WriteLine("Converted " & item)

@@ -1,14 +1,15 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class CteImageExport
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(FileFormats.CteImage)}
+            Return {GetType(CteImage)}
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As FileFormats.CteImage In Targets
+            For Each item As CteImage In Targets
                 If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
                     Dim format As System.Drawing.Imaging.ImageFormat
                     Select Case SaveFileDialog1.FilterIndex

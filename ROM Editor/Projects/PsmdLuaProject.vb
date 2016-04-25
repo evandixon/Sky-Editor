@@ -1,6 +1,7 @@
 ﻿Imports System.Collections.Concurrent
 Imports System.Text.RegularExpressions
 Imports CodeFiles
+Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
@@ -84,7 +85,7 @@ Validate:
 
                                                       Dim f2 As New Utilities.AsyncFor
                                                       Await f2.RunForEach(Sub(File As String)
-                                                                              Using msg As New FileFormats.MessageBin(True)
+                                                                              Using msg As New MessageBin(True)
                                                                                   msg.OpenFileOnlyIDs(File)
 
                                                                                   For Each entry In msg.Strings
@@ -115,7 +116,7 @@ Validate:
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
                 Await Utilities.FileSystem.ReCreateDirectory(destDir)
 
-                Dim farc As New FileFormats.FarcF5
+                Dim farc As New FarcF5
                 farc.OpenFile(item)
                 Await farc.Extract(destDir)
             Next
@@ -164,7 +165,7 @@ Validate:
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")
-            'Dim filesToOpen As New List(Of String)
+            Dim filesToOpen As New List(Of String)
 
             Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingDecompilingScripts)
             Await f.RunForEach(Async Function(Item As String) As Task
@@ -175,20 +176,20 @@ Validate:
 
                                    Await unluac.DecompileToFile(Item, dest)
                                    IO.File.Copy(dest, dest & ".original")
-                                   'filesToOpen.Add(dest)
+                                   filesToOpen.Add(dest)
 
                                    'Add the file to the project
-                                   Dim d = IO.Path.GetDirectoryName(dest).Replace(scriptDestination, "script")
-                                   Me.CreateDirectory(d)
-                                   Await Me.AddExistingFile(d, Item, False)
+                                   'Dim d = IO.Path.GetDirectoryName(dest).Replace(scriptDestination, "script")
+                                   'Me.CreateDirectory(d)
+                                   'Await Me.AddExistingFile(d, Item, False)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
 
-            'Dim f2 As New Utilities.AsyncFor(PluginHelper.GetLanguageItem("Adding Files..."))
-            'Await f2.RunForEachSync(Async Function(Item As String) As Task
-            '                            Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
-            '                            Me.CreateDirectory(d)
-            '                            Await Me.AddExistingFile(d, Item, False)
-            '                        End Function, filesToOpen)
+            Dim f2 As New Utilities.AsyncFor(My.Resources.Language.LoadingAddingFiles)
+            Await f2.RunForEachSync(Async Function(Item As String) As Task
+                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
+                                        Me.CreateDirectory(d)
+                                        Await Me.AddExistingFile(d, Item, False)
+                                    End Function, filesToOpen)
 
             PluginHelper.SetLoadingStatusFinished()
         End Function
@@ -208,7 +209,7 @@ Validate:
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
                                        Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
-                                       Await FileFormats.FarcF5.Pack(dirs(count), newFilePath)
+                                       Await FarcF5.Pack(dirs(count), newFilePath)
                                    Next
                                    Me.BuildProgress = 1
                                End Function)
@@ -279,7 +280,7 @@ Validate:
                     Return {IO.Path.Combine("romfs", "script")}
                 End If
             Else
-                    Return {IO.Path.Combine("romfs", "script")}
+                Return {IO.Path.Combine("romfs", "script")}
             End If
         End Function
 

@@ -1,14 +1,15 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class CteImageImport
         Inherits MenuAction
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(FileFormats.CteImage)}
+            Return {GetType(CteImage)}
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As FileFormats.CteImage In Targets
+            For Each item As CteImage In Targets
                 If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
                     item.ContainedImage = Drawing.Bitmap.FromFile(OpenFileDialog1.FileName)
                 End If

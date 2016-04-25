@@ -4,6 +4,7 @@ Imports SkyEditorBase.Interfaces
 Imports System.Windows.Controls
 Imports ROMEditor
 Imports SkyEditorWPF.UI
+Imports ROMEditor.FileFormats.Explorers
 
 Namespace ObjectControls
     Public Class PersonalityTest
@@ -513,7 +514,7 @@ Namespace ObjectControls
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(FileFormats.PersonalityTestContainer)}
+            Return {GetType(PersonalityTestContainer)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

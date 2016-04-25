@@ -173,11 +173,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Adding files....
+        '''</summary>
+        Friend Shared ReadOnly Property LoadingAddingFiles() As String
+            Get
+                Return ResourceManager.GetString("LoadingAddingFiles", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Analyzing files....
         '''</summary>
-        Friend Shared ReadOnly Property LoadingAnalzingFIles() As String
+        Friend Shared ReadOnly Property LoadingAnalzingFiles() As String
             Get
-                Return ResourceManager.GetString("LoadingAnalzingFIles", resourceCulture)
+                Return ResourceManager.GetString("LoadingAnalzingFiles", resourceCulture)
             End Get
         End Property
         

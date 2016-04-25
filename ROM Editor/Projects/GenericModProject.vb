@@ -227,7 +227,7 @@ Namespace Projects
 
                 Await Task.Run(Async Function() As Task
                                    Me.BuildProgress = 0
-                                   Me.BuildStatusMessage = My.Resources.Language.LoadingAnalzingFIles
+                                   Me.BuildStatusMessage = My.Resources.Language.LoadingAnalzingFiles
                                    'Create the mod
                                    '-Find all the files
                                    Dim sourceFiles As New Dictionary(Of String, Byte())

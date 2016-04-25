@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats
+Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditorBase
 
 Namespace Projects
@@ -58,7 +59,7 @@ Namespace Projects
             End If
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key)) Then
-                    Using langString = New FileFormats.LanguageString()
+                    Using langString = New LanguageString()
                         langString.OpenFile(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key))
                         Dim langList As New ObjectFile(Of List(Of String))
                         langList.ContainedObject = langString.Items
@@ -69,9 +70,9 @@ Namespace Projects
 
             'Convert Personality Test
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingPersonalityTest)
-            Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
-            Dim personalityTest As New ObjectFile(Of FileFormats.PersonalityTestContainer)
-            personalityTest.ContainedObject = New FileFormats.PersonalityTestContainer(overlay13)
+            Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
+            Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)
+            personalityTest.ContainedObject = New PersonalityTestContainer(overlay13)
             personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"))
             Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
             PluginHelper.SetLoadingStatusFinished()
@@ -84,7 +85,7 @@ Namespace Projects
             'Convert Personality Test
             Dim personalityTest As ObjectFile(Of PersonalityTestContainer) = Nothing
             If IO.File.Exists(IO.Path.Combine(projDir, "Starter Pokemon")) Then
-                Dim overlay13 As New FileFormats.Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
+                Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
                 personalityTest = New ObjectFile(Of PersonalityTestContainer)(IO.Path.Combine(projDir, "Starter Pokemon"))
                 personalityTest.ContainedObject.UpdateOverlay(overlay13)
                 overlay13.Save()
@@ -102,7 +103,7 @@ Namespace Projects
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(projDir, "Languages", item.Value)) Then
                     Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(projDir, "Languages", item.Value))
-                    Using langString As New FileFormats.LanguageString
+                    Using langString As New LanguageString
                         langString.Items = langFile.ContainedObject
 
                         If personalityTest IsNot Nothing Then

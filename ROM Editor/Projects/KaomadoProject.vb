@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats
+Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditorBase
 
 Namespace Projects

@@ -100,17 +100,31 @@
     <Compile Include="ConsoleCommands\NameListResearcher.vb" />
     <Compile Include="ConsoleCommands\PackFarc.vb" />
     <Compile Include="ConsoleCommands\PokemonStatsCalculator.vb" />
+    <Compile Include="ConsoleCommands\PSMDExpTableCsv.vb" />
     <Compile Include="ConsoleCommands\PSMDLangSearch.vb" />
     <Compile Include="ConsoleCommands\Sir0Ptrs.vb" />
+    <Compile Include="FarcFilenames.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FarcFilenames.resx</DependentUpon>
+    </Compile>
     <Compile Include="FileFormats\CTR\Level3Header.vb" />
     <Compile Include="FileFormats\CTR\RomFs.vb" />
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
-    <Compile Include="FileFormats\DungeonDataInfo.vb" />
-    <Compile Include="FileFormats\Experience.vb" />
-    <Compile Include="FileFormats\FixedPokemon.vb" />
-    <Compile Include="FileFormats\FlowData.vb" />
-    <Compile Include="FileFormats\MessageBinStringEntry.vb" />
-    <Compile Include="FileFormats\PokemonDataInfo.vb" />
+    <Compile Include="FileFormats\PSMD\ActDataInfo.vb" />
+    <Compile Include="FileFormats\PSMD\ActHitCountTableDataInfo.vb" />
+    <Compile Include="FileFormats\Explorers\ExplorersSir0.vb" />
+    <Compile Include="FileFormats\Explorers\mappa.vb" />
+    <Compile Include="FileFormats\PSMD\ActXlWaza.vb" />
+    <Compile Include="FileFormats\PSMD\DungeonDataInfo.vb" />
+    <Compile Include="FileFormats\PSMD\Experience.vb" />
+    <Compile Include="FileFormats\Explorers\MonsterMDFile.vb" />
+    <Compile Include="FileFormats\PSMD\FixedPokemon.vb" />
+    <Compile Include="FileFormats\PSMD\FlowData.vb" />
+    <Compile Include="FileFormats\PSMD\ItemDataInfo.vb" />
+    <Compile Include="FileFormats\PSMD\MessageBinStringEntry.vb" />
+    <Compile Include="FileFormats\PSMD\PokemonDataInfo.vb" />
+    <Compile Include="FileFormats\PSMD\WazaDataInfo.vb" />
     <Compile Include="Flashcart\ConsoleCommands\FlashcartCommand.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -118,14 +132,14 @@
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
     <Compile Include="Makerom.vb" />
+    <Compile Include="Projects\ExplorersScriptModProject.vb" />
     <Compile Include="PsmdDir.vb" />
-    <Compile Include="FileFormats\ScriptDS\Command.vb" />
-    <Compile Include="FileFormats\ScriptDS\CommandDefinition.vb" />
-    <Compile Include="FileFormats\ScriptDS\CommandGroup.vb" />
-    <Compile Include="FileFormats\ScriptDS\DecimalParamCommandDefinition.vb" />
-    <Compile Include="FileFormats\ScriptDS\SSA.vb" />
-    <Compile Include="FileFormats\Smdh.vb" />
-    <Compile Include="FileFormats\ScriptDS\SSB.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Command.vb" />
+    <Compile Include="FileFormats\Explorers\Script\CommandDefinition.vb" />
+    <Compile Include="FileFormats\Explorers\Script\CommandGroup.vb" />
+    <Compile Include="FileFormats\Explorers\Script\SSA.vb" />
+    <Compile Include="FileFormats\CTR\Smdh.vb" />
+    <Compile Include="FileFormats\Explorers\Script\SSB.vb" />
     <Compile Include="Flashcart\FileCollection.vb" />
     <Compile Include="Flashcart\FileCollectionContainer.vb" />
     <Compile Include="Flashcart\FlashcartInfoFile.vb" />
@@ -143,36 +157,35 @@
     <Compile Include="Projects\DSModPackProject.vb" />
     <Compile Include="DSModSolution.vb" />
     <Compile Include="ffmpeg.vb" />
-    <Compile Include="FileFormats\DatabaseBin.vb" />
-    <Compile Include="FileFormats\Farc.vb" />
-    <Compile Include="FileFormats\item_s_p.vb" />
-    <Compile Include="FileFormats\JukeboxBin.vb" />
-    <Compile Include="FileFormats\MessageBin.vb" />
+    <Compile Include="FileFormats\PSMD\DatabaseBin.vb" />
+    <Compile Include="FileFormats\PSMD\Farc.vb" />
+    <Compile Include="FileFormats\Explorers\item_s_p.vb" />
+    <Compile Include="FileFormats\PSMD\JukeboxBin.vb" />
+    <Compile Include="FileFormats\PSMD\MessageBin.vb" />
     <Compile Include="FileFormats\Sir0.vb" />
     <Compile Include="FileFormats\Sir0Fat5.vb" />
-    <Compile Include="FileFormats\TableDatItemList.vb" />
+    <Compile Include="FileFormats\Explorers\TableDatItemList.vb" />
     <Compile Include="FilePatcher.vb" />
     <Compile Include="GameCodeRegistry.vb" />
     <Compile Include="GameStrings.vb" />
     <Compile Include="FileFormats\Animations\AnimatedSprite.vb" />
     <Compile Include="FileFormats\Animations\Frame.vb" />
-    <Compile Include="FileFormats\BGP.vb" />
+    <Compile Include="FileFormats\Explorers\BGP.vb" />
     <Compile Include="FileFormats\Animations\AnimData.vb" />
-    <Compile Include="FileFormats\DecompressedFile.vb" />
-    <Compile Include="FileFormats\File Formats.vb" />
-    <Compile Include="FileFormats\item_p.vb" />
-    <Compile Include="FileFormats\Kaomado.vb" />
-    <Compile Include="FileFormats\LanguageString.vb" />
+    <Compile Include="FileFormats\Explorers\DecompressedFile.vb" />
+    <Compile Include="FileFormats\Explorers\item_p.vb" />
+    <Compile Include="FileFormats\Explorers\Kaomado.vb" />
+    <Compile Include="FileFormats\Explorers\LanguageString.vb" />
     <Compile Include="Projects\GenericModProject.vb" />
     <Compile Include="Java.vb" />
-    <Compile Include="FileFormats\CteImage.vb" />
+    <Compile Include="FileFormats\PSMD\CteImage.vb" />
     <Compile Include="MenuActions\CteImageExport.vb" />
     <Compile Include="MenuActions\CteImageImport.vb" />
     <Compile Include="ModJson.vb" />
     <Compile Include="ModpackInfo.vb" />
     <Compile Include="Mods\GenericSkyMod.vb" />
-    <Compile Include="FileFormats\Overlay13.vb" />
-    <Compile Include="FileFormats\waza_p.vb" />
+    <Compile Include="FileFormats\Explorers\Overlay13.vb" />
+    <Compile Include="FileFormats\Explorers\waza_p.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -208,6 +221,11 @@
     <Compile Include="vgmstream.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FarcFilenames.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FarcFilenames.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Language.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -222,7 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="FileFormats\ScriptDS\SSB.GetSkyCommandDefinitions.vb" />
+    <Compile Include="FileFormats\Explorers\Script\SSB.GetSkyCommandDefinitions.vb" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

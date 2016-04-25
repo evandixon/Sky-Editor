@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditorBase
 
 Namespace Projects
     Public Class SkyBackModProject
@@ -24,7 +25,7 @@ Namespace Projects
             Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
 
             Await f.RunForEach(Async Function(Item As String) As Task
-                                   Using b As New FileFormats.BGP
+                                   Using b As New BGP
                                        b.OpenFile(Item)
                                        Dim image = Await b.GetImage
                                        Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
@@ -66,10 +67,10 @@ Namespace Projects
                     End If
 
                     If includeInPack Then
-                        Dim bgp = FileFormats.BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
-                        bgp.Save(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
-                        bgp.Dispose()
-                        Await FileFormats.BGP.RunCompress(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
+                        Dim img = BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
+                        img.Save(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
+                        img.Dispose()
+                        Await bgp.RunCompress(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                     End If
 
                 Next

@@ -1,4 +1,5 @@
 ﻿Imports System.Security.Cryptography
+Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditorBase
 
 Namespace ConsoleCommands
@@ -13,30 +14,30 @@ Namespace ConsoleCommands
                         Await Utilities.FileSystem.ReCreateDirectory(tmpDirectory)
 
                         'Extract the farc
-                        Dim f As New FileFormats.FarcF5
+                        Dim f As New FarcF5
                         f.OpenFile(Arguments(0))
-                            Await f.Extract(tmpDirectory, False)
+                        Await f.Extract(tmpDirectory, False)
 
 
-                            Dim farcFiles = IO.Directory.GetFiles(tmpDirectory)
-                            Dim actualFiles = IO.Directory.GetFiles(Arguments(1))
+                        Dim farcFiles = IO.Directory.GetFiles(tmpDirectory)
+                        Dim actualFiles = IO.Directory.GetFiles(Arguments(1))
 
-                            Dim farcHashes As New Dictionary(Of UInteger, Byte())
-                            Dim actualHashes As New Dictionary(Of String, Byte())
+                        Dim farcHashes As New Dictionary(Of UInteger, Byte())
+                        Dim actualHashes As New Dictionary(Of String, Byte())
 
-                            'Calculate hashes for the files
-                            Using hash = MD5.Create
-                                For Each item In farcFiles
-                                    Dim filename = IO.Path.GetFileNameWithoutExtension(item)
-                                    If IsNumeric(filename) Then
+                        'Calculate hashes for the files
+                        Using hash = MD5.Create
+                            For Each item In farcFiles
+                                Dim filename = IO.Path.GetFileNameWithoutExtension(item)
+                                If IsNumeric(filename) Then
                                     farcHashes.Add(f.Header.FileData(CUInt(filename)).FilenamePointer, hash.ComputeHash(IO.File.ReadAllBytes(item)))
                                 End If
-                                Next
-                                For Each item In actualFiles
-                                    Dim filename = IO.Path.GetFileNameWithoutExtension(item)
-                                    actualHashes.Add(filename, hash.ComputeHash(IO.File.ReadAllBytes(item)))
-                                Next
-                            End Using
+                            Next
+                            For Each item In actualFiles
+                                Dim filename = IO.Path.GetFileNameWithoutExtension(item)
+                                actualHashes.Add(filename, hash.ComputeHash(IO.File.ReadAllBytes(item)))
+                            Next
+                        End Using
                         f.Dispose()
                         Dim matches As New Dictionary(Of UInteger, String)
 

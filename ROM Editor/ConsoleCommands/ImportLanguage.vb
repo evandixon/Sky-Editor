@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class ImportLanguage
@@ -7,7 +8,7 @@ Namespace ConsoleCommands
         Public Overrides Sub Main(Arguments() As String)
             Dim LanguageStringPath = Arguments(0)
             Dim formatRegex As New Text.RegularExpressions.Regex("\[.+\]")
-            Dim ls As New FileFormats.LanguageString
+            Dim ls As New LanguageString
             ls.OpenFile(LanguageStringPath)
             Dim languagechar As String = IO.Path.GetFileNameWithoutExtension(LanguageStringPath).Replace("text_", "")
             Dim language As String
@@ -32,7 +33,7 @@ Namespace ConsoleCommands
 
             'Import Pokemon
             Dim PokemonLines As New List(Of String)
-            For count = 0 To FileFormats.LanguageString.PokemonNameLength - 1
+            For count = 0 To LanguageString.PokemonNameLength - 1
                 PokemonLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetPokemonName(count), ""))
             Next
             Dim pkmFile = PluginHelper.GetResourceName(language & "/SkyPokemon.txt", "SkyEditor")
@@ -44,7 +45,7 @@ Namespace ConsoleCommands
 
             'Import Items
             Dim ItemLines As New List(Of String)
-            For count = 0 To FileFormats.LanguageString.ItemLength - 1
+            For count = 0 To LanguageString.ItemLength - 1
                 ItemLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetItemName(count), ""))
             Next
             Dim itemFile = PluginHelper.GetResourceName(language & "/SkyItems.txt", "SkyEditor")
@@ -56,7 +57,7 @@ Namespace ConsoleCommands
 
             'Import Moves
             Dim MoveLines As New List(Of String)
-            For count = 0 To FileFormats.LanguageString.MoveLength - 1
+            For count = 0 To LanguageString.MoveLength - 1
                 MoveLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetMoveName(count), ""))
             Next
             Dim moveFile = PluginHelper.GetResourceName(language & "/SkyMoves.txt", "SkyEditor")
@@ -68,7 +69,7 @@ Namespace ConsoleCommands
 
             'Import Locations
             Dim LocationLines As New List(Of String)
-            For count = 0 To FileFormats.LanguageString.LocationLength - 1
+            For count = 0 To LanguageString.LocationLength - 1
                 LocationLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetLocationName(count), ""))
             Next
             Dim locFile = PluginHelper.GetResourceName(language & "/SkyLocations.txt", "SkyEditor")

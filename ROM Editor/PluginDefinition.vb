@@ -2,6 +2,7 @@
 Imports ROMEditor.Roms
 Imports SkyEditorBase.Interfaces
 Imports ROMEditor.Projects
+Imports ROMEditor.FileFormats.PSMD
 
 Public Class PluginDefinition
     Implements iSkyEditorPlugin
@@ -40,7 +41,7 @@ Public Class PluginDefinition
     Public Function FileFormatDetector(File As GenericFile) As Type()
         If File.Length > &H4 Then
             If File.RawData(0) = 0 AndAlso File.RawData(1) = &H63 AndAlso File.RawData(2) = &H74 AndAlso File.RawData(3) = &H65 Then
-                Return {GetType(FileFormats.CteImage)}
+                Return {GetType(CteImage)}
             Else
                 Return {}
             End If

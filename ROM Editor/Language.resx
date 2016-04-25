@@ -189,7 +189,7 @@ evandixon (Personality test, bgp files)</value>
   <data name="Game_Y" xml:space="preserve">
     <value>Pokémon Y</value>
   </data>
-  <data name="LoadingAnalzingFIles" xml:space="preserve">
+  <data name="LoadingAnalzingFiles" xml:space="preserve">
     <value>Analyzing files...</value>
   </data>
   <data name="LoadingApplyingPatch" xml:space="preserve">
@@ -251,5 +251,8 @@ evandixon (Personality test, bgp files)</value>
   </data>
   <data name="MenuDevExtractNDS" xml:space="preserve">
     <value>Extract NDS</value>
+  </data>
+  <data name="LoadingAddingFiles" xml:space="preserve">
+    <value>Adding files...</value>
   </data>
 </root>

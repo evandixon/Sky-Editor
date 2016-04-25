@@ -74,6 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -161,6 +162,9 @@
     <Compile Include="MenuActions\ToolsSettings.vb" />
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SolutionExplorer2.xaml.vb">
+      <DependentUpon>SolutionExplorer2.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="Application.xaml.vb">
@@ -291,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\SolutionExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SolutionExplorer2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

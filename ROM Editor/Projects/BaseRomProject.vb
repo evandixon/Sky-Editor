@@ -101,6 +101,7 @@ Namespace Projects
                     Dim nds As New Roms.GenericNDSRom()
                     nds.OpenFile(e.FullFilename)
                     Await nds.UnpackWithNDSTool(GetRawFilesDir)
+                    'Await nds.Unpack(GetRawFilesDir)
                     Setting("System") = "NDS"
                     Setting("GameCode") = nds.GameCode
                     nds.Dispose()

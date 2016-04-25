@@ -1,10 +1,11 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class NameListResearcher
         Inherits ConsoleCommandAsync
 
-        Private Function GetHash(Search As String, File As FileFormats.MessageBin) As FileFormats.MessageBinStringEntry
+        Private Function GetHash(Search As String, File As MessageBin) As MessageBinStringEntry
             Return (From s In File.Strings Where s.Entry = Search).First
         End Function
 
@@ -14,20 +15,22 @@ Namespace ConsoleCommands
                     Dim output As New Text.StringBuilder
                     Dim nameOutput As New Text.StringBuilder
                     Dim msg As New GenericFile
-                    Dim msg2 As New FileFormats.MessageBin
+                    Dim msg2 As New MessageBin
                     msg.OpenFile(Arguments(0))
-                    'msg2.OpenFile(Arguments(0))
-                    Dim position = &H12
-                    For count = 0 To 230
+                    msg2.OpenFile(Arguments(0))
+                    Dim position = &HD0BA
+                    For count = 0 To 2000
                         Dim s = msg.ReadNullTerminatedString(position, Text.Encoding.Unicode)
                         Console.WriteLine(s)
-                        'Dim entry = (From ent In msg2.Strings Where ent.Pointer = position).First
-                        'output.AppendLine(entry.HashSigned)
+                        Dim entry = (From ent In msg2.Strings Where ent.Pointer = position).First
+                        output.AppendLine(entry.HashSigned)
                         nameOutput.AppendLine(s)
                         position += s.Length * 2 + 2
                     Next
                     'IO.File.WriteAllText("PSMD Dungeon Name Hashes.txt", output.ToString)
-                    IO.File.WriteAllText("PSMD Dungeon BGM Names.txt", nameOutput.ToString)
+                    'IO.File.WriteAllText("PSMD Dungeon BGM Names.txt", nameOutput.ToString)
+                    IO.File.WriteAllText("PSMD Item Name Hashes.txt", output.ToString)
+                    IO.File.WriteAllText("PSMD Item Names.txt", nameOutput.ToString)
                     Console.Write("Done.")
                 Else
                     Console.WriteLine("File doesn't exist")

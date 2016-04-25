@@ -4,6 +4,7 @@ Imports System.Timers
 Imports System.Windows.Controls
 Imports System.Windows.Forms
 Imports ROMEditor.FileFormats
+Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
@@ -26,7 +27,7 @@ Public Class MessageBinEditor
     Private searchTask As Task
 
     Public Overrides Sub RefreshDisplay()
-        With GetEditingObject(Of ROMEditor.FileFormats.MessageBin)()
+        With GetEditingObject(Of MessageBin)()
             AddHandler .EntryAdded, AddressOf OnMsgItemAdded
             AddHandler .FileModified, AddressOf OnObjModified
             lstEntries.ItemsSource = .Strings
@@ -49,7 +50,7 @@ Public Class MessageBinEditor
                               lstEntries.ItemsSource = results
                           End Sub)
         For Each item In Keys
-            Dim entry = (From s In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings Where s.HashSigned = item).FirstOrDefault
+            Dim entry = (From s In GetEditingObject(Of MessageBin)().Strings Where s.HashSigned = item).FirstOrDefault
             If entry IsNot Nothing Then
                 Dispatcher.Invoke(Sub()
                                       results.Add(entry)
@@ -93,7 +94,7 @@ Public Class MessageBinEditor
         cancelSearch = False
         If String.IsNullOrEmpty(SearchText) Then
             Dispatcher.Invoke(Sub()
-                                  lstEntries.ItemsSource = GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+                                  lstEntries.ItemsSource = GetEditingObject(Of MessageBin)().Strings
                               End Sub)
         Else
             Dim results As New ObservableCollection(Of MessageBinStringEntry)
@@ -103,7 +104,7 @@ Public Class MessageBinEditor
 
             Dim searchTerms = SearchText.Split(" ")
 
-            For Each item In GetEditingObject(Of ROMEditor.FileFormats.MessageBin)().Strings
+            For Each item In GetEditingObject(Of MessageBin)().Strings
                 If cancelSearch = True Then
                     'If we get here, the search textbox has been changed, so we'll stop searching
                     Exit For
@@ -142,7 +143,7 @@ Public Class MessageBinEditor
     End Sub
 
     Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-        Return {GetType(ROMEditor.FileFormats.MessageBin)}
+        Return {GetType(MessageBin)}
     End Function
 
     Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

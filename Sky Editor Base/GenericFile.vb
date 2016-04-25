@@ -68,14 +68,22 @@ Public Class GenericFile
         CreateFile(Name, {})
     End Sub
 
+    ''' <summary>
+    ''' Creates a new file with the given contents.
+    ''' </summary>
+    ''' <param name="FileContents">Contents of the new file.</param>
+    Public Overridable Sub CreateFile(FileContents As Byte())
+        CreateFile("", FileContents)
+    End Sub
+
     Public Overridable Sub CreateFile(Name As String, FileContents As Byte())
         'Generate a temporary filename
         _tempname = Guid.NewGuid.ToString()
-        _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
         'Load the file if applicable
         If EnableInMemoryLoad Then
             Me.InMemoryFile = FileContents
         Else
+            _tempFilename = PluginHelper.GetResourceName(_tempname & ".tmp")
             IO.File.WriteAllBytes(_tempFilename, FileContents)
             'The file reader will be initialized when it's first needed
         End If
@@ -156,7 +164,11 @@ Public Class GenericFile
     Public Property RawData(Index As Long) As Byte
         Get
             If InMemoryFile IsNot Nothing Then
-                Return InMemoryFile(Index)
+                If InMemoryFile.Length > Index Then
+                    Return InMemoryFile(Index)
+                Else
+                    Throw New IndexOutOfRangeException("Index " & Index.ToString & " is out of range.  Length of file: " & InMemoryFile.Length.ToString)
+                End If
             Else
                 FileReader.Seek(Index, IO.SeekOrigin.Begin)
                 Dim b = FileReader.ReadByte

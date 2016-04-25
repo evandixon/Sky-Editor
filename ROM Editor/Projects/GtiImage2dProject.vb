@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditorBase
 
 Namespace Projects
     Public Class GtiImage2dProject
@@ -20,7 +21,7 @@ Namespace Projects
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
             Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
             Await f.RunForEach(Function(Item As String) As Task
-                                   Using b As New FileFormats.CteImage
+                                   Using b As New CteImage
                                        b.OpenFile(Item)
                                        Dim image = b.ContainedImage
                                        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
@@ -85,7 +86,7 @@ Namespace Projects
                 End If
 
                 If includeInPack Then
-                    Dim img As New FileFormats.CteImage
+                    Dim img As New CteImage
                     img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"))
                     img.ContainedImage = Drawing.Image.FromFile(background)
                     img.Save()

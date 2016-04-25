@@ -7,9 +7,9 @@ Namespace ConsoleCommands
         Public Overrides Sub Main(Arguments() As String)
             If IO.File.Exists(Arguments(0)) Then
                 Dim f As New IO.FileStream(Arguments(0), IO.FileMode.Open)
-                f.Seek(2, IO.SeekOrigin.Begin)
+                f.Seek(4, IO.SeekOrigin.Begin)
                 Dim z As New DeflateStream(f, IO.Compression.CompressionMode.Decompress)
-                Dim d As New IO.FileStream(Arguments(0) & "-deflated", IO.FileMode.OpenOrCreate)
+                Dim d As New IO.FileStream(Arguments(0) & "-inflated", IO.FileMode.OpenOrCreate)
                 d.Seek(0, IO.SeekOrigin.Begin)
                 z.CopyTo(d)
                 f.Dispose()
@@ -20,7 +20,7 @@ Namespace ConsoleCommands
 
         Public Overrides ReadOnly Property CommandName As String
             Get
-                Return "inflate"
+                Return "inflate-gyu0"
             End Get
         End Property
     End Class

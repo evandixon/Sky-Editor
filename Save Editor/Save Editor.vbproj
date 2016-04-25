@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="Binary.vb" />
     <Compile Include="BinaryFile.vb" />
+    <Compile Include="ConsoleCommands\BitSum.vb" />
     <Compile Include="ConsoleCommands\Inflate.vb" />
     <Compile Include="Interfaces\iItem.vb" />
     <Compile Include="Interfaces\iItemStorage.vb" />
@@ -209,9 +210,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SaveEditor\Deutsche\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\Language.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SaveEditor\English\RBBaseTypes.txt">

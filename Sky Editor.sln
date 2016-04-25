@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Base", "Sky Editor Base\Sky Editor Base.vbproj", "{F3E6313C-4337-4D20-B4E2-ED41420C9D05}"
 EndProject
@@ -55,6 +55,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CheatGenerator", "CheatGenerator\CheatGenerator.vbproj", "{27FBAD1A-58BC-4BBD-AAD1-86E58520BA01}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DungeonBalance", "DungeonBalance\DungeonBalance.vbproj", "{A6CCC5E0-904C-4250-8963-936E2220380E}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Online", "Sky Editor Online\Sky Editor Online.vbproj", "{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +211,14 @@ Global
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|x86.Build.0 = Release|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
