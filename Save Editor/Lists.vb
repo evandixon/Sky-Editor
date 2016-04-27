@@ -1,6 +1,21 @@
 ﻿Imports SkyEditorBase.Utilities
 Public Class Lists
-    Public Shared Function SkyLocations() As Dictionary(Of Integer, String)
+
+    Private Shared Property SkyLocations As Dictionary(Of Integer, String)
+    Private Shared Property TDLocations As Dictionary(Of Integer, String)
+    Private Shared Property RBLocations As Dictionary(Of Integer, String)
+    Private Shared Property SkyMoves As Dictionary(Of Integer, String)
+    Private Shared Property TDMoves As Dictionary(Of Integer, String)
+    Private Shared Property RBMoves As Dictionary(Of Integer, String)
+    Private Shared Property SkyItems As Dictionary(Of Integer, String)
+    Private Shared Property TDItems As Dictionary(Of Integer, String)
+    Private Shared Property RBItems As Dictionary(Of Integer, String)
+    Private Shared Property SkyPokemon As Dictionary(Of Integer, String)
+    Private Shared Property TDPokemon As Dictionary(Of Integer, String)
+    Private Shared Property RBPokemon As Dictionary(Of Integer, String)
+
+
+    <Obsolete> Public Shared Function GetSkyLocations() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -11,7 +26,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyLocationsInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetSkyLocationsInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -22,7 +37,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function TDLocations() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetTDLocations() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/TDLocations.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -33,7 +48,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function TDLocationsInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetTDLocationsInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -44,7 +59,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBLocations() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetRBLocations() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -55,7 +70,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyMoves() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyMoves.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -66,7 +81,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyMovesInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetSkyMovesInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyMoves.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -77,7 +92,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBMoves() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetRBMoves() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBMoves.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -88,7 +103,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBMovesInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetRBMovesInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBMoves.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -99,7 +114,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyItemNames() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyItems.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -110,7 +125,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyItemNamesInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function SkyItemNamesInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyItems.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -121,7 +136,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBItemNames() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function RBItemNames() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBItems.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -132,7 +147,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBItemNamesInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetRBItemNamesInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBItems.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -143,7 +158,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBBaseTypes() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetRBBaseTypes() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBBaseTypes.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -154,7 +169,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBBaseTypesInverse() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetRBBaseTypesInverse() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBBaseTypes.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -165,7 +180,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyPokemon() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyPokemon.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -176,7 +191,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function SkyPokemonInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetSkyPokemonInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyPokemon.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -187,7 +202,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBPokemon() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetRBPokemon() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBPokemon.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -198,7 +213,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function RBPokemonInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetRBPokemonInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/RBPokemon.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -209,7 +224,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function TDItemNames() As Dictionary(Of Integer, String)
+    <Obsolete> Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/TDItems.txt")
         Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -220,7 +235,7 @@ Public Class Lists
         End If
         Return _dictionaryConverted
     End Function
-    Public Shared Function TDItemNamesInverse() As Dictionary(Of String, Integer)
+    <Obsolete> Public Shared Function GetTDItemNamesInverse() As Dictionary(Of String, Integer)
         Static _dictionaryOriginal As New ResourceDictionary("&L;/TDItems.txt")
         Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
         If _dictionaryConverted Is Nothing Then
@@ -228,33 +243,6 @@ Public Class Lists
             For Each Key As String In _dictionaryOriginal.Keys
                 If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
             Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    Public Shared Function StringEncoding() As Dictionary(Of Byte, Char)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/StringEncoding.txt")
-        Static _dictionaryConverted As Dictionary(Of Byte, Char) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Byte, Char)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If _dictionaryOriginal(Key).Length <= 1 Then
-                    _dictionaryConverted.Add(Convert.ToByte(Key, 16), _dictionaryOriginal(Key))
-                End If
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    Public Shared Function StringEncodingInverse() As Dictionary(Of Char, Byte)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/StringEncoding.txt")
-        Static _dictionaryConverted As Dictionary(Of Char, Byte) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Char, Byte)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If _dictionaryOriginal(Key).Length = 1 AndAlso Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then
-                    _dictionaryConverted.Add(_dictionaryOriginal(Key), Convert.ToByte(Key, 16))
-                End If
-            Next
-            _dictionaryConverted.Add(vbNullChar, 0)
         End If
         Return _dictionaryConverted
     End Function

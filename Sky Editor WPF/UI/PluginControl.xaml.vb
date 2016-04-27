@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports SkyEditor.Core.Extensions.Plugins
 Imports SkyEditorBase.Redistribution
 
 Namespace UI
@@ -11,8 +12,8 @@ Namespace UI
 
         Private Sub DoRefreshDisplay()
             Dim uiElements As New List(Of PluginUiElement)
-            With GetEditingObject(Of PluginManager)()
-                Dim supportedAssemblyPaths = Utilities.ReflectionHelpers.GetSupportedPlugins(PluginHelper.GetPluginAssemblies, .CoreAssemblyName)
+            With GetEditingObject(Of SkyEditorBase.PluginManager)()
+                Dim supportedAssemblyPaths = .GetSupportedPlugins(PluginHelper.GetPluginAssemblies, .CoreAssemblyName)
                 For Each item In .Plugins
                     Dim assemblyPath As String = item.GetType.Assembly.Location
                     uiElements.Add(New PluginUiElement With {.IsEnabled = False, .Author = item.PluginAuthor, .Name = item.PluginName, .Credits = item.Credits, .Filename = assemblyPath, .ContainedDefinition = item})
@@ -97,7 +98,7 @@ Namespace UI
         'End Sub
 
         Private Async Sub btnCreateExtension_Click(sender As Object, e As RoutedEventArgs) Handles btnCreateExtension.Click
-            Dim plugins As New List(Of Interfaces.iSkyEditorPlugin)
+            Dim plugins As New List(Of ISkyEditorPlugin)
             For Each item As PluginUiElement In gridPlugins.SelectedItems
                 plugins.Add(item.ContainedDefinition)
             Next

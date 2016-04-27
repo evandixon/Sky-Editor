@@ -75,7 +75,7 @@ Namespace Saves
                 End Set
             End Property
             Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.SkyMoves
+                Return Lists.GetSkyMoves
             End Function
         End Class
         Public Class ActivePkm
@@ -273,18 +273,18 @@ Namespace Saves
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetSkyPokemon(ID))
                 Else
                     Return "----------"
                 End If
             End Function
 
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
-                Return Lists.SkyLocations
+                Return Lists.GetSkyLocations
             End Function
 
             Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.SkyPokemon
+                Return Lists.GetSkyPokemon
             End Function
         End Class
         Public Property ActivePokemon(Index As Integer) As ActivePkm

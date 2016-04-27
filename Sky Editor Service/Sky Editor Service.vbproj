@@ -127,6 +127,10 @@
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
+      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
+      <Name>SkyEditor.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

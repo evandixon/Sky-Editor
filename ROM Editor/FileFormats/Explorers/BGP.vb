@@ -1,5 +1,5 @@
 ﻿Imports System.Drawing
-Imports SkyEditor.Core.Utilities.Utilities
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
 

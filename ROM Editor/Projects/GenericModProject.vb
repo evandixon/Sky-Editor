@@ -2,7 +2,6 @@
 Imports System.Text.RegularExpressions
 Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.Utilities
-Imports SkyEditor.Core.Utilities.Utilities
 Imports SkyEditorBase
 Namespace Projects
     Public Class GenericModProject

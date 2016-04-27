@@ -62,7 +62,7 @@ Namespace Saves
                 End Set
             End Property
             Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.RBMoves
+                Return Lists.GetRBMoves
             End Function
         End Class
         Public Class StoredPkm
@@ -208,17 +208,17 @@ Namespace Saves
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.RBPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetRBPokemon(ID))
                 Else
                     Return "----------"
                 End If
             End Function
             Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.RBPokemon
+                Return Lists.GetRBPokemon
             End Function
 
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
-                Return Lists.RBLocations
+                Return Lists.GetRBLocations
             End Function
 
             Public Property Filename As String Implements iOnDisk.Filename

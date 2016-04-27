@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Threading
+Imports SkyEditor.Core.Extensions.Plugins
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Redistribution
 
@@ -10,7 +11,7 @@ Public Class StartupHelpers
     ''' Will shut down the current application when complete.
     ''' </summary>
     Public Shared Async Function StartConsole() As Task
-        Dim manager As PluginManager = PluginManager.GetInstance
+        Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
         manager.LoadPlugins(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
@@ -22,7 +23,7 @@ Public Class StartupHelpers
         Await RunWPFStartupSequence(New WpfCoreMod)
     End Function
 
-    Public Shared Async Function RunWPFStartupSequence(CoreMod As iSkyEditorPlugin) As Task
+    Public Shared Async Function RunWPFStartupSequence(CoreMod As ISkyEditorPlugin) As Task
         Try
             Await RedistributionHelpers.DeleteScheduledFiles()
         Catch ex As Exception
@@ -44,7 +45,7 @@ Public Class StartupHelpers
         If args.Contains("-console") Then
             Await StartupHelpers.StartConsole()
         Else
-            Dim manager As PluginManager = PluginManager.GetInstance
+            Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
             manager.LoadPlugins(CoreMod)
 
             Dim checkForUpdates As Boolean = SettingsManager.Instance.Settings.UpdatePlugins

@@ -1,25 +1,25 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Extensions.Plugins
 
 ''' <summary>
 ''' Core of a WPF Core Mod that handles environment specific things, like how to restart the application.
 ''' </summary>
 Public MustInherit Class WpfCoreModBase
-    Implements iSkyEditorPlugin
-    Public MustOverride ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
+    Implements ISkyEditorPlugin
+    Public MustOverride ReadOnly Property Credits As String Implements ISkyEditorPlugin.Credits
 
-    Public MustOverride ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
+    Public MustOverride ReadOnly Property PluginAuthor As String Implements ISkyEditorPlugin.PluginAuthor
 
-    Public MustOverride ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
+    Public MustOverride ReadOnly Property PluginName As String Implements ISkyEditorPlugin.PluginName
 
-    Public Overridable Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
+    Public Overridable Sub Load(Manager As PluginManager) Implements ISkyEditorPlugin.Load
         AddHandler Redistribution.RedistributionHelpers.ApplicationRestartRequested, AddressOf WpfCoreModBase.RestartApplication
     End Sub
 
-    Public Overridable Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
+    Public Overridable Sub PrepareForDistribution() Implements ISkyEditorPlugin.PrepareForDistribution
 
     End Sub
 
-    Public Overridable Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
+    Public Overridable Sub UnLoad(Manager As PluginManager) Implements ISkyEditorPlugin.UnLoad
 
     End Sub
 

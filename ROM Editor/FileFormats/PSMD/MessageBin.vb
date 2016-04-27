@@ -1,7 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Utilities.Utilities
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 

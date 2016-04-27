@@ -1,12 +1,12 @@
-﻿Imports SkyEditorBase
-Imports ROMEditor.Roms
-Imports SkyEditorBase.Interfaces
+﻿Imports ROMEditor.Roms
 Imports ROMEditor.Projects
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core
+Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditorBase
 
 Public Class PluginDefinition
-    Implements iSkyEditorPlugin
+    Implements ISkyEditorPlugin
 
     'Public Function AutoDetectFileType(File As GenericFile) As Type
     '    Dim out As Type = Nothing
@@ -51,19 +51,19 @@ Public Class PluginDefinition
         End If
     End Function
 
-    Public ReadOnly Property Credits As String Implements iSkyEditorPlugin.Credits
+    Public ReadOnly Property Credits As String Implements ISkyEditorPlugin.Credits
         Get
             Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
-    Public ReadOnly Property PluginAuthor As String Implements iSkyEditorPlugin.PluginAuthor
+    Public ReadOnly Property PluginAuthor As String Implements ISkyEditorPlugin.PluginAuthor
         Get
             Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
-    Public ReadOnly Property PluginName As String Implements iSkyEditorPlugin.PluginName
+    Public ReadOnly Property PluginName As String Implements ISkyEditorPlugin.PluginName
         Get
             Return My.Resources.Language.PluginName
         End Get
@@ -76,7 +76,7 @@ Public Class PluginDefinition
     '    ROMFileTypes.Add("bgp", New BGPControl)
     'End Sub
 
-    Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
+    Public Sub Load(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager) Implements ISkyEditorPlugin.Load
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
         Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
@@ -100,7 +100,7 @@ Public Class PluginDefinition
         GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_PSMD, GameStrings.PSMDCode)
     End Sub
 
-    Public Sub UnLoad(Manager As PluginManager) Implements iSkyEditorPlugin.UnLoad
+    Public Sub UnLoad(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager) Implements ISkyEditorPlugin.UnLoad
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = PluginHelper.GetResourceName("Temp")
         If IO.Directory.Exists(directory) Then
@@ -110,7 +110,7 @@ Public Class PluginDefinition
         End If
     End Sub
 
-    Public Sub PrepareForDistribution() Implements iSkyEditorPlugin.PrepareForDistribution
+    Public Sub PrepareForDistribution() Implements ISkyEditorPlugin.PrepareForDistribution
         EnsureDirDeleted(PluginHelper.GetResourceName("Current"))
         EnsureDirDeleted(PluginHelper.GetResourceName("temp"))
         EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win32"))

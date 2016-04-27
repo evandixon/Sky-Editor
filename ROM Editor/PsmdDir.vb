@@ -5,11 +5,11 @@ Imports SkyEditorBase.Interfaces
 
 Public Class PsmdDir
     Implements iOpenableFile
-    Implements iContainer(Of PokemonDataInfo)
-    Implements iContainer(Of Experience)
+    Implements IContainer(Of PokemonDataInfo)
+    Implements IContainer(Of Experience)
 
-    Public Property PokemonInfo As PokemonDataInfo Implements iContainer(Of PokemonDataInfo).Item
-    Public Property PokemonExpTable As Experience Implements iContainer(Of Experience).Item
+    Public Property PokemonInfo As PokemonDataInfo Implements IContainer(Of PokemonDataInfo).Item
+    Public Property PokemonExpTable As Experience Implements IContainer(Of Experience).Item
     Public Property LanguageFiles As Dictionary(Of String, FarcF5)
     Public Property DungeonFixedPokemon As FixedPokemon
     Public Property WazaData As WazaDataInfo

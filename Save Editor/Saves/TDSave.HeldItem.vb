@@ -155,12 +155,12 @@ Namespace Saves
             Public Overrides Function ToString() As String
                 If IsValid Then
                     Dim output As New Text.StringBuilder
-                    output.Append(Lists.TDItemNames(ID))
+                    output.Append(Lists.GetTDItemNames(ID))
                     If Parameter > 0 Then
                         If Me.IsBox Then
-                            If Lists.SkyItemNames.ContainsKey(Parameter) Then
+                            If Lists.GetSkyItemNames.ContainsKey(Parameter) Then
                                 output.Append(" (")
-                                output.Append(Lists.SkyItemNames(Parameter))
+                                output.Append(Lists.GetSkyItemNames(Parameter))
                                 output.Append(")")
                             End If
                         Else
@@ -231,11 +231,11 @@ Namespace Saves
             Public Overrides Function ToString() As String
                 If ID > 0 Then
                     Dim output As New Text.StringBuilder
-                    output.Append(Lists.SkyItemNames(ID))
+                    output.Append(Lists.GetSkyItemNames(ID))
                     If Parameter > 0 Then
                         If Me.IsBox Then
                             output.Append(" (")
-                            output.Append(Lists.SkyItemNames(Parameter))
+                            output.Append(Lists.GetSkyItemNames(Parameter))
                             output.Append(")")
                         Else
                             output.Append(" (")
@@ -332,7 +332,7 @@ Namespace Saves
         End Function
 
         Public Function GetItemDicitonary() As Dictionary(Of Integer, String) Implements iItemStorage.GetItemDictionary
-            Return Lists.TDItemNames
+            Return Lists.GetTDItemNames
         End Function
 
         Public Function IsBox(ItemID As Integer) As Boolean Implements iItemStorage.IsBox

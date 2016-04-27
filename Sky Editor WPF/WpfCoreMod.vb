@@ -1,6 +1,5 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
-Imports SkyEditorWPF.UI
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
 ''' </summary>
@@ -25,7 +24,7 @@ Friend Class WpfCoreMod
         End Get
     End Property
 
-    Public Overrides Sub Load(Manager As PluginManager)
+    Public Overrides Sub Load(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager)
         MyBase.Load(Manager)
         'CoreMod stuff
         Manager.RegisterTypeRegister(GetType(iObjectControl))

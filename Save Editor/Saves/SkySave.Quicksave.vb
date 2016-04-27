@@ -76,7 +76,7 @@ Namespace Saves
             End Property
 
             Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.SkyMoves
+                Return Lists.GetSkyMoves
             End Function
         End Class
         Public Class QuicksavePkm
@@ -277,7 +277,7 @@ Namespace Saves
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("Lvl. {0} {1}", Level, Lists.SkyPokemon(ID))
+                    Return String.Format("Lvl. {0} {1}", Level, Lists.GetSkyPokemon(ID))
                 Else
                     Return "----------"
                 End If

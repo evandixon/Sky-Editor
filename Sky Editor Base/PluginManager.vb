@@ -2,14 +2,13 @@
 Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Extensions.Plugins
 Imports SkyEditor.Core.Windows
 Imports SkyEditorBase.EventArguments
 Imports SkyEditorBase.Interfaces
-Imports SkyEditorBase.Internal
-Imports SkyEditorBase.Redistribution
-Imports SkyEditorBase.Utilities
 
 Public Class PluginManager
+    Inherits SkyEditor.Core.Extensions.Plugins.PluginManager
     Implements IDisposable
     Implements iNamed
 
@@ -33,10 +32,12 @@ Public Class PluginManager
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub New()
+        MyBase.New
+
         Me.CurrentSolution = Nothing
         Assemblies = New List(Of Assembly)
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
-        Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
+        Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
         Me.FailedPluginLoads = New List(Of String)
         Me.OpenedFiles = New Dictionary(Of Object, ProjectOld)
         Me.DependantPlugins = New Dictionary(Of Assembly, List(Of Assembly))
@@ -48,10 +49,66 @@ Public Class PluginManager
 
 #Region "Plugin Loading"
     ''' <summary>
+    ''' Returns a list of the plugin paths that are valid .Net assemblies that contain an iPlugin.
+    ''' </summary>
+    ''' <param name="PluginPaths">Full paths of the plugin assemblies to analyse.</param>
+    ''' <param name="CoreAssemblyName">Name of the core assembly, usually the Entry assembly.  Assemblies with this name are not supported, to avoid loading duplicates.</param>
+    ''' <returns></returns>
+    Public Overrides Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), Optional CoreAssemblyName As String = Nothing) As List(Of String)
+        Dim supportedList As New List(Of String)
+        'We're going to load these assemblies into another appdomain, so we don't accidentally create duplicates, and so we don't keep any unneeded assemblies loaded for the life of the application.
+        Using reflectionManager As New Utilities.AssemblyReflectionManager
+            For Each item In PluginPaths
+                reflectionManager.LoadAssembly(item, "PluginManagerAnalysis")
+
+                Dim pluginInfoNames As New List(Of String)
+
+                Try
+                    pluginInfoNames =
+                            reflectionManager.Reflect(item,
+                                                      Function(a As Assembly, Args() As Object) As List(Of String)
+                                                          Dim out As New List(Of String)
+
+                                                          If a IsNot Nothing AndAlso
+                                                            Not (a.FullName = Assembly.GetCallingAssembly.FullName OrElse
+                                                                    (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse
+                                                                    a.FullName = Assembly.GetExecutingAssembly.FullName OrElse
+                                                                    (Args(0) IsNot Nothing AndAlso a.FullName = Args(0))
+                                                                    ) Then
+                                                              For Each t As Type In a.GetTypes
+                                                                  Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
+                                                                  If isPlg Then
+                                                                      out.Add(t.FullName)
+                                                                  End If
+                                                              Next
+                                                          End If
+
+                                                          Return out
+                                                      End Function, CoreAssemblyName)
+                Catch ex As Reflection.ReflectionTypeLoadException
+                    'If we fail here, then the assembly is NOT a valid plugin, so we won't load it.
+                    Console.WriteLine(ex.ToString)
+                Catch ex As IO.FileNotFoundException
+                    'If we fail here, then the assembly is missing some of its references, meaning it's not a valid plugin.
+                    Console.WriteLine(ex.ToString)
+                End Try
+
+                If pluginInfoNames.Count > 0 Then
+                    'Then we want to keep this assembly
+                    supportedList.Add(item)
+                End If
+            Next
+        End Using 'The reflection appdomain will be unloaded on dispose
+        Return supportedList
+    End Function
+
+
+
+    ''' <summary>
     ''' Loads all available plugins using the given CoreMod.
     ''' </summary>
     ''' <param name="CoreMod"></param>
-    Public Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
+    Public Overrides Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
         'Me.PluginFolder = FromFolder
         Dim devAssemblyPaths As New List(Of String)
         Dim saveAssemblies As Boolean = False
@@ -79,7 +136,7 @@ Public Class PluginManager
             Next
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.dll"))
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.exe"))
-            supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(extAssemblies, CoreAssemblyName))
+            supportedPlugins.AddRange(GetSupportedPlugins(extAssemblies, CoreAssemblyName))
         Next
 
         'If we're in dev mode, or if we couldn't find any plugin extensions, then load plugins from the dev directory
@@ -91,7 +148,7 @@ Public Class PluginManager
                     devAssemblyPaths.Add(item)
                 End If
             Next
-            supportedPlugins.AddRange(ReflectionHelpers.GetSupportedPlugins(devAssemblyPaths, CoreAssemblyName))
+            supportedPlugins.AddRange(GetSupportedPlugins(devAssemblyPaths, CoreAssemblyName))
         End If
 
         For Each item In supportedPlugins
@@ -129,38 +186,11 @@ Public Class PluginManager
     End Sub
 
     ''' <summary>
-    ''' Looks at the given assembly and loads supported types into the type registry.
-    ''' </summary>
-    ''' <param name="Item"></param>
-    Private Sub LoadTypes(Item As Assembly)
-        'Load types
-
-        Dim types As Type() = Item.GetTypes
-        For Each actualType In types
-            'Check to see if this type inherits from one we're looking for
-            For Each registeredType In TypeRegistery.Keys
-                If ReflectionHelpers.IsOfType(actualType, registeredType) Then
-                    RegisterType(registeredType, actualType)
-                End If
-            Next
-
-            'Do the same for each interface
-            For Each i In actualType.GetInterfaces
-                For Each registeredType In TypeRegistery.Keys
-                    If ReflectionHelpers.IsOfType(i, registeredType) Then
-                        RegisterType(registeredType, actualType)
-                    End If
-                Next
-            Next
-        Next
-    End Sub
-
-    ''' <summary>
     ''' Loads the given plugin.
     ''' Should only be called from another plugin's load method.
     ''' </summary>
     ''' <param name="Plugin"></param>
-    Public Sub LoadPlugin(Plugin As iSkyEditorPlugin)
+    Public Overrides Sub LoadPlugin(Plugin As ISkyEditorPlugin)
         Dim a = Plugin.GetType.Assembly
         For Each item In Plugins
             If item.GetType.IsEquivalentTo(Plugin.GetType) Then
@@ -186,13 +216,6 @@ Public Class PluginManager
 #End Region
 
 #Region "Properties"
-    ''' <summary>
-    ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property IOFilters As New Dictionary(Of String, String)
 
     ''' <summary>
     ''' List of all loaded iSkyEditorPlugins that are loaded.
@@ -201,8 +224,7 @@ Public Class PluginManager
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Property Plugins As New List(Of iSkyEditorPlugin)
-    Public Property FileTypeDetectors As New List(Of FileTypeDetector)
-    Public Property DirectoryTypeDetectors As New List(Of DirectoryTypeDetector)
+
     Public Property PluginFolder As String
 
     ''' <summary>
@@ -212,8 +234,6 @@ Public Class PluginManager
     Private Property FailedPluginLoads As List(Of String)
 
     Private Property MenuItems As List(Of MenuItemInfo)
-
-    Private Property TypeRegistery As Dictionary(Of Type, List(Of Type))
 
     ''' <summary>
     ''' Matches plugin assemblies (key) to assemblies that depend on that assembly (value).
@@ -257,50 +277,19 @@ Public Class PluginManager
     End Property
     Private WithEvents _currentProject As ProjectOld
 
-    ''' <summary>
-    ''' Gets the Full Name of the Core Assembly, which is usually the entry assembly.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property CoreAssemblyName As String
-        Get
-            Return _coreAssemblyName
-        End Get
-        Protected Set(value As String)
-            _coreAssemblyName = value
-        End Set
-    End Property
-
     Private ReadOnly Property Name As String Implements iNamed.Name
         Get
             Return My.Resources.Language.PluginManager
         End Get
     End Property
 
-    Dim _coreAssemblyName As String
 #End Region
 
 #Region "Delegates"
-    Delegate Function FileTypeDetector(File As SkyEditor.Core.GenericFile) As IEnumerable(Of Type)
-    Delegate Function DirectoryTypeDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
     Delegate Sub TypeSearchFound(TypeFound As Type)
 #End Region
 
 #Region "Registration"
-    ''' <summary>
-    ''' Registers a filter for use in open and save file dialogs.
-    ''' </summary>
-    ''' <param name="FileExtension">Filter for the dialog.  If this is by extension, should be *.extension</param>
-    ''' <param name="FileFormatName">Name of the file format</param>
-    Public Sub RegisterIOFilter(FileExtension As String, FileFormatName As String)
-        Dim TempIOFilters As Dictionary(Of String, String) = IOFilters
-        If TempIOFilters Is Nothing Then
-            TempIOFilters = New Dictionary(Of String, String)
-        End If
-        If Not TempIOFilters.ContainsKey(FileExtension) Then
-            TempIOFilters.Add(FileExtension, FileFormatName)
-        End If
-        IOFilters = TempIOFilters
-    End Sub
 
     ''' <summary>
     ''' Registers a Menu Action for use with creating custom menu items.
@@ -402,68 +391,9 @@ Public Class PluginManager
         RaiseEvent MenuActionAdded(Me, New EventArguments.MenuActionAddedEventArgs With {.ActionType = ActionType})
     End Sub
 
-    Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
-        If Not FileTypeDetectors.Contains(Detector) Then
-            FileTypeDetectors.Add(Detector)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Registers SkyEditorBase's file type detectors.
-    ''' </summary>
-    Public Sub RegisterDefaultFileTypeDetectors()
+    Public Overrides Sub RegisterDefaultFileTypeDetectors()
         RegisterFileTypeDetector(AddressOf Me.DetectFileType)
         RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
-    End Sub
-
-    Public Sub RegisterDirectoryTypeDetector(Detector As DirectoryTypeDetector)
-        DirectoryTypeDetectors.Add(Detector)
-    End Sub
-
-    ''' <summary>
-    ''' Adds the given type to the type registry.
-    ''' After plugins are loaded, any type that inherits or implements the given Type can be easily found.
-    ''' 
-    ''' If the type is already in the type registry, nothing will be done.
-    ''' </summary>
-    ''' <param name="Type"></param>
-    Public Sub RegisterTypeRegister(Type As Type)
-        If Type Is Nothing Then
-            Throw New ArgumentNullException(NameOf(Type))
-        End If
-
-        If Not TypeRegistery.ContainsKey(Type) Then
-            TypeRegistery.Add(Type, New List(Of Type))
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Registers the given Type in the type registry.
-    ''' </summary>
-    ''' <param name="Register">The base type or interface that the given Type inherits or implements.</param>
-    ''' <param name="Type">The type to register.</param>
-    Public Sub RegisterType(Register As Type, Type As Type)
-        If Register Is Nothing Then
-            Throw New ArgumentNullException(NameOf(Register))
-        End If
-        If Type Is Nothing Then
-            Throw New ArgumentNullException(NameOf(Type))
-        End If
-        If Type.GetConstructor({}) Is Nothing Then
-            'We only want types with default constructors.
-            'This also helps weed out Generic Types, MustInherit Classes, and Interfaces.
-            Exit Sub
-        End If
-
-        'Ensure that TypeRegistry contains the key.
-        RegisterTypeRegister(Register)
-
-        'Duplicates make can cause minor issues
-        If Not TypeRegistery(Register).Contains(Type) Then
-            TypeRegistery(Register).Add(Type)
-        End If
-
-        RaiseEvent TypeRegistered(Me, New TypeRegisteredEventArgs With {.BaseType = Register, .RegisteredType = Type})
     End Sub
 
 #End Region
@@ -527,7 +457,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="BaseType">Type to get children or implementors of.</param>
     ''' <returns></returns>
-    Public Function GetRegisteredTypes(BaseType As Type) As IEnumerable(Of Type)
+    Public Function GetRegisteredTypes(BaseType As TypeInfo) As IEnumerable(Of TypeInfo)
         If BaseType Is Nothing Then
             Throw New ArgumentNullException(NameOf(BaseType))
         End If
@@ -539,10 +469,10 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Function GetRegisteredObjects(BaseType As Type) As IEnumerable(Of Object)
+    Public Function GetRegisteredObjects(BaseType As TypeInfo) As IEnumerable(Of Object)
         Dim output As New List(Of Object)
 
-        For Each item In GetRegisteredTypes(BaseType)
+        For Each item In GetRegisteredTypes(BaseType.GetTypeInfo)
             If item.GetConstructor({}) IsNot Nothing AndAlso Not item.IsGenericType Then
                 output.Add(item.GetConstructor({}).Invoke({}))
             End If
@@ -611,7 +541,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Public Function GetObjectControls() As IEnumerable(Of iObjectControl)
-        Return GetRegisteredObjects(Of iObjectControl)
+        Return GetRegisteredObjects(Of iObjectControl)()
     End Function
 
     ''' <summary>
@@ -653,13 +583,6 @@ Public Class PluginManager
     Public Event SolutionChanged(sender As Object, e As EventArgs)
     Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
     Public Event PluginLoadComplete(sender As Object, e As EventArgs)
-
-    ''' <summary>
-    ''' Raised when a type is added into the type registry.
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Public Event TypeRegistered(sender As Object, e As TypeRegisteredEventArgs)
 #End Region
 
 #Region "Event Handlers"
@@ -956,7 +879,7 @@ Public Class PluginManager
     Public Function GetDirectoryType(Directory As IO.DirectoryInfo) As Type
         Dim matches As New List(Of Type)
         For Each item In DirectoryTypeDetectors
-            Dim t = item.Invoke(Directory)
+            Dim t = item.Invoke(Directory.FullName)
             If t IsNot Nothing Then
                 For Each match In t
                     matches.Add(match)

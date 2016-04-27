@@ -94,8 +94,9 @@ Public Class Binary
     Public Property StringPMD(ByteIndex As Integer, BitIndex As Integer, ByteLength As Integer) As String
         Get
             Dim s As New StringBuilder
+            Dim e = Encoding.GetEncoding("Windows-1252")
             For i = 0 To ByteLength - 1
-                Dim c = Lists.StringEncoding(Int(ByteIndex + i, BitIndex, 8))
+                Dim c = e.GetString({CByte(Int(ByteIndex + i, BitIndex, 8))}, 0, 1)
                 If Not c = vbNullChar Then
                     s.Append(c)
                 Else
@@ -105,9 +106,10 @@ Public Class Binary
             Return s.ToString
         End Get
         Set(value As String)
+            Dim e = Encoding.GetEncoding("Windows-1252")
             For i = 0 To ByteLength - 1
                 If value.Length > i Then
-                    Int(ByteIndex + i, BitIndex, 8) = Lists.StringEncodingInverse(value(i))
+                    Int(ByteIndex + i, BitIndex, 8) = e.GetBytes({value(i)})(0) 'Lists.StringEncodingInverse(value(i))
                 Else
                     Int(ByteIndex + i, BitIndex, 8) = 0
                 End If

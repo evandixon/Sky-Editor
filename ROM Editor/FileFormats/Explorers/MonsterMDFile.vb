@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Core.Utilities.Utilities
+﻿Imports SkyEditor.Core.Utilities
 
 Namespace FileFormats.Explorers
     Public Class MonsterMDEntry

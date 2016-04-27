@@ -4,11 +4,11 @@ Imports SkyEditorBase.Interfaces
 Namespace Saves
     Public Class GTISave
         Inherits SdfSave
-        Implements iContainer(Of GTIGameData)
+        Implements IContainer(Of GTIGameData)
 
         Public Const GTIMiniTitleID As String = "00000ba8"
 
-        Public Property GameData As GTIGameData Implements iContainer(Of GTIGameData).Item
+        Public Property GameData As GTIGameData Implements IContainer(Of GTIGameData).Item
 
         Public Sub New()
             MyBase.New

@@ -375,8 +375,8 @@ Public Class PluginHelper
     Public Shared Function Cast(Of T)(ObjectToCast As Object) As T
         If TypeOf ObjectToCast Is T Then
             Return DirectCast(ObjectToCast, T)
-        ElseIf TypeOf ObjectToCast Is iContainer(Of T) Then
-            Return DirectCast(ObjectToCast, iContainer(Of T)).Item
+        ElseIf TypeOf ObjectToCast Is IContainer(Of T) Then
+            Return DirectCast(ObjectToCast, IContainer(Of T)).Item
         Else
             'I should probably throw my own exception here, since I'm casting EditingObject to T even though I just found that EditingObject is NOT T, but there will be an exception anyway
             Return DirectCast(ObjectToCast, T)
@@ -393,8 +393,8 @@ Public Class PluginHelper
     Public Shared Sub CastUpdate(Of T)(ByRef ObjectToCast As Object, ByVal NewValue As T)
         If TypeOf ObjectToCast Is T Then
             ObjectToCast = NewValue
-        ElseIf TypeOf ObjectToCast Is iContainer(Of T) Then
-            DirectCast(ObjectToCast, iContainer(Of T)).Item = NewValue
+        ElseIf TypeOf ObjectToCast Is IContainer(Of T) Then
+            DirectCast(ObjectToCast, IContainer(Of T)).Item = NewValue
         Else
             ObjectToCast = NewValue
         End If

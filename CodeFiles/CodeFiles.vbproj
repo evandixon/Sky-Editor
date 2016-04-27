@@ -151,9 +151,9 @@
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.vbproj">
+    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.Json.vbproj">
       <Project>{78e4d58b-b3ac-44e8-af93-64d56f4ddbe2}</Project>
-      <Name>SkyEditor.Core.Utilities</Name>
+      <Name>SkyEditor.Core.Utilities.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
       <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>

@@ -71,7 +71,7 @@ Namespace Saves
                 End Set
             End Property
             Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iMDAttack.GetAttackDictionary
-                Return Lists.SkyMoves
+                Return Lists.GetSkyMoves
             End Function
         End Class
         Public Class StoredPkm
@@ -262,17 +262,17 @@ Namespace Saves
 
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetSkyPokemon(ID))
                 Else
                     Return "----------"
                 End If
             End Function
             Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.SkyPokemon
+                Return Lists.GetSkyPokemon
             End Function
 
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
-                Return Lists.SkyLocations
+                Return Lists.GetSkyLocations
             End Function
 
             Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension

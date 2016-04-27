@@ -88,20 +88,21 @@
   <ItemGroup>
     <Compile Include="EventArguments\HeaderUpdatedEventArgs.vb" />
     <Compile Include="EventArguments\LoadingStatusChangedEventArgs.vb" />
+    <Compile Include="Extensions\Plugins\iSkyEditorPlugin.vb" />
     <Compile Include="GenericFile.vb" />
-    <Compile Include="Interfaces\iContainer.vb" />
-    <Compile Include="Interfaces\iCreatableFile.vb" />
-    <Compile Include="Interfaces\iDetectableFileType.vb" />
-    <Compile Include="Interfaces\iGameTypeSelector.vb" />
-    <Compile Include="Interfaces\iGenericFile.vb" />
-    <Compile Include="Interfaces\iModifiable.vb" />
-    <Compile Include="Interfaces\iNamed.vb" />
-    <Compile Include="Interfaces\iObjectControl.vb" />
-    <Compile Include="Interfaces\iObjectWindow.vb" />
-    <Compile Include="Interfaces\iOnDisk.vb" />
-    <Compile Include="Interfaces\iOpenableFile.vb" />
-    <Compile Include="Interfaces\iSavable.vb" />
-    <Compile Include="Interfaces\ISavableAs.vb" />
+    <Compile Include="Legacy Interfaces\iContainer.vb" />
+    <Compile Include="Legacy Interfaces\iCreatableFile.vb" />
+    <Compile Include="Legacy Interfaces\iDetectableFileType.vb" />
+    <Compile Include="Legacy Interfaces\iGameTypeSelector.vb" />
+    <Compile Include="Legacy Interfaces\iGenericFile.vb" />
+    <Compile Include="Legacy Interfaces\iModifiable.vb" />
+    <Compile Include="Legacy Interfaces\iNamed.vb" />
+    <Compile Include="Legacy Interfaces\iObjectControl.vb" />
+    <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
+    <Compile Include="Legacy Interfaces\iOnDisk.vb" />
+    <Compile Include="Legacy Interfaces\iOpenableFile.vb" />
+    <Compile Include="Legacy Interfaces\iSavable.vb" />
+    <Compile Include="Legacy Interfaces\ISavableAs.vb" />
     <Compile Include="IOProvider.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -109,7 +110,12 @@
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="Extensions\Plugins\PluginManager.vb" />
+    <Compile Include="Extensions\Plugins\TypeRegisteredEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />
+    <Compile Include="Utilities\GenericArrayOperations.vb" />
+    <Compile Include="Utilities\Hex.vb" />
+    <Compile Include="Extensions\Plugins\ReflectionHelpers.vb" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\" />

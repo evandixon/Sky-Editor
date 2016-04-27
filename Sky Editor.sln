@@ -62,7 +62,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core", "SkyEditor
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Windows", "SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj", "{8238A6A2-76AF-4741-8564-D1D2A4B067BB}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Utilities", "SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.vbproj", "{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Utilities.Json", "SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.Json.vbproj", "{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53D85B17-1B65-40A4-AF8E-4F8E5248D51E}"
 EndProject

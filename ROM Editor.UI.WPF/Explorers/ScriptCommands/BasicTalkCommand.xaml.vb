@@ -1,3 +1,3 @@
-﻿Public Class MonologueCommand
+﻿Public Class BasicTalkCommand
 
 End Class

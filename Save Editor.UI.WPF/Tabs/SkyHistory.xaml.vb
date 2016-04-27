@@ -52,7 +52,7 @@ Namespace Tabs
         ''' Updates UI elements to display certain properties.
         ''' </summary>
         Public Overrides Sub RefreshDisplay()
-            PokemonDictionary = Lists.SkyPokemon
+            PokemonDictionary = Lists.GetSkyPokemon
             With GetEditingObject(Of SkySave)()
                 txtPlayerName.Text = .OriginalPlayerName
                 txtPartnerName.Text = .OriginalPartnerName

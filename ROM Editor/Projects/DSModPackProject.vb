@@ -6,9 +6,9 @@ Imports SkyEditorBase.Interfaces
 Namespace Projects
     Public Class DSModPackProject
         Inherits ProjectOld
-        Implements iContainer(Of ModpackInfo)
+        Implements IContainer(Of ModpackInfo)
 
-        Public Property Info As ModpackInfo Implements iContainer(Of ModpackInfo).Item
+        Public Property Info As ModpackInfo Implements IContainer(Of ModpackInfo).Item
             Get
                 Return Me.Setting("ModpackInfo")
             End Get

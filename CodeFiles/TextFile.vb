@@ -11,7 +11,7 @@ Public Class TextFile
     Implements iNamed
     Implements iModifiable
     Implements ITextFile
-    Implements iContainer(Of String)
+    Implements IContainer(Of String)
 
     Public Sub New()
         Text = ""
@@ -29,7 +29,7 @@ Public Class TextFile
         End Get
     End Property
 
-    Public Property Text As String Implements ITextFile.Text, iContainer(Of String).Item
+    Public Property Text As String Implements ITextFile.Text, IContainer(Of String).Item
 
     Dim _name As String
 

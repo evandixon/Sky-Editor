@@ -119,6 +119,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
+    <Compile Include="ListResources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ListResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Saves\GTIGameData.vb" />
     <Compile Include="Saves\GTISave.vb" />
     <Compile Include="Saves\RBSaveEU.StoredPokemon.vb" />
@@ -169,6 +174,11 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Language.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListResources.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListResources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -250,9 +260,6 @@
     <Content Include="SaveEditor\English\SkyPokemon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SaveEditor\English\StringEncoding.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="SaveEditor\English\TDFriendAreaOffsets.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -320,9 +327,9 @@
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.vbproj">
+    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.Json.vbproj">
       <Project>{78e4d58b-b3ac-44e8-af93-64d56f4ddbe2}</Project>
-      <Name>SkyEditor.Core.Utilities</Name>
+      <Name>SkyEditor.Core.Utilities.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
       <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>

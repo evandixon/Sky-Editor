@@ -1,6 +1,6 @@
 ﻿Imports System.Security.Cryptography
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditor.Core.Utilities.Utilities
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace ConsoleCommands

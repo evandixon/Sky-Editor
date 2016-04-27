@@ -4,7 +4,7 @@ Imports SkyEditorBase
 
 Namespace Utilities
     <Serializable()>
-    Public Class ResourceDictionary
+    <Obsolete> Public Class ResourceDictionary
         Inherits Dictionary(Of String, String)
         Public Sub New(ResourceName As String)
             MyBase.New()
