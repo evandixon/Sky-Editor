@@ -1,40 +1,83 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class BinaryFile
-    Inherits GenericFile
+    Implements iCreatableFile
     Implements iOpenableFile
-    Implements iModifiable
+    Implements iNamed
+    Implements iOnDisk
+    Implements ISavableAs
 
 #Region "Constructors"
     Public Sub New()
         Bits = New Binary(0)
     End Sub
 
-    Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-        MyBase.OpenFile(Filename)
-        Bits = New Binary(0)
-        ProcessRawData()
+    Public Overridable Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Me.Filename = Filename
+        Using f As New GenericFile(Filename, True, True)
+            Bits = New Binary(0)
+            ProcessRawData(f)
+        End Using
     End Sub
 
-    Private Sub ProcessRawData()
-        For count As Integer = 0 To Length - 1
-            Bits.AppendByte(RawData(count))
+    Private Sub ProcessRawData(File As SkyEditor.Core.GenericFile)
+        For count As Integer = 0 To File.Length - 1
+            Bits.AppendByte(File.RawData(count))
         Next
     End Sub
 #End Region
 
     Public Property Bits As Binary
+    Public Property Filename As String Implements iOnDisk.Filename
+
+    ''' <summary>
+    ''' Name of the file.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Name As String Implements iNamed.Name
+        Get
+            If _name Is Nothing Then
+                Return IO.Path.GetFileName(Filename)
+            Else
+                Return _name
+            End If
+        End Get
+        Set(value As String)
+            _name = value
+        End Set
+    End Property
+    Dim _name As String
 
     Protected Overridable Sub FixChecksum()
 
     End Sub
 
-    Protected Overrides Sub PreSave()
-        MyBase.PreSave()
+    Public Sub Save(Destination As String) Implements ISavableAs.Save
         FixChecksum()
-        For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
-            RawData(count) = Bits.Int(count, 0, 8)
-        Next
+        Dim tmp(Math.Ceiling(Bits.Count / 8) - 1) As Byte
+        Using f As New GenericFile(tmp)
+            For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
+                f.RawData(count) = Bits.Int(count, 0, 8)
+            Next
+            f.Save(Destination)
+        End Using
+        RaiseEvent FileSaved(Me, New EventArgs)
+    End Sub
+
+    Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
+        Return ".sav"
+    End Function
+
+    Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+
+    Public Sub Save() Implements iSavable.Save
+        Save(Filename)
+    End Sub
+
+    Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
+        Me.Name = ""
     End Sub
 End Class

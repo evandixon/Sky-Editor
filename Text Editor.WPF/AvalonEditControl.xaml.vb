@@ -3,6 +3,8 @@ Imports System.Windows.Controls
 Imports System.Windows.Input
 Imports CodeFiles
 Imports ICSharpCode.AvalonEdit.CodeCompletion
+Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -127,7 +129,7 @@ Public Class AvalonEditControl
         Set(value As String)
             Dim oldValue = _header
             _header = value
-            RaiseEvent HeaderUpdated(Me, New EventArguments.HeaderUpdatedEventArgs(oldValue, value))
+            RaiseEvent HeaderUpdated(Me, New HeaderUpdatedEventArgs(oldValue, value))
         End Set
     End Property
     Dim _header As String

@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
@@ -26,15 +27,15 @@ Friend Class ConsoleCoreMod
 
     Public Sub Load(Manager As PluginManager) Implements iSkyEditorPlugin.Load
         'CoreMod stuff
-        Manager.RegisterTypeRegister(GetType(Solution))
-        Manager.RegisterTypeRegister(GetType(Project))
+        Manager.RegisterTypeRegister(GetType(SolutionOld))
+        Manager.RegisterTypeRegister(GetType(ProjectOld))
         Manager.RegisterTypeRegister(GetType(iCreatableFile))
         Manager.RegisterTypeRegister(GetType(iOpenableFile))
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))
         Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
 
-        Manager.RegisterType(GetType(Solution), GetType(Solution))
-        Manager.RegisterType(GetType(Project), GetType(Project))
+        Manager.RegisterType(GetType(SolutionOld), GetType(SolutionOld))
+        Manager.RegisterType(GetType(ProjectOld), GetType(ProjectOld))
 
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
         Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.GeneratePluginExtensions))

@@ -1,4 +1,5 @@
 ﻿Imports SaveEditor.Interfaces
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -274,7 +275,7 @@ Namespace Saves
                 Return Lists.SkyLocations
             End Function
 
-            Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
+            Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
                 Return ".skypkm"
             End Function
 
@@ -286,7 +287,6 @@ Namespace Saves
                 For i = 1 To 8 - (Length Mod 8)
                     Me.Bits.RemoveAt(0)
                 Next
-                toOpen.Dispose()
             End Sub
 
             Public Sub Save() Implements iSavable.Save
@@ -302,7 +302,6 @@ Namespace Saves
                 Next
                 toSave.Bits.Bits.AddRange(Me.Bits)
                 toSave.Save(Filename)
-                toSave.Dispose()
             End Sub
         End Class
         Public Property StoredPokemon(Index As Integer) As StoredPkm

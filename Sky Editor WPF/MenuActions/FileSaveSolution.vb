@@ -2,11 +2,11 @@
     Public Class FileSaveSolution
         Inherits MenuAction
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Solution)}
+            Return {GetType(SolutionOld)}
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As Solution In Targets
+            For Each item As SolutionOld In Targets
                 item.Save()
                 item.SaveAllProjects()
             Next

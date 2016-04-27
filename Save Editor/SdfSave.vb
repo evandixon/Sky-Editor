@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase.Interfaces
 
 Public Class SdfSave
     Implements iOpenableFile
@@ -48,7 +50,7 @@ Public Class SdfSave
         For Each item In IO.Directory.GetFiles(IO.Path.Combine(Me.Path, MiniTitleId), "*", IO.SearchOption.TopDirectoryOnly)
             IO.File.Copy(item, IO.Path.Combine(dir, MiniTitleId, IO.Path.GetFileName(item)), True)
         Next
-        SkyEditorBase.Utilities.Json.SerializeToFile(IO.Path.Combine(dir, "info.json"), Info)
+        Json.SerializeToFile(IO.Path.Combine(dir, "info.json"), Info, New SkyEditor.Core.Windows.IOProvider)
     End Sub
 
     Public Sub New(Path As String)
@@ -87,7 +89,7 @@ Public Class SdfSave
             End If
 
             If IO.File.Exists(IO.Path.Combine(Path, "info.json")) Then
-                Info = SkyEditorBase.Utilities.Json.DeserializeFromFile(Of SdfSaveExtraData)(IO.Path.Combine(Path, "info.json"))
+                Info = Json.DeserializeFromFile(Of SdfSaveExtraData)(IO.Path.Combine(Path, "info.json"), New SkyEditor.Core.Windows.IOProvider)
             End If
         Else
             IsValid = False

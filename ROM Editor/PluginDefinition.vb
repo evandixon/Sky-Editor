@@ -3,6 +3,7 @@ Imports ROMEditor.Roms
 Imports SkyEditorBase.Interfaces
 Imports ROMEditor.Projects
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core
 
 Public Class PluginDefinition
     Implements iSkyEditorPlugin

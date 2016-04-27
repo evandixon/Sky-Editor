@@ -126,8 +126,16 @@
   <data name="ErrorCantAddFile" xml:space="preserve">
     <value>Cannot add a file at the given path: {0}</value>
   </data>
+  <data name="ErrorNoSaveFilename" xml:space="preserve">
+    <value>Using GenericFile.Save() requires GenericFile.OriginalFilename to not be null.</value>
+    <comment>Message for an exception that's thrown when using GenericFile.Save() when the file doesn't have an original filename.</comment>
+  </data>
   <data name="ErrorProjectCircularReference" xml:space="preserve">
     <value>Project {0} has a circular reference.  Skipping its compilation.</value>
+  </data>
+  <data name="ErrorWrittenReadonly" xml:space="preserve">
+    <value>Attempted to write to a read-only file.</value>
+    <comment>Message for an exception that's thrown when attempting to alter a read-only file.</comment>
   </data>
   <data name="ExecutingProgram" xml:space="preserve">
     <value>Executing {0} {1}</value>

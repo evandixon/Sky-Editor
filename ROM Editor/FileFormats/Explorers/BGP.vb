@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports SkyEditor.Core.Utilities.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Utilities
 
@@ -161,13 +162,12 @@ Namespace FileFormats.Explorers
                 For x = 0 To 31
                     Dim index As Integer = BitConverter.ToUInt16({MapData(dataIndex * 2), (MapData(dataIndex * 2 + 1) Or &HFC) - &HFC}, 0) 'Data(dataIndex * 2)
                     If Chunks.Count >= index - 1 AndAlso index > 0 Then
-                        Dim b8 = New Bits8(MapData(dataIndex * 2 + 1))
                         Dim palette As Integer = ((MapData(dataIndex * 2 + 1) >> 4 Or &HF0) - &HF0)
                         Dim icopy = ChunkToImage(Chunks(index - 1), PalData, palette) 'Chunks(index - 1).Clone
-                        If b8.Bit3 Then
+                        If (MapData(dataIndex * 2 + 1) And 4) = 4 Then 'If bit 3
                             icopy.RotateFlip(RotateFlipType.RotateNoneFlipX)
                         End If
-                        If b8.Bit4 Then
+                        If (MapData(dataIndex * 2 + 1) And 8) = 8 Then 'If bit 4
                             icopy.RotateFlip(RotateFlipType.RotateNoneFlipY)
                         End If
                         g.DrawImage(icopy, New Point(x * 8, y * 8))

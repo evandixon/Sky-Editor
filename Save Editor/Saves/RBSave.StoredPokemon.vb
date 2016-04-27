@@ -1,4 +1,5 @@
 ﻿Imports SaveEditor.Interfaces
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -222,7 +223,7 @@ Namespace Saves
 
             Public Property Filename As String Implements iOnDisk.Filename
 
-            Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
+            Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
                 Return ".rbpkm"
             End Function
 
@@ -233,7 +234,6 @@ Namespace Saves
                 For i = 1 To 8 - (Length Mod 8)
                     Me.Bits.RemoveAt(Me.Bits.Count - 1)
                 Next
-                toOpen.Dispose()
             End Sub
 
             Public Sub Save() Implements iSavable.Save
@@ -248,7 +248,6 @@ Namespace Saves
                     toSave.Bits.Bits.Add(0)
                 Next
                 toSave.Save(Filename)
-                toSave.Dispose()
             End Sub
         End Class
         Public Property StoredPokemon(Index As Integer) As StoredPkm

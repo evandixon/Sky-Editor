@@ -1,4 +1,7 @@
-﻿Imports CodeFiles
+﻿Imports System.Runtime.Serialization
+Imports CodeFiles
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Utilities
@@ -65,7 +68,7 @@ Public Class CodeExtraDataFile
 
     Public Sub Save(Filename As String) Implements ISavableAs.Save
         Dim j As New JsonStructure With {.Database = Me.Database, .AutoCompleteChars = Me.AutoCompleteChars}
-        Json.SerializeToFile(Filename, j)
+        Json.SerializeToFile(Filename, j, New SkyEditor.Core.Windows.IOProvider)
     End Sub
 
     Public Sub New(Filename As String)
@@ -84,14 +87,14 @@ Public Class CodeExtraDataFile
     End Sub
 
     Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-        Dim j = Json.DeserializeFromFile(Of JsonStructure)(Filename)
+        Dim j = Json.DeserializeFromFile(Of JsonStructure)(Filename, New SkyEditor.Core.Windows.IOProvider)
         Me.Database = j.Database
         Me.AutoCompleteChars = j.AutoCompleteChars
     End Sub
 
     Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 
-    Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
+    Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
         Return ".fdd"
     End Function
 

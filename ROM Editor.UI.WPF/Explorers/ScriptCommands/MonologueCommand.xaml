@@ -1,0 +1,16 @@
+﻿<skywpf:DataBoundObjectControl x:Class="MonologueCommand" x:TypeArguments="script:MonologueCommand"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:skywpf="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:local="clr-namespace:ROMEditor.UI.WPF"
+             xmlns:script="clr-namespace:ROMEditor.FileFormats.Explorers.Script.Commands;assembly=ROMEditor"
+             xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Label Content="{x:Static res:Language.Monologue}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+        <Label Content="{Binding Line}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="37,26,0,0"/>
+    </Grid>
+</skywpf:DataBoundObjectControl>

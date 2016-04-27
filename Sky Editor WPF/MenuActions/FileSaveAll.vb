@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 
 Namespace MenuActions
@@ -6,18 +7,18 @@ Namespace MenuActions
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Solution), GetType(iSavable)}
+            Return {GetType(SolutionOld), GetType(iSavable)}
         End Function
         Public Overrides Function SupportsObjects(Objects As IEnumerable(Of Object)) As Boolean
-            Dim hasProject = From o In Objects Where TypeOf o Is Solution
+            Dim hasProject = From o In Objects Where TypeOf o Is SolutionOld
             Dim hasSavable = From o In Objects Where TypeOf o Is iSavable
 
             Return hasProject.Any AndAlso hasSavable.Any
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item In Targets
-                If TypeOf item Is Solution Then
-                    DirectCast(item, Solution).SaveAllProjects()
+                If TypeOf item Is SolutionOld Then
+                    DirectCast(item, SolutionOld).SaveAllProjects()
                 ElseIf TypeOf item Is iSavable Then
 
                     If TypeOf item Is iOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, iOnDisk).Filename) Then

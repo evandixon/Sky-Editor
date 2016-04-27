@@ -92,6 +92,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Say.
+        '''</summary>
+        Public Shared ReadOnly Property BasicTalk() As String
+            Get
+                Return ResourceManager.GetString("BasicTalk", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Bold Female:.
         '''</summary>
         Public Shared ReadOnly Property BoldFemale() As String
@@ -367,6 +376,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property ModpackInfo() As String
             Get
                 Return ResourceManager.GetString("ModpackInfo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Monologue.
+        '''</summary>
+        Public Shared ReadOnly Property Monologue() As String
+            Get
+                Return ResourceManager.GetString("Monologue", resourceCulture)
             End Get
         End Property
         

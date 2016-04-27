@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
@@ -28,8 +29,8 @@ Friend Class WpfCoreMod
         MyBase.Load(Manager)
         'CoreMod stuff
         Manager.RegisterTypeRegister(GetType(iObjectControl))
-        Manager.RegisterTypeRegister(GetType(Solution))
-        Manager.RegisterTypeRegister(GetType(Project))
+        Manager.RegisterTypeRegister(GetType(SolutionOld))
+        Manager.RegisterTypeRegister(GetType(ProjectOld))
         Manager.RegisterTypeRegister(GetType(iCreatableFile))
         Manager.RegisterTypeRegister(GetType(iOpenableFile))
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))

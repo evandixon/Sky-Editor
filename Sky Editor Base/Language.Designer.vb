@@ -92,11 +92,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Using GenericFile.Save() requires GenericFile.OriginalFilename to not be null..
+        '''</summary>
+        Public Shared ReadOnly Property ErrorNoSaveFilename() As String
+            Get
+                Return ResourceManager.GetString("ErrorNoSaveFilename", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Project {0} has a circular reference.  Skipping its compilation..
         '''</summary>
         Public Shared ReadOnly Property ErrorProjectCircularReference() As String
             Get
                 Return ResourceManager.GetString("ErrorProjectCircularReference", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Attempted to write to a read-only file..
+        '''</summary>
+        Public Shared ReadOnly Property ErrorWrittenReadonly() As String
+            Get
+                Return ResourceManager.GetString("ErrorWrittenReadonly", resourceCulture)
             End Get
         End Property
         

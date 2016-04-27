@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class TextFile
@@ -59,7 +60,7 @@ Public Class TextFile
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
-    Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
+    Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
         Return ".txt"
     End Function
 End Class

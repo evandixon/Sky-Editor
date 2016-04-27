@@ -1,14 +1,17 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.PSMD
     ''' <summary>
     ''' 
     ''' </summary>
-    ''' <remarks>Credit to Andibad for research.  https://projectpokemon.org/forums/showthread.php?46904-Pokemon-Super-Mystery-Dungeon-And-PMD-GTI-Research-And-Utilities&p=211199&viewfull=1#post211199</remarks>
+    ''' <remarks>Credit to Andibad for research.  https://projectpokemon.org/forums/showthread.php?46904-Pokemon-Super-Mystery-Dungeon-And-PMD-GTI-Research-And-Utilities&amp;p=211199&amp;viewfull=1#post211199
+    ''' </remarks>
 
     Public Class ActXlWaza
-        Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements iOpenableFile
         Public Class ActXlWazaEntry
             Public Property MoveActionIndex As UInt16
             Public Property MoveActionIndexTarget As UInt16

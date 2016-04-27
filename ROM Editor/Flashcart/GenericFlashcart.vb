@@ -1,8 +1,9 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase.Interfaces
 
 Namespace Flashcart
     Public Class GenericFlashcart
-        Implements SkyEditorBase.Interfaces.iSavable
+        Implements iSavable
 
         Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 

@@ -1,5 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -77,7 +79,7 @@ Namespace FileFormats.PSMD
                     Else
                         Dim c = e.GetString(cRaw)
 
-                        If (SkyEditorBase.Utilities.GenericArrayOperations(Of Byte).ArraysEqual(cRaw, {0, 0})) Then
+                        If (GenericArrayOperations(Of Byte).ArraysEqual(cRaw, {0, 0})) Then
                             doEnd = True
                         Else
                             s.Append(c)

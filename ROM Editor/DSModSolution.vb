@@ -3,7 +3,7 @@ Imports SkyEditorBase
 Imports SkyEditorBase.EventArguments
 
 Public Class DSModSolution
-    Inherits SkyEditorBase.Solution
+    Inherits SkyEditorBase.SolutionOld
 
     Public Overrides Function CanCreateDirectory(Path As String) As Boolean
         Return True

@@ -6,7 +6,7 @@ Namespace Projects
     Public Class SkyStarterModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("overlay", "overlay_0013.bin"),
                     IO.Path.Combine("data", "MESSAGE", "text_e.str"),
                     IO.Path.Combine("data", "MESSAGE", "text_f.str"),
@@ -38,7 +38,7 @@ Namespace Projects
             Return patchers
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
 
             Dim rawDir = GetRawFilesDir()
@@ -78,7 +78,7 @@ Namespace Projects
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             Dim rawDir = GetRawFilesDir()
             Dim projDir = GetRootDirectory()
 

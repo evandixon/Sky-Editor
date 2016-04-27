@@ -1,5 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports System.Windows.Forms
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 Namespace UI
     Public Class ObjectWindow
@@ -74,7 +75,7 @@ Namespace UI
                 Dim o As New OpenFileDialog
 
                 If TypeOf _objectToEdit Is ISavableAs Then
-                    Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).DefaultExtension.Trim("*").Trim(".")
+                    Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).GetDefaultExtension.Trim("*").Trim(".")
                     If _manager.IOFilters.ContainsKey(ext) Then
                         o.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.IOFilters(ext), ext)
                     Else
@@ -108,7 +109,7 @@ Namespace UI
         Private Sub menuFileSaveAs_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSaveAs.Click
             If TypeOf ObjectToEdit Is ISavableAs Then
                 Dim s As New SaveFileDialog
-                Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).DefaultExtension.Trim("*").Trim(".")
+                Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).GetDefaultExtension.Trim("*").Trim(".")
                 If _manager.IOFilters.ContainsKey(ext) Then
                     s.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.IOFilters(ext), ext)
                 Else

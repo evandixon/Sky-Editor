@@ -1,4 +1,4 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
 
 ''' <summary>
 ''' Models a basic file that stores Key/Value pairs.

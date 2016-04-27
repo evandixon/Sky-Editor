@@ -1,10 +1,12 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.Explorers
     Public Class item_p
-        Inherits SkyEditorBase.GenericFile
-        Implements SkyEditorBase.Interfaces.iOpenableFile
+        Inherits GenericFile
+        Implements iOpenableFile
         Public Property Items As List(Of Item)
         Public Class Item
             Public Property RawData As Byte()
@@ -200,11 +202,11 @@ Namespace FileFormats.Explorers
 
             Return out.ToArray
         End Function
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
+        Public Overrides Sub Save(Destination As String)
             Dim buffer = GetBytes()
             Length = buffer.Length
             RawData(0, Length) = buffer
+            MyBase.Save(Destination)
         End Sub
     End Class
 End Namespace

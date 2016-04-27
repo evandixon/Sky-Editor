@@ -11,7 +11,7 @@
     <Grid>
         <DataGrid x:Name="dataGrid">
             <DataGrid.DataContext>
-                <SkyEditorBase:Project/>
+                <SkyEditorBase:ProjectOld/>
             </DataGrid.DataContext>
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="columnName" Binding="{Binding Name, BindsDirectlyToSource=True}" Header="{x:Static res:Language.ProjectName}" IsReadOnly="True"/>

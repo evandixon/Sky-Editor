@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
 

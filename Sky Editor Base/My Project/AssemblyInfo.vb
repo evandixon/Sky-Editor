@@ -44,3 +44,4 @@ Imports System.Windows
 
 <Assembly: AssemblyVersion("4.0.1.0")>
 <Assembly: AssemblyFileVersion("4.0.1.0")>
+<Assembly: NeutralResourcesLanguage("en-US")>

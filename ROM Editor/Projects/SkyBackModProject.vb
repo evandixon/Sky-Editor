@@ -1,11 +1,12 @@
 ﻿Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace Projects
     Public Class SkyBackModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("data", "BACK")}
         End Function
 
@@ -13,7 +14,7 @@ Namespace Projects
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
 
             Dim projectDir = GetRootDirectory()
@@ -22,7 +23,7 @@ Namespace Projects
             Dim BACKdir As String = IO.Path.Combine(projectDir, "Backgrounds")
             Me.CreateDirectory("Backgrounds")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "BACK"), "*.bgp")
-            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
+            Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
 
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New BGP
@@ -39,7 +40,7 @@ Namespace Projects
                                End Function, backFiles)
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             'Convert BACK
             Dim projectDir = GetRootDirectory()
             Dim rawDir = GetRawFilesDir()
@@ -70,7 +71,7 @@ Namespace Projects
                         Dim img = BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
                         img.Save(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                         img.Dispose()
-                        Await bgp.RunCompress(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
+                        Await BGP.RunCompress(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                     End If
 
                 Next

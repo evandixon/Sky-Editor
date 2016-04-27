@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase.Interfaces
 
 Namespace Saves
     Public Class GTISave

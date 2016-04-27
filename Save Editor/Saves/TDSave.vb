@@ -1,9 +1,11 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 
 Namespace Saves
     Public Class TDSave
         Inherits BinaryFile
-        Implements SkyEditorBase.Interfaces.iDetectableFileType
+        Implements iDetectableFileType
 
         Public Sub New()
             MyBase.New()
@@ -93,7 +95,7 @@ Namespace Saves
         'End Sub
 #End Region
 
-        Public Function IsFileOfType(File As GenericFile) As Boolean Implements SkyEditorBase.Interfaces.iDetectableFileType.IsOfType
+        Public Function IsFileOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
             If File.Length > Offsets.ChecksumEnd Then
                 Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd))
                 Return (File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))

@@ -2,6 +2,8 @@
 Imports System.Text.RegularExpressions
 Imports CodeFiles
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
@@ -79,11 +81,12 @@ Validate:
             Dim dir = IO.Path.Combine(Me.GetRootDirectory, "Languages")
             If IO.Directory.Exists(dir) Then
                 Dim langDirs = IO.Directory.GetDirectories(dir)
-                Dim f1 As New Utilities.AsyncFor(My.Resources.Language.LoadingLanguages)
+                Dim f1 As New AsyncFor(My.Resources.Language.LoadingLanguages)
+                f1.BatchSize = langDirs.Length
                 _languageLoadTask = f1.RunForEach(Async Function(Item As String)
                                                       Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
 
-                                                      Dim f2 As New Utilities.AsyncFor
+                                                      Dim f2 As New AsyncFor
                                                       Await f2.RunForEach(Sub(File As String)
                                                                               Using msg As New MessageBin(True)
                                                                                   msg.OpenFileOnlyIDs(File)
@@ -97,7 +100,7 @@ Validate:
                                                                                   Next
                                                                               End Using
                                                                           End Sub, IO.Directory.GetFiles(Item))
-                                                  End Function, langDirs, langDirs.Count)
+                                                  End Function, langDirs)
             End If
         End Sub
 
@@ -158,7 +161,7 @@ Validate:
             End If
         End Sub
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
 
             Await ExtractLanguages()
@@ -167,7 +170,7 @@ Validate:
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")
             Dim filesToOpen As New List(Of String)
 
-            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingDecompilingScripts)
+            Dim f As New AsyncFor(My.Resources.Language.LoadingDecompilingScripts)
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Dim dest = Item.Replace(scriptSource, scriptDestination)
                                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
@@ -184,17 +187,18 @@ Validate:
                                    'Await Me.AddExistingFile(d, Item, False)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
 
-            Dim f2 As New Utilities.AsyncFor(My.Resources.Language.LoadingAddingFiles)
-            Await f2.RunForEachSync(Async Function(Item As String) As Task
-                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
-                                        Me.CreateDirectory(d)
-                                        Await Me.AddExistingFile(d, Item, False)
-                                    End Function, filesToOpen)
+            Dim f2 As New AsyncFor(My.Resources.Language.LoadingAddingFiles)
+            f2.RunSynchronously = True
+            Await f2.RunForEach(Async Function(Item As String) As Task
+                                    Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
+                                    Me.CreateDirectory(d)
+                                    Await Me.AddExistingFile(d, Item, False)
+                                End Function, filesToOpen)
 
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             Dim farcMode As Boolean = False
 
             If IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*").Length > 0 Then
@@ -233,10 +237,10 @@ Validate:
 
             Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
-            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingCompilingScripts)
+            Dim f As New AsyncFor(My.Resources.Language.LoadingCompilingScripts)
             f.SetLoadingStatus = False
             f.SetLoadingStatusOnFinish = False
-            Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)
+            Dim onProgressChanged = Sub(sender As Object, e As LoadingStatusChangedEventArgs)
                                         Me.BuildStatusMessage = e.Message
                                         Me.BuildProgress = e.Progress
                                     End Sub
@@ -254,8 +258,8 @@ Validate:
             Await MyBase.Build(Solution)
         End Function
 
-        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
-            Dim project As Project = Solution.GetProjectsByName(BaseRomProjectName).FirstOrDefault
+        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+            Dim project As ProjectOld = Solution.GetProjectsByName(BaseRomProjectName).FirstOrDefault
             If project IsNot Nothing AndAlso TypeOf project Is BaseRomProject Then
                 Dim code = DirectCast(project, BaseRomProject).GameCode
                 Dim psmd As New Regex(GameStrings.PSMDCode)

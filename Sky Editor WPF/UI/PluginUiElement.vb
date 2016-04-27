@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 
 Namespace UI

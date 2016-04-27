@@ -9,7 +9,7 @@
         ''' Null if the file is not in a project.
         ''' </summary>
         ''' <returns></returns>
-        Public Property ParentProject As Project
+        Public Property ParentProject As ProjectOld
         Public Sub New()
             DisposeOnExit = False
         End Sub

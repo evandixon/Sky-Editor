@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase.Interfaces
 
 Namespace UI
     Public Class ObjectControl
@@ -24,7 +26,12 @@ Namespace UI
         ''' </summary>
         ''' <returns></returns>
         Public Overridable Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
-            Return {}
+            Dim context = Me.DataContext
+            If context IsNot Nothing Then
+                Return context.GetType
+            Else
+                Return {}
+            End If
         End Function
 
         ''' <summary>
@@ -53,7 +60,7 @@ Namespace UI
         ''' <summary>
         ''' Called when Header is changed.
         ''' </summary>
-        Public Event HeaderUpdated(sender As Object, e As EventArguments.HeaderUpdatedEventArgs) Implements iObjectControl.HeaderUpdated
+        Public Event HeaderUpdated(sender As Object, e As HeaderUpdatedEventArgs) Implements iObjectControl.HeaderUpdated
 
         ''' <summary>
         ''' Called when IsModified is changed.
@@ -71,7 +78,7 @@ Namespace UI
             Set(value As String)
                 Dim oldValue = _header
                 _header = value
-                RaiseEvent HeaderUpdated(Me, New EventArguments.HeaderUpdatedEventArgs(oldValue, value))
+                RaiseEvent HeaderUpdated(Me, New HeaderUpdatedEventArgs(oldValue, value))
             End Set
         End Property
         Dim _header As String

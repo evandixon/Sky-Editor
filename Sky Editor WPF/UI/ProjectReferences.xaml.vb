@@ -4,20 +4,20 @@
 
         Public Overrides Sub RefreshDisplay()
             MyBase.RefreshDisplay()
-            With GetEditingObject(Of Project)()
+            With GetEditingObject(Of ProjectOld)()
                 listReferences.ItemsSource = .ProjectReferences
             End With
         End Sub
 
         Public Overrides Sub UpdateObject()
             MyBase.UpdateObject()
-            With GetEditingObject(Of Project)()
+            With GetEditingObject(Of ProjectOld)()
                 .ProjectReferences = listReferences.ItemsSource
             End With
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SkyEditorBase.Project)}
+            Return {GetType(SkyEditorBase.ProjectOld)}
         End Function
     End Class
 

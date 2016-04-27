@@ -22,7 +22,7 @@ Namespace UI
             ' Add any initialization after the InitializeComponent() call.
             _folderBrowser = New FolderBrowserDialog
 
-            For Each item As Solution In Manager.GetRegisteredObjects(GetType(Solution))
+            For Each item As SolutionOld In Manager.GetRegisteredObjects(GetType(SolutionOld))
                 ddType.Items.Add(item)
             Next
             If ddType.Items.Count > 0 Then ddType.SelectedIndex = 0
@@ -58,11 +58,11 @@ Namespace UI
             End Set
         End Property
 
-        Public Property SelectedSolution As Solution
+        Public Property SelectedSolution As SolutionOld
             Get
                 Return ddType.LastSafeValue
             End Get
-            Set(value As Solution)
+            Set(value As SolutionOld)
                 ddType.LastSafeValue = value
             End Set
         End Property

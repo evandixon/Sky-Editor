@@ -1,5 +1,7 @@
 ﻿Imports System.Windows.Controls
 Imports CodeFiles
+Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -56,7 +58,7 @@ Public Class TextControl
         Set(value As String)
             Dim oldValue = _header
             _header = value
-            RaiseEvent HeaderUpdated(Me, New EventArguments.HeaderUpdatedEventArgs(oldValue, value))
+            RaiseEvent HeaderUpdated(Me, New HeaderUpdatedEventArgs(oldValue, value))
         End Set
     End Property
     Dim _header As String

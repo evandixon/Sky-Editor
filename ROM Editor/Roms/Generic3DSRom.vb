@@ -1,16 +1,18 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 
 Namespace Roms
     Public Class Generic3DSRom
-        Inherits GenericFile
-        Implements Interfaces.iOpenableFile
-        Implements Interfaces.iDetectableFileType
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements iOpenableFile
+        Implements iDetectableFileType
         Implements iPackedRom
-        Public Overrides Function DefaultExtension() As String
+        Public Overrides Function GetDefaultExtension() As String
             Return "*.3ds"
         End Function
 
-        Public Overridable Function IsOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
+        Public Overridable Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
             If File.Length > 104 Then
                 Dim e As New System.Text.ASCIIEncoding
                 Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
@@ -42,7 +44,7 @@ Namespace Roms
         Public Async Function Unpack(DestinationDirectory As String) As Task Implements iPackedRom.Unpack
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
-                DestinationDirectory = IO.Path.Combine(PluginHelper.GetResourceName(IO.Path.GetFileNameWithoutExtension(Me.Filename)))
+                DestinationDirectory = IO.Path.Combine(PluginHelper.GetResourceName(IO.Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
             End If
             If Not IO.Directory.Exists(DestinationDirectory) Then
                 IO.Directory.CreateDirectory(DestinationDirectory)
@@ -65,13 +67,13 @@ Namespace Roms
             Dim onlineHeaderBinPath = IO.Path.Combine(DestinationDirectory, "OnlineHeader.bin")
 
             'Unpack portions
-            Dim exheaderTask = RunCtrTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{Filename}""")
-            Dim exefsBinTask = RunCtrTool($"-p --ncch=0 --exefs=""{exefsBinPath}"" ""{Filename}""")
-            Dim romfsBinTask = RunCtrTool($"-p --ncch=0 --romfs=""{romfsBinPath}"" ""{Filename}""")
-            Dim manualBinTask = RunCtrTool($"-p --ncch=1 --romfs=""{manualBinPath}"" ""{Filename}"" --decompresscode")
-            Dim dlPlayBinTask = RunCtrTool($"-p --ncch=2 --romfs=""{dlPlayBinPath}"" ""{Filename}"" --decompresscode")
-            Dim n3dsUpdateBinTask = RunCtrTool($"-p --ncch=6 --romfs=""{n3dsUpdateBinPath}"" ""{Filename}"" --decompresscode")
-            Dim o3dsUpdateBinTask = RunCtrTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{Filename}"" --decompresscode")
+            Dim exheaderTask = RunCtrTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{PhysicalFilename}""")
+            Dim exefsBinTask = RunCtrTool($"-p --ncch=0 --exefs=""{exefsBinPath}"" ""{PhysicalFilename}""")
+            Dim romfsBinTask = RunCtrTool($"-p --ncch=0 --romfs=""{romfsBinPath}"" ""{PhysicalFilename}""")
+            Dim manualBinTask = RunCtrTool($"-p --ncch=1 --romfs=""{manualBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+            Dim dlPlayBinTask = RunCtrTool($"-p --ncch=2 --romfs=""{dlPlayBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+            Dim n3dsUpdateBinTask = RunCtrTool($"-p --ncch=6 --romfs=""{n3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+            Dim o3dsUpdateBinTask = RunCtrTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
 
             'Save online header
             IO.File.WriteAllBytes(onlineHeaderBinPath, OnlineHeaderBinary)
@@ -128,7 +130,7 @@ Namespace Roms
             MyBase.New()
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
         End Sub
     End Class

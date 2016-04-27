@@ -1,9 +1,12 @@
 ﻿Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
+Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Utilities.Utilities
 Imports SkyEditorBase
 Namespace Projects
     Public Class GenericModProject
-        Inherits Project
+        Inherits ProjectOld
 
 #Region "Project Settings"
         Public Property ModName As String
@@ -95,7 +98,7 @@ Namespace Projects
             Return {".*"}
         End Function
 
-        Public Overrides Function CanBuild(Solution As Solution) As Boolean
+        Public Overrides Function CanBuild(Solution As SolutionOld) As Boolean
             Return True
         End Function
 #End Region
@@ -109,7 +112,7 @@ Namespace Projects
         ''' If empty, will copy everything.
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overridable Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {}
         End Function
 
@@ -122,7 +125,7 @@ Namespace Projects
         End Function
 
 #Region "File Paths"
-        Public Overridable Function GetRawFilesSourceDir(Solution As Solution, SourceProjectName As String) As String
+        Public Overridable Function GetRawFilesSourceDir(Solution As SolutionOld, SourceProjectName As String) As String
             Dim baseRomProject As BaseRomProject = Solution.GetProjectsByName(SourceProjectName).FirstOrDefault
             Return baseRomProject.GetRawFilesDir
         End Function
@@ -152,7 +155,7 @@ Namespace Projects
         Private Function DictionaryContainsValue(Dictionary As Dictionary(Of String, Byte()), Value As Byte()) As Boolean
             Dim out As Boolean = False
             For Each item In Dictionary
-                If Utilities.GenericArrayOperations(Of Byte).ArraysEqual(item.Value, Value) Then
+                If GenericArrayOperations(Of Byte).ArraysEqual(item.Value, Value) Then
                     out = True
                     Exit For
                 End If
@@ -160,7 +163,7 @@ Namespace Projects
             Return out
         End Function
 
-        Public Overridable Async Function Initialize(Solution As Solution) As Task
+        Public Overridable Async Function Initialize(Solution As SolutionOld) As Task
             If Me.ProjectReferences.Count > 0 Then
                 Dim filesToCopy = Me.GetFilesToCopy(Solution, Me.ProjectReferences(0))
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
@@ -176,7 +179,7 @@ Namespace Projects
                         Await Utilities.FileSystem.CopyDirectory(source, dest, True)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
-                    Dim a As New Utilities.AsyncFor(My.Resources.Language.LoadingCopyingFiles)
+                    Dim a As New AsyncFor(My.Resources.Language.LoadingCopyingFiles)
                     Await a.RunForEach(Sub(Item As String)
                                            Dim source As String = IO.Path.Combine(sourceRoot, Item)
                                            If IO.File.Exists(source) Then
@@ -199,9 +202,9 @@ Namespace Projects
                 Else
                     Await Utilities.FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, True)
                 End If
-                Else
-                    'Since there's no source project, we'll leave it up to the user to supply the needed files.
-                    If Not IO.Directory.Exists(GetRawFilesDir) Then
+            Else
+                'Since there's no source project, we'll leave it up to the user to supply the needed files.
+                If Not IO.Directory.Exists(GetRawFilesDir) Then
                     IO.Directory.CreateDirectory(GetRawFilesDir)
                 End If
             End If
@@ -213,7 +216,7 @@ Namespace Projects
         ''' <param name="Solution"></param>
         ''' <returns></returns>
         ''' <remarks>If this is overridden, do custom work, THEN use MyBase.Build</remarks>
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             For Each sourceProjectName In Me.ProjectReferences
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, sourceProjectName)
                 Dim currentFiles = GetRawFilesDir()
@@ -302,12 +305,12 @@ Namespace Projects
                                        Dim existsSource As Boolean = sourceFiles.ContainsKey(item)
                                        If existsSource Then
                                            'Possible actions: rename, update, none
-                                           If Utilities.GenericArrayOperations(Of Byte).ArraysEqual(sourceFiles(item), destFiles(item)) Then
+                                           If GenericArrayOperations(Of Byte).ArraysEqual(sourceFiles(item), destFiles(item)) Then
                                                'Do Nothing
                                            Else
                                                'Possible actions: update, rename
                                                If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                                   actions.ToRename.Add(item, (From s In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(s.Value, destFiles(item)) Take 1 Select s.Key).ToList(0))
+                                                   actions.ToRename.Add(item, (From s In sourceFiles Where GenericArrayOperations(Of Byte).ArraysEqual(s.Value, destFiles(item)) Take 1 Select s.Key).ToList(0))
                                                Else
                                                    actions.ToUpdate.Add(item)
                                                End If
@@ -315,7 +318,7 @@ Namespace Projects
                                        Else
                                            'Possible actions: add, rename
                                            If DictionaryContainsValue(sourceFiles, destFiles(item)) Then
-                                               actions.ToRename.Add(item, (From d In sourceFiles Where Utilities.GenericArrayOperations(Of Byte).ArraysEqual(d.Value, destFiles(item)) Take 1 Select d.Key).ToList(0))
+                                               actions.ToRename.Add(item, (From d In sourceFiles Where GenericArrayOperations(Of Byte).ArraysEqual(d.Value, destFiles(item)) Take 1 Select d.Key).ToList(0))
                                            Else
                                                If Me.SupportsAdd Then
                                                    actions.ToAdd.Add(item)
@@ -346,7 +349,7 @@ Namespace Projects
                 '-Copy and write files
                 Await Utilities.FileSystem.ReCreateDirectory(modTemp)
 
-                IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), SkyEditorBase.Utilities.Json.Serialize(actions))
+                IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), Json.Serialize(actions))
 
                 Me.BuildProgress = 0
                 Me.BuildStatusMessage = My.Resources.Language.LoadingGeneratingPatch
@@ -363,10 +366,10 @@ Namespace Projects
                     End If
                 Next
 
-                Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingGeneratingPatch)
+                Dim f As New AsyncFor(My.Resources.Language.LoadingGeneratingPatch)
                 f.SetLoadingStatus = False
                 f.SetLoadingStatusOnFinish = False
-                Dim onProgressChanged = Sub(sender As Object, e As EventArguments.LoadingStatusChangedEventArgs)
+                Dim onProgressChanged = Sub(sender As Object, e As LoadingStatusChangedEventArgs)
                                             Me.BuildStatusMessage = e.Message
                                             Me.BuildProgress = e.Progress
                                         End Sub
@@ -426,7 +429,7 @@ Namespace Projects
                         IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
                     End If
                 Next
-                Utilities.Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers)
+                Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers, New SkyEditor.Core.Windows.IOProvider)
 
                 '-Zip Mod
                 If Not IO.Directory.Exists(modOutput) Then

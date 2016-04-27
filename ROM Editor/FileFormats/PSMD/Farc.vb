@@ -1,4 +1,7 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.PSMD
@@ -6,7 +9,7 @@ Namespace FileFormats.PSMD
     ''' Models a type 5 FARC file, one that does not contain embedded filenames.
     ''' </summary>
     Public Class FarcF5
-        Inherits SkyEditorBase.GenericFile
+        Inherits GenericFile
         Implements iOpenableFile
 
         Public Property Header As Sir0Fat5
@@ -67,7 +70,7 @@ Namespace FileFormats.PSMD
         ''' </summary>
         ''' <param name="Directory">Directory to extract the FARC to.</param>
         Public Async Function Extract(Directory As String, Optional UseDictionary As Boolean = True) As Task
-            Dim asyncFor As New Utilities.AsyncFor(My.Resources.Language.FarcLoadingExtract)
+            Dim asyncFor As New AsyncFor(My.Resources.Language.FarcLoadingExtract)
             Dim dic As Dictionary(Of UInteger, String)
             If UseDictionary Then
                 dic = GetFileDictionary()
@@ -76,6 +79,7 @@ Namespace FileFormats.PSMD
             End If
             'Extract the files.
             'Async if thread safe, sync otherwise
+            asyncFor.RunSynchronously = Not Me.IsThreadSafe
             Await asyncFor.RunFor(Sub(Count As Integer)
                                       Dim filename As String
                                       Dim fileHash As UInteger = Header.FileData(Count).FilenamePointer
@@ -85,7 +89,7 @@ Namespace FileFormats.PSMD
                                           filename = fileHash.ToString 'Count.ToString
                                       End If
                                       IO.File.WriteAllBytes(IO.Path.Combine(Directory, filename), GetFileData(Count))
-                                  End Sub, 0, FileCount - 1, 1, Me.IsThreadSafe)
+                                  End Sub, 0, FileCount - 1)
         End Function
 
         ''' <summary>

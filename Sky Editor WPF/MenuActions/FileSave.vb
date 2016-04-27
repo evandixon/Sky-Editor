@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 
 Namespace MenuActions
@@ -6,7 +7,7 @@ Namespace MenuActions
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Interfaces.iSavable)}
+            Return {GetType(iSavable)}
         End Function
         'Public Overrides Function SupportsObject(Obj As Object) As Boolean
         '    Return Not TypeOf Obj Is Solution AndAlso Not TypeOf Obj Is Project

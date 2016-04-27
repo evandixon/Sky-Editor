@@ -378,4 +378,10 @@ evandixon (Personality test, bgp files)</value>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="Monologue" xml:space="preserve">
+    <value>Monologue</value>
+  </data>
+  <data name="BasicTalk" xml:space="preserve">
+    <value>Say</value>
+  </data>
 </root>

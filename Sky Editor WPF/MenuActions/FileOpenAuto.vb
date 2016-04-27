@@ -11,7 +11,7 @@ Namespace MenuActions
             OpenFileDialog1.Filter = _manager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 If OpenFileDialog1.FileName.ToLower.EndsWith(".skysln") Then
-                    PluginManager.GetInstance.CurrentSolution = Solution.OpenSolutionFile(OpenFileDialog1.FileName)
+                    PluginManager.GetInstance.CurrentSolution = SolutionOld.OpenSolutionFile(OpenFileDialog1.FileName)
                 Else
                     PluginHelper.RequestFileOpen(_manager.OpenObject(OpenFileDialog1.FileName), True)
                 End If

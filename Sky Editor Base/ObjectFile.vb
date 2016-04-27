@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase.Interfaces
 
 Public Class ObjectFile(Of T)
     'Inherits GenericFile
@@ -48,11 +50,11 @@ Public Class ObjectFile(Of T)
         End If
     End Sub
 
-    Public Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+    Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
         Me.Filename = Filename
 
         If IO.File.Exists(Filename) Then
-            Dim c = Utilities.Json.DeserializeFromFile(Of JsonContainer(Of T))(Filename)
+            Dim c = Json.DeserializeFromFile(Of JsonContainer(Of T))(Filename, New SkyEditor.Core.Windows.IOProvider)
             Me.ContainedObject = c.ContainedObject
             Me.ContainedTypeName = c.ContainedTypeName
         Else
@@ -65,15 +67,15 @@ Public Class ObjectFile(Of T)
 
 #Region "iSaveableFile support"
 
-    Public Sub Save(Filename As String) Implements Interfaces.ISavableAs.Save
+    Public Sub Save(Filename As String) Implements ISavableAs.Save
         Dim c As New JsonContainer(Of T)
         c.ContainedObject = Me.ContainedObject
         c.ContainedTypeName = Me.GetType.AssemblyQualifiedName 'GetType(T).AssemblyQualifiedName
-        Utilities.Json.SerializeToFile(Filename, c)
+        Json.SerializeToFile(Filename, c, New SkyEditor.Core.Windows.IOProvider)
         RaiseFileSaved(Me, New EventArgs)
     End Sub
 
-    Public Sub Save() Implements Interfaces.iSavable.Save
+    Public Sub Save() Implements iSavable.Save
         Save(Me.Filename)
     End Sub
 
@@ -92,7 +94,7 @@ Public Class ObjectFile(Of T)
         Return (TypeToCheck.IsGenericType AndAlso TypeToCheck.GetGenericTypeDefinition.IsEquivalentTo(GetGenericTypeDefinition)) OrElse (Not TypeToCheck.BaseType = GetType(Object) AndAlso IsObjectFile(TypeToCheck.BaseType))
     End Function
 
-    Public Overridable Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
+    Public Overridable Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
         Return ""
     End Function
 End Class

@@ -1,5 +1,6 @@
 ﻿Imports System.Security.Cryptography
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.Utilities.Utilities
 Imports SkyEditorBase
 
 Namespace ConsoleCommands
@@ -44,7 +45,7 @@ Namespace ConsoleCommands
                         'Compare the hashes, to find which file index matches which filename goes with which file number
                         For Each farcHash In (From kv In farcHashes Order By kv.Key Ascending)
                             For Each actualHash In actualHashes
-                                If Utilities.GenericArrayOperations(Of Byte).ArraysEqual(farcHash.Value, actualHash.Value) Then
+                                If GenericArrayOperations(Of Byte).ArraysEqual(farcHash.Value, actualHash.Value) Then
                                     matches.Add(farcHash.Key, actualHash.Key)
                                     Console.WriteLine($"Matched {farcHash.Key} to {actualHash.Key}")
                                     Exit For

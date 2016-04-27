@@ -1,4 +1,6 @@
 ﻿Imports System.Drawing
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -95,8 +97,7 @@ Namespace FileFormats.PSMD
             End If
         End Function
 
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
+        Public Overrides Sub Save(Destination As String)
             Dim empty64(64) As Byte
             Dim dataLength = Width * Height * PixelLength
             Length = dataLength + &H80
@@ -119,6 +120,7 @@ Namespace FileFormats.PSMD
                     offset += (PixelLength * 64) / 8
                 Next
             Next
+            MyBase.Save(Destination)
         End Sub
 
         Private Function GetColorData(Color As Color, PixelLength As Integer) As Byte()

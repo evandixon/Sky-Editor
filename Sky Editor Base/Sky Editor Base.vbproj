@@ -160,7 +160,6 @@
     <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\HeaderUpdatedEventArgs.vb" />
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
-    <Compile Include="EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="EventArguments\PluginLoadingEventArgs.vb" />
     <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
@@ -184,55 +183,34 @@
     <Compile Include="Extensions\ExtensionUninstallResult.vb" />
     <Compile Include="Extensions\InstalledExtensionCollection.vb" />
     <Compile Include="Extensions\PluginExtensionType.vb" />
-    <Compile Include="Interfaces\iContainer.vb" />
-    <Compile Include="Interfaces\iCreatableFile.vb" />
-    <Compile Include="Interfaces\iDetectableFileType.vb" />
-    <Compile Include="Interfaces\iGameTypeSelector.vb" />
-    <Compile Include="Interfaces\iGenericFile.vb" />
-    <Compile Include="Interfaces\iModifiable.vb" />
-    <Compile Include="Interfaces\iNamed.vb" />
-    <Compile Include="Interfaces\iObjectControl.vb" />
-    <Compile Include="Interfaces\iOnDisk.vb" />
-    <Compile Include="Interfaces\iOpenableFile.vb" />
-    <Compile Include="Interfaces\iSavable.vb" />
-    <Compile Include="Interfaces\ISavableAs.vb" />
+    <Compile Include="Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="Interfaces\ITargetedControl.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
+    <Compile Include="Solution.vb" />
     <Compile Include="Utilities\AssemblyReflectionManager.vb" />
     <Compile Include="Utilities\AssemblyReflectionProxy.vb" />
     <Compile Include="MenuAction.vb" />
     <Compile Include="MenuItemInfo.vb" />
     <Compile Include="ObjectFile.vb" />
-    <Compile Include="Interfaces\iObjectWindow.vb" />
     <Compile Include="PluginHelper.vb" />
     <Compile Include="PluginManager.vb" />
-    <Compile Include="Project.vb" />
+    <Compile Include="ProjectOld.vb" />
     <Compile Include="Redistribution\PluginInfo.vb" />
-    <Compile Include="Solution.vb" />
+    <Compile Include="SolutionOld.vb" />
     <Compile Include="Utilities\AsyncFileCopier.vb" />
-    <Compile Include="Utilities\AsyncForEach.vb" />
     <Compile Include="Utilities\AsyncHelpers.vb" />
-    <Compile Include="Utilities\CurrentUser.vb" />
     <Compile Include="Utilities\FileSystem.vb" />
     <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
-    <Compile Include="Utilities\Hex.vb" />
-    <Compile Include="Utilities\Json.vb" />
     <Compile Include="Utilities\ReflectionHelpers.vb" />
     <Compile Include="Utilities\ResourceDictionary.vb" />
     <Compile Include="Settings.vb" />
-    <Compile Include="Utilities\BitOperations.vb" />
-    <Compile Include="Utilities\Bits8.vb" />
-    <Compile Include="Utilities\ByteExtensions.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />
-    <Compile Include="Utilities\GenericArrayOperations.vb" />
-    <Compile Include="GenericFile.vb" />
     <Compile Include="Utilities\Zip.vb" />
-    <Compile Include="Interfaces\iSkyEditorPlugin.vb" />
     <Compile Include="ConsoleModule.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +247,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Language.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="My Project\app.manifest" />
@@ -307,7 +286,20 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.vbproj">
+      <Project>{78e4d58b-b3ac-44e8-af93-64d56f4ddbe2}</Project>
+      <Name>SkyEditor.Core.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
+      <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>
+      <Name>SkyEditor.Core.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
+      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
+      <Name>SkyEditor.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>

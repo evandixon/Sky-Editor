@@ -16,70 +16,70 @@ Namespace ARDS
             Next
             Return _codetypes
         End Function
-        Public Function GetRegions(CodeType As CheatFormat) As List(Of Region)
-            Dim out As New List(Of Region)
-            For Each item In CodeDefinitions
-                If item.SupportedCheatFormats.Contains(CodeType) Then
-                    Dim bytes() As Byte = BitConverter.GetBytes(item.SupportedRegions)
-                    If CType(bytes(0), Bits8).Bit1 Then
-                        If Not out.Contains(Region.Japan) Then
-                            out.Add(Region.Japan)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit2 Then
-                        If Not out.Contains(Region.US) Then
-                            out.Add(Region.US)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit3 Then
-                        If Not out.Contains(Region.UK) Then
-                            out.Add(Region.UK)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit4 Then
-                        If Not out.Contains(Region.Germany) Then
-                            out.Add(Region.Germany)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit5 Then
-                        If Not out.Contains(Region.Korea) Then
-                            out.Add(Region.Korea)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit6 Then
-                        If Not out.Contains(Region.Australia) Then
-                            out.Add(Region.Australia)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit7 Then
-                        If Not out.Contains(Region.Spain) Then
-                            out.Add(Region.Spain)
-                        End If
-                    End If
-                    If CType(bytes(0), Bits8).Bit8 Then
-                        If Not out.Contains(Region.France) Then
-                            out.Add(Region.France)
-                        End If
-                    End If
-                    If CType(bytes(1), Bits8).Bit1 Then
-                        If Not out.Contains(Region.Netherlands) Then
-                            out.Add(Region.Netherlands)
-                        End If
-                    End If
-                    If CType(bytes(1), Bits8).Bit2 Then
-                        If Not out.Contains(Region.Italy) Then
-                            out.Add(Region.Italy)
-                        End If
-                    End If
-                    If CType(bytes(1), Bits8).Bit3 Then
-                        If Not out.Contains(Region.Denmark) Then
-                            out.Add(Region.Denmark)
-                        End If
-                    End If
-                End If
-            Next
-            Return out
-        End Function
+        'Public Function GetRegions(CodeType As CheatFormat) As List(Of Region)
+        '    Dim out As New List(Of Region)
+        '    For Each item In CodeDefinitions
+        '        If item.SupportedCheatFormats.Contains(CodeType) Then
+        '            Dim bytes() As Byte = BitConverter.GetBytes(item.SupportedRegions)
+        '            If CType(bytes(0), Bits8).Bit1 Then
+        '                If Not out.Contains(Region.Japan) Then
+        '                    out.Add(Region.Japan)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit2 Then
+        '                If Not out.Contains(Region.US) Then
+        '                    out.Add(Region.US)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit3 Then
+        '                If Not out.Contains(Region.UK) Then
+        '                    out.Add(Region.UK)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit4 Then
+        '                If Not out.Contains(Region.Germany) Then
+        '                    out.Add(Region.Germany)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit5 Then
+        '                If Not out.Contains(Region.Korea) Then
+        '                    out.Add(Region.Korea)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit6 Then
+        '                If Not out.Contains(Region.Australia) Then
+        '                    out.Add(Region.Australia)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit7 Then
+        '                If Not out.Contains(Region.Spain) Then
+        '                    out.Add(Region.Spain)
+        '                End If
+        '            End If
+        '            If CType(bytes(0), Bits8).Bit8 Then
+        '                If Not out.Contains(Region.France) Then
+        '                    out.Add(Region.France)
+        '                End If
+        '            End If
+        '            If CType(bytes(1), Bits8).Bit1 Then
+        '                If Not out.Contains(Region.Netherlands) Then
+        '                    out.Add(Region.Netherlands)
+        '                End If
+        '            End If
+        '            If CType(bytes(1), Bits8).Bit2 Then
+        '                If Not out.Contains(Region.Italy) Then
+        '                    out.Add(Region.Italy)
+        '                End If
+        '            End If
+        '            If CType(bytes(1), Bits8).Bit3 Then
+        '                If Not out.Contains(Region.Denmark) Then
+        '                    out.Add(Region.Denmark)
+        '                End If
+        '            End If
+        '        End If
+        '    Next
+        '    Return out
+        'End Function
         Private Function ValidGameType(SupportedGames As String(), GameType As String) As Boolean
             Dim out As Boolean = False
             For Each item In SupportedGames

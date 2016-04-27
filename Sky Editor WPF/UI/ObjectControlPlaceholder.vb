@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase.Interfaces
 Namespace UI
     Public Class ObjectControlPlaceholder
         Inherits UserControl
@@ -30,16 +31,18 @@ Namespace UI
                     AddHandler DirectCast(value, iModifiable).Modified, AddressOf OnModified
                 End If
                 Dim objControl = PluginManager.GetInstance.GetObjectControl(value, {GetType(UserControl)})
-                Content = objControl
-                objControl.EditingObject = value
-                'With DirectCast(Content, iObjectControl)
-                '    .VerticalAlignment = VerticalAlignment.Top
-                '    .HorizontalAlignment = HorizontalAlignment.Left
-                '    .EditingObject = value
-                '    .RefreshDisplay()
-                'End With
+                If objControl IsNot Nothing Then
+                    Content = objControl
+                    objControl.EditingObject = value
+                Else
+                    'Todo: display a "missing control" message?
+                End If
             End Set
         End Property
+
+        Private Sub ObjectControlPlaceholder_DataContextChanged(sender As Object, e As DependencyPropertyChangedEventArgs) Handles Me.DataContextChanged
+            ObjectToEdit = e.NewValue
+        End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs)
             RaiseEvent Modified(sender, e)

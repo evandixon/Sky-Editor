@@ -1,4 +1,6 @@
-﻿Namespace Extensions
+﻿Imports SkyEditor.Core.Utilities
+
+Namespace Extensions
     Public Class ExtensionInfo
         Public Property ExtensionTypeName As String
         ''' <summary>
@@ -18,10 +20,10 @@
             Return Filename
         End Function
         Public Sub Save(Filename As String)
-            Utilities.Json.SerializeToFile(Filename, Me)
+            Json.SerializeToFile(Filename, Me, New SkyEditor.Core.Windows.IOProvider)
         End Sub
         Public Shared Function Open(Filename) As ExtensionInfo
-            Dim out = Utilities.Json.DeserializeFromFile(Of ExtensionInfo)(Filename)
+            Dim out = Json.DeserializeFromFile(Of ExtensionInfo)(Filename, New SkyEditor.Core.Windows.IOProvider)
             out.Filename = Filename
             Return out
         End Function

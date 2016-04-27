@@ -1,6 +1,8 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase.Interfaces
 Public Class SettingsManager
-    Implements Interfaces.iSavable
+    Implements iSavable
     Implements iModifiable
     Implements iNamed
     Friend Class SettingsValue
@@ -122,32 +124,15 @@ Public Class SettingsManager
             End Set
         End Property
 
-        ''' <summary>
-        ''' If this is enabled, things usually read from file streams will be loaded into RAM.
-        ''' This may increase performance, while eating up loads of RAM.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property ExtravagantRamMode As Boolean
-            Get
-                If Setting("ExtravagantRamMode") Is Nothing Then
-                    Setting("ExtravagantRamMode") = False
-                End If
-                Return Setting("ExtravagantRamMode")
-            End Get
-            Set(value As Boolean)
-                Setting("ExtravagantRamMode") = value
-            End Set
-        End Property
-
         Friend Function Serialize() As String
             Dim settingsItems As New Dictionary(Of String, SettingsValue)
             For Each item In Settings
-                Dim v As New SettingsValue() With {.TypeName = item.Value.GetType.AssemblyQualifiedName, .Value = Utilities.Json.Serialize(item.Value)}
+                Dim v As New SettingsValue() With {.TypeName = item.Value.GetType.AssemblyQualifiedName, .Value = Json.Serialize(item.Value)}
                 settingsItems.Add(item.Key, v)
             Next
             Dim f As New SettingsFile
             f.Settings = settingsItems
-            Return Utilities.Json.Serialize(f)
+            Return Json.Serialize(f)
         End Function
 
         Friend Sub New()
@@ -166,7 +151,7 @@ Public Class SettingsManager
                 For Each item In File.Settings
                     Dim t = Utilities.ReflectionHelpers.GetTypeFromName(item.Value.TypeName)
                     If t IsNot Nothing Then
-                        Dim obj = Utilities.Json.Deserialize(t, item.Value.Value)
+                        Dim obj = Json.Deserialize(t, item.Value.Value)
                         Settings.Add(item.Key, obj)
                     Else
                         Dim obj = item.Value.Value
@@ -201,7 +186,7 @@ Public Class SettingsManager
     Private Sub New()
         MyBase.New()
         If IO.File.Exists(SettingsFilename) Then
-            Dim file = Utilities.Json.DeserializeFromFile(Of SettingsFile)(SettingsFilename)
+            Dim file = Json.DeserializeFromFile(Of SettingsFile)(SettingsFilename, New SkyEditor.Core.Windows.IOProvider)
             Settings = New SettingsSet(file)
         Else
             Settings = New SettingsSet

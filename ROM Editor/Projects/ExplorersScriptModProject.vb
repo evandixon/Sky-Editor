@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase
 
 Namespace Projects
     Public Class ExplorersScriptModProject
@@ -6,26 +7,27 @@ Namespace Projects
         Public Overrides Function GetRawFilesDir() As String
             Return GetRootDirectory()
         End Function
-        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("data", "script")}
         End Function
         Public Overrides Function GetSupportedGameCodes() As IEnumerable(Of String)
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
 
             Dim projectDir = GetRootDirectory()
             Dim sourceDir = GetRawFilesDir()
 
             Dim scriptFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "SCRIPT"), "*", IO.SearchOption.AllDirectories)
-            Dim f2 As New Utilities.AsyncFor(My.Resources.Language.LoadingAddingFiles)
-            Await f2.RunForEachSync(Async Function(Item As String) As Task
-                                        Dim d = IO.Path.GetDirectoryName(Item).Replace(projectDir, "")
-                                        Me.CreateDirectory(d)
-                                        Await Me.AddExistingFile(d, Item, False)
-                                    End Function, scriptFiles)
+            Dim f2 As New AsyncFor(My.Resources.Language.LoadingAddingFiles)
+            f2.RunSynchronously = True
+            Await f2.RunForEach(Async Function(Item As String) As Task
+                                    Dim d = IO.Path.GetDirectoryName(Item).Replace(projectDir, "")
+                                    Me.CreateDirectory(d)
+                                    Await Me.AddExistingFile(d, Item, False)
+                                End Function, scriptFiles)
 
             PluginHelper.SetLoadingStatusFinished()
         End Function

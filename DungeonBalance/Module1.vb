@@ -1,4 +1,6 @@
-﻿Module Module1
+﻿Imports SkyEditor.Core.Windows
+
+Module Module1
 
     Sub Main()
         Dim args = Environment.GetCommandLineArgs
@@ -13,11 +15,11 @@
                         IO.Directory.CreateDirectory(outputPath)
                     End If
 
-                    Using bin As New SkyEditorBase.GenericFile
+                    Using bin As New GenericFile
                         bin.EnableInMemoryLoad = True
                         bin.OpenFile(inputFile)
 
-                        Using ent As New SkyEditorBase.GenericFile
+                        Using ent As New GenericFile
                             ent.EnableInMemoryLoad = True
                             ent.OpenFile(IO.Path.Combine(IO.Path.GetDirectoryName(inputFile), IO.Path.GetFileNameWithoutExtension(inputFile) & ".ent"))
 

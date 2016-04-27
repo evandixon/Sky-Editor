@@ -65,6 +65,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ListViewDragDropManager, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ListViewDragDropManager.1.1.0.0\lib\net45\ListViewDragDropManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -118,6 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawingImageConverter.vb" />
+    <Compile Include="Explorers\ScriptCommands\BasicTalkCommand.xaml.vb">
+      <DependentUpon>BasicTalkCommand.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorers\ScriptCommands\MonologueCommand.xaml.vb">
+      <DependentUpon>MonologueCommand.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorers\ScriptCommands\RawCommand.xaml.vb">
+      <DependentUpon>RawCommand.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FlashcartManager.xaml.vb">
       <DependentUpon>FlashcartManager.xaml</DependentUpon>
     </Compile>
@@ -144,7 +157,7 @@
     <Compile Include="ObjectControls\CteImageControl.xaml.vb">
       <DependentUpon>CteImageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\item_p_Editor.xaml.vb">
+    <Compile Include="Explorers\item_p_Editor.xaml.vb">
       <DependentUpon>item_p_Editor.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\MessageBinEditor.xaml.vb">
@@ -159,19 +172,19 @@
     <Compile Include="ObjectControls\NDSModSrcEditor.xaml.vb">
       <DependentUpon>NDSModSrcEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\PersonalityTest.xaml.vb">
+    <Compile Include="Explorers\PersonalityTest.xaml.vb">
       <DependentUpon>PersonalityTest.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\PsmdLuaLangIntegration.xaml.vb">
       <DependentUpon>PsmdLuaLangIntegration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\SSBScriptEditor.xaml.vb">
+    <Compile Include="Explorers\SSBScriptEditor.xaml.vb">
       <DependentUpon>SSBScriptEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\SSBStringDictionaryEditor.xaml.vb">
+    <Compile Include="Explorers\SSBStringDictionaryEditor.xaml.vb">
       <DependentUpon>SSBStringDictionaryEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectControls\SSBStringEditor.xaml.vb">
+    <Compile Include="Explorers\SSBStringEditor.xaml.vb">
       <DependentUpon>SSBStringEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\ThreeDSModPackControl.xaml.vb">
@@ -215,6 +228,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Explorers\ScriptCommands\BasicTalkCommand.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Explorers\ScriptCommands\MonologueCommand.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Explorers\ScriptCommands\RawCommand.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FlashcartManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -223,7 +248,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\item_p_Editor.xaml">
+    <Page Include="Explorers\item_p_Editor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -243,7 +268,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ObjectControls\PersonalityTest.xaml">
+    <Page Include="Explorers\PersonalityTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -251,15 +276,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ObjectControls\SSBScriptEditor.xaml">
+    <Page Include="Explorers\SSBScriptEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ObjectControls\SSBStringDictionaryEditor.xaml">
+    <Page Include="Explorers\SSBStringDictionaryEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ObjectControls\SSBStringEditor.xaml">
+    <Page Include="Explorers\SSBStringEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,7 +326,16 @@
       <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
       <Name>Sky Editor WPF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
+      <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>
+      <Name>SkyEditor.Core.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
+      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
+      <Name>SkyEditor.Core</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

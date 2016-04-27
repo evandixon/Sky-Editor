@@ -1,6 +1,8 @@
 ﻿Imports System.Reflection
 Imports System.Text
 Imports System.Threading.Tasks
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase.EventArguments
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Internal
@@ -36,7 +38,7 @@ Public Class PluginManager
         Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.TypeRegistery = New Dictionary(Of Type, List(Of Type))
         Me.FailedPluginLoads = New List(Of String)
-        Me.OpenedFiles = New Dictionary(Of Object, Project)
+        Me.OpenedFiles = New Dictionary(Of Object, ProjectOld)
         Me.DependantPlugins = New Dictionary(Of Assembly, List(Of Assembly))
 
         AddHandler PluginHelper.FileOpenRequested, AddressOf _pluginHelper_FileOpened
@@ -224,7 +226,7 @@ Public Class PluginManager
     ''' Matches opened files to their parent projects
     ''' </summary>
     ''' <returns></returns>
-    Private Property OpenedFiles As Dictionary(Of Object, Project)
+    Private Property OpenedFiles As Dictionary(Of Object, ProjectOld)
 
     ''' <summary>
     ''' Contains the assemblies that contain plugin information.
@@ -232,28 +234,28 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Property Assemblies As List(Of Assembly)
 
-    Public Property CurrentSolution As Solution
+    Public Property CurrentSolution As SolutionOld
         Get
             Return _currentSolutoin
         End Get
-        Set(value As Solution)
+        Set(value As SolutionOld)
             If _currentSolutoin IsNot Nothing Then _currentSolutoin.Dispose()
             _currentSolutoin = value
             RaiseEvent SolutionChanged(Me, New EventArgs)
         End Set
     End Property
-    Private WithEvents _currentSolutoin As Solution
+    Private WithEvents _currentSolutoin As SolutionOld
 
-    Public Property CurrentProject As Project
+    Public Property CurrentProject As ProjectOld
         Get
             Return _currentProject
         End Get
-        Set(value As Project)
+        Set(value As ProjectOld)
             _currentProject = value
             RaiseEvent CurrentProjectChanged(Me, New EventArgs)
         End Set
     End Property
-    Private WithEvents _currentProject As Project
+    Private WithEvents _currentProject As ProjectOld
 
     ''' <summary>
     ''' Gets the Full Name of the Core Assembly, which is usually the entry assembly.
@@ -278,7 +280,7 @@ Public Class PluginManager
 #End Region
 
 #Region "Delegates"
-    Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of Type)
+    Delegate Function FileTypeDetector(File As SkyEditor.Core.GenericFile) As IEnumerable(Of Type)
     Delegate Function DirectoryTypeDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
     Delegate Sub TypeSearchFound(TypeFound As Type)
 #End Region
@@ -541,7 +543,20 @@ Public Class PluginManager
         Dim output As New List(Of Object)
 
         For Each item In GetRegisteredTypes(BaseType)
-            If item.GetConstructor({}) IsNot Nothing Then
+            If item.GetConstructor({}) IsNot Nothing AndAlso Not item.IsGenericType Then
+                output.Add(item.GetConstructor({}).Invoke({}))
+            End If
+        Next
+
+        Return output
+    End Function
+
+    Public Function GetRegisteredObjects(Of T)() As IEnumerable(Of T)
+        Dim output As New List(Of T)
+        Dim targetType = GetType(T)
+
+        For Each item In GetRegisteredTypes(targetType)
+            If item.GetConstructor({}) IsNot Nothing AndAlso Not item.IsGenericType Then
                 output.Add(item.GetConstructor({}).Invoke({}))
             End If
         Next
@@ -596,15 +611,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Public Function GetObjectControls() As IEnumerable(Of iObjectControl)
-        Dim output As New List(Of iObjectControl)
-
-        For Each item In GetRegisteredTypes(GetType(iObjectControl))
-            If item.GetConstructor({}) IsNot Nothing Then
-                output.Add(item.GetConstructor({}).Invoke({}))
-            End If
-        Next
-
-        Return output
+        Return GetRegisteredObjects(Of iObjectControl)
     End Function
 
     ''' <summary>
@@ -612,7 +619,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="File">File of which to get the parent project.  Must be an open file, otherwise the function will return Nothing.</param>
     ''' <returns></returns>
-    Public Function GetOpenedFileProject(File As Object) As Project
+    Public Function GetOpenedFileProject(File As Object) As ProjectOld
         If Me.OpenedFiles.ContainsKey(File) Then
             Return Me.OpenedFiles(File)
         Else
@@ -754,7 +761,7 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Function OpenFile(File As GenericFile) As Object
         Dim type = GetFileType(File)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(iOpenableFile)) Then
             'Reopen the file without being readonly
             Dim filename = File.OriginalFilename
             File.Dispose()
@@ -775,7 +782,7 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Function OpenDirectory(Directory As IO.DirectoryInfo) As Object
         Dim type = GetDirectoryType(Directory)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(Interfaces.iOpenableFile)) Then
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(iOpenableFile)) Then
             'Let's not return nothing.  Maybe something wants to use the directory info.
             Return Directory
         Else

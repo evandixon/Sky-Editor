@@ -29,12 +29,6 @@ Namespace Saves
                 Throw New IndexOutOfRangeException
             End If
         End Function
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
-            For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
-                RawData(count) = Bits.Int(count, 0, 8)
-            Next
-        End Sub
         Public Property StoredChecksum As Byte
             Get
                 Return Bits.Int(0, FindChecksumBitOffset, 8)

@@ -5,12 +5,12 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Solution)}
+            Return {GetType(SolutionOld)}
         End Function
 
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As Solution In Targets
+            For Each item As SolutionOld In Targets
                 Try
                     Await item.Build()
                 Catch ex As Exception

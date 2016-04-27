@@ -1,12 +1,14 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace Projects
     Public Class DSModPackProject
-        Inherits Project
+        Inherits ProjectOld
         Implements iContainer(Of ModpackInfo)
 
-        Public Property Info As ModpackInfo Implements Interfaces.iContainer(Of ModpackInfo).Item
+        Public Property Info As ModpackInfo Implements iContainer(Of ModpackInfo).Item
             Get
                 Return Me.Setting("ModpackInfo")
             End Get
@@ -91,17 +93,17 @@ Namespace Projects
             Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Output")
         End Function
 
-        Public Overridable Function GetBaseRomFilename(Solution As Solution) As String
+        Public Overridable Function GetBaseRomFilename(Solution As SolutionOld) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.GetRawFilesDir
             ' Return p.GetProjectItemByPath("/BaseRom").GetFilename
         End Function
 
-        Public Overridable Function GetBaseRomSystem(Solution As Solution) As String
+        Public Overridable Function GetBaseRomSystem(Solution As SolutionOld) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.RomSystem
         End Function
-        Public Overridable Function GetBaseGameCode(Solution As Solution) As String
+        Public Overridable Function GetBaseGameCode(Solution As SolutionOld) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.GameCode
         End Function
@@ -109,12 +111,12 @@ Namespace Projects
             Return IO.Path.Combine(GetRootDirectory, "Modpack.smdh")
         End Function
 
-        Public Overrides Function CanBuild(Solution As Solution) As Boolean
+        Public Overrides Function CanBuild(Solution As SolutionOld) As Boolean
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return (p IsNot Nothing)
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             Const patcherVersion As String = "alpha 4"
             Dim modpackDir = GetModPackDir()
             Dim modpackModsDir = GetModsDir()
@@ -168,7 +170,7 @@ Namespace Projects
             xdelta.PatchExtension = "xdelta"
             patchers.Add(xdelta)
             '-Copy patchers
-            IO.File.WriteAllText(IO.Path.Combine(modpackToolsDir, "patchers.json"), Utilities.Json.Serialize(patchers))
+            IO.File.WriteAllText(IO.Path.Combine(modpackToolsDir, "patchers.json"), Json.Serialize(patchers))
             For Each item In patchers
                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram))) Then
                     IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram)))
@@ -193,7 +195,7 @@ Namespace Projects
             If IO.File.Exists(GetLocalSmdhPath) Then
                 IO.File.Copy(GetLocalSmdhPath, IO.Path.Combine(modpackModsDir, "Modpack.smdh"), True)
             End If
-            IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Utilities.Json.Serialize(Me.Info))
+            IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Json.Serialize(Me.Info))
 
             '-Zip it
             Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
@@ -208,7 +210,7 @@ Namespace Projects
             Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
-        Public Overridable Sub CopyPatcherProgram(Solution As Solution)
+        Public Overridable Sub CopyPatcherProgram(Solution As SolutionOld)
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     '-Copy ctrtool
@@ -228,7 +230,7 @@ Namespace Projects
             IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
         End Sub
 
-        Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task
+        Public Overridable Async Function ApplyPatchAsync(Solution As SolutionOld) As Task
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     If Output3DSFile Then

@@ -1,4 +1,7 @@
-﻿Imports SkyEditorBase
+﻿Imports ROMEditor.FileFormats.Explorers.Script.Commands
+Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.Explorers.Script
@@ -9,22 +12,17 @@ Namespace FileFormats.Explorers.Script
         Implements iOnDisk
         Implements iNamed
 
-        Protected Shared Function GetSkyCommandDefinitionsDictionary() As Dictionary(Of Integer, CommandDefinition)
-            Dim out As New Dictionary(Of Integer, CommandDefinition)
-            For Each item In GetSkyCommandDefinitions()
-                out.Add(item.CommandID, item)
-            Next
-            Return out
-        End Function
+        Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 
+#Region "Properties"
         Public Property Groups As New List(Of CommandGroup)
-        Public Property Commands As New List(Of Command)
-        Public Property Constants As New Dictionary(Of Integer, String)
-        Public Property English As New Dictionary(Of Integer, String)
-        Public Property French As New Dictionary(Of Integer, String)
-        Public Property German As New Dictionary(Of Integer, String)
-        Public Property Italian As New Dictionary(Of Integer, String)
-        Public Property Spanish As New Dictionary(Of Integer, String)
+        Public Property Commands As New ObjectModel.ObservableCollection(Of RawCommand)
+        Public Property Constants As New List(Of String)
+        Public Property English As New List(Of String)
+        Public Property French As New List(Of String)
+        Public Property German As New List(Of String)
+        Public Property Italian As New List(Of String)
+        Public Property Spanish As New List(Of String)
         Public Property isMultiLang As Boolean
 
         Public Property Filename As String Implements iOnDisk.Filename
@@ -34,29 +32,14 @@ Namespace FileFormats.Explorers.Script
                 Return IO.Path.GetFileName(Filename)
             End Get
         End Property
+#End Region
 
-        Public Function GetText() As String
-            Dim out As New Text.StringBuilder
-            Dim defs = GetSkyCommandDefinitionsDictionary()
+#Region "Functions"
 
-            For count = 0 To Commands.Count - 1
-                Dim c = count
-                Dim q = From g In Groups Where g.CommandNumber = c
-
-                If q.Any Then
-                    Dim item = q.First
-                    out.AppendLine($"Group{Conversion.Hex(Groups.IndexOf(item)).PadLeft(2, "0"c)}Type{Conversion.Hex(item.Type).PadLeft(2, "0"c)}Unk{Conversion.Hex(item.Unknown).PadLeft(2, "0"c)}:")
-                End If
-                out.Append("    ")
-                out.AppendLine(Commands(count).GetScript(defs, Me))
-            Next
-
-            Return out.ToString
-        End Function
-
+#Region "IO"
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             Me.Filename = Filename
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
 
@@ -116,34 +99,8 @@ Namespace FileFormats.Explorers.Script
                     groupPointerDictionary(ptrScript).Add(g)
                 Next
 
-                'Load commands
-                Dim commandOffset = f.Position
-                Dim currentCommandStart As Integer = commandOffset
-                Dim commandDefs = GetSkyCommandDefinitionsDictionary()
-                While currentCommandStart < dataWordLength * 2 + dataBlockOffset '(currentCommandStart + numWordsData)
-                    'Update the relevant group's pointer
-                    If groupPointerDictionary.ContainsKey(currentCommandStart) Then
-                        For Each item In groupPointerDictionary(currentCommandStart)
-                            item.CommandNumber = Commands.Count
-                        Next
-                    End If
-
-                    'Read the command
-                    Dim commandID As Integer = f.Int16(currentCommandStart)
-                    Dim paramSize As Integer = commandDefs(commandID).Length * 2
-                    Dim buffer(paramSize + 1) As Byte 'Large enough for the params and the 2 byte command id
-                    Dim commandIDBytes = BitConverter.GetBytes(commandID)
-                    buffer(0) = commandIDBytes(0)
-                    buffer(1) = commandIDBytes(1)
-                    For i = 2 To paramSize + 1
-                        buffer(i) = f.RawData(currentCommandStart + i)
-                    Next
-                    Commands.Add(New Command(buffer))
-                    currentCommandStart += paramSize + 2
-                End While
-
                 'Load Strings
-
+                ''Given this implementation, it's important to load the strings first, because the commands below directly reference these strings.
                 Dim stringStart = dataBlockOffset + stringTableOffset * 2
                 LoadStringList(numConstants, stringStart, f, Constants, True)
 
@@ -164,32 +121,100 @@ Namespace FileFormats.Explorers.Script
                     LoadStringList(numStrings, stringStart, f, Spanish, False)
                 End If
 
-                Console.Write("")
+                UnreferencedConstantIndexes = New List(Of Integer)
+                For count = 0 To Constants.Count - 1
+                    UnreferencedConstantIndexes.Add(count)
+                Next
+
+                UnreferencedStringIndexes = New List(Of Integer)
+                For count = 0 To English.Count - 1
+                    UnreferencedStringIndexes.Add(count)
+                Next
+
+                'Load commands
+                Dim commandOffset = f.Position
+                Dim currentCommandStart As Integer = commandOffset
+                Dim commandDefs = GetSkyCommandParamLengths()
+                While currentCommandStart < dataWordLength * 2 + dataBlockOffset '(currentCommandStart + numWordsData)
+                    'Update the relevant group's pointer
+                    If groupPointerDictionary.ContainsKey(currentCommandStart) Then
+                        For Each item In groupPointerDictionary(currentCommandStart)
+                            item.CommandNumber = Commands.Count
+                        Next
+                    End If
+
+                    'Read the command
+                    Dim commandID As UInt16 = f.UInt16(currentCommandStart)
+                    Dim paramSize As Integer = commandDefs(commandID)
+                    Dim params As New List(Of UInt16)
+                    For i = 1 To paramSize
+                        params.Add(f.UInt16(currentCommandStart + i * 2))
+                    Next
+                    Commands.Add(CreateSkyCommand(commandID, params))
+                    currentCommandStart += paramSize * 2 + 2
+                End While
+
             End Using
         End Sub
 
-        Private Sub LoadStringList(numStrings As Integer, stringStart As Integer, f As GenericFile, currentDictionary As Dictionary(Of Integer, String), IsContantTable As Boolean)
-            Dim e = Text.Encoding.GetEncoding("Windows-1252")
-            Dim stringPosition As Integer = stringStart
-            If Not IsContantTable Then
-                stringPosition += 2 * numStrings
-            End If
-            For count = 0 To numStrings - 1
-                Dim s = f.ReadNullTerminatedString(stringPosition, e)
-                stringPosition += s.Length + 1
-                currentDictionary.Add(count + 1, s)
-            Next
-        End Sub
-
-        Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
-
-
-        Public Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
-            'Todo: actually look at the file contents to verify its integrity
-            Return File.OriginalFilename.ToLower.EndsWith(".ssb")
-        End Function
-
         Public Sub Save(Filename As String) Implements ISavableAs.Save
+            'Preprocess the constants and strings
+            'The function that converts commands into byte arrays will add strings to the proper tables where appropriate
+            'However, not all commands are known, and some could be referencing strings or constants we're not aware of.
+            'We need to keep those in place just in case, and we can remove the rest.
+
+            AvailableConstantIndexes = New List(Of Integer)
+            AvailableStringIndexes = New List(Of Integer)
+
+            '-Remove items until the first unreferenced string
+            Dim constantRemove As Boolean = True
+            For count = Constants.Count - 1 To 0 Step -1
+                If constantRemove Then
+                    'If we can remove constants
+                    If UnreferencedConstantIndexes.Contains(count) Then
+                        constantRemove = False
+                    Else
+                        Constants.RemoveAt(count)
+                    End If
+                Else
+                    'If not, clear the referenced ones to save space
+                    If Not UnreferencedConstantIndexes.Contains(count) Then
+                        Constants(count) = ""
+                        AvailableConstantIndexes.Add(count)
+                    End If
+                End If
+            Next
+            '-Do the same with the other languages
+            Dim stringRemove As Boolean = True
+            For count = English.Count - 1 To 0 Step -1
+                If stringRemove Then
+                    'If we can remove strings
+                    If UnreferencedStringIndexes.Contains(count) Then
+                        stringRemove = False
+                    Else
+                        English.RemoveAt(count)
+                        If isMultiLang Then
+                            French.RemoveAt(count)
+                            German.RemoveAt(count)
+                            Italian.RemoveAt(count)
+                            Spanish.RemoveAt(count)
+                        End If
+                    End If
+                Else
+                    'If not, clear the referenced ones to save space
+                    If Not UnreferencedStringIndexes.Contains(count) Then
+                        English(count) = ""
+                        If isMultiLang Then
+                            French(count) = ""
+                            German(count) = ""
+                            Italian(count) = ""
+                            Spanish(count) = ""
+                        End If
+                        AvailableStringIndexes.Add(count)
+                    End If
+                End If
+            Next
+
             'Commands and groups
             Dim groupsSection As New List(Of Byte)
             Dim commandsSection As New List(Of Byte)
@@ -197,7 +222,8 @@ Namespace FileFormats.Explorers.Script
             For count = 0 To Commands.Count - 1
                 'Add the command to commandSection
                 Dim item = Commands(count)
-                Dim buffer = item.GetBytes
+
+                Dim buffer = GetSkyCommandBytes(item)
                 commandsSection.AddRange(buffer)
 
                 'Add the group if there's a group pointing to this command
@@ -230,17 +256,17 @@ Namespace FileFormats.Explorers.Script
             Dim spanishTable As List(Of Byte) = GenerateStringTable(Spanish, constantsTable.Count / 2)
 
             Dim header As New List(Of Byte)
-            header.AddRange(BitConverter.GetBytes(CUShort(Constants.Keys.Count)))
-            header.AddRange(BitConverter.GetBytes(CUShort(English.Keys.Count)))
+            header.AddRange(BitConverter.GetBytes(CUShort(Constants.Count)))
+            header.AddRange(BitConverter.GetBytes(CUShort(English.Count)))
             'Offset const
-            If Constants.Keys.Count = 0 Then
+            If Constants.Count = 0 Then
                 'Point to the first string table
                 Dim offset As UShort = data.Count / 2
                 header.AddRange(BitConverter.GetBytes(offset))
             Else
                 'Point to the first constant in the constant table, skipping the pointers in the same table.
                 'I don't know why, but that's just how the game works.
-                Dim offset As UShort = data.Count / 2 + Constants.Keys.Count * 2
+                Dim offset As UShort = data.Count / 2 + Constants.Count * 2
                 header.AddRange(BitConverter.GetBytes(offset))
             End If
             header.AddRange(BitConverter.GetBytes(CUShort(constantsTable.Count / 2)))
@@ -269,12 +295,36 @@ Namespace FileFormats.Explorers.Script
             IO.File.WriteAllBytes(Filename, out.ToArray)
             RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
-        Private Function GenerateStringTable(SourceDictionary As Dictionary(Of Integer, String), sizeConstantsWords As UShort) As List(Of Byte)
+
+        Public Sub Save() Implements iSavable.Save
+            Save(Me.Filename)
+        End Sub
+
+        Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
+            Return ".ssb"
+        End Function
+#End Region
+
+        Private Sub LoadStringList(numStrings As Integer, stringStart As Integer, f As GenericFile, currentDictionary As List(Of String), IsContantTable As Boolean)
+            Dim e = Text.Encoding.GetEncoding("Windows-1252")
+            Dim stringPosition As Integer = stringStart
+            If Not IsContantTable Then
+                stringPosition += 2 * numStrings
+            End If
+            For count = 0 To numStrings - 1
+                Dim s = f.ReadNullTerminatedString(stringPosition, e)
+                stringPosition += s.Length + 1
+                currentDictionary.Add(s)
+            Next
+        End Sub
+
+
+        Private Function GenerateStringTable(SourceDictionary As List(Of String), sizeConstantsWords As UShort) As List(Of Byte)
             Dim e = Text.Encoding.GetEncoding("Windows-1252")
             Dim stringSection As New List(Of Byte)
             Dim pointerSection As New List(Of Byte)
-            Dim offset As UShort = SourceDictionary.Values.Count * 2 + sizeConstantsWords * 2 'Looks like this is the only thing in Bytes and not Words.
-            For Each item In SourceDictionary.Values
+            Dim offset As UShort = SourceDictionary.Count * 2 + sizeConstantsWords * 2 'Looks like this is the only thing in Bytes and not Words.
+            For Each item In SourceDictionary
                 pointerSection.AddRange(BitConverter.GetBytes(offset))
                 Dim buffer = e.GetBytes(item.Replace(vbCrLf, vbLf))
                 stringSection.AddRange(buffer)
@@ -293,13 +343,13 @@ Namespace FileFormats.Explorers.Script
             Return out
         End Function
 
-        Public Function DefaultExtension() As String Implements ISavableAs.DefaultExtension
-            Return ".ssb"
+        Public Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
+            'Todo: actually look at the file contents to verify its integrity
+            Return File.OriginalFilename.ToLower.EndsWith(".ssb")
         End Function
+#End Region
 
-        Public Sub Save() Implements iSavable.Save
-            Save(Me.Filename)
-        End Sub
+
     End Class
 End Namespace
 

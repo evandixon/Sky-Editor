@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
+    <Compile Include="UI\DataBoundObjectControl.vb" />
     <Compile Include="UI\DocumentTab.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
@@ -267,6 +268,10 @@
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
+      <Project>{6F869961-8D92-4FB1-9680-A1D5C6938350}</Project>
+      <Name>SkyEditor.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿Imports System.Text.RegularExpressions
 Imports ROMEditor.Projects
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Namespace MenuActions
     Public Class PsmdSoundtrackMenuAction
@@ -45,7 +46,7 @@ Namespace MenuActions
 
                 PluginHelper.SetLoadingStatus(My.Resources.Language.ConvertingStreams)
 
-                Dim f As New SkyEditorBase.Utilities.AsyncFor(My.Resources.Language.ConvertingStreams)
+                Dim f As New AsyncFor(My.Resources.Language.ConvertingStreams)
                 Await f.RunForEach(Async Function(Item As String) As Task
                                        Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
 

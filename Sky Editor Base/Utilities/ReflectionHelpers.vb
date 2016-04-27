@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Text.RegularExpressions
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Internal
 

@@ -4,6 +4,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
 Imports SkyEditorBase.Interfaces
 Imports System.Resources
+Imports SkyEditor.Core.Interfaces
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -56,8 +57,8 @@ Public Class PluginHelper
                 IO.Directory.CreateDirectory(baseDir)
             Catch ex As UnauthorizedAccessException
                 If ThrowIfCantCreateDirectory Then
-                Throw ex
-            End If
+                    Throw ex
+                End If
             End Try
             Return baseDir
         End If
@@ -334,7 +335,7 @@ Public Class PluginHelper
             RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
         End If
     End Sub
-    Public Shared Sub RequestFileOpen(File As Object, ParentProject As Project)
+    Public Shared Sub RequestFileOpen(File As Object, ParentProject As ProjectOld)
         If File IsNot Nothing Then
             RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
         End If

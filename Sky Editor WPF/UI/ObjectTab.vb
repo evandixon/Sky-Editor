@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.Interfaces
 Namespace UI
     Public Class ObjectTab
         Inherits TabItem
@@ -32,7 +33,7 @@ Namespace UI
             End Set
         End Property
 
-        Private Sub OnContentHeaderChanged(sender As Object, e As EventArguments.HeaderUpdatedEventArgs)
+        Private Sub OnContentHeaderChanged(sender As Object, e As HeaderUpdatedEventArgs)
             Me.Header = e.NewValue
         End Sub
 

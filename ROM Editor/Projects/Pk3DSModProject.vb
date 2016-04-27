@@ -7,7 +7,7 @@ Namespace Projects
             Return {GameStrings.PokemonXCode, GameStrings.PokemonYCode, GameStrings.ORCode, GameStrings.ASCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
             IO.File.Copy(PluginHelper.GetResourceName("pk3DS.exe"), IO.Path.Combine(GetRootDirectory, "pk3DS.exe"))
             Await Me.AddExistingFile("", IO.Path.Combine(GetRootDirectory, "pk3DS.exe"))

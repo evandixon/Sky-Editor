@@ -1,11 +1,13 @@
 ﻿Imports System.Text
 Imports ROMEditor.Roms
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class LanguageString
         Inherits GenericFile
-        Implements SkyEditorBase.Interfaces.iOpenableFile
+        Implements iOpenableFile
         Public Enum Region
             US
             Europe
@@ -56,7 +58,7 @@ Namespace FileFormats.Explorers
             Items = New List(Of String)
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             Dim bytes = IO.File.ReadAllBytes(Filename)
 
@@ -78,9 +80,7 @@ Namespace FileFormats.Explorers
                 Items(count / 4) = s.ToString
             Next
         End Sub
-
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
+        Public Overrides Sub Save(Destination As String)
             'Generate File
             Dim e = Encoding.GetEncoding("Windows-1252")
             Dim offsets As New List(Of UInt32)
@@ -118,6 +118,7 @@ Namespace FileFormats.Explorers
             'Write buffer to stream
             Length = totalData.Count
             RawData(0, totalData.Count) = totalData.ToArray
+            MyBase.Save(Destination)
         End Sub
         Default Public Property Item(Index As UInteger) As String
             Get
@@ -128,54 +129,54 @@ Namespace FileFormats.Explorers
             End Set
         End Property
         Public Const ItemNameStartUS As Integer = 6773
-        Public Const HardyMessage As Integer = 01660
-        Public Const HardyMale As Integer = 01661
-        Public Const HardyFemale As Integer = 01662
-        Public Const DocileMessage As Integer = 01663
-        Public Const DocileMale As Integer = 01664
-        Public Const DocileFemale As Integer = 01665
-        Public Const BraveMessage As Integer = 01666
-        Public Const BraveMale As Integer = 01667
-        Public Const BraveFemale As Integer = 01668
-        Public Const JollyMessage As Integer = 01669
-        Public Const JollyMale As Integer = 01670
-        Public Const JollyFemale As Integer = 01671
-        Public Const ImpishMessage As Integer = 01672
-        Public Const ImpishMale As Integer = 01673
-        Public Const ImpishFemale As Integer = 01674
-        Public Const NaïveMessage As Integer = 01675
-        Public Const NaïveMale As Integer = 01676
-        Public Const NaïveFemale As Integer = 01677
-        Public Const TimidMessage As Integer = 01678
-        Public Const TimidMale As Integer = 01679
-        Public Const TimidFemale As Integer = 01680
-        Public Const HastyMessage As Integer = 01681
-        Public Const HastyMale As Integer = 01682
-        Public Const HastyFemale As Integer = 01683
-        Public Const SassyMessage As Integer = 01684
-        Public Const SassyMale As Integer = 01685
-        Public Const SassyFemale As Integer = 01686
-        Public Const CalmMessage As Integer = 01687
-        Public Const CalmMale As Integer = 01688
-        Public Const CalmFemale As Integer = 01689
-        Public Const RelaxedMessage As Integer = 01690
-        Public Const RelaxedMale As Integer = 01691
-        Public Const RelaxedFemale As Integer = 01692
-        Public Const LonelyMessage As Integer = 01693
-        Public Const LonelyMale As Integer = 01694
-        Public Const LonelyFemale As Integer = 01695
-        Public Const QuirkyMessage As Integer = 01696
-        Public Const QuirkyMale As Integer = 01697
-        Public Const QuirkyFemale As Integer = 01698
-        Public Const QuietMessage As Integer = 01699
-        Public Const QuietMale As Integer = 01700
-        Public Const QuietFemale As Integer = 01701
-        Public Const RashMessage As Integer = 01702
-        Public Const RashMale As Integer = 01703
-        Public Const RashFemale As Integer = 01704
-        Public Const BoldMessage As Integer = 01705
-        Public Const BoldMale As Integer = 01706
-        Public Const BoldFemale As Integer = 01707
+        Public Const HardyMessage As Integer = 1660
+        Public Const HardyMale As Integer = 1661
+        Public Const HardyFemale As Integer = 1662
+        Public Const DocileMessage As Integer = 1663
+        Public Const DocileMale As Integer = 1664
+        Public Const DocileFemale As Integer = 1665
+        Public Const BraveMessage As Integer = 1666
+        Public Const BraveMale As Integer = 1667
+        Public Const BraveFemale As Integer = 1668
+        Public Const JollyMessage As Integer = 1669
+        Public Const JollyMale As Integer = 1670
+        Public Const JollyFemale As Integer = 1671
+        Public Const ImpishMessage As Integer = 1672
+        Public Const ImpishMale As Integer = 1673
+        Public Const ImpishFemale As Integer = 1674
+        Public Const NaïveMessage As Integer = 1675
+        Public Const NaïveMale As Integer = 1676
+        Public Const NaïveFemale As Integer = 1677
+        Public Const TimidMessage As Integer = 1678
+        Public Const TimidMale As Integer = 1679
+        Public Const TimidFemale As Integer = 1680
+        Public Const HastyMessage As Integer = 1681
+        Public Const HastyMale As Integer = 1682
+        Public Const HastyFemale As Integer = 1683
+        Public Const SassyMessage As Integer = 1684
+        Public Const SassyMale As Integer = 1685
+        Public Const SassyFemale As Integer = 1686
+        Public Const CalmMessage As Integer = 1687
+        Public Const CalmMale As Integer = 1688
+        Public Const CalmFemale As Integer = 1689
+        Public Const RelaxedMessage As Integer = 1690
+        Public Const RelaxedMale As Integer = 1691
+        Public Const RelaxedFemale As Integer = 1692
+        Public Const LonelyMessage As Integer = 1693
+        Public Const LonelyMale As Integer = 1694
+        Public Const LonelyFemale As Integer = 1695
+        Public Const QuirkyMessage As Integer = 1696
+        Public Const QuirkyMale As Integer = 1697
+        Public Const QuirkyFemale As Integer = 1698
+        Public Const QuietMessage As Integer = 1699
+        Public Const QuietMale As Integer = 1700
+        Public Const QuietFemale As Integer = 1701
+        Public Const RashMessage As Integer = 1702
+        Public Const RashMale As Integer = 1703
+        Public Const RashFemale As Integer = 1704
+        Public Const BoldMessage As Integer = 1705
+        Public Const BoldMale As Integer = 1706
+        Public Const BoldFemale As Integer = 1707
 
         Public Const PokemonNameLength As Integer = 553
         Public Const ItemLength As Integer = 1352

@@ -1,10 +1,12 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace Saves
     Public Class RBSave
         Inherits BinaryFile
-        Implements SkyEditorBase.Interfaces.iDetectableFileType
+        Implements iDetectableFileType
 
         Public Sub New()
             MyBase.New()

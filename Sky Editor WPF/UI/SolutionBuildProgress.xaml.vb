@@ -3,7 +3,7 @@ Namespace UI
     Public Class SolutionBuildProgress
         Implements Interfaces.ITargetedControl
 
-        Private Property CurrentSolution As Solution
+        Private Property CurrentSolution As SolutionOld
 
         Public Property Header As String Implements ITargetedControl.Header
             Get
@@ -42,7 +42,7 @@ Namespace UI
             dataGrid.Items.Clear()
 
             For Each item In Targets
-                If TypeOf item Is Solution Then
+                If TypeOf item Is SolutionOld Then
                     CurrentSolution = item
                     AddHandler CurrentSolution.SolutionBuildStarted, AddressOf Solution_BuildStarted
                     AddHandler CurrentSolution.SolutionBuildCompleted, AddressOf Solution_BuildCompleted
@@ -65,13 +65,13 @@ Namespace UI
         End Sub
         Private Sub Solution_BuildStarted(sender As Object, e As EventArgs)
             dataGrid.Items.Clear()
-            For Each item In DirectCast(sender, Solution).GetAllProjects
+            For Each item In DirectCast(sender, SolutionOld).GetAllProjects
                 AddHandler item.BuildStatusChanged, AddressOf Project_BuildStatusChanged
             Next
         End Sub
 
         Private Sub Solution_BuildCompleted(sender As Object, e As EventArgs)
-            For Each item In DirectCast(sender, Solution).GetAllProjects
+            For Each item In DirectCast(sender, SolutionOld).GetAllProjects
                 RemoveHandler item.BuildStatusChanged, AddressOf Project_BuildStatusChanged
             Next
         End Sub

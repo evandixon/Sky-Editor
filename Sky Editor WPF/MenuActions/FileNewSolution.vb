@@ -6,7 +6,7 @@
             Dim m = PluginManager.GetInstance
             Dim newSol As New UI.NewSolutionWindow(m)
             If newSol.ShowDialog Then
-                m.CurrentSolution = Solution.CreateSolution(newSol.SelectedLocation, newSol.SelectedName, newSol.SelectedSolution.GetType)
+                m.CurrentSolution = SolutionOld.CreateSolution(newSol.SelectedLocation, newSol.SelectedName, newSol.SelectedSolution.GetType)
             End If
             Return Task.CompletedTask
         End Function

@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditorBase
 
 Namespace Roms
     Public Class Cxi3DSRom

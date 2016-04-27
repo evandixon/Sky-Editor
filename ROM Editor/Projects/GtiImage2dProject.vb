@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace Projects
@@ -9,17 +10,17 @@ Namespace Projects
             Return {GameStrings.GTICode}
         End Function
 
-        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("romfs", "bg"), IO.Path.Combine("romfs", "font"), IO.Path.Combine("romfs", "image_2d")}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
+        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
             Await MyBase.Initialize(Solution)
             Dim rawFilesDir = GetRawFilesDir()
             Dim backDir = GetRootDirectory()
 
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
-            Dim f As New Utilities.AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
+            Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
             Await f.RunForEach(Function(Item As String) As Task
                                    Using b As New CteImage
                                        b.OpenFile(Item)
@@ -58,7 +59,7 @@ Namespace Projects
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build(Solution As SolutionOld) As Task
             'Convert BACK
             Dim sourceDir = GetRootDirectory()
             Dim rawFilesDir = GetRawFilesDir()

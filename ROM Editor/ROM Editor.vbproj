@@ -82,6 +82,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -111,6 +112,14 @@
     <Compile Include="FileFormats\CTR\Level3Header.vb" />
     <Compile Include="FileFormats\CTR\RomFs.vb" />
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
+    <Compile Include="FileFormats\Explorers\Script\CommandParameterAttribute.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\BasicTalkCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\MonologueCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\RawCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\ConstantCommandParameter.vb" />
+    <Compile Include="FileFormats\Explorers\Script\SSB.GetSkyCommandParamLengths.vb" />
+    <Compile Include="FileFormats\Explorers\Script\MultiLangStringCommandParameter.vb" />
+    <Compile Include="FileFormats\Explorers\Script\StringCommandParameter.vb" />
     <Compile Include="FileFormats\PSMD\ActDataInfo.vb" />
     <Compile Include="FileFormats\PSMD\ActHitCountTableDataInfo.vb" />
     <Compile Include="FileFormats\Explorers\ExplorersSir0.vb" />
@@ -134,8 +143,6 @@
     <Compile Include="Makerom.vb" />
     <Compile Include="Projects\ExplorersScriptModProject.vb" />
     <Compile Include="PsmdDir.vb" />
-    <Compile Include="FileFormats\Explorers\Script\Command.vb" />
-    <Compile Include="FileFormats\Explorers\Script\CommandDefinition.vb" />
     <Compile Include="FileFormats\Explorers\Script\CommandGroup.vb" />
     <Compile Include="FileFormats\Explorers\Script\SSA.vb" />
     <Compile Include="FileFormats\CTR\Smdh.vb" />
@@ -214,7 +221,6 @@
     <Compile Include="Roms\Generic3DSRom.vb" />
     <Compile Include="Roms\GenericNDSRom.vb" />
     <Compile Include="Roms\iPackedRom.vb" />
-    <Compile Include="Roms\SkyNDSRom.vb" />
     <Compile Include="romTool3ds.vb" />
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="unluac.vb" />
@@ -240,7 +246,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="FileFormats\Explorers\Script\SSB.GetSkyCommandDefinitions.vb" />
+    <Compile Include="FileFormats\Explorers\Script\SSB.SkyCommandFactory.vb" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -355,6 +361,18 @@
     <ProjectReference Include="..\Sky Editor WPF\Sky Editor WPF.vbproj">
       <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
       <Name>Sky Editor WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.vbproj">
+      <Project>{78e4d58b-b3ac-44e8-af93-64d56f4ddbe2}</Project>
+      <Name>SkyEditor.Core.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
+      <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>
+      <Name>SkyEditor.Core.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
+      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
+      <Name>SkyEditor.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

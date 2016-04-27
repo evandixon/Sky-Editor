@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class item_s_p
@@ -53,8 +54,7 @@ Namespace FileFormats.Explorers
                 End While
             End If
         End Sub
-        Protected Overrides Sub PreSave()
-            MyBase.PreSave()
+        Public Overrides Sub Save(Destination As String)
             Length = &HF0F '4 * Items.Count + 32
 
             'Write header
@@ -98,7 +98,7 @@ Namespace FileFormats.Explorers
             RawData(Length - 3) = &H0
             RawData(Length - 2) = &H0
             RawData(Length - 1) = &H0
-
+            MyBase.Save(Destination)
         End Sub
     End Class
 End Namespace

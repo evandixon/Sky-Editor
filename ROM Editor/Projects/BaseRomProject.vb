@@ -1,9 +1,10 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 Imports SkyEditorBase.EventArguments
 
 Namespace Projects
     Public Class BaseRomProject
-        Inherits SkyEditorBase.Project
+        Inherits SkyEditorBase.ProjectOld
 
         Public Property RomSystem As String
             Get

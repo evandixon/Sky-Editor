@@ -1,9 +1,9 @@
 ﻿Imports System.Threading.Tasks
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.Interfaces
 
 Namespace Extensions
     Public Class ExtensionHelper
-        Implements Interfaces.iNamed
+        Implements iNamed
 
         Public ReadOnly Property Name As String Implements iNamed.Name
             Get
@@ -15,7 +15,7 @@ Namespace Extensions
             Dim result As ExtensionInstallResult
             Dim tempDir = IO.Path.Combine(PluginHelper.RootResourceDirectory, "Temp", IO.Path.GetFileNameWithoutExtension(ExtensionZip))
             Await Utilities.FileSystem.ReCreateDirectory(tempDir)
-            Utilities.Zip.UnZip(ExtensionZip, tempDir)
+            Utilities.Zip.Unzip(ExtensionZip, tempDir)
             Dim infoFilename As String = IO.Path.Combine(tempDir, "info.skyext")
             If IO.File.Exists(infoFilename) Then
                 Dim info = ExtensionInfo.Open(infoFilename)

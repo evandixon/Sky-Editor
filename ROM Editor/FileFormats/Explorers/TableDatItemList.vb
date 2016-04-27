@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class TableDatItemList
@@ -27,7 +28,7 @@ Namespace FileFormats.Explorers
                 Next
             End If
         End Sub
-        Protected Overrides Sub PreSave()
+        Public Overrides Sub Save(Destination As String)
             Me.Length = 2 + (Items.Count * 4)
             RawData(0, 2) = BitConverter.GetBytes(Items.Count)
             For count As Integer = 0 To Items.Count - 1
@@ -38,6 +39,7 @@ Namespace FileFormats.Explorers
                 End If
                 RawData(count * 4 + 2, 2) = BitConverter.GetBytes(Items(count).ItemID)
             Next
+            MyBase.Save(Destination)
         End Sub
     End Class
 

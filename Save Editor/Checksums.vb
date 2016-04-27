@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditorBase
 
 Public Class Checksums
     Public Shared Function Calculate32BitChecksum(Bits As Binary, StartIndex As Integer, EndIndex As Integer) As UInt32

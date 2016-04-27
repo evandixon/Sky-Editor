@@ -1,4 +1,6 @@
-﻿Namespace Flashcart
+﻿Imports SkyEditor.Core.Utilities
+
+Namespace Flashcart
     Public MustInherit Class FileCollection
         ''' <summary>
         ''' Name of the collection
@@ -29,7 +31,7 @@
             container.CollectionTypeName = Me.GetType.AssemblyQualifiedName
             container.Name = Me.Name
             container.Directory = Directory
-            Return SkyEditorBase.Utilities.Json.Serialize(container)
+            Return Json.Serialize(container)
         End Function
 
         Public Overridable Sub Initialize(Container As FileCollectionContainer)
@@ -37,8 +39,8 @@
             Directory = Container.Directory
         End Sub
 
-        Public Shared Function DeSerialize(Json As String) As FileCollection
-            Dim container = SkyEditorBase.Utilities.Json.Deserialize(Of FileCollectionContainer)(Json)
+        Public Shared Function DeSerialize(JsonString As String) As FileCollection
+            Dim container = Json.Deserialize(Of FileCollectionContainer)(JsonString)
             Dim type = SkyEditorBase.Utilities.ReflectionHelpers.GetTypeFromName(container.CollectionTypeName)
             If type IsNot Nothing AndAlso type.GetConstructor({}) IsNot Nothing Then
                 Dim out As FileCollection = type.GetConstructor({}).Invoke({})

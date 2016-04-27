@@ -1,5 +1,6 @@
 ﻿Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 
 Public Class PsmdDir

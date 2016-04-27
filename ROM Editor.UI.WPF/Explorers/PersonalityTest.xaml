@@ -1,0 +1,247 @@
+﻿<local:ObjectControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
+             xmlns:FileFormats="clr-namespace:ROMEditor.FileFormats;assembly=ROMEditor" x:Class="Explorers.PersonalityTest"
+             mc:Ignorable="d">
+    <Grid x:Name="grid1">
+        <TabControl x:Name="tc1">
+            <TabItem Header="{x:Static res:Language.Player}">
+                <UniformGrid Columns="6" Rows="16" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Label    x:Name="lblHardyMale" Content="{x:Static res:Language.HardyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbHardyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbHardyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblHardyFemale" Content="{x:Static res:Language.HardyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbHardyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbHardyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblDocileMale" Content="{x:Static res:Language.DocileMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbDocileMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbDocileMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblDocileFemale" Content="{x:Static res:Language.DocileFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbDocileFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbDocileFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblBraveMale" Content="{x:Static res:Language.BraveMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbBraveMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbBraveMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblBraveFemale" Content="{x:Static res:Language.BraveFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbBraveFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbBraveFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblJollyMale" Content="{x:Static res:Language.JollyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbJollyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbJollyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblJollyFemale" Content="{x:Static res:Language.JollyFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbJollyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbJollyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblImpishMale" Content="{x:Static res:Language.ImpishMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbImpishMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbImpishMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblImpishFemale" Content="{x:Static res:Language.ImpishFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbImpishFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbImpishFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblNaiveMale" Content="{x:Static res:Language.NaiveMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbNaiveMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbNaiveMale" Content="Female" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblNaiveFemale" Content="{x:Static res:Language.NaiveFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbNaiveFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbNaiveFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblTimidMale" Content="{x:Static res:Language.TimidMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbTimidMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbTimidMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblTimidFemale" Content="{x:Static res:Language.TimidFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbTimidFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbTimidFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblHastyMale" Content="{x:Static res:Language.HastyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbHastyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbHastyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblHastyFemale" Content="{x:Static res:Language.HastyFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbHastyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbHastyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblSassyMale" Content="{x:Static res:Language.SassyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbSassyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbSassyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblSassyFemale" Content="{x:Static res:Language.SassyFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbSassyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbSassyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblCalmMale" Content="{x:Static res:Language.CalmMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbCalmMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbCalmMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblCalmFemale" Content="{x:Static res:Language.CalmFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbCalmFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbCalmFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblRelaxedMale" Content="{x:Static res:Language.RelaxedMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbRelaxedMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbRelaxedMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblRelaxedFemale" Content="{x:Static res:Language.RelaxedFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbRelaxedFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbRelaxedFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblLonelyMale" Content="{x:Static res:Language.LonelyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbLonelyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbLonelyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblLonelyFemale" Content="{x:Static res:Language.LonelyFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbLonelyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbLonelyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblQuirkyMale" Content="{x:Static res:Language.QuirkyMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbQuirkyMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbQuirkyMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblQuirkyFemale" Content="{x:Static res:Language.QuirkyFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbQuirkyFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbQuirkyFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblQuietMale" Content="{x:Static res:Language.QuietMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbQuietMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbQuietMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblQuietFemale" Content="{x:Static res:Language.QuietFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbQuietFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbQuietFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblRashMale" Content="{x:Static res:Language.RashMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbRashMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbRashMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblRashFemale" Content="{x:Static res:Language.RashFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbRashFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbRashFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+
+                    <Label    x:Name="lblBoldMale" Content="{x:Static res:Language.BoldMale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbBoldMale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbBoldMale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblBoldFemale" Content="{x:Static res:Language.BoldFemale}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbBoldFemale" Height="21" Width="100" />
+                    <CheckBox x:Name="chbBoldFemale" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+                </UniformGrid>
+            </TabItem>
+            <TabItem Header="{x:Static res:Language.Partner}">
+                <UniformGrid Columns="3" Rows="21" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Label    x:Name="lblPartner01" Content="{x:Static res:Language.Partner01}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner01" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner01" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner02" Content="{x:Static res:Language.Partner02}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner02" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner02" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner03" Content="{x:Static res:Language.Partner03}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner03" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner03" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner04" Content="{x:Static res:Language.Partner04}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner04" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner04" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner05" Content="{x:Static res:Language.Partner05}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner05" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner05" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner06" Content="{x:Static res:Language.Partner06}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner06" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner06" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner07" Content="{x:Static res:Language.Partner07}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner07" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner07" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner08" Content="{x:Static res:Language.Partner08}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner08" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner08" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner09" Content="{x:Static res:Language.Partner09}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner09" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner09" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner10" Content="{x:Static res:Language.Partner10}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner10" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner10" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner11" Content="{x:Static res:Language.Partner11}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner11" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner11" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner12" Content="{x:Static res:Language.Partner12}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner12" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner12" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner13" Content="{x:Static res:Language.Partner13}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner13" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner13" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner14" Content="{x:Static res:Language.Partner14}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner14" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner14" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner15" Content="{x:Static res:Language.Partner15}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner15" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner15" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner16" Content="{x:Static res:Language.Partner16}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner16" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner16" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner17" Content="{x:Static res:Language.Partner17}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner17" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner17" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner18" Content="{x:Static res:Language.Partner18}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner18" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner18" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner19" Content="{x:Static res:Language.Partner19}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner19" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner19" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner20" Content="{x:Static res:Language.Partner20}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner20" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner20" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+
+                    <Label    x:Name="lblPartner21" Content="{x:Static res:Language.Partner21}" Height="26" VerticalContentAlignment="Center"/>
+                    <local:SearchableDropDown  x:Name="cbPartner21" Height="21" Width="100"/>
+                    <CheckBox x:Name="chbPartner21" Content="{x:Static res:Language.IsFemale}" Height="21" VerticalContentAlignment="Center" />
+                </UniformGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</local:ObjectControl>

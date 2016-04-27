@@ -1,15 +1,17 @@
 ﻿Imports System.Collections.Concurrent
 Imports System.IO
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace Roms
     Public Class GenericNDSRom
-        Inherits GenericFile
-        Implements SkyEditorBase.Interfaces.iOpenableFile
-        Implements SkyEditorBase.Interfaces.iDetectableFileType
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements iOpenableFile
+        Implements iDetectableFileType
         Implements iPackedRom
 
-        Public Overrides Function DefaultExtension() As String
+        Public Overrides Function GetDefaultExtension() As String
             Return "*.nds"
         End Function
 
@@ -19,7 +21,7 @@ Namespace Roms
             Me.EnableInMemoryLoad = True
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements Interfaces.iOpenableFile.OpenFile
+        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
         End Sub
 #End Region
@@ -38,11 +40,6 @@ Namespace Roms
             Await PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ndstool.exe"),
                                                   String.Format("-c ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", NewFileName, IO.Path.Combine(romDirectory, Name)))
         End Function
-
-        <Obsolete> Public Overrides Async Sub Save()
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
-            Await RePack(romDirectory & "\" & Name & ".nds")
-        End Sub
 #End Region
 
 #Region "Properties"
@@ -512,7 +509,7 @@ Namespace Roms
 
             IO.Directory.CreateDirectory(romDirectory)
             Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
-                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", Filename, romDirectory))
+                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", PhysicalFilename, romDirectory))
         End Function
         ''' <summary>
         ''' Queues file extraction tasks if the file is thread safe, otherwise, extracts files one at a time.
@@ -523,7 +520,9 @@ Namespace Roms
         ''' <returns></returns>
         Private Async Function StartExtractFiles(FAT As List(Of FileAllocationEntry), Root As FilenameTable, TargetDir As String) As Task
             Dim dest As String = IO.Path.Combine(TargetDir, Root.Name)
-            Dim f As New SkyEditorBase.Utilities.AsyncFor
+            Dim f As New AsyncFor
+            f.RunSynchronously = Not Me.IsThreadSafe
+            f.BatchSize = Root.Children.Count
             Dim task = (f.RunForEach(Async Function(Item As FilenameTable) As Task
                                          If Item.IsDirectory Then
                                              Await StartExtractFiles(FAT, Item, dest)
@@ -537,7 +536,7 @@ Namespace Roms
                                              Console.WriteLine("Extracted " & IO.Path.Combine(dest, Item.Name))
                                              System.Threading.Interlocked.Increment(CurrentExtractProgress)
                                          End If
-                                     End Function, Root.Children, Integer.MaxValue, Not Me.IsThreadSafe))
+                                     End Function, Root.Children))
             If Me.IsThreadSafe Then
                 'Then let it keep running while we go and add more
                 ExtractionTasks.Add(task)
@@ -591,7 +590,7 @@ Namespace Roms
         End Sub
 #End Region
 
-        Public Overridable Function IsFileOfType(File As GenericFile) As Boolean Implements Interfaces.iDetectableFileType.IsOfType
+        Public Overridable Function IsFileOfType(File As SkyEditor.Core.GenericFile) As Boolean Implements iDetectableFileType.IsOfType
             Return (File.Length > &H15D AndAlso File.RawData(&H15C) = &H56 AndAlso File.RawData(&H15D) = &HCF)
         End Function
 

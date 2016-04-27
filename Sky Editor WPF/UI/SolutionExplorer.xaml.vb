@@ -8,8 +8,8 @@ Namespace UI
             Public Property IsRoot As Boolean
             Public Property IsProjectRoot As Boolean
             Public Property IsDirectory As Boolean
-            Public Property ParentProject As Project
-            Public Property ParentSolution As Solution
+            Public Property ParentProject As ProjectOld
+            Public Property ParentSolution As SolutionOld
             Public Property ParentPath As String
             Public Property Name As String
             Public Sub New()
@@ -38,7 +38,7 @@ Namespace UI
             InitializeComponent()
 
             ' Add any initialization after the InitializeComponent() call.
-            ProjectRegistry = New Dictionary(Of Project, TreeViewItem)
+            ProjectRegistry = New Dictionary(Of ProjectOld, TreeViewItem)
         End Sub
 
         Private Sub SolutionExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -77,7 +77,7 @@ Namespace UI
         End Property
         Dim _isVisible As Boolean
 
-        Private Property ProjectRegistry As Dictionary(Of Project, TreeViewItem)
+        Private Property ProjectRegistry As Dictionary(Of ProjectOld, TreeViewItem)
 
         Public Event HeaderChanged As ITargetedControl.HeaderChangedEventHandler Implements ITargetedControl.HeaderChanged
         Public Event VisibilityChanged As ITargetedControl.VisibilityChangedEventHandler Implements ITargetedControl.VisibilityChanged
@@ -108,8 +108,8 @@ Namespace UI
             tvSolution.Items.Clear()
 
             For Each item In Targets
-                If TypeOf item Is Solution Then
-                    Dim sol = DirectCast(item, Solution)
+                If TypeOf item Is SolutionOld Then
+                    Dim sol = DirectCast(item, SolutionOld)
 
                     Dim n As New TreeViewItem
                     Dim t As New NodeTag
@@ -141,7 +141,7 @@ Namespace UI
             ITargetedControl_IsVisible = (supported > 0)
         End Sub
 
-        Private Function GetNode(Solution As Solution, Item As Solution.SolutionItem, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As SolutionOld, Item As SolutionOld.SolutionItem, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name
@@ -185,7 +185,7 @@ Namespace UI
             Return n
         End Function
 
-        Private Function GetNode(Solution As Solution, Project As Project, Item As Project.ProjectItem, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As SolutionOld, Project As ProjectOld, Item As ProjectOld.ProjectItem, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name
@@ -567,7 +567,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Function GetSolutionNode(Solution As Solution, Path As String) As TreeViewItem
+        Private Function GetSolutionNode(Solution As SolutionOld, Path As String) As TreeViewItem
             Dim node As TreeViewItem = Nothing
 
             For Each item As TreeViewItem In tvSolution.Items
@@ -595,11 +595,11 @@ Namespace UI
             Return node
         End Function
 
-        Private Function GetProjectRootNode(Project As Project) As TreeViewItem
+        Private Function GetProjectRootNode(Project As ProjectOld) As TreeViewItem
             Return ProjectRegistry(Project)
         End Function
 
-        Private Function GetProjectNode(Project As Project, Path As String) As TreeViewItem
+        Private Function GetProjectNode(Project As ProjectOld, Path As String) As TreeViewItem
             Dim node As TreeViewItem = GetProjectRootNode(Project)
 
             If node IsNot Nothing AndAlso Not String.IsNullOrEmpty(Path) Then

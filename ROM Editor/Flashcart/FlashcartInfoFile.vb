@@ -1,4 +1,6 @@
-﻿Namespace Flashcart
+﻿Imports SkyEditor.Core.Utilities
+
+Namespace Flashcart
     Public Class FlashcartInfoFile
         Public Property FlashcartAssemblyQualifiedTypeName As String
         Public Property Name As String
@@ -6,10 +8,10 @@
         Public Property Collections As List(Of String)
 
         Public Sub Save(Filename As String)
-            SkyEditorBase.Utilities.Json.SerializeToFile(Filename, Me)
+            Json.SerializeToFile(Filename, Me, New SkyEditor.Core.Windows.IOProvider)
         End Sub
         Public Shared Function Open(Filename As String) As FlashcartInfoFile
-            Return SkyEditorBase.Utilities.Json.DeserializeFromFile(Of FlashcartInfoFile)(Filename)
+            Return Json.DeserializeFromFile(Of FlashcartInfoFile)(Filename, New SkyEditor.Core.Windows.IOProvider)
         End Function
         Public Sub New()
             Collections = New List(Of String)

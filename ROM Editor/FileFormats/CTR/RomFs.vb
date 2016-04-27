@@ -1,4 +1,6 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.CTR
@@ -12,7 +14,7 @@ Namespace FileFormats.CTR
         Protected Property Header As RomFSHeader
 
         Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
                 Header = New RomFSHeader(f.RawData(0, &H60))

@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class Kaomado
@@ -79,15 +80,15 @@ Namespace FileFormats.Explorers
                                                                "0032_SIGH.png",
                                                                "0034_STUNNED.png"}
 
-            Dim runner As New SkyEditorBase.Utilities.AsyncFor("Fixing missing portraits...")
+            Dim runner As New AsyncFor("Fixing missing portraits...")
             Dim directories = IO.Directory.GetDirectories(UnpackDirectory)
-            Dim delegateAction As New Utilities.AsyncFor.ForEachItem(Of String)(Sub(directory As String)
-                                                                                    For j As Integer = 1 To faces.Length - 1
-                                                                                        If Not IO.File.Exists(IO.Path.Combine(directory, faces(j))) Then
-                                                                                            IO.File.Copy(IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(j)))
-                                                                                        End If
-                                                                                    Next
-                                                                                End Sub)
+            Dim delegateAction As New AsyncFor.ForEachItem(Of String)(Sub(directory As String)
+                                                                          For j As Integer = 1 To faces.Length - 1
+                                                                              If Not IO.File.Exists(IO.Path.Combine(directory, faces(j))) Then
+                                                                                  IO.File.Copy(IO.Path.Combine(directory, faces(0)), IO.Path.Combine(directory, faces(j)))
+                                                                              End If
+                                                                          Next
+                                                                      End Sub)
             Await runner.RunForEach(delegateAction, directories)
         End Function
         Public Async Function ApplyMissingPortraitFix() As Task
