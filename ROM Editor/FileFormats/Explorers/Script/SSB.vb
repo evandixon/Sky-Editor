@@ -187,11 +187,11 @@ Namespace FileFormats.Explorers.Script
 
                     'Log where the command is located
                     If isMultiLang Then
-                        commandLocations.Add(RawCommands.Count,
-                                                (currentCommandStart - &H12 - numGroups * 6) / 2) 'Index of the command in the file - header - size of the groups block, then converted to Words, instead of bytes
+                        commandLocations.Add(rawCommands.Count,
+                                                (currentCommandStart - &H12) / 2) 'Index of the command in the file - header, then converted to Words, instead of bytes
                     Else
-                        commandLocations.Add(RawCommands.Count,
-                                                (currentCommandStart - &HC - numGroups * 6) / 2) 'Index of the command in the file - header - size of the groups block, then converted to Words, instead of bytes
+                        commandLocations.Add(rawCommands.Count,
+                                                (currentCommandStart - &HC) / 2) 'Index of the command in the file - header, then converted to Words, instead of bytes
                     End If
 
 
