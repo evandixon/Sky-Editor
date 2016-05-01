@@ -2,26 +2,26 @@
 Imports SkyEditor.Core.Extensions.Plugins
 
 Public Class SkyEditorInfo
-    Implements ISkyEditorPlugin
-    Public ReadOnly Property PluginAuthor As String Implements ISkyEditorPlugin.PluginAuthor
+    Inherits SkyEditorPlugin
+    Public Overrides ReadOnly Property PluginAuthor As String
         Get
             Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
-    Public ReadOnly Property PluginName As String Implements ISkyEditorPlugin.PluginName
+    Public Overrides ReadOnly Property PluginName As String
         Get
             Return My.Resources.Language.PluginName
         End Get
     End Property
 
-    Public ReadOnly Property Credits As String Implements ISkyEditorPlugin.Credits
+    Public Overrides ReadOnly Property Credits As String
         Get
             Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
-    Public Sub Load(Manager As PluginManager) Implements ISkyEditorPlugin.Load
+    Public Overrides Sub Load(Manager As PluginManager)
         'Manager.RegisterSaveTypeDetector(AddressOf DetectSaveType)
         Manager.RegisterIOFilter("*.sav", My.Resources.Language.RawSaveFile)
         Manager.RegisterIOFilter("*.dsv", My.Resources.Language.DeSmuMeSaveFile)
@@ -43,11 +43,11 @@ Public Class SkyEditorInfo
         End If
     End Function
 
-    Public Sub UnLoad(Manager As PluginManager) Implements ISkyEditorPlugin.UnLoad
+    Public Overrides Sub UnLoad(Manager As PluginManager)
 
     End Sub
 
-    Public Sub PrepareForDistribution() Implements ISkyEditorPlugin.PrepareForDistribution
+    Public Overrides Sub PrepareForDistribution()
 
     End Sub
 End Class

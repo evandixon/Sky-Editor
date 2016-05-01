@@ -65,22 +65,23 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Bulbasaur=13
-        '''Charmander=8
-        '''Chikorita=14
-        '''Cubone=11
-        '''Cyndaquil=10
-        '''Eevee=2
-        '''Machop=12
-        '''Meowth=1
-        '''Mudkip=6
-        '''Pikachu=0
-        '''Psyduck=7
-        '''Skitty=3
-        '''Squirtle=4
-        '''Torchic=9
-        '''Totodile=5
-        '''Treeko=16.
+        '''  Looks up a localized string similar to 0=Pikachu
+        '''1=Meowth
+        '''2=Eevee
+        '''3=Skitty
+        '''4=Squirtle
+        '''5=Totodile
+        '''6=Mudkip
+        '''7=Psyduck
+        '''8=Charmander
+        '''9=Torchic
+        '''10=Cyndaquil
+        '''11=Cubone
+        '''12=Machop
+        '''13=Bulbasaur
+        '''14=Chikorita
+        '''15=(Missing Entry)
+        '''16=Treeko.
         '''</summary>
         Public Shared ReadOnly Property RBBaseTypes() As String
             Get

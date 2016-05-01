@@ -8,8 +8,10 @@ Namespace FileFormats.PSMD
     Public Class CteImage
         Inherits GenericFile
         Implements iOpenableFile
+        Implements iModifiable
 
         Public Event ContainedImageUpdated(sender As Object, e As EventArgs)
+        Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
 
         Public Property ContainedImage As Bitmap
             Get
@@ -154,5 +156,9 @@ Namespace FileFormats.PSMD
                 Return out
             End If
         End Function
+
+        Public Sub RaiseModified() Implements iModifiable.RaiseModified
+            RaiseEvent Modified(Me, New EventArgs)
+        End Sub
     End Class
 End Namespace

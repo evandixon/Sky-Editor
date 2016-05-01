@@ -3,14 +3,24 @@
 Namespace Extensions.Plugins
     Public MustInherit Class PluginManager
 
+#Region "Constructors"
         Protected Sub New()
             Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
             Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
         End Sub
+#End Region
+
         Protected Property TypeRegistery As Dictionary(Of TypeInfo, List(Of TypeInfo))
         Public Property CoreAssemblyName As String 'Todo: make readonly to the public
         Protected Property FileTypeDetectors As New List(Of FileTypeDetector)
         Protected Property DirectoryTypeDetectors As New List(Of DirectoryTypeDetector)
+
+        ''' <summary>
+        ''' Matches plugin assemblies (key) to assemblies that depend on that assembly (value).
+        ''' If an assembly is a key, it is manually loaded by each of the assemblies in the value.
+        ''' </summary>
+        ''' <returns></returns>
+        Protected Property DependantPlugins As Dictionary(Of Assembly, List(Of Assembly))
 
         ''' <summary>
         ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
@@ -19,6 +29,20 @@ Namespace Extensions.Plugins
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Property IOFilters As New Dictionary(Of String, String)
+
+        ''' <summary>
+        ''' Contains the assemblies that contain plugin information.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Assemblies As List(Of Assembly)
+
+        ''' <summary>
+        ''' List of all loaded iSkyEditorPlugins that are loaded.
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Plugins As New List(Of SkyEditorPlugin)
 
 #Region "Delegates"
         ''' <summary>
@@ -45,13 +69,39 @@ Namespace Extensions.Plugins
         ''' Loads all available plugins using the given CoreMod.
         ''' </summary>
         ''' <param name="CoreMod"></param>
-        Public MustOverride Sub LoadPlugins(CoreMod As ISkyEditorPlugin)
+        Public MustOverride Sub LoadPlugins(CoreMod As SkyEditorPlugin)
 
         ''' <summary>
-        ''' Loads the given plugin.
+        ''' Loads a plugin that's referenced by another.
         ''' </summary>
-        ''' <param name="Plugin"></param>
-        Public MustOverride Sub LoadPlugin(Plugin As ISkyEditorPlugin)
+        ''' <param name="targetPlugin">The plugin to load.</param>
+        ''' <param name="dependantPlugin">The plugin that requires the load.</param>
+        Public Overridable Sub LoadRequiredPlugin(targetPlugin As SkyEditorPlugin, dependantPlugin As SkyEditorPlugin)
+            Dim pluginType = targetPlugin.GetType
+            Dim pluginTypeInfo = pluginType.GetTypeInfo
+            Dim pluginAssembly = pluginTypeInfo.Assembly
+
+            For Each item In Plugins
+                If item.GetType.Equals(pluginType) Then
+                    'Then we already have this plugin loaded and should do nothing
+                Else
+                    targetPlugin.Load(Me)
+
+                    If Not Assemblies.Contains(pluginAssembly) Then
+                        Assemblies.Add(pluginAssembly)
+                    End If
+                End If
+            Next
+
+            'Mark this plugin as a dependant
+            If Not DependantPlugins.ContainsKey(pluginAssembly) Then
+                DependantPlugins.Add(pluginAssembly, New List(Of Assembly))
+            End If
+            Dim caller = dependantPlugin.GetType.GetTypeInfo.Assembly
+            If Not DependantPlugins(pluginAssembly).Contains(caller) Then
+                DependantPlugins(pluginAssembly).Add(caller)
+            End If
+        End Sub
 
         ''' <summary>
         ''' Looks at the given assembly and loads supported types into the type registry.
@@ -174,6 +224,62 @@ Namespace Extensions.Plugins
         End Sub
 #End Region
 
+#Region "Functions"
+#Region "Read Type Registry"
+        ''' <summary>
+        ''' Returns an IEnumerable of all the registered types that inherit or implement the given BaseType.
+        ''' </summary>
+        ''' <param name="BaseType">Type to get children or implementors of.</param>
+        ''' <returns></returns>
+        Public Function GetRegisteredTypes(BaseType As TypeInfo) As IEnumerable(Of TypeInfo)
+            If BaseType Is Nothing Then
+                Throw New ArgumentNullException(NameOf(BaseType))
+            End If
+
+            If TypeRegistery.ContainsKey(BaseType) Then
+                Return TypeRegistery(BaseType)
+            Else
+                Return {}
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Returns an IEnumerable of new instances of all the registered types that inherit or implement the given BaseType.
+        ''' </summary>
+        ''' <param name="BaseType">Type to get children or implementors of.</param>
+        ''' <returns></returns>
+        Public Function GetRegisteredObjects(BaseType As TypeInfo) As IEnumerable(Of Object)
+            Dim output As New List(Of Object)
+
+            For Each item In GetRegisteredTypes(BaseType)
+                If ReflectionHelpers.HasDefaultConstructor(item) AndAlso Not item.IsGenericType Then
+                    output.Add(ReflectionHelpers.CreateInstance(item))
+                End If
+            Next
+
+            Return output
+        End Function
+
+        ''' <summary>
+        ''' eturns an IEnumerable of new instances of all the registered types that inherit or implement the given type.
+        ''' </summary>
+        ''' <typeparam name="T">Type to get children or implementors of.</typeparam>
+        ''' <returns></returns>
+        Public Function GetRegisteredObjects(Of T)() As IEnumerable(Of T)
+            Dim output As New List(Of T)
+            Dim targetType = GetType(T).GetTypeInfo
+
+            For Each item In GetRegisteredTypes(targetType)
+                If ReflectionHelpers.HasDefaultConstructor(item) AndAlso Not item.IsGenericType Then
+                    output.Add(ReflectionHelpers.CreateInstance(item))
+                End If
+            Next
+
+            Return output
+        End Function
+#End Region
+
+#End Region
 
     End Class
 

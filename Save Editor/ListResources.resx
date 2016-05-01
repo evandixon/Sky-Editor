@@ -119,51 +119,51 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="RBBaseTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBBaseTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBBaseTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="RBFriendAreaOffsets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="RBItemOffsets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBItemOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBItemOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="RBItemOrder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBItemOrder.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBItemOrder.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="RBItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="RBLocations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\English\RBLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="RBMoves" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBMoves.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\English\RBMoves.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="RBPokemon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\RBPokemon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\RBPokemon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SkyFriendAreaOffsets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\SkyFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\SkyFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SkyItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\SkyItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\SkyItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SkyLocations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\SkyLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\English\SkyLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="SkyMoves" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\SkyMoves.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\English\SkyMoves.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="SkyPokemon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\SkyPokemon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\SkyPokemon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TDFriendAreaOffsets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\TDFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\TDFriendAreaOffsets.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TDItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\TDItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>Resources\English\TDItems.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TDLocations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>SaveEditor\English\TDLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\English\TDLocations.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

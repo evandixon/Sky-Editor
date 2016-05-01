@@ -98,7 +98,7 @@ Namespace UI
         'End Sub
 
         Private Async Sub btnCreateExtension_Click(sender As Object, e As RoutedEventArgs) Handles btnCreateExtension.Click
-            Dim plugins As New List(Of ISkyEditorPlugin)
+            Dim plugins As New List(Of SkyEditorPlugin)
             For Each item As PluginUiElement In gridPlugins.SelectedItems
                 plugins.Add(item.ContainedDefinition)
             Next

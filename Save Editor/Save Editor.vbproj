@@ -97,6 +97,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicDictionaryIniFile.vb" />
     <Compile Include="Binary.vb" />
     <Compile Include="BinaryFile.vb" />
     <Compile Include="ConsoleCommands\BitSum.vb" />
@@ -175,11 +176,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Language.Designer.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ListResources.fr.resx" />
+    <EmbeddedResource Include="ListResources.de.resx" />
+    <EmbeddedResource Include="ListResources.it.resx" />
     <EmbeddedResource Include="ListResources.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ListResources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ListResources.es.resx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -197,108 +202,40 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SaveEditor\Italiano\SkyItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Italiano\SkyLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Italiano\SkyMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Italiano\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Deutsche\SkyItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Deutsche\SkyLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Deutsche\SkyMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Deutsche\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBBaseTypes.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBFriendAreaOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBItemOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBItemOrder.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\SkyFriendAreaOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\SkyItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\RBLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\SkyLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\SkyMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\TDFriendAreaOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\TDItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\English\TDLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Español\SkyItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Español\SkyLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Español\SkyMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Español\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\SkyFriendAreaOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\SkyItems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\SkyLocations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\SkyMoves.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\SkyPokemon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SaveEditor\Français\TDFriendAreaOffsets.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Resources\English\RBBaseTypes.txt" />
+    <Resource Include="Resources\English\RBFriendAreaOffsets.txt" />
+    <Resource Include="Resources\English\RBItemOffsets.txt" />
+    <Resource Include="Resources\English\RBItemOrder.txt" />
+    <Resource Include="Resources\English\RBItems.txt" />
+    <Resource Include="Resources\English\RBLocations.txt" />
+    <Resource Include="Resources\English\RBMoves.txt" />
+    <Resource Include="Resources\English\RBPokemon.txt" />
+    <Resource Include="Resources\English\SkyFriendAreaOffsets.txt" />
+    <Resource Include="Resources\English\SkyItems.txt" />
+    <Resource Include="Resources\English\SkyLocations.txt" />
+    <Resource Include="Resources\English\SkyMoves.txt" />
+    <Resource Include="Resources\English\SkyPokemon.txt" />
+    <Resource Include="Resources\English\TDFriendAreaOffsets.txt" />
+    <Resource Include="Resources\English\TDItems.txt" />
+    <Resource Include="Resources\English\TDLocations.txt" />
+    <Content Include="Resources\Italian\SkyItems.txt" />
+    <Content Include="Resources\Italian\SkyLocations.txt" />
+    <Content Include="Resources\Italian\SkyMoves.txt" />
+    <Content Include="Resources\Italian\SkyPokemon.txt" />
+    <Content Include="Resources\German\SkyItems.txt" />
+    <Content Include="Resources\German\SkyLocations.txt" />
+    <Content Include="Resources\German\SkyMoves.txt" />
+    <Content Include="Resources\German\SkyPokemon.txt" />
+    <Content Include="Resources\Spanish\SkyItems.txt" />
+    <Content Include="Resources\Spanish\SkyLocations.txt" />
+    <Content Include="Resources\Spanish\SkyMoves.txt" />
+    <Content Include="Resources\Spanish\SkyPokemon.txt" />
+    <Content Include="Resources\French\SkyFriendAreaOffsets.txt" />
+    <Content Include="Resources\French\SkyItems.txt" />
+    <Content Include="Resources\French\SkyLocations.txt" />
+    <Content Include="Resources\French\SkyMoves.txt" />
+    <Content Include="Resources\French\SkyPokemon.txt" />
+    <Content Include="Resources\French\TDFriendAreaOffsets.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

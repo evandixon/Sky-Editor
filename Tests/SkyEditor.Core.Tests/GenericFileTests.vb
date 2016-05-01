@@ -6,7 +6,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     Private _file As GenericFile
 
     <TestInitialize> Public Sub SetupGenericFile_InMemory()
-        _file = New GenericFile(New FakeIOProvider)
+        _file = New GenericFile()
     End Sub
 
     <TestMethod()> Public Sub RawData_InMemory_1Byte_ReadTest()

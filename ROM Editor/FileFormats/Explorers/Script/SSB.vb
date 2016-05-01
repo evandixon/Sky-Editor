@@ -14,9 +14,12 @@ Namespace FileFormats.Explorers.Script
 
         Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 
+        Public Sub New()
+            GotoTargetCommands = New List(Of RawCommand)
+        End Sub
+
 #Region "Properties"
-        Public Property Groups As New List(Of CommandGroup)
-        Public Property Commands As New ObjectModel.ObservableCollection(Of RawCommand)
+        Public Property Commands As New List(Of LogicalCommand)
         Public Property Constants As New List(Of String)
         Public Property English As New List(Of String)
         Public Property French As New List(Of String)
@@ -32,6 +35,38 @@ Namespace FileFormats.Explorers.Script
                 Return IO.Path.GetFileName(Filename)
             End Get
         End Property
+
+        ''' <summary>
+        ''' A list of the indexes of the constants that have not been referenced by a known Command type.
+        ''' We need to leave these in their current index in order to keep things from breaking.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Property UnreferencedConstantIndexes As List(Of Integer)
+
+        ''' <summary>
+        ''' A list of the indexes of the strings that have not been referenced by a known Command type.
+        ''' We need to leave these in their current index in order to keep things from breaking.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Property UnreferencedStringIndexes As List(Of Integer)
+
+        ''' <summary>
+        ''' A list of the indexes of constants that have been temporarily cleared and can be used for other strings.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Property AvailableConstantIndexes As List(Of Integer)
+
+        ''' <summary>
+        ''' A list of the indexes of strings that have been temporarily cleared and can be used for other strings.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Property AvailableStringIndexes As List(Of Integer)
+
+        ''' <summary>
+        ''' A list of references to all commands with a GotoTarget property.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Property GotoTargetCommands As List(Of RawCommand)
 #End Region
 
 #Region "Functions"
@@ -82,6 +117,7 @@ Namespace FileFormats.Explorers.Script
                 Dim numGroups = f.NextUInt16
 
                 'Read Groups
+                Dim groupDefinitions As New List(Of CommandGroup)
                 Dim groupPointerDictionary As New Dictionary(Of Integer, List(Of CommandGroup))
                 Dim groupOffset = f.Position
                 For count = 0 To numGroups - 1
@@ -90,7 +126,7 @@ Namespace FileFormats.Explorers.Script
                     Dim unknownGroupData As Integer = f.NextUInt16
 
                     Dim g = New CommandGroup With {.Type = type, .Unknown = unknownGroupData}
-                    Groups.Add(g)
+                    GroupDefinitions.Add(g)
 
                     'Log the groups by command pointer so we can later update the CommandNumber
                     If Not groupPointerDictionary.ContainsKey(ptrScript) Then
@@ -98,6 +134,9 @@ Namespace FileFormats.Explorers.Script
                     End If
                     groupPointerDictionary(ptrScript).Add(g)
                 Next
+
+                'Note the current position as the start of the command block
+                Dim commandOffset = f.Position
 
                 'Load Strings
                 ''Given this implementation, it's important to load the strings first, because the commands below directly reference these strings.
@@ -132,16 +171,29 @@ Namespace FileFormats.Explorers.Script
                 Next
 
                 'Load commands
-                Dim commandOffset = f.Position
+
+                Dim rawCommands As New List(Of RawCommand)
+                Dim commandLocations As New Dictionary(Of Integer, Integer) 'Key: index of the command in RawCommands. Value: index of the start of the Command, in Words.  
                 Dim currentCommandStart As Integer = commandOffset
                 Dim commandDefs = GetSkyCommandParamLengths()
+                Dim gotoPhysicalPointers As New List(Of Integer)
                 While currentCommandStart < dataWordLength * 2 + dataBlockOffset '(currentCommandStart + numWordsData)
                     'Update the relevant group's pointer
                     If groupPointerDictionary.ContainsKey(currentCommandStart) Then
                         For Each item In groupPointerDictionary(currentCommandStart)
-                            item.CommandNumber = Commands.Count
+                            item.CommandNumber = RawCommands.Count
                         Next
                     End If
+
+                    'Log where the command is located
+                    If isMultiLang Then
+                        commandLocations.Add(RawCommands.Count,
+                                                (currentCommandStart - &H12 - numGroups * 6) / 2) 'Index of the command in the file - header - size of the groups block, then converted to Words, instead of bytes
+                    Else
+                        commandLocations.Add(RawCommands.Count,
+                                                (currentCommandStart - &HC - numGroups * 6) / 2) 'Index of the command in the file - header - size of the groups block, then converted to Words, instead of bytes
+                    End If
+
 
                     'Read the command
                     Dim commandID As UInt16 = f.UInt16(currentCommandStart)
@@ -150,12 +202,91 @@ Namespace FileFormats.Explorers.Script
                     For i = 1 To paramSize
                         params.Add(f.UInt16(currentCommandStart + i * 2))
                     Next
-                    Commands.Add(CreateSkyCommand(commandID, params))
+                    Dim newCmd = CreateSkyCommand(commandID, params)
+                    rawCommands.Add(newCmd)
                     currentCommandStart += paramSize * 2 + 2
+
+                    'Determine if the given command has a goto target
+                    If TypeOf newCmd Is RawCommand AndAlso GotoTargetCommands.Contains(newCmd) Then
+                        'Then alter the relevant property to reference the label
+                        For Each prop In newCmd.GetType.GetProperties
+                            For Each attribute In prop.GetCustomAttributes(True)
+                                If TypeOf attribute Is CommandParameterAttribute AndAlso prop.PropertyType.Equals(GetType(GotoTarget)) Then
+                                    'We have an attribute on a GotoTarget.  Let's read the physical pointer, and log it so we can add a label later
+
+                                    Dim physical = newCmd.Params(DirectCast(attribute, CommandParameterAttribute).Index)
+                                    If Not gotoPhysicalPointers.Contains(physical) Then
+                                        gotoPhysicalPointers.Add(physical)
+                                    End If
+                                End If
+                            Next
+                        Next
+                    End If
                 End While
 
+                'Process pass 1 part 1 - processing Goto statements and Groups
+                Dim processPass1 As New List(Of LogicalCommand)
+                Dim gotoLabelIndexes As New Dictionary(Of Integer, Integer) 'Key: index of the target command in RawCommands. Value: index of the goto label in processPass1.
+                Dim groupIndex = 0
+                Dim gotoIndex = 0
+                '-Add group and goto labels as logical commands
+                For count = 0 To RawCommands.Count - 1
+                    Dim count2 = count
+                    Dim group = (From g In GroupDefinitions Where g.CommandNumber = count2).FirstOrDefault
+                    If group IsNot Nothing Then
+                        'Then this is the start of a group
+                        'Add a group start label
+                        processPass1.Add(New Commands.GroupLabel With {.GroupIndex = groupIndex, .Type = group.Type, .Unknown = group.Unknown})
+                        groupIndex += 1
+                    End If
+
+                    'If this command was referenced by a goto statement
+                    If gotoPhysicalPointers.Contains(commandLocations(count)) Then
+                        'Then add a goto label
+                        processPass1.Add(New Commands.GotoLabel With {.Name = GetPass1GotoLabelName(gotoIndex)})
+                        gotoLabelIndexes.Add(count, processPass1.Count - 1)
+                        gotoIndex += 1
+                    End If
+                    'Add the original command
+                    processPass1.Add(RawCommands(count))
+                Next
+                '-Change goto statements to point to a goto label, instead of a Word index
+                For Each item In processPass1
+                    If TypeOf item Is RawCommand AndAlso GotoTargetCommands.Contains(item) Then
+                        'Then alter the relevant property to reference the label
+                        For Each prop In item.GetType.GetProperties
+                            For Each attribute In prop.GetCustomAttributes(True)
+                                If TypeOf attribute Is CommandParameterAttribute AndAlso prop.PropertyType.Equals(GetType(GotoTarget)) Then
+                                    'We have an attribute on a GotoTarget.  Let's set the value now.
+
+                                    'Get the raw address of the target
+                                    Dim rawAddress = DirectCast(item, RawCommand).Params(DirectCast(attribute, CommandParameterAttribute).Index)
+
+                                    'Get the index of the command in RawCommands
+                                    Dim rawCommandIndex = (From i In commandLocations Where i.Value = rawAddress Select i.Key).First
+
+                                    'Get the label index
+                                    Dim labelIndex As Integer = gotoLabelIndexes(rawCommandIndex)
+                                    Dim target As New GotoTarget
+                                    target.LabelName = GetPass1GotoLabelName(labelIndex)
+
+                                    'Set the property
+                                    prop.SetValue(item, target)
+                                End If
+                            Next
+                        Next
+                    End If
+                Next
+
+                Commands = processPass1
+
+                'Todo: Pass 2 - Convert certain series of Goto statements into more human readable structures like If/ElseIf statements, Loops, Etc.
             End Using
         End Sub
+
+        Private Function GetPass1GotoLabelName(LabelIndex As Integer) As String
+            Return $"Goto-{LabelIndex}"
+        End Function
 
         Public Sub Save(Filename As String) Implements ISavableAs.Save
             'Preprocess the constants and strings
@@ -215,20 +346,76 @@ Namespace FileFormats.Explorers.Script
                 End If
             Next
 
-            'Commands and groups
+            'Todo when implemented in Open:
+            'Command saving pass 2 - processing If/ElseIf, Loops, etc. into Goto statements.
+
+            'Command saving pass 1 - processing Goto statements and Groups
+            Dim rawCommands As New List(Of RawCommand)
+            Dim rawCommandPointerTmp As Integer = 0
+            Dim groupDefinitions As New List(Of CommandGroup)
+            Dim gotoLabels As New Dictionary(Of String, Integer) 'Key: name of the label.  Value: index of the command it logically points to
+            Dim gotoRawPointers As New Dictionary(Of Integer, Integer) 'Key: index of the command in rawCommands.  Value: Physical pointer
+            Dim gotoCommandData As New Dictionary(Of RawCommand, Reflection.PropertyInfo)
+            For count = 0 To Commands.Count - 1
+                If TypeOf Commands(count) Is RawCommand Then
+                    'If this is a raw command, then add it.
+                    rawCommands.Add(Commands(count))
+
+                    'Update the pointer tmp variable so we can know the physical location of commands that are pointed to
+                    rawCommandPointerTmp += 1 + DirectCast(Commands(count), RawCommand).Params.Count 'Add the appropriate number of words
+
+                    'Check to see if this has a GotoTarget parameter
+                    For Each prop In Commands(count).GetType.GetProperties
+                        For Each attribute In prop.GetCustomAttributes(True)
+                            If TypeOf attribute Is CommandParameterAttribute AndAlso prop.PropertyType.Equals(GetType(GotoTarget)) Then
+                                'If it does, log it so we can update it after we've processed all the labels
+                                gotoCommandData.Add(Commands(count), prop)
+                            End If
+                        Next
+                    Next
+                ElseIf TypeOf Commands(count) Is GotoLabel Then
+                    'If this is a goto label, log that its name and where it points, so we can update any goto statements
+                    With DirectCast(Commands(count), GotoLabel)
+                        gotoLabels.Add(.Name, rawCommands.Count)
+                        gotoRawPointers.Add(rawCommands.Count, rawCommandPointerTmp)
+                    End With
+                    'Todo: maybe save the label names somewhere so they can be read later
+                ElseIf TypeOf Commands(count) Is GroupLabel Then
+                    'If this is a group definition, log it for future use
+                    Dim g = DirectCast(Commands(count), GroupLabel)
+                    groupDefinitions.Add(New CommandGroup With {.CommandNumber = rawCommands.Count, .Type = g.Type, .Unknown = g.Unknown})
+
+                End If
+            Next
+
+            'Command saving pass 1 part 2 - update goto statements
+            For Each item In gotoCommandData
+                For Each attribute In item.Value.GetCustomAttributes(True)
+                    If TypeOf attribute Is CommandParameterAttribute Then
+                        With DirectCast(attribute, CommandParameterAttribute)
+                            'Read the GotoTarget to get the label name, then get the index of the command it logically points to 
+                            Dim logicalPointer = gotoLabels(DirectCast(item.Value.GetValue(item.Key), GotoTarget).LabelName)
+                            Dim physicalPointer = gotoRawPointers(logicalPointer)
+                            item.Key.Params(.Index) = physicalPointer
+                        End With
+                    End If
+                Next
+            Next
+
+            'Commands saving pass 0 - converting commands and groups to byte code.
             Dim groupsSection As New List(Of Byte)
             Dim commandsSection As New List(Of Byte)
-            Dim commandOffset = 2 + 3 * Groups.Count
-            For count = 0 To Commands.Count - 1
+            Dim commandOffset = 2 + 3 * groupDefinitions.Count
+            For count = 0 To rawCommands.Count - 1
                 'Add the command to commandSection
-                Dim item = Commands(count)
+                Dim item = rawCommands(count)
 
                 Dim buffer = GetSkyCommandBytes(item)
                 commandsSection.AddRange(buffer)
 
                 'Add the group if there's a group pointing to this command
                 Dim c = count
-                Dim group = (From g In Groups Where g.CommandNumber = c).FirstOrDefault
+                Dim group = (From g In groupDefinitions Where g.CommandNumber = c).FirstOrDefault
 
                 If group IsNot Nothing Then
                     groupsSection.AddRange(BitConverter.GetBytes(CUShort(commandOffset)))
@@ -243,7 +430,7 @@ Namespace FileFormats.Explorers.Script
             'The data section
             Dim data As New List(Of Byte)
             data.AddRange(BitConverter.GetBytes(CUShort((groupsSection.Count + commandsSection.Count) / 2 + 2))) 'The number of words in groups and commands, plus the words for data length and numGroups.
-            data.AddRange(BitConverter.GetBytes(CUShort(Groups.Count))) 'numGroups
+            data.AddRange(BitConverter.GetBytes(CUShort(groupDefinitions.Count))) 'numGroups
             data.AddRange(groupsSection)
             data.AddRange(commandsSection)
 

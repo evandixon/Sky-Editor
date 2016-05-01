@@ -3,34 +3,6 @@
 Namespace FileFormats.Explorers.Script
     Partial Class SSB
 
-
-        ''' <summary>
-        ''' A list of the indexes of the constants that have not been referenced by a known Command type.
-        ''' We need to leave these in their current index in order to keep things from breaking.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Property UnreferencedConstantIndexes As List(Of Integer)
-
-        ''' <summary>
-        ''' A list of the indexes of the strings that have not been referenced by a known Command type.
-        ''' We need to leave these in their current index in order to keep things from breaking.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Property UnreferencedStringIndexes As List(Of Integer)
-
-        ''' <summary>
-        ''' A list of the indexes of constants that have been temporarily cleared and can be used for other strings.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Property AvailableConstantIndexes As List(Of Integer)
-
-        ''' <summary>
-        ''' A list of the indexes of strings that have been temporarily cleared and can be used for other strings.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Property AvailableStringIndexes As List(Of Integer)
-
-
         ''' <summary>
         ''' Creates a Command for Explorers of Sky using the given data.
         ''' </summary>
@@ -41,20 +13,37 @@ Namespace FileFormats.Explorers.Script
             'Select the command type
             Dim commandType As Type
 
-            Select Case CommandID
-                Case &H9E
-                    commandType = GetType(MonologueCommand)
-                Case &HAE
-                    commandType = GetType(BasicTalkCommand)
-                Case Else
-                    commandType = GetType(RawCommand)
-            End Select
+            If Params.Count = 0 Then
+                commandType = GetType(NoParamCommand)
+            Else
+                Select Case CommandID
+                    Case &H17, &H18
+                        commandType = GetType(LoadTopPic)
+                    Case &H20, &H25
+                        commandType = GetType(BgmFadeIn)
+                    Case &H60
+                        commandType = GetType(ImagePos)
+                    Case &H87
+                        commandType = GetType(GotoCommandRaw)
+                    Case &H9E
+                        commandType = GetType(MonologueCommand)
+                    Case &HAE
+                        commandType = GetType(BasicTalkCommand)
+                    Case &HE8, &HEA
+                        commandType = GetType(FadeTopBg)
+                    Case &H157
+                        commandType = GetType(Delay)
+                    Case Else
+                        commandType = GetType(RawCommand)
+                End Select
+            End If
 
             'Initialize the command
             Dim cmd As RawCommand = commandType.GetConstructor({}).Invoke({})
             'Set the default data
             cmd.CommandID = CommandID
             cmd.Params = Params
+            cmd.IsEoS = True
 
             'Use attributes on Properties to make parameter interaction more natural.
             Dim paramAttributeType = GetType(CommandParameterAttribute)
@@ -92,6 +81,12 @@ Namespace FileFormats.Explorers.Script
                                 stringParam.Constant = Constants(Params(paramInfo.Index))
                                 UnreferencedConstantIndexes.Remove(Params(paramInfo.Index))
                                 item.SetValue(cmd, stringParam)
+                            Case GetType(GotoTarget)
+                                'This will be processed at a later time.  For now, we'll just keep track of this command.
+                                'After all commands have been created, its Goto Target will be set to a particular label, using the raw value stored in cmd.Params
+                                If Not GotoTargetCommands.Contains(cmd) Then
+                                    GotoTargetCommands.Add(cmd)
+                                End If
                             Case Else
                                 Throw New InvalidCastException(My.Resources.Language.ErrorScriptCommandAttributeInvalidType)
                         End Select
@@ -188,6 +183,10 @@ Namespace FileFormats.Explorers.Script
                                     'Otherwise, add new ones
                                     Constants.Add(constParam.Constant)
                                 End If
+
+                            Case GetType(GotoTarget)
+                                'At this point in the saving cycle, we've already updated the appropriate parameter.
+                                'Take no action
                             Case Else
                                 Throw New InvalidCastException(My.Resources.Language.ErrorScriptCommandAttributeInvalidType)
                         End Select

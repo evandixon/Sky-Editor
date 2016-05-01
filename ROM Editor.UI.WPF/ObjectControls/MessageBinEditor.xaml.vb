@@ -29,7 +29,7 @@ Public Class MessageBinEditor
     Public Overrides Sub RefreshDisplay()
         With GetEditingObject(Of MessageBin)()
             AddHandler .EntryAdded, AddressOf OnMsgItemAdded
-            AddHandler .FileModified, AddressOf OnObjModified
+            AddHandler .Modified, AddressOf OnObjModified
             lstEntries.ItemsSource = .Strings
             If lstEntries.Items.Count > 0 Then
                 lstEntries.SelectedIndex = 0

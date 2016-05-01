@@ -64,7 +64,7 @@ Namespace UI
         End Property
         Dim _filename As String
 
-        Public Property ContainedDefinition As ISkyEditorPlugin
+        Public Property ContainedDefinition As SkyEditorPlugin
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
         Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified

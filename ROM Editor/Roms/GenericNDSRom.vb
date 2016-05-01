@@ -463,8 +463,16 @@ Namespace Roms
 
             '-Arm9
             Dim arm9Task = Task.Run(New Action(Sub()
-                                                   IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm9.bin"), RawData(Me.Arm9RomOffset, Me.Arm9Size))
-                                                   'Todo: write additional 0xC bytes if the next 4 equal: 21 06 C0 DE
+                                                   Dim arm9buffer As New List(Of Byte)
+                                                   arm9buffer.AddRange(RawData(Me.Arm9RomOffset, Me.Arm9Size))
+
+                                                   'Write an additional 0xC bytes if the next 4 equal: 21 06 C0 DE
+                                                   Dim footer As UInt32 = UInt32(Me.Arm9RomOffset + Me.Arm9Size)
+                                                   If footer = &HDEC00621 Then
+                                                       arm9buffer.AddRange(RawData(Me.Arm9RomOffset + Me.Arm9Size, &HC))
+                                                   End If
+
+                                                   IO.File.WriteAllBytes(IO.Path.Combine(TargetDir, "arm9.bin"), arm9buffer.ToArray)
                                                End Sub))
             If Me.IsThreadSafe Then
                 ExtractionTasks.Add(arm9Task)
@@ -509,7 +517,7 @@ Namespace Roms
 
             IO.Directory.CreateDirectory(romDirectory)
             Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ndstool.exe"),
-                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", PhysicalFilename, romDirectory))
+                                                  String.Format("-v -x ""{0}"" -9 ""{1}/arm9.bin"" -7 ""{1}/arm7.bin"" -y9 ""{1}/y9.bin"" -y7 ""{1}/y7.bin"" -d ""{1}/data"" -y ""{1}/overlay"" -t ""{1}/banner.bin"" -h ""{1}/header.bin""", OriginalFilename, romDirectory))
         End Function
         ''' <summary>
         ''' Queues file extraction tasks if the file is thread safe, otherwise, extracts files one at a time.

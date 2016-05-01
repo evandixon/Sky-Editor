@@ -85,7 +85,7 @@ Namespace Redistribution
         ''' <param name="Plugins">Definitions of the plugins to pack.</param>
         ''' <param name="DestinationFilename">File path of the zip to create.</param>
         ''' <returns></returns>
-        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of ISkyEditorPlugin), DestinationFilename As String, Info As Extensions.ExtensionInfo) As Task
+        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As Extensions.ExtensionInfo) As Task
             Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
             Dim ToCopy As New List(Of String)
             For Each plugin In Plugins
@@ -101,8 +101,8 @@ Namespace Redistribution
                     Using reflector As New Utilities.AssemblyReflectionManager
                         reflector.LoadAssembly(plgAssembly.Location, "PackPlugin")
                         reflector.Reflect(plgAssembly.Location, Function(CurrentAssembly As Assembly, Args() As Object) As Object
-                                                                    For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(ISkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
-                                                                        Dim def As ISkyEditorPlugin = result.GetConstructor({}).Invoke({})
+                                                                    For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+                                                                        Dim def As SkyEditorPlugin = result.GetConstructor({}).Invoke({})
                                                                         def.PrepareForDistribution()
                                                                     Next
                                                                     Return Nothing

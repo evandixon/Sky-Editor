@@ -114,6 +114,17 @@
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
     <Compile Include="FileFormats\Explorers\Script\CommandParameterAttribute.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\BasicTalkCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\BgmFadeIn.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\Delay.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\FadeTopBg.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\GotoCommandRaw.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\GotoLabel.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\GroupLabel.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\ImagePos.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\LoadTopPic.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\NoParamCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\GotoTarget.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\LogicalCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\MonologueCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\RawCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\ConstantCommandParameter.vb" />
@@ -155,7 +166,6 @@
     <Compile Include="Flashcart\GenericFlashcart.vb" />
     <Compile Include="Flashcart\NDSFlashcart.vb" />
     <Compile Include="Flashcart\NDSRomCollection.vb" />
-    <Compile Include="MenuActions\ExtractNDS.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
     <Compile Include="ConsoleCommands\Gzip.vb" />
@@ -223,6 +233,11 @@
     <Compile Include="Roms\iPackedRom.vb" />
     <Compile Include="romTool3ds.vb" />
     <Compile Include="SkyRomProject.vb" />
+    <Compile Include="SsbCommandNames.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SsbCommandNames.resx</DependentUpon>
+    </Compile>
     <Compile Include="unluac.vb" />
     <Compile Include="vgmstream.vb" />
   </ItemGroup>
@@ -242,6 +257,11 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SsbCommandNames.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SsbCommandNames.Designer.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

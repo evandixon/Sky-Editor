@@ -13,237 +13,106 @@ Public Class Lists
     Private Shared Property SkyPokemon As Dictionary(Of Integer, String)
     Private Shared Property TDPokemon As Dictionary(Of Integer, String)
     Private Shared Property RBPokemon As Dictionary(Of Integer, String)
+    Private Shared Property RBBaseTypes As Dictionary(Of Integer, String)
 
 
-    <Obsolete> Public Shared Function GetSkyLocations() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+    Public Shared Function GetSkyLocations() As Dictionary(Of Integer, String)
+        If SkyLocations Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.SkyLocations)
+            SkyLocations = i.Entries
         End If
-        Return _dictionaryConverted
+        Return SkyLocations
     End Function
-    <Obsolete> Public Shared Function GetSkyLocationsInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyLocations.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
+
+    Public Shared Function GetTDLocations() As Dictionary(Of Integer, String)
+        If TDLocations Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.TDLocations)
+            TDLocations = i.Entries
         End If
-        Return _dictionaryConverted
+        Return TDLocations
     End Function
-    <Obsolete> Public Shared Function GetTDLocations() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/TDLocations.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+
+    Public Shared Function GetRBLocations() As Dictionary(Of Integer, String)
+        If RBLocations Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.RBLocations)
+            RBLocations = i.Entries
         End If
-        Return _dictionaryConverted
+        Return RBLocations
     End Function
-    <Obsolete> Public Shared Function GetTDLocationsInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
+
+    Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
+        If SkyMoves Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.SkyMoves)
+            SkyMoves = i.Entries
         End If
-        Return _dictionaryConverted
+        Return SkyMoves
     End Function
-    <Obsolete> Public Shared Function GetRBLocations() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBLocations.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+
+    Public Shared Function GetRBMoves() As Dictionary(Of Integer, String)
+        If RBMoves Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.RBMoves)
+            RBMoves = i.Entries
         End If
-        Return _dictionaryConverted
+        Return RBMoves
     End Function
-    <Obsolete> Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyMoves.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+
+    Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
+        If SkyItems Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.SkyItems)
+            SkyItems = i.Entries
         End If
-        Return _dictionaryConverted
+        Return SkyItems
     End Function
-    <Obsolete> Public Shared Function GetSkyMovesInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyMoves.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
+
+    Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
+        If TDItems Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.TDItems)
+            TDItems = i.Entries
         End If
-        Return _dictionaryConverted
+        Return TDItems
     End Function
-    <Obsolete> Public Shared Function GetRBMoves() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBMoves.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+
+    Public Shared Function RBItemNames() As Dictionary(Of Integer, String)
+        If RBItems Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.RBItems)
+            RBItems = i.Entries
         End If
-        Return _dictionaryConverted
+        Return RBItems
     End Function
-    <Obsolete> Public Shared Function GetRBMovesInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBMoves.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
+
+    Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
+        If SkyPokemon Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.SkyPokemon)
+            SkyPokemon = i.Entries
         End If
-        Return _dictionaryConverted
+        Return SkyPokemon
     End Function
-    <Obsolete> Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyItems.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
+
+    Public Shared Function GetRBPokemon() As Dictionary(Of Integer, String)
+        If RBPokemon Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.RBPokemon)
+            RBPokemon = i.Entries
         End If
-        Return _dictionaryConverted
+        Return RBPokemon
     End Function
-    <Obsolete> Public Shared Function SkyItemNamesInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyItems.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
+
+    Public Shared Function GetRBBaseTypes() As Dictionary(Of Integer, String)
+        If RBBaseTypes Is Nothing Then
+            Dim i As New BasicDictionaryIniFile
+            i.CreateFile(My.Resources.ListResources.RBBaseTypes)
+            RBBaseTypes = i.Entries
         End If
-        Return _dictionaryConverted
+        Return RBBaseTypes
     End Function
-    <Obsolete> Public Shared Function RBItemNames() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBItems.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetRBItemNamesInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBItems.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetRBBaseTypes() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBBaseTypes.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetRBBaseTypesInverse() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBBaseTypes.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyPokemon.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetSkyPokemonInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/SkyPokemon.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetRBPokemon() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBPokemon.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetRBPokemonInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/RBPokemon.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/TDItems.txt")
-        Static _dictionaryConverted As Dictionary(Of Integer, String) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of Integer, String)
-            For Each Key As String In _dictionaryOriginal.Keys
-                _dictionaryConverted.Add(Key, _dictionaryOriginal(Key))
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
-    <Obsolete> Public Shared Function GetTDItemNamesInverse() As Dictionary(Of String, Integer)
-        Static _dictionaryOriginal As New ResourceDictionary("&L;/TDItems.txt")
-        Static _dictionaryConverted As Dictionary(Of String, Integer) = Nothing
-        If _dictionaryConverted Is Nothing Then
-            _dictionaryConverted = New Dictionary(Of String, Integer)
-            For Each Key As String In _dictionaryOriginal.Keys
-                If Not _dictionaryConverted.ContainsKey(_dictionaryOriginal(Key)) Then _dictionaryConverted.Add(_dictionaryOriginal(Key), Key)
-            Next
-        End If
-        Return _dictionaryConverted
-    End Function
+
 End Class

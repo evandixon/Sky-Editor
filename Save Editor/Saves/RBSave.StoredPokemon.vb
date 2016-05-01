@@ -289,13 +289,7 @@ Namespace Saves
         End Sub
 
         Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
-            Dim filename = PluginHelper.GetResourceName("{0}\RBFriendAreaOffsets.txt")
-            Dim currentLanguage As String = SettingsManager.Instance.Settings.CurrentLanguage
-            If IO.File.Exists(String.Format(filename, currentLanguage)) Then
-                Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(String.Format(filename, currentLanguage))).ToArray
-            Else
-                Return StoredPokemonSlotDefinition.FromLines(IO.File.ReadAllText(String.Format(filename, "English"))).ToArray
-            End If
+            Return StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets).ToArray
         End Function
     End Class
 

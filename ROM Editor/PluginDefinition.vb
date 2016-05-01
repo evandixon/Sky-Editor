@@ -4,9 +4,10 @@ Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Extensions.Plugins
 Imports SkyEditorBase
+Imports System.Reflection
 
 Public Class PluginDefinition
-    Implements ISkyEditorPlugin
+    Inherits SkyEditorPlugin
 
     'Public Function AutoDetectFileType(File As GenericFile) As Type
     '    Dim out As Type = Nothing
@@ -26,11 +27,11 @@ Public Class PluginDefinition
     '    Return out
     'End Function
 
-    Public Function AutoDetect3dsRom(File As GenericFile) As Type()
+    Public Function AutoDetect3dsRom(File As GenericFile) As TypeInfo()
         If File.Length > &H115A Then
             Dim e As New System.Text.ASCIIEncoding
             If e.GetString(File.RawData(&H100, 4)) = "NCSD" Then 'This is a 3DS ROM
-                Return {GetType(Generic3DSRom)}
+                Return {GetType(Generic3DSRom).GetTypeInfo}
             Else
                 Return {}
             End If
@@ -39,10 +40,10 @@ Public Class PluginDefinition
         End If
     End Function
 
-    Public Function FileFormatDetector(File As GenericFile) As Type()
+    Public Function FileFormatDetector(File As GenericFile) As TypeInfo()
         If File.Length > &H4 Then
             If File.RawData(0) = 0 AndAlso File.RawData(1) = &H63 AndAlso File.RawData(2) = &H74 AndAlso File.RawData(3) = &H65 Then
-                Return {GetType(CteImage)}
+                Return {GetType(CteImage).GetTypeInfo}
             Else
                 Return {}
             End If
@@ -51,19 +52,19 @@ Public Class PluginDefinition
         End If
     End Function
 
-    Public ReadOnly Property Credits As String Implements ISkyEditorPlugin.Credits
+    Public Overrides ReadOnly Property Credits As String
         Get
             Return My.Resources.Language.PluginCredits
         End Get
     End Property
 
-    Public ReadOnly Property PluginAuthor As String Implements ISkyEditorPlugin.PluginAuthor
+    Public Overrides ReadOnly Property PluginAuthor As String
         Get
             Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 
-    Public ReadOnly Property PluginName As String Implements ISkyEditorPlugin.PluginName
+    Public Overrides ReadOnly Property PluginName As String
         Get
             Return My.Resources.Language.PluginName
         End Get
@@ -76,7 +77,7 @@ Public Class PluginDefinition
     '    ROMFileTypes.Add("bgp", New BGPControl)
     'End Sub
 
-    Public Sub Load(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager) Implements ISkyEditorPlugin.Load
+    Public Overrides Sub Load(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager)
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
         Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
@@ -100,7 +101,7 @@ Public Class PluginDefinition
         GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_PSMD, GameStrings.PSMDCode)
     End Sub
 
-    Public Sub UnLoad(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager) Implements ISkyEditorPlugin.UnLoad
+    Public Overrides Sub UnLoad(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager)
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = PluginHelper.GetResourceName("Temp")
         If IO.Directory.Exists(directory) Then
@@ -110,7 +111,7 @@ Public Class PluginDefinition
         End If
     End Sub
 
-    Public Sub PrepareForDistribution() Implements ISkyEditorPlugin.PrepareForDistribution
+    Public Overrides Sub PrepareForDistribution()
         EnsureDirDeleted(PluginHelper.GetResourceName("Current"))
         EnsureDirDeleted(PluginHelper.GetResourceName("temp"))
         EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win32"))

@@ -23,7 +23,7 @@ Public Class StartupHelpers
         Await RunWPFStartupSequence(New WpfCoreMod)
     End Function
 
-    Public Shared Async Function RunWPFStartupSequence(CoreMod As ISkyEditorPlugin) As Task
+    Public Shared Async Function RunWPFStartupSequence(CoreMod As SkyEditorPlugin) As Task
         Try
             Await RedistributionHelpers.DeleteScheduledFiles()
         Catch ex As Exception

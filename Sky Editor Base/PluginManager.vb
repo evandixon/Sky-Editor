@@ -76,8 +76,7 @@ Public Class PluginManager
                                                                     (Args(0) IsNot Nothing AndAlso a.FullName = Args(0))
                                                                     ) Then
                                                               For Each t As Type In a.GetTypes
-                                                                  Dim isPlg As Boolean = (From i In t.GetInterfaces Where ReflectionHelpers.IsOfType(i, GetType(iSkyEditorPlugin))).Any
-                                                                  If isPlg Then
+                                                                  If ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin)) Then
                                                                       out.Add(t.FullName)
                                                                   End If
                                                               Next
@@ -108,7 +107,7 @@ Public Class PluginManager
     ''' Loads all available plugins using the given CoreMod.
     ''' </summary>
     ''' <param name="CoreMod"></param>
-    Public Overrides Sub LoadPlugins(CoreMod As iSkyEditorPlugin)
+    Public Overrides Sub LoadPlugins(CoreMod As SkyEditorPlugin)
         'Me.PluginFolder = FromFolder
         Dim devAssemblyPaths As New List(Of String)
         Dim saveAssemblies As Boolean = False
@@ -154,7 +153,7 @@ Public Class PluginManager
         For Each item In supportedPlugins
             Dim assemblyActual = Assembly.LoadFrom(item)
             Assemblies.Add(assemblyActual)
-            For Each plg In From t In assemblyActual.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(iSkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+            For Each plg In From t In assemblyActual.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
                 Plugins.Add(plg.GetConstructor({}).Invoke({}))
             Next
         Next
@@ -185,45 +184,9 @@ Public Class PluginManager
         RaiseEvent PluginLoadComplete(Me, New EventArgs)
     End Sub
 
-    ''' <summary>
-    ''' Loads the given plugin.
-    ''' Should only be called from another plugin's load method.
-    ''' </summary>
-    ''' <param name="Plugin"></param>
-    Public Overrides Sub LoadPlugin(Plugin As ISkyEditorPlugin)
-        Dim a = Plugin.GetType.Assembly
-        For Each item In Plugins
-            If item.GetType.IsEquivalentTo(Plugin.GetType) Then
-                'Then we already have this plugin loaded and should do nothing
-            Else
-                Plugin.Load(Me)
-
-                If Not Assemblies.Contains(a) Then
-                    Assemblies.Add(a)
-                End If
-            End If
-        Next
-
-        'Mark this plugin as a dependant
-        If Not DependantPlugins.ContainsKey(a) Then
-            DependantPlugins.Add(a, New List(Of Assembly))
-        End If
-        Dim caller = Assembly.GetCallingAssembly
-        If Not DependantPlugins(a).Contains(caller) Then
-            DependantPlugins(a).Add(caller)
-        End If
-    End Sub
 #End Region
 
 #Region "Properties"
-
-    ''' <summary>
-    ''' List of all loaded iSkyEditorPlugins that are loaded.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property Plugins As New List(Of iSkyEditorPlugin)
 
     Public Property PluginFolder As String
 
@@ -236,23 +199,12 @@ Public Class PluginManager
     Private Property MenuItems As List(Of MenuItemInfo)
 
     ''' <summary>
-    ''' Matches plugin assemblies (key) to assemblies that depend on that assembly (value).
-    ''' If an assembly is a key, it is manually loaded by each of the assemblies in the value.
-    ''' </summary>
-    ''' <returns></returns>
-    Private Property DependantPlugins As Dictionary(Of Assembly, List(Of Assembly))
-
-    ''' <summary>
     ''' Matches opened files to their parent projects
     ''' </summary>
     ''' <returns></returns>
     Private Property OpenedFiles As Dictionary(Of Object, ProjectOld)
 
-    ''' <summary>
-    ''' Contains the assemblies that contain plugin information.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property Assemblies As List(Of Assembly)
+
 
     Public Property CurrentSolution As SolutionOld
         Get
@@ -452,47 +404,7 @@ Public Class PluginManager
     End Function
 #End Region
 
-    ''' <summary>
-    ''' Returns an IEnumerable of all the registered types that inherit or implement the given BaseType.
-    ''' </summary>
-    ''' <param name="BaseType">Type to get children or implementors of.</param>
-    ''' <returns></returns>
-    Public Function GetRegisteredTypes(BaseType As TypeInfo) As IEnumerable(Of TypeInfo)
-        If BaseType Is Nothing Then
-            Throw New ArgumentNullException(NameOf(BaseType))
-        End If
 
-        If TypeRegistery.ContainsKey(BaseType) Then
-            Return TypeRegistery(BaseType)
-        Else
-            Return {}
-        End If
-    End Function
-
-    Public Function GetRegisteredObjects(BaseType As TypeInfo) As IEnumerable(Of Object)
-        Dim output As New List(Of Object)
-
-        For Each item In GetRegisteredTypes(BaseType.GetTypeInfo)
-            If item.GetConstructor({}) IsNot Nothing AndAlso Not item.IsGenericType Then
-                output.Add(item.GetConstructor({}).Invoke({}))
-            End If
-        Next
-
-        Return output
-    End Function
-
-    Public Function GetRegisteredObjects(Of T)() As IEnumerable(Of T)
-        Dim output As New List(Of T)
-        Dim targetType = GetType(T)
-
-        For Each item In GetRegisteredTypes(targetType)
-            If item.GetConstructor({}) IsNot Nothing AndAlso Not item.IsGenericType Then
-                output.Add(item.GetConstructor({}).Invoke({}))
-            End If
-        Next
-
-        Return output
-    End Function
 
     ''' <summary>
     ''' Returns an IEnumerable of all the registered types that implement iCreatableFile.
@@ -843,8 +755,8 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Function GetFileType(File As GenericFile) As Type
-        Dim matches As New List(Of Type)
+    Public Function GetFileType(File As GenericFile) As TypeInfo
+        Dim matches As New List(Of TypeInfo)
         For Each item In FileTypeDetectors
             Dim t = item.Invoke(File)
             If t IsNot Nothing Then
@@ -876,8 +788,8 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Function GetDirectoryType(Directory As IO.DirectoryInfo) As Type
-        Dim matches As New List(Of Type)
+    Public Function GetDirectoryType(Directory As IO.DirectoryInfo) As TypeInfo
+        Dim matches As New List(Of TypeInfo)
         For Each item In DirectoryTypeDetectors
             Dim t = item.Invoke(Directory.FullName)
             If t IsNot Nothing Then
@@ -898,8 +810,8 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Function DetectFileType(File As GenericFile) As IEnumerable(Of Type)
-        Dim matches As New List(Of Type)
+    Public Function DetectFileType(File As GenericFile) As IEnumerable(Of TypeInfo)
+        Dim matches As New List(Of TypeInfo)
 
         If ExecutableFile.IsExeFile(File.OriginalFilename) Then
             matches.Add(GetType(ExecutableFile))
@@ -927,7 +839,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="Filename"></param>
     ''' <returns></returns>
-    Public Shared Function TryGetObjectFileType(Filename As String) As Type
+    Public Shared Function TryGetObjectFileType(Filename As String) As TypeInfo
         Try
             Dim f As New ObjectFile(Of Object)(Filename)
             'Doesn't work for ObjectFiles

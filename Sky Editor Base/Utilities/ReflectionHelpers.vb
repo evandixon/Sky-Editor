@@ -43,8 +43,8 @@ Namespace Utilities
         ''' </summary>
         ''' <param name="TypeName"></param>
         ''' <returns></returns>
-        Public Shared Function GetTypeFromName(TypeName As String) As Type
-            Return Type.GetType(TypeName, AddressOf CustomAssemblyResolver, AddressOf TypeResolver, False)
+        Public Shared Function GetTypeFromName(TypeName As String) As TypeInfo
+            Return Type.GetType(TypeName, AddressOf CustomAssemblyResolver, AddressOf TypeResolver, False).GetTypeInfo
         End Function
 
         Public Shared Function GetAssemblyVersion(Assembly As Assembly) As Version

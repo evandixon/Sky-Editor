@@ -3,7 +3,6 @@ Imports SkyEditor.Core.Interfaces
 Public Class GenericFile
     Implements IDisposable
     Implements iNamed
-    Implements iModifiable
     'Implements iCreatableFile 'Excluded because this might not apply to children
     'Implements iOpenableFile
     Implements iOnDisk
@@ -404,7 +403,6 @@ Public Class GenericFile
 #End Region
 
 #Region "Events"
-    Public Event FileModified(sender As Object, e As EventArgs) Implements iModifiable.Modified
 
     ''' <summary>
     ''' Raised when the file has been saved to disk.
@@ -420,19 +418,8 @@ Public Class GenericFile
     ''' <param name="e"></param>
     Public Event FileSaving(sender As Object, e As EventArgs)
 
-    ''' <summary>
-    ''' Raises the FileModified event, marking the file as having been modified.
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Protected Sub RaiseFileModified(sender As Object, e As EventArgs)
-        RaiseEvent FileModified(sender, e)
-    End Sub
     Protected Sub RaiseFileSaved(sender As Object, e As EventArgs)
         RaiseEvent FileSaved(sender, e)
-    End Sub
-    Public Sub RaiseModified() Implements iModifiable.RaiseModified
-        RaiseFileModified(Me, New EventArgs)
     End Sub
 
 #End Region

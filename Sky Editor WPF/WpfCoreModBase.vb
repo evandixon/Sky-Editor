@@ -4,22 +4,22 @@
 ''' Core of a WPF Core Mod that handles environment specific things, like how to restart the application.
 ''' </summary>
 Public MustInherit Class WpfCoreModBase
-    Implements ISkyEditorPlugin
-    Public MustOverride ReadOnly Property Credits As String Implements ISkyEditorPlugin.Credits
+    Inherits SkyEditorPlugin
+    Public MustOverride Overrides ReadOnly Property Credits As String
 
-    Public MustOverride ReadOnly Property PluginAuthor As String Implements ISkyEditorPlugin.PluginAuthor
+    Public MustOverride Overrides ReadOnly Property PluginAuthor As String
 
-    Public MustOverride ReadOnly Property PluginName As String Implements ISkyEditorPlugin.PluginName
+    Public MustOverride Overrides ReadOnly Property PluginName As String
 
-    Public Overridable Sub Load(Manager As PluginManager) Implements ISkyEditorPlugin.Load
+    Public Overrides Sub Load(Manager As PluginManager)
         AddHandler Redistribution.RedistributionHelpers.ApplicationRestartRequested, AddressOf WpfCoreModBase.RestartApplication
     End Sub
 
-    Public Overridable Sub PrepareForDistribution() Implements ISkyEditorPlugin.PrepareForDistribution
+    Public Overrides Sub PrepareForDistribution()
 
     End Sub
 
-    Public Overridable Sub UnLoad(Manager As PluginManager) Implements ISkyEditorPlugin.UnLoad
+    Public Overrides Sub UnLoad(Manager As PluginManager)
 
     End Sub
 

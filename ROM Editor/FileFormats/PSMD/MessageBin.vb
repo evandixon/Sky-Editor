@@ -14,6 +14,7 @@ Namespace FileFormats.PSMD
         Inherits Sir0
         Implements iOpenableFile
         Implements ComponentModel.INotifyPropertyChanged
+        Implements iModifiable
 
         Public Class EntryAddedEventArgs
             Inherits EventArgs
@@ -160,6 +161,7 @@ Namespace FileFormats.PSMD
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
         Public Event EntryAdded(sender As Object, e As EntryAddedEventArgs)
+        Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
 
         Public Sub New()
             MyBase.New
@@ -170,6 +172,10 @@ Namespace FileFormats.PSMD
             Me.New
             IsReadOnly = OpenReadOnly
             Strings = New ObservableCollection(Of MessageBinStringEntry)
+        End Sub
+
+        Public Sub RaiseModified() Implements iModifiable.RaiseModified
+            RaiseEvent Modified(Me, New EventArgs)
         End Sub
     End Class
 End Namespace

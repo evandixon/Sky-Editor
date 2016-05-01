@@ -59,6 +59,15 @@ Namespace Extensions.Plugins
         Public Shared Function HasDefaultConstructor(Type As TypeInfo) As Boolean
             Return (From c In Type.DeclaredConstructors Where c.GetParameters.Length = 0).Any
         End Function
+
+        ''' <summary>
+        ''' Creates a new instance of the given type.
+        ''' </summary>
+        ''' <param name="Type">Type to create an instance of.  Must have a default constructor.</param>
+        ''' <returns></returns>
+        Public Shared Function CreateInstance(Type As TypeInfo) As Object
+            Return Activator.CreateInstance(Type.AsType)
+        End Function
     End Class
 End Namespace
 

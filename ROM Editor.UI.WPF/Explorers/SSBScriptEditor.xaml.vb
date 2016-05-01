@@ -13,12 +13,17 @@ Namespace Explorers
         ''' Container class that's used to bypass a bug in ListViewDragDropManager.
         ''' </summary>
         Public Class ObjectContainer
-            Public Property Item As Commands.RawCommand
+            Public Property Item As Commands.LogicalCommand
+            Public ReadOnly Property AsString As String
+                Get
+                    Return Item.ToString
+                End Get
+            End Property
         End Class
 #End Region
 
         Private WithEvents dragManager As ListViewDragDropManager(Of ObjectContainer)
-        Private Property Items As ObjectModel.ObservableCollection(Of ObjectContainer)
+        Protected Property Items As ObjectModel.ObservableCollection(Of ObjectContainer)
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer
             Return 1
@@ -61,7 +66,7 @@ Namespace Explorers
 
             ' Add any initialization after the InitializeComponent() call.
             Items = New ObjectModel.ObservableCollection(Of ObjectContainer)
-            lvScript.ItemsSource = Items
+            lvScript.DataContext = Items
             dragManager = New ListViewDragDropManager(Of ObjectContainer)(lvScript)
         End Sub
 

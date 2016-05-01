@@ -3,55 +3,55 @@ Imports Microsoft.VisualBasic.Devices
 
 Public Class IOProvider
     Inherits SkyEditor.Core.IOProvider
-    Public Overrides Sub CopyFile(SourceFilename As String, DestinationFilename As String)
-        IO.File.Copy(SourceFilename, DestinationFilename, True)
+    Public Overrides Sub CopyFile(sourceFilename As String, destinationFilename As String)
+        IO.File.Copy(sourceFilename, destinationFilename, True)
     End Sub
 
-    Public Overrides Sub DeleteFile(Filename As String)
-        IO.File.Delete(Filename)
+    Public Overrides Sub DeleteFile(filename As String)
+        IO.File.Delete(filename)
     End Sub
 
-    Public Overrides Sub WriteAllBytes(Filename As String, Data() As Byte)
-        IO.File.WriteAllBytes(Filename, Data)
+    Public Overrides Sub WriteAllBytes(filename As String, data() As Byte)
+        IO.File.WriteAllBytes(filename, data)
     End Sub
 
-    Public Overrides Sub WriteAllText(Filename As String, Data As String)
-        IO.File.WriteAllText(Filename, Data)
+    Public Overrides Sub WriteAllText(filename As String, data As String)
+        IO.File.WriteAllText(filename, data)
     End Sub
 
-    Public Overrides Function CanLoadFileInMemory(FileSize As Long) As Boolean
-        Return (New ComputerInfo).AvailablePhysicalMemory > (FileSize + 500 * 1024 * 1024)
+    Public Overrides Function CanLoadFileInMemory(fileSize As Long) As Boolean
+        Return (New ComputerInfo).AvailablePhysicalMemory > (fileSize + 500 * 1024 * 1024)
     End Function
 
-    Public Overrides Function FileExists(Filename As String) As Boolean
+    Public Overrides Function fileExists(Filename As String) As Boolean
         Return IO.File.Exists(Filename)
     End Function
 
-    Public Overrides Function GetFileLength(Filename As String) As Long
-        Return (New IO.FileInfo(Filename)).Length
+    Public Overrides Function GetFileLength(filename As String) As Long
+        Return (New IO.FileInfo(filename)).Length
     End Function
 
     Public Overrides Function GetTempFilename() As String
         Return IO.Path.GetTempFileName
     End Function
 
-    Public Overrides Function OpenFile(Filename As String) As Stream
-        Return IO.File.Open(Filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
+    Public Overrides Function OpenFile(filename As String) As Stream
+        Return IO.File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
     End Function
 
-    Public Overrides Function OpenFileReadOnly(Filename As String) As Stream
-        Return IO.File.Open(Filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite)
+    Public Overrides Function OpenFileReadOnly(filename As String) As Stream
+        Return IO.File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite)
     End Function
 
-    Public Overrides Function OpenFileWriteOnly(Filename As String) As Stream
-        Return IO.File.Open(Filename, FileMode.OpenOrCreate, FileAccess.Write)
+    Public Overrides Function OpenFileWriteOnly(filename As String) As Stream
+        Return IO.File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write)
     End Function
 
-    Public Overrides Function ReadAllBytes(Filename As String) As Byte()
-        Return IO.File.ReadAllBytes(Filename)
+    Public Overrides Function ReadAllBytes(filename As String) As Byte()
+        Return IO.File.ReadAllBytes(filename)
     End Function
 
-    Public Overrides Function ReadAllText(Filename As String) As String
-        Return IO.File.ReadAllText(Filename)
+    Public Overrides Function ReadAllText(filename As String) As String
+        Return IO.File.ReadAllText(filename)
     End Function
 End Class

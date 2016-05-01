@@ -13,10 +13,10 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Header="{x:Static res:Language.Script}">
     <Grid>
-        <ListView x:Name="lvScript">
+        <ListView x:Name="lvScript" ItemsSource="{Binding}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+                    <VirtualizingStackPanel IsItemsHost="True" ScrollViewer.CanContentScroll="True" ScrollViewer.IsDeferredScrollingEnabled="True"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemContainerStyle>
@@ -33,7 +33,8 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <skywpf:ObjectControlPlaceholder DataContext="{Binding Item}" />
+                    <!--<skywpf:ObjectControlPlaceholder DataContext="{Binding Item}" />-->
+                    <Label Content="{Binding Item}" />
                 </DataTemplate>            
             </ListView.ItemTemplate>
         </ListView>
