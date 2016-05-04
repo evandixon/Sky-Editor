@@ -1,10 +1,79 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports System.Text.RegularExpressions
 Imports ROMEditor.Projects
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
+Imports TagLib
+
 Namespace MenuActions
     Public Class PsmdSoundtrackMenuAction
         Inherits MenuAction
+
+        Private Class FileAbstraction
+            Implements TagLib.File.IFileAbstraction
+            Implements IDisposable
+
+            Private Filestream As IO.FileStream
+
+            Public ReadOnly Property Name As String Implements TagLib.File.IFileAbstraction.Name
+                Get
+                    Return Filestream.Name
+                End Get
+            End Property
+
+            Public ReadOnly Property ReadStream As Stream Implements TagLib.File.IFileAbstraction.ReadStream
+                Get
+                    Return Filestream
+                End Get
+            End Property
+
+            Public ReadOnly Property WriteStream As Stream Implements TagLib.File.IFileAbstraction.WriteStream
+                Get
+                    Return Filestream
+                End Get
+            End Property
+
+            Public Sub CloseStream(stream As Stream) Implements TagLib.File.IFileAbstraction.CloseStream
+                stream.Close()
+            End Sub
+
+            Public Sub New(Filename As String)
+                Filestream = IO.File.Open(Filename, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+            End Sub
+
+#Region "IDisposable Support"
+            Private disposedValue As Boolean ' To detect redundant calls
+
+            ' IDisposable
+            Protected Overridable Sub Dispose(disposing As Boolean)
+                If Not Me.disposedValue Then
+                    If disposing Then
+                        ' TODO: dispose managed state (managed objects).
+                        Filestream.Dispose()
+                    End If
+
+                    ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+                    ' TODO: set large fields to null.
+                End If
+                Me.disposedValue = True
+            End Sub
+
+            ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
+            'Protected Overrides Sub Finalize()
+            '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+            '    Dispose(False)
+            '    MyBase.Finalize()
+            'End Sub
+
+            ' This code added by Visual Basic to correctly implement the disposable pattern.
+            Public Sub Dispose() Implements IDisposable.Dispose
+                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+                Dispose(True)
+                ' TODO: uncomment the following line if Finalize() is overridden above.
+                ' GC.SuppressFinalize(Me)
+            End Sub
+#End Region
+        End Class
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
             Return {GetType(BaseRomProject)}
@@ -72,22 +141,27 @@ Namespace MenuActions
 
                                        IO.File.Delete(destinationWav)
 
-                                       ' Dim m = IdSharp.AudioInfo.AudioFile.Create(destinationMp3, True)
-                                       Dim t As New IdSharp.Tagging.ID3v2.ID3v2Tag(destinationMp3)
-                                       t.Album = My.Resources.Language.PSMDSoundTrackAlbum
-                                       t.Artist = My.Resources.Language.PSMDSoundTrackArtist
-                                       t.Year = 2015
-                                       Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
-                                       If filenameParts.Count = 2 Then
-                                           If IsNumeric(filenameParts(0)) Then
-                                               t.TrackNumber = CInt(filenameParts(0))
-                                           End If
+                                       'Add the tag
+                                       Using abs As New FileAbstraction(destinationMp3)
+                                           Dim t As New TagLib.Mpeg.AudioFile(abs)
+                                           With t.Tag
+                                               .Album = My.Resources.Language.PSMDSoundTrackAlbum
+                                               .AlbumArtists = {My.Resources.Language.PSMDSoundTrackArtist}
+                                               .Year = 2015
+                                               Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
+                                               If filenameParts.Count = 2 Then
+                                                   If IsNumeric(filenameParts(0)) Then
+                                                       .Track = CInt(filenameParts(0))
+                                                   End If
 
-                                           t.Title = filenameParts(1)
-                                       End If
-                                       t.Save(destinationMp3)
+                                                   .Title = filenameParts(1)
+                                               End If
+                                           End With
+                                           t.Save()
+                                       End Using
                                    End Function, trackNames.Keys)
             Next
+            PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Public Sub New()

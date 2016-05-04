@@ -62,15 +62,6 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IdSharp.AudioInfo">
-      <HintPath>..\IdSharp.AudioInfo.dll</HintPath>
-    </Reference>
-    <Reference Include="IdSharp.Common">
-      <HintPath>..\IdSharp.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="IdSharp.Tagging">
-      <HintPath>..\IdSharp.Tagging.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -82,6 +73,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="TagLib.Portable, Version=2.2.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <HintPath>..\packages\TagLib.Portable.1.0.4\lib\portable-net45+win+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10\TagLib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
