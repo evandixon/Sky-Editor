@@ -1,8 +1,11 @@
-﻿Namespace MenuActions
+﻿Imports System.Reflection
+Imports SkyEditor.Core.UI
+
+Namespace MenuActions
     Public Class FileSaveSolution
         Inherits MenuAction
-        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SolutionOld)}
+        Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
+            Return {GetType(SolutionOld).GetTypeInfo}
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task

@@ -110,6 +110,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Case {0}: {1}.
+        '''</summary>
+        Friend Shared ReadOnly Property CaseText() As String
+            Get
+                Return ResourceManager.GetString("CaseText", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Case Else: {0}.
+        '''</summary>
+        Friend Shared ReadOnly Property CaseTextDefault() As String
+            Get
+                Return ResourceManager.GetString("CaseTextDefault", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Delay {0} Frames.
         '''</summary>
         Friend Shared ReadOnly Property Delay() As String
@@ -178,6 +196,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property ImagePos() As String
             Get
                 Return ResourceManager.GetString("ImagePos", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Load Picture on Bottom Screen: {0}.
+        '''</summary>
+        Friend Shared ReadOnly Property LoadBottomPic() As String
+            Get
+                Return ResourceManager.GetString("LoadBottomPic", resourceCulture)
             End Get
         End Property
         
@@ -272,11 +299,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Switch Monologue (CharacterID: {0}).
+        '''</summary>
+        Friend Shared ReadOnly Property SwitchMonologue() As String
+            Get
+                Return ResourceManager.GetString("SwitchMonologue", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to switchparam.
         '''</summary>
         Friend Shared ReadOnly Property SwitchParam() As String
             Get
                 Return ResourceManager.GetString("SwitchParam", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Switch Talk (CharacterID: {0}).
+        '''</summary>
+        Friend Shared ReadOnly Property SwitchTalk() As String
+            Get
+                Return ResourceManager.GetString("SwitchTalk", resourceCulture)
             End Get
         End Property
     End Class

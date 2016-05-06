@@ -5,7 +5,7 @@ Module Module1
     Sub Main()
         Try
             Dim manager As PluginManager = PluginManager.GetInstance
-            manager.LoadPlugins(New ConsoleCoreMod)
+            manager.LoadCore(New ConsoleCoreMod)
 
             PluginHelper.ShowConsole()
             Console.WriteLine("Sky Editor Console has successfully loaded.")

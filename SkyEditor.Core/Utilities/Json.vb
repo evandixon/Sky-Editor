@@ -1,8 +1,9 @@
-﻿''' <summary>
-''' Contains methods to help in JSON serialization.
-''' Currently, this is a wrapper for the Newtonsoft Json library.
-''' </summary>
-Public Class Json
+﻿Namespace Utilities
+    ''' <summary>
+    ''' Contains methods to help in JSON serialization.
+    ''' Currently, this is a wrapper for the Newtonsoft Json library.
+    ''' </summary>
+    Public Class Json
         ''' <summary>
         ''' Serializes the specified object into a JSON string.
         ''' </summary>
@@ -49,3 +50,5 @@ Public Class Json
             Return Deserialize(Of T)(FileProvider.ReadAllText(Filename))
         End Function
     End Class
+
+End Namespace

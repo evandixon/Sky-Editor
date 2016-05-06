@@ -1,9 +1,10 @@
 ﻿Imports System.Windows.Forms
+Imports SkyEditor.Core.UI
 Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class OpenSdfSave
-        Inherits SkyEditorBase.MenuAction
+        Inherits MenuAction
         Implements IDisposable
 
         Dim dialog As FolderBrowserDialog

@@ -1,5 +1,5 @@
 ﻿Imports System.ComponentModel
-Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 

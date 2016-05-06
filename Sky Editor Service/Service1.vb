@@ -42,7 +42,7 @@ WaitForTask:
 
     Private Sub InitPluginManager()
         manager = PluginManager.GetInstance
-        manager.LoadPlugins(New ServiceCoreMod)
+        manager.LoadCore(New ServiceCoreMod)
     End Sub
 
     Private Sub workTimer_Elapsed(sender As Object, e As ElapsedEventArgs) Handles workTimer.Elapsed

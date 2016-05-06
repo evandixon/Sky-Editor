@@ -17,16 +17,24 @@ Namespace FileFormats.Explorers.Script
                 commandType = GetType(NoParamCommand)
             Else
                 Select Case CommandID
+                    Case &H9
+                        commandType = GetType(LoadBottomPic)
                     Case &H17, &H18
                         commandType = GetType(LoadTopPic)
                     Case &H20, &H25
                         commandType = GetType(BgmFadeIn)
                     Case &H60
                         commandType = GetType(ImagePos)
+                    Case &H67
+                        commandType = GetType(CaseText)
+                    Case &H6E
+                        commandType = GetType(CaseTextDefault)
                     Case &H87
                         commandType = GetType(GotoCommandRaw)
                     Case &H9E
                         commandType = GetType(MonologueCommand)
+                    Case &HAC, &HAD
+                        commandType = GetType(SwitchTalk)
                     Case &HAE
                         commandType = GetType(BasicTalkCommand)
                     Case &HE8, &HEA
@@ -57,10 +65,10 @@ Namespace FileFormats.Explorers.Script
                                 item.SetValue(cmd, Params(paramInfo.Index))
                             Case GetType(Int16), GetType(Short)
                                 item.SetValue(cmd, BitConverter.ToInt16(BitConverter.GetBytes(Params(paramInfo.Index)), 0))
-                            Case GetType(Int32), GetType(Integer)
-                                item.SetValue(cmd, BitConverter.ToInt32(BitConverter.GetBytes(Params(paramInfo.Index)), 0))
-                            Case GetType(Int64), GetType(Long)
-                                item.SetValue(cmd, BitConverter.ToInt64(BitConverter.GetBytes(Params(paramInfo.Index)), 0))
+                            'Case GetType(Int32), GetType(Integer)
+                            '    item.SetValue(cmd, BitConverter.ToInt32(BitConverter.GetBytes(Params(paramInfo.Index)), 0))
+                            'Case GetType(Int64), GetType(Long)
+                            '    item.SetValue(cmd, BitConverter.ToInt64(BitConverter.GetBytes(Params(paramInfo.Index)), 0))
                             Case GetType(StringCommandParameter)
                                 If isMultiLang Then
                                     Dim stringParam As New MultiLangStringCommandParameter
@@ -120,12 +128,12 @@ Namespace FileFormats.Explorers.Script
                             Case GetType(Int16), GetType(Short)
                                 'We don't want any overflow due to negatives, or numbers that are over 2 bytes, so we'll allow all overflow
                                 params(index) = BitConverter.ToUInt16(BitConverter.GetBytes(item.GetValue(Command)), 0)
-                            Case GetType(Int32), GetType(Integer)
-                                'We don't want any overflow due to negatives, or numbers that are over 2 bytes, so we'll allow all overflow
-                                params(index) = BitConverter.ToUInt16(BitConverter.GetBytes(item.GetValue(Command)), 0)
-                            Case GetType(Int64), GetType(Long)
-                                'We don't want any overflow due to negatives, or numbers that are over 2 bytes, so we'll allow all overflow
-                                params(index) = BitConverter.ToUInt16(BitConverter.GetBytes(item.GetValue(Command)), 0)
+                            'Case GetType(Int32), GetType(Integer)
+                            '    'We don't want any overflow due to negatives, or numbers that are over 2 bytes, so we'll allow all overflow
+                            '    params(index) = BitConverter.ToUInt16(BitConverter.GetBytes(item.GetValue(Command)), 0)
+                            'Case GetType(Int64), GetType(Long)
+                            '    'We don't want any overflow due to negatives, or numbers that are over 2 bytes, so we'll allow all overflow
+                            '    params(index) = BitConverter.ToUInt16(BitConverter.GetBytes(item.GetValue(Command)), 0)
                             Case GetType(StringCommandParameter)
                                 Dim stringParam As StringCommandParameter = item.GetValue(Command)
                                 If AvailableStringIndexes.Count > 0 Then

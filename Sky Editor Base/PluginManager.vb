@@ -2,13 +2,14 @@
 Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Extensions.Plugins
-Imports SkyEditor.Core.Windows
 Imports SkyEditorBase.EventArguments
 Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core
 
 Public Class PluginManager
-    Inherits SkyEditor.Core.Extensions.Plugins.PluginManager
+    Inherits SkyEditor.Core.PluginManager
     Implements IDisposable
     Implements iNamed
 
@@ -76,7 +77,7 @@ Public Class PluginManager
                                                                     (Args(0) IsNot Nothing AndAlso a.FullName = Args(0))
                                                                     ) Then
                                                               For Each t As Type In a.GetTypes
-                                                                  If ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin)) Then
+                                                                  If ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) Then
                                                                       out.Add(t.FullName)
                                                                   End If
                                                               Next
@@ -106,8 +107,8 @@ Public Class PluginManager
     ''' <summary>
     ''' Loads all available plugins using the given CoreMod.
     ''' </summary>
-    ''' <param name="CoreMod"></param>
-    Public Overrides Sub LoadPlugins(CoreMod As SkyEditorPlugin)
+    ''' <param name="Core"></param>
+    Public Overrides Sub LoadCore(Core As CoreSkyEditorPlugin)
         'Me.PluginFolder = FromFolder
         Dim devAssemblyPaths As New List(Of String)
         Dim saveAssemblies As Boolean = False
@@ -122,7 +123,7 @@ Public Class PluginManager
         Me.RegisterType(GetType(Extensions.ExtensionType), GetType(Extensions.PluginExtensionType))
 
         'Note the core assembly name, so we don't accidentally try to load it again (seeing that it's already in the AppDomain).
-        CoreAssemblyName = CoreMod.GetType.Assembly.FullName
+        CoreAssemblyName = Core.GetType.Assembly.FullName
 
         Dim supportedPlugins As New List(Of String)
 
@@ -167,7 +168,7 @@ Public Class PluginManager
         '    Next
         'End If
 
-        CoreMod.Load(Me)
+        MyBase.LoadCore(Core)
 
         RaiseEvent PluginsLoading(Me, New PluginLoadingEventArgs)
 
@@ -175,7 +176,7 @@ Public Class PluginManager
             item.Load(Me)
         Next
 
-        LoadTypes(CoreMod.GetType.Assembly)
+        LoadTypes(Core.GetType.Assembly)
         LoadTypes(Assembly.GetCallingAssembly)
 
         For Each item In Assemblies
@@ -188,15 +189,11 @@ Public Class PluginManager
 
 #Region "Properties"
 
-    Public Property PluginFolder As String
-
     ''' <summary>
     ''' Gets a list of assemblies that failed to be loaded as plugins, while being registered as such.
     ''' </summary>
     ''' <returns></returns>
     Private Property FailedPluginLoads As List(Of String)
-
-    Private Property MenuItems As List(Of MenuItemInfo)
 
     ''' <summary>
     ''' Matches opened files to their parent projects
@@ -243,105 +240,7 @@ Public Class PluginManager
 
 #Region "Registration"
 
-    ''' <summary>
-    ''' Registers a Menu Action for use with creating custom menu items.
-    ''' </summary>
-    ''' <param name="ActionType">Type of the menu action to be registered.</param>
-    Protected Sub RegisterMenuActionType(ActionType As Type)
-        If ActionType Is Nothing Then
-            Throw New ArgumentNullException(NameOf(ActionType))
-        End If
-        If Not ReflectionHelpers.IsOfType(ActionType, GetType(MenuAction)) Then
-            Throw New ArgumentException("Given type must inherit from MenuAction.", NameOf(ActionType))
-        End If
 
-        'While we're registering the type, we need an instance to get extra information, like where to put it
-        Dim ActionInstance As MenuAction = ActionType.GetConstructor({}).Invoke({})
-
-        If ActionInstance.DevOnly AndAlso Not SettingsManager.Instance.Settings.DevelopmentMode Then
-            'Then this menu item is not supported.
-            Exit Sub
-        End If
-
-        'Generate the MenuItem
-        If MenuItems Is Nothing Then
-            MenuItems = New List(Of MenuItemInfo)
-        End If
-
-        If ActionInstance.ActionPath.Count >= 1 Then
-            'Create parent menu items
-            Dim parent = From m In MenuItems Where m.Header = ActionInstance.ActionPath(0)
-
-            Dim current As MenuItemInfo
-            If parent.Any Then
-                current = parent.First
-                If current.ActionTypes.Count = 0 Then
-                    current.SortOrder = Math.Min(current.SortOrder, ActionInstance.SortOrder)
-                End If
-            Else
-                Dim m As New MenuItemInfo
-                m.Header = ActionInstance.ActionPath(0)
-                m.Children = New List(Of MenuItemInfo)
-                m.ActionTypes = New List(Of Type)
-                m.SortOrder = ActionInstance.SortOrder
-                If ActionInstance.ActionPath.Count = 1 Then
-                    m.ActionTypes.Add(ActionType)
-                End If
-                MenuItems.Add(m)
-                current = m
-            End If
-
-
-            For count = 1 To ActionInstance.ActionPath.Count - 2
-                Dim index = count 'To avoid potential issues with using the below linq expression.  Might not be needed, but it's probably best to avoid potential issues.
-                parent = From m As MenuItemInfo In current.Children Where m.Header = ActionInstance.ActionPath(index)
-                If parent.Any Then
-                    current = parent.First
-                    If current.ActionTypes.Count = 0 Then
-                        current.SortOrder = Math.Min(current.SortOrder, ActionInstance.SortOrder)
-                    End If
-                Else
-                    Dim m As New MenuItemInfo
-                    m.Header = ActionInstance.ActionPath(count)
-                    m.Children = New List(Of MenuItemInfo)
-                    m.SortOrder = ActionInstance.SortOrder
-                    If count = 0 Then
-                        MenuItems.Add(m)
-                    Else
-                        current.Children.Add(m)
-                    End If
-                    current = m
-                End If
-            Next
-
-
-            If ActionInstance.ActionPath.Count > 1 Then
-                'Check to see if the menu item exists
-                parent = From m As MenuItemInfo In current.Children Where m.Header = ActionInstance.ActionPath.Last
-
-                If parent.Any Then
-                    Dim m = DirectCast(parent.First, MenuItemInfo)
-                    m.ActionTypes = New List(Of Type)
-                    m.ActionTypes.Add(ActionType)
-                Else
-                    'Add the menu item, and give it a proper tag
-                    Dim m As New MenuItemInfo
-                    m.Children = New List(Of MenuItemInfo)
-                    m.Header = ActionInstance.ActionPath.Last
-                    m.SortOrder = ActionInstance.SortOrder
-                    m.ActionTypes = New List(Of Type)
-                    m.ActionTypes.Add(ActionType)
-                    current.Children.Add(m)
-                End If
-            End If
-
-        Else 'Count=0
-            Throw New ArgumentException("The action's ActionPath needs to contain at least 1 item.")
-        End If
-
-        'Call the event
-        RaiseEvent MenuActionAdded(Me, New EventArguments.MenuActionAddedEventArgs With {.ActionType = ActionType})
-    End Sub
 
     Public Overrides Sub RegisterDefaultFileTypeDetectors()
         RegisterFileTypeDetector(AddressOf Me.DetectFileType)
@@ -441,14 +340,6 @@ Public Class PluginManager
     End Function
 
     ''' <summary>
-    ''' Returns data that can be used to make MenuItems that run MenuActions.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetMenuItemInfo() As IEnumerable(Of MenuItemInfo)
-        Return MenuItems
-    End Function
-
-    ''' <summary>
     ''' Returns a new instance of each registered ObjectControl.
     ''' </summary>
     ''' <returns></returns>
@@ -523,12 +414,6 @@ Public Class PluginManager
     Private Sub _pluginHelper_FileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
         If Me.OpenedFiles.ContainsKey(e.File) Then
             Me.OpenedFiles.Remove(e.File)
-        End If
-    End Sub
-
-    Private Sub PluginManager_TypeRegistered(sender As Object, e As TypeRegisteredEventArgs) Handles Me.TypeRegistered
-        If e.BaseType.IsEquivalentTo(GetType(MenuAction)) Then
-            RegisterMenuActionType(e.RegisteredType)
         End If
     End Sub
 

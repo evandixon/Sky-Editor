@@ -63,6 +63,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
     <Compile Include="GenericFile.vb" />
     <Compile Include="IOProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

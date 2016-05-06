@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Core.Extensions.Plugins
+﻿Imports SkyEditor.Core
 
 Public Class PluginDefinition
     Inherits SkyEditorPlugin

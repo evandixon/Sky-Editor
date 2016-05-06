@@ -1,11 +1,13 @@
-﻿Imports System.Threading.Tasks
+﻿Imports System.Reflection
+Imports System.Threading.Tasks
+Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class SolutionBuild
         Inherits MenuAction
 
-        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SolutionOld)}
+        Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
+            Return {GetType(SolutionOld).GetTypeInfo}
         End Function
 
 

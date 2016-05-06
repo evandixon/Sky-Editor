@@ -110,14 +110,18 @@
     <Compile Include="FileFormats\Explorers\Script\CommandParameterAttribute.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\BasicTalkCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\BgmFadeIn.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\CaseText.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\CaseTextDefault.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\Delay.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\FadeTopBg.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\GotoCommandRaw.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\GotoLabel.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\GroupLabel.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\ImagePos.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\LoadBottomPic.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\LoadTopPic.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\NoParamCommand.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\SwitchTalk.vb" />
     <Compile Include="FileFormats\Explorers\Script\GotoTarget.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\LogicalCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\MonologueCommand.vb" />
@@ -376,10 +380,6 @@
     <ProjectReference Include="..\Sky Editor WPF\Sky Editor WPF.vbproj">
       <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
       <Name>Sky Editor WPF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.Json.vbproj">
-      <Project>{78e4d58b-b3ac-44e8-af93-64d56f4ddbe2}</Project>
-      <Name>SkyEditor.Core.Utilities.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
       <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>

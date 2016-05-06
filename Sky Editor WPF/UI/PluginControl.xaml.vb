@@ -1,5 +1,5 @@
 ﻿Imports System.Windows.Forms
-Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditor.Core
 Imports SkyEditorBase.Redistribution
 
 Namespace UI

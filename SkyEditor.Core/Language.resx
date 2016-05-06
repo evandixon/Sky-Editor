@@ -121,6 +121,9 @@
     <value>StepCount cannot be 0.</value>
     <comment>Message for an exception that's thrown when the Step of a logical For statement is 0.</comment>
   </data>
+  <data name="ErrorMenuActionEmptyActionPath" xml:space="preserve">
+    <value>The action's ActionPath needs to contain at least 1 item.</value>
+  </data>
   <data name="ErrorNoSaveFilename" xml:space="preserve">
     <value>Using GenericFile.Save() requires GenericFile.OriginalFilename to not be null.</value>
     <comment>Message for an exception that's thrown when using GenericFile.Save() when the file doesn't have an original filename.</comment>

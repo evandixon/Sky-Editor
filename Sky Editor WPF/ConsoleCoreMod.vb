@@ -1,10 +1,11 @@
-﻿Imports SkyEditor.Core.Extensions.Plugins
+﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.Windows
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
 ''' </summary>
 Friend Class ConsoleCoreMod
-    Inherits SkyEditorPlugin
+    Inherits WindowsCoreSkyEditorPlugin
 
     Public Overrides ReadOnly Property Credits As String
         Get

@@ -62,8 +62,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core", "SkyEditor
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Windows", "SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj", "{8238A6A2-76AF-4741-8564-D1D2A4B067BB}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Utilities.Json", "SkyEditor.Core.Utilities\SkyEditor.Core.Utilities.Json.vbproj", "{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53D85B17-1B65-40A4-AF8E-4F8E5248D51E}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Tests", "Tests\SkyEditor.Core.Tests\SkyEditor.Core.Tests.vbproj", "{2A654374-1ACE-4907-8416-9C31D13DEED8}"
@@ -247,14 +245,6 @@ Global
 		{8238A6A2-76AF-4741-8564-D1D2A4B067BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8238A6A2-76AF-4741-8564-D1D2A4B067BB}.Release|x86.ActiveCfg = Release|Any CPU
 		{8238A6A2-76AF-4741-8564-D1D2A4B067BB}.Release|x86.Build.0 = Release|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Debug|x86.Build.0 = Debug|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Release|x86.ActiveCfg = Release|Any CPU
-		{78E4D58B-B3AC-44E8-AF93-64D56F4DDBE2}.Release|x86.Build.0 = Release|Any CPU
 		{2A654374-1ACE-4907-8416-9C31D13DEED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A654374-1ACE-4907-8416-9C31D13DEED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A654374-1ACE-4907-8416-9C31D13DEED8}.Debug|x86.ActiveCfg = Debug|Any CPU

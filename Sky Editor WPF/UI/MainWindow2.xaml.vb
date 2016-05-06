@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Globalization
 Imports System.Reflection
+Imports SkyEditor.Core.UI
 Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
 Namespace UI
@@ -136,7 +137,7 @@ Namespace UI
             ShowWelcomePage()
 
             _toolWindows = New List(Of ITargetedControl)
-            For Each item In _manager.GetRegisteredObjects(GetType(ITargetedControl))
+            For Each item In _manager.GetRegisteredObjects(GetType(ITargetedControl).GetTypeInfo)
                 _toolWindows.Add(item)
             Next
             For Each item In UiHelper.GenerateToolWindows(_toolWindows)
@@ -150,7 +151,7 @@ Namespace UI
                 End Select
             Next
 
-            For Each item In UiHelper.GenerateMenuItems(_manager.GetMenuItemInfo)
+            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, SettingsManager.Instance.Settings.DevelopmentMode))
                 menuMain.Items.Add(item)
                 RegisterEventMenuItemHandlers(item)
             Next

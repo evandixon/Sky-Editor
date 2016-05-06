@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Threading.Tasks
 Imports ICSharpCode.SharpZipLib.Zip
-Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditor.Core
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Utilities
 

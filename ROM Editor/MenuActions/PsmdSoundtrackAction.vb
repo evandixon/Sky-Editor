@@ -1,6 +1,8 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ROMEditor.Projects
+Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports TagLib
@@ -75,8 +77,8 @@ Namespace MenuActions
 #End Region
         End Class
 
-        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(BaseRomProject)}
+        Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
+            Return {GetType(BaseRomProject).GetTypeInfo}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean

@@ -1,4 +1,6 @@
-﻿Namespace MenuActions
+﻿Imports SkyEditor.Core.UI
+
+Namespace MenuActions
     Public Class FileNewSolution
         Inherits MenuAction
 

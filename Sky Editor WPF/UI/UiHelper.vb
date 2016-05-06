@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.UI
 Imports SkyEditorBase.Interfaces
 
 Namespace UI

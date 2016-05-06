@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Threading
-Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditor.Core
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.Redistribution
 
@@ -12,7 +12,7 @@ Public Class StartupHelpers
     ''' </summary>
     Public Shared Async Function StartConsole() As Task
         Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
-        manager.LoadPlugins(New ConsoleCoreMod)
+        manager.LoadCore(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
         Await ConsoleModule.ConsoleMain(manager)
@@ -23,7 +23,7 @@ Public Class StartupHelpers
         Await RunWPFStartupSequence(New WpfCoreMod)
     End Function
 
-    Public Shared Async Function RunWPFStartupSequence(CoreMod As SkyEditorPlugin) As Task
+    Public Shared Async Function RunWPFStartupSequence(CoreMod As CoreSkyEditorPlugin) As Task
         Try
             Await RedistributionHelpers.DeleteScheduledFiles()
         Catch ex As Exception
@@ -46,7 +46,7 @@ Public Class StartupHelpers
             Await StartupHelpers.StartConsole()
         Else
             Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
-            manager.LoadPlugins(CoreMod)
+            manager.LoadCore(CoreMod)
 
             Dim checkForUpdates As Boolean = SettingsManager.Instance.Settings.UpdatePlugins
             If args.Contains("-disableupdates") Then

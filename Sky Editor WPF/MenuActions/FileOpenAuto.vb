@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class FileOpenAuto

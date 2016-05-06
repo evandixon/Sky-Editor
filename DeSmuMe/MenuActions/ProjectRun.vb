@@ -1,11 +1,13 @@
-﻿Imports SkyEditorBase
+﻿Imports System.Reflection
+Imports SkyEditor.Core.UI
+Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class ProjectRun
         Inherits MenuAction
 
-        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(ROMEditor.Projects.DSModPackProject)}
+        Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
+            Return {GetType(ROMEditor.Projects.DSModPackProject).GetTypeInfo}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
@@ -23,7 +25,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({My.Resources.language.MenuProject, My.Resources.Language.MenuProjectRun})
+            MyBase.New({My.Resources.Language.MenuProject, My.Resources.Language.MenuProjectRun})
             SortOrder = 2.2
         End Sub
     End Class

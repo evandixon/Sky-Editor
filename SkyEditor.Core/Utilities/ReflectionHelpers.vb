@@ -1,7 +1,7 @@
 ﻿Imports System.Reflection
 Imports SkyEditor.Core.Interfaces
 
-Namespace Extensions.Plugins
+Namespace Utilities
     Public Class ReflectionHelpers
         ''' <summary>
         ''' Determines whether the given Object is, inherits, or implements the given type.

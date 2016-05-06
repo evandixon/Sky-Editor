@@ -1,12 +1,14 @@
-﻿Imports ROMEditor.FileFormats.PSMD
+﻿Imports System.Reflection
+Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.UI
 Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class CteImageExport
         Inherits MenuAction
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
-        Public Overrides Function SupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(CteImage)}
+        Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
+            Return {GetType(CteImage).GetTypeInfo}
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item As CteImage In Targets

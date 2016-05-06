@@ -1,6 +1,8 @@
-﻿Namespace MenuActions
+﻿Imports SkyEditor.Core.UI
+
+Namespace MenuActions
     Public Class ImportSdf
-        Inherits SkyEditorBase.MenuAction
+        Inherits MenuAction
         Implements IDisposable
 
         Dim FolderBrowserDialog1 As Windows.Forms.FolderBrowserDialog

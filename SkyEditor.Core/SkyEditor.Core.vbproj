@@ -25,6 +25,7 @@
     <DocumentationFile>SkyEditor.Core.xml</DocumentationFile>
     <NoWarn>40057,42016,41999,42020,42021,42022</NoWarn>
     <WarningsAsErrors>42017,42018,42019,42032,42036</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -86,9 +87,10 @@
     <Import Include="Windows.UI.Xaml.Media.Imaging" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventArguments\HeaderUpdatedEventArgs.vb" />
-    <Compile Include="EventArguments\LoadingStatusChangedEventArgs.vb" />
-    <Compile Include="Extensions\Plugins\SkyEditorPlugin.vb" />
+    <Compile Include="Legacy EventArguments\HeaderUpdatedEventArgs.vb" />
+    <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
+    <Compile Include="CoreSkyEditorPlugin.vb" />
+    <Compile Include="SkyEditorPlugin.vb" />
     <Compile Include="GenericFile.vb" />
     <Compile Include="Legacy Interfaces\iContainer.vb" />
     <Compile Include="Legacy Interfaces\iCreatableFile.vb" />
@@ -110,15 +112,26 @@
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="Extensions\Plugins\PluginManager.vb" />
-    <Compile Include="Extensions\Plugins\TypeRegisteredEventArgs.vb" />
+    <Compile Include="PluginManager.vb" />
+    <Compile Include="TypeRegisteredEventArgs.vb" />
+    <Compile Include="UI\MenuAction.vb" />
+    <Compile Include="UI\MenuItemInfo.vb" />
+    <Compile Include="UI\UIHelper.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />
     <Compile Include="Utilities\GenericArrayOperations.vb" />
     <Compile Include="Utilities\Hex.vb" />
-    <Compile Include="Extensions\Plugins\ReflectionHelpers.vb" />
+    <Compile Include="Utilities\ReflectionHelpers.vb" />
+    <Compile Include="Utilities\Json.vb" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,5 @@
 ﻿Imports System.Reflection
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Extensions.Plugins
 
 Public Class PluginDefinition
     Inherits SkyEditorPlugin

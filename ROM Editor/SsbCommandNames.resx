@@ -132,6 +132,12 @@
   <data name="BgmStop" xml:space="preserve">
     <value>Stop Background Music 1</value>
   </data>
+  <data name="CaseText" xml:space="preserve">
+    <value>Case {0}: {1}</value>
+  </data>
+  <data name="CaseTextDefault" xml:space="preserve">
+    <value>Case Else: {0}</value>
+  </data>
   <data name="Delay" xml:space="preserve">
     <value>Delay {0} Frames</value>
   </data>
@@ -155,6 +161,9 @@
   </data>
   <data name="ImagePos" xml:space="preserve">
     <value>Set Image Position: C:{0}, R:{1}, X:{2}, Y:{3}</value>
+  </data>
+  <data name="LoadBottomPic" xml:space="preserve">
+    <value>Load Picture on Bottom Screen: {0}</value>
   </data>
   <data name="LoadTopPic" xml:space="preserve">
     <value>Load Picture on Top Screen: {0}</value>
@@ -186,7 +195,13 @@
   <data name="SoundStop" xml:space="preserve">
     <value>Stop Sound</value>
   </data>
+  <data name="SwitchMonologue" xml:space="preserve">
+    <value>Switch Monologue (CharacterID: {0})</value>
+  </data>
   <data name="SwitchParam" xml:space="preserve">
     <value>switchparam</value>
+  </data>
+  <data name="SwitchTalk" xml:space="preserve">
+    <value>Switch Talk (CharacterID: {0})</value>
   </data>
 </root>

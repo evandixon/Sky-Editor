@@ -1,8 +1,7 @@
-﻿Namespace Extensions.Plugins
-    ''' <summary>
-    ''' Defines a plugin for Sky Editor.
-    ''' </summary>
-    Public MustInherit Class SkyEditorPlugin
+﻿''' <summary>
+''' Defines a plugin for Sky Editor.
+''' </summary>
+Public MustInherit Class SkyEditorPlugin
 
         ''' <summary>
         ''' Name of the plugin.
@@ -41,6 +40,4 @@
         ''' </summary>
         ''' <remarks></remarks>
         Public MustOverride Sub PrepareForDistribution()
-    End Class
-
-End Namespace
+End Class

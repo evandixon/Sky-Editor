@@ -2,7 +2,6 @@
 Imports ROMEditor.Projects
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Extensions.Plugins
 Imports SkyEditorBase
 Imports System.Reflection
 
@@ -77,7 +76,7 @@ Public Class PluginDefinition
     '    ROMFileTypes.Add("bgp", New BGPControl)
     'End Sub
 
-    Public Overrides Sub Load(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager)
+    Public Overrides Sub Load(Manager As SkyEditor.Core.PluginManager)
         PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
         Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
@@ -101,7 +100,7 @@ Public Class PluginDefinition
         GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_PSMD, GameStrings.PSMDCode)
     End Sub
 
-    Public Overrides Sub UnLoad(Manager As SkyEditor.Core.Extensions.Plugins.PluginManager)
+    Public Overrides Sub UnLoad(Manager As SkyEditor.Core.PluginManager)
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
         Dim directory As String = PluginHelper.GetResourceName("Temp")
         If IO.Directory.Exists(directory) Then

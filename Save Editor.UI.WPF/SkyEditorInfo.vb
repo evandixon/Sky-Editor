@@ -1,5 +1,5 @@
 ﻿Imports SaveEditor.Saves
-Imports SkyEditor.Core.Extensions.Plugins
+Imports SkyEditor.Core
 
 Public Class SkyEditorInfo
     Inherits SkyEditorPlugin

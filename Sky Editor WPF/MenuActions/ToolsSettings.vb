@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class ToolsSettings
@@ -14,7 +15,7 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({My.Resources.Language.MenuTools, My.Resources.Language.menutoolsSettings})
+            MyBase.New({My.Resources.Language.MenuTools, My.Resources.Language.MenuToolsSettings})
             AlwaysVisible = True
             SortOrder = 3.1
         End Sub
