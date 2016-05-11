@@ -1,13 +1,10 @@
 ﻿Imports System.Text
-Imports ROMEditor.Roms
-Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
+Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers
     Public Class LanguageString
-        Inherits GenericFile
-        Implements iOpenableFile
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements IOpenableFile
         Public Enum Region
             US
             Europe
@@ -54,11 +51,11 @@ Namespace FileFormats.Explorers
 
 
         Public Sub New()
-            MyBase.New()
+            MyBase.New({})
             Items = New List(Of String)
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             Dim bytes = IO.File.ReadAllBytes(Filename)
 
@@ -79,7 +76,8 @@ Namespace FileFormats.Explorers
                 End While
                 Items(count / 4) = s.ToString
             Next
-        End Sub
+            Return Task.CompletedTask
+        End Function
         Public Overrides Sub Save(Destination As String)
             'Generate File
             Dim e = Encoding.GetEncoding("Windows-1252")

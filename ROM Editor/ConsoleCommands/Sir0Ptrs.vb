@@ -4,13 +4,13 @@ Namespace ConsoleCommands
     Public Class Sir0Ptrs
         Inherits ConsoleCommandAsync
 
-        Public Overrides Function MainAsync(Arguments() As String) As Task
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
                     Dim pointers As New Dictionary(Of UInt32, UInt32)
                     Using f As New FileFormats.Sir0
                         f.IsReadOnly = True
-                        f.OpenFile(Arguments(0))
+                        Await f.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
                         Dim offset As UInt32 = 0
                         For Each item In f.RelativePointers
                             offset += item
@@ -40,11 +40,10 @@ Namespace ConsoleCommands
                     End Using
                 Else
                     Console.WriteLine("File doesn't exist")
-                            End If
+                End If
             Else
                 Console.WriteLine("Usage: sir0ptrs <filename>")
             End If
-            Return Task.CompletedTask
         End Function
     End Class
 

@@ -1,4 +1,6 @@
-﻿Namespace FileFormats.PSMD
+﻿Imports SkyEditor.Core.IO
+
+Namespace FileFormats.PSMD
     Public Class FlowData
         Inherits Sir0
 
@@ -7,8 +9,8 @@
         Public Property Data1 As List(Of ULong)
         Public Property Data2 As List(Of ULong)
 
-        Public Overrides Sub OpenFile(Filename As String)
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, Provider)
 
             Dim numEntries1 As UInteger = Me.UInt32(&H18)
             Dim entryPtr1 As UInteger = Me.UInt32(&H1C)
@@ -59,7 +61,7 @@
                 s2.AppendLine(item)
             Next
             Console.WriteLine()
-        End Sub
+        End Function
 
         Public Sub New()
             MyBase.New

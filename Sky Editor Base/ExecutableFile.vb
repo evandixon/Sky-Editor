@@ -1,8 +1,10 @@
-﻿Imports SkyEditor.Core.Interfaces
+﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase.Interfaces
 
 Public Class ExecutableFile
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements iOnDisk
 
     Private WithEvents _process As Process
@@ -15,10 +17,11 @@ Public Class ExecutableFile
         End Get
     End Property
 
-    Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+    Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
         Me.Filename = Filename
         InitProcess()
-    End Sub
+        Return Task.CompletedTask
+    End Function
 
     Private Sub _process_Exited(sender As Object, e As EventArgs) Handles _process.Exited
         _process = Nothing

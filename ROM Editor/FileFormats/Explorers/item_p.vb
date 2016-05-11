@@ -1,12 +1,12 @@
 ﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.Explorers
     Public Class item_p
-        Inherits GenericFile
-        Implements iOpenableFile
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements IOpenableFile
         Public Property Items As List(Of Item)
         Public Class Item
             Public Property RawData As Byte()
@@ -160,10 +160,11 @@ Namespace FileFormats.Explorers
         Public Sub New()
             MyBase.New
         End Sub
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Overloads Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             ProcessRawData()
-        End Sub
+            Return Task.CompletedTask
+        End Function
         Private Sub ProcessRawData()
             Items = New List(Of Item)
             For count As Integer = &H20 To Me.Length * 16 - 17 Step 16

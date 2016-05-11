@@ -1,7 +1,4 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     ''' <summary>
@@ -11,7 +8,7 @@ Namespace FileFormats.PSMD
     ''' </remarks>
 
     Public Class ActXlWaza
-        Implements iOpenableFile
+        Implements IOpenableFile
         Public Class ActXlWazaEntry
             Public Property MoveActionIndex As UInt16
             Public Property MoveActionIndexTarget As UInt16
@@ -22,9 +19,9 @@ Namespace FileFormats.PSMD
         End Class
         Public Property Entries As List(Of ActXlWazaEntry)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = 8
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.EnableInMemoryLoad = True
                 f.OpenFile(Filename)
 
@@ -32,7 +29,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(New ActXlWazaEntry(f.RawData(count * entryLength, entryLength)))
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             Entries = New List(Of ActXlWazaEntry)

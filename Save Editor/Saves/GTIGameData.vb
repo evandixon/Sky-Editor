@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditorBase
 Namespace Saves
     Public Class GTIGameData
         Inherits BinaryFile
@@ -6,10 +7,10 @@ Namespace Saves
         Public Sub New()
             MyBase.New()
         End Sub
-        Public Overrides Sub OpenFile(Filename As String)
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, Provider)
             originalChecksum = CalculateChecksum()
-        End Sub
+        End Function
 
         Public Class Offsets
             Public Const HeldItemsOffset As Integer = &H20A * 8 + 2

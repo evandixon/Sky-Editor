@@ -28,16 +28,16 @@ Namespace Redistribution
             Dim devAssemblyPaths = PluginHelper.GetPluginAssemblies
 
             'Get the Sky Editor Plugin's resource directory
-            Dim resourceDirectory = IO.Path.Combine(IO.Path.GetDirectoryName(SourceAssembly.Location), IO.Path.GetFileNameWithoutExtension(SourceAssembly.Location))
-            If IO.Directory.Exists(resourceDirectory) Then
+            Dim resourceDirectory = Path.Combine(Path.GetDirectoryName(SourceAssembly.Location), Path.GetFileNameWithoutExtension(SourceAssembly.Location))
+            If Directory.Exists(resourceDirectory) Then
                 out.Add(resourceDirectory)
             End If
 
             'Get regional resources
-            Dim resourcesName = IO.Path.GetFileNameWithoutExtension(SourceAssembly.Location) & ".resources.dll"
-            For Each item In IO.Directory.GetDirectories(IO.Path.GetDirectoryName(SourceAssembly.Location))
-                If IO.File.Exists(IO.Path.Combine(item, resourcesName)) Then
-                    out.Add(IO.Path.Combine(item, resourcesName))
+            Dim resourcesName = Path.GetFileNameWithoutExtension(SourceAssembly.Location) & ".resources.dll"
+            For Each item In Directory.GetDirectories(Path.GetDirectoryName(SourceAssembly.Location))
+                If File.Exists(Path.Combine(item, resourcesName)) Then
+                    out.Add(Path.Combine(item, resourcesName))
                 End If
             Next
 
@@ -86,11 +86,11 @@ Namespace Redistribution
         ''' <param name="DestinationFilename">File path of the zip to create.</param>
         ''' <returns></returns>
         Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As Extensions.ExtensionInfo) As Task
-            Dim tempDir = IO.Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
+            Dim tempDir = Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
             Dim ToCopy As New List(Of String)
             For Each plugin In Plugins
                 Dim plgAssembly = plugin.GetType.Assembly
-                Dim filename = IO.Path.GetFileNameWithoutExtension(plgAssembly.Location)
+                Dim filename = Path.GetFileNameWithoutExtension(plgAssembly.Location)
 
                 'Prepare the plugin for distribution
                 Dim plg = (From p In PluginManager.GetInstance.Plugins Where p.GetType.Assembly.Location = plgAssembly.Location).FirstOrDefault
@@ -127,13 +127,13 @@ Namespace Redistribution
 
             'Copy temporary files
             Await Utilities.FileSystem.ReCreateDirectory(tempDir)
-            For Each file In ToCopy
-                If IO.File.Exists(file) Then
-                    IO.File.Copy(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir), True)
+            For Each filePath In ToCopy
+                If File.Exists(filePath) Then
+                    File.Copy(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), True)
                 Else
                     'It's probably a directory.
-                    If IO.Directory.Exists(file) Then
-                        Await FileSystem.CopyDirectory(file, file.Replace(IO.Path.GetDirectoryName(file), tempDir))
+                    If Directory.Exists(filePath) Then
+                        Await FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir))
                         'Else
                         'Guess not.  Do nothing.
                     End If
@@ -144,9 +144,9 @@ Namespace Redistribution
             Info.ExtensionTypeName = GetType(Extensions.PluginExtensionType).AssemblyQualifiedName
             Info.IsEnabled = True
             For Each item In Plugins
-                Info.ExtensionFiles.Add(IO.Path.GetFileName(item.GetType.Assembly.Location))
+                Info.ExtensionFiles.Add(Path.GetFileName(item.GetType.Assembly.Location))
             Next
-            Info.Save(IO.Path.Combine(tempDir, "info.skyext"))
+            Info.Save(Path.Combine(tempDir, "info.skyext"))
 
             'Then zip it
             Utilities.Zip.Zip(tempDir, DestinationFilename)
@@ -157,28 +157,28 @@ Namespace Redistribution
         ''' Deletes files and directories scheduled for deletion.
         ''' </summary>
         Public Shared Async Function DeleteScheduledFiles() As Task
-            If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
-                IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
+            If Not File.Exists(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
+                File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
             End If
-            For Each item In IO.File.ReadAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"))
-                If IO.File.Exists(item) Then
-                    IO.File.Delete(item)
-                ElseIf IO.Directory.Exists(item) Then
+            For Each item In File.ReadAllLines(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"))
+                If File.Exists(item) Then
+                    File.Delete(item)
+                ElseIf Directory.Exists(item) Then
                     Await Utilities.FileSystem.DeleteDirectory(item)
                 End If
             Next
-            IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
+            File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
         End Function
 
         ''' <summary>
         ''' Schedules a file or directory for deletion.
         ''' </summary>
-        ''' <param name="Path"></param>
-        Public Shared Sub ScheduleDelete(Path As String)
-            If Not IO.File.Exists(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
-                IO.File.WriteAllText(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
+        ''' <param name="pathToDelete"></param>
+        Public Shared Sub ScheduleDelete(pathToDelete As String)
+            If Not File.Exists(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
+                File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
             End If
-            IO.File.AppendAllLines(IO.Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), {Path})
+            File.AppendAllLines(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), {pathToDelete})
         End Sub
 
         ''' <summary>

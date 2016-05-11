@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class JukeboxBin
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         Public Class JukeboxEntry
             Public Property Filename As String
@@ -22,8 +19,8 @@ Namespace FileFormats.PSMD
         Public Property Entries As List(Of JukeboxEntry)
 
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            Using f As New GenericFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
 
@@ -56,7 +53,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(e)
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             MyBase.New

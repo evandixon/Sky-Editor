@@ -11,7 +11,8 @@ Namespace Explorers
         Inherits ObjectControl
 
         Public Overrides Sub RefreshDisplay()
-            Dim overlay As PersonalityTestContainer = Me.GetEditingObject(Of PersonalityTestContainer)
+            Dim overlay As PersonalityTestContainer = Me.GetEditingObject(Of ObjectFile(Of PersonalityTestContainer)).ContainedObject
+
             cbPartner01.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner01)
             cbPartner02.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner02)
             cbPartner03.SelectedIndex = Overlay13.GetPokemonID(overlay.Partner03)
@@ -177,7 +178,7 @@ Namespace Explorers
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim o As PersonalityTestContainer = Me.GetEditingObject(Of PersonalityTestContainer)
+            Dim o As PersonalityTestContainer = Me.GetEditingObject(Of ObjectFile(Of PersonalityTestContainer)).ContainedObject
             o.Partner01 = Overlay13.SetPokemonIDGender(cbPartner01.LastSafeIndex, chbPartner01.IsChecked)
             o.Partner02 = Overlay13.SetPokemonIDGender(cbPartner02.LastSafeIndex, chbPartner02.IsChecked)
             o.Partner03 = Overlay13.SetPokemonIDGender(cbPartner03.LastSafeIndex, chbPartner03.IsChecked)
@@ -514,7 +515,7 @@ Namespace Explorers
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(PersonalityTestContainer)}
+            Return {GetType(ObjectFile(Of PersonalityTestContainer))}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

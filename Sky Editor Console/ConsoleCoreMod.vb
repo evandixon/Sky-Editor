@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 ''' <summary>
@@ -31,7 +32,7 @@ Friend Class ConsoleCoreMod
         Manager.RegisterTypeRegister(GetType(SolutionOld))
         Manager.RegisterTypeRegister(GetType(ProjectOld))
         Manager.RegisterTypeRegister(GetType(iCreatableFile))
-        Manager.RegisterTypeRegister(GetType(iOpenableFile))
+        Manager.RegisterTypeRegister(GetType(IOpenableFile))
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))
         Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
 

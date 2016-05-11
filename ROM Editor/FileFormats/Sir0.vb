@@ -1,12 +1,9 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats
     Public Class Sir0
-        Inherits GenericFile
-        Implements iOpenableFile
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements IOpenableFile
 
         ''' <summary>
         ''' The byte used to pad blocks that aren't divisible by 0x10.
@@ -84,10 +81,11 @@ Namespace FileFormats
             End If
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Overridable Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             ProcessData()
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Overrides Sub Save(Destination As String)
             'The header and relative pointers must be set by child classes

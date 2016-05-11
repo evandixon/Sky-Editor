@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class WazaDataInfo
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         Public Class WazaDataInfoEntry
             ''' <summary>
@@ -20,9 +17,9 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of WazaDataInfoEntry)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = 18
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.EnableInMemoryLoad = True
                 f.OpenFile(Filename)
 
@@ -30,7 +27,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(New WazaDataInfoEntry(f.RawData(count * entryLength, entryLength)))
                 Next
             End Using
-        End Sub
+            Return Task.completedtask
+        End Function
 
         Public Sub New()
             Entries = New List(Of WazaDataInfoEntry)

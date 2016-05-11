@@ -3,13 +3,13 @@ Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class ImportLanguage
-        Inherits ConsoleCommand
+        Inherits ConsoleCommandAsync
 
-        Public Overrides Sub Main(Arguments() As String)
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             Dim LanguageStringPath = Arguments(0)
             Dim formatRegex As New Text.RegularExpressions.Regex("\[.+\]")
             Dim ls As New LanguageString
-            ls.OpenFile(LanguageStringPath)
+            Await ls.OpenFile(LanguageStringPath, New SkyEditor.Core.Windows.IOProvider)
             Dim languagechar As String = IO.Path.GetFileNameWithoutExtension(LanguageStringPath).Replace("text_", "")
             Dim language As String
             Select Case languagechar
@@ -80,7 +80,7 @@ Namespace ConsoleCommands
             Console.WriteLine("Saved Locations.")
 
             Console.WriteLine("Done!")
-        End Sub
+        End Function
     End Class
 
 End Namespace

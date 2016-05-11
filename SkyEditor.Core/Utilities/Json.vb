@@ -1,4 +1,6 @@
-﻿Namespace Utilities
+﻿Imports SkyEditor.Core.IO
+
+Namespace Utilities
     ''' <summary>
     ''' Contains methods to help in JSON serialization.
     ''' Currently, this is a wrapper for the Newtonsoft Json library.
@@ -36,7 +38,7 @@
         ''' </summary>
         ''' <param name="Filename">Filename to store the JSON.</param>
         ''' <param name="ObjectToSerialize">Object to serialize.</param>
-        Public Shared Sub SerializeToFile(Filename As String, ObjectToSerialize As Object, FileProvider As SkyEditor.Core.IOProvider)
+        Public Shared Sub SerializeToFile(Filename As String, ObjectToSerialize As Object, FileProvider As IOProvider)
             FileProvider.WriteAllText(Filename, Serialize(ObjectToSerialize))
         End Sub
 
@@ -46,7 +48,7 @@
         ''' <typeparam name="T"></typeparam>
         ''' <param name="Filename">Path to the text file containing a JSON string.</param>
         ''' <returns></returns>
-        Public Shared Function DeserializeFromFile(Of T)(Filename As String, FileProvider As SkyEditor.Core.IOProvider) As T
+        Public Shared Function DeserializeFromFile(Of T)(Filename As String, FileProvider As IOProvider) As T
             Return Deserialize(Of T)(FileProvider.ReadAllText(Filename))
         End Function
     End Class

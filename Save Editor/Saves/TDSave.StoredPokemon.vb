@@ -1,5 +1,6 @@
 ﻿Imports SaveEditor.Interfaces
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -75,7 +76,7 @@ Namespace Saves
             Implements iPkmAttack
             Implements ISavableAs
             Implements iOnDisk
-            Implements iOpenableFile
+            Implements IOpenableFile
 
             Public Const Length As Integer = 388
             Public Const MimeType As String = "application/x-td-pokemon"
@@ -268,14 +269,14 @@ Namespace Saves
                 Return ".tdpkm"
             End Function
 
-            Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+            Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
                 Dim toOpen As New BinaryFile
-                toOpen.OpenFile(Filename)
+                Await toOpen.OpenFile(Filename, Provider)
                 Me.Bits = toOpen.Bits.Bits
                 For i = 1 To 8 - (Length Mod 8)
                     Me.Bits.RemoveAt(Me.Bits.Count - 1)
                 Next
-            End Sub
+            End Function
 
             Public Sub Save() Implements iSavable.Save
                 Save(Filename)

@@ -1,4 +1,5 @@
-﻿''' <summary>
+﻿Imports SkyEditor.Core.IO
+''' <summary>
 ''' A variant of SkyEditorPlugin that is able to host an instance of Sky Editor
 ''' </summary>
 Public MustInherit Class CoreSkyEditorPlugin

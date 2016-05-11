@@ -1,11 +1,13 @@
-﻿Imports SkyEditor.Core
+﻿Imports System.IO
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 
 Namespace Roms
     Public Class Generic3DSRom
         Inherits SkyEditor.Core.Windows.GenericFile
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements iDetectableFileType
         Implements iPackedRom
         Public Overrides Function GetDefaultExtension() As String
@@ -44,27 +46,27 @@ Namespace Roms
         Public Async Function Unpack(DestinationDirectory As String) As Task Implements iPackedRom.Unpack
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
-                DestinationDirectory = IO.Path.Combine(PluginHelper.GetResourceName(IO.Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
+                DestinationDirectory = Path.Combine(PluginHelper.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
             End If
-            If Not IO.Directory.Exists(DestinationDirectory) Then
-                IO.Directory.CreateDirectory(DestinationDirectory)
+            If Not Directory.Exists(DestinationDirectory) Then
+                Directory.CreateDirectory(DestinationDirectory)
             End If
             '(Basically these variables are formatted as so: [item][bin/dir][path/task])
             'Define paths
-            Dim exHeaderPath = IO.Path.Combine(DestinationDirectory, "DecryptedExHeader.bin")
-            Dim exefsBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedExeFS.bin")
-            Dim romfsBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedRomFS.bin")
-            Dim romfsDirPath = IO.Path.Combine(DestinationDirectory, "Romfs")
-            Dim exefsDirPath = IO.Path.Combine(DestinationDirectory, "Exefs")
-            Dim manualBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedManual.bin")
-            Dim manualDirPath = IO.Path.Combine(DestinationDirectory, "Manual")
-            Dim dlPlayBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedDownloadPlay.bin")
-            Dim dlPlayDirPath = IO.Path.Combine(DestinationDirectory, "DownloadPlay")
-            Dim n3dsUpdateBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedN3DSUpdate.bin")
-            Dim n3dsUpdateDirPath = IO.Path.Combine(DestinationDirectory, "N3DSUpdate")
-            Dim o3dsUpdateBinPath = IO.Path.Combine(DestinationDirectory, "DecryptedO3DSUpdate.bin")
-            Dim o3dsUpdateDirPath = IO.Path.Combine(DestinationDirectory, "O3DSUpdate")
-            Dim onlineHeaderBinPath = IO.Path.Combine(DestinationDirectory, "OnlineHeader.bin")
+            Dim exHeaderPath = Path.Combine(DestinationDirectory, "DecryptedExHeader.bin")
+            Dim exefsBinPath = Path.Combine(DestinationDirectory, "DecryptedExeFS.bin")
+            Dim romfsBinPath = Path.Combine(DestinationDirectory, "DecryptedRomFS.bin")
+            Dim romfsDirPath = Path.Combine(DestinationDirectory, "Romfs")
+            Dim exefsDirPath = Path.Combine(DestinationDirectory, "Exefs")
+            Dim manualBinPath = Path.Combine(DestinationDirectory, "DecryptedManual.bin")
+            Dim manualDirPath = Path.Combine(DestinationDirectory, "Manual")
+            Dim dlPlayBinPath = Path.Combine(DestinationDirectory, "DecryptedDownloadPlay.bin")
+            Dim dlPlayDirPath = Path.Combine(DestinationDirectory, "DownloadPlay")
+            Dim n3dsUpdateBinPath = Path.Combine(DestinationDirectory, "DecryptedN3DSUpdate.bin")
+            Dim n3dsUpdateDirPath = Path.Combine(DestinationDirectory, "N3DSUpdate")
+            Dim o3dsUpdateBinPath = Path.Combine(DestinationDirectory, "DecryptedO3DSUpdate.bin")
+            Dim o3dsUpdateDirPath = Path.Combine(DestinationDirectory, "O3DSUpdate")
+            Dim onlineHeaderBinPath = Path.Combine(DestinationDirectory, "OnlineHeader.bin")
 
             'Unpack portions
             Dim exheaderTask = RunCtrTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{PhysicalFilename}""")
@@ -76,7 +78,7 @@ Namespace Roms
             Dim o3dsUpdateBinTask = RunCtrTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
 
             'Save online header
-            IO.File.WriteAllBytes(onlineHeaderBinPath, OnlineHeaderBinary)
+            File.WriteAllBytes(onlineHeaderBinPath, OnlineHeaderBinary)
 
             'Unpack romfs
             Await romfsBinTask
@@ -130,9 +132,10 @@ Namespace Roms
             MyBase.New()
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
-        End Sub
+            Return Task.CompletedTask
+        End Function
     End Class
 
 End Namespace

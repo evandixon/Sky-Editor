@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -8,12 +9,12 @@ Namespace FileFormats.CTR
     ''' Models a RomFS file, as described at https://www.3dbrew.org/wiki/RomFS
     ''' </summary>
     Public Class RomFs
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements iDetectableFileType
 
         Protected Property Header As RomFSHeader
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
@@ -22,7 +23,8 @@ Namespace FileFormats.CTR
 
 
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
 

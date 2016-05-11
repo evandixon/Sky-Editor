@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class DungeonDataInfo
-        Implements iOpenableFile
+        Implements IOpenableFile
         Private Const EntryLength As Integer = &H18
 
         Public Class DungeonDataInfoEntry
@@ -30,8 +27,8 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of DungeonDataInfoEntry)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            Using f As New GenericFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.OpenFile(Filename)
 
                 Dim numEntries = Math.Floor(f.Length / EntryLength)
@@ -40,7 +37,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(New DungeonDataInfoEntry(f.RawData(count * EntryLength, EntryLength)))
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             Entries = New List(Of DungeonDataInfoEntry)

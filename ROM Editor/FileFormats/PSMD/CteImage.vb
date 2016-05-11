@@ -1,13 +1,11 @@
 ﻿Imports System.Drawing
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class CteImage
-        Inherits GenericFile
-        Implements iOpenableFile
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements IOpenableFile
         Implements iModifiable
 
         Public Event ContainedImageUpdated(sender As Object, e As EventArgs)
@@ -37,7 +35,7 @@ Namespace FileFormats.PSMD
 
         Private Property Height As Integer
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
             ImageFormat = BitConverter.ToInt32(RawData(&H4, 4), 0)
             Width = BitConverter.ToInt32(RawData(&H8, 4), 0)
@@ -60,7 +58,8 @@ Namespace FileFormats.PSMD
             ' image.RotateFlip(RotateFlipType.Rotate270FlipNone)
 
             ContainedImage = image
-        End Sub
+            Return Task.CompletedTask
+        End Function
         Private Function GetColor(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer) As Color
             If PixelLength = &H20 Then '32 bit
                 Dim data = RawData(PixelIndex * (PixelLength / 8) + DataStart, 4)

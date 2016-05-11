@@ -1,10 +1,11 @@
 ﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class TextFile
     Implements iCreatableFile
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements iOnDisk
     Implements iGenericFile
     Implements ISavableAs
@@ -41,10 +42,11 @@ Public Class TextFile
         _name = Name
     End Sub
 
-    Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-        Text = IO.File.ReadAllText(Filename)
+    Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Text = Provider.ReadAllText(Filename)
         Me.Filename = Filename
-    End Sub
+        Return Task.CompletedTask
+    End Function
 
     Public Sub RaiseModified() Implements iModifiable.RaiseModified
         RaiseEvent Modified(Me, New EventArgs)

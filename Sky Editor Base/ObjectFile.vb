@@ -1,11 +1,13 @@
-﻿Imports SkyEditor.Core.Interfaces
+﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase.Interfaces
 
 Public Class ObjectFile(Of T)
     'Inherits GenericFile
     Implements iNamed
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements ISavableAs
     Implements iOnDisk
     Implements iCreatableFile
@@ -40,7 +42,7 @@ Public Class ObjectFile(Of T)
 
     Public Sub New(Filename As String)
         Me.New
-        Me.OpenFile(Filename)
+        Me.OpenFileInternal(Filename)
     End Sub
 
     Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
@@ -50,7 +52,12 @@ Public Class ObjectFile(Of T)
         End If
     End Sub
 
-    Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+    Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        OpenFileInternal(Filename)
+        Return Task.CompletedTask
+    End Function
+
+    Private Sub OpenFileInternal(Filename As String)
         Me.Filename = Filename
 
         If IO.File.Exists(Filename) Then

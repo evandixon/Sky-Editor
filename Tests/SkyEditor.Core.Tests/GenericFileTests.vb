@@ -1,13 +1,8 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
+Imports SkyEditor.Core.IO
 
 <TestClass()> Public Class GenericFileTests
-
-    Private _file As GenericFile
-
-    <TestInitialize> Public Sub SetupGenericFile_InMemory()
-        _file = New GenericFile()
-    End Sub
 
     <TestMethod()> Public Sub RawData_InMemory_1Byte_ReadTest()
         'Arrange

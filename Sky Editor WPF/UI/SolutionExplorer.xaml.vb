@@ -729,13 +729,13 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub tvSolution_MouseDoubleClick(sender As Object, e As EventArgs) Handles tvSolution.MouseDoubleClick, menuOpen.Click
+        Private Async Sub tvSolution_MouseDoubleClick(sender As Object, e As EventArgs) Handles tvSolution.MouseDoubleClick, menuOpen.Click
             If tvSolution.SelectedItem IsNot Nothing Then
                 Dim tag As NodeTag = DirectCast(tvSolution.SelectedItem, TreeViewItem).Tag
                 If tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                     Dim projItem = tag.ParentProject.GetProjectItemByPath(tag.ParentPath & "/" & tag.Name)
                     If projItem IsNot Nothing Then
-                        Dim obj = projItem?.GetFile
+                        Dim obj = Await projItem?.GetFile
                         If obj Is Nothing Then
                             Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
                             If Not IO.File.Exists(f) Then

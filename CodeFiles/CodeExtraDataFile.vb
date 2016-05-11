@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.Serialization
 Imports CodeFiles
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
@@ -12,7 +13,7 @@ Public Class CodeExtraDataFile
     Inherits CodeExtraData
     'Implements iCreatableFile
     Implements iNamed
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements iOnDisk
     Implements ISavableAs
 
@@ -73,7 +74,7 @@ Public Class CodeExtraDataFile
 
     Public Sub New(Filename As String)
         Me.New
-        OpenFile(Filename)
+        OpenFileInternal(Filename)
     End Sub
     Public Sub New()
         MyBase.New()
@@ -86,11 +87,16 @@ Public Class CodeExtraDataFile
         AutoCompleteChars = New List(Of Char)
     End Sub
 
-    Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+    Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Await OpenFileInternal(Filename)
+    End Function
+
+    Private Function OpenFileInternal(Filename As String) As Task
         Dim j = Json.DeserializeFromFile(Of JsonStructure)(Filename, New SkyEditor.Core.Windows.IOProvider)
         Me.Database = j.Database
         Me.AutoCompleteChars = j.AutoCompleteChars
-    End Sub
+        Return Task.CompletedTask
+    End Function
 
     Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 

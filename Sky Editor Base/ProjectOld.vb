@@ -47,27 +47,25 @@ Public Class ProjectOld
         Public Property Filename As String
         Public Property Children As List(Of ProjectItem)
         Public Property AssemblyQualifiedTypeName As String
-
         Dim _file As Object
-        Public Function GetFile() As Object
+        Public Async Function GetFile() As Task(Of Object)
+
             If _file Is Nothing Then
                 Dim f = GetFilename()
-
-                If IO.File.Exists(f) Then
-                    If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
-                        _file = PluginManager.GetInstance.OpenObject(f)
+                If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
+                    Return Await PluginManager.GetInstance.OpenObject(f)
+                Else
+                    Dim t = Utilities.ReflectionHelpers.GetTypeFromName(AssemblyQualifiedTypeName)
+                    If t Is Nothing Then
+                        Return Await PluginManager.GetInstance.OpenObject(f)
                     Else
-                        Dim t = Utilities.ReflectionHelpers.GetTypeFromName(AssemblyQualifiedTypeName)
-                        If t Is Nothing Then
-                            _file = PluginManager.GetInstance.OpenObject(f)
-                        Else
-                            _file = PluginManager.GetInstance.OpenFile(f, t)
-                        End If
+                        Return PluginManager.GetInstance.OpenFile(f, t)
                     End If
                 End If
+            Else
+                Return _file
             End If
 
-            Return _file
         End Function
 
         Public Function GetFilename() As String
@@ -348,8 +346,8 @@ Public Class ProjectOld
     ''' </summary>
     ''' <param name="Path">Path to look for a file.</param>
     ''' <returns></returns>
-    Public Function GetProjectByPath(Path As String) As Object
-        Return GetProjectItemByPath(Path)?.GetFile
+    Public Async Function GetProjectByPath(Path As String) As Task(Of Object)
+        Return Await GetProjectItemByPath(Path)?.GetFile
     End Function
 
     ''' <summary>

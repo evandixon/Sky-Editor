@@ -127,7 +127,6 @@
     <Compile Include="FileFormats\Explorers\Script\Commands\MonologueCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\RawCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\ConstantCommandParameter.vb" />
-    <Compile Include="FileFormats\Explorers\Script\SSB.GetSkyCommandParamLengths.vb" />
     <Compile Include="FileFormats\Explorers\Script\MultiLangStringCommandParameter.vb" />
     <Compile Include="FileFormats\Explorers\Script\StringCommandParameter.vb" />
     <Compile Include="FileFormats\PSMD\ActDataInfo.vb" />

@@ -1,4 +1,6 @@
-﻿Namespace FileFormats.PSMD
+﻿Imports SkyEditor.Core.IO
+
+Namespace FileFormats.PSMD
     Public Class FixedPokemon
         Inherits Sir0
         Public Class PokemonEntry
@@ -89,8 +91,8 @@
         '    End Get
         'End Property
 
-        Public Overrides Sub OpenFile(Filename As String)
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, Provider)
 
             Dim numEntries = BitConverter.ToUInt32(Me.Header, 0)
             'Unknown integer at 0x4
@@ -99,7 +101,7 @@
                 Dim dataPointer = BitConverter.ToUInt32(Me.Header, 8 + count * 4)
                 Entries.Add(New PokemonEntry(Me.RawData(dataPointer, &H30)))
             Next
-        End Sub
+        End Function
 
         Public Overrides Sub Save(Destination As String)
             Me.RelativePointers.Clear()

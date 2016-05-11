@@ -56,6 +56,7 @@ Namespace Explorers
                         Next
                     End With
                 End If
+                tbScript.ScriptFile = value
             End Set
         End Property
         Dim _editing As Object
@@ -68,6 +69,7 @@ Namespace Explorers
             Items = New ObjectModel.ObservableCollection(Of ObjectContainer)
             lvScript.DataContext = Items
             dragManager = New ListViewDragDropManager(Of ObjectContainer)(lvScript)
+            tbScript.Target = lvScript
         End Sub
 
         Private Sub lvScript_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lvScript.SelectionChanged

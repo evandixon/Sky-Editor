@@ -1,6 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
@@ -12,7 +13,7 @@ Namespace FileFormats.PSMD
     ''' <remarks>Credit to psy_commando for researching the format.</remarks>
     Public Class MessageBin
         Inherits Sir0
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements ComponentModel.INotifyPropertyChanged
         Implements iModifiable
 
@@ -43,11 +44,11 @@ Namespace FileFormats.PSMD
             ProcessData()
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
 
             ProcessData()
-        End Sub
+        End Function
 
         Private Sub ProcessData()
             Dim stringCount As Integer = BitConverter.ToInt32(Header, 0)
@@ -96,8 +97,8 @@ Namespace FileFormats.PSMD
             Next
         End Sub
 
-        Public Sub OpenFileOnlyIDs(Filename As String)
-            MyBase.OpenFile(Filename)
+        Public Async Function OpenFileOnlyIDs(Filename As String) As Task
+            Await MyBase.OpenFile(Filename, New SkyEditor.Core.Windows.IOProvider)
 
             Dim stringCount As Integer = BitConverter.ToInt32(Header, 0)
             Dim stringInfoPointer As Integer = BitConverter.ToInt32(Header, 4)
@@ -113,7 +114,7 @@ Namespace FileFormats.PSMD
                 AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
                 Strings.Add(newEntry)
             Next
-        End Sub
+        End Function
 
         Private Sub Entry_PropertyChanged(sender As Object, e As EventArgs)
             If Strings.Contains(sender) Then

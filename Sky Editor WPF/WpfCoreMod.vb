@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditorBase.Interfaces
 ''' <summary>
@@ -33,7 +34,7 @@ Friend Class WpfCoreMod
         Manager.RegisterTypeRegister(GetType(SolutionOld))
         Manager.RegisterTypeRegister(GetType(ProjectOld))
         Manager.RegisterTypeRegister(GetType(iCreatableFile))
-        Manager.RegisterTypeRegister(GetType(iOpenableFile))
+        Manager.RegisterTypeRegister(GetType(IOpenableFile))
         Manager.RegisterTypeRegister(GetType(iDetectableFileType))
         Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
         Manager.RegisterTypeRegister(GetType(ITargetedControl))

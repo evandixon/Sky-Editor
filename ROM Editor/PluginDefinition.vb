@@ -4,6 +4,8 @@ Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core
 Imports SkyEditorBase
 Imports System.Reflection
+Imports System.IO
+Imports SkyEditor.Core.IO
 
 Public Class PluginDefinition
     Inherits SkyEditorPlugin
@@ -102,11 +104,11 @@ Public Class PluginDefinition
 
     Public Overrides Sub UnLoad(Manager As SkyEditor.Core.PluginManager)
         PluginHelper.Writeline("Deleting ROM Editor's temp directory")
-        Dim directory As String = PluginHelper.GetResourceName("Temp")
-        If IO.Directory.Exists(directory) Then
+        Dim dir As String = PluginHelper.GetResourceName("Temp")
+        If Directory.Exists(dir) Then
             On Error Resume Next
-            IO.Directory.Delete(directory, True)
-            IO.Directory.CreateDirectory(directory)
+            Directory.Delete(dir, True)
+            Directory.CreateDirectory(dir)
         End If
     End Sub
 
@@ -134,13 +136,13 @@ Public Class PluginDefinition
     End Sub
 
     Private Sub EnsureDirDeleted(Dir As String)
-        If IO.Directory.Exists(Dir) Then
-            IO.Directory.Delete(Dir, True)
+        If Directory.Exists(Dir) Then
+            Directory.Delete(Dir, True)
         End If
     End Sub
     Private Sub EnsureFileDeleted(Dir As String)
-        If IO.File.Exists(Dir) Then
-            IO.File.Delete(Dir)
+        If File.Exists(Dir) Then
+            File.Delete(Dir)
         End If
     End Sub
 End Class

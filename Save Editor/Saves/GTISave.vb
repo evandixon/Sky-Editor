@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase.Interfaces
 
 Namespace Saves
@@ -14,12 +15,12 @@ Namespace Saves
             MyBase.New
         End Sub
 
-        Public Overrides Sub OpenFile(SdfDirectory As String)
-            MyBase.OpenFile(SdfDirectory)
+        Public Overrides Async Function OpenFile(SdfDirectory As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(SdfDirectory, Provider)
 
             GameData = New GTIGameData
-            GameData.OpenFile(Me.GetFilePath("game_data"))
-        End Sub
+            Await GameData.OpenFile(Me.GetFilePath("game_data"), Provider)
+        End Function
     End Class
 
 End Namespace

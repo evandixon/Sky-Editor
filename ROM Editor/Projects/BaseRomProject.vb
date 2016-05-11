@@ -100,7 +100,7 @@ Namespace Projects
             Select Case mode
                 Case "nds"
                     Dim nds As New Roms.GenericNDSRom()
-                    nds.OpenFile(e.FullFilename)
+                    Await nds.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
                     Await nds.UnpackWithNDSTool(GetRawFilesDir)
                     'Await nds.Unpack(GetRawFilesDir)
                     Setting("System") = "NDS"
@@ -109,7 +109,7 @@ Namespace Projects
                 Case "3ds"
                     Dim threeDS As New Roms.Generic3DSRom
                     threeDS.IsReadOnly = True
-                    threeDS.OpenFile(e.FullFilename)
+                    Await threeDS.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
                     Await threeDS.Unpack(GetRawFilesDir)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID
@@ -117,7 +117,7 @@ Namespace Projects
                 Case "cxi"
                     Dim threeDS As New Roms.Cxi3DSRom
                     threeDS.IsReadOnly = True
-                    threeDS.OpenFile(e.FullFilename)
+                    Await threeDS.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
                     Await threeDS.Unpack(GetRawFilesDir)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID

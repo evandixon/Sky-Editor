@@ -8,6 +8,10 @@
             Return $"Monologue ""{Line}"""
         End Function
 
+        Public Sub New()
+            MyBase.New
+        End Sub
+
     End Class
 
 End Namespace

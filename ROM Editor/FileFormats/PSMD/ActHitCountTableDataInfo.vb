@@ -1,7 +1,4 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     ''' <summary>
@@ -10,7 +7,7 @@ Namespace FileFormats.PSMD
     ''' <remarks>Credit to Andibad for research.  https://projectpokemon.org/forums/showthread.php?46904-Pokemon-Super-Mystery-Dungeon-And-PMD-GTI-Research-And-Utilities&amp;p=211199&amp;viewfull=1#post211199
     ''' </remarks>
     Public Class ActHitCountTableDataInfo
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         Public Class ActHitCountTableDataInfoEntry
             ''' <summary>
@@ -37,8 +34,8 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of ActHitCountTableDataInfoEntry)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            Using f As New GenericFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.EnableInMemoryLoad = True
                 f.OpenFile(Filename)
 
@@ -46,7 +43,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(New ActHitCountTableDataInfoEntry(f.RawData(count * 16, 16)))
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             MyBase.New

@@ -1,7 +1,8 @@
-﻿Namespace Interfaces
+﻿Imports SkyEditor.Core.IO
+Namespace Interfaces
     Public Interface iCreatableFile
         Inherits iGenericFile
-        Inherits iOpenableFile
+        Inherits IOpenableFile
         Sub CreateFile(Name As String)
     End Interface
 End Namespace

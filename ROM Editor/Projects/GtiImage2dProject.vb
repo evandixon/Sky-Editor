@@ -21,9 +21,9 @@ Namespace Projects
 
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
             Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
-            Await f.RunForEach(Function(Item As String) As Task
+            Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New CteImage
-                                       b.OpenFile(Item)
+                                       Await b.OpenFile(Item, New SkyEditor.Core.Windows.IOProvider)
                                        Dim image = b.ContainedImage
                                        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
@@ -34,8 +34,7 @@ Namespace Projects
 
                                        Dim internalDir = IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "")
                                        Me.CreateDirectory(internalDir)
-                                       Me.AddExistingFile(internalDir, newFilename)
-                                       Return Task.CompletedTask
+                                       Await Me.AddExistingFile(internalDir, newFilename)
                                    End Using
                                End Function, backFiles)
 
@@ -88,7 +87,7 @@ Namespace Projects
 
                 If includeInPack Then
                     Dim img As New CteImage
-                    img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"))
+                    Await img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"), New SkyEditor.Core.Windows.IOProvider)
                     img.ContainedImage = Drawing.Image.FromFile(background)
                     img.Save()
                     img.Dispose()

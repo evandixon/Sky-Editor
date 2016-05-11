@@ -6,11 +6,11 @@ Namespace ConsoleCommands
     Public Class PSMDExpTableCsv
         Inherits ConsoleCommandAsync
 
-        Public Overrides Function MainAsync(Arguments() As String) As Task
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
                     Dim exp As New Experience
-                    exp.OpenFile(Arguments(0))
+                    Await exp.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
 
                     For Each item In exp.Entries
                         Dim s As New StringBuilder
@@ -40,7 +40,6 @@ Namespace ConsoleCommands
             Else
                 Console.WriteLine("Usage: PSMDExpTableCsv <Filename>")
             End If
-            Return Task.CompletedTask
         End Function
     End Class
 

@@ -1,7 +1,7 @@
 ﻿Imports SkyEditor.Core
 
 Public Class GenericFile
-    Inherits SkyEditor.Core.GenericFile
+    Inherits SkyEditor.Core.IO.GenericFile
 
 #Region "Constructors"
     ''' <summary>

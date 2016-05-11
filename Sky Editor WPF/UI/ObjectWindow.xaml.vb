@@ -1,6 +1,7 @@
 ﻿Imports System.Threading.Tasks
 Imports System.Windows.Forms
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase.Interfaces
 Namespace UI
     Public Class ObjectWindow
@@ -23,7 +24,7 @@ Namespace UI
                 tcTabs.Items.Add(item)
             Next
 
-            If TypeOf _objectToEdit Is iOpenableFile Then
+            If TypeOf _objectToEdit Is IOpenableFile Then
                 menuFileOpen.Visibility = Visibility.Visible
             Else
                 menuFileOpen.Visibility = Visibility.Collapsed
@@ -70,8 +71,8 @@ Namespace UI
             _manager = PluginManager.GetInstance
         End Sub
 
-        Private Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpen.Click
-            If TypeOf _objectToEdit Is iOpenableFile Then
+        Private Async Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpen.Click
+            If TypeOf _objectToEdit Is IOpenableFile Then
                 Dim o As New OpenFileDialog
 
                 If TypeOf _objectToEdit Is ISavableAs Then
@@ -86,7 +87,7 @@ Namespace UI
                 End If
 
                 If o.ShowDialog = Forms.DialogResult.OK Then
-                    DirectCast(_objectToEdit, iOpenableFile).OpenFile(o.FileName)
+                    Await DirectCast(_objectToEdit, IOpenableFile).OpenFile(o.FileName, New SkyEditor.Core.Windows.IOProvider)
                     RefreshDisplay()
                 End If
             End If

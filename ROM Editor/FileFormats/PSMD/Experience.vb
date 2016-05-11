@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class Experience
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         Public Class ExperienceEntry
             Public Property Exp As UInteger
@@ -28,10 +25,10 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As Dictionary(Of Integer, List(Of ExperienceEntry))
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = &HC
             Const tableLength = &H4C0
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.EnableInMemoryLoad = True
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
@@ -44,7 +41,8 @@ Namespace FileFormats.PSMD
                 Next
 
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             Entries = New Dictionary(Of Integer, List(Of ExperienceEntry))

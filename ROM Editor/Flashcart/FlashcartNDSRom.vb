@@ -34,7 +34,7 @@
         ''' 
         ''' </summary>
         ''' <param name="Filename">The full file path of the NDS ROM.</param>
-        Public Sub New(Filename As String)
+        <Obsolete("Needs refactoring")> Public Sub New(Filename As String)
             Me.ROM = ROM
             Me.Saves = New Dictionary(Of String, Object)
             'Detect saves
@@ -54,7 +54,8 @@
             For Each item In possibleFilenames
                 If IO.File.Exists(item) Then
                     'Load the save
-                    Saves.Add(item, SkyEditorBase.PluginManager.GetInstance.OpenObject(item))
+                    'Todo: properly wait for the async task
+                    Saves.Add(item, SkyEditorBase.PluginManager.GetInstance.OpenObject(item).Result)
                 End If
             Next
         End Sub

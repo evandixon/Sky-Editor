@@ -10,7 +10,7 @@ Namespace ConsoleCommands
             Return (From s In File.Strings Where s.Entry = Search).First
         End Function
 
-        Public Overrides Function MainAsync(Arguments() As String) As Task
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
                     Dim output As New Text.StringBuilder
@@ -18,7 +18,7 @@ Namespace ConsoleCommands
                     Dim msg As New GenericFile
                     Dim msg2 As New MessageBin
                     msg.OpenFile(Arguments(0))
-                    msg2.OpenFile(Arguments(0))
+                    Await msg2.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
                     Dim position = &HD0BA
                     For count = 0 To 2000
                         Dim s = msg.ReadNullTerminatedString(position, Text.Encoding.Unicode)
@@ -39,7 +39,6 @@ Namespace ConsoleCommands
             Else
                 Console.WriteLine("Usage: NameListResearcher <filename>")
             End If
-            Return Task.CompletedTask
         End Function
     End Class
 End Namespace

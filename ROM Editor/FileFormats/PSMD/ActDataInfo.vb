@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class ActDataInfo
-        Implements iOpenableFile
+        Implements IOpenableFile
         Public Class ActDataInfoEntry
             Public Property EffectRate As UInt16
             Public Property HPBellyChangeValue As UInt16
@@ -288,9 +285,9 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of ActDataInfoEntry)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = 160
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.EnableInMemoryLoad = True
                 f.OpenFile(Filename)
 
@@ -298,7 +295,8 @@ Namespace FileFormats.PSMD
                     Entries.Add(New ActDataInfoEntry(f.RawData(count * entryLength, entryLength)))
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             Entries = New List(Of ActDataInfoEntry)

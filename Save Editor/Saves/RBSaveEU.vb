@@ -1,11 +1,12 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 
 Namespace Saves
     Public Class RBSaveEU
         Inherits BinaryFile
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements iDetectableFileType
 
         Public Sub New()
@@ -18,9 +19,9 @@ Namespace Saves
         '        Bits.AppendByte(RawData(count))
         '    Next
         'End Sub
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
-        End Sub
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
+        End Function
 
         Protected Class Offsets
             Public Const BackupSaveStart As Integer = &H6000

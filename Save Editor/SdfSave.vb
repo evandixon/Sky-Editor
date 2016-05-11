@@ -1,9 +1,10 @@
 ﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase.Interfaces
 
 Public Class SdfSave
-    Implements iOpenableFile
+    Implements IOpenableFile
 
     Public Class SdfSaveExtraData
         Public Property Name As String
@@ -54,14 +55,19 @@ Public Class SdfSave
     End Sub
 
     Public Sub New(Path As String)
-        OpenFile(Path)
+        OpenFileInternal(Path)
     End Sub
 
     Public Sub New()
         Info = New SdfSaveExtraData
     End Sub
 
-    Public Overridable Sub OpenFile(SdfDirectory As String) Implements iOpenableFile.OpenFile
+    Public Overridable Function OpenFile(SdfDirectory As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        OpenFileInternal(SdfDirectory)
+        Return Task.CompletedTask
+    End Function
+
+    Private Sub OpenFileInternal(SdfDirectory As String)
         Me.Path = SdfDirectory
         Me.Info = New SdfSaveExtraData
         Dim dirName As String = IO.Path.GetFileNameWithoutExtension(Path)
@@ -95,4 +101,5 @@ Public Class SdfSave
             IsValid = False
         End If
     End Sub
+
 End Class

@@ -89,9 +89,9 @@ Public Class StartupHelpers
 
     Public Shared Sub RunExitSequence()
         'Delete .tmp files
-        For Each item In IO.Directory.GetFiles(PluginHelper.RootResourceDirectory, "*.tmp", IO.SearchOption.AllDirectories)
+        For Each item In Directory.GetFiles(PluginHelper.RootResourceDirectory, "*.tmp", SearchOption.AllDirectories)
             Try
-                IO.File.Delete(item)
+                File.Delete(item)
             Catch ex As IOException
                 'Something's keeping the file from being deleted.  It's probably still open.  It will get deleted the next time the program exits.
             End Try

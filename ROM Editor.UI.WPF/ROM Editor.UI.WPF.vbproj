@@ -131,6 +131,9 @@
     <Compile Include="Explorers\ScriptCommands\RawCommand.xaml.vb">
       <DependentUpon>RawCommand.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Explorers\SsbScriptToolbar.xaml.vb">
+      <DependentUpon>SsbScriptToolbar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FlashcartManager.xaml.vb">
       <DependentUpon>FlashcartManager.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Explorers\ScriptCommands\RawCommand.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Explorers\SsbScriptToolbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

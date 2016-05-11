@@ -1,4 +1,6 @@
-﻿Namespace Interfaces
+﻿Imports SkyEditor.Core.IO
+
+Namespace Interfaces
     ''' <summary>
     ''' Represents a class that can detect whether or not it is the same type as the given file.
     ''' </summary>

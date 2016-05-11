@@ -13,7 +13,7 @@ Public Class PsmdLuaLangIntegration
         Me.Header = My.Resources.Language.Message
     End Sub
 
-    Public Overrides Sub RefreshDisplay()
+    Public Overrides Async Sub RefreshDisplay()
         With PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject) 'GetEditingObject(Of CodeFiles.LuaCodeFile)()
             Dim messageFiles As New Dictionary(Of String, MessageBin)
             For Each item In IO.Directory.GetDirectories(IO.Path.Combine(.GetRootDirectory, "Languages"), "*", IO.SearchOption.TopDirectoryOnly)
@@ -29,7 +29,7 @@ Public Class PsmdLuaLangIntegration
                 End If
 
                 If exists Then
-                    msgfile.OpenFile(filename)
+                    Await msgfile.OpenFile(filename, New SkyEditor.Core.Windows.IOProvider)
                     messageFiles.Add(IO.Path.GetFileName(item), msgfile)
                 End If
             Next

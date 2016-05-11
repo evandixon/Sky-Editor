@@ -1,16 +1,14 @@
-﻿Imports SkyEditor.Core.Interfaces
+﻿Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
-Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.PSMD
     ''' <summary>
     ''' Models a type 5 FARC file, one that does not contain embedded filenames.
     ''' </summary>
     Public Class FarcF5
-        Inherits GenericFile
-        Implements iOpenableFile
+        Inherits SkyEditor.Core.Windows.GenericFile
+        Implements IOpenableFile
 
         Public Property Header As Sir0Fat5
         Protected Property DataOffset As Integer
@@ -121,7 +119,7 @@ Namespace FileFormats.PSMD
             Me.EnableInMemoryLoad = True
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             MyBase.OpenFile(Filename)
 
             Dim sir0Type = Me.Int32(&H20)
@@ -135,7 +133,8 @@ Namespace FileFormats.PSMD
             Header = New Sir0Fat5
             Header.EnableInMemoryLoad = True
             Header.CreateFile("", Me.RawData(sir0Offset, sir0Length))
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task
             If IO.File.Exists(DestinationFarcFilename) Then
@@ -245,7 +244,7 @@ Namespace FileFormats.PSMD
             Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Filename) & ".txt"))
             If IO.File.Exists(resourceFile) Then
                 Dim i As New BasicIniFile
-                i.OpenFile(resourceFile)
+                i.OpenFile(resourceFile, New SkyEditor.Core.Windows.IOProvider)
                 For Each item In i.Entries
                     out.Add(item.Value, CUInt(item.Key))
                 Next

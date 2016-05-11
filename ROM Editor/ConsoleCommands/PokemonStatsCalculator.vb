@@ -4,11 +4,11 @@ Namespace ConsoleCommands
     Public Class PokemonStatsCalculator
         Inherits ConsoleCommandAsync
 
-        Public Overrides Function MainAsync(Arguments() As String) As Task
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If IO.Directory.Exists(Arguments(0)) Then
                     Dim data As New PsmdDir
-                    data.OpenFile(Arguments(0))
+                    Await data.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
 
                     Dim doExit As Boolean = False
                     While Not doExit
@@ -92,7 +92,6 @@ Namespace ConsoleCommands
             Else
                 Console.WriteLine("Usage: PokemonStatsCalculator <directory>")
             End If
-            Return Task.CompletedTask
         End Function
     End Class
 End Namespace

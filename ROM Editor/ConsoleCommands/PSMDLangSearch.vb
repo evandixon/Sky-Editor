@@ -5,13 +5,13 @@ Namespace ConsoleCommands
     Public Class PSMDLangSearch
         Inherits ConsoleCommandAsync
 
-        Public Overrides Function MainAsync(Arguments() As String) As Task
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If IO.Directory.Exists(Arguments(0)) Then
                 Dim languageEntries As New Dictionary(Of String, Dictionary(Of UInteger, String))
                 Dim totalList As New Dictionary(Of UInteger, String)
                 For Each item In IO.Directory.GetFiles(Arguments(0))
                     Dim msg As New MessageBin
-                    msg.OpenFile(item)
+                    Await msg.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
                     languageEntries.Add(IO.Path.GetFileNameWithoutExtension(item), New Dictionary(Of UInteger, String))
                     For Each s In msg.Strings
                         languageEntries(IO.Path.GetFileNameWithoutExtension(item)).Add(s.Hash, s.Entry)
@@ -31,7 +31,6 @@ Namespace ConsoleCommands
             Else
                 Console.WriteLine($"Directory ""{Arguments(0)}"" not found.")
             End If
-            Return Task.CompletedTask
         End Function
     End Class
 

@@ -87,9 +87,9 @@ Validate:
                                                       Dim lang = IO.Path.GetFileNameWithoutExtension(Item)
 
                                                       Dim f2 As New AsyncFor
-                                                      Await f2.RunForEach(Sub(File As String)
+                                                      Await f2.RunForEach(Async Function(File As String) As Task
                                                                               Using msg As New MessageBin(True)
-                                                                                  msg.OpenFileOnlyIDs(File)
+                                                                                  Await msg.OpenFileOnlyIDs(File)
 
                                                                                   For Each entry In msg.Strings
                                                                                       'If LanguageIDs(lang).Contains(entry.Hash) Then
@@ -99,7 +99,7 @@ Validate:
                                                                                       'End If
                                                                                   Next
                                                                               End Using
-                                                                          End Sub, IO.Directory.GetFiles(Item))
+                                                                          End Function, IO.Directory.GetFiles(Item))
                                                   End Function, langDirs)
             End If
         End Sub
@@ -120,7 +120,7 @@ Validate:
                 Await Utilities.FileSystem.ReCreateDirectory(destDir)
 
                 Dim farc As New FarcF5
-                farc.OpenFile(item)
+                Await farc.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
                 Await farc.Extract(destDir)
             Next
 

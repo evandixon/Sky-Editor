@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SkyEditor.Core.Android
 {
-    public class IOProvider : SkyEditor.Core.IOProvider
+    public class IOProvider : SkyEditor.Core.IO.IOProvider
     {
         public override bool CanLoadFileInMemory(long fileSize)
         {

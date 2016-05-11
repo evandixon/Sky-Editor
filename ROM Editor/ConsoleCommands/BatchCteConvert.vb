@@ -2,18 +2,18 @@
 
 Namespace ConsoleCommands
     Public Class BatchCteConvert
-        Inherits SkyEditorBase.ConsoleCommand
+        Inherits SkyEditorBase.ConsoleCommandAsync
 
-        Public Overrides Sub Main(Arguments() As String)
+        Public Overrides Async Function MainAsync(Arguments() As String) As Task
             Dim SourceDir = Arguments(0)
             If Not IO.Directory.Exists(SourceDir) Then
                 Console.WriteLine($"Invalid dir ""{SourceDir}""")
-                Exit Sub
+                Exit Function
             End If
             For Each item In IO.Directory.GetFiles(SourceDir)
                 Try
                     Using c As New CteImage
-                        c.OpenFile(item)
+                        Await c.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
                         c.ContainedImage.Save(item & ".png", Drawing.Imaging.ImageFormat.Png)
                         Console.WriteLine("Converted " & item)
                     End Using
@@ -22,7 +22,7 @@ Namespace ConsoleCommands
                     Console.WriteLine(ex)
                 End Try
             Next
-        End Sub
+        End Function
     End Class
 
 End Namespace

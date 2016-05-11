@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 
@@ -65,7 +66,7 @@ Public MustInherit Class PluginManager
     ''' </summary>
     ''' <param name="File"></param>
     ''' <returns></returns>
-    Delegate Function FileTypeDetector(File As SkyEditor.Core.GenericFile) As IEnumerable(Of TypeInfo)
+    Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of TypeInfo)
     Delegate Function DirectoryTypeDetector(Directory As String) As IEnumerable(Of TypeInfo)
 #End Region
 

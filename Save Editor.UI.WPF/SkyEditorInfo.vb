@@ -1,4 +1,5 @@
-﻿Imports SaveEditor.Saves
+﻿Imports System.IO
+Imports SaveEditor.Saves
 Imports SkyEditor.Core
 
 Public Class SkyEditorInfo
@@ -25,7 +26,7 @@ Public Class SkyEditorInfo
         Manager.LoadRequiredPlugin(New SaveEditor.SkyEditorInfo, Me)
     End Sub
 
-    Public Function DirectoryDetector(Directory As IO.DirectoryInfo) As IEnumerable(Of Type)
+    Public Function DirectoryDetector(Directory As DirectoryInfo) As IEnumerable(Of Type)
         Dim s As New SdfSave(Directory.FullName)
         If s.IsValid Then
             Select Case s.MiniTitleId.ToLower

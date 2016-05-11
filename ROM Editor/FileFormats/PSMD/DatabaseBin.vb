@@ -1,11 +1,8 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class DatabaseBin
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         ''' <summary>
         ''' Matches string hashes to the strings contained in the file.
@@ -13,9 +10,9 @@ Namespace FileFormats.PSMD
         ''' <returns>The games' scripts refer to the strings by this hash.</returns>
         Public Property Strings As List(Of String)
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Dim total As New Text.StringBuilder
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
                 Dim subHeaderPointer = f.Int32(4)
@@ -51,7 +48,8 @@ Namespace FileFormats.PSMD
                     End If
                 Next
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Public Sub New()
             MyBase.New

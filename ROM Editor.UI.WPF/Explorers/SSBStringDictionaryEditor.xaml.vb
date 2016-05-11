@@ -53,8 +53,8 @@ Namespace Explorers
 
         Public Overrides Sub RefreshDisplay()
             mainSource = New ObservableCollection(Of KVPWrapper)
-            For Each item In GetEditingObject(Of Dictionary(Of Integer, String))()
-                Dim n = New KVPWrapper With {.Key = item.Key, .Value = item.Value}
+            For Each item In GetEditingObject(Of List(Of String))()
+                Dim n = New KVPWrapper With {.Key = 0, .Value = item}
                 AddHandler n.PropertyChanged, AddressOf Me.OnObjModified
                 mainSource.Add(n)
             Next
@@ -63,9 +63,9 @@ Namespace Explorers
         End Sub
 
         Public Overrides Sub UpdateObject()
-            GetEditingObject(Of Dictionary(Of Integer, String)).Clear()
+            GetEditingObject(Of List(Of String)).Clear()
             For Each item In mainSource
-                GetEditingObject(Of Dictionary(Of Integer, String)).Add(item.Key, item.Value)
+                GetEditingObject(Of List(Of String)).Add(item.Value)
             Next
         End Sub
 

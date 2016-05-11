@@ -1,5 +1,6 @@
 ﻿Imports SaveEditor.Interfaces
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
@@ -83,7 +84,7 @@ Namespace Saves
             Implements iPkmAttack
             Implements ISavableAs
             Implements iOnDisk
-            Implements iOpenableFile
+            Implements IOpenableFile
             Public Const Length As Integer = 362
             Public Const MimeType As String = "application/x-sky-pokemon"
             Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
@@ -279,15 +280,15 @@ Namespace Saves
                 Return ".skypkm"
             End Function
 
-            Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+            Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
                 Dim toOpen As New BinaryFile
-                toOpen.OpenFile(Filename)
+                Await toOpen.OpenFile(Filename, Provider)
                 Me.Bits = toOpen.Bits.Bits
                 'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
                 For i = 1 To 8 - (Length Mod 8)
                     Me.Bits.RemoveAt(0)
                 Next
-            End Sub
+            End Function
 
             Public Sub Save() Implements iSavable.Save
                 Save(Filename)

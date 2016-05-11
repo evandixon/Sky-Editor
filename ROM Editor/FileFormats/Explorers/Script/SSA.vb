@@ -1,11 +1,9 @@
 ﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers.Script
     Public Class SSA
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements iOnDisk
         Implements iNamed
 
@@ -17,10 +15,10 @@ Namespace FileFormats.Explorers.Script
             End Get
         End Property
 
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Me.Filename = Filename
 
-            Using f As New GenericFile
+            Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
                 f.OpenFile(Filename)
 
@@ -35,7 +33,8 @@ Namespace FileFormats.Explorers.Script
                 Dim movements = f.NextUInt16
                 Dim wordsGStart = f.NextUInt16
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
     End Class
 
 End Namespace

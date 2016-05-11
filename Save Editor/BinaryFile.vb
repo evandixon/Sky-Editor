@@ -1,11 +1,11 @@
 ﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 
 Public Class BinaryFile
     Implements iCreatableFile
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements iNamed
     Implements iOnDisk
     Implements ISavableAs
@@ -15,15 +15,16 @@ Public Class BinaryFile
         Bits = New Binary(0)
     End Sub
 
-    Public Overridable Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+    Public Overridable Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
         Me.Filename = Filename
-        Using f As New GenericFile(Filename, True, True)
+        Using f As New SkyEditor.Core.Windows.GenericFile(Filename, True, True)
             Bits = New Binary(0)
             ProcessRawData(f)
         End Using
-    End Sub
+        Return Task.CompletedTask
+    End Function
 
-    Private Sub ProcessRawData(File As SkyEditor.Core.GenericFile)
+    Private Sub ProcessRawData(File As GenericFile)
         For count As Integer = 0 To File.Length - 1
             Bits.AppendByte(File.RawData(count))
         Next
@@ -58,7 +59,7 @@ Public Class BinaryFile
     Public Sub Save(Destination As String) Implements ISavableAs.Save
         FixChecksum()
         Dim tmp(Math.Ceiling(Bits.Count / 8) - 1) As Byte
-        Using f As New GenericFile(tmp)
+        Using f As New SkyEditor.Core.Windows.GenericFile(tmp)
             For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
                 f.RawData(count) = Bits.Int(count, 0, 8)
             Next

@@ -7,6 +7,8 @@ Imports SkyEditorBase.Interfaces
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
+Imports System.IO
 
 Public Class PluginManager
     Inherits SkyEditor.Core.PluginManager
@@ -88,7 +90,7 @@ Public Class PluginManager
                 Catch ex As Reflection.ReflectionTypeLoadException
                     'If we fail here, then the assembly is NOT a valid plugin, so we won't load it.
                     Console.WriteLine(ex.ToString)
-                Catch ex As IO.FileNotFoundException
+                Catch ex As FileNotFoundException
                     'If we fail here, then the assembly is missing some of its references, meaning it's not a valid plugin.
                     Console.WriteLine(ex.ToString)
                 End Try
@@ -132,7 +134,7 @@ Public Class PluginManager
         For Each item In pluginExtType.GetInstalledExtensions
             Dim extAssemblies As New List(Of String)
             For Each file In item.ExtensionFiles
-                extAssemblies.Add(IO.Path.Combine(pluginExtType.GetExtensionDirectory(item), file))
+                extAssemblies.Add(Path.Combine(pluginExtType.GetExtensionDirectory(item), file))
             Next
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.dll"))
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.exe"))
@@ -318,7 +320,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Public Function GetOpenableFiles() As IEnumerable(Of Type)
-        Return GetRegisteredTypes(GetType(iOpenableFile))
+        Return GetRegisteredTypes(GetType(IOpenableFile))
     End Function
 
     ''' <summary>
@@ -420,7 +422,7 @@ Public Class PluginManager
 #End Region
 
     Public Function CreateNewFile(NewFileName As String, FileType As Type) As iCreatableFile
-        If Not ReflectionHelpers.IsOfType(FileType, GetType(iOpenableFile)) Then
+        If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile)) Then
             Throw New ArgumentException("The given type must implement iCreatableFile.")
         End If
         Dim c = FileType.GetConstructor({})
@@ -439,19 +441,19 @@ Public Class PluginManager
     ''' <param name="Filename">Filename of the file to open.</param>
     ''' <param name="FileType">Type of the class to create an instance of.  Must have a default constructor and implement iOpenableFile.</param>
     ''' <returns></returns>
-    Public Function OpenFile(Filename As String, FileType As Type) As Object
+    Public Async Function OpenFile(Filename As String, FileType As Type) As Task(Of Object)
         If String.IsNullOrEmpty(Filename) Then
             Throw New ArgumentNullException(NameOf(Filename))
         End If
-        If Not ReflectionHelpers.IsOfType(FileType, GetType(iOpenableFile)) Then
+        If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile)) Then
             Throw New ArgumentException("The given type must implement iOpenableFile.")
         End If
         Dim c = FileType.GetConstructor({})
         If c Is Nothing Then
             Throw New ArgumentException("The given type must provide a default constructor.")
         Else
-            Dim f As iOpenableFile = c.Invoke({})
-            f.OpenFile(Filename)
+            Dim f As IOpenableFile = c.Invoke({})
+            Await f.OpenFile(Filename, CurrentIOProvider)
             Return f
         End If
     End Function
@@ -460,15 +462,15 @@ Public Class PluginManager
     ''' </summary>
     ''' <param name="Filename"></param>
     ''' <returns></returns>
-    Public Function OpenObject(Filename As String) As Object
-        If IO.File.Exists(Filename) Then
-            Dim g As New GenericFile
+    Public Async Function OpenObject(Filename As String) As Task(Of Object)
+        If File.Exists(Filename) Then
+            Dim g As New GenericFile(CurrentIOProvider)
             g.IsReadOnly = True
             g.OpenFile(Filename)
-            Return OpenFile(g)
+            Return Await OpenFile(g)
         Else
-            If IO.Directory.Exists(Filename) Then
-                Return OpenDirectory(New IO.DirectoryInfo(Filename))
+            If Directory.Exists(Filename) Then
+                Return OpenDirectory(New DirectoryInfo(Filename))
             Else
                 Return Nothing
             End If
@@ -479,9 +481,9 @@ Public Class PluginManager
     ''' If no appropriate file can be found, will return the given File.
     ''' </summary>
     ''' <returns></returns>
-    Public Function OpenFile(File As GenericFile) As Object
+    Public Async Function OpenFile(File As GenericFile) As Task(Of Object)
         Dim type = GetFileType(File)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(iOpenableFile)) Then
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(IOpenableFile)) Then
             'Reopen the file without being readonly
             Dim filename = File.OriginalFilename
             File.Dispose()
@@ -489,8 +491,8 @@ Public Class PluginManager
             g.OpenFile(File.OriginalFilename)
             Return g
         Else
-            Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
-            out.OpenFile(File.OriginalFilename)
+            Dim out As IOpenableFile = type.GetConstructor({}).Invoke({})
+            Await out.OpenFile(File.OriginalFilename, CurrentIOProvider)
             File.Dispose()
             Return out
         End If
@@ -500,14 +502,14 @@ Public Class PluginManager
     ''' Sometimes a "file" actually exists as multiple files in a directory.  This method will open a "file" using the given directory.
     ''' </summary>
     ''' <returns></returns>
-    Public Function OpenDirectory(Directory As IO.DirectoryInfo) As Object
+    Public Async Function OpenDirectory(Directory As DirectoryInfo) As Task(Of Object)
         Dim type = GetDirectoryType(Directory)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(iOpenableFile)) Then
+        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(IOpenableFile)) Then
             'Let's not return nothing.  Maybe something wants to use the directory info.
             Return Directory
         Else
-            Dim out As iOpenableFile = type.GetConstructor({}).Invoke({})
-            out.OpenFile(Directory.FullName)
+            Dim out As IOpenableFile = type.GetConstructor({}).Invoke({})
+            Await out.OpenFile(Directory.FullName, CurrentIOProvider)
             Return out
         End If
     End Function
@@ -673,7 +675,7 @@ Public Class PluginManager
         End If
     End Function
 
-    Public Function GetDirectoryType(Directory As IO.DirectoryInfo) As TypeInfo
+    Public Function GetDirectoryType(Directory As DirectoryInfo) As TypeInfo
         Dim matches As New List(Of TypeInfo)
         For Each item In DirectoryTypeDetectors
             Dim t = item.Invoke(Directory.FullName)
@@ -739,7 +741,7 @@ Public Class PluginManager
     ''' Otherwise, returns Nothing.
     ''' </summary>
     ''' <returns></returns>
-    Public Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of Type)
+    Public Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of TypeInfo)
         If File.Length > 0 AndAlso File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
             Dim result = TryGetObjectFileType(File.OriginalFilename)
             If result Is Nothing Then

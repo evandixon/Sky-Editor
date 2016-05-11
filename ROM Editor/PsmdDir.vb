@@ -1,10 +1,11 @@
 ﻿Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase.Interfaces
 
 Public Class PsmdDir
-    Implements iOpenableFile
+    Implements IOpenableFile
     Implements IContainer(Of PokemonDataInfo)
     Implements IContainer(Of Experience)
 
@@ -36,13 +37,13 @@ Public Class PsmdDir
         MyBase.New
     End Sub
 
-    Public Sub OpenFile(RootDirectory As String) Implements iOpenableFile.OpenFile
+    Public Async Function OpenFile(RootDirectory As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
         PokemonInfo = New PokemonDataInfo
         PokemonInfo.EnableInMemoryLoad = True
-        PokemonInfo.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "pokemon_data_info.bin"))
+        Await PokemonInfo.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "pokemon_data_info.bin"), Provider)
 
         PokemonExpTable = New Experience
-        PokemonExpTable.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "experience.bin"))
+        Await PokemonExpTable.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "experience.bin"), Provider)
 
         LanguageFiles = New Dictionary(Of String, FarcF5)
         CommonLanguages = New Dictionary(Of String, MessageBin)
@@ -51,7 +52,7 @@ Public Class PsmdDir
             If IO.File.Exists(filename) Then
                 Dim f As New FarcF5
                 f.EnableInMemoryLoad = True
-                f.OpenFile(filename)
+                Await f.OpenFile(filename, New SkyEditor.Core.Windows.IOProvider)
                 LanguageFiles.Add(item, f)
                 Dim m As New MessageBin
                 m.EnableInMemoryLoad = True
@@ -62,7 +63,7 @@ Public Class PsmdDir
 
         DungeonFixedPokemon = New FixedPokemon
         DungeonFixedPokemon.EnableInMemoryLoad = True
-        DungeonFixedPokemon.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "fixed_pokemon.bin"))
+        Await DungeonFixedPokemon.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "fixed_pokemon.bin"), Provider)
 
         PokemonNameHashes = New List(Of Integer)
         For Each item In My.Resources.PSMD_Pokemon_Name_Hashes.Split(vbCrLf)
@@ -77,18 +78,18 @@ Public Class PsmdDir
         Next
 
         WazaData = New WazaDataInfo
-        WazaData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "waza_data_info.bin"))
+        Await WazaData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "pokemon", "waza_data_info.bin"), Provider)
 
         ActData = New ActDataInfo
-        ActData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_data_info.bin"))
+        Await ActData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_data_info.bin"), Provider)
 
         ActXlData = New ActXlWaza
-        ActXlData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_xlwaza.bin"))
+        Await ActXlData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_xlwaza.bin"), Provider)
 
         ActHitCountData = New ActHitCountTableDataInfo
-        ActHitCountData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_hit_count_table_data_info.bin"))
+        Await ActHitCountData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "dungeon", "act_hit_count_table_data_info.bin"), Provider)
 
         ItemData = New ItemDataInfo
-        ItemData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "item_data_info.bin"))
-    End Sub
+        Await ItemData.OpenFile(IO.Path.Combine(RootDirectory, "romfs", "item_data_info.bin"), Provider)
+    End Function
 End Class

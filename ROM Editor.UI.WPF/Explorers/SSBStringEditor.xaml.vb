@@ -64,7 +64,7 @@ Namespace Explorers
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {}
+            Return {GetType(SSB)}
         End Function
 
         Public Overrides Function IsBackupControl(Obj As Object) As Boolean

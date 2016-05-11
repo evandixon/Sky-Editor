@@ -16,7 +16,7 @@ Namespace ConsoleCommands
 
                         'Extract the farc
                         Dim f As New FarcF5
-                        f.OpenFile(Arguments(0))
+                        Await f.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
                         Await f.Extract(tmpDirectory, False)
 
 

@@ -1,11 +1,9 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats
     Public Class Sir0Fat5
         Inherits Sir0
-        Implements iOpenableFile
+        Implements IOpenableFile
 
         Public Class FileInfo
             Public Property Index As Integer
@@ -34,11 +32,11 @@ Namespace FileFormats
             End If
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
 
             ProcessData()
-        End Sub
+        End Function
         Private Sub ProcessData()
             FileData = New List(Of FileInfo)
             DataOffset = BitConverter.ToInt32(Header, 0)

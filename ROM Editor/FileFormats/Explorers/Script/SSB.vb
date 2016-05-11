@@ -1,12 +1,12 @@
-﻿Imports ROMEditor.FileFormats.Explorers.Script.Commands
+﻿Imports System.IO
+Imports ROMEditor.FileFormats.Explorers.Script.Commands
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers.Script
     Partial Public Class SSB
-        Implements iOpenableFile
+        Implements IOpenableFile
         Implements ISavableAs
         Implements iDetectableFileType
         Implements iOnDisk
@@ -16,6 +16,7 @@ Namespace FileFormats.Explorers.Script
 
         Public Sub New()
             GotoTargetCommands = New List(Of RawCommand)
+            CurrentCommandInfo = GetSkyCommandInfo()
         End Sub
 
 #Region "Properties"
@@ -32,7 +33,7 @@ Namespace FileFormats.Explorers.Script
 
         Public ReadOnly Property Name As String Implements iNamed.Name
             Get
-                Return IO.Path.GetFileName(Filename)
+                Return Path.GetFileName(Filename)
             End Get
         End Property
 
@@ -72,7 +73,7 @@ Namespace FileFormats.Explorers.Script
 #Region "Functions"
 
 #Region "IO"
-        Public Sub OpenFile(Filename As String) Implements iOpenableFile.OpenFile
+        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Me.Filename = Filename
             Using f As New SkyEditor.Core.Windows.GenericFile
                 f.IsReadOnly = True
@@ -126,7 +127,7 @@ Namespace FileFormats.Explorers.Script
                     Dim unknownGroupData As Integer = f.NextUInt16
 
                     Dim g = New CommandGroup With {.Type = type, .Unknown = unknownGroupData}
-                    GroupDefinitions.Add(g)
+                    groupDefinitions.Add(g)
 
                     'Log the groups by command pointer so we can later update the CommandNumber
                     If Not groupPointerDictionary.ContainsKey(ptrScript) Then
@@ -175,13 +176,12 @@ Namespace FileFormats.Explorers.Script
                 Dim rawCommands As New List(Of RawCommand)
                 Dim commandLocations As New Dictionary(Of Integer, Integer) 'Key: index of the command in RawCommands. Value: index of the start of the Command, in Words.  
                 Dim currentCommandStart As Integer = commandOffset
-                Dim commandDefs = GetSkyCommandParamLengths()
                 Dim gotoPhysicalPointers As New List(Of Integer)
                 While currentCommandStart < dataWordLength * 2 + dataBlockOffset '(currentCommandStart + numWordsData)
                     'Update the relevant group's pointer
                     If groupPointerDictionary.ContainsKey(currentCommandStart) Then
                         For Each item In groupPointerDictionary(currentCommandStart)
-                            item.CommandNumber = RawCommands.Count
+                            item.CommandNumber = rawCommands.Count
                         Next
                     End If
 
@@ -197,12 +197,12 @@ Namespace FileFormats.Explorers.Script
 
                     'Read the command
                     Dim commandID As UInt16 = f.UInt16(currentCommandStart)
-                    Dim paramSize As Integer = commandDefs(commandID)
+                    Dim paramSize As Integer = (From d In CurrentCommandInfo Where d.CommandID = commandID Select d.ParameterCount).First
                     Dim params As New List(Of UInt16)
                     For i = 1 To paramSize
                         params.Add(f.UInt16(currentCommandStart + i * 2))
                     Next
-                    Dim newCmd = CreateSkyCommand(commandID, params)
+                    Dim newCmd = CreateCommand(commandID, params)
                     rawCommands.Add(newCmd)
                     currentCommandStart += paramSize * 2 + 2
 
@@ -230,9 +230,9 @@ Namespace FileFormats.Explorers.Script
                 Dim groupIndex = 0
                 Dim gotoIndex = 0
                 '-Add group and goto labels as logical commands
-                For count = 0 To RawCommands.Count - 1
+                For count = 0 To rawCommands.Count - 1
                     Dim count2 = count
-                    Dim group = (From g In GroupDefinitions Where g.CommandNumber = count2).FirstOrDefault
+                    Dim group = (From g In groupDefinitions Where g.CommandNumber = count2).FirstOrDefault
                     If group IsNot Nothing Then
                         'Then this is the start of a group
                         'Add a group start label
@@ -248,7 +248,7 @@ Namespace FileFormats.Explorers.Script
                         gotoIndex += 1
                     End If
                     'Add the original command
-                    processPass1.Add(RawCommands(count))
+                    processPass1.Add(rawCommands(count))
                 Next
                 '-Change goto statements to point to a goto label, instead of a Word index
                 For Each item In processPass1
@@ -282,7 +282,8 @@ Namespace FileFormats.Explorers.Script
 
                 'Todo: Pass 2 - Convert certain series of Goto statements into more human readable structures like If/ElseIf statements, Loops, Etc.
             End Using
-        End Sub
+            Return Task.CompletedTask
+        End Function
 
         Private Function GetPass1GotoLabelName(LabelIndex As Integer) As String
             Return $"Goto-{LabelIndex}"
@@ -410,7 +411,7 @@ Namespace FileFormats.Explorers.Script
                 'Add the command to commandSection
                 Dim item = rawCommands(count)
 
-                Dim buffer = GetSkyCommandBytes(item)
+                Dim buffer = GetCommandBytes(item)
                 commandsSection.AddRange(buffer)
 
                 'Add the group if there's a group pointing to this command
@@ -479,7 +480,7 @@ Namespace FileFormats.Explorers.Script
             out.AddRange(italianTable)
             out.AddRange(spanishTable)
 
-            IO.File.WriteAllBytes(Filename, out.ToArray)
+            File.WriteAllBytes(Filename, out.ToArray)
             RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
 
@@ -512,6 +513,12 @@ Namespace FileFormats.Explorers.Script
             Dim pointerSection As New List(Of Byte)
             Dim offset As UShort = SourceDictionary.Count * 2 + sizeConstantsWords * 2 'Looks like this is the only thing in Bytes and not Words.
             For Each item In SourceDictionary
+
+                'Replace null strings with empty strings, so they can still be encoded in the file
+                If item Is Nothing Then
+                    item = String.Empty
+                End If
+
                 pointerSection.AddRange(BitConverter.GetBytes(offset))
                 Dim buffer = e.GetBytes(item.Replace(vbCrLf, vbLf))
                 stringSection.AddRange(buffer)
