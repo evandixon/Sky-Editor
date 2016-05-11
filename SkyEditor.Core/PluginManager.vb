@@ -86,8 +86,16 @@ Public MustInherit Class PluginManager
     ''' </summary>
     ''' <param name="Core">Core to load</param>
     Public Overridable Sub LoadCore(Core As CoreSkyEditorPlugin)
+        'Load the provided core
         CurrentIOProvider = Core.GetIOProvider
         Core.Load(Me)
+
+        'Load types in SkyEditor.Core
+        RegisterTypeRegister(GetType(IOpenableFile).GetTypeInfo)
+        RegisterTypeRegister(GetType(IDetectableFileType).GetTypeInfo)
+        RegisterTypeRegister(GetType(IDirectoryTypeDetector).GetTypeInfo)
+        RegisterTypeRegister(GetType(IFileTypeDetector).GetTypeInfo)
+        RegisterType(GetType(IFileTypeDetector).GetTypeInfo, GetType(DetectableFileTypeDetector).GetTypeInfo)
     End Sub
 
     ''' <summary>

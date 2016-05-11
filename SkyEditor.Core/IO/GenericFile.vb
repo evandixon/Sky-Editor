@@ -6,7 +6,7 @@ Namespace IO
         Implements IDisposable
         Implements iNamed
         'Implements iCreatableFile 'Excluded because this might not apply to children
-        'Implements iOpenableFile
+        Implements IOpenableFile
         Implements iOnDisk
         Implements ISavableAs
 
@@ -474,21 +474,14 @@ Namespace IO
         End Sub
 
         ''' <summary>
-        ''' Asynchronously opens a file from the given filename.  If it does not exists, a blank one will be created.
-        ''' </summary>
-        Public Overridable Async Function OpenFileAsync(Filename As String) As Task
-            Await Task.Run(New Action(Sub()
-                                          OpenFile(Filename)
-                                      End Sub))
-        End Function
-
-        ''' <summary>
         ''' Opens a file from the given filename.  If it does not exists, a blank one will be created.
         ''' </summary>
         ''' <param name="Filename"></param>
-        Public Overridable Sub OpenFile(Filename As String) ' Implements iOpenableFile.OpenFile
+        Public Overridable Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Me.FileProvider = Provider
             OpenFileInternal(Filename)
-        End Sub
+            Return Task.FromResult(0)
+        End Function
 
         Private Sub OpenFileInternal(Filename As String)
             Dim fileSize As Long = FileProvider.GetFileLength(Filename)

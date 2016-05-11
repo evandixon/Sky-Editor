@@ -2,7 +2,7 @@
 
 Namespace FileFormats.PSMD
     Public Class PokemonDataInfo
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Private Const entryLength = &H98
         Public Class PokemonInfoEntry
@@ -162,15 +162,14 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of PokemonInfoEntry)
 
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
 
             Dim numEntries = Math.Floor(Me.Length / entryLength)
 
             For count = 0 To numEntries - 1
                 Entries.Add(New PokemonInfoEntry(RawData(count * entryLength, entryLength)))
             Next
-            Return Task.CompletedTask
         End Function
         Public Overrides Sub Save(Destination As String)
             Me.Length = Entries.Count * entryLength

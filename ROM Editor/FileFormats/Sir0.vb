@@ -2,7 +2,7 @@
 
 Namespace FileFormats
     Public Class Sir0
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
 
         ''' <summary>
@@ -81,10 +81,9 @@ Namespace FileFormats
             End If
         End Sub
 
-        Public Overridable Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
             ProcessData()
-            Return Task.CompletedTask
         End Function
 
         Public Overrides Sub Save(Destination As String)

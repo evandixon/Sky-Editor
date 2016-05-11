@@ -15,6 +15,13 @@
         Public MustOverride Function FileExists(filename As String) As Boolean
 
         ''' <summary>
+        ''' Determines whether the specified directory exists.
+        ''' </summary>
+        ''' <param name="directory">Full path of the directory.</param>
+        ''' <returns></returns>
+        Public MustOverride Function DirectoryExists(directory As String) As Boolean
+
+        ''' <summary>
         ''' Reads a file from disk, and returns its contents as a byte array.
         ''' </summary>
         ''' <param name="filename">Full path of the file.</param>

@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
@@ -53,13 +54,13 @@ Public Class ProjectOld
             If _file Is Nothing Then
                 Dim f = GetFilename()
                 If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
-                    Return Await PluginManager.GetInstance.OpenObject(f)
+                    Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, PluginManager.GetInstance)
                 Else
                     Dim t = Utilities.ReflectionHelpers.GetTypeFromName(AssemblyQualifiedTypeName)
                     If t Is Nothing Then
-                        Return Await PluginManager.GetInstance.OpenObject(f)
+                        Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, PluginManager.GetInstance)
                     Else
-                        Return PluginManager.GetInstance.OpenFile(f, t)
+                        Return IOHelper.OpenFile(f, t, PluginManager.GetInstance)
                     End If
                 End If
             Else

@@ -34,16 +34,15 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of ActHitCountTableDataInfoEntry)
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            Using f As New SkyEditor.Core.Windows.GenericFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New GenericFile
                 f.EnableInMemoryLoad = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
 
                 For count = 0 To ((f.Length / 16) - 1)
                     Entries.Add(New ActHitCountTableDataInfoEntry(f.RawData(count * 16, 16)))
                 Next
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

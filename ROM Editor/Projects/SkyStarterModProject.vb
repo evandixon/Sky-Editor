@@ -104,6 +104,7 @@ Namespace Projects
                 If IO.File.Exists(IO.Path.Combine(projDir, "Languages", item.Value)) Then
                     Dim langFile As New ObjectFile(Of List(Of String))(IO.Path.Combine(projDir, "Languages", item.Value))
                     Using langString As New LanguageString
+                        langString.CreateFile("")
                         langString.Items = langFile.ContainedObject
 
                         If personalityTest IsNot Nothing Then

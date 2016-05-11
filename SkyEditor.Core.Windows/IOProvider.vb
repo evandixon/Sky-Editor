@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.Devices
 
 Public Class IOProvider
     Inherits SkyEditor.Core.IO.IOProvider
+
     Public Overrides Sub CopyFile(sourceFilename As String, destinationFilename As String)
         File.Copy(sourceFilename, destinationFilename, True)
     End Sub
@@ -21,6 +22,10 @@ Public Class IOProvider
 
     Public Overrides Function CanLoadFileInMemory(fileSize As Long) As Boolean
         Return (New ComputerInfo).AvailablePhysicalMemory > (fileSize + 500 * 1024 * 1024)
+    End Function
+
+    Public Overrides Function DirectoryExists(directoryPath As String) As Boolean
+        Return Directory.Exists(directoryPath)
     End Function
 
     Public Overrides Function fileExists(Filename As String) As Boolean

@@ -27,7 +27,7 @@ Namespace Projects
 
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New BGP
-                                       b.OpenFile(Item)
+                                       Await b.OpenFile(Item, New SkyEditor.Core.Windows.IOProvider)
                                        Dim image = Await b.GetImage
                                        Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then

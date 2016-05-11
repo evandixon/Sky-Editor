@@ -3,12 +3,12 @@
 Namespace Roms
     Public Class Cxi3DSRom
         Inherits Generic3DSRom
-        Public Overrides Function IsOfType(File As GenericFile) As Boolean
+        Public Overrides Function IsOfType(File As GenericFile) As Task(Of Boolean)
             If File.Length > 104 Then
                 Dim e As New System.Text.ASCIIEncoding
-                Return e.GetString(File.RawData(&H100, 4)) = "NCCH"
+                Return Task.FromResult(e.GetString(File.RawData(&H100, 4)) = "NCCH")
             Else
-                Return False
+                Return Task.FromResult(False)
             End If
         End Function
 

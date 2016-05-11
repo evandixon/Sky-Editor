@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Core.Windows
+﻿Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers

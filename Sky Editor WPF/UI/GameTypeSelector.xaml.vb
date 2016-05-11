@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.Interfaces
+﻿Imports System.Reflection
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.Interfaces
 Namespace UI
     Public Class GameTypeSelector
@@ -19,7 +20,7 @@ Namespace UI
         Public Sub ResetGames()
             cbGame.Items.Clear()
         End Sub
-        Public Sub AddGames(Games As Dictionary(Of String, Type).KeyCollection) Implements iGameTypeSelector.AddGames
+        Public Sub AddGames(Games As Dictionary(Of String, TypeInfo).KeyCollection) Implements iGameTypeSelector.AddGames
             For Each item In Games
                 cbGame.Items.Add(item)
             Next

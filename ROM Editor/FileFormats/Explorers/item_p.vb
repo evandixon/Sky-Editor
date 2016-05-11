@@ -5,7 +5,7 @@ Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.Explorers
     Public Class item_p
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Public Property Items As List(Of Item)
         Public Class Item
@@ -160,10 +160,9 @@ Namespace FileFormats.Explorers
         Public Sub New()
             MyBase.New
         End Sub
-        Public Overloads Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
             ProcessRawData()
-            Return Task.CompletedTask
         End Function
         Private Sub ProcessRawData()
             Items = New List(Of Item)

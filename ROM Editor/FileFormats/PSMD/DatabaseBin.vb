@@ -10,11 +10,11 @@ Namespace FileFormats.PSMD
         ''' <returns>The games' scripts refer to the strings by this hash.</returns>
         Public Property Strings As List(Of String)
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Dim total As New Text.StringBuilder
-            Using f As New SkyEditor.Core.Windows.GenericFile
+            Using f As New GenericFile
                 f.IsReadOnly = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
                 Dim subHeaderPointer = f.Int32(4)
                 Dim stringPointerOffset = f.Int32(subHeaderPointer + 4)
                 Dim numEntries = f.Int32(subHeaderPointer + 8) * 4
@@ -48,7 +48,6 @@ Namespace FileFormats.PSMD
                     End If
                 Next
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

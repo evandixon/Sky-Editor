@@ -17,7 +17,7 @@ Public Class BinaryFile
 
     Public Overridable Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
         Me.Filename = Filename
-        Using f As New SkyEditor.Core.Windows.GenericFile(Filename, True, True)
+        Using f As New GenericFile(Provider, Filename, True, True)
             Bits = New Binary(0)
             ProcessRawData(f)
         End Using
@@ -59,7 +59,7 @@ Public Class BinaryFile
     Public Sub Save(Destination As String) Implements ISavableAs.Save
         FixChecksum()
         Dim tmp(Math.Ceiling(Bits.Count / 8) - 1) As Byte
-        Using f As New SkyEditor.Core.Windows.GenericFile(tmp)
+        Using f As New GenericFile(New SkyEditor.Core.Windows.IOProvider, tmp)
             For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
                 f.RawData(count) = Bits.Int(count, 0, 8)
             Next

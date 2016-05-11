@@ -1,4 +1,6 @@
-﻿Namespace Flashcart
+﻿Imports SkyEditor.Core.IO
+
+Namespace Flashcart
     'Public Enum NDSSaveSlot
     '    DefaultSlot 'ROM.sav
     '    Slot0 'ROM.0.sav
@@ -55,7 +57,7 @@
                 If IO.File.Exists(item) Then
                     'Load the save
                     'Todo: properly wait for the async task
-                    Saves.Add(item, SkyEditorBase.PluginManager.GetInstance.OpenObject(item).Result)
+                    Saves.Add(item, IOHelper.OpenObject(item, AddressOf IOHelper.PickFirstDuplicateMatchSelector, SkyEditorBase.PluginManager.GetInstance).Result)
                 End If
             Next
         End Sub

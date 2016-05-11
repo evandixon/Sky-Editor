@@ -15,12 +15,12 @@ Namespace FileFormats.Explorers.Script
             End Get
         End Property
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Me.Filename = Filename
 
-            Using f As New SkyEditor.Core.Windows.GenericFile
+            Using f As New GenericFile
                 f.IsReadOnly = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
 
                 f.Position = 0
                 Dim numGroups = f.NextUInt16
@@ -33,7 +33,6 @@ Namespace FileFormats.Explorers.Script
                 Dim movements = f.NextUInt16
                 Dim wordsGStart = f.NextUInt16
             End Using
-            Return Task.CompletedTask
         End Function
     End Class
 

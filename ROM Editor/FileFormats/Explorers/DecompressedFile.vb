@@ -1,4 +1,4 @@
-﻿Imports SkyEditor.Core.Windows
+﻿Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
@@ -43,11 +43,10 @@ Namespace FileFormats.Explorers
             'Await RunCompress(Path)
         End Sub
 
-        Public Overrides Sub OpenFile(Filename As String)
-            'Todo: find a way to run this asynchrounously
-            RunDecompress(Filename).Wait()
-            MyBase.OpenFile(Filename)
-        End Sub
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await RunDecompress(Filename)
+            Await MyBase.OpenFile(Filename, Provider)
+        End Function
 
         Public Sub New()
 

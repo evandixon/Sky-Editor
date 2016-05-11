@@ -25,13 +25,13 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As Dictionary(Of Integer, List(Of ExperienceEntry))
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = &HC
             Const tableLength = &H4C0
-            Using f As New SkyEditor.Core.Windows.GenericFile
+            Using f As New GenericFile
                 f.EnableInMemoryLoad = True
                 f.IsReadOnly = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
                 For tableCount = 0 To (f.Length / tableLength) - 1
                     Dim localEntries As New List(Of ExperienceEntry)
                     For entryCount = 0 To 99 '100 entries
@@ -41,7 +41,6 @@ Namespace FileFormats.PSMD
                 Next
 
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

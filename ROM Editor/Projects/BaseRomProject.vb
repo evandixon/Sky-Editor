@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.Windows
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Imports SkyEditorBase.EventArguments
 
@@ -73,19 +74,19 @@ Namespace Projects
 
             If mode Is Nothing Then
                 Using f As New GenericFile
-                    f.OpenFile(e.FullFilename)
+                    Await f.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
                     'Then we have to detect the ROM type
                     Dim n As New Roms.GenericNDSRom
-                    If n.IsFileOfType(f) Then
+                    If Await n.IsFileOfType(f) Then
                         mode = "nds"
                         n.Dispose()
                     Else
                         Dim three As New Roms.Generic3DSRom
                         Dim cxi As New Roms.Cxi3DSRom
-                        If three.IsOfType(f) Then
+                        If Await three.IsOfType(f) Then
                             mode = "3ds"
                             three.Dispose()
-                        ElseIf cxi.IsOfType(f) Then
+                        ElseIf Await cxi.IsOfType(f) Then
                             mode = "cxi"
                         Else
                             'This file is invalid, and we'll delete it.

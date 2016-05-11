@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditorBase
 
@@ -11,7 +12,7 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             If dialog.ShowDialog Then
-                PluginHelper.RequestFileOpen(Await PluginManager.GetInstance.OpenObject(dialog.SelectedPath), True)
+                PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(dialog.SelectedPath, AddressOf IOHelper.PickFirstDuplicateMatchSelector, PluginManager.GetInstance), True)
             End If
         End Function
 

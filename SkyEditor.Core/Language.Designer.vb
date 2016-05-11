@@ -75,6 +75,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to The specified path neither points to an existing file nor an existing directory..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorFileOrDirDoesntExist() As String
+            Get
+                Return ResourceManager.GetString("ErrorFileOrDirDoesntExist", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The action&apos;s ActionPath needs to contain at least 1 item..
         '''</summary>
         Friend Shared ReadOnly Property ErrorMenuActionEmptyActionPath() As String
@@ -89,6 +98,33 @@ Namespace My.Resources
         Friend Shared ReadOnly Property ErrorNoSaveFilename() As String
             Get
                 Return ResourceManager.GetString("ErrorNoSaveFilename", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sanity check failed.  Out of a list of non-zero length, no item exists that equals the max item..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorSanityNoMax() As String
+            Get
+                Return ResourceManager.GetString("ErrorSanityNoMax", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The given type must implement IOpenableFile..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorTypeMustInheritIOpenableFile() As String
+            Get
+                Return ResourceManager.GetString("ErrorTypeMustInheritIOpenableFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The given type must provide a default constructor..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorTypeNoDefaultConstructor() As String
+            Get
+                Return ResourceManager.GetString("ErrorTypeNoDefaultConstructor", resourceCulture)
             End Get
         End Property
         

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace SkyEditor.Core.Android
@@ -19,6 +20,11 @@ namespace SkyEditor.Core.Android
         public override void DeleteFile(string filename)
         {
             File.Delete(filename);
+        }
+
+        public override bool DirectoryExists(string directoryPath)
+        {
+            return Directory.Exists(directoryPath);
         }
 
         public override bool FileExists(string filename)

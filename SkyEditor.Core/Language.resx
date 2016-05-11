@@ -121,12 +121,26 @@
     <value>StepCount cannot be 0.</value>
     <comment>Message for an exception that's thrown when the Step of a logical For statement is 0.</comment>
   </data>
+  <data name="ErrorFileOrDirDoesntExist" xml:space="preserve">
+    <value>The specified path neither points to an existing file nor an existing directory.</value>
+  </data>
   <data name="ErrorMenuActionEmptyActionPath" xml:space="preserve">
     <value>The action's ActionPath needs to contain at least 1 item.</value>
   </data>
   <data name="ErrorNoSaveFilename" xml:space="preserve">
     <value>Using GenericFile.Save() requires GenericFile.OriginalFilename to not be null.</value>
     <comment>Message for an exception that's thrown when using GenericFile.Save() when the file doesn't have an original filename.</comment>
+  </data>
+  <data name="ErrorSanityNoMax" xml:space="preserve">
+    <value>Sanity check failed.  Out of a list of non-zero length, no item exists that equals the max item.</value>
+  </data>
+  <data name="ErrorTypeMustInheritIOpenableFile" xml:space="preserve">
+    <value>The given type must implement IOpenableFile.</value>
+    <comment>Message for an exception that's thrown when a type doesn't implement IOpenableFile.</comment>
+  </data>
+  <data name="ErrorTypeNoDefaultConstructor" xml:space="preserve">
+    <value>The given type must provide a default constructor.</value>
+    <comment>Message for an exception that's thrown when a type doesn't have a default constructor.</comment>
   </data>
   <data name="ErrorWrittenReadonly" xml:space="preserve">
     <value>Attempted to write to a read-only file.</value>

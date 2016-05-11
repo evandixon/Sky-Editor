@@ -1,8 +1,8 @@
-﻿Imports SkyEditor.Core.Windows
+﻿Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
-    Public Class item_s_p
+    <Obsolete("Needs rewriting")> Public Class item_s_p
         Inherits GenericFile
         Public Structure Item
             ''' <summary>

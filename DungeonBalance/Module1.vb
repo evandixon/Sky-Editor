@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.Windows
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 
 Module Module1
 
@@ -17,11 +18,11 @@ Module Module1
 
                     Using bin As New GenericFile
                         bin.EnableInMemoryLoad = True
-                        bin.OpenFile(inputFile)
+                        bin.OpenFile(inputFile, New SkyEditor.Core.Windows.IOProvider).Wait()
 
                         Using ent As New GenericFile
                             ent.EnableInMemoryLoad = True
-                            ent.OpenFile(IO.Path.Combine(IO.Path.GetDirectoryName(inputFile), IO.Path.GetFileNameWithoutExtension(inputFile) & ".ent"))
+                            ent.OpenFile(IO.Path.Combine(IO.Path.GetDirectoryName(inputFile), IO.Path.GetFileNameWithoutExtension(inputFile) & ".ent"), New SkyEditor.Core.Windows.IOProvider).Wait()
 
                             For count = 0 To (ent.Length / 4 - 2)
                                 Dim startIndex = ent.Int32(count * 4)

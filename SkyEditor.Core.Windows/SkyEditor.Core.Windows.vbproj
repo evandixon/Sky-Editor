@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
-    <Compile Include="GenericFile.vb" />
     <Compile Include="IOProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

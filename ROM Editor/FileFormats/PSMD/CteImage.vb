@@ -4,7 +4,7 @@ Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD
     Public Class CteImage
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Implements iModifiable
 
@@ -35,8 +35,8 @@ Namespace FileFormats.PSMD
 
         Private Property Height As Integer
 
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
             ImageFormat = BitConverter.ToInt32(RawData(&H4, 4), 0)
             Width = BitConverter.ToInt32(RawData(&H8, 4), 0)
             Height = BitConverter.ToInt32(RawData(&HC, 4), 0)
@@ -58,7 +58,6 @@ Namespace FileFormats.PSMD
             ' image.RotateFlip(RotateFlipType.Rotate270FlipNone)
 
             ContainedImage = image
-            Return Task.CompletedTask
         End Function
         Private Function GetColor(PixelIndex As Integer, PixelLength As Integer, DataStart As Integer) As Color
             If PixelLength = &H20 Then '32 bit

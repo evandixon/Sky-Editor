@@ -2,7 +2,7 @@
 
 Namespace FileFormats.Explorers
     Public Class waza_p
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Public Property Pokemon As List(Of PokemonMoves)
         Public Class PokemonMoves
@@ -28,8 +28,8 @@ Namespace FileFormats.Explorers
                 Return m
             End Function
         End Class
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
             Pokemon = New List(Of PokemonMoves)
             Dim index As Integer = &H13
             Dim section As Byte = 0
@@ -98,7 +98,6 @@ Namespace FileFormats.Explorers
                         End If
                 End Select
             End While
-            Return Task.CompletedTask
         End Function
     End Class
 End Namespace

@@ -73,11 +73,11 @@ Namespace FileFormats.Explorers.Script
 #Region "Functions"
 
 #Region "IO"
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Me.Filename = Filename
-            Using f As New SkyEditor.Core.Windows.GenericFile
+            Using f As New GenericFile
                 f.IsReadOnly = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
 
                 f.Position = 0
                 Dim numConstants As Integer = f.NextUInt16
@@ -282,7 +282,6 @@ Namespace FileFormats.Explorers.Script
 
                 'Todo: Pass 2 - Convert certain series of Goto statements into more human readable structures like If/ElseIf statements, Loops, Etc.
             End Using
-            Return Task.CompletedTask
         End Function
 
         Private Function GetPass1GotoLabelName(LabelIndex As Integer) As String
@@ -537,9 +536,9 @@ Namespace FileFormats.Explorers.Script
             Return out
         End Function
 
-        Public Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
+        Public Function IsOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
             'Todo: actually look at the file contents to verify its integrity
-            Return File.OriginalFilename.ToLower.EndsWith(".ssb")
+            Return Task.FromResult(File.OriginalFilename.ToLower.EndsWith(".ssb"))
         End Function
 #End Region
 

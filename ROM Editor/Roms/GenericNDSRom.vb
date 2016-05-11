@@ -7,8 +7,7 @@ Imports SkyEditorBase
 
 Namespace Roms
     Public Class GenericNDSRom
-        Inherits SkyEditor.Core.Windows.GenericFile
-        Implements IOpenableFile
+        Inherits GenericFile
         Implements iDetectableFileType
         Implements iPackedRom
 
@@ -17,15 +16,12 @@ Namespace Roms
         End Function
 
 #Region "Constructors"
+
         Sub New()
             MyBase.New()
             Me.EnableInMemoryLoad = True
         End Sub
 
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
-            Return Task.CompletedTask
-        End Function
 #End Region
 
 
@@ -600,8 +596,8 @@ Namespace Roms
         End Sub
 #End Region
 
-        Public Overridable Function IsFileOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
-            Return (File.Length > &H15D AndAlso File.RawData(&H15C) = &H56 AndAlso File.RawData(&H15D) = &HCF)
+        Public Overridable Function IsFileOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
+            Return Task.FromResult(File.Length > &H15D AndAlso File.RawData(&H15C) = &H56 AndAlso File.RawData(&H15D) = &HCF)
         End Function
 
     End Class

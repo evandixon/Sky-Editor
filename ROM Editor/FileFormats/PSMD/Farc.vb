@@ -7,7 +7,7 @@ Namespace FileFormats.PSMD
     ''' Models a type 5 FARC file, one that does not contain embedded filenames.
     ''' </summary>
     Public Class FarcF5
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
 
         Public Property Header As Sir0Fat5
@@ -119,8 +119,8 @@ Namespace FileFormats.PSMD
             Me.EnableInMemoryLoad = True
         End Sub
 
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
 
             Dim sir0Type = Me.Int32(&H20)
             Dim sir0Offset = Me.Int32(&H24)
@@ -133,7 +133,6 @@ Namespace FileFormats.PSMD
             Header = New Sir0Fat5
             Header.EnableInMemoryLoad = True
             Header.CreateFile("", Me.RawData(sir0Offset, sir0Length))
-            Return Task.CompletedTask
         End Function
 
         Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task

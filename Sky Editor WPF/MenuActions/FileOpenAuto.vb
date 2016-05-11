@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
@@ -14,7 +15,7 @@ Namespace MenuActions
                 If OpenFileDialog1.FileName.ToLower.EndsWith(".skysln") Then
                     PluginManager.GetInstance.CurrentSolution = SolutionOld.OpenSolutionFile(OpenFileDialog1.FileName)
                 Else
-                    PluginHelper.RequestFileOpen(Await _manager.OpenObject(OpenFileDialog1.FileName), True)
+                    PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(OpenFileDialog1.FileName, AddressOf IOHelper.PickFirstDuplicateMatchSelector, _manager), True)
                 End If
             End If
         End Function

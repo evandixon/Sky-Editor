@@ -27,9 +27,9 @@ Namespace FileFormats.PSMD
 
         Public Property Entries As List(Of DungeonDataInfoEntry)
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            Using f As New SkyEditor.Core.Windows.GenericFile
-                f.OpenFile(Filename)
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New GenericFile
+                Await f.OpenFile(Filename, Provider)
 
                 Dim numEntries = Math.Floor(f.Length / EntryLength)
 
@@ -37,7 +37,6 @@ Namespace FileFormats.PSMD
                     Entries.Add(New DungeonDataInfoEntry(f.RawData(count * EntryLength, EntryLength)))
                 Next
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

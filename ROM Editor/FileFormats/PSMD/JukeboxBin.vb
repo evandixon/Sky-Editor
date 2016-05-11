@@ -19,10 +19,10 @@ Namespace FileFormats.PSMD
         Public Property Entries As List(Of JukeboxEntry)
 
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            Using f As New SkyEditor.Core.Windows.GenericFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Using f As New GenericFile
                 f.IsReadOnly = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
 
                 Dim subHeaderPointer = f.Int32(4)
                 Dim jukeboxPointerOffset = f.Int32(subHeaderPointer + 0)
@@ -53,7 +53,6 @@ Namespace FileFormats.PSMD
                     Entries.Add(e)
                 Next
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

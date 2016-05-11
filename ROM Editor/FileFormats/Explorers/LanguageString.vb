@@ -3,12 +3,16 @@ Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers
     Public Class LanguageString
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Public Enum Region
             US
             Europe
         End Enum
+
+        Public Sub New()
+            Items = New List(Of String)
+        End Sub
 
         Public Shared Function ConvertEUToUS(Offset As Integer) As Integer
             If Offset = 3938 OrElse Offset = 3939 Then
@@ -49,14 +53,8 @@ Namespace FileFormats.Explorers
 
         Public Property Items As List(Of String)
 
-
-        Public Sub New()
-            MyBase.New({})
-            Items = New List(Of String)
-        End Sub
-
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+            Await MyBase.OpenFile(Filename, Provider)
             Dim bytes = IO.File.ReadAllBytes(Filename)
 
             Items = New List(Of String)
@@ -76,7 +74,6 @@ Namespace FileFormats.Explorers
                 End While
                 Items(count / 4) = s.ToString
             Next
-            Return Task.CompletedTask
         End Function
         Public Overrides Sub Save(Destination As String)
             'Generate File

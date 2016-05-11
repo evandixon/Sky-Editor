@@ -6,7 +6,7 @@ Imports SkyEditorBase
 
 Namespace Roms
     Public Class Generic3DSRom
-        Inherits SkyEditor.Core.Windows.GenericFile
+        Inherits GenericFile
         Implements IOpenableFile
         Implements iDetectableFileType
         Implements iPackedRom
@@ -14,12 +14,12 @@ Namespace Roms
             Return "*.3ds"
         End Function
 
-        Public Overridable Function IsOfType(File As GenericFile) As Boolean Implements iDetectableFileType.IsOfType
+        Public Overridable Function IsOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
             If File.Length > 104 Then
                 Dim e As New System.Text.ASCIIEncoding
-                Return e.GetString(File.RawData(&H100, 4)) = "NCSD"
+                Return Task.FromResult(e.GetString(File.RawData(&H100, 4)) = "NCSD")
             Else
-                Return False
+                Return Task.FromResult(False)
             End If
         End Function
         Public ReadOnly Property GameCode As String
@@ -132,10 +132,6 @@ Namespace Roms
             MyBase.New()
         End Sub
 
-        Public Shadows Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-            MyBase.OpenFile(Filename)
-            Return Task.CompletedTask
-        End Function
     End Class
 
 End Namespace

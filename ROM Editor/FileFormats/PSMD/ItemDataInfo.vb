@@ -19,17 +19,16 @@ Namespace FileFormats.PSMD
         End Class
         Public Property Entries As List(Of ItemDataInfoEntry)
 
-        Public Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
+        Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
             Const entryLength = &H24
-            Using f As New SkyEditor.Core.Windows.GenericFile
+            Using f As New GenericFile
                 f.EnableInMemoryLoad = True
-                f.OpenFile(Filename)
+                Await f.OpenFile(Filename, Provider)
 
                 For count = 0 To ((f.Length / entryLength) - 1)
                     Entries.Add(New ItemDataInfoEntry(f.RawData(count * entryLength, entryLength)))
                 Next
             End Using
-            Return Task.CompletedTask
         End Function
 
         Public Sub New()

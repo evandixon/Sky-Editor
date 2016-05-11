@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
@@ -15,9 +16,9 @@ Namespace ConsoleCommands
                 If IO.File.Exists(Arguments(0)) Then
                     Dim output As New Text.StringBuilder
                     Dim nameOutput As New Text.StringBuilder
-                    Dim msg As New GenericFile
+                    Dim msg As New GenericFile()
                     Dim msg2 As New MessageBin
-                    msg.OpenFile(Arguments(0))
+                    Await msg.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
                     Await msg2.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
                     Dim position = &HD0BA
                     For count = 0 To 2000

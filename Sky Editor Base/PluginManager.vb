@@ -245,7 +245,6 @@ Public Class PluginManager
 
 
     Public Overrides Sub RegisterDefaultFileTypeDetectors()
-        RegisterFileTypeDetector(AddressOf Me.DetectFileType)
         RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
     End Sub
 
@@ -313,14 +312,6 @@ Public Class PluginManager
     ''' <returns></returns>
     Public Function GetCreatableFiles() As IEnumerable(Of Type)
         Return GetRegisteredTypes(GetType(iCreatableFile))
-    End Function
-
-    ''' <summary>
-    ''' Returns an IEnumerable of all the registered types that implement iOpenableFile.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetOpenableFiles() As IEnumerable(Of Type)
-        Return GetRegisteredTypes(GetType(IOpenableFile))
     End Function
 
     ''' <summary>
@@ -434,87 +425,6 @@ Public Class PluginManager
         Return file
     End Function
 
-#Region "Open File"
-    ''' <summary>
-    ''' Creates a new instance of the given iOpenableFile type using the given filename.
-    ''' </summary>
-    ''' <param name="Filename">Filename of the file to open.</param>
-    ''' <param name="FileType">Type of the class to create an instance of.  Must have a default constructor and implement iOpenableFile.</param>
-    ''' <returns></returns>
-    Public Async Function OpenFile(Filename As String, FileType As Type) As Task(Of Object)
-        If String.IsNullOrEmpty(Filename) Then
-            Throw New ArgumentNullException(NameOf(Filename))
-        End If
-        If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile)) Then
-            Throw New ArgumentException("The given type must implement iOpenableFile.")
-        End If
-        Dim c = FileType.GetConstructor({})
-        If c Is Nothing Then
-            Throw New ArgumentException("The given type must provide a default constructor.")
-        Else
-            Dim f As IOpenableFile = c.Invoke({})
-            Await f.OpenFile(Filename, CurrentIOProvider)
-            Return f
-        End If
-    End Function
-    ''' <summary>
-    ''' Auto-detects the file/directory type and creates an instance of an appropriate class to model it.
-    ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <returns></returns>
-    Public Async Function OpenObject(Filename As String) As Task(Of Object)
-        If File.Exists(Filename) Then
-            Dim g As New GenericFile(CurrentIOProvider)
-            g.IsReadOnly = True
-            g.OpenFile(Filename)
-            Return Await OpenFile(g)
-        Else
-            If Directory.Exists(Filename) Then
-                Return OpenDirectory(New DirectoryInfo(Filename))
-            Else
-                Return Nothing
-            End If
-        End If
-    End Function
-    ''' <summary>
-    ''' Using the given file, auto-detects the file type and creates an instance of an appropriate class.
-    ''' If no appropriate file can be found, will return the given File.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Async Function OpenFile(File As GenericFile) As Task(Of Object)
-        Dim type = GetFileType(File)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(IOpenableFile)) Then
-            'Reopen the file without being readonly
-            Dim filename = File.OriginalFilename
-            File.Dispose()
-            Dim g As New GenericFile
-            g.OpenFile(File.OriginalFilename)
-            Return g
-        Else
-            Dim out As IOpenableFile = type.GetConstructor({}).Invoke({})
-            Await out.OpenFile(File.OriginalFilename, CurrentIOProvider)
-            File.Dispose()
-            Return out
-        End If
-    End Function
-
-    ''' <summary>
-    ''' Sometimes a "file" actually exists as multiple files in a directory.  This method will open a "file" using the given directory.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Async Function OpenDirectory(Directory As DirectoryInfo) As Task(Of Object)
-        Dim type = GetDirectoryType(Directory)
-        If type Is Nothing OrElse Not ReflectionHelpers.IsOfType(type, GetType(IOpenableFile)) Then
-            'Let's not return nothing.  Maybe something wants to use the directory info.
-            Return Directory
-        Else
-            Dim out As IOpenableFile = type.GetConstructor({}).Invoke({})
-            Await out.OpenFile(Directory.FullName, CurrentIOProvider)
-            Return out
-        End If
-    End Function
-
-#End Region
 
     ''' <summary>
     ''' Gets an object control that can edit the given object.
@@ -639,84 +549,6 @@ Public Class PluginManager
             Else
                 Return {toUse}
             End If
-        End If
-    End Function
-
-    Public Function GetFileType(File As GenericFile) As TypeInfo
-        Dim matches As New List(Of TypeInfo)
-        For Each item In FileTypeDetectors
-            Dim t = item.Invoke(File)
-            If t IsNot Nothing Then
-                For Each match In t
-                    matches.Add(match)
-                Next
-            End If
-        Next
-
-        If matches.Count = 0 Then
-            Return Nothing
-        ElseIf matches.Count = 1 Then
-            Return matches(0)
-        Else
-            matches.Sort(New Utilities.ReflectionHelpers.TypeInheritanceDepthComparer)
-            matches.Reverse()
-            Return matches(0)
-            'Dim w As New SkyEditorWindows.GameTypeSelector()
-            'Dim games As New Dictionary(Of String, Type)
-            'For Each item In matches
-            '    games.Add(PluginHelper.GetLanguageItem(item.Name), item)
-            'Next
-            'w.AddGames(games.Keys)
-            'If w.ShowDialog Then
-            '    Return games(w.SelectedGame)
-            'Else
-            '    Return Nothing
-            'End If
-        End If
-    End Function
-
-    Public Function GetDirectoryType(Directory As DirectoryInfo) As TypeInfo
-        Dim matches As New List(Of TypeInfo)
-        For Each item In DirectoryTypeDetectors
-            Dim t = item.Invoke(Directory.FullName)
-            If t IsNot Nothing Then
-                For Each match In t
-                    matches.Add(match)
-                Next
-            End If
-        Next
-
-        If matches.Count = 0 Then
-            Return Nothing
-        ElseIf matches.Count = 1 Then
-            Return matches(0)
-        Else
-            matches.Sort(New Utilities.ReflectionHelpers.TypeInheritanceDepthComparer)
-            matches.Reverse()
-            Return matches(0)
-        End If
-    End Function
-
-    Public Function DetectFileType(File As GenericFile) As IEnumerable(Of TypeInfo)
-        Dim matches As New List(Of TypeInfo)
-
-        If ExecutableFile.IsExeFile(File.OriginalFilename) Then
-            matches.Add(GetType(ExecutableFile))
-        End If
-
-        If matches.Count = 0 Then
-            For Each item In GetDetectableFileTypes()
-                Dim instance As iDetectableFileType = item.GetConstructor({})?.Invoke({})
-                If instance IsNot Nothing AndAlso instance.IsOfType(File) Then
-                    matches.Add(item)
-                End If
-            Next
-        End If
-
-        If matches.Count = 0 Then
-            Return Nothing
-        Else
-            Return matches
         End If
     End Function
 
