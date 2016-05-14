@@ -5,6 +5,7 @@ Public Module ConsoleModule
     Async Function ConsoleMain(Manager As PluginManager) As Task
         Dim AllCommands As New Dictionary(Of String, SkyEditor.Core.ConsoleCommands.ConsoleCommandAsync)
         For Each item In Manager.GetRegisteredObjects(Of SkyEditor.Core.ConsoleCommands.ConsoleCommandAsync)
+            item.CurrentPluginManager = Manager
             AllCommands.Add(item.CommandName, item)
         Next
         While True

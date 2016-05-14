@@ -114,7 +114,7 @@ Namespace IO
         ''' Null if the current file was created and has never been saved.
         ''' </summary>
         ''' <returns></returns>
-        Public Property OriginalFilename As String Implements iOnDisk.Filename
+        Public Property OriginalFilename As String Implements IOnDisk.Filename
 
         ''' <summary>
         ''' The location of the file being accessed by the internal FileReader.
@@ -634,6 +634,10 @@ Namespace IO
         ''' <returns></returns>
         Public Overridable Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
             Return ""
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return Me.Name
         End Function
 
 

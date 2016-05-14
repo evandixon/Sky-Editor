@@ -227,7 +227,7 @@ Namespace IO
                 matches.AddRange(item.Result)
             Next
 
-            Return HandleFileTypeDetectionResultList(matches, duplicateFileTypeSelector).FileType
+            Return HandleFileTypeDetectionResultList(matches, duplicateFileTypeSelector)?.FileType
         End Function
 
         Public Shared Function GetDirectoryType(path As String, duplicateDirectoryTypeSelector As DuplicateMatchSelector, Manager As PluginManager) As TypeInfo

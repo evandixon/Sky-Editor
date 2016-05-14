@@ -13,9 +13,13 @@ Public Class GenericNDSRom
 
 #Region "Constructors"
 
-    Sub New()
+    Public Sub New()
         MyBase.New()
         Me.EnableInMemoryLoad = True
+    End Sub
+
+    Public Sub New(filename As String, isReadOnly As Boolean, enableInMemoryLoad As Boolean, provider As IOProvider)
+        MyBase.New(provider, filename, isReadOnly, enableInMemoryLoad)
     End Sub
 
 #End Region

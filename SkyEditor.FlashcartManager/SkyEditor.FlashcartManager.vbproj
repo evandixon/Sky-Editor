@@ -56,6 +56,10 @@
       <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
       <Name>SkyEditor.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.ROMEditor\SkyEditor.ROMEditor.vbproj">
+      <Project>{B7F1E33D-EDE9-42BA-8932-6CCA5891D2E0}</Project>
+      <Name>SkyEditor.ROMEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -85,9 +89,14 @@
     <Import Include="Windows.UI.Xaml.Media.Imaging" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Flashcart.vb" />
+    <Compile Include="FlashcartNDSRom.vb" />
+    <Compile Include="Library.vb" />
+    <Compile Include="NDSFlashcartLibrary.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

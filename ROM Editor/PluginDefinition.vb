@@ -36,13 +36,10 @@ Public Class PluginDefinition
     'End Sub
 
     Public Overrides Sub Load(Manager As SkyEditor.Core.PluginManager)
-        PluginHelper.Writeline(SkyEditorBase.PluginHelper.GetResourceName("Root"))
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
         Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
 
         Manager.RegisterTypeRegister(GetType(GenericModProject))
-        Manager.RegisterTypeRegister(GetType(Flashcart.GenericFlashcart))
-        Manager.RegisterTypeRegister(GetType(Flashcart.FileCollection))
 
         'Manager.RegisterConsoleCommand("import-language", New ConsoleCommands.ImportLanguage)
         'Manager.RegisterConsoleCommand("cteconvert", New ConsoleCommands.BatchCteConvert)

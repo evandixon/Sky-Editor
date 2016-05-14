@@ -42,6 +42,18 @@ namespace SkyEditor.Core.Android
             return (new FileInfo(filename).Length);
         }
 
+        public override string[] GetFiles(string path, string searchPattern, bool topDirectoryOnly)
+        {
+            if (topDirectoryOnly)
+            {
+                return Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
+            }
+            else
+            {
+                return Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories);
+            }
+        }
+
         public override string GetTempFilename()
         {
             return Path.GetTempFileName();

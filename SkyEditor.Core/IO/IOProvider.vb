@@ -28,6 +28,15 @@
         Public MustOverride Sub CreateDirectory(path As String)
 
         ''' <summary>
+        ''' Gets the full paths of the files in the directory in the given path.
+        ''' </summary>
+        ''' <param name="path">Full path of the directory from which to get the files.</param>
+        ''' <param name="searchPattern">The search string to match against the names of files in path. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but doesn't support regular expressions.</param>
+        ''' <param name="topDirectoryOnly">True to search only the top directory.  False to search all child directories too.</param>
+        ''' <returns></returns>
+        Public MustOverride Function GetFiles(path As String, searchPattern As String, topDirectoryOnly As Boolean) As String()
+
+        ''' <summary>
         ''' Reads a file from disk, and returns its contents as a byte array.
         ''' </summary>
         ''' <param name="filename">Full path of the file.</param>

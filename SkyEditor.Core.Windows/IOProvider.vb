@@ -39,6 +39,14 @@ Public Class IOProvider
         Return (New FileInfo(filename)).Length
     End Function
 
+    Public Overrides Function GetFiles(path As String, searchPattern As String, topDirectoryOnly As Boolean) As String()
+        If topDirectoryOnly Then
+            Return Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly)
+        Else
+            Return Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories)
+        End If
+    End Function
+
     Public Overrides Function GetTempFilename() As String
         Return Path.GetTempFileName
     End Function

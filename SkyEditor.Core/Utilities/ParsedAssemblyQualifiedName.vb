@@ -83,12 +83,12 @@ Namespace Utilities
             Me.AssemblyNameDescriptor = New Lazy(Of AssemblyName)(Function() New System.Reflection.AssemblyName(Me.AssemblyDescriptionString))
 
             Me.FoundType = New Lazy(Of Type)(Function() As Type
-                                                 Dim searchedType = Type.GetType(AssemblyQualifiedName)
+                                                 Dim searchedType = Type.GetType(TypeName)
                                                  If searchedType IsNot Nothing Then
                                                      Return searchedType
                                                  End If
                                                  For Each assem In Assemblies
-                                                     searchedType = assem.GetType(AssemblyQualifiedName)
+                                                     searchedType = assem.GetType(TypeName)
                                                      If searchedType IsNot Nothing Then
                                                          Return searchedType
                                                      End If
