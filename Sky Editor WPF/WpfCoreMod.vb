@@ -33,17 +33,9 @@ Friend Class WpfCoreMod
         Manager.RegisterTypeRegister(GetType(iObjectControl))
         Manager.RegisterTypeRegister(GetType(SolutionOld))
         Manager.RegisterTypeRegister(GetType(ProjectOld))
-        Manager.RegisterTypeRegister(GetType(iCreatableFile))
-        Manager.RegisterTypeRegister(GetType(IOpenableFile))
-        Manager.RegisterTypeRegister(GetType(iDetectableFileType))
-        Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
+        Manager.RegisterTypeRegister(GetType(ICreatableFile))
         Manager.RegisterTypeRegister(GetType(ITargetedControl))
-        Manager.RegisterTypeRegister(GetType(MenuAction))
-        Manager.RegisterDefaultFileTypeDetectors()
         'End CoreMod stuff
-
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.GeneratePluginExtensions))
 
         Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub

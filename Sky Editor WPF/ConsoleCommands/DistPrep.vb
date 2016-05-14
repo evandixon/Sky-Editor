@@ -1,4 +1,6 @@
-﻿Namespace ConsoleCommands
+﻿Imports SkyEditor.Core.ConsoleCommands
+
+Namespace ConsoleCommands
     Public Class DistPrep
         Inherits ConsoleCommand
 

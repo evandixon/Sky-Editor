@@ -166,7 +166,6 @@
     <Compile Include="Flashcart\NDSRomCollection.vb" />
     <Compile Include="Projects\BaseRomProject.vb" />
     <Compile Include="ConsoleCommands\BatchCteConvert.vb" />
-    <Compile Include="ConsoleCommands\Gzip.vb" />
     <Compile Include="ConsoleCommands\ImportLanguage.vb" />
     <Compile Include="DSIconTool.vb" />
     <Compile Include="Projects\DSModPackProject.vb" />
@@ -227,8 +226,6 @@
     <Compile Include="Projects\PsmdLuaProject.vb" />
     <Compile Include="Roms\Cxi3DSRom.vb" />
     <Compile Include="Roms\Generic3DSRom.vb" />
-    <Compile Include="Roms\GenericNDSRom.vb" />
-    <Compile Include="Roms\iPackedRom.vb" />
     <Compile Include="romTool3ds.vb" />
     <Compile Include="SkyRomProject.vb" />
     <Compile Include="SsbCommandNames.Designer.vb">
@@ -368,10 +365,6 @@
       <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
       <Name>CodeFiles</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Save Editor\Save Editor.vbproj">
-      <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
-      <Name>Save Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
@@ -387,6 +380,14 @@
     <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
       <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
       <Name>SkyEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.ROMEditor\SkyEditor.ROMEditor.vbproj">
+      <Project>{b7f1e33d-ede9-42ba-8932-6cca5891d2e0}</Project>
+      <Name>SkyEditor.ROMEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
+      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
+      <Name>SkyEditor.SaveEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

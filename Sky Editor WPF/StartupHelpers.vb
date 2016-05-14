@@ -15,7 +15,7 @@ Public Class StartupHelpers
         manager.LoadCore(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
-        Await ConsoleModule.ConsoleMain(manager)
+        Await SkyEditor.Core.Windows.ConsoleModule.ConsoleMain(manager)
 
         Application.Current.Shutdown()
     End Function

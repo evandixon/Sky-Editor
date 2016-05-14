@@ -1,4 +1,6 @@
-﻿Namespace UI
+﻿Imports System.Reflection
+
+Namespace UI
     Public Class ExtensionInfoControl
         Inherits ObjectControl
 

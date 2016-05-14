@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports SaveEditor.Saves
 Imports SkyEditor.Core
 
 Public Class SkyEditorInfo
@@ -23,21 +22,21 @@ Public Class SkyEditorInfo
     End Property
 
     Public Overrides Sub Load(Manager As PluginManager)
-        Manager.LoadRequiredPlugin(New SaveEditor.SkyEditorInfo, Me)
+        Manager.LoadRequiredPlugin(New SkyEditor.SaveEditor.PluginDefinition, Me)
     End Sub
 
     Public Function DirectoryDetector(Directory As DirectoryInfo) As IEnumerable(Of Type)
-        Dim s As New SdfSave(Directory.FullName)
-        If s.IsValid Then
-            Select Case s.MiniTitleId.ToLower
-                Case GTISave.GTIMiniTitleID
-                    Return {GetType(GTISave)}
-                Case Else
-                    Return {GetType(SdfSave)}
-            End Select
-        Else
-            Return {}
-        End If
+        'Dim s As New SdfSave(Directory.FullName)
+        'If s.IsValid Then
+        '    Select Case s.MiniTitleId.ToLower
+        '        Case GTISave.GTIMiniTitleID
+        '            Return {GetType(GTISave)}
+        '        Case Else
+        '            Return {GetType(SdfSave)}
+        '    End Select
+        'Else
+        Return {}
+        'End If
     End Function
 
     Public Overrides Sub UnLoad(Manager As PluginManager)

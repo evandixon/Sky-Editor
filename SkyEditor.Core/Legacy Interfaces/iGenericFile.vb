@@ -1,6 +1,8 @@
-﻿Namespace Interfaces
+﻿Imports SkyEditor.Core.IO
+
+Namespace Interfaces
     Public Interface iGenericFile
-        Inherits iOnDisk
+        Inherits IOnDisk
         Inherits iSavable
         Inherits iNamed
     End Interface

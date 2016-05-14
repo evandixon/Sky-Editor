@@ -13,6 +13,7 @@ Public MustInherit Class WpfCoreModBase
     Public MustOverride Overrides ReadOnly Property PluginName As String
 
     Public Overrides Sub Load(Manager As PluginManager)
+        MyBase.Load(Manager)
         AddHandler Redistribution.RedistributionHelpers.ApplicationRestartRequested, AddressOf WpfCoreModBase.RestartApplication
     End Sub
 

@@ -17,6 +17,11 @@ namespace SkyEditor.Core.Android
             File.Copy(sourceFilename, destinationFilename, true);
         }
 
+        public override void CreateDirectory(string path)
+        {
+            Directory.CreateDirectory(path);
+        }
+
         public override void DeleteFile(string filename)
         {
             File.Delete(filename);

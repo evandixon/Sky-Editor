@@ -1,6 +1,8 @@
-﻿Partial Class PokemonLib
+﻿Imports SkyEditor.SaveEditor.Interfaces
+
+Partial Class PokemonLib
     Class mMoves
-        Implements SaveEditor.Interfaces.iAttack
+        Implements iAttack
         Public Value As Moves
         Public Name As String
         Public Power As UInt16
@@ -40,7 +42,7 @@
             ContestCategory = New mContestCategory(Val(dPKMMoves(index)(12)))
         End Sub
 
-        Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements SaveEditor.Interfaces.iAttack.GetAttackDictionary
+        Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
             Dim out As New Dictionary(Of Integer, String)
             For Each item In dPKMMoves
                 out.Add(item.Key, item.Value(0))
@@ -48,7 +50,7 @@
             Return out
         End Function
 
-        Public Property ID As Integer Implements SaveEditor.Interfaces.iAttack.ID
+        Public Property ID As Integer Implements iAttack.ID
             Get
                 Return Value
             End Get

@@ -51,6 +51,17 @@ Namespace Utilities
             Return match
         End Function
 
+        Public Shared Function GetTypeByName(AssemblyQualifiedName As String, Manager As PluginManager) As TypeInfo
+            Dim t = Type.GetType(AssemblyQualifiedName, False)
+            If t Is Nothing Then
+                'Can't find the type.  Time to parse it and search the plugin manager's assemblies to find it.
+                'We could have done this to begin with, but Type.GetType is probably a little faster.
+                Dim name As New ParsedAssemblyQualifiedName(AssemblyQualifiedName, Manager.Assemblies)
+                t = name.FoundType.Value
+            End If
+            Return t?.GetTypeInfo
+        End Function
+
         ''' <summary>
         ''' Determines whether the given type has a default constructor.
         ''' </summary>

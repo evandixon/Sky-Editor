@@ -39,7 +39,6 @@ Public Class PluginManager
 
         Me.CurrentSolution = Nothing
         Assemblies = New List(Of Assembly)
-        Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
         Me.FailedPluginLoads = New List(Of String)
         Me.OpenedFiles = New Dictionary(Of Object, ProjectOld)
@@ -57,7 +56,7 @@ Public Class PluginManager
     ''' <param name="PluginPaths">Full paths of the plugin assemblies to analyse.</param>
     ''' <param name="CoreAssemblyName">Name of the core assembly, usually the Entry assembly.  Assemblies with this name are not supported, to avoid loading duplicates.</param>
     ''' <returns></returns>
-    Public Overrides Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), Optional CoreAssemblyName As String = Nothing) As List(Of String)
+    Public Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), Optional CoreAssemblyName As String = Nothing) As List(Of String)
         Dim supportedList As New List(Of String)
         'We're going to load these assemblies into another appdomain, so we don't accidentally create duplicates, and so we don't keep any unneeded assemblies loaded for the life of the application.
         Using reflectionManager As New Utilities.AssemblyReflectionManager
@@ -236,20 +235,6 @@ Public Class PluginManager
 
 #End Region
 
-#Region "Delegates"
-    Delegate Sub TypeSearchFound(TypeFound As Type)
-#End Region
-
-#Region "Registration"
-
-
-
-    Public Overrides Sub RegisterDefaultFileTypeDetectors()
-        RegisterFileTypeDetector(AddressOf Me.TryGetObjectFileType)
-    End Sub
-
-#End Region
-
 #Region "Functions"
 
 #Region "IO Filters"
@@ -304,42 +289,6 @@ Public Class PluginManager
     End Function
 #End Region
 
-
-
-    ''' <summary>
-    ''' Returns an IEnumerable of all the registered types that implement iCreatableFile.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetCreatableFiles() As IEnumerable(Of Type)
-        Return GetRegisteredTypes(GetType(iCreatableFile))
-    End Function
-
-    ''' <summary>
-    ''' Returns an IEnumerable of all the registered types that implement iDetectableFileType.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetDetectableFileTypes() As IEnumerable(Of Type)
-        Return GetRegisteredTypes(GetType(iDetectableFileType))
-    End Function
-
-    Public Function GetConsoleCommands() As Dictionary(Of String, SkyEditorBase.ConsoleCommandAsync)
-        Dim out As New Dictionary(Of String, ConsoleCommandAsync)
-        For Each item As ConsoleCommandAsync In GetRegisteredObjects(GetType(ConsoleCommandAsync))
-            If Not out.ContainsKey(item.CommandName) Then
-                out.Add(item.CommandName, item)
-            End If
-        Next
-        Return out
-    End Function
-
-    ''' <summary>
-    ''' Returns a new instance of each registered ObjectControl.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetObjectControls() As IEnumerable(Of iObjectControl)
-        Return GetRegisteredObjects(Of iObjectControl)()
-    End Function
-
     ''' <summary>
     ''' Returns the file's parent project, if it exists.
     ''' </summary>
@@ -351,15 +300,6 @@ Public Class PluginManager
         Else
             Return Nothing
         End If
-    End Function
-
-    ''' <summary>
-    ''' Returns a boolean indicating whether or not the given assembly is a plugin assembly that is directly loaded by another plugin assembly.
-    ''' </summary>
-    ''' <param name="Assembly">Assembly in question</param>
-    ''' <returns></returns>
-    Public Function IsAssemblyDependant(Assembly As Assembly) As Boolean
-        Return DependantPlugins.ContainsKey(Assembly)
     End Function
 
 #End Region
@@ -411,180 +351,6 @@ Public Class PluginManager
     End Sub
 
 #End Region
-
-    Public Function CreateNewFile(NewFileName As String, FileType As Type) As iCreatableFile
-        If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile)) Then
-            Throw New ArgumentException("The given type must implement iCreatableFile.")
-        End If
-        Dim c = FileType.GetConstructor({})
-        If c Is Nothing Then
-            Throw New ArgumentException("The given type must provide a default constructor.")
-        End If
-        Dim file As iCreatableFile = c.Invoke({})
-        file.CreateFile(NewFileName)
-        Return file
-    End Function
-
-
-    ''' <summary>
-    ''' Gets an object control that can edit the given object.
-    ''' </summary>
-    ''' <param name="ObjectToEdit"></param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Function GetObjectControl(ObjectToEdit As Object, RequestedTabTypes As IEnumerable(Of Type)) As iObjectControl
-        Dim out As iObjectControl = Nothing
-        If ObjectToEdit IsNot Nothing Then
-            'Look for a supported Object Control
-            For Each item In (From o In GetObjectControls() Order By o.GetSortOrder(ObjectToEdit.GetType, False) Descending)
-                'We're only looking for the first non-backup control
-                If out Is Nothing OrElse out.IsBackupControl(ObjectToEdit) Then
-                    'Check to see if the control supports what we want to edit
-                    For Each t In item.GetSupportedTypes
-                        If ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
-
-                            'If the control supports our object, we also want to make sure it's supported in the environment.
-                            'It must be one of the types in RequestedTabTypes
-                            Dim isSupported As Boolean = False
-                            For Each r In RequestedTabTypes
-                                If ReflectionHelpers.IsOfType(item, r) Then
-                                    isSupported = True
-                                    Exit For
-                                End If
-                            Next
-
-                            If isSupported Then
-                                out = item '.GetType.GetConstructor({}).Invoke({})
-                                Exit For
-                            End If
-                        End If
-                    Next
-                Else
-                    Exit For
-                End If
-            Next
-        End If
-        Return out
-    End Function
-    ''' <summary>
-    ''' Returns a list of iObjectControl that edit the given ObjectToEdit.
-    ''' </summary>
-    ''' <param name="ObjectToEdit">Object the iObjectControl should edit.</param>
-    ''' <param name="RequestedTabTypes">Limits what types of iObjectControl should be returned.  If the iObjectControl is not of any type in this IEnumerable, it will not be used.  If empty or nothing, no constraints will be applied, which is not recommended because the iObjectControl could be made for a different environment (for example, a Windows Forms user control being used in a WPF environment).</param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Function GetRefreshedTabs(ObjectToEdit As Object, RequestedTabTypes As IEnumerable(Of Type)) As IEnumerable(Of iObjectControl)
-        If ObjectToEdit Is Nothing Then
-            Throw New ArgumentNullException(NameOf(ObjectToEdit))
-        End If
-        Dim objType = ObjectToEdit.GetType
-        Dim allTabs As New List(Of iObjectControl)
-
-        'This is our cache of reference-only object controls.
-        'We use this to find out which object controls support the given object.
-        'It's a static variable because we're likely going to be calling GetRefreshedTabs multiple times,
-        'So we'll only have to take a little more time the first time we run this
-        Static objControls As List(Of iObjectControl) = Nothing
-        If objControls Is Nothing Then
-            objControls = GetObjectControls()
-        End If
-
-        For Each etab In (From e In objControls Order By e.GetSortOrder(objType, True) Ascending)
-            Dim isMatch = False
-            'Check to see if the tab itself is supported
-            'It must be one of the types in RequestedTabTypes
-            For Each t In RequestedTabTypes
-                If ReflectionHelpers.IsOfType(etab, t) Then
-                    isMatch = True
-                    Exit For
-                End If
-            Next
-            'Check to see if the tab support the type of the given object
-            Dim supportedTypes = etab.GetSupportedTypes
-            If isMatch Then
-                isMatch = supportedTypes.Count > 0
-            End If
-            If isMatch Then
-                For Each t In supportedTypes
-                    If ObjectToEdit Is Nothing OrElse Not ReflectionHelpers.IsOfType(ObjectToEdit, t) Then
-                        isMatch = False
-                        Exit For
-                    End If
-                Next
-            End If
-            'Check to see if the tab support the object itself
-            If isMatch Then
-                isMatch = etab.SupportsObject(ObjectToEdit)
-            End If
-            'This is a supported tab.  We're adding it!
-            If isMatch Then
-                'etab.EditingObject = ObjectToEdit
-                'allTabs.Add(etab)
-                'Create another instance of etab, since etab is our cached, search-only instance.
-                Dim t As iObjectControl = etab.GetType.GetConstructor({}).Invoke({})
-                t.EditingObject = ObjectToEdit
-                allTabs.Add(t)
-            End If
-        Next
-
-        Dim backupTabs As New List(Of iObjectControl)
-        Dim notBackup As New List(Of iObjectControl)
-
-        'Sort the backup vs non-backup tabs
-        For Each item In allTabs
-            If item.IsBackupControl(ObjectToEdit) Then
-                backupTabs.Add(item)
-            Else
-                notBackup.Add(item)
-            End If
-        Next
-
-        'And use the non-backup ones if available
-        If notBackup.Count > 0 Then
-            Return notBackup
-        Else
-            Dim toUse = (From b In backupTabs Order By b.GetSortOrder(objType, True)).FirstOrDefault
-            If toUse Is Nothing Then
-                Return {}
-            Else
-                Return {toUse}
-            End If
-        End If
-    End Function
-
-    ''' <summary>
-    ''' If the given file is of type ObjectFile, returns the contained Type.
-    ''' Otherwise, returns Nothing.
-    ''' </summary>
-    ''' <param name="Filename"></param>
-    ''' <returns></returns>
-    Public Shared Function TryGetObjectFileType(Filename As String) As TypeInfo
-        Try
-            Dim f As New ObjectFile(Of Object)(Filename)
-            'Doesn't work for ObjectFiles
-            Return Utilities.ReflectionHelpers.GetTypeFromName(f.ContainedTypeName) 'GetType(ObjectFile(Of Object)).GetGenericTypeDefinition.MakeGenericType({Type.GetType(f.ContainedTypeName, AddressOf AssemblyResolver, AddressOf TypeResolver, False)})
-        Catch ex As Exception
-            Return Nothing
-        End Try
-    End Function
-
-    ''' <summary>
-    ''' If the given file is of type ObjectFile, returns the contained Type.
-    ''' Otherwise, returns Nothing.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function TryGetObjectFileType(File As GenericFile) As IEnumerable(Of TypeInfo)
-        If File.Length > 0 AndAlso File.RawData(0) = &H7B Then 'Check to see if the first character is "{".  Otherwise, we could try to open a 500+ MB file which takes much more RAM than we need.
-            Dim result = TryGetObjectFileType(File.OriginalFilename)
-            If result Is Nothing Then
-                Return Nothing
-            Else
-                Return {result}
-            End If
-        Else
-            Return Nothing
-        End If
-    End Function
 
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls

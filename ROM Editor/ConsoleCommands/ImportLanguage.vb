@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditorBase
 
 Namespace ConsoleCommands

@@ -1,10 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports System.Reflection
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorBase.PluginHelper
 
 Public Class ProjectOld
@@ -260,7 +259,7 @@ Public Class ProjectOld
         If ProjectType Is Nothing Then
             Throw New ArgumentNullException(NameOf(ProjectType))
         End If
-        If Not Utilities.ReflectionHelpers.IsOfType(ProjectType, GetType(ProjectOld)) Then
+        If Not ReflectionHelpers.IsOfType(ProjectType, GetType(ProjectOld).GetTypeInfo) Then
             Throw New ArgumentException("ProjectType must inherit from Project.", NameOf(ProjectType))
         End If
 
@@ -443,9 +442,9 @@ Public Class ProjectOld
         Return CanCreateFile(Path)
     End Function
 
-    Public Overridable Function GetSupportedFileTypes(Path As String) As IEnumerable(Of Type)
+    Public Overridable Function GetSupportedFileTypes(Path As String) As IEnumerable(Of TypeInfo)
         If CanCreateDirectory(Path) Then
-            Return PluginManager.GetInstance.GetCreatableFiles
+            Return IOHelper.GetCreatableFileTypes(PluginManager.GetInstance)
         Else
             Return {}
         End If
@@ -457,7 +456,7 @@ Public Class ProjectOld
             FileName = FileName.Replace("\", "/").TrimStart("/")
             Dim q = (From c In item.Children Where c.Name.ToLower = FileName.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
             If q Is Nothing Then
-                Dim fileObj As iCreatableFile = FileType.GetConstructor({}).Invoke({})
+                Dim fileObj As ICreatableFile = FileType.GetConstructor({}).Invoke({})
                 fileObj.CreateFile(FileName)
                 fileObj.Filename = IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), ParentPath.Replace("/", "\").TrimStart("\"), FileName)
 

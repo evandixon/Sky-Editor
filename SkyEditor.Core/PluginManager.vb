@@ -3,19 +3,16 @@ Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 
-Public MustInherit Class PluginManager
+Public Class PluginManager
 
 #Region "Constructors"
     Protected Sub New()
-        Me.DirectoryTypeDetectors = New List(Of DirectoryTypeDetector)
         Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
     End Sub
 #End Region
 
     Protected Property TypeRegistery As Dictionary(Of TypeInfo, List(Of TypeInfo))
     Public Property CoreAssemblyName As String 'Todo: make readonly to the public
-    Protected Property FileTypeDetectors As New List(Of FileTypeDetector)
-    Protected Property DirectoryTypeDetectors As New List(Of DirectoryTypeDetector)
 
     ''' <summary>
     ''' Matches plugin assemblies (key) to assemblies that depend on that assembly (value).
@@ -60,16 +57,6 @@ Public MustInherit Class PluginManager
     End Property
     Dim _currentIOProvider As IOProvider
 
-#Region "Delegates"
-    ''' <summary>
-    ''' A function that can determine what Type can model the given file.
-    ''' </summary>
-    ''' <param name="File"></param>
-    ''' <returns></returns>
-    Delegate Function FileTypeDetector(File As GenericFile) As IEnumerable(Of TypeInfo)
-    Delegate Function DirectoryTypeDetector(Directory As String) As IEnumerable(Of TypeInfo)
-#End Region
-
 #Region "Events"
     ''' <summary>
     ''' Raised when a type is added into the type registry.
@@ -90,11 +77,14 @@ Public MustInherit Class PluginManager
         CurrentIOProvider = Core.GetIOProvider
         Core.Load(Me)
 
-        'Load types in SkyEditor.Core
+        'Load type registers
         RegisterTypeRegister(GetType(IOpenableFile).GetTypeInfo)
         RegisterTypeRegister(GetType(IDetectableFileType).GetTypeInfo)
         RegisterTypeRegister(GetType(IDirectoryTypeDetector).GetTypeInfo)
         RegisterTypeRegister(GetType(IFileTypeDetector).GetTypeInfo)
+        RegisterTypeRegister(GetType(MenuAction).GetTypeInfo)
+
+        'Load types
         RegisterType(GetType(IFileTypeDetector).GetTypeInfo, GetType(DetectableFileTypeDetector).GetTypeInfo)
     End Sub
 
@@ -156,12 +146,14 @@ Public MustInherit Class PluginManager
     End Sub
 
     ''' <summary>
-    ''' Returns a list of the paths to the supported plugins in PluginPaths.
+    ''' Returns a boolean indicating whether or not the given assembly is a plugin assembly that is directly loaded by another plugin assembly.
     ''' </summary>
-    ''' <param name="PluginPaths">Full paths of the plugin assemblies to analyse.</param>
-    ''' <param name="CoreAssemblyName">Name of the core assembly, usually the Entry assembly.  Assemblies with this name are not supported, to avoid loading duplicates.</param>
-    ''' <returns>The full paths of the supported plugins.</returns>
-    Public MustOverride Function GetSupportedPlugins(PluginPaths As IEnumerable(Of String), Optional CoreAssemblyName As String = Nothing) As List(Of String)
+    ''' <param name="Assembly">Assembly in question</param>
+    ''' <returns></returns>
+    Public Function IsAssemblyDependant(Assembly As Assembly) As Boolean
+        Return DependantPlugins.ContainsKey(Assembly)
+    End Function
+
 #End Region
 
 #Region "Registration"
@@ -229,25 +221,6 @@ Public MustInherit Class PluginManager
             TempIOFilters.Add(FileExtension, FileFormatName)
         End If
         IOFilters = TempIOFilters
-    End Sub
-
-    ''' <summary>
-    ''' Registers the given delegate function so that it can be used to detect file types.
-    ''' </summary>
-    ''' <param name="Detector"></param>
-    Public Sub RegisterFileTypeDetector(Detector As FileTypeDetector)
-        If Not FileTypeDetectors.Contains(Detector) Then
-            FileTypeDetectors.Add(Detector)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Registers SkyEditorBase's file type detectors.
-    ''' </summary>
-    Public MustOverride Sub RegisterDefaultFileTypeDetectors()
-
-    Public Sub RegisterDirectoryTypeDetector(Detector As DirectoryTypeDetector)
-        DirectoryTypeDetectors.Add(Detector)
     End Sub
 
 #End Region

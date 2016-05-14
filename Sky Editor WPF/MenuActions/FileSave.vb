@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditorBase.Interfaces
 
@@ -20,10 +21,10 @@ Namespace MenuActions
                     Dim sav = DirectCast(item, iSavable)
                     If TypeOf sav Is ISavableAs Then
                         'Detect if the file has a filename
-                        If TypeOf item Is iOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, iOnDisk).Filename) Then
+                        If TypeOf item Is IOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, IOnDisk).Filename) Then
                             'If it doesn't, then do a SaveAs.
-                            If TypeOf item Is iOnDisk Then
-                                SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(item, iOnDisk).Filename))
+                            If TypeOf item Is IOnDisk Then
+                                SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(item, IOnDisk).Filename))
                             Else
                                 SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersString(IsSaveAs:=True) 'Todo: use default extension
                             End If

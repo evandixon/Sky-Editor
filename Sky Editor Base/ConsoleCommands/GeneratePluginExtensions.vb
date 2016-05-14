@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditorBase.Redistribution
 
 Namespace ConsoleCommands

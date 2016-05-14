@@ -1,5 +1,5 @@
-﻿Imports SkyEditor.Core.EventArguments
-Imports SkyEditor.Core.Interfaces
+﻿Imports System.Reflection
+Imports SkyEditor.Core.UI
 
 Namespace UI
     ''' <summary>
@@ -7,13 +7,13 @@ Namespace UI
     ''' </summary>
     Public Class DataBoundObjectControl
         Inherits UserControl
-        Implements iObjectControl
+        Implements IObjectControl
 
         ''' <summary>
         ''' Returns an IEnumeriable of Types that this control can display or edit.
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
+        Public Overridable Function GetSupportedTypes() As IEnumerable(Of Type) Implements IObjectControl.GetSupportedTypes
             If DataContext IsNot Nothing Then
                 Return {DataContext.GetType}
             Else
@@ -27,7 +27,7 @@ Namespace UI
         ''' </summary>
         ''' <param name="Obj"></param>
         ''' <returns></returns>
-        Public Overridable Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
+        Public Overridable Function SupportsObject(Obj As Object) As Boolean Implements IObjectControl.SupportsObject
             Return True
         End Function
 
@@ -36,29 +36,29 @@ Namespace UI
         ''' </summary>
         ''' <param name="Obj"></param>
         ''' <returns></returns>
-        Public Overridable Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
+        Public Overridable Function IsBackupControl(Obj As Object) As Boolean Implements IObjectControl.IsBackupControl
             Return False
         End Function
 
-        Public Overridable Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
+        Public Overridable Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements IObjectControl.GetSortOrder
             Return 0
         End Function
 
         ''' <summary>
         ''' Called when Header is changed.
         ''' </summary>
-        Public Event HeaderUpdated(sender As Object, e As HeaderUpdatedEventArgs) Implements iObjectControl.HeaderUpdated
+        Public Event HeaderUpdated(sender As Object, e As HeaderUpdatedEventArgs) Implements IObjectControl.HeaderUpdated
 
         ''' <summary>
         ''' Called when IsModified is changed.
         ''' </summary>
-        Public Event IsModifiedChanged As iObjectControl.IsModifiedChangedEventHandler Implements iObjectControl.IsModifiedChanged
+        Public Event IsModifiedChanged As IObjectControl.IsModifiedChangedEventHandler Implements IObjectControl.IsModifiedChanged
 
         ''' <summary>
         ''' Returns the value of the Header.  Only used when the iObjectControl is behaving as a tab.
         ''' </summary>
         ''' <returns></returns>
-        Public Property Header As String Implements iObjectControl.Header
+        Public Property Header As String Implements IObjectControl.Header
             Get
                 Return _header
             End Get
@@ -77,7 +77,7 @@ Namespace UI
         ''' <returns></returns>
         Public Property SortOrder As Integer
 
-        Public Overridable Property EditingObject As Object Implements iObjectControl.EditingObject
+        Public Overridable Property EditingObject As Object Implements IObjectControl.EditingObject
             Get
                 Return Me.DataContext
             End Get
@@ -92,7 +92,7 @@ Namespace UI
         ''' Set to false when the object is saved, or if the user undoes every change.
         ''' </summary>
         ''' <returns></returns>
-        Public Property IsModified As Boolean Implements iObjectControl.IsModified
+        Public Property IsModified As Boolean Implements IObjectControl.IsModified
             Get
                 Return _isModified
             End Get

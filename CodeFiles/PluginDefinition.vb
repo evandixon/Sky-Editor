@@ -4,6 +4,7 @@ Imports SkyEditor.Core.IO
 
 Public Class PluginDefinition
     Inherits SkyEditorPlugin
+    Implements IFileTypeDetector
 
     Public Overrides ReadOnly Property Credits As String
         Get
@@ -26,7 +27,6 @@ Public Class PluginDefinition
     Public Overrides Sub Load(Manager As PluginManager)
         Manager.RegisterIOFilter("*.txt", My.Resources.Language.TextFiles)
         Manager.RegisterIOFilter("*.lua", My.Resources.Language.LuaFiles)
-        Manager.RegisterFileTypeDetector(AddressOf DetectFileType)
     End Sub
 
     Public Overrides Sub PrepareForDistribution()
@@ -37,13 +37,13 @@ Public Class PluginDefinition
 
     End Sub
 
-    Public Shared Function DetectFileType(File As GenericFile) As IEnumerable(Of TypeInfo)
+    Public Function DetectFileType(File As GenericFile, manager As PluginManager) As Task(Of IEnumerable(Of FileTypeDetectionResult)) Implements IFileTypeDetector.DetectFileType
+        Dim out As New List(Of FileTypeDetectionResult)
         If File.OriginalFilename.ToLower.EndsWith(".txt") Then
-            Return {GetType(TextFile).GetTypeInfo}
+            out.Add(New FileTypeDetectionResult With {.FileType = GetType(TextFile).GetTypeInfo, .MatchChance = 0.1})
         ElseIf File.OriginalFilename.ToLower.EndsWith(".lua") Then
-            Return {GetType(LuaCodeFile).GetTypeInfo}
-        Else
-            Return {}
+            out.Add(New FileTypeDetectionResult With {.FileType = GetType(LuaCodeFile).GetTypeInfo, .MatchChance = 0.1})
         End If
+        Return Task.FromResult(DirectCast(out, IEnumerable(Of FileTypeDetectionResult)))
     End Function
 End Class

@@ -1,5 +1,4 @@
-﻿Imports SaveEditor.Saves
-Imports SkyEditorBase
+﻿Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 

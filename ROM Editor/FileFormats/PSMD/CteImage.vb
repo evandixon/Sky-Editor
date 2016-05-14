@@ -7,6 +7,7 @@ Namespace FileFormats.PSMD
         Inherits GenericFile
         Implements IOpenableFile
         Implements iModifiable
+        Implements IDetectableFileType
 
         Public Event ContainedImageUpdated(sender As Object, e As EventArgs)
         Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
@@ -158,5 +159,9 @@ Namespace FileFormats.PSMD
         Public Sub RaiseModified() Implements iModifiable.RaiseModified
             RaiseEvent Modified(Me, New EventArgs)
         End Sub
+
+        Public Function IsOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
+            Return Task.FromResult(File.RawData(0) = 0 AndAlso File.RawData(1) = &H63 AndAlso File.RawData(2) = &H74 AndAlso File.RawData(3) = &H65)
+        End Function
     End Class
 End Namespace

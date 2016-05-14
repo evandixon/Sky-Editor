@@ -7,12 +7,13 @@ Namespace MenuActions
 
         Dim FolderBrowserDialog1 As Windows.Forms.FolderBrowserDialog
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            If FolderBrowserDialog1.ShowDialog = Forms.DialogResult.OK Then
-                Dim source As New SdfSaveDataDirectory(IO.Path.Combine(FolderBrowserDialog1.SelectedPath, "filer", "UserSaveData"))
-                Dim dest As New SdfSaveDataDirectory(SkyEditorBase.PluginHelper.GetResourceName("SDF"))
-                source.MoveSaves(dest)
-            End If
-            Return Task.CompletedTask
+            'If FolderBrowserDialog1.ShowDialog = Forms.DialogResult.OK Then
+            '    Dim source As New SdfSaveDataDirectory(IO.Path.Combine(FolderBrowserDialog1.SelectedPath, "filer", "UserSaveData"))
+            '    Dim dest As New SdfSaveDataDirectory(SkyEditorBase.PluginHelper.GetResourceName("SDF"))
+            '    source.MoveSaves(dest)
+            'End If
+            'Return Task.CompletedTask
+            Throw New NotImplementedException
         End Function
 
         Public Sub New()

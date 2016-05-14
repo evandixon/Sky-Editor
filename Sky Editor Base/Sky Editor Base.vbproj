@@ -149,8 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicIniFile.vb" />
-    <Compile Include="ConsoleCommand.vb" />
-    <Compile Include="ConsoleCommandAsync.vb" />
     <Compile Include="ConsoleCommands\GeneratePluginExtensions.vb" />
     <Compile Include="ConsoleCommands\InstallExtension.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
@@ -172,7 +170,6 @@
     <Compile Include="EventArguments\DirectoryDeletedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovingEventArgs.vb" />
     <Compile Include="EventArguments\VisibilityUpdatedEventArgs.vb" />
-    <Compile Include="ExecutableFile.vb" />
     <Compile Include="Extensions\BasicOnlineExtensionCollection.vb" />
     <Compile Include="Extensions\ExtensionCollection.vb" />
     <Compile Include="Extensions\ExtensionHelper.vb" />
@@ -191,7 +188,6 @@
     <Compile Include="Solution.vb" />
     <Compile Include="Utilities\AssemblyReflectionManager.vb" />
     <Compile Include="Utilities\AssemblyReflectionProxy.vb" />
-    <Compile Include="ObjectFile.vb" />
     <Compile Include="PluginHelper.vb" />
     <Compile Include="PluginManager.vb" />
     <Compile Include="ProjectOld.vb" />
@@ -206,7 +202,6 @@
     <Compile Include="Settings.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />
     <Compile Include="Utilities\Zip.vb" />
-    <Compile Include="ConsoleModule.vb" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Linq" />

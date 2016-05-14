@@ -485,7 +485,7 @@ Public Class SolutionOld
         If SolutionType Is Nothing Then
             Throw New ArgumentNullException(NameOf(SolutionType))
         End If
-        If Not Utilities.ReflectionHelpers.IsOfType(SolutionType, GetType(SolutionOld)) Then
+        If Not ReflectionHelpers.IsOfType(SolutionType, GetType(SolutionOld)) Then
             Throw New ArgumentException("SolutionType must inherit from Solution.", NameOf(SolutionType))
         End If
 

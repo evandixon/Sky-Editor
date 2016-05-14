@@ -652,7 +652,7 @@ Namespace IO
                         _fileReader.Dispose()
                     End If
                     If EnableShadowCopy Then
-                        If FileProvider.FileExists(Me.PhysicalFilename) Then
+                        If FileProvider IsNot Nothing AndAlso FileProvider.FileExists(Me.PhysicalFilename) Then
                             FileProvider.DeleteFile(Me.PhysicalFilename)
                         End If
                     End If

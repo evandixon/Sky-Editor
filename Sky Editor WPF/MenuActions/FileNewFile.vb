@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
@@ -9,12 +10,12 @@ Namespace MenuActions
             Dim _manager = PluginManager.GetInstance
             Dim w As New UI.NewFileWindow()
             Dim games As New Dictionary(Of String, Type)
-            For Each item In _manager.GetCreatableFiles
+            For Each item In IOHelper.GetCreatableFileTypes(_manager)
                 games.Add(PluginHelper.GetTypeName(item), item)
             Next
             w.AddGames(games.Keys)
             If w.ShowDialog Then
-                Dim file As Object = _manager.CreateNewFile(w.SelectedName, games(w.SelectedGame))
+                Dim file As Object = IOHelper.CreateNewFile(w.SelectedName, games(w.SelectedGame))
                 PluginHelper.RequestFileOpen(file, True)
             End If
             Return Task.CompletedTask

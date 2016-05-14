@@ -15,6 +15,14 @@ Namespace IO
         End Function
 
         ''' <summary>
+        ''' Returns an IEnumerable of all the registered types that implement iCreatableFile.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function GetCreatableFileTypes(Manager As PluginManager) As IEnumerable(Of TypeInfo)
+            Return Manager.GetRegisteredTypes(GetType(ICreatableFile).GetTypeInfo)
+        End Function
+
+        ''' <summary>
         ''' Returns an IEnumerable of all the registered types that implement iOpenableFile.
         ''' </summary>
         ''' <returns></returns>
@@ -24,6 +32,32 @@ Namespace IO
             End If
 
             Return Manager.GetRegisteredTypes(GetType(IOpenableFile).GetTypeInfo)
+        End Function
+
+        ''' <summary>
+        ''' Creates a new instance of the given file type.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function CreateNewFile(NewFileName As String, FileType As TypeInfo) As ICreatableFile
+            If String.IsNullOrEmpty(NewFileName) Then
+                Throw New ArgumentNullException(NameOf(NewFileName))
+            End If
+
+            If FileType Is Nothing Then
+                Throw New ArgumentNullException(NameOf(FileType))
+            End If
+
+            If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile).GetTypeInfo) Then
+                Throw New ArgumentException(My.Resources.Language.ErrorTypeMustInheritICreatableFile, NameOf(FileType))
+            End If
+
+            If Not ReflectionHelpers.HasDefaultConstructor(FileType) Then
+                Throw New ArgumentException(My.Resources.Language.ErrorTypeNoDefaultConstructor, NameOf(FileType))
+            End If
+
+            Dim file As ICreatableFile = ReflectionHelpers.CreateInstance(FileType)
+            file.CreateFile(NewFileName)
+            Return file
         End Function
 
         ''' <summary>
@@ -46,7 +80,7 @@ Namespace IO
             End If
 
             If Not ReflectionHelpers.IsOfType(FileType, GetType(IOpenableFile).GetTypeInfo) Then
-                Throw New ArgumentException(My.Resources.Language.ErrorTypeMustInheritIOpenableFile)
+                Throw New ArgumentException(My.Resources.Language.ErrorTypeMustInheritIOpenableFile, NameOf(FileType))
             End If
 
             If ReflectionHelpers.HasDefaultConstructor(FileType) Then
@@ -54,7 +88,7 @@ Namespace IO
                 Await f.OpenFile(Filename, Manager.CurrentIOProvider)
                 Return f
             Else
-                Throw New ArgumentException(My.Resources.Language.ErrorTypeNoDefaultConstructor)
+                Throw New ArgumentException(My.Resources.Language.ErrorTypeNoDefaultConstructor, NameOf(FileType))
             End If
         End Function
 

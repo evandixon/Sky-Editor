@@ -19,7 +19,13 @@
         ''' </summary>
         ''' <param name="directory">Full path of the directory.</param>
         ''' <returns></returns>
-        Public MustOverride Function DirectoryExists(directory As String) As Boolean
+        Public MustOverride Function DirectoryExists(path As String) As Boolean
+
+        ''' <summary>
+        ''' Creates a directory at the specified path.
+        ''' </summary>
+        ''' <param name="path"></param>
+        Public MustOverride Sub CreateDirectory(path As String)
 
         ''' <summary>
         ''' Reads a file from disk, and returns its contents as a byte array.

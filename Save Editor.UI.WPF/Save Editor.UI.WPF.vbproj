@@ -104,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="SkyEditor.SaveEditor" />
+    <Import Include="SkyEditor.SaveEditor.Interfaces" />
+    <Import Include="SkyEditor.SaveEditor.Saves" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -288,10 +291,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Save Editor\Save Editor.vbproj">
-      <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
-      <Name>Save Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
@@ -307,6 +306,10 @@
     <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
       <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
       <Name>SkyEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
+      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
+      <Name>SkyEditor.SaveEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

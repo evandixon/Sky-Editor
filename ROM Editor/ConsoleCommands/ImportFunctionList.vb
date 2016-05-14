@@ -1,8 +1,9 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class ImportFunctionList
-        Inherits SkyEditorBase.ConsoleCommand
+        Inherits ConsoleCommand
 
         Public Overrides Sub Main(Arguments() As String)
             Dim currentPrefix As String = ""

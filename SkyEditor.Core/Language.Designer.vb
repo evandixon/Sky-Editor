@@ -111,6 +111,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to The given type must implement ICreatableFile..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorTypeMustInheritICreatableFile() As String
+            Get
+                Return ResourceManager.GetString("ErrorTypeMustInheritICreatableFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The given type must implement IOpenableFile..
         '''</summary>
         Friend Shared ReadOnly Property ErrorTypeMustInheritIOpenableFile() As String

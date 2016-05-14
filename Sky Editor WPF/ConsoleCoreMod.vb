@@ -27,26 +27,17 @@ Friend Class ConsoleCoreMod
     End Property
 
     Public Overrides Sub Load(Manager As PluginManager)
+        MyBase.Load(Manager)
         'CoreMod stuff
         Manager.RegisterTypeRegister(GetType(SolutionOld))
         Manager.RegisterTypeRegister(GetType(ProjectOld))
-        Manager.RegisterTypeRegister(GetType(iCreatableFile))
-        Manager.RegisterTypeRegister(GetType(IOpenableFile))
-        Manager.RegisterTypeRegister(GetType(iDetectableFileType))
-        Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
+        Manager.RegisterTypeRegister(GetType(ICreatableFile))
 
         Manager.RegisterType(GetType(SolutionOld), GetType(SolutionOld))
         Manager.RegisterType(GetType(ProjectOld), GetType(ProjectOld))
-
-        Manager.RegisterDefaultFileTypeDetectors()
         'End CoreMod stuff
 
-        'Manager.OpenableFiles.Add(GetType(ExecutableFile))
-
         Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
-
-        'Console Commands
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
     End Sub
     Public Overrides Sub UnLoad(Manager As PluginManager)
 

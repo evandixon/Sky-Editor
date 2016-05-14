@@ -1,6 +1,7 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
+Imports SkyEditor.SaveEditor
 
 Namespace Tabs
     Public Class PkmMovesTab

@@ -26,6 +26,7 @@ Friend Class ServiceCoreMod
     End Property
 
     Public Overrides Sub Load(Manager As PluginManager)
+        MyBase.Load(Manager)
         'In the service environment, there's not much that can be done outside of just loading the plugins.
         'So, we're going to do nothing.  It's up to the plugins to define things.
     End Sub

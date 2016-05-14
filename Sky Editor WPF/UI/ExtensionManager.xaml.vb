@@ -1,4 +1,5 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Reflection
+Imports System.Windows.Forms
 
 Namespace UI
     Public Class ExtensionManager

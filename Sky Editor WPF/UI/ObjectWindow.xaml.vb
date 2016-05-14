@@ -2,7 +2,8 @@
 Imports System.Windows.Forms
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.UI
+
 Namespace UI
     Public Class ObjectWindow
         Implements iObjectWindow
@@ -20,7 +21,7 @@ Namespace UI
         End Property
         Public Sub RefreshDisplay()
             tcTabs.Items.Clear()
-            For Each item In UiHelper.GenerateObjectTabs(_manager.GetRefreshedTabs(_objectToEdit, {GetType(Windows.Controls.UserControl)}))
+            For Each item In UiHelper.GenerateObjectTabs(SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(_objectToEdit, {GetType(Windows.Controls.UserControl)}, _manager))
                 tcTabs.Items.Add(item)
             Next
 
@@ -55,7 +56,7 @@ Namespace UI
             For Each item In tcTabs.Items
                 'Here, we want to force the ObjectControl to apply its GUI changes to the underlying model.
                 'Calling should accomplish this goal
-                Dim x = DirectCast(item.containedobjectcontrol, iObjectControl).EditingObject
+                Dim x = DirectCast(item.containedobjectcontrol, IObjectControl).EditingObject
             Next
         End Sub
         Public Sub New(Manager As PluginManager)

@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.ROMEditor
 
 Namespace Flashcart
     'Public Enum NDSSaveSlot
@@ -30,7 +31,7 @@ Namespace Flashcart
     ''' Represents an NDSRom that exists on a flashcart, including saves.
     ''' </summary>
     Public Class FlashcartNDSRom
-        Public Property ROM As Roms.GenericNDSRom
+        Public Property ROM As GenericNDSRom
         Public Property Saves As Dictionary(Of String, Object)
         ''' <summary>
         ''' 

@@ -321,10 +321,6 @@
       <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
       <Name>ROM Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Save Editor\Save Editor.vbproj">
-      <Project>{01813d1e-f5c5-417c-8e1e-10bf1f4c073a}</Project>
-      <Name>Save Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
       <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
       <Name>Sky Editor Base</Name>
@@ -340,6 +336,10 @@
     <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
       <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
       <Name>SkyEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
+      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
+      <Name>SkyEditor.SaveEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

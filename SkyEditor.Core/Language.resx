@@ -134,6 +134,9 @@
   <data name="ErrorSanityNoMax" xml:space="preserve">
     <value>Sanity check failed.  Out of a list of non-zero length, no item exists that equals the max item.</value>
   </data>
+  <data name="ErrorTypeMustInheritICreatableFile" xml:space="preserve">
+    <value>The given type must implement ICreatableFile.</value>
+  </data>
   <data name="ErrorTypeMustInheritIOpenableFile" xml:space="preserve">
     <value>The given type must implement IOpenableFile.</value>
     <comment>Message for an exception that's thrown when a type doesn't implement IOpenableFile.</comment>

@@ -1,13 +1,10 @@
 ﻿Imports System.Windows.Controls
-Imports CodeFiles
-Imports SkyEditor.Core.EventArguments
-Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.UI
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 
 Public Class TextControl
     Inherits UserControl
-    Implements iObjectControl
+    Implements IObjectControl
     Public Sub RefreshDisplay()
         txtText.Text = GetEditingObject(Of String)()
     End Sub
@@ -19,39 +16,39 @@ Public Class TextControl
         IsModified = True
     End Sub
 
-    Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements iObjectControl.GetSupportedTypes
+    Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements IObjectControl.GetSupportedTypes
         'Return {GetType(TextFile)}
         Return {GetType(String)}
     End Function
 
-    Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements iObjectControl.GetSortOrder
+    Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements IObjectControl.GetSortOrder
         Return -1
     End Function
 
 #Region "IObjectControl Support"
-    Public Function SupportsObject(Obj As Object) As Boolean Implements iObjectControl.SupportsObject
+    Public Function SupportsObject(Obj As Object) As Boolean Implements IObjectControl.SupportsObject
         Return True
     End Function
 
-    Public Function IsBackupControl(Obj As Object) As Boolean Implements iObjectControl.IsBackupControl
+    Public Function IsBackupControl(Obj As Object) As Boolean Implements IObjectControl.IsBackupControl
         Return True
     End Function
 
     ''' <summary>
     ''' Called when Header is changed.
     ''' </summary>
-    Public Event HeaderUpdated As iObjectControl.HeaderUpdatedEventHandler Implements iObjectControl.HeaderUpdated
+    Public Event HeaderUpdated As IObjectControl.HeaderUpdatedEventHandler Implements IObjectControl.HeaderUpdated
 
     ''' <summary>
     ''' Called when IsModified is changed.
     ''' </summary>
-    Public Event IsModifiedChanged As iObjectControl.IsModifiedChangedEventHandler Implements iObjectControl.IsModifiedChanged
+    Public Event IsModifiedChanged As IObjectControl.IsModifiedChangedEventHandler Implements IObjectControl.IsModifiedChanged
 
     ''' <summary>
     ''' Returns the value of the Header.  Only used when the iObjectControl is behaving as a tab.
     ''' </summary>
     ''' <returns></returns>
-    Public Property Header As String Implements iObjectControl.Header
+    Public Property Header As String Implements IObjectControl.Header
         Get
             Return _header
         End Get
@@ -90,7 +87,7 @@ Public Class TextControl
     ''' Calling this from inside this class could result in a stack overflow, especially if called from UpdateObject, so use GetEditingObject or GetEditingObject(Of T) instead.
     ''' </summary>
     ''' <returns></returns>
-    Public Property EditingObject As Object Implements iObjectControl.EditingObject
+    Public Property EditingObject As Object Implements IObjectControl.EditingObject
         Get
             UpdateObject()
             Return _editingObject
@@ -108,7 +105,7 @@ Public Class TextControl
     ''' Set to false when the object is saved, or if the user undoes every change.
     ''' </summary>
     ''' <returns></returns>
-    Public Property IsModified As Boolean Implements iObjectControl.IsModified
+    Public Property IsModified As Boolean Implements IObjectControl.IsModified
         Get
             Return _isModified
         End Get

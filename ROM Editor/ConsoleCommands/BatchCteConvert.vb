@@ -1,8 +1,9 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.ConsoleCommands
 
 Namespace ConsoleCommands
     Public Class BatchCteConvert
-        Inherits SkyEditorBase.ConsoleCommandAsync
+        Inherits ConsoleCommandAsync
 
         Public Overrides Async Function MainAsync(Arguments() As String) As Task
             Dim SourceDir = Arguments(0)

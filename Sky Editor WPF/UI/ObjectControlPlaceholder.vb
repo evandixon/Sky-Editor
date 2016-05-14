@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.UI
+
 Namespace UI
     Public Class ObjectControlPlaceholder
         Inherits UserControl
@@ -19,7 +20,7 @@ Namespace UI
                 If Content Is Nothing Then
                     Return Nothing
                 Else
-                    Return DirectCast(Content, iObjectControl).EditingObject
+                    Return DirectCast(Content, IObjectControl).EditingObject
                 End If
             End Get
             Set(value As Object)
@@ -30,7 +31,7 @@ Namespace UI
                 If TypeOf value Is iModifiable Then
                     AddHandler DirectCast(value, iModifiable).Modified, AddressOf OnModified
                 End If
-                Dim objControl = PluginManager.GetInstance.GetObjectControl(value, {GetType(UserControl)})
+                Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, PluginManager.GetInstance)
                 If objControl IsNot Nothing Then
                     Content = objControl
                     objControl.EditingObject = value

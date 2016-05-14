@@ -28,21 +28,14 @@ Friend Class ConsoleCoreMod
     End Property
 
     Public Overrides Sub Load(Manager As SkyEditor.Core.PluginManager)
+        MyBase.Load(Manager)
         'CoreMod stuff
         Manager.RegisterTypeRegister(GetType(SolutionOld))
         Manager.RegisterTypeRegister(GetType(ProjectOld))
-        Manager.RegisterTypeRegister(GetType(iCreatableFile))
-        Manager.RegisterTypeRegister(GetType(IOpenableFile))
-        Manager.RegisterTypeRegister(GetType(iDetectableFileType))
-        Manager.RegisterTypeRegister(GetType(ConsoleCommandAsync))
+        Manager.RegisterTypeRegister(GetType(ICreatableFile))
 
         Manager.RegisterType(GetType(SolutionOld), GetType(SolutionOld))
         Manager.RegisterType(GetType(ProjectOld), GetType(ProjectOld))
-
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.InstallExtension))
-        Manager.RegisterType(GetType(ConsoleCommandAsync), GetType(SkyEditorBase.ConsoleCommands.GeneratePluginExtensions))
-
-        Manager.RegisterDefaultFileTypeDetectors()
     End Sub
     Public Overrides Sub UnLoad(Manager As SkyEditor.Core.PluginManager)
 

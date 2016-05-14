@@ -1,7 +1,4 @@
-﻿Imports SaveEditor.Saves
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
-Imports SkyEditorWPF.UI
+﻿Imports SkyEditorWPF.UI
 
 Namespace Tabs
     Public Class QuicksavePokemonTab
@@ -54,7 +51,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Saves.SkySave)}
+            Return {GetType(SkySave)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

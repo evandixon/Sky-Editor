@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditorBase
 
 Namespace ConsoleCommands

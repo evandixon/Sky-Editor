@@ -1,10 +1,8 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Threading.Tasks
-Imports ICSharpCode.SharpZipLib.Zip
 Imports SkyEditor.Core
-Imports SkyEditorBase.Interfaces
-Imports SkyEditorBase.Utilities
+Imports SkyEditor.Core.Utilities
 
 Namespace Redistribution
     'Legacy code to deal with the old manor of handling plugins, some of which will still be used for plugin development.
@@ -101,7 +99,7 @@ Namespace Redistribution
                     Using reflector As New Utilities.AssemblyReflectionManager
                         reflector.LoadAssembly(plgAssembly.Location, "PackPlugin")
                         reflector.Reflect(plgAssembly.Location, Function(CurrentAssembly As Assembly, Args() As Object) As Object
-                                                                    For Each result In From t In CurrentAssembly.GetTypes Where Utilities.ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin)) AndAlso t.GetConstructor({}) IsNot Nothing
+                                                                    For Each result In From t In CurrentAssembly.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) AndAlso t.GetConstructor({}) IsNot Nothing
                                                                         Dim def As SkyEditorPlugin = result.GetConstructor({}).Invoke({})
                                                                         def.PrepareForDistribution()
                                                                     Next
@@ -133,7 +131,7 @@ Namespace Redistribution
                 Else
                     'It's probably a directory.
                     If Directory.Exists(filePath) Then
-                        Await FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir))
+                        Await SkyEditorBase.Utilities.FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir))
                         'Else
                         'Guess not.  Do nothing.
                     End If

@@ -1,6 +1,7 @@
 ﻿Imports System.Globalization
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase.Interfaces
+Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Namespace UI
@@ -13,12 +14,12 @@ Namespace UI
 #Region "Properties"
         Public Property Document As Object
             Get
-                If TypeOf Me.Content Is iObjectControl Then
-                    _document = DirectCast(Me.Content, iObjectControl).EditingObject()
+                If TypeOf Me.Content Is IObjectControl Then
+                    _document = DirectCast(Me.Content, IObjectControl).EditingObject()
                 ElseIf TypeOf Me.Content Is TabControl Then
                     For Each item In DirectCast(Me.Content, TabControl).Items
-                        If TypeOf item.Content Is iObjectControl Then
-                            _document = DirectCast(item.Content, iObjectControl).EditingObject()
+                        If TypeOf item.Content Is IObjectControl Then
+                            _document = DirectCast(item.Content, IObjectControl).EditingObject()
                         End If
                     Next
                 End If
@@ -33,8 +34,8 @@ Namespace UI
                 End If
 
                 If value IsNot Nothing Then
-                    Dim tabs = _manager.GetRefreshedTabs(value, {GetType(UserControl)})
-                    Dim ucTabs = (From t In tabs Where Utilities.ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
+                    Dim tabs = SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(value, {GetType(UserControl)}, _manager)
+                    Dim ucTabs = (From t In tabs Where ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
                     Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
                     If count > 1 Then
                         Dim tabControl As New TabControl
@@ -76,12 +77,12 @@ Namespace UI
                 _isModified = value
                 UpdateTitle()
                 If value = False Then
-                    If TypeOf Me.Content Is iObjectControl Then
-                        DirectCast(Me.Content, iObjectControl).IsModified = False
+                    If TypeOf Me.Content Is IObjectControl Then
+                        DirectCast(Me.Content, IObjectControl).IsModified = False
                     ElseIf TypeOf Me.Content Is TabControl Then
                         For Each item As TabItem In DirectCast(Me.Content, TabControl).Items
-                            If TypeOf item.Content Is iObjectControl Then
-                                DirectCast(item.Content, iObjectControl).IsModified = False
+                            If TypeOf item.Content Is IObjectControl Then
+                                DirectCast(item.Content, IObjectControl).IsModified = False
                             End If
                         Next
                     End If
@@ -130,8 +131,8 @@ Namespace UI
             End If
         End Sub
         Private Sub File_FileModified(sender As Object, e As EventArgs)
-            If TypeOf sender Is iObjectControl Then
-                IsModified = DirectCast(sender, iObjectControl).IsModified
+            If TypeOf sender Is IObjectControl Then
+                IsModified = DirectCast(sender, IObjectControl).IsModified
             Else
                 IsModified = True
             End If

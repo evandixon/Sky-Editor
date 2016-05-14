@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.ConsoleCommands
 
 Namespace ConsoleCommands
     Public Class InstallExtension

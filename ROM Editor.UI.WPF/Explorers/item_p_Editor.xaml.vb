@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditor.Core.IO
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -11,7 +12,7 @@ Namespace Explorers
             With GetEditingObject(Of item_p)()
                 Items = .Items
                 If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                    Dim englishlanguage = New ObjectFile(Of List(Of String))(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                    Dim englishlanguage = New ObjectFile(Of List(Of String))(New SkyEditor.Core.Windows.IOProvider, .OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
                     ReDim ItemNames(1959)
                     englishlanguage.ContainedObject.CopyTo(6773, ItemNames, 0, 1959)
                     'Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
@@ -19,7 +20,7 @@ Namespace Explorers
                     '    englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)
                     'End Using
                 Else
-                    ItemNames = SaveEditor.Lists.GetSkyItemNames.Values.ToArray
+                    ItemNames = SkyEditor.SaveEditor.Lists.GetSkyItemNames.Values.ToArray
                 End If
             End With
             RefreshItems()

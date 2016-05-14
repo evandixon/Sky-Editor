@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.ROMEditor
 Imports SkyEditorBase
 Imports SkyEditorBase.EventArguments
 
@@ -76,7 +77,7 @@ Namespace Projects
                 Using f As New GenericFile
                     Await f.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
                     'Then we have to detect the ROM type
-                    Dim n As New Roms.GenericNDSRom
+                    Dim n As New GenericNDSRom
                     If Await n.IsFileOfType(f) Then
                         mode = "nds"
                         n.Dispose()
@@ -100,10 +101,9 @@ Namespace Projects
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             Select Case mode
                 Case "nds"
-                    Dim nds As New Roms.GenericNDSRom()
+                    Dim nds As New GenericNDSRom
                     Await nds.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
-                    Await nds.UnpackWithNDSTool(GetRawFilesDir)
-                    'Await nds.Unpack(GetRawFilesDir)
+                    Await nds.Unpack(GetRawFilesDir, New SkyEditor.Core.Windows.IOProvider)
                     Setting("System") = "NDS"
                     Setting("GameCode") = nds.GameCode
                     nds.Dispose()

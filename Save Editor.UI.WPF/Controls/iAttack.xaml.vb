@@ -5,13 +5,13 @@ Imports SkyEditorWPF.UI
 Namespace Controls
     Public Class iAttack
         Inherits ObjectControl
-        Dim _attack As Interfaces.iAttack
-        Public Property Attack As Interfaces.iAttack
+        Dim _attack As SkyEditor.SaveEditor.Interfaces.iAttack
+        Public Property Attack As SkyEditor.SaveEditor.Interfaces.iAttack
             Get
                 _attack.ID = SelectedMoveID
                 Return _attack
             End Get
-            Set(value As Interfaces.iAttack)
+            Set(value As SkyEditor.SaveEditor.Interfaces.iAttack)
                 For Each item In (From m In value.GetAttackDictionary Select m Order By m.Value)
                     cbMove.Items.Add(New SkyEditorBase.Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
@@ -46,7 +46,7 @@ Namespace Controls
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Interfaces.iAttack)}
+            Return {GetType(SkyEditor.SaveEditor.Interfaces.iAttack)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

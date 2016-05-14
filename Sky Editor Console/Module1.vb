@@ -9,7 +9,7 @@ Module Module1
 
             PluginHelper.ShowConsole()
             Console.WriteLine("Sky Editor Console has successfully loaded.")
-            ConsoleModule.ConsoleMain(manager).Wait()
+            SkyEditor.Core.Windows.ConsoleModule.ConsoleMain(manager).Wait()
         Catch ex As Exception
             Console.WriteLine(ex.ToString)
             IO.File.WriteAllText("error.txt", ex.ToString)

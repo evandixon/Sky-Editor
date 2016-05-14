@@ -2,14 +2,14 @@
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.ROMEditor
 Imports SkyEditorBase
 
 Namespace Roms
     Public Class Generic3DSRom
         Inherits GenericFile
         Implements IOpenableFile
-        Implements iDetectableFileType
-        Implements iPackedRom
+        Implements IDetectableFileType
         Public Overrides Function GetDefaultExtension() As String
             Return "*.3ds"
         End Function
@@ -28,7 +28,7 @@ Namespace Roms
             End Get
         End Property
 
-        Public Overridable ReadOnly Property TitleID As String Implements iPackedRom.GameCode
+        Public Overridable ReadOnly Property TitleID As String
             Get
                 Return Conversion.Hex(BitConverter.ToUInt64(RawData(&H108, 8), 0)).PadLeft(16, "0"c)
             End Get
@@ -43,7 +43,7 @@ Namespace Roms
             End Set
         End Property
 
-        Public Async Function Unpack(DestinationDirectory As String) As Task Implements iPackedRom.Unpack
+        Public Async Function Unpack(DestinationDirectory As String) As Task
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
                 DestinationDirectory = Path.Combine(PluginHelper.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
@@ -118,10 +118,6 @@ Namespace Roms
             Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath)
             Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath)
             PluginHelper.SetLoadingStatusFinished()
-        End Function
-
-        Private Function RePack(NewFileName As String) As Task Implements iPackedRom.RePack
-            Throw New NotImplementedException()
         End Function
 
         Private Shared Async Function RunCtrTool(Arguments As String) As Task

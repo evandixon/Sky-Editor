@@ -1,20 +1,20 @@
-﻿Imports SkyEditor.Core.EventArguments
-Imports SkyEditor.Core.Interfaces
+﻿Imports SkyEditor.Core.UI
+
 Namespace UI
     Public Class ObjectTab
         Inherits TabItem
 
-        Public Property ContainedObjectControl As iObjectControl
+        Public Property ContainedObjectControl As IObjectControl
             Get
-                If TypeOf Me.Content Is iObjectControl Then
+                If TypeOf Me.Content Is IObjectControl Then
                     Return Me.Content
                 Else
                     Return Nothing
                 End If
             End Get
-            Set(value As iObjectControl)
-                If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is iObjectControl Then
-                    RemoveHandler DirectCast(Me.Content, iObjectControl).HeaderUpdated, AddressOf OnContentHeaderChanged
+            Set(value As IObjectControl)
+                If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is IObjectControl Then
+                    RemoveHandler DirectCast(Me.Content, IObjectControl).HeaderUpdated, AddressOf OnContentHeaderChanged
                 End If
 
                 If TypeOf value Is UserControl Then
@@ -27,8 +27,8 @@ Namespace UI
                     Me.Header = PluginHelper.GetTypeName(value.GetType)
                 End If
 
-                If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is iObjectControl Then
-                    AddHandler DirectCast(Me.Content, iObjectControl).HeaderUpdated, AddressOf OnContentHeaderChanged
+                If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is IObjectControl Then
+                    AddHandler DirectCast(Me.Content, IObjectControl).HeaderUpdated, AddressOf OnContentHeaderChanged
                 End If
             End Set
         End Property
@@ -40,7 +40,7 @@ Namespace UI
         Public Sub New()
             Margin = New Thickness(0, 0, 0, 0)
         End Sub
-        Public Sub New(ContainedObjectControl As iObjectControl)
+        Public Sub New(ContainedObjectControl As IObjectControl)
             Me.New
             Me.ContainedObjectControl = ContainedObjectControl
         End Sub

@@ -7,7 +7,7 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             PluginHelper.ShowConsole()
-            Await ConsoleMain(PluginManager.GetInstance)
+            Await SkyEditor.Core.Windows.ConsoleMain(PluginManager.GetInstance)
         End Function
 
         Public Sub New()

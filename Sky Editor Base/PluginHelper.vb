@@ -2,7 +2,6 @@
 Imports System.Threading.Tasks
 Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
-Imports SkyEditorBase.Interfaces
 Imports System.Resources
 Imports SkyEditor.Core.Interfaces
 
@@ -355,16 +354,6 @@ Public Class PluginHelper
     Public Shared Sub ShowConsole()
         Internal.ConsoleManager.Show()
     End Sub
-
-    ''' <summary>
-    ''' Returns whether or not ObjectToCheck is of type T.
-    ''' </summary>
-    ''' <typeparam name="T"></typeparam>
-    ''' <param name="ObjectToCheck"></param>
-    ''' <returns></returns>
-    Public Shared Function IsTypeOf(Of T)(ObjectToCheck As Object) As Boolean
-        Return Utilities.ReflectionHelpers.IsOfType(ObjectToCheck, GetType(T))
-    End Function
 
     ''' <summary>
     ''' Casts the given object to type T, or returns its contained item if it implements the interface iContainer(Of T).

@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class Sir0Ptrs

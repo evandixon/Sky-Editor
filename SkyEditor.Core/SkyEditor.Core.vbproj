@@ -87,27 +87,31 @@
     <Import Include="Windows.UI.Xaml.Media.Imaging" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleCommands\ConsoleCommand.vb" />
+    <Compile Include="ConsoleCommands\ConsoleCommandAsync.vb" />
     <Compile Include="IO\DetectableFileTypeDetector.vb" />
     <Compile Include="IO\DirectoryTypeDetectionResult.vb" />
     <Compile Include="IO\FileTypeDetectionResult.vb" />
     <Compile Include="IO\IDirectoryTypeDetector.vb" />
     <Compile Include="IO\IFileTypeDetector.vb" />
     <Compile Include="IO\IOHelper.vb" />
-    <Compile Include="Legacy EventArguments\HeaderUpdatedEventArgs.vb" />
+    <Compile Include="IO\ObjectFile.vb" />
+    <Compile Include="IO\ObjectFileDetector.vb" />
+    <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="CoreSkyEditorPlugin.vb" />
     <Compile Include="SkyEditorPlugin.vb" />
     <Compile Include="IO\GenericFile.vb" />
     <Compile Include="Legacy Interfaces\iContainer.vb" />
-    <Compile Include="Legacy Interfaces\iCreatableFile.vb" />
+    <Compile Include="IO\ICreatableFile.vb" />
     <Compile Include="IO\IDetectableFileType.vb" />
     <Compile Include="Legacy Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Legacy Interfaces\iGenericFile.vb" />
     <Compile Include="Legacy Interfaces\iModifiable.vb" />
     <Compile Include="Legacy Interfaces\iNamed.vb" />
-    <Compile Include="Legacy Interfaces\iObjectControl.vb" />
+    <Compile Include="UI\iObjectControl.vb" />
     <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
-    <Compile Include="Legacy Interfaces\iOnDisk.vb" />
+    <Compile Include="IO\IOnDisk.vb" />
     <Compile Include="IO\IOpenableFile.vb" />
     <Compile Include="Legacy Interfaces\iSavable.vb" />
     <Compile Include="Legacy Interfaces\ISavableAs.vb" />
@@ -126,6 +130,7 @@
     <Compile Include="Utilities\AsyncFor.vb" />
     <Compile Include="Utilities\GenericArrayOperations.vb" />
     <Compile Include="Utilities\Hex.vb" />
+    <Compile Include="Utilities\ParsedAssemblyQualifiedName.vb" />
     <Compile Include="Utilities\ReflectionHelpers.vb" />
     <Compile Include="Utilities\Json.vb" />
   </ItemGroup>
