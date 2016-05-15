@@ -58,6 +58,11 @@
       <LastGenOutput>Language.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings\SettingNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingNames.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -89,12 +94,14 @@
   <ItemGroup>
     <Compile Include="ConsoleCommands\ConsoleCommand.vb" />
     <Compile Include="ConsoleCommands\ConsoleCommandAsync.vb" />
+    <Compile Include="Extensions\ExtensionHelper.vb" />
     <Compile Include="Extensions\ExtensionInstallResult.vb" />
     <Compile Include="Extensions\ExtensionType.vb" />
     <Compile Include="Extensions\ExtensionUninstallResult.vb" />
     <Compile Include="Extensions\IExtensionCollection.vb" />
     <Compile Include="Extensions\ExtensionInfo.vb" />
     <Compile Include="Extensions\InstalledExtensionCollection.vb" />
+    <Compile Include="Extensions\PluginExtensionType.vb" />
     <Compile Include="IO\DetectableFileTypeDetector.vb" />
     <Compile Include="IO\DirectoryTypeDetectionResult.vb" />
     <Compile Include="IO\FileTypeDetectionResult.vb" />
@@ -103,6 +110,14 @@
     <Compile Include="IO\IOHelper.vb" />
     <Compile Include="IO\ObjectFile.vb" />
     <Compile Include="IO\ObjectFileDetector.vb" />
+    <Compile Include="ISettingsProvider.vb" />
+    <Compile Include="SettingsProvider.vb" />
+    <Compile Include="Settings\ISettingsProviderExtensions.vb" />
+    <Compile Include="Settings\SettingNames.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SettingNames.resx</DependentUpon>
+    </Compile>
     <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="CoreSkyEditorPlugin.vb" />

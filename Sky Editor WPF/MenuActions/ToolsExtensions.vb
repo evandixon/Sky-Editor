@@ -1,11 +1,12 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports SkyEditor.Core.Extensions
+Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class ToolsExtensions
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            PluginHelper.RequestFileOpen(New SkyEditorBase.Extensions.ExtensionHelper, False)
+            PluginHelper.RequestFileOpen(New ExtensionHelper, False)
             Return Task.CompletedTask
         End Function
 

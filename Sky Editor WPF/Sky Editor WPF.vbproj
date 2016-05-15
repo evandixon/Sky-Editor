@@ -146,10 +146,6 @@
       <DependentUpon>ProjectReferences.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchableDropDown.vb" />
-    <Compile Include="UI\PluginControl.xaml.vb">
-      <DependentUpon>PluginControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\PluginUiElement.vb" />
     <Compile Include="UI\SettingsEditor.xaml.vb">
       <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>
@@ -284,10 +280,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ExtensionManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\PluginControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

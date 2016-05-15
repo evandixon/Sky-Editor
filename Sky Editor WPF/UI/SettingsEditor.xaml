@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <CheckBox x:Name="chbDevelopment" Content="{x:Static res:Language.EnableDevMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="chbVerbose" Content="{x:Static res:Language.EnableVerboseOutput}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chbVerbose" Content="{x:Static res:Language.EnableVerboseOutput}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
         <Label x:Name="label" Content="{x:Static res:Language.SettingsApplyRestartWarning}" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

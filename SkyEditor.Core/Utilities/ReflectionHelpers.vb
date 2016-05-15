@@ -67,8 +67,8 @@ Namespace Utilities
         ''' </summary>
         ''' <param name="Type"></param>
         ''' <returns></returns>
-        Public Shared Function HasDefaultConstructor(Type As TypeInfo) As Boolean
-            Return (From c In Type.DeclaredConstructors Where c.GetParameters.Length = 0).Any
+        Public Shared Function CanCreateInstance(Type As TypeInfo) As Boolean
+            Return (From c In Type.DeclaredConstructors Where c.GetParameters.Length = 0).Any AndAlso Not Type.IsAbstract
         End Function
 
         ''' <summary>

@@ -92,10 +92,16 @@
         Public MustOverride Sub DeleteDirectory(path As String)
 
         ''' <summary>
-        ''' Creates a temporary, blank file, and returns the filename.
+        ''' Creates a temporary, blank file and returns its full path.
         ''' </summary>
         ''' <returns></returns>
         Public MustOverride Function GetTempFilename() As String
+
+        ''' <summary>
+        ''' Creates a temporary empty directory and returns its full path.
+        ''' </summary>
+        ''' <returns></returns>
+        Public MustOverride Function GetTempDirectory() As String
 
         ''' <summary>
         ''' Determines whether or not a file of the given size will fit in memory.

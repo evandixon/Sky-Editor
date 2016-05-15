@@ -2,6 +2,7 @@
 Imports System.Globalization
 Imports System.Reflection
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Settings
 Imports Xceed.Wpf.AvalonDock.Layout
 Namespace UI
     Public Class MainWindow
@@ -150,7 +151,7 @@ Namespace UI
                 End Select
             Next
 
-            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, SettingsManager.Instance.Settings.DevelopmentMode))
+            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, PluginManager.GetInstance.CurrentSettingsProvider.GetIsDevMode))
                 menuMain.Items.Add(item)
                 RegisterEventMenuItemHandlers(item)
             Next
@@ -160,7 +161,7 @@ Namespace UI
             UpdateTargetedControlTargets(t)
 
             AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
-            AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
+            'AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
             AddHandler PluginHelper.FileOpenRequested, AddressOf OnFileOpenRequested
             AddHandler PluginHelper.ExceptionThrown, AddressOf OnExceptionThrown
         End Sub
@@ -202,16 +203,16 @@ Namespace UI
                                              progressBar.Value = e.Progress ' * 100
                                          End Sub))
         End Sub
-        Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
-            If Not e.Type = PluginHelper.LineType.ConsoleOutput OrElse SettingsManager.Instance.Settings.VerboseOutput Then
-                '_queuedConsoleLines.Enqueue(e)
-                Dispatcher.InvokeAsync(New Action(Sub()
-                                                      txtOutput.AppendText(e.Line)
-                                                      txtOutput.AppendText(vbCrLf)
-                                                      txtOutput.ScrollToEnd()
-                                                  End Sub))
-            End If
-        End Sub
+        'Private Sub OnConsoleLineWritten(sender As Object, e As PluginHelper.ConsoleLineWrittenEventArgs)
+        '    If Not e.Type = PluginHelper.LineType.ConsoleOutput OrElse PluginManager.GetInstance.CurrentSettingsProvider.GetEnableVerboseOutput Then
+        '        '_queuedConsoleLines.Enqueue(e)
+        '        Dispatcher.InvokeAsync(New Action(Sub()
+        '                                              txtOutput.AppendText(e.Line)
+        '                                              txtOutput.AppendText(vbCrLf)
+        '                                              txtOutput.ScrollToEnd()
+        '                                          End Sub))
+        '    End If
+        'End Sub
 
         Private Sub OnFileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
             OpenDocumentTab(e.File, e.DisposeOnExit)

@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
@@ -25,16 +26,24 @@ Friend Class ServiceCoreMod
         End Get
     End Property
 
-    Public Overrides Sub Load(Manager As PluginManager)
+    Public Overrides Sub Load(Manager As SkyEditor.Core.PluginManager)
         MyBase.Load(Manager)
         'In the service environment, there's not much that can be done outside of just loading the plugins.
         'So, we're going to do nothing.  It's up to the plugins to define things.
     End Sub
-    Public Overrides Sub UnLoad(Manager As PluginManager)
+    Public Overrides Sub UnLoad(Manager As SkyEditor.Core.PluginManager)
 
     End Sub
 
     Public Overrides Sub PrepareForDistribution()
 
     End Sub
+
+    Public Overrides Function GetSettingsProvider(manager As SkyEditor.Core.PluginManager) As ISettingsProvider
+        Return SettingsProvider.Open(System.IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.json"), manager)
+    End Function
+
+    Public Overrides Function GetExtensionDirectory() As String
+        Return PluginHelper.GetExtensionDirectory
+    End Function
 End Class

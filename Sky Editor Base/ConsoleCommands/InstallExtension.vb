@@ -1,7 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.Extensions
-Imports SkyEditorBase.Extensions
 
 Namespace ConsoleCommands
     Public Class InstallExtension
@@ -10,7 +9,7 @@ Namespace ConsoleCommands
         Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
-                    Dim result = Await ExtensionHelper.InstallExtension(Arguments(0), CurrentPluginManager)
+                    Dim result = Await ExtensionHelper.InstallExtension(Arguments(0), PluginHelper.GetExtensionDirectory, CurrentPluginManager)
                     Select Case result
                         Case ExtensionInstallResult.Success
                             Console.WriteLine("Extension install was successful.")

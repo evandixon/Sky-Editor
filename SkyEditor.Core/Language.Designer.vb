@@ -145,5 +145,41 @@ Namespace My.Resources
                 Return ResourceManager.GetString("ErrorWrittenReadonly", resourceCulture)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to You!.
+        '''</summary>
+        Friend Shared ReadOnly Property PluginDevExtAuthor() As String
+            Get
+                Return ResourceManager.GetString("PluginDevExtAuthor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to All of the plugins that are placed in the development directory..
+        '''</summary>
+        Friend Shared ReadOnly Property PluginDevExtDescription() As String
+            Get
+                Return ResourceManager.GetString("PluginDevExtDescription", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Development Plugins.
+        '''</summary>
+        Friend Shared ReadOnly Property PluginDevExtName() As String
+            Get
+                Return ResourceManager.GetString("PluginDevExtName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 0.0.
+        '''</summary>
+        Friend Shared ReadOnly Property PluginDevExtVersion() As String
+            Get
+                Return ResourceManager.GetString("PluginDevExtVersion", resourceCulture)
+            End Get
+        End Property
     End Class
 End Namespace

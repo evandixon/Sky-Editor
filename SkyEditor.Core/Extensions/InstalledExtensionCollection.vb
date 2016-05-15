@@ -13,7 +13,12 @@ Namespace Extensions
         End Property
 
         Public Function GetChildCollections(manager As Core.PluginManager) As IEnumerable(Of IExtensionCollection) Implements IExtensionCollection.GetChildCollections
-            Return manager.GetRegisteredObjects(Of ExtensionType)
+            Dim out = manager.GetRegisteredObjects(Of ExtensionType)
+            For Each item In out
+                item.CurrentPluginManager = manager
+                item.RootExtensionDirectory = manager.ExtensionDirectory
+            Next
+            Return out
         End Function
 
         Public Function GetExtensions(manager As Core.PluginManager) As IEnumerable(Of ExtensionInfo) Implements IExtensionCollection.GetExtensions

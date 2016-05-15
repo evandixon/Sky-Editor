@@ -1,3 +1,3 @@
 Because most game related functionality is plugin based, to run Sky Editor, Build or Rebuild the solution first (BUILD -> Rebuild Solution), then run Sky Editor Base.
 The startup project should always be one of the core applications, depending on which environment you want to run in (WPF, Console, Service, etc).
-The plugins should already be configured to output into ~/bin/[SolutionConfiguration]/Resources/Plugins, at least for the existing solution configurations.
+The plugins should already be configured to output into ~/bin/[SolutionConfiguration]/Resources/Extensions/Plugins/Development, at least for the existing solution configurations.

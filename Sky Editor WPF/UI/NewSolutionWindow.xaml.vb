@@ -5,8 +5,8 @@ Namespace UI
 
         Dim _folderBrowser As FolderBrowserDialog
         Private Sub btnOk_Click(sender As Object, e As RoutedEventArgs) Handles btnOk.Click
-            SettingsManager.Instance.Settings.Setting("LastSolutionDirectory") = txtLocation.Text
-            SettingsManager.Instance.Save()
+            PluginManager.GetInstance.CurrentSettingsProvider.SetSetting("SkyEditor.Core.Solution.LastSolutionDirectory", txtLocation.Text)
+            PluginManager.GetInstance.CurrentSettingsProvider.Save()
             DialogResult = True
             Me.Close()
         End Sub
@@ -35,8 +35,8 @@ Namespace UI
         End Sub
 
         Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            If SettingsManager.Instance.Settings.Setting("LastSolutionDirectory") IsNot Nothing Then
-                txtLocation.Text = SettingsManager.Instance.Settings.Setting("LastSolutionDirectory")
+            If PluginManager.GetInstance.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory") IsNot Nothing Then
+                txtLocation.Text = PluginManager.GetInstance.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory")
             End If
         End Sub
 

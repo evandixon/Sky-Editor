@@ -294,12 +294,12 @@ Validate:
 
         Public Function GetExtraData(Code As CodeFile) As CodeExtraData Implements ICodeProject.GetExtraData
             Dim filenameTemplate = PluginHelper.GetResourceName("Code/psmdLuaInfo-{0}.fdd")
-            Dim filenameCurrent = String.Format(filenameTemplate, SettingsManager.Instance.Settings.CurrentLanguage)
-            Dim filenameDefault = String.Format(filenameTemplate, SettingsManager.Instance.Settings.DefaultLanguage)
+            Dim filenameCurrent = String.Format(filenameTemplate, "English") 'SettingsManager.Instance.Settings.CurrentLanguage)
+            ' Dim filenameDefault = String.Format(filenameTemplate, SettingsManager.Instance.Settings.DefaultLanguage)
             If IO.File.Exists(filenameCurrent) Then
                 Return New CodeExtraDataFile(filenameCurrent)
-            ElseIf IO.File.Exists(filenameDefault) Then
-                Return New CodeExtraDataFile(filenameDefault)
+                'ElseIf IO.File.Exists(filenameDefault) Then
+                '    Return New CodeExtraDataFile(filenameDefault)
             Else
                 Return New CodeExtraDataFile
             End If

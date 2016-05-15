@@ -10,7 +10,7 @@ Namespace MenuActions
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            PluginHelper.RequestFileOpen(SettingsManager.Instance, False)
+            PluginHelper.RequestFileOpen(PluginManager.GetInstance.CurrentSettingsProvider, False)
             Return Task.CompletedTask
         End Function
 

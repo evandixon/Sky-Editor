@@ -51,7 +51,7 @@ Namespace IO
                 Throw New ArgumentException(My.Resources.Language.ErrorTypeMustInheritICreatableFile, NameOf(FileType))
             End If
 
-            If Not ReflectionHelpers.HasDefaultConstructor(FileType) Then
+            If Not ReflectionHelpers.CanCreateInstance(FileType) Then
                 Throw New ArgumentException(My.Resources.Language.ErrorTypeNoDefaultConstructor, NameOf(FileType))
             End If
 
@@ -83,7 +83,7 @@ Namespace IO
                 Throw New ArgumentException(My.Resources.Language.ErrorTypeMustInheritIOpenableFile, NameOf(FileType))
             End If
 
-            If ReflectionHelpers.HasDefaultConstructor(FileType) Then
+            If ReflectionHelpers.CanCreateInstance(FileType) Then
                 Dim f As IOpenableFile = ReflectionHelpers.CreateInstance(FileType)
                 Await f.OpenFile(Filename, Manager.CurrentIOProvider)
                 Return f

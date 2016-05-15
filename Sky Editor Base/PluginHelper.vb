@@ -12,6 +12,10 @@ Imports SkyEditor.Core.Interfaces
 Public Class PluginHelper
 
 #Region "Resources"
+
+    Public Shared Function GetExtensionDirectory() As String
+        Return IO.Path.Combine(RootResourceDirectory, "Extensions")
+    End Function
     ''' <summary>
     ''' Combines the given path with your plugin's resource directory.
     ''' </summary>

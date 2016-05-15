@@ -1,5 +1,7 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Settings
 
 Namespace UI
     Public Class SettingsEditor
@@ -7,14 +9,14 @@ Namespace UI
         Implements IObjectControl
 
         Public Sub RefreshDisplay()
-            chbDevelopment.IsChecked = GetEditingObject(Of SettingsManager).Settings.DevelopmentMode
-            chbVerbose.IsChecked = GetEditingObject(Of SettingsManager).Settings.VerboseOutput
+            chbDevelopment.IsChecked = GetEditingObject(Of ISettingsProvider).GetIsDevMode
+            'chbVerbose.IsChecked = GetEditingObject(Of ISettingsProvider).Settings.VerboseOutput
             IsModified = False
         End Sub
 
         Public Sub UpdateObject()
-            GetEditingObject(Of SettingsManager).Settings.VerboseOutput = chbVerbose.IsChecked
-            GetEditingObject(Of SettingsManager).Settings.DevelopmentMode = chbDevelopment.IsChecked
+            'GetEditingObject(Of ISettingsProvider).Settings.VerboseOutput = chbVerbose.IsChecked
+            GetEditingObject(Of ISettingsProvider).SetIsDevMode(chbDevelopment.IsChecked)
         End Sub
 
         Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDevelopment.Checked, chbVerbose.Checked, chbDevelopment.Unchecked, chbVerbose.Unchecked
@@ -22,7 +24,7 @@ Namespace UI
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements IObjectControl.GetSupportedTypes
-            Return {GetType(SettingsManager)}
+            Return {GetType(ISettingsProvider)}
         End Function
 
         Public Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer Implements IObjectControl.GetSortOrder

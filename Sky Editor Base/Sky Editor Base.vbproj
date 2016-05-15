@@ -158,7 +158,6 @@
     <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
-    <Compile Include="EventArguments\PluginLoadingEventArgs.vb" />
     <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectBuildStatusChanged.vb" />
     <Compile Include="EventArguments\ProjectFileAddedEventArgs.vb" />
@@ -168,8 +167,6 @@
     <Compile Include="EventArguments\DirectoryCreatedEventArgs.vb" />
     <Compile Include="EventArguments\DirectoryDeletedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovingEventArgs.vb" />
-    <Compile Include="Extensions\ExtensionHelper.vb" />
-    <Compile Include="Extensions\PluginExtensionType.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,7 +181,6 @@
     <Compile Include="SolutionOld.vb" />
     <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
-    <Compile Include="Settings.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -60,6 +60,14 @@ Public Class IOProvider
         End If
     End Function
 
+    Public Overrides Function GetTempDirectory() As String
+        Dim tempDir = Path.Combine(Path.GetTempPath, "SkyEditor", Guid.NewGuid.ToString)
+        If Not DirectoryExists(tempDir) Then
+            CreateDirectory(tempDir)
+        End If
+        Return tempDir
+    End Function
+
     Public Overrides Function GetTempFilename() As String
         Return Path.GetTempFileName
     End Function

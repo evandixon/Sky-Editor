@@ -71,6 +71,16 @@ namespace SkyEditor.Core.Android
             }
         }
 
+        public override string GetTempDirectory()
+        {
+            var tempDir = Path.Combine(Path.GetTempPath(), "SkyEditor", Guid.NewGuid().ToString());
+            if (!DirectoryExists(tempDir))
+            {
+                CreateDirectory(tempDir);
+            }
+            return tempDir;
+        }
+
         public override string GetTempFilename()
         {
             return Path.GetTempFileName();

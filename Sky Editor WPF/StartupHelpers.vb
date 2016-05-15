@@ -11,7 +11,7 @@ Public Class StartupHelpers
     ''' </summary>
     Public Shared Async Function StartConsole() As Task
         Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
-        manager.LoadCore(New ConsoleCoreMod)
+        Await manager.LoadCore(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
         Await SkyEditor.Core.Windows.ConsoleModule.ConsoleMain(manager)
@@ -45,9 +45,9 @@ Public Class StartupHelpers
             Await StartupHelpers.StartConsole()
         Else
             Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
-            manager.LoadCore(CoreMod)
+            Await manager.LoadCore(CoreMod)
 
-            Dim checkForUpdates As Boolean = SettingsManager.Instance.Settings.UpdatePlugins
+            Dim checkForUpdates As Boolean = False 'PluginManager.GetInstance.CurrentSettingsProvider.UpdatePlugins
             If args.Contains("-disableupdates") Then
                 checkForUpdates = False
             End If
@@ -95,8 +95,6 @@ Public Class StartupHelpers
                 'Something's keeping the file from being deleted.  It's probably still open.  It will get deleted the next time the program exits.
             End Try
         Next
-
-        SettingsManager.Instance.Save()
 
         ''Restart program if exit code warrants it
         'If e.ApplicationExitCode = 1 Then

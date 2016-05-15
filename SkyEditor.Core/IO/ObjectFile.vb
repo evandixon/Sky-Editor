@@ -28,7 +28,7 @@ Namespace IO
         End Sub
 
         Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
-            If ReflectionHelpers.HasDefaultConstructor(GetType(T).GetTypeInfo) Then
+            If ReflectionHelpers.CanCreateInstance(GetType(T).GetTypeInfo) Then
                 ContainedObject = ReflectionHelpers.CreateInstance(GetType(T).GetTypeInfo)
                 _name = Name
             End If

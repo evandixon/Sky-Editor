@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core
+﻿Imports System.Reflection
+Imports SkyEditor.Core
 
 Public MustInherit Class WindowsCoreSkyEditorPlugin
     Inherits CoreSkyEditorPlugin
@@ -12,4 +13,12 @@ Public MustInherit Class WindowsCoreSkyEditorPlugin
 
         manager.RegisterTypeRegister(GetType(ConsoleCommands.ConsoleCommandAsync))
     End Sub
+
+    Public Overrides Function IsPluginLoadingEnabled() As Boolean
+        Return True
+    End Function
+
+    Public Overrides Function LoadAssembly(assemblyPath As String) As Assembly
+        Return Assembly.LoadFrom(assemblyPath)
+    End Function
 End Class

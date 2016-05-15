@@ -18,9 +18,9 @@ Namespace Extensions
         ''' Gets or sets the directory the ExtensionType stores extensions in.
         ''' </summary>
         ''' <returns></returns>
-        Public Property ExtensionDirectory As String
+        Public Property RootExtensionDirectory As String
 
-        Public Property CurrentIOProvider As IOProvider
+        Public Property CurrentPluginManager As PluginManager
 
         ''' <summary>
         ''' The internal name of the extension type used in paths.
@@ -32,14 +32,18 @@ Namespace Extensions
             End Get
         End Property
 
+        Public Overridable Function GetExtensionDirectory(info As ExtensionInfo) As String
+            Return Path.Combine(RootExtensionDirectory, InternalName, info.ID.ToString)
+        End Function
+
         ''' <summary>
         ''' Lists the extensions that are currently installed.
         ''' </summary>
         ''' <returns></returns>
         Public Overridable Function GetInstalledExtensions(manager As Core.PluginManager) As IEnumerable(Of ExtensionInfo) Implements IExtensionCollection.GetExtensions
             Dim out As New List(Of ExtensionInfo)
-            If manager.CurrentIOProvider.DirectoryExists(ExtensionDirectory) Then
-                For Each item In manager.CurrentIOProvider.GetDirectories(ExtensionDirectory, True)
+            If manager.CurrentIOProvider.DirectoryExists(Path.Combine(RootExtensionDirectory, InternalName)) Then
+                For Each item In manager.CurrentIOProvider.GetDirectories(Path.Combine(RootExtensionDirectory, InternalName), True)
                     If manager.CurrentIOProvider.FileExists(Path.Combine(item, "info.skyext")) Then
                         Dim e = ExtensionInfo.Open(Path.Combine(item, "info.skyext"), manager.CurrentIOProvider)
                         e.IsInstalled = True
@@ -59,7 +63,7 @@ Namespace Extensions
         ''' </summary>
         ''' <param name="TempDir">Temporary directory that contains the extension's files.</param>
         Public Overridable Async Function InstallExtension(Extension As ExtensionInfo, TempDir As String) As Task(Of ExtensionInstallResult)
-            Await Core.Utilities.FileSystem.CopyDirectory(TempDir, Path.Combine(ExtensionDirectory, Extension.ID.ToString), CurrentIOProvider)
+            Await Core.Utilities.FileSystem.CopyDirectory(TempDir, GetExtensionDirectory(Extension), CurrentPluginManager.CurrentIOProvider)
             Return ExtensionInstallResult.Success
         End Function
 
@@ -68,7 +72,7 @@ Namespace Extensions
         ''' </summary>
         ''' <param name="Extension">Extension to uninstall</param>
         Public Overridable Function UninstallExtension(Extension As ExtensionInfo) As Task(Of ExtensionUninstallResult) Implements IExtensionCollection.UninstallExtension
-            CurrentIOProvider.DeleteDirectory(Path.Combine(ExtensionDirectory, Extension.ID.ToString))
+            CurrentPluginManager.CurrentIOProvider.DeleteDirectory(GetExtensionDirectory(Extension))
             Return Task.FromResult(ExtensionUninstallResult.Success)
         End Function
 

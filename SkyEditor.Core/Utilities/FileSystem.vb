@@ -62,13 +62,15 @@ Namespace Utilities
         End Function
 
         ''' <summary>
-        ''' Deletes the given directory and all files inside it.
+        ''' Deletes the given directory and all files inside it, if it exists.
         ''' </summary>
         ''' <param name="DirectoryName"></param>
         ''' <returns></returns>
         Public Shared Async Function DeleteDirectory(DirectoryName As String, provider As IOProvider) As Task
-            Await DeleteDirectoryContents(DirectoryName, provider)
-            provider.DeleteDirectory(DirectoryName)
+            If provider.DirectoryExists(DirectoryName) Then
+                Await DeleteDirectoryContents(DirectoryName, provider)
+                provider.DeleteDirectory(DirectoryName)
+            End If
         End Function
 
         ''' <summary>
