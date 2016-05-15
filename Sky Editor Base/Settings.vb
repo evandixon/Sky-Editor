@@ -1,6 +1,5 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.Utilities
-Imports SkyEditorBase.Interfaces
 Public Class SettingsManager
     Implements iSavable
     Implements iModifiable
@@ -149,7 +148,7 @@ Public Class SettingsManager
             Settings = New Dictionary(Of String, Object)
             If File.Settings IsNot Nothing Then
                 For Each item In File.Settings
-                    Dim t = Utilities.ReflectionHelpers.GetTypeFromName(item.Value.TypeName)
+                    Dim t = ReflectionHelpers.GetTypeByName(item.Value.TypeName, PluginManager.GetInstance)
                     If t IsNot Nothing Then
                         Dim obj = Json.Deserialize(t, item.Value.Value)
                         Settings.Add(item.Key, obj)

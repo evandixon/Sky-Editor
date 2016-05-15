@@ -1,5 +1,4 @@
-﻿Imports SkyEditorBase.EventArguments
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.UI
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Namespace UI

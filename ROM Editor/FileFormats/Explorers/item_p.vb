@@ -1,7 +1,4 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers
     Public Class item_p

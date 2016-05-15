@@ -3,7 +3,6 @@ Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase.Interfaces
 
 Namespace MenuActions
     Public Class FileSaveAll

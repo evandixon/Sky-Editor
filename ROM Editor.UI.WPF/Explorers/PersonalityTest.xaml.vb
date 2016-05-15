@@ -1,8 +1,5 @@
 ﻿Imports SkyEditorBase
 Imports ROMEditor.FileFormats
-Imports SkyEditorBase.Interfaces
-Imports System.Windows.Controls
-Imports ROMEditor
 Imports SkyEditorWPF.UI
 Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.IO

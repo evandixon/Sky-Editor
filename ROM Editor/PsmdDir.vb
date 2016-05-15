@@ -2,8 +2,6 @@
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
-Imports SkyEditorBase.Interfaces
-
 Public Class PsmdDir
     Implements IOpenableFile
     Implements IContainer(Of PokemonDataInfo)

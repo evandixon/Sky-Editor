@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase
 Public Module DeSmuMe
     Public Class DeSmuMeVersion
         Implements IComparable(Of DeSmuMeVersion)
@@ -46,7 +47,7 @@ Public Module DeSmuMe
         If IO.Directory.Exists(IO.Path.GetFileNameWithoutExtension(FilePath)) Then
             'Everything's fine then
         Else
-            SkyEditorBase.Utilities.Zip.UnZip(FilePath, FilePath.Replace(".zip", ""))
+            Zip.Unzip(FilePath, FilePath.Replace(".zip", ""))
         End If
     End Sub
     Function GetBestVersionExecutableName() As String

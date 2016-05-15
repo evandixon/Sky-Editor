@@ -3,12 +3,10 @@ Imports System.Text
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditorBase.EventArguments
-Imports SkyEditorBase.Interfaces
-Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core
-Imports SkyEditor.Core.IO
 Imports System.IO
+Imports SkyEditor.Core.Extensions
 
 Public Class PluginManager
     Inherits SkyEditor.Core.PluginManager
@@ -120,8 +118,8 @@ Public Class PluginManager
         'Next
 
         'Register plugin extension type, since we're about to use it to load more plugins
-        Me.RegisterTypeRegister(GetType(Extensions.ExtensionType))
-        Me.RegisterType(GetType(Extensions.ExtensionType), GetType(Extensions.PluginExtensionType))
+        Me.RegisterTypeRegister(GetType(ExtensionType))
+        Me.RegisterType(GetType(ExtensionType), GetType(Extensions.PluginExtensionType))
 
         'Note the core assembly name, so we don't accidentally try to load it again (seeing that it's already in the AppDomain).
         CoreAssemblyName = Core.GetType.Assembly.FullName
@@ -130,10 +128,10 @@ Public Class PluginManager
 
         'Look at the plugin extensions to find plugins.
         Dim pluginExtType As New Extensions.PluginExtensionType
-        For Each item In pluginExtType.GetInstalledExtensions
+        For Each item In pluginExtType.GetInstalledExtensions(Me)
             Dim extAssemblies As New List(Of String)
             For Each file In item.ExtensionFiles
-                extAssemblies.Add(Path.Combine(pluginExtType.GetExtensionDirectory(item), file))
+                extAssemblies.Add(Path.Combine(pluginExtType.ExtensionDirectory, item.ID.ToString, file))
             Next
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.dll"))
             'extAssemblies.AddRange(IO.Directory.GetFiles(pluginExtType.GetExtensionDirectory(item), "*.exe"))

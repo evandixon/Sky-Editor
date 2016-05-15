@@ -1,7 +1,6 @@
 ﻿Imports System.Windows
 Imports SkyEditor.SaveEditor
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace Controls

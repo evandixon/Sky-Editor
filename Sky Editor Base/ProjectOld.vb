@@ -55,7 +55,7 @@ Public Class ProjectOld
                 If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
                     Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, PluginManager.GetInstance)
                 Else
-                    Dim t = Utilities.ReflectionHelpers.GetTypeFromName(AssemblyQualifiedTypeName)
+                    Dim t = ReflectionHelpers.GetTypeByName(AssemblyQualifiedTypeName, PluginManager.GetInstance)
                     If t Is Nothing Then
                         Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, PluginManager.GetInstance)
                     Else
@@ -618,7 +618,7 @@ Public Class ProjectOld
             Throw New IO.FileNotFoundException("Could not find a file at the given filename.", Filename)
         End If
         Dim solutionInfo As ProjectFile = Json.DeserializeFromFile(Of ProjectFile)(Filename, New SkyEditor.Core.Windows.IOProvider)
-        Dim type As Type = Utilities.ReflectionHelpers.GetTypeFromName(solutionInfo.AssemblyQualifiedTypeName)
+        Dim type As Type = ReflectionHelpers.GetTypeByName(solutionInfo.AssemblyQualifiedTypeName, PluginManager.GetInstance)
         If type Is Nothing Then
             PluginHelper.Writeline($"Could not find project type ""{solutionInfo.AssemblyQualifiedTypeName}"".  Substituting a generic project.", LineType.Error)
             type = GetType(ProjectOld)
@@ -636,7 +636,7 @@ Public Class ProjectOld
         'Load Settings
         For Each item In File.Settings
             If Not Settings.ContainsKey(item.Key) Then
-                Dim type = Utilities.ReflectionHelpers.GetTypeFromName(item.Value.AssemblyQualifiedTypeName)
+                Dim type = ReflectionHelpers.GetTypeByName(item.Value.AssemblyQualifiedTypeName, PluginManager.GetInstance)
                 If type Is Nothing Then
                     PluginHelper.Writeline($"Could not find setting type ""{item.Value.AssemblyQualifiedTypeName}"".  Treating setting as an Object.")
                     type = GetType(Object)

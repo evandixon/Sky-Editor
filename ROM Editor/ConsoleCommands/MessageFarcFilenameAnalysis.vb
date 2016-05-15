@@ -13,7 +13,7 @@ Namespace ConsoleCommands
                 If IO.File.Exists(Arguments(0)) Then
                     If IO.Directory.Exists(Arguments(1)) Then
                         Dim tmpDirectory = IO.Path.Combine(Environment.CurrentDirectory, "tmp", "farcAnalysis")
-                        Await Utilities.FileSystem.ReCreateDirectory(tmpDirectory)
+                        Await FileSystem.ReCreateDirectory(tmpDirectory, CurrentPluginManager.CurrentIOProvider)
 
                         'Extract the farc
                         Dim f As New FarcF5

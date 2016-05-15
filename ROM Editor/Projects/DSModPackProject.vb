@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 
 Namespace Projects
     Public Class DSModPackProject
@@ -124,7 +123,7 @@ Namespace Projects
             Dim modpackToolsPatchersDir = GetPatchersDir()
             Dim modsSourceDir = GetSourceModsDir()
 
-            Await Utilities.FileSystem.ReCreateDirectory(modpackDir)
+            Await FileSystem.ReCreateDirectory(modpackDir, PluginManager.GetInstance.CurrentIOProvider)
 
             If Not IO.Directory.Exists(modpackModsDir) Then
                 IO.Directory.CreateDirectory(modpackModsDir)
@@ -139,7 +138,7 @@ Namespace Projects
                 IO.Directory.CreateDirectory(modsSourceDir)
             End If
 
-            Await Utilities.FileSystem.ReCreateDirectory(OutputDir)
+            Await FileSystem.ReCreateDirectory(OutputDir, PluginManager.GetInstance.CurrentIOProvider)
 
             'Copy external mods
             For Each item In IO.Directory.GetFiles(modsSourceDir)
@@ -198,7 +197,7 @@ Namespace Projects
             IO.File.WriteAllText(IO.Path.Combine(modpackModsDir, "Modpack Info"), Json.Serialize(Me.Info))
 
             '-Zip it
-            Utilities.Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
+            Zip.Zip(modpackDir, IO.Path.Combine(OutputDir, Me.Info.Name & " " & Me.Info.Version & "-" & patcherVersion & ".zip"))
 
             'Apply patch
             Me.BuildProgress = 0.9

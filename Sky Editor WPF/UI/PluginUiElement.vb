@@ -1,7 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase.Interfaces
 
 Namespace UI
     Public Class PluginUiElement

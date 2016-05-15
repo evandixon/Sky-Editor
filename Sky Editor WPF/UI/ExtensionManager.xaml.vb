@@ -1,15 +1,17 @@
 ﻿Imports System.Reflection
 Imports System.Windows.Forms
+Imports SkyEditor.Core.Extensions
+Imports SkyEditorBase.Extensions
 
 Namespace UI
     Public Class ExtensionManager
         Inherits ObjectControl
 
-        Private Function GetTVItem(Collection As SkyEditorBase.Extensions.IExtensionCollection)
+        Private Function GetTVItem(Collection As IExtensionCollection)
             Dim item As New TreeViewItem
             item.Header = Collection.Name
             item.Tag = Collection
-            For Each child In Collection.GetChildCollections
+            For Each child In Collection.GetChildCollections(PluginManager.GetInstance)
                 item.Items.Add(GetTVItem(child))
             Next
             Return item
@@ -18,7 +20,7 @@ Namespace UI
         Private Sub ExtensionManager_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = My.Resources.Language.ExtensionManager
             tvCategories.Items.Clear()
-            tvCategories.Items.Add(GetTVItem(New SkyEditorBase.Extensions.InstalledExtensionCollection))
+            tvCategories.Items.Add(GetTVItem(New InstalledExtensionCollection))
         End Sub
 
         Private Sub tvCategories_SelectedItemChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Object)) Handles tvCategories.SelectedItemChanged
@@ -27,18 +29,18 @@ Namespace UI
 
         Sub RefreshCurrentExtensionList()
             If tvCategories.SelectedItem IsNot Nothing Then
-                lvExtensions.ItemsSource = DirectCast(tvCategories.SelectedItem.Tag, SkyEditorBase.Extensions.IExtensionCollection).GetExtensions
+                lvExtensions.ItemsSource = DirectCast(tvCategories.SelectedItem.Tag, IExtensionCollection).GetExtensions(PluginManager.GetInstance)
             End If
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SkyEditorBase.Extensions.ExtensionHelper)}
+            Return {GetType(ExtensionHelper)}
         End Function
 
         Private Sub lvExtensions_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lvExtensions.SelectionChanged
             If lvExtensions.SelectedItem IsNot Nothing Then
                 btnToggleInstall.Visibility = Visibility.Visible
-                Dim info = DirectCast(lvExtensions.SelectedItem, SkyEditorBase.Extensions.ExtensionInfo)
+                Dim info = DirectCast(lvExtensions.SelectedItem, ExtensionInfo)
                 If info.IsInstalled Then
                     btnToggleInstall.Content = My.Resources.Language.Uninstall
                 Else
@@ -53,7 +55,7 @@ Namespace UI
             Dim o As New OpenFileDialog
             o.Filter = $"{My.Resources.Language.ZipFiles} (*.zip)|*.zip|{My.Resources.Language.AllFiles} (*.*)|*.*"
             If o.ShowDialog = DialogResult.OK Then
-                Dim result = Await SkyEditorBase.Extensions.ExtensionHelper.InstallExtension(o.FileName)
+                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, PluginManager.GetInstance)
                 DisplayInstallResultMessage(result)
                 RefreshCurrentExtensionList()
             End If
@@ -61,8 +63,8 @@ Namespace UI
 
         Private Async Sub btnToggleInstall_Click(sender As Object, e As RoutedEventArgs) Handles btnToggleInstall.Click
             If tvCategories.SelectedItem IsNot Nothing AndAlso lvExtensions.SelectedItem IsNot Nothing Then
-                Dim repo = DirectCast(tvCategories.SelectedItem.Tag, SkyEditorBase.Extensions.IExtensionCollection)
-                Dim info = DirectCast(lvExtensions.SelectedItem, SkyEditorBase.Extensions.ExtensionInfo)
+                Dim repo = DirectCast(tvCategories.SelectedItem.Tag, IExtensionCollection)
+                Dim info = DirectCast(lvExtensions.SelectedItem, ExtensionInfo)
                 If info.IsInstalled Then
                     DisplayUninstallResultMessage(Await repo.UninstallExtension(info))
                 Else
@@ -71,28 +73,28 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub DisplayInstallResultMessage(Result As SkyEditorBase.Extensions.ExtensionInstallResult)
+        Private Sub DisplayInstallResultMessage(Result As ExtensionInstallResult)
             Select Case Result
-                Case SkyEditorBase.Extensions.ExtensionInstallResult.Success
+                Case ExtensionInstallResult.Success
                     MessageBox.Show(My.Resources.Language.ExtensionInstallSuccess)
-                Case SkyEditorBase.Extensions.ExtensionInstallResult.RestartRequired
+                Case ExtensionInstallResult.RestartRequired
                     If MessageBox.Show(My.Resources.Language.ExtensionInstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
                         Redistribution.RedistributionHelpers.RequestRestartProgram()
                     End If
-                Case SkyEditorBase.Extensions.ExtensionInstallResult.InvalidFormat
+                Case ExtensionInstallResult.InvalidFormat
                     MessageBox.Show(My.Resources.Language.ExtensionInstallInvalid, My.Resources.Language.MainTitle)
-                Case SkyEditorBase.Extensions.ExtensionInstallResult.UnsupportedFormat
+                Case ExtensionInstallResult.UnsupportedFormat
                     MessageBox.Show(My.Resources.Language.ExtensionInstallUnsupported, My.Resources.Language.MainTitle)
                 Case Else
                     MessageBox.Show(My.Resources.Language.ExtensionInstallUnknownFailure, My.Resources.Language.MainTitle)
             End Select
         End Sub
 
-        Private Sub DisplayUninstallResultMessage(Result As SkyEditorBase.Extensions.ExtensionUninstallResult)
+        Private Sub DisplayUninstallResultMessage(Result As ExtensionUninstallResult)
             Select Case Result
-                Case SkyEditorBase.Extensions.ExtensionUninstallResult.Success
+                Case ExtensionUninstallResult.Success
                     MessageBox.Show(My.Resources.Language.ExtensionUninstallSuccess)
-                Case SkyEditorBase.Extensions.ExtensionUninstallResult.RestartRequired
+                Case ExtensionUninstallResult.RestartRequired
                     If MessageBox.Show(My.Resources.Language.ExtensionUninstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
                         Redistribution.RedistributionHelpers.RequestRestartProgram()
                     End If

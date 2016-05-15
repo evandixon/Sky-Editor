@@ -244,6 +244,10 @@ Public Class PluginManager
         End If
     End Function
 
+    Public Function GetRegisteredTypes(Of T)() As IEnumerable(Of TypeInfo)
+        Return GetRegisteredTypes(GetType(T).GetTypeInfo)
+    End Function
+
     ''' <summary>
     ''' Returns an IEnumerable of new instances of all the registered types that inherit or implement the given BaseType.
     ''' </summary>

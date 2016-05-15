@@ -3,12 +3,17 @@ Imports Microsoft.VisualBasic.Devices
 
 Public Class IOProvider
     Inherits SkyEditor.Core.IO.IOProvider
+
     Public Overrides Sub CopyFile(sourceFilename As String, destinationFilename As String)
         File.Copy(sourceFilename, destinationFilename, True)
     End Sub
 
     Public Overrides Sub CreateDirectory(path As String)
         Directory.CreateDirectory(path)
+    End Sub
+
+    Public Overrides Sub DeleteDirectory(path As String)
+        Directory.Delete(path, True)
     End Sub
 
     Public Overrides Sub DeleteFile(filename As String)
@@ -33,6 +38,14 @@ Public Class IOProvider
 
     Public Overrides Function fileExists(Filename As String) As Boolean
         Return File.Exists(Filename)
+    End Function
+
+    Public Overrides Function GetDirectories(path As String, topDirectoryOnly As Boolean) As String()
+        If topDirectoryOnly Then
+            Return Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly)
+        Else
+            Return Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
+        End If
     End Function
 
     Public Overrides Function GetFileLength(filename As String) As Long

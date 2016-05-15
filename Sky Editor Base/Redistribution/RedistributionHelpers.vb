@@ -1,8 +1,11 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Threading.Tasks
+Imports SkyEditor
 Imports SkyEditor.Core
+Imports SkyEditor.Core.Extensions
 Imports SkyEditor.Core.Utilities
+Imports SkyEditorBase.Extensions
 
 Namespace Redistribution
     'Legacy code to deal with the old manor of handling plugins, some of which will still be used for plugin development.
@@ -83,7 +86,7 @@ Namespace Redistribution
         ''' <param name="Plugins">Definitions of the plugins to pack.</param>
         ''' <param name="DestinationFilename">File path of the zip to create.</param>
         ''' <returns></returns>
-        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As Extensions.ExtensionInfo) As Task
+        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As ExtensionInfo) As Task
             Dim tempDir = Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
             Dim ToCopy As New List(Of String)
             For Each plugin In Plugins
@@ -124,14 +127,14 @@ Namespace Redistribution
             Next
 
             'Copy temporary files
-            Await Utilities.FileSystem.ReCreateDirectory(tempDir)
+            Await Core.Utilities.FileSystem.ReCreateDirectory(tempDir, PluginManager.GetInstance.CurrentIOProvider)
             For Each filePath In ToCopy
                 If File.Exists(filePath) Then
                     File.Copy(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), True)
                 Else
                     'It's probably a directory.
                     If Directory.Exists(filePath) Then
-                        Await SkyEditorBase.Utilities.FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir))
+                        Await Core.Utilities.FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), PluginManager.GetInstance.CurrentIOProvider)
                         'Else
                         'Guess not.  Do nothing.
                     End If
@@ -139,16 +142,16 @@ Namespace Redistribution
             Next
 
             'Create the extension info file
-            Info.ExtensionTypeName = GetType(Extensions.PluginExtensionType).AssemblyQualifiedName
+            Info.ExtensionTypeName = GetType(PluginExtensionType).AssemblyQualifiedName
             Info.IsEnabled = True
             For Each item In Plugins
                 Info.ExtensionFiles.Add(Path.GetFileName(item.GetType.Assembly.Location))
             Next
-            Info.Save(Path.Combine(tempDir, "info.skyext"))
+            Info.Save(Path.Combine(tempDir, "info.skyext"), PluginManager.GetInstance.CurrentIOProvider)
 
             'Then zip it
-            Utilities.Zip.Zip(tempDir, DestinationFilename)
-            Await Utilities.FileSystem.DeleteDirectory(tempDir)
+            Core.Utilities.Zip.Zip(tempDir, DestinationFilename)
+            Await Core.Utilities.FileSystem.DeleteDirectory(tempDir, PluginManager.GetInstance.CurrentIOProvider)
         End Function
 
         ''' <summary>
@@ -162,7 +165,7 @@ Namespace Redistribution
                 If File.Exists(item) Then
                     File.Delete(item)
                 ElseIf Directory.Exists(item) Then
-                    Await Utilities.FileSystem.DeleteDirectory(item)
+                    Await Core.Utilities.FileSystem.DeleteDirectory(item, PluginManager.GetInstance.CurrentIOProvider)
                 End If
             Next
             File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")

@@ -2,7 +2,6 @@
 Imports ROMEditor
 Imports ROMEditor.Projects
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace ObjectControls

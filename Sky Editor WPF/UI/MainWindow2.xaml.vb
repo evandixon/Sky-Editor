@@ -2,7 +2,6 @@
 Imports System.Globalization
 Imports System.Reflection
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase.Interfaces
 Imports Xceed.Wpf.AvalonDock.Layout
 Namespace UI
     Public Class MainWindow

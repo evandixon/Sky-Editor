@@ -8,7 +8,7 @@ Public Class Library
     ''' Represents the serialized form of a Library.
     ''' </summary>
     Protected Class LibraryFile
-        Public Property ID As String
+        Public Property ID As Guid
         Public Property Name As String
         Public Property RelativePath As String
         Public Property LibraryTypeName As String

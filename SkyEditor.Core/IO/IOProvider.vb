@@ -17,7 +17,7 @@
         ''' <summary>
         ''' Determines whether the specified directory exists.
         ''' </summary>
-        ''' <param name="directory">Full path of the directory.</param>
+        ''' <param name="path">Full path of the directory.</param>
         ''' <returns></returns>
         Public MustOverride Function DirectoryExists(path As String) As Boolean
 
@@ -28,13 +28,21 @@
         Public MustOverride Sub CreateDirectory(path As String)
 
         ''' <summary>
-        ''' Gets the full paths of the files in the directory in the given path.
+        ''' Gets the full paths of the files in the directory at the given path.
         ''' </summary>
         ''' <param name="path">Full path of the directory from which to get the files.</param>
         ''' <param name="searchPattern">The search string to match against the names of files in path. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but doesn't support regular expressions.</param>
         ''' <param name="topDirectoryOnly">True to search only the top directory.  False to search all child directories too.</param>
         ''' <returns></returns>
         Public MustOverride Function GetFiles(path As String, searchPattern As String, topDirectoryOnly As Boolean) As String()
+
+        ''' <summary>
+        ''' Gets the full paths of the directories in the directory at the given path
+        ''' </summary>
+        ''' <param name="path">Full path of the directory from which to get the files.</param>
+        ''' <param name="topDirectoryOnly">True to search only the top directory.  False to search all child directories too.</param>
+        ''' <returns></returns>
+        Public MustOverride Function GetDirectories(path As String, topDirectoryOnly As Boolean) As String()
 
         ''' <summary>
         ''' Reads a file from disk, and returns its contents as a byte array.
@@ -76,6 +84,12 @@
         ''' </summary>
         ''' <param name="filename">Full path of the file.</param>
         Public MustOverride Sub DeleteFile(filename As String)
+
+        ''' <summary>
+        ''' Deletes the directory at the given path, and all of its contents.
+        ''' </summary>
+        ''' <param name="path"></param>
+        Public MustOverride Sub DeleteDirectory(path As String)
 
         ''' <summary>
         ''' Creates a temporary, blank file, and returns the filename.

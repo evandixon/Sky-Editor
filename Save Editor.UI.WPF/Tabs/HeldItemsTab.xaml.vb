@@ -1,7 +1,6 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditor.SaveEditor
 Imports SkyEditorBase.Utilities
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace Tabs

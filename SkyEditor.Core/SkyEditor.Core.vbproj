@@ -89,6 +89,12 @@
   <ItemGroup>
     <Compile Include="ConsoleCommands\ConsoleCommand.vb" />
     <Compile Include="ConsoleCommands\ConsoleCommandAsync.vb" />
+    <Compile Include="Extensions\ExtensionInstallResult.vb" />
+    <Compile Include="Extensions\ExtensionType.vb" />
+    <Compile Include="Extensions\ExtensionUninstallResult.vb" />
+    <Compile Include="Extensions\IExtensionCollection.vb" />
+    <Compile Include="Extensions\ExtensionInfo.vb" />
+    <Compile Include="Extensions\InstalledExtensionCollection.vb" />
     <Compile Include="IO\DetectableFileTypeDetector.vb" />
     <Compile Include="IO\DirectoryTypeDetectionResult.vb" />
     <Compile Include="IO\FileTypeDetectionResult.vb" />
@@ -109,7 +115,7 @@
     <Compile Include="Legacy Interfaces\iGenericFile.vb" />
     <Compile Include="Legacy Interfaces\iModifiable.vb" />
     <Compile Include="Legacy Interfaces\iNamed.vb" />
-    <Compile Include="UI\iObjectControl.vb" />
+    <Compile Include="UI\IObjectControl.vb" />
     <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
     <Compile Include="IO\IOnDisk.vb" />
     <Compile Include="IO\IOpenableFile.vb" />
@@ -124,18 +130,26 @@
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="PluginManager.vb" />
     <Compile Include="TypeRegisteredEventArgs.vb" />
+    <Compile Include="UI\ITargetedControl.vb" />
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
     <Compile Include="UI\UIHelper.vb" />
+    <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />
+    <Compile Include="Utilities\FileSystem.vb" />
     <Compile Include="Utilities\GenericArrayOperations.vb" />
     <Compile Include="Utilities\Hex.vb" />
     <Compile Include="Utilities\ParsedAssemblyQualifiedName.vb" />
     <Compile Include="Utilities\ReflectionHelpers.vb" />
     <Compile Include="Utilities\Json.vb" />
+    <Compile Include="Utilities\Zip.vb" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\11\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>

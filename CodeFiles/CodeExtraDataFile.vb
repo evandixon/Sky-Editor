@@ -4,8 +4,7 @@ Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
-Imports SkyEditorBase.Utilities
+
 ''' <summary>
 ''' An instance of CodeExtraData that reads its information from disk.
 ''' </summary>

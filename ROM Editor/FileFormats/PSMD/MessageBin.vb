@@ -4,7 +4,6 @@ Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 
 Namespace FileFormats.PSMD
     ''' <summary>

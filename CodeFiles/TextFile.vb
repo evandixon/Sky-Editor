@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 
 Public Class TextFile
     Implements iCreatableFile

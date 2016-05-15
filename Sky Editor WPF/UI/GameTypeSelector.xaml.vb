@@ -1,6 +1,6 @@
 ﻿Imports System.Reflection
 Imports SkyEditor.Core.Interfaces
-Imports SkyEditorBase.Interfaces
+
 Namespace UI
     Public Class GameTypeSelector
         Implements iGameTypeSelector

@@ -3,7 +3,6 @@ Imports System.ComponentModel
 Imports System.Timers
 Imports System.Windows.Controls
 Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace Explorers

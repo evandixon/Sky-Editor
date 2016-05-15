@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Windows.Forms
 Imports SkyEditor.Core
+Imports SkyEditor.Core.Extensions
 Imports SkyEditorBase.Redistribution
 
 Namespace UI
@@ -104,7 +105,7 @@ Namespace UI
                 plugins.Add(item.ContainedDefinition)
             Next
             If plugins.Count > 0 Then
-                Dim info As New SkyEditorBase.Extensions.ExtensionInfo
+                Dim info As New ExtensionInfo
                 Dim first = plugins.First
                 info.Name = first.PluginName
                 info.Author = first.PluginAuthor

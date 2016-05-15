@@ -1,10 +1,5 @@
-﻿Imports System.Windows.Controls
-Imports System.Windows.Media
-Imports ROMEditor
-Imports ROMEditor.FileFormats
+﻿Imports System.Windows.Media
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditorBase
-Imports SkyEditorBase.Interfaces
 Imports SkyEditorWPF.UI
 
 Namespace ObjectControls

@@ -175,7 +175,7 @@ Namespace Projects
                         End If
                         IO.File.Copy(source, dest, True)
                     ElseIf IO.Directory.Exists(source) Then
-                        Await Utilities.FileSystem.CopyDirectory(source, dest, True)
+                        Await FileSystem.CopyDirectory(source, dest, PluginManager.GetInstance.CurrentIOProvider)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
                     Dim a As New AsyncFor(My.Resources.Language.LoadingCopyingFiles)
@@ -199,7 +199,7 @@ Namespace Projects
                                            End If
                                        End Sub, filesToCopy)
                 Else
-                    Await Utilities.FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, True)
+                    Await FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, PluginManager.GetInstance.CurrentIOProvider)
                 End If
             Else
                 'Since there's no source project, we'll leave it up to the user to supply the needed files.
@@ -346,7 +346,7 @@ Namespace Projects
                 actions.UpdateUrl = Homepage
 
                 '-Copy and write files
-                Await Utilities.FileSystem.ReCreateDirectory(modTemp)
+                Await FileSystem.ReCreateDirectory(modTemp, PluginManager.GetInstance.CurrentIOProvider)
 
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), Json.Serialize(actions))
 
@@ -434,7 +434,7 @@ Namespace Projects
                 If Not IO.Directory.Exists(modOutput) Then
                     IO.Directory.CreateDirectory(modOutput)
                 End If
-                SkyEditorBase.Utilities.Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
+                Zip.Zip(modTemp, GetModOutputFilename(sourceProjectName))
 
 
             Next

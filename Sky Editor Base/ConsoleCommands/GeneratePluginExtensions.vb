@@ -1,5 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditor.Core.Extensions
 Imports SkyEditorBase.Redistribution
 
 Namespace ConsoleCommands
@@ -11,7 +12,7 @@ Namespace ConsoleCommands
             For Each item In manager.Plugins
                 Dim a = item.GetType.Assembly
                 If Not manager.IsAssemblyDependant(a) Then
-                    Dim info As New SkyEditorBase.Extensions.ExtensionInfo
+                    Dim info As New ExtensionInfo
                     info.Name = item.PluginName
                     info.Author = item.PluginAuthor
                     info.Version = item.GetType.Assembly.GetName.Version.ToString

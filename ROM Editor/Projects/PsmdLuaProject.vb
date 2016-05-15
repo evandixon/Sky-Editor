@@ -117,7 +117,7 @@ Validate:
                 End If
 
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await Utilities.FileSystem.ReCreateDirectory(destDir)
+                Await FileSystem.ReCreateDirectory(destDir, PluginManager.GetInstance.CurrentIOProvider)
 
                 Dim farc As New FarcF5
                 Await farc.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
@@ -135,8 +135,8 @@ Validate:
                 End If
 
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await Utilities.FileSystem.ReCreateDirectory(destDir)
-                Await Utilities.FileSystem.CopyDirectory(item, destDir, True)
+                Await FileSystem.ReCreateDirectory(destDir, PluginManager.GetInstance.CurrentIOProvider)
+                Await FileSystem.CopyDirectory(item, destDir, PluginManager.GetInstance.CurrentIOProvider)
             Next
         End Function
 
@@ -226,7 +226,7 @@ Validate:
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count))
                                        Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_en", "")))
-                                       Await Utilities.FileSystem.CopyDirectory(dirs(count), newFilePath)
+                                       Await FileSystem.CopyDirectory(dirs(count), newFilePath, PluginManager.GetInstance.CurrentIOProvider)
                                    Next
                                    Me.BuildProgress = 1
                                End Function)

@@ -111,12 +111,12 @@ Namespace Roms
             Await n3dsUpdateDirTask
             Await dlPlayDirTask
 
-            Utilities.FileSystem.DeleteFile(exefsBinPath)
-            Utilities.FileSystem.DeleteFile(romfsBinPath)
-            Utilities.FileSystem.DeleteFile(manualBinPath)
-            Utilities.FileSystem.DeleteFile(dlPlayBinPath)
-            Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath)
-            Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath)
+            Utilities.FileSystem.DeleteFile(exefsBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(romfsBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(manualBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(dlPlayBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
             PluginHelper.SetLoadingStatusFinished()
         End Function
 

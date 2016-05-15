@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core.Extensions
 
 Namespace UI
     Public Class ExtensionInfoControl
@@ -6,7 +7,7 @@ Namespace UI
 
         Public Overrides Sub RefreshDisplay()
             MyBase.RefreshDisplay()
-            With GetEditingObject(Of SkyEditorBase.Extensions.ExtensionInfo)()
+            With GetEditingObject(Of ExtensionInfo)()
                 txtAuthor.Text = .Author
                 txtDescription.Text = .Description
                 txtName.Text = .Name
@@ -16,7 +17,7 @@ Namespace UI
 
         Public Overrides Sub UpdateObject()
             MyBase.UpdateObject()
-            With GetEditingObject(Of SkyEditorBase.Extensions.ExtensionInfo)()
+            With GetEditingObject(Of ExtensionInfo)()
                 .Author = txtAuthor.Text
                 .Description = txtDescription.Text
                 .Name = txtName.Text
@@ -33,7 +34,7 @@ Namespace UI
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SkyEditorBase.Extensions.ExtensionInfo)}
+            Return {GetType(ExtensionInfo)}
         End Function
     End Class
 End Namespace

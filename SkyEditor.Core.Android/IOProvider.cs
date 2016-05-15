@@ -22,6 +22,11 @@ namespace SkyEditor.Core.Android
             Directory.CreateDirectory(path);
         }
 
+        public override void DeleteDirectory(string path)
+        {
+            Directory.Delete(path, true);
+        }
+
         public override void DeleteFile(string filename)
         {
             File.Delete(filename);
@@ -35,6 +40,18 @@ namespace SkyEditor.Core.Android
         public override bool FileExists(string filename)
         {
             return File.Exists(filename);
+        }
+
+        public override string[] GetDirectories(string path, bool topDirectoryOnly)
+        {
+            if (topDirectoryOnly)
+            {
+                return Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            }
+            else
+            {
+                return Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+            }
         }
 
         public override long GetFileLength(string filename)

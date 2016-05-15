@@ -1,5 +1,4 @@
-﻿Imports SkyEditorBase.Interfaces
-
+﻿
 Namespace ARDS
     ''' <summary>
     ''' Interface a class must implement in order to be loaded as an ARDS plugin.

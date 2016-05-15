@@ -1,7 +1,8 @@
-﻿Imports SkyEditorBase.Interfaces
+﻿Imports SkyEditor.Core.UI
+
 Namespace UI
     Public Class SolutionBuildProgress
-        Implements Interfaces.ITargetedControl
+        Implements ITargetedControl
 
         Private Property CurrentSolution As SolutionOld
 
@@ -12,7 +13,7 @@ Namespace UI
             Set(value As String)
                 Dim old = _header
                 _header = value
-                RaiseEvent HeaderChanged(Me, New EventArguments.HeaderUpdatedEventArgs With {.NewValue = value, .OldValue = old})
+                RaiseEvent HeaderChanged(Me, New HeaderUpdatedEventArgs With {.NewValue = value, .OldValue = old})
             End Set
         End Property
         Dim _header As String
@@ -23,7 +24,7 @@ Namespace UI
             End Get
             Set(value As Boolean)
                 _isVisible = value
-                RaiseEvent VisibilityChanged(Me, New EventArguments.VisibilityUpdatedEventArgs With {.IsVisible = value})
+                RaiseEvent VisibilityChanged(Me, New VisibilityUpdatedEventArgs With {.IsVisible = value})
             End Set
         End Property
         Dim _isVisible As Boolean
