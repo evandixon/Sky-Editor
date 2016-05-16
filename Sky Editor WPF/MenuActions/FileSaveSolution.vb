@@ -10,8 +10,8 @@ Namespace MenuActions
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item As SolutionOld In Targets
-                item.Save()
-                item.SaveAllProjects()
+                item.Save(PluginManager.GetInstance.CurrentIOProvider)
+                item.SaveAllProjects(PluginManager.GetInstance.CurrentIOProvider)
             Next
             Return Task.CompletedTask
         End Function

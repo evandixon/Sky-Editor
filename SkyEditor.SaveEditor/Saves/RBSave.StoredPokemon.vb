@@ -235,18 +235,18 @@ Namespace Saves
                 Next
             End Function
 
-            Public Sub Save() Implements iSavable.Save
-                Save(Filename)
+            Public Sub Save(provider As IOProvider) Implements ISavable.Save
+                Save(Filename, provider)
             End Sub
 
-            Public Sub Save(Filename As String) Implements ISavableAs.Save
+            Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
                 Dim toSave As New BinaryFile()
                 toSave.CreateFile(IO.Path.GetFileNameWithoutExtension(Filename))
                 toSave.Bits.Bits.AddRange(Me.Bits)
                 For i = 1 To 8 - (Length Mod 8)
                     toSave.Bits.Bits.Add(0)
                 Next
-                toSave.Save(Filename)
+                toSave.Save(Filename, provider)
             End Sub
         End Class
         Public Property StoredPokemon(Index As Integer) As StoredPkm

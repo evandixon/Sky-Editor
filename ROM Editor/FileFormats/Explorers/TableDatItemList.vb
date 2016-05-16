@@ -28,7 +28,7 @@ Namespace FileFormats.Explorers
                 Next
             End If
         End Sub
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Me.Length = 2 + (Items.Count * 4)
             RawData(0, 2) = BitConverter.GetBytes(Items.Count)
             For count As Integer = 0 To Items.Count - 1
@@ -39,7 +39,7 @@ Namespace FileFormats.Explorers
                 End If
                 RawData(count * 4 + 2, 2) = BitConverter.GetBytes(Items(count).ItemID)
             Next
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
     End Class
 

@@ -159,7 +159,6 @@
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectBuildStatusChanged.vb" />
     <Compile Include="EventArguments\ProjectFileAddedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectFileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\ProjectRemovedEventArgs.vb" />
@@ -172,7 +171,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
-    <Compile Include="Solution.vb" />
     <Compile Include="Utilities\AssemblyReflectionManager.vb" />
     <Compile Include="Utilities\AssemblyReflectionProxy.vb" />
     <Compile Include="PluginHelper.vb" />

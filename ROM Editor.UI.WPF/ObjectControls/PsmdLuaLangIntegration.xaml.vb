@@ -48,7 +48,7 @@ Public Class PsmdLuaLangIntegration
 
     Public Overrides Sub UpdateObject()
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).Save()
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).Save(PluginManager.GetInstance.CurrentIOProvider)
         Next
     End Sub
 

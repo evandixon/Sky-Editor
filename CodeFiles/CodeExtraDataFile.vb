@@ -62,13 +62,13 @@ Public Class CodeExtraDataFile
         Return out
     End Function
 
-    Public Sub Save() Implements iSavable.Save
-        Save(Filename)
+    Public Sub Save(provider As IOProvider) Implements ISavable.Save
+        Save(Filename, provider)
     End Sub
 
-    Public Sub Save(Filename As String) Implements ISavableAs.Save
+    Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
         Dim j As New JsonStructure With {.Database = Me.Database, .AutoCompleteChars = Me.AutoCompleteChars}
-        Json.SerializeToFile(Filename, j, New SkyEditor.Core.Windows.IOProvider)
+        Json.SerializeToFile(Filename, j, provider)
     End Sub
 
     Public Sub New(Filename As String)

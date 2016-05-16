@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace UI
@@ -24,12 +25,12 @@ Namespace UI
                 End If
             End Get
             Set(value As Object)
-                If _object IsNot Nothing AndAlso TypeOf _object Is iModifiable Then
-                    RemoveHandler DirectCast(_object, iModifiable).Modified, AddressOf OnModified
+                If _object IsNot Nothing AndAlso TypeOf _object Is INotifyModified Then
+                    RemoveHandler DirectCast(_object, INotifyModified).Modified, AddressOf OnModified
                 End If
                 _object = value
-                If TypeOf value Is iModifiable Then
-                    AddHandler DirectCast(value, iModifiable).Modified, AddressOf OnModified
+                If TypeOf value Is INotifyModified Then
+                    AddHandler DirectCast(value, INotifyModified).Modified, AddressOf OnModified
                 End If
                 Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, PluginManager.GetInstance)
                 If objControl IsNot Nothing Then

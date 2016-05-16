@@ -76,16 +76,16 @@ Namespace IO
 
 #Region "iSaveableFile support"
 
-        Public Sub Save(Filename As String) Implements ISavableAs.Save
+        Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
             Dim c As New JsonContainer(Of T)
             c.ContainedObject = Me.ContainedObject
             c.ContainedTypeName = Me.GetType.AssemblyQualifiedName 'GetType(T).AssemblyQualifiedName
-            Json.SerializeToFile(Filename, c, CurrentIOProvider)
+            Json.SerializeToFile(Filename, c, provider)
             RaiseFileSaved(Me, New EventArgs)
         End Sub
 
-        Public Sub Save() Implements iSavable.Save
-            Save(Me.Filename)
+        Public Sub Save(provider As IOProvider) Implements ISavable.Save
+            Save(Me.Filename, provider)
         End Sub
 
         Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved

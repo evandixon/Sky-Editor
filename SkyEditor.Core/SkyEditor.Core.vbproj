@@ -110,6 +110,8 @@
     <Compile Include="IO\IOHelper.vb" />
     <Compile Include="IO\ObjectFile.vb" />
     <Compile Include="IO\ObjectFileDetector.vb" />
+    <Compile Include="IO\Project.vb" />
+    <Compile Include="IO\ProjectBuildStatusChanged.vb" />
     <Compile Include="ISettingsProvider.vb" />
     <Compile Include="SettingsProvider.vb" />
     <Compile Include="Settings\ISettingsProviderExtensions.vb" />
@@ -118,6 +120,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SettingNames.resx</DependentUpon>
     </Compile>
+    <Compile Include="IO\Solution.vb" />
     <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="CoreSkyEditorPlugin.vb" />
@@ -128,14 +131,14 @@
     <Compile Include="IO\IDetectableFileType.vb" />
     <Compile Include="Legacy Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Legacy Interfaces\iGenericFile.vb" />
-    <Compile Include="Legacy Interfaces\iModifiable.vb" />
+    <Compile Include="IO\INotifyModified.vb" />
     <Compile Include="Legacy Interfaces\iNamed.vb" />
     <Compile Include="UI\IObjectControl.vb" />
     <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
     <Compile Include="IO\IOnDisk.vb" />
     <Compile Include="IO\IOpenableFile.vb" />
-    <Compile Include="Legacy Interfaces\iSavable.vb" />
-    <Compile Include="Legacy Interfaces\ISavableAs.vb" />
+    <Compile Include="IO\iSavable.vb" />
+    <Compile Include="IO\ISavableAs.vb" />
     <Compile Include="IO\IOProvider.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -148,6 +151,7 @@
     <Compile Include="UI\ITargetedControl.vb" />
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
+    <Compile Include="UI\UIController.vb" />
     <Compile Include="UI\UIHelper.vb" />
     <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />

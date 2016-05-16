@@ -123,12 +123,12 @@ Public Class SettingsProvider
     ''' Saves the SettingsProvider to the filename it was loaded with.
     ''' </summary>
     ''' <exception cref="ArgumentNullException">Thrown if SettingsProvider.Filename is null.</exception>
-    Public Sub Save() Implements ISettingsProvider.Save
+    Public Sub Save(provider As IOProvider) Implements ISettingsProvider.Save
         If String.IsNullOrEmpty(Filename) Then
             Throw New ArgumentNullException(NameOf(Filename))
         End If
 
-        CurrentPluginManager.CurrentIOProvider.WriteAllText(Me.Filename, Me.Serialize)
+        provider.WriteAllText(Me.Filename, Me.Serialize)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 

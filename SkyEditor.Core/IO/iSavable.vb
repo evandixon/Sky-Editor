@@ -1,12 +1,12 @@
-﻿Namespace Interfaces
+﻿Namespace IO
     ''' <summary>
     ''' Marks a class that supports saving.
     ''' </summary>
-    Public Interface iSavable
+    Public Interface ISavable
         ''' <summary>
         ''' Saves the class to the last filename.
         ''' </summary>
-        Sub Save()
+        Sub Save(provider As IOProvider)
         ''' <summary>
         ''' Raised when the file is saved.
         ''' </summary>

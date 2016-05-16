@@ -29,15 +29,15 @@ Namespace MenuActions
                             End If
 
                             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                                DirectCast(sav, ISavableAs).Save(SaveFileDialog1.FileName)
+                                DirectCast(sav, ISavableAs).Save(SaveFileDialog1.FileName, PluginManager.GetInstance.CurrentIOProvider)
                             Else
-                                sav.Save()
+                                sav.Save(PluginManager.GetInstance.CurrentIOProvider)
                             End If
                         Else
-                            sav.Save()
+                            sav.Save(PluginManager.GetInstance.CurrentIOProvider)
                         End If
                     Else
-                        sav.Save()
+                        sav.Save(PluginManager.GetInstance.CurrentIOProvider)
                     End If
                 Else
                     'The act of getting to this point (calling DocumentTab.Document) forces any changes in the GUI to be applied to the underlying object.

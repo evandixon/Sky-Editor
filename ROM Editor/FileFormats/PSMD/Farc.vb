@@ -183,7 +183,7 @@ Namespace FileFormats.PSMD
             'Next
 
             Dim tempName As String = Guid.NewGuid.ToString
-            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"))
+            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"), PluginManager.GetInstance.CurrentIOProvider)
             header.Dispose()
             Dim headerData = IO.File.ReadAllBytes(PluginHelper.GetResourceName(tempName & ".tmp"))
             IO.File.Delete(PluginHelper.GetResourceName(tempName & ".tmp"))

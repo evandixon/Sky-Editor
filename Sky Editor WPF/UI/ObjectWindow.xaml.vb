@@ -100,10 +100,10 @@ Namespace UI
                     If String.IsNullOrEmpty(DirectCast(ObjectToEdit, iOnDisk).Filename) Then
                         menuFileSaveAs_Click(sender, e)
                     Else
-                        DirectCast(ObjectToEdit, iSavable).Save()
+                        DirectCast(ObjectToEdit, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
                     End If
                 Else
-                    DirectCast(ObjectToEdit, iSavable).Save()
+                    DirectCast(ObjectToEdit, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
                 End If
             End If
         End Sub
@@ -118,7 +118,7 @@ Namespace UI
                     s.Filter = "All Files (*.*)|*.*"
                 End If
                 If s.ShowDialog Then
-                    DirectCast(ObjectToEdit, ISavableAs).Save(s.FileName)
+                    DirectCast(ObjectToEdit, ISavableAs).Save(s.FileName, PluginManager.GetInstance.CurrentIOProvider)
                     If TypeOf ObjectToEdit Is iOnDisk Then
                         DirectCast(ObjectToEdit, iOnDisk).Filename = s.FileName
                     End If

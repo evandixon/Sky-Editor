@@ -54,14 +54,14 @@ Public Class BinaryFile
 
     End Sub
 
-    Public Sub Save(Destination As String) Implements ISavableAs.Save
+    Public Sub Save(Destination As String, provider As IOProvider) Implements ISavableAs.Save
         FixChecksum()
         Dim tmp(Math.Ceiling(Bits.Count / 8) - 1) As Byte
-        Using f As New GenericFile(CurrentIOProvider, tmp)
+        Using f As New GenericFile(provider, tmp)
             For count As Integer = 0 To Math.Ceiling(Bits.Count / 8) - 1
                 f.RawData(count) = Bits.Int(count, 0, 8)
             Next
-            f.Save(Destination)
+            f.Save(Destination, provider)
         End Using
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
@@ -72,8 +72,8 @@ Public Class BinaryFile
 
     Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
 
-    Public Sub Save() Implements iSavable.Save
-        Save(Filename)
+    Public Sub Save(provider As IOProvider) Implements ISavable.Save
+        Save(Filename, provider)
     End Sub
 
     Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile

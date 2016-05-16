@@ -61,7 +61,7 @@ Namespace FileFormats
             Next
         End Sub
 
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             'Only works for files without filenames
 
             'Reset pointers
@@ -91,7 +91,7 @@ Namespace FileFormats
 
 
             Me.RelativePointers.Add(data.Count + 8)
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
 
 

@@ -8,8 +8,8 @@ Imports SkyEditorBase.PluginHelper
 
 Public Class ProjectOld
     Implements IDisposable
-    Implements iSavable
-    Implements iModifiable
+    Implements ISavable
+    Implements INotifyModified
     Implements INotifyPropertyChanged
     Implements iNamed
 
@@ -189,7 +189,7 @@ Public Class ProjectOld
         End Get
         Set(value As Single)
             _buildProgress = value
-            RaiseEvent BuildStatusChanged(Me, New EventArguments.ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
+            RaiseEvent BuildStatusChanged(Me, New ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BuildProgress)))
         End Set
     End Property
@@ -205,7 +205,7 @@ Public Class ProjectOld
         End Get
         Set(value As String)
             _buildStatusMessage = value
-            RaiseEvent BuildStatusChanged(Me, New EventArguments.ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
+            RaiseEvent BuildStatusChanged(Me, New ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BuildStatusMessage)))
         End Set
     End Property
@@ -218,8 +218,8 @@ Public Class ProjectOld
     Public Event DirectoryDeleted(sender As Object, e As EventArguments.DirectoryDeletedEventArgs)
     Public Event FileAdded(sender As Object, e As EventArguments.ProjectFileAddedEventArgs)
     Public Event FileRemoved(sender As Object, e As EventArguments.ProjectFileRemovedEventArgs)
-    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
-    Public Event BuildStatusChanged(sender As Object, e As EventArguments.ProjectBuildStatusChanged)
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements ISavable.FileSaved
+    Public Event BuildStatusChanged(sender As Object, e As ProjectBuildStatusChanged)
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
     ''' <summary>
@@ -228,7 +228,7 @@ Public Class ProjectOld
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Public Event ProjectOpened(sender As Object, e As EventArgs)
-    Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
+    Public Event Modified(sender As Object, e As EventArgs) Implements INotifyModified.Modified
 #End Region
 
 #Region "Create New"
@@ -688,7 +688,7 @@ Public Class ProjectOld
 #End Region
 
 #Region "Save"
-    Public Sub Save() Implements iSavable.Save
+    Public Sub Save(provider As IOProvider) Implements ISavable.Save
         Dim file As New ProjectFile
         file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
         file.Name = Me.Name
@@ -699,7 +699,7 @@ Public Class ProjectOld
             file.Settings.Add(item.Key, value)
         Next
         file.Files = GetProjectDictionary(ProjectNode, "")
-        Json.SerializeToFile(Filename, file, New SkyEditor.Core.Windows.IOProvider)
+        Json.SerializeToFile(Filename, file, provider)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
@@ -729,7 +729,7 @@ Public Class ProjectOld
         Return ".skyproj"
     End Function
 
-    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+    Public Sub RaiseModified() Implements INotifyModified.RaiseModified
         RaiseEvent Modified(Me, New EventArgs)
     End Sub
 

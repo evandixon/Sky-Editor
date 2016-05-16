@@ -288,7 +288,7 @@ Namespace FileFormats.Explorers.Script
             Return $"Goto-{LabelIndex}"
         End Function
 
-        Public Sub Save(Filename As String) Implements ISavableAs.Save
+        Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
             'Preprocess the constants and strings
             'The function that converts commands into byte arrays will add strings to the proper tables where appropriate
             'However, not all commands are known, and some could be referencing strings or constants we're not aware of.
@@ -479,12 +479,12 @@ Namespace FileFormats.Explorers.Script
             out.AddRange(italianTable)
             out.AddRange(spanishTable)
 
-            File.WriteAllBytes(Filename, out.ToArray)
+            provider.WriteAllBytes(Filename, out.ToArray)
             RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
 
-        Public Sub Save() Implements iSavable.Save
-            Save(Me.Filename)
+        Public Sub Save(provider As IOProvider) Implements ISavable.Save
+            Save(Me.Filename, provider)
         End Sub
 
         Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension

@@ -1,15 +1,14 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
-Imports SkyEditorBase
 
 Public Class TextFile
-    Implements iCreatableFile
+    Implements ICreatableFile
     Implements IOpenableFile
-    Implements iOnDisk
+    Implements IOnDisk
     Implements iGenericFile
     Implements ISavableAs
     Implements iNamed
-    Implements iModifiable
+    Implements INotifyModified
     Implements ITextFile
     Implements IContainer(Of String)
 
@@ -17,7 +16,7 @@ Public Class TextFile
         Text = ""
     End Sub
 
-    Public Property Filename As String Implements iOnDisk.Filename
+    Public Property Filename As String Implements IOnDisk.Filename
 
     Public ReadOnly Property Name As String Implements iNamed.Name
         Get
@@ -33,10 +32,10 @@ Public Class TextFile
 
     Dim _name As String
 
-    Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
-    Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
+    Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
+    Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
-    Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
+    Public Sub CreateFile(Name As String) Implements ICreatableFile.CreateFile
         Text = ""
         _name = Name
     End Sub
@@ -47,17 +46,17 @@ Public Class TextFile
         Return Task.CompletedTask
     End Function
 
-    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+    Public Sub RaiseModified() Implements INotifyModified.RaiseModified
         RaiseEvent Modified(Me, New EventArgs)
     End Sub
 
-    Public Sub Save() Implements iSavable.Save
-        IO.File.WriteAllText(Me.Filename, Text)
+    Public Sub Save(provider As IOProvider) Implements ISavable.Save
+        provider.WriteAllText(Me.Filename, Text)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
-    Public Sub Save(Filename As String) Implements ISavableAs.Save
-        IO.File.WriteAllText(Filename, Text)
+    Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
+        provider.WriteAllText(Filename, Text)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 

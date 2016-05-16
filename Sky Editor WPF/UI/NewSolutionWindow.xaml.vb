@@ -6,7 +6,7 @@ Namespace UI
         Dim _folderBrowser As FolderBrowserDialog
         Private Sub btnOk_Click(sender As Object, e As RoutedEventArgs) Handles btnOk.Click
             PluginManager.GetInstance.CurrentSettingsProvider.SetSetting("SkyEditor.Core.Solution.LastSolutionDirectory", txtLocation.Text)
-            PluginManager.GetInstance.CurrentSettingsProvider.Save()
+            PluginManager.GetInstance.CurrentSettingsProvider.Save(PluginManager.GetInstance.CurrentIOProvider)
             DialogResult = True
             Me.Close()
         End Sub

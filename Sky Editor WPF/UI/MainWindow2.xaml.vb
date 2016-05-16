@@ -138,6 +138,7 @@ Namespace UI
 
             _toolWindows = New List(Of ITargetedControl)
             For Each item In _manager.GetRegisteredObjects(GetType(ITargetedControl).GetTypeInfo)
+                'Todo: filter so ony the control types we're expecting are retrieved
                 _toolWindows.Add(item)
             Next
             For Each item In UiHelper.GenerateToolWindows(_toolWindows)

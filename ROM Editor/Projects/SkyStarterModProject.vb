@@ -64,7 +64,7 @@ Namespace Projects
                         Await langString.OpenFile(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), New SkyEditor.Core.Windows.IOProvider)
                         Dim langList As New ObjectFile(Of List(Of String))(New SkyEditor.Core.Windows.IOProvider)
                         langList.ContainedObject = langString.Items
-                        langList.Save(IO.Path.Combine(projDir, "Languages", item.Value))
+                        langList.Save(IO.Path.Combine(projDir, "Languages", item.Value), PluginManager.GetInstance.CurrentIOProvider)
                     End Using
                 End If
             Next
@@ -74,7 +74,7 @@ Namespace Projects
             Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)(New SkyEditor.Core.Windows.IOProvider)
             personalityTest.ContainedObject = New PersonalityTestContainer(overlay13)
-            personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"))
+            personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"), PluginManager.GetInstance.CurrentIOProvider)
             Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
             PluginHelper.SetLoadingStatusFinished()
         End Function
@@ -112,7 +112,7 @@ Namespace Projects
                             langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
                         End If
 
-                        langString.Save(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key))
+                        langString.Save(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), PluginManager.GetInstance.CurrentIOProvider)
                     End Using
                 End If
             Next

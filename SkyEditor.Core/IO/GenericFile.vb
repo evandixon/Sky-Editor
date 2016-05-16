@@ -513,15 +513,15 @@ Namespace IO
         ''' Saves the file to the given destination.
         ''' </summary>
         ''' <param name="Destination">Full path of where the file should be saved to.</param>
-        Public Overridable Sub Save(Destination As String) Implements ISavableAs.Save
+        Public Overridable Sub Save(Destination As String, provider As IOProvider) Implements ISavableAs.Save
             RaiseEvent FileSaving(Me, New EventArgs)
             If InMemoryFile IsNot Nothing Then
-                FileProvider.WriteAllBytes(Destination, InMemoryFile)
+                provider.WriteAllBytes(Destination, InMemoryFile)
             Else
                 FileReader.Seek(0, SeekOrigin.Begin)
                 FileReader.Flush()
                 If Not String.IsNullOrEmpty(Destination) Then
-                    Using dest = FileProvider.OpenFileWriteOnly(Destination)
+                    Using dest = provider.OpenFileWriteOnly(Destination)
                         FileReader.CopyTo(dest)
                     End Using
                 End If
@@ -537,11 +537,11 @@ Namespace IO
         ''' Saves the file to the Original Filename.
         ''' Throws a NullReferernceException if the Original Filename is null.
         ''' </summary>
-        Public Sub Save() Implements iSavable.Save
+        Public Sub Save(provider As IOProvider) Implements ISavable.Save
             If String.IsNullOrEmpty(Me.OriginalFilename) Then
                 Throw New NullReferenceException(My.Resources.Language.ErrorNoSaveFilename)
             End If
-            Save(Me.OriginalFilename)
+            Save(Me.OriginalFilename, provider)
         End Sub
 #End Region
 

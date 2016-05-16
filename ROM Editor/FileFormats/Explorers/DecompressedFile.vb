@@ -35,11 +35,11 @@ Namespace FileFormats.Explorers
         ''' Saves and compresses the DecompressedFile.
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub Save(Path As String)
+        Public Overrides Sub Save(Path As String, provider As IOProvider)
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Path) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Path) & "\Decompressed")
             End If
-            MyBase.Save(Path.Replace(IO.Path.GetDirectoryName(Path), IO.Path.GetDirectoryName(Path) & "\Decompressed"))
+            MyBase.Save(Path.Replace(IO.Path.GetDirectoryName(Path), IO.Path.GetDirectoryName(Path) & "\Decompressed"), provider)
             'Await RunCompress(Path)
         End Sub
 

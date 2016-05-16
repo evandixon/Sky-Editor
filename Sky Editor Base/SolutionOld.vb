@@ -1,13 +1,14 @@
 ﻿Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Imports SkyEditorBase.PluginHelper
 
 Public Class SolutionOld
     Implements IDisposable
-    Implements iSavable
-    Implements iModifiable
+    Implements ISavable
+    Implements INotifyModified
 
 #Region "Child Classes"
     ''' <summary>
@@ -155,10 +156,10 @@ Public Class SolutionOld
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Public Event Created(sender As Object, e As EventArgs)
-    Public Event FileSaved(sender As Object, e As EventArgs) Implements iSavable.FileSaved
+    Public Event FileSaved(sender As Object, e As EventArgs) Implements ISavable.FileSaved
     Public Event SolutionBuildStarted(sender As Object, e As EventArgs)
     Public Event SolutionBuildCompleted(sender As Object, e As EventArgs)
-    Public Event Modified(sender As Object, e As EventArgs) Implements iModifiable.Modified
+    Public Event Modified(sender As Object, e As EventArgs) Implements INotifyModified.Modified
 #End Region
 
     Private Sub RaiseCreated()
@@ -390,9 +391,9 @@ Public Class SolutionOld
         Return output
     End Function
 
-    Public Overridable Sub SaveAllProjects()
+    Public Overridable Sub SaveAllProjects(provider As IOProvider)
         For Each item In GetAllProjects()
-            item.Save()
+            item.Save(provider)
         Next
     End Sub
 
@@ -586,7 +587,7 @@ Public Class SolutionOld
 #End Region
 
 #Region "Save"
-    Public Sub Save() Implements iSavable.Save
+    Public Sub Save(provider As IOProvider) Implements ISavable.Save
         Dim file As New SolutionFile
         file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
         file.Name = Me.Name
@@ -599,7 +600,7 @@ Public Class SolutionOld
             End If
         Next
         file.Projects = GetProjectDictionary(SolutionNode, "")
-        Json.SerializeToFile(Filename, file, New SkyEditor.Core.Windows.IOProvider)
+        Json.SerializeToFile(Filename, file, provider)
         RaiseEvent FileSaved(Me, New EventArgs)
     End Sub
 
@@ -675,7 +676,7 @@ Public Class SolutionOld
         Return ".skysln"
     End Function
 
-    Public Sub RaiseModified() Implements iModifiable.RaiseModified
+    Public Sub RaiseModified() Implements INotifyModified.RaiseModified
         IsModified = True
         RaiseEvent Modified(Me, New EventArgs)
     End Sub

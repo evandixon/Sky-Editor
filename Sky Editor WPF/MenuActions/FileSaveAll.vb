@@ -20,7 +20,7 @@ Namespace MenuActions
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item In Targets
                 If TypeOf item Is SolutionOld Then
-                    DirectCast(item, SolutionOld).SaveAllProjects()
+                    DirectCast(item, SolutionOld).SaveAllProjects(PluginManager.GetInstance.CurrentIOProvider)
                 ElseIf TypeOf item Is iSavable Then
 
                     If TypeOf item Is IOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, IOnDisk).Filename) Then

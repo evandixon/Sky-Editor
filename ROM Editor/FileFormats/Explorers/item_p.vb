@@ -199,11 +199,11 @@ Namespace FileFormats.Explorers
 
             Return out.ToArray
         End Function
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Dim buffer = GetBytes()
             Length = buffer.Length
             RawData(0, Length) = buffer
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
     End Class
 End Namespace

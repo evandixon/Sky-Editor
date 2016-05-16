@@ -75,7 +75,7 @@ Namespace FileFormats.Explorers
                 Items(count / 4) = s.ToString
             Next
         End Function
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             'Generate File
             Dim e = Encoding.GetEncoding("Windows-1252")
             Dim offsets As New List(Of UInt32)
@@ -113,7 +113,7 @@ Namespace FileFormats.Explorers
             'Write buffer to stream
             Length = totalData.Count
             RawData(0, totalData.Count) = totalData.ToArray
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
         Default Public Property Item(Index As UInteger) As String
             Get

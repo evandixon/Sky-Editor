@@ -11,7 +11,6 @@ Imports SkyEditor.Core.Extensions
 Public Class PluginManager
     Inherits SkyEditor.Core.PluginManager
     Implements IDisposable
-    Implements iNamed
 
 #Region "Constructors"
     ''' <summary>
@@ -77,12 +76,6 @@ Public Class PluginManager
         End Set
     End Property
     Private WithEvents _currentProject As ProjectOld
-
-    Private ReadOnly Property Name As String Implements iNamed.Name
-        Get
-            Return My.Resources.Language.PluginManager
-        End Get
-    End Property
 
 #End Region
 

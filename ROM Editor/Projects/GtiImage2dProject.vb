@@ -89,7 +89,7 @@ Namespace Projects
                     Dim img As New CteImage
                     Await img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"), New SkyEditor.Core.Windows.IOProvider)
                     img.ContainedImage = Drawing.Image.FromFile(background)
-                    img.Save()
+                    img.Save(PluginManager.GetInstance.CurrentIOProvider)
                     img.Dispose()
                 End If
 

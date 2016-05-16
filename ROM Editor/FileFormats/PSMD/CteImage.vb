@@ -6,11 +6,11 @@ Namespace FileFormats.PSMD
     Public Class CteImage
         Inherits GenericFile
         Implements IOpenableFile
-        Implements iModifiable
+        Implements INotifyModified
         Implements IDetectableFileType
 
         Public Event ContainedImageUpdated(sender As Object, e As EventArgs)
-        Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
         Public Property ContainedImage As Bitmap
             Get
@@ -98,7 +98,7 @@ Namespace FileFormats.PSMD
             End If
         End Function
 
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Dim empty64(64) As Byte
             Dim dataLength = Width * Height * PixelLength
             Length = dataLength + &H80
@@ -121,7 +121,7 @@ Namespace FileFormats.PSMD
                     offset += (PixelLength * 64) / 8
                 Next
             Next
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
 
         Private Function GetColorData(Color As Color, PixelLength As Integer) As Byte()
@@ -156,7 +156,7 @@ Namespace FileFormats.PSMD
             End If
         End Function
 
-        Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
             RaiseEvent Modified(Me, New EventArgs)
         End Sub
 

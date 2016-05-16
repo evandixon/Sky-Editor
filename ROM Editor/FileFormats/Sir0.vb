@@ -86,7 +86,7 @@ Namespace FileFormats
             ProcessData()
         End Function
 
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             'The header and relative pointers must be set by child classes
 
             Me.RawData(0, 4) = {&H53, &H49, &H52, &H30}
@@ -138,7 +138,7 @@ Namespace FileFormats
                 Length += 1
             End While
 
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
 
             'Saving multiple times like this will make the second time fail, because the file length is changing.  
             'To change it back to a good working size, we'll reload the SIR0 portions.

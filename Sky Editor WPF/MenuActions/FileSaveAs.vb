@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
@@ -14,7 +15,7 @@ Namespace MenuActions
             For Each item As ISavableAs In Targets
                 SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(item.GetDefaultExtension))
                 If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                    item.Save(SaveFileDialog1.FileName)
+                    item.Save(SaveFileDialog1.FileName, PluginManager.GetInstance.CurrentIOProvider)
                 End If
             Next
             Return Task.CompletedTask

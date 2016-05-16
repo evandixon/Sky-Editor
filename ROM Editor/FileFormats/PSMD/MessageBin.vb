@@ -14,7 +14,7 @@ Namespace FileFormats.PSMD
         Inherits Sir0
         Implements IOpenableFile
         Implements ComponentModel.INotifyPropertyChanged
-        Implements iModifiable
+        Implements INotifyModified
 
         Public Class EntryAddedEventArgs
             Inherits EventArgs
@@ -121,7 +121,7 @@ Namespace FileFormats.PSMD
             End If
         End Sub
 
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Me.RelativePointers.Clear()
             'Sir0 header pointers
             Me.RelativePointers.Add(4)
@@ -156,12 +156,12 @@ Namespace FileFormats.PSMD
             Me.RelativePointers.Add(&H10)
 
             'Let the general SIR0 stuff happen
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
         Public Event EntryAdded(sender As Object, e As EntryAddedEventArgs)
-        Public Event Modified As iModifiable.ModifiedEventHandler Implements iModifiable.Modified
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
         Public Sub New()
             MyBase.New
@@ -174,7 +174,7 @@ Namespace FileFormats.PSMD
             Strings = New ObservableCollection(Of MessageBinStringEntry)
         End Sub
 
-        Public Sub RaiseModified() Implements iModifiable.RaiseModified
+        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
             RaiseEvent Modified(Me, New EventArgs)
         End Sub
     End Class

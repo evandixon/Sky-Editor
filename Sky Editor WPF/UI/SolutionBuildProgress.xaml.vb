@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 
 Namespace UI
     Public Class SolutionBuildProgress
@@ -77,7 +78,7 @@ Namespace UI
             Next
         End Sub
 
-        Private Sub Project_BuildStatusChanged(sender As Object, e As EventArguments.ProjectBuildStatusChanged)
+        Private Sub Project_BuildStatusChanged(sender As Object, e As ProjectBuildStatusChanged)
             Dispatcher.Invoke(New Action(Sub()
                                              If Not dataGrid.Items.Contains(sender) Then
                                                  dataGrid.Items.Add(sender)

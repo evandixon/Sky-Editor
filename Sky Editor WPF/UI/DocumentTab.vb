@@ -1,5 +1,6 @@
 ﻿Imports System.Globalization
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports Xceed.Wpf.AvalonDock.Layout
@@ -29,8 +30,8 @@ Namespace UI
                 'If _document IsNot Nothing AndAlso TypeOf _document Is iModifiable Then
                 '    RemoveHandler DirectCast(_document, iModifiable).Modified, AddressOf File_FileModified
                 'End If
-                If _document IsNot Nothing AndAlso TypeOf _document Is iSavable Then
-                    RemoveHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
+                If _document IsNot Nothing AndAlso TypeOf _document Is ISavable Then
+                    RemoveHandler DirectCast(_document, ISavable).FileSaved, AddressOf _file_FileSaved
                 End If
 
                 If value IsNot Nothing Then
@@ -59,8 +60,8 @@ Namespace UI
                 End If
                 _document = value
 
-                If TypeOf _document Is iSavable Then
-                    AddHandler DirectCast(_document, iSavable).FileSaved, AddressOf _file_FileSaved
+                If TypeOf _document Is ISavable Then
+                    AddHandler DirectCast(_document, ISavable).FileSaved, AddressOf _file_FileSaved
                 End If
             End Set
         End Property
@@ -147,12 +148,12 @@ Namespace UI
 #Region "Methods"
         Public Sub SaveFile(Filename As String)
             If TypeOf Document Is ISavableAs Then
-                DirectCast(Document, ISavableAs).Save(Filename)
+                DirectCast(Document, ISavableAs).Save(Filename, PluginManager.GetInstance.CurrentIOProvider)
             End If
         End Sub
         Public Sub SaveFile()
-            If TypeOf Document Is iSavable Then
-                DirectCast(Document, iSavable).Save()
+            If TypeOf Document Is ISavable Then
+                DirectCast(Document, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
             End If
         End Sub
 

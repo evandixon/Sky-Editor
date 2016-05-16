@@ -171,14 +171,14 @@ Namespace FileFormats.PSMD
                 Entries.Add(New PokemonInfoEntry(RawData(count * entryLength, entryLength)))
             Next
         End Function
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Me.Length = Entries.Count * entryLength
 
             For count = 0 To Entries.Count - 1
                 RawData(count * entryLength, entryLength) = Entries(count).ToBytes
             Next
 
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
 
         Public Sub New()

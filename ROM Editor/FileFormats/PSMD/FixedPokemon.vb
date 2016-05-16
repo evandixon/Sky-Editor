@@ -103,7 +103,7 @@ Namespace FileFormats.PSMD
             Next
         End Function
 
-        Public Overrides Sub Save(Destination As String)
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
             Me.RelativePointers.Clear()
             'Sir0 header pointers
             Me.RelativePointers.Add(4)
@@ -135,7 +135,7 @@ Namespace FileFormats.PSMD
             Me.Header = headerBytes.ToArray
 
             'Let the general SIR0 stuff happen
-            MyBase.Save(Destination)
+            MyBase.Save(Destination, provider)
         End Sub
 
         Public Sub New()
