@@ -29,12 +29,12 @@ Namespace ConsoleCommands
                     Console.WriteLine("1. Create an NDS Library")
                     Console.WriteLine("2. List contents of all libraries")
 
-                    Select Case Console.ReadKey.KeyChar
-                        Case "0"c
+                    Select Case Console.Read
+                        Case AscW("0")
                             Console.WriteLine()
                             Await cart.Save(CurrentPluginManager.CurrentIOProvider)
                             doExit = True
-                        Case "1"c
+                        Case AscW("1")
                             Console.WriteLine()
                             Console.WriteLine("Enter the name of the library:")
                             Dim name = Console.ReadLine
@@ -43,7 +43,7 @@ Namespace ConsoleCommands
                             Dim l As New NDSFlashcartLibrary(name, relativePath, cart.GetRootPath)
                             cart.Libraries.Add(l)
                             Console.WriteLine("Library added.")
-                        Case "2"c
+                        Case AscW("2")
                             Console.WriteLine()
                             Console.WriteLine("Libraries:")
                             For Each library In cart.Libraries

@@ -37,7 +37,7 @@ Public Class PluginDefinition
 
     Public Overrides Sub Load(Manager As SkyEditor.Core.PluginManager)
         'Manager.RegisterIOFilter("*.nds", PluginHelper.GetLanguageItem("Nintendo DS ROM"))
-        Manager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
+        Manager.CurrentIOUIManager.RegisterIOFilter("*.img", My.Resources.Language.CTEImageFiles)
 
         Manager.RegisterTypeRegister(GetType(GenericModProject))
 

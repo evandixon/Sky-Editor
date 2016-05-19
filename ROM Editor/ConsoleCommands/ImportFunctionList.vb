@@ -28,7 +28,7 @@ Namespace ConsoleCommands
             Next
             file.AutoCompleteChars.Clear()
             file.AutoCompleteChars.Add(":")
-            file.Save(PluginHelper.GetResourceName("Code/psmdLuaInfo-English.fdd"), PluginManager.GetInstance.CurrentIOProvider)
+            file.Save(PluginHelper.GetResourceName("Code/psmdLuaInfo-English.fdd"), CurrentPluginManager.CurrentIOProvider)
         End Sub
         Private Function FullTrim(Input As String) As String
             Dim current As String = Input

@@ -14,7 +14,7 @@ Namespace ConsoleCommands
             For Each item In IO.Directory.GetFiles(SourceDir)
                 Try
                     Using c As New CteImage
-                        Await c.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
+                        Await c.OpenFile(item, CurrentPluginManager.CurrentIOProvider)
                         c.ContainedImage.Save(item & ".png", Drawing.Imaging.ImageFormat.Png)
                         Console.WriteLine("Converted " & item)
                     End Using

@@ -19,7 +19,7 @@ Public Class SettingsProvider
         Public Property TypeName As String
     End Class
 
-    Protected Sub New()
+    Public Sub New()
         Me.Settings = New ConcurrentDictionary(Of String, Object)
         Me.UnloadableSettings = New ConcurrentDictionary(Of String, SerializedValue)
     End Sub

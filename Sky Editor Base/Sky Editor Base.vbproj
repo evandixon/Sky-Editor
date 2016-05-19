@@ -152,20 +152,8 @@
     <Compile Include="ConsoleCommands\GeneratePluginExtensions.vb" />
     <Compile Include="ConsoleCommands\InstallExtension.vb" />
     <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
-    <Compile Include="EventArguments\FileAddedEventArguments.vb" />
-    <Compile Include="EventArguments\FileClosedEventArgs.vb" />
-    <Compile Include="EventArguments\FileOpenedEventArgs.vb" />
-    <Compile Include="EventArguments\FileRemovedEventArgs.vb" />
     <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
     <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectAddedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectFileAddedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectFileRemovedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectRemovedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectDirectoryCreatedEventArgs.vb" />
-    <Compile Include="EventArguments\DirectoryCreatedEventArgs.vb" />
-    <Compile Include="EventArguments\DirectoryDeletedEventArgs.vb" />
-    <Compile Include="EventArguments\ProjectRemovingEventArgs.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,9 +162,6 @@
     <Compile Include="Utilities\AssemblyReflectionManager.vb" />
     <Compile Include="Utilities\AssemblyReflectionProxy.vb" />
     <Compile Include="PluginHelper.vb" />
-    <Compile Include="PluginManager.vb" />
-    <Compile Include="ProjectOld.vb" />
-    <Compile Include="SolutionOld.vb" />
     <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />

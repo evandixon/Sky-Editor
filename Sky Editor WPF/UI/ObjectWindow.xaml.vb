@@ -1,5 +1,6 @@
 ﻿Imports System.Threading.Tasks
 Imports System.Windows.Forms
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
@@ -21,7 +22,7 @@ Namespace UI
         End Property
         Public Sub RefreshDisplay()
             tcTabs.Items.Clear()
-            For Each item In UiHelper.GenerateObjectTabs(SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(_objectToEdit, {GetType(Windows.Controls.UserControl)}, _manager))
+            For Each item In UiHelper.GenerateObjectTabs(SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(_objectToEdit, {GetType(UserControl)}, _manager))
                 tcTabs.Items.Add(item)
             Next
 
@@ -31,7 +32,7 @@ Namespace UI
                 menuFileOpen.Visibility = Visibility.Collapsed
             End If
 
-            If TypeOf _objectToEdit Is iSavable Then
+            If TypeOf _objectToEdit Is ISavable Then
                 menuFileSave.Visibility = Visibility.Visible
                 If TypeOf _objectToEdit Is ISavableAs Then
                     menuFileSaveAs.Visibility = Visibility.Visible
@@ -59,17 +60,23 @@ Namespace UI
                 Dim x = DirectCast(item.containedobjectcontrol, IObjectControl).EditingObject
             Next
         End Sub
-        Public Sub New(Manager As PluginManager)
-            InitializeComponent()
-            _manager = Manager
-        End Sub
-        Public Sub New()
+
+        ''' <summary>
+        ''' This sub New is for the designer only
+        ''' </summary>
+        Protected Sub New()
 
             ' This call is required by the designer.
             InitializeComponent()
 
             ' Add any initialization after the InitializeComponent() call.
-            _manager = PluginManager.GetInstance
+        End Sub
+        Public Sub New(manager As PluginManager)
+            ' This call is required by the designer.
+            InitializeComponent()
+
+            ' Add any initialization after the InitializeComponent() call.
+            _manager = manager
         End Sub
 
         Private Async Sub menuFileOpen_Click(sender As Object, e As RoutedEventArgs) Handles menuFileOpen.Click
@@ -78,8 +85,8 @@ Namespace UI
 
                 If TypeOf _objectToEdit Is ISavableAs Then
                     Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).GetDefaultExtension.Trim("*").Trim(".")
-                    If _manager.IOFilters.ContainsKey(ext) Then
-                        o.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.IOFilters(ext), ext)
+                    If _manager.CurrentIOUIManager.IOFilters.ContainsKey(ext) Then
+                        o.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.CurrentIOUIManager.IOFilters(ext), ext)
                     Else
                         o.Filter = "All Files (*.*)|*.*"
                     End If
@@ -88,22 +95,22 @@ Namespace UI
                 End If
 
                 If o.ShowDialog = Forms.DialogResult.OK Then
-                    Await DirectCast(_objectToEdit, IOpenableFile).OpenFile(o.FileName, New SkyEditor.Core.Windows.IOProvider)
+                    Await DirectCast(_objectToEdit, IOpenableFile).OpenFile(o.FileName, _manager.CurrentIOProvider)
                     RefreshDisplay()
                 End If
             End If
         End Sub
 
         Private Sub menuFileSave_Click(sender As Object, e As RoutedEventArgs) Handles menuFileSave.Click
-            If TypeOf ObjectToEdit Is iSavable Then
-                If TypeOf ObjectToEdit Is iOnDisk Then
-                    If String.IsNullOrEmpty(DirectCast(ObjectToEdit, iOnDisk).Filename) Then
+            If TypeOf ObjectToEdit Is ISavable Then
+                If TypeOf ObjectToEdit Is IOnDisk Then
+                    If String.IsNullOrEmpty(DirectCast(ObjectToEdit, IOnDisk).Filename) Then
                         menuFileSaveAs_Click(sender, e)
                     Else
-                        DirectCast(ObjectToEdit, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
+                        DirectCast(ObjectToEdit, ISavable).Save(_manager.CurrentIOProvider)
                     End If
                 Else
-                    DirectCast(ObjectToEdit, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
+                    DirectCast(ObjectToEdit, ISavable).Save(_manager.CurrentIOProvider)
                 End If
             End If
         End Sub
@@ -112,15 +119,15 @@ Namespace UI
             If TypeOf ObjectToEdit Is ISavableAs Then
                 Dim s As New SaveFileDialog
                 Dim ext As String = DirectCast(ObjectToEdit, ISavableAs).GetDefaultExtension.Trim("*").Trim(".")
-                If _manager.IOFilters.ContainsKey(ext) Then
-                    s.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.IOFilters(ext), ext)
+                If _manager.CurrentIOUIManager.IOFilters.ContainsKey(ext) Then
+                    s.Filter = String.Format("{0} Files (*.{1})|*.{1}|All Files (*.*)|*.*", _manager.CurrentIOUIManager.IOFilters(ext), ext)
                 Else
                     s.Filter = "All Files (*.*)|*.*"
                 End If
                 If s.ShowDialog Then
-                    DirectCast(ObjectToEdit, ISavableAs).Save(s.FileName, PluginManager.GetInstance.CurrentIOProvider)
-                    If TypeOf ObjectToEdit Is iOnDisk Then
-                        DirectCast(ObjectToEdit, iOnDisk).Filename = s.FileName
+                    DirectCast(ObjectToEdit, ISavableAs).Save(s.FileName, _manager.CurrentIOProvider)
+                    If TypeOf ObjectToEdit Is IOnDisk Then
+                        DirectCast(ObjectToEdit, IOnDisk).Filename = s.FileName
                     End If
                 End If
             End If

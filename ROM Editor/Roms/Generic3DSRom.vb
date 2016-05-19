@@ -43,7 +43,7 @@ Namespace Roms
             End Set
         End Property
 
-        Public Async Function Unpack(DestinationDirectory As String) As Task
+        Public Async Function Unpack(DestinationDirectory As String, provider As IOProvider) As Task
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
                 DestinationDirectory = Path.Combine(PluginHelper.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
@@ -111,12 +111,12 @@ Namespace Roms
             Await n3dsUpdateDirTask
             Await dlPlayDirTask
 
-            Utilities.FileSystem.DeleteFile(exefsBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
-            Utilities.FileSystem.DeleteFile(romfsBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
-            Utilities.FileSystem.DeleteFile(manualBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
-            Utilities.FileSystem.DeleteFile(dlPlayBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
-            Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
-            Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath, SkyEditorBase.PluginManager.GetInstance.CurrentIOProvider)
+            Utilities.FileSystem.DeleteFile(exefsBinPath, provider)
+            Utilities.FileSystem.DeleteFile(romfsBinPath, provider)
+            Utilities.FileSystem.DeleteFile(manualBinPath, provider)
+            Utilities.FileSystem.DeleteFile(dlPlayBinPath, provider)
+            Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath, provider)
+            Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath, provider)
             PluginHelper.SetLoadingStatusFinished()
         End Function
 

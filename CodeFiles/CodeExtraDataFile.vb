@@ -71,9 +71,9 @@ Public Class CodeExtraDataFile
         Json.SerializeToFile(Filename, j, provider)
     End Sub
 
-    Public Sub New(Filename As String)
+    Public Sub New(Filename As String, provider As IOProvider)
         Me.New
-        OpenFileInternal(Filename)
+        OpenFileInternal(Filename, provider)
     End Sub
     Public Sub New()
         MyBase.New()
@@ -87,11 +87,11 @@ Public Class CodeExtraDataFile
     End Sub
 
     Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-        Await OpenFileInternal(Filename)
+        Await OpenFileInternal(Filename, Provider)
     End Function
 
-    Private Function OpenFileInternal(Filename As String) As Task
-        Dim j = Json.DeserializeFromFile(Of JsonStructure)(Filename, New SkyEditor.Core.Windows.IOProvider)
+    Private Function OpenFileInternal(Filename As String, provider As IOProvider) As Task
+        Dim j = Json.DeserializeFromFile(Of JsonStructure)(Filename, provider)
         Me.Database = j.Database
         Me.AutoCompleteChars = j.AutoCompleteChars
         Return Task.CompletedTask

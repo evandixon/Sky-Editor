@@ -1,17 +1,18 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class FileSaveSolution
         Inherits MenuAction
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
-            Return {GetType(SolutionOld).GetTypeInfo}
+            Return {GetType(Solution).GetTypeInfo}
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As SolutionOld In Targets
-                item.Save(PluginManager.GetInstance.CurrentIOProvider)
-                item.SaveAllProjects(PluginManager.GetInstance.CurrentIOProvider)
+            For Each item As Solution In Targets
+                item.Save(CurrentPluginManager.CurrentIOProvider)
+                item.SaveAllProjects(CurrentPluginManager.CurrentIOProvider)
             Next
             Return Task.CompletedTask
         End Function

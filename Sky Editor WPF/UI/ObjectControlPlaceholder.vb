@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.Interfaces
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
@@ -32,7 +33,7 @@ Namespace UI
                 If TypeOf value Is INotifyModified Then
                     AddHandler DirectCast(value, INotifyModified).Modified, AddressOf OnModified
                 End If
-                Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, PluginManager.GetInstance)
+                Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, CurrentPluginManager)
                 If objControl IsNot Nothing Then
                     Content = objControl
                     objControl.EditingObject = value
@@ -41,6 +42,8 @@ Namespace UI
                 End If
             End Set
         End Property
+
+        Public Property CurrentPluginManager As PluginManager
 
         Private Sub ObjectControlPlaceholder_DataContextChanged(sender As Object, e As DependencyPropertyChangedEventArgs) Handles Me.DataContextChanged
             ObjectToEdit = e.NewValue
@@ -84,5 +87,6 @@ Namespace UI
             ' GC.SuppressFinalize(Me)
         End Sub
 #End Region
+
     End Class
 End Namespace

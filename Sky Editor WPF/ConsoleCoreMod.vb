@@ -28,16 +28,8 @@ Friend Class ConsoleCoreMod
 
     Public Overrides Sub Load(Manager As PluginManager)
         MyBase.Load(Manager)
-        'CoreMod stuff
-        Manager.RegisterTypeRegister(GetType(SolutionOld))
-        Manager.RegisterTypeRegister(GetType(ProjectOld))
-        Manager.RegisterTypeRegister(GetType(ICreatableFile))
 
-        Manager.RegisterType(GetType(SolutionOld), GetType(SolutionOld))
-        Manager.RegisterType(GetType(ProjectOld), GetType(ProjectOld))
-        'End CoreMod stuff
-
-        Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
+        Manager.CurrentIOUIManager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub
     Public Overrides Sub UnLoad(Manager As PluginManager)
 

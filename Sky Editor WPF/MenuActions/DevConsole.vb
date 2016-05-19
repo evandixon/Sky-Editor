@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
@@ -7,7 +8,7 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             PluginHelper.ShowConsole()
-            Await SkyEditor.Core.Windows.ConsoleMain(PluginManager.GetInstance)
+            Await ConsoleHelper.RunConsole(CurrentPluginManager)
         End Function
 
         Public Sub New()

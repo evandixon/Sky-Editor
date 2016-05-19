@@ -29,14 +29,11 @@ Friend Class WpfCoreMod
     Public Overrides Sub Load(Manager As PluginManager)
         MyBase.Load(Manager)
         'CoreMod stuff
-        Manager.RegisterTypeRegister(GetType(iObjectControl))
-        Manager.RegisterTypeRegister(GetType(SolutionOld))
-        Manager.RegisterTypeRegister(GetType(ProjectOld))
-        Manager.RegisterTypeRegister(GetType(ICreatableFile))
+        Manager.RegisterTypeRegister(GetType(IObjectControl))
         Manager.RegisterTypeRegister(GetType(ITargetedControl))
         'End CoreMod stuff
 
-        Manager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
+        Manager.CurrentIOUIManager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub
 
     Public Overrides Function GetSettingsProvider(manager As SkyEditor.Core.PluginManager) As ISettingsProvider

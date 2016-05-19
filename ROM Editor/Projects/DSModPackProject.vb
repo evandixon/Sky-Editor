@@ -1,10 +1,11 @@
 ﻿Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace Projects
     Public Class DSModPackProject
-        Inherits ProjectOld
+        Inherits Project
         Implements IContainer(Of ModpackInfo)
 
         Public Property Info As ModpackInfo Implements IContainer(Of ModpackInfo).Item
@@ -92,17 +93,17 @@ Namespace Projects
             Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Output")
         End Function
 
-        Public Overridable Function GetBaseRomFilename(Solution As SolutionOld) As String
+        Public Overridable Function GetBaseRomFilename(Solution As Solution) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.GetRawFilesDir
             ' Return p.GetProjectItemByPath("/BaseRom").GetFilename
         End Function
 
-        Public Overridable Function GetBaseRomSystem(Solution As SolutionOld) As String
+        Public Overridable Function GetBaseRomSystem(Solution As Solution) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.RomSystem
         End Function
-        Public Overridable Function GetBaseGameCode(Solution As SolutionOld) As String
+        Public Overridable Function GetBaseGameCode(Solution As Solution) As String
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return p.GameCode
         End Function
@@ -110,12 +111,12 @@ Namespace Projects
             Return IO.Path.Combine(GetRootDirectory, "Modpack.smdh")
         End Function
 
-        Public Overrides Function CanBuild(Solution As SolutionOld) As Boolean
+        Public Overrides Function CanBuild(Solution As Solution) As Boolean
             Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return (p IsNot Nothing)
         End Function
 
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             Const patcherVersion As String = "alpha 4"
             Dim modpackDir = GetModPackDir()
             Dim modpackModsDir = GetModsDir()
@@ -123,7 +124,7 @@ Namespace Projects
             Dim modpackToolsPatchersDir = GetPatchersDir()
             Dim modsSourceDir = GetSourceModsDir()
 
-            Await FileSystem.ReCreateDirectory(modpackDir, PluginManager.GetInstance.CurrentIOProvider)
+            Await FileSystem.ReCreateDirectory(modpackDir, CurrentPluginManager.CurrentIOProvider)
 
             If Not IO.Directory.Exists(modpackModsDir) Then
                 IO.Directory.CreateDirectory(modpackModsDir)
@@ -138,7 +139,7 @@ Namespace Projects
                 IO.Directory.CreateDirectory(modsSourceDir)
             End If
 
-            Await FileSystem.ReCreateDirectory(OutputDir, PluginManager.GetInstance.CurrentIOProvider)
+            Await FileSystem.ReCreateDirectory(OutputDir, CurrentPluginManager.CurrentIOProvider)
 
             'Copy external mods
             For Each item In IO.Directory.GetFiles(modsSourceDir)
@@ -209,7 +210,7 @@ Namespace Projects
             Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
-        Public Overridable Sub CopyPatcherProgram(Solution As SolutionOld)
+        Public Overridable Sub CopyPatcherProgram(Solution As Solution)
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     '-Copy ctrtool
@@ -229,7 +230,7 @@ Namespace Projects
             IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
         End Sub
 
-        Public Overridable Async Function ApplyPatchAsync(Solution As SolutionOld) As Task
+        Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     If Output3DSFile Then

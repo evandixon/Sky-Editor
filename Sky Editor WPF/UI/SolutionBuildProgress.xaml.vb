@@ -1,11 +1,12 @@
-﻿Imports SkyEditor.Core.IO
+﻿Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace UI
     Public Class SolutionBuildProgress
         Implements ITargetedControl
 
-        Private Property CurrentSolution As SolutionOld
+        Private Property CurrentSolution As Solution
 
         Public Property Header As String Implements ITargetedControl.Header
             Get
@@ -44,7 +45,7 @@ Namespace UI
             dataGrid.Items.Clear()
 
             For Each item In Targets
-                If TypeOf item Is SolutionOld Then
+                If TypeOf item Is Solution Then
                     CurrentSolution = item
                     AddHandler CurrentSolution.SolutionBuildStarted, AddressOf Solution_BuildStarted
                     AddHandler CurrentSolution.SolutionBuildCompleted, AddressOf Solution_BuildCompleted
@@ -67,13 +68,13 @@ Namespace UI
         End Sub
         Private Sub Solution_BuildStarted(sender As Object, e As EventArgs)
             dataGrid.Items.Clear()
-            For Each item In DirectCast(sender, SolutionOld).GetAllProjects
+            For Each item In DirectCast(sender, Solution).GetAllProjects
                 AddHandler item.BuildStatusChanged, AddressOf Project_BuildStatusChanged
             Next
         End Sub
 
         Private Sub Solution_BuildCompleted(sender As Object, e As EventArgs)
-            For Each item In DirectCast(sender, SolutionOld).GetAllProjects
+            For Each item In DirectCast(sender, Solution).GetAllProjects
                 RemoveHandler item.BuildStatusChanged, AddressOf Project_BuildStatusChanged
             Next
         End Sub
@@ -84,6 +85,10 @@ Namespace UI
                                                  dataGrid.Items.Add(sender)
                                              End If
                                          End Sub))
+        End Sub
+
+        Public Sub SetPluginManager(manager As PluginManager) Implements ITargetedControl.SetPluginManager
+            'Do nothing, not needed for this control
         End Sub
     End Class
 

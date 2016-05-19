@@ -25,6 +25,10 @@ Namespace Tabs
 
         Private Sub PkmMovesTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = My.Resources.Language.Moves
+            Attack1.CurrentPluginManager = CurrentPluginManager
+            Attack2.CurrentPluginManager = CurrentPluginManager
+            Attack3.CurrentPluginManager = CurrentPluginManager
+            Attack4.CurrentPluginManager = CurrentPluginManager
         End Sub
 
         Private Sub OnModified(sender As Object, e As EventArgs) Handles Attack1.Modified, Attack2.Modified, Attack3.Modified, Attack4.Modified

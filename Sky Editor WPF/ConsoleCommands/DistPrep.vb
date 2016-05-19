@@ -5,7 +5,7 @@ Namespace ConsoleCommands
         Inherits ConsoleCommand
 
         Public Overrides Sub Main(Arguments() As String)
-            Redistribution.RedistributionHelpers.PrepareForDistribution(PluginManager.GetInstance)
+            Redistribution.RedistributionHelpers.PrepareForDistribution(CurrentPluginManager)
         End Sub
     End Class
 End Namespace

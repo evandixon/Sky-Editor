@@ -10,7 +10,7 @@ Namespace ConsoleCommands
             Dim LanguageStringPath = Arguments(0)
             Dim formatRegex As New Text.RegularExpressions.Regex("\[.+\]")
             Dim ls As New LanguageString
-            Await ls.OpenFile(LanguageStringPath, New SkyEditor.Core.Windows.IOProvider)
+            Await ls.OpenFile(LanguageStringPath, CurrentPluginManager.CurrentIOProvider)
             Dim languagechar As String = IO.Path.GetFileNameWithoutExtension(LanguageStringPath).Replace("text_", "")
             Dim language As String
             Select Case languagechar

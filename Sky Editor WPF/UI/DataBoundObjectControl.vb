@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 
 Namespace UI
@@ -44,6 +45,10 @@ Namespace UI
             Return 0
         End Function
 
+        Public Sub SetPluginManager(manager As PluginManager) Implements IObjectControl.SetPluginManager
+            CurrentPluginManager = manager
+        End Sub
+
         ''' <summary>
         ''' Called when Header is changed.
         ''' </summary>
@@ -85,6 +90,8 @@ Namespace UI
                 Me.DataContext = value
             End Set
         End Property
+
+        Public Property CurrentPluginManager As PluginManager
 
         ''' <summary>
         ''' Whether or not the EditingObject has been modified without saving.

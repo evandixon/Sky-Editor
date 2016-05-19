@@ -12,7 +12,7 @@ Namespace Explorers
             With GetEditingObject(Of item_p)()
                 Items = .Items
                 If IO.File.Exists(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English")) Then
-                    Dim englishlanguage = New ObjectFile(Of List(Of String))(New SkyEditor.Core.Windows.IOProvider, .OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
+                    Dim englishlanguage = New ObjectFile(Of List(Of String))(CurrentPluginManager.CurrentIOProvider, .OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))
                     ReDim ItemNames(1959)
                     englishlanguage.ContainedObject.CopyTo(6773, ItemNames, 0, 1959)
                     'Using englishLanguage = New FileFormats.LanguageString(.OriginalFilename.Replace("\", "/").Replace("Items/Item Definitions", "Languages/English"))

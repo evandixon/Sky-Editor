@@ -4,6 +4,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Deployment.Application
 Imports System.Resources
 Imports SkyEditor.Core.Interfaces
+Imports SkyEditor.Core.IO
 
 ''' <summary>
 ''' A collection of methods that are useful to Sky Editor plugins.
@@ -328,19 +329,19 @@ Public Class PluginHelper
 #End Region
 
 #Region "Open/Close File"
-    Public Shared Event FileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
-    Public Shared Event FileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
-    Public Shared Sub RaiseFileClosed(sender As Object, e As EventArguments.FileClosedEventArgs)
+    Public Shared Event FileOpenRequested(sender As Object, e As FileOpenedEventArguments)
+    Public Shared Event FileClosed(sender As Object, e As FileClosedEventArgs)
+    Public Shared Sub RaiseFileClosed(sender As Object, e As FileClosedEventArgs)
         RaiseEvent FileClosed(sender, e)
     End Sub
     Public Shared Sub RequestFileOpen(File As Object, DisposeOnClose As Boolean)
         If File IsNot Nothing Then
-            RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+            RaiseEvent FileOpenRequested(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
         End If
     End Sub
-    Public Shared Sub RequestFileOpen(File As Object, ParentProject As ProjectOld)
+    Public Shared Sub RequestFileOpen(File As Object, ParentProject As Project)
         If File IsNot Nothing Then
-            RaiseEvent FileOpenRequested(Nothing, New EventArguments.FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
+            RaiseEvent FileOpenRequested(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
         End If
     End Sub
 #End Region

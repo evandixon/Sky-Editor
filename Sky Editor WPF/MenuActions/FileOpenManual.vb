@@ -8,17 +8,16 @@ Namespace MenuActions
         Inherits MenuAction
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Dim _manager = PluginManager.GetInstance
-            OpenFileDialog1.Filter = _manager.IOFiltersString
+            OpenFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 Dim w As New UI.GameTypeSelector()
                 Dim games As New Dictionary(Of String, TypeInfo)
-                For Each item In IOHelper.GetOpenableFileTypes(_manager)
+                For Each item In IOHelper.GetOpenableFileTypes(CurrentPluginManager)
                     games.Add(PluginHelper.GetTypeName(item), item)
                 Next
                 w.AddGames(games.Keys)
                 If w.ShowDialog Then
-                    PluginHelper.RequestFileOpen(Await IOHelper.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame), _manager), True)
+                    PluginHelper.RequestFileOpen(Await IOHelper.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame), CurrentPluginManager), True)
                 End If
             End If
         End Function

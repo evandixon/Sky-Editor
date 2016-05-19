@@ -11,7 +11,7 @@ Namespace ConsoleCommands
                     Dim pointers As New Dictionary(Of UInt32, UInt32)
                     Using f As New FileFormats.Sir0
                         f.IsReadOnly = True
-                        Await f.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
+                        Await f.OpenFile(Arguments(0), CurrentPluginManager.CurrentIOProvider)
                         Dim offset As UInt32 = 0
                         For Each item In f.RelativePointers
                             offset += item

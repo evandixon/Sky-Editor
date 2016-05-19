@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
@@ -6,7 +7,7 @@ Namespace Projects
     Public Class SkyBackModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("data", "BACK")}
         End Function
 
@@ -14,7 +15,7 @@ Namespace Projects
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
             Dim projectDir = GetRootDirectory()
@@ -27,7 +28,7 @@ Namespace Projects
 
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New BGP
-                                       Await b.OpenFile(Item, New SkyEditor.Core.Windows.IOProvider)
+                                       Await b.OpenFile(Item, CurrentPluginManager.CurrentIOProvider)
                                        Dim image = Await b.GetImage
                                        Dim newFilename = IO.Path.Combine(BACKdir, IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
@@ -35,12 +36,12 @@ Namespace Projects
                                        End If
                                        image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
                                        IO.File.Copy(newFilename, newFilename & ".original")
-                                       Await Me.AddExistingFile("Backgrounds", newFilename)
+                                       Await Me.AddExistingFile("Backgrounds", newFilename, CurrentPluginManager.CurrentIOProvider)
                                    End Using
                                End Function, backFiles)
         End Function
 
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             'Convert BACK
             Dim projectDir = GetRootDirectory()
             Dim rawDir = GetRawFilesDir()
@@ -69,7 +70,7 @@ Namespace Projects
 
                     If includeInPack Then
                         Dim img = BGP.ConvertFromBitmap(Drawing.Bitmap.FromFile(background))
-                        img.Save(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"), PluginManager.GetInstance.CurrentIOProvider)
+                        img.Save(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"), CurrentPluginManager.CurrentIOProvider)
                         img.Dispose()
                         Await BGP.RunCompress(IO.Path.Combine(rawDir, "Data", "BACK", IO.Path.GetFileNameWithoutExtension(background) & ".bgp"))
                     End If

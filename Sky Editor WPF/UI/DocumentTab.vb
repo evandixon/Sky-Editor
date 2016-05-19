@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
@@ -107,18 +108,18 @@ Namespace UI
                     e.Cancel = True
                 Else
                     If TypeOf _document Is IDisposable Then
-                        PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
+                        PluginHelper.RaiseFileClosed(Me, New FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
                         DirectCast(_document, IDisposable).Dispose()
                     Else
-                        PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
+                        PluginHelper.RaiseFileClosed(Me, New FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
                     End If
                 End If
             Else
                 If TypeOf _document Is IDisposable Then
-                    PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
+                    PluginHelper.RaiseFileClosed(Me, New FileClosedEventArgs With {.File = Me._document, .WillDispose = True})
                     DirectCast(_document, IDisposable).Dispose()
                 Else
-                    PluginHelper.RaiseFileClosed(Me, New EventArguments.FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
+                    PluginHelper.RaiseFileClosed(Me, New FileClosedEventArgs With {.File = Me._document, .WillDispose = False})
                 End If
             End If
             If TypeOf Me.Content Is TabControl Then
@@ -148,12 +149,12 @@ Namespace UI
 #Region "Methods"
         Public Sub SaveFile(Filename As String)
             If TypeOf Document Is ISavableAs Then
-                DirectCast(Document, ISavableAs).Save(Filename, PluginManager.GetInstance.CurrentIOProvider)
+                DirectCast(Document, ISavableAs).Save(Filename, _manager.CurrentIOProvider)
             End If
         End Sub
         Public Sub SaveFile()
             If TypeOf Document Is ISavable Then
-                DirectCast(Document, ISavable).Save(PluginManager.GetInstance.CurrentIOProvider)
+                DirectCast(Document, ISavable).Save(_manager.CurrentIOProvider)
             End If
         End Sub
 

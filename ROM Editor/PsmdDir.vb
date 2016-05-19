@@ -50,7 +50,7 @@ Public Class PsmdDir
             If IO.File.Exists(filename) Then
                 Dim f As New FarcF5
                 f.EnableInMemoryLoad = True
-                Await f.OpenFile(filename, New SkyEditor.Core.Windows.IOProvider)
+                Await f.OpenFile(filename, Provider)
                 LanguageFiles.Add(item, f)
                 Dim m As New MessageBin
                 m.EnableInMemoryLoad = True

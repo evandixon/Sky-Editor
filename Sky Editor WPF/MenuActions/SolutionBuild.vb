@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Threading.Tasks
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
 Namespace MenuActions
@@ -7,12 +8,12 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
-            Return {GetType(SolutionOld).GetTypeInfo}
+            Return {GetType(Solution).GetTypeInfo}
         End Function
 
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As SolutionOld In Targets
+            For Each item As Solution In Targets
                 Try
                     Await item.Build()
                 Catch ex As Exception

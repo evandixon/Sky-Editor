@@ -7,10 +7,9 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Dim _manager = PluginManager.GetInstance
             Dim w As New UI.NewFileWindow()
             Dim games As New Dictionary(Of String, Type)
-            For Each item In IOHelper.GetCreatableFileTypes(_manager)
+            For Each item In IOHelper.GetCreatableFileTypes(CurrentPluginManager)
                 games.Add(PluginHelper.GetTypeName(item), item)
             Next
             w.AddGames(games.Keys)

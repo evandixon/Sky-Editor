@@ -7,7 +7,7 @@ Namespace Projects
     Public Class SkyStarterModProject
         Inherits GenericModProject
 
-        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("overlay", "overlay_0013.bin"),
                     IO.Path.Combine("data", "MESSAGE", "text_e.str"),
                     IO.Path.Combine("data", "MESSAGE", "text_f.str"),
@@ -39,7 +39,7 @@ Namespace Projects
             Return patchers
         End Function
 
-        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
             Dim rawDir = GetRawFilesDir()
@@ -61,10 +61,10 @@ Namespace Projects
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key)) Then
                     Using langString = New LanguageString()
-                        Await langString.OpenFile(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), New SkyEditor.Core.Windows.IOProvider)
-                        Dim langList As New ObjectFile(Of List(Of String))(New SkyEditor.Core.Windows.IOProvider)
+                        Await langString.OpenFile(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), CurrentPluginManager.CurrentIOProvider)
+                        Dim langList As New ObjectFile(Of List(Of String))(CurrentPluginManager.CurrentIOProvider)
                         langList.ContainedObject = langString.Items
-                        langList.Save(IO.Path.Combine(projDir, "Languages", item.Value), PluginManager.GetInstance.CurrentIOProvider)
+                        langList.Save(IO.Path.Combine(projDir, "Languages", item.Value), CurrentPluginManager.CurrentIOProvider)
                     End Using
                 End If
             Next
@@ -72,14 +72,14 @@ Namespace Projects
             'Convert Personality Test
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingPersonalityTest)
             Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
-            Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)(New SkyEditor.Core.Windows.IOProvider)
+            Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)(CurrentPluginManager.CurrentIOProvider)
             personalityTest.ContainedObject = New PersonalityTestContainer(overlay13)
-            personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"), PluginManager.GetInstance.CurrentIOProvider)
-            Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"))
+            personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"), CurrentPluginManager.CurrentIOProvider)
+            Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"), CurrentPluginManager.CurrentIOProvider)
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             Dim rawDir = GetRawFilesDir()
             Dim projDir = GetRootDirectory()
 
@@ -87,7 +87,7 @@ Namespace Projects
             Dim personalityTest As ObjectFile(Of PersonalityTestContainer) = Nothing
             If IO.File.Exists(IO.Path.Combine(projDir, "Starter Pokemon")) Then
                 Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
-                personalityTest = New ObjectFile(Of PersonalityTestContainer)(New SkyEditor.Core.Windows.IOProvider, IO.Path.Combine(projDir, "Starter Pokemon"))
+                personalityTest = New ObjectFile(Of PersonalityTestContainer)(CurrentPluginManager.CurrentIOProvider, IO.Path.Combine(projDir, "Starter Pokemon"))
                 personalityTest.ContainedObject.UpdateOverlay(overlay13)
                 overlay13.Save()
             End If
@@ -103,7 +103,7 @@ Namespace Projects
             languageDictionary.Add("text_j.str", "日本語") 'Japanese
             For Each item In languageDictionary
                 If IO.File.Exists(IO.Path.Combine(projDir, "Languages", item.Value)) Then
-                    Dim langFile As New ObjectFile(Of List(Of String))(New SkyEditor.Core.Windows.IOProvider, IO.Path.Combine(projDir, "Languages", item.Value))
+                    Dim langFile As New ObjectFile(Of List(Of String))(CurrentPluginManager.CurrentIOProvider, IO.Path.Combine(projDir, "Languages", item.Value))
                     Using langString As New LanguageString
                         langString.CreateFile("")
                         langString.Items = langFile.ContainedObject
@@ -112,7 +112,7 @@ Namespace Projects
                             langString.UpdatePersonalityTestResult(personalityTest.ContainedObject)
                         End If
 
-                        langString.Save(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), PluginManager.GetInstance.CurrentIOProvider)
+                        langString.Save(IO.Path.Combine(rawDir, "Data", "MESSAGE", item.Key), CurrentPluginManager.CurrentIOProvider)
                     End Using
                 End If
             Next

@@ -135,7 +135,7 @@ Namespace FileFormats.PSMD
             Header.CreateFile("", Me.RawData(sir0Offset, sir0Length))
         End Function
 
-        Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String) As Task
+        Public Shared Function Pack(SourceDirectory As String, DestinationFarcFilename As String, provider As IOProvider) As Task
             If IO.File.Exists(DestinationFarcFilename) Then
                 IO.File.Delete(DestinationFarcFilename)
             End If
@@ -146,7 +146,7 @@ Namespace FileFormats.PSMD
             Dim fileNames = IO.Directory.GetFiles(SourceDirectory)
             'Dim fileData As New GenericFile({})
             Dim fileData As New List(Of Byte)
-            Dim filenameDic = GetReverseFileDictionary(DestinationFarcFilename)
+            Dim filenameDic = GetReverseFileDictionary(DestinationFarcFilename, provider)
 
             For Each item In From kv In filenameDic Order By kv.Value
                 Dim entry As New Sir0Fat5.FileInfo
@@ -183,7 +183,7 @@ Namespace FileFormats.PSMD
             'Next
 
             Dim tempName As String = Guid.NewGuid.ToString
-            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"), PluginManager.GetInstance.CurrentIOProvider)
+            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"), provider)
             header.Dispose()
             Dim headerData = IO.File.ReadAllBytes(PluginHelper.GetResourceName(tempName & ".tmp"))
             IO.File.Delete(PluginHelper.GetResourceName(tempName & ".tmp"))
@@ -238,12 +238,12 @@ Namespace FileFormats.PSMD
             Return Task.CompletedTask
         End Function
 
-        Private Shared Function GetReverseFileDictionary(Filename As String) As Dictionary(Of String, UInteger)
+        Private Shared Function GetReverseFileDictionary(Filename As String, provider As IOProvider) As Dictionary(Of String, UInteger)
             Dim out As New Dictionary(Of String, UInteger)
             Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Filename) & ".txt"))
             If IO.File.Exists(resourceFile) Then
                 Dim i As New BasicIniFile
-                i.OpenFile(resourceFile, New SkyEditor.Core.Windows.IOProvider)
+                i.OpenFile(resourceFile, provider)
                 For Each item In i.Entries
                     out.Add(item.Value, CUInt(item.Key))
                 Next

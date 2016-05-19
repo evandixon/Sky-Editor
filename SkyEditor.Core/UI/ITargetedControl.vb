@@ -33,6 +33,7 @@
         ''' </summary>
         ''' <param name="Targets"></param>
         Sub UpdateTargets(Targets As IEnumerable(Of Object))
+        Sub SetPluginManager(manager As PluginManager)
     End Interface
 
 End Namespace

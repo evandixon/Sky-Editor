@@ -4,6 +4,9 @@ Imports Microsoft.VisualBasic.Devices
 Public Class IOProvider
     Inherits SkyEditor.Core.IO.IOProvider
 
+    Public Sub New()
+    End Sub
+
     Public Overrides Sub CopyFile(sourceFilename As String, destinationFilename As String)
         File.Copy(sourceFilename, destinationFilename, True)
     End Sub

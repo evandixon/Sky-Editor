@@ -85,7 +85,7 @@ Namespace Redistribution
         ''' <param name="Plugins">Definitions of the plugins to pack.</param>
         ''' <param name="DestinationFilename">File path of the zip to create.</param>
         ''' <returns></returns>
-        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As ExtensionInfo) As Task
+        Public Shared Async Function PackPlugins(Plugins As IEnumerable(Of SkyEditorPlugin), DestinationFilename As String, Info As ExtensionInfo, manager As PluginManager) As Task
             Dim tempDir = Path.Combine(Environment.CurrentDirectory, "PackageTemp" & Guid.NewGuid.ToString)
             Dim ToCopy As New List(Of String)
             For Each plugin In Plugins
@@ -93,7 +93,7 @@ Namespace Redistribution
                 Dim filename = Path.GetFileNameWithoutExtension(plgAssembly.Location)
 
                 'Prepare the plugin for distribution
-                Dim plg = (From p In PluginManager.GetInstance.Plugins Where p.GetType.Assembly.Location = plgAssembly.Location).FirstOrDefault
+                Dim plg = (From p In manager.Plugins Where p.GetType.Assembly.Location = plgAssembly.Location).FirstOrDefault
                 If plg IsNot Nothing Then
                     plg.PrepareForDistribution()
                 Else
@@ -126,14 +126,14 @@ Namespace Redistribution
             Next
 
             'Copy temporary files
-            Await Core.Utilities.FileSystem.ReCreateDirectory(tempDir, PluginManager.GetInstance.CurrentIOProvider)
+            Await Core.Utilities.FileSystem.ReCreateDirectory(tempDir, manager.CurrentIOProvider)
             For Each filePath In ToCopy
                 If File.Exists(filePath) Then
                     File.Copy(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), True)
                 Else
                     'It's probably a directory.
                     If Directory.Exists(filePath) Then
-                        Await Core.Utilities.FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), PluginManager.GetInstance.CurrentIOProvider)
+                        Await Core.Utilities.FileSystem.CopyDirectory(filePath, filePath.Replace(Path.GetDirectoryName(filePath), tempDir), manager.CurrentIOProvider)
                         'Else
                         'Guess not.  Do nothing.
                     End If
@@ -146,40 +146,12 @@ Namespace Redistribution
             For Each item In Plugins
                 Info.ExtensionFiles.Add(Path.GetFileName(item.GetType.Assembly.Location))
             Next
-            Info.Save(Path.Combine(tempDir, "info.skyext"), PluginManager.GetInstance.CurrentIOProvider)
+            Info.Save(Path.Combine(tempDir, "info.skyext"), manager.CurrentIOProvider)
 
             'Then zip it
             Core.Utilities.Zip.Zip(tempDir, DestinationFilename)
-            Await Core.Utilities.FileSystem.DeleteDirectory(tempDir, PluginManager.GetInstance.CurrentIOProvider)
+            Await Core.Utilities.FileSystem.DeleteDirectory(tempDir, manager.CurrentIOProvider)
         End Function
-
-        ''' <summary>
-        ''' Deletes files and directories scheduled for deletion.
-        ''' </summary>
-        Public Shared Async Function DeleteScheduledFiles() As Task
-            If Not File.Exists(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
-                File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
-            End If
-            For Each item In File.ReadAllLines(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"))
-                If File.Exists(item) Then
-                    File.Delete(item)
-                ElseIf Directory.Exists(item) Then
-                    Await Core.Utilities.FileSystem.DeleteDirectory(item, PluginManager.GetInstance.CurrentIOProvider)
-                End If
-            Next
-            File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
-        End Function
-
-        ''' <summary>
-        ''' Schedules a file or directory for deletion.
-        ''' </summary>
-        ''' <param name="pathToDelete"></param>
-        Public Shared Sub ScheduleDelete(pathToDelete As String)
-            If Not File.Exists(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt")) Then
-                File.WriteAllText(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), "")
-            End If
-            File.AppendAllLines(Path.Combine(PluginHelper.RootResourceDirectory, "todelete.txt"), {pathToDelete})
-        End Sub
 
         ''' <summary>
         ''' Restarts the application.

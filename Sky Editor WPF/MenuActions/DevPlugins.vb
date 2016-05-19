@@ -5,7 +5,7 @@ Namespace MenuActions
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            PluginHelper.RequestFileOpen(PluginManager.GetInstance, False)
+            PluginHelper.RequestFileOpen(CurrentPluginManager, False)
             Return Task.CompletedTask
         End Function
 

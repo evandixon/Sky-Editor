@@ -1,11 +1,12 @@
 ﻿Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
 Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Namespace Projects
     Public Class GenericModProject
-        Inherits ProjectOld
+        Inherits Project
 
 #Region "Project Settings"
         Public Property ModName As String
@@ -97,7 +98,7 @@ Namespace Projects
             Return {".*"}
         End Function
 
-        Public Overrides Function CanBuild(Solution As SolutionOld) As Boolean
+        Public Overrides Function CanBuild(Solution As Solution) As Boolean
             Return True
         End Function
 #End Region
@@ -111,7 +112,7 @@ Namespace Projects
         ''' If empty, will copy everything.
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overridable Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {}
         End Function
 
@@ -124,7 +125,7 @@ Namespace Projects
         End Function
 
 #Region "File Paths"
-        Public Overridable Function GetRawFilesSourceDir(Solution As SolutionOld, SourceProjectName As String) As String
+        Public Overridable Function GetRawFilesSourceDir(Solution As Solution, SourceProjectName As String) As String
             Dim baseRomProject As BaseRomProject = Solution.GetProjectsByName(SourceProjectName).FirstOrDefault
             Return baseRomProject.GetRawFilesDir
         End Function
@@ -162,7 +163,7 @@ Namespace Projects
             Return out
         End Function
 
-        Public Overridable Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overridable Async Function Initialize(Solution As Solution) As Task
             If Me.ProjectReferences.Count > 0 Then
                 Dim filesToCopy = Me.GetFilesToCopy(Solution, Me.ProjectReferences(0))
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
@@ -175,7 +176,7 @@ Namespace Projects
                         End If
                         IO.File.Copy(source, dest, True)
                     ElseIf IO.Directory.Exists(source) Then
-                        Await FileSystem.CopyDirectory(source, dest, PluginManager.GetInstance.CurrentIOProvider)
+                        Await FileSystem.CopyDirectory(source, dest, CurrentPluginManager.CurrentIOProvider)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
                     Dim a As New AsyncFor(My.Resources.Language.LoadingCopyingFiles)
@@ -199,7 +200,7 @@ Namespace Projects
                                            End If
                                        End Sub, filesToCopy)
                 Else
-                    Await FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, PluginManager.GetInstance.CurrentIOProvider)
+                    Await FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, CurrentPluginManager.CurrentIOProvider)
                 End If
             Else
                 'Since there's no source project, we'll leave it up to the user to supply the needed files.
@@ -215,7 +216,7 @@ Namespace Projects
         ''' <param name="Solution"></param>
         ''' <returns></returns>
         ''' <remarks>If this is overridden, do custom work, THEN use MyBase.Build</remarks>
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             For Each sourceProjectName In Me.ProjectReferences
                 Dim sourceRoot = GetRawFilesSourceDir(Solution, sourceProjectName)
                 Dim currentFiles = GetRawFilesDir()
@@ -346,7 +347,7 @@ Namespace Projects
                 actions.UpdateUrl = Homepage
 
                 '-Copy and write files
-                Await FileSystem.ReCreateDirectory(modTemp, PluginManager.GetInstance.CurrentIOProvider)
+                Await FileSystem.ReCreateDirectory(modTemp, CurrentPluginManager.CurrentIOProvider)
 
                 IO.File.WriteAllText(IO.Path.Combine(modTemp, "mod.json"), Json.Serialize(actions))
 
@@ -428,7 +429,7 @@ Namespace Projects
                         IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
                     End If
                 Next
-                Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers, New SkyEditor.Core.Windows.IOProvider)
+                Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers, CurrentPluginManager.CurrentIOProvider)
 
                 '-Zip Mod
                 If Not IO.Directory.Exists(modOutput) Then

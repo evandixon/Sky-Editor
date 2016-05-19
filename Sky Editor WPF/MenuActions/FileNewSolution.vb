@@ -1,14 +1,14 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 
 Namespace MenuActions
     Public Class FileNewSolution
         Inherits MenuAction
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Dim m = PluginManager.GetInstance
-            Dim newSol As New UI.NewSolutionWindow(m)
+            Dim newSol As New UI.NewSolutionWindow(CurrentPluginManager)
             If newSol.ShowDialog Then
-                m.CurrentSolution = SolutionOld.CreateSolution(newSol.SelectedLocation, newSol.SelectedName, newSol.SelectedSolution.GetType)
+                CurrentPluginManager.CurrentIOUIManager.CurrentSolution = Solution.CreateSolution(newSol.SelectedLocation, newSol.SelectedName, newSol.SelectedSolution.GetType, CurrentPluginManager)
             End If
             Return Task.CompletedTask
         End Function

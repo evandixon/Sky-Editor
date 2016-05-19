@@ -4,11 +4,16 @@ Imports System.Reflection
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Settings
 Imports Xceed.Wpf.AvalonDock.Layout
+Imports SkyEditor.Core.IO
+Imports SkyEditor.Core
+Imports SkyEditorBase.EventArguments
+
 Namespace UI
     Public Class MainWindow
 
 #Region "Private Variables"
         Private WithEvents _manager As PluginManager
+        Private WithEvents _iouiManager As IOUIManager
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
         Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
         Private _queuedConsoleLines As Queue(Of PluginHelper.ConsoleLineWrittenEventArgs)
@@ -52,13 +57,13 @@ Namespace UI
             Dim targets As New List(Of Object)
 
             'Add the current solution to the targets if supported
-            If _manager.CurrentSolution IsNot Nothing Then
-                targets.Add(_manager.CurrentSolution)
+            If _manager.CurrentIOUIManager.CurrentSolution IsNot Nothing Then
+                targets.Add(_manager.CurrentIOUIManager.CurrentSolution)
             End If
 
             'Add the current project
-            If _manager.CurrentProject IsNot Nothing Then
-                targets.Add(_manager.CurrentProject)
+            If _manager.CurrentIOUIManager.CurrentProject IsNot Nothing Then
+                targets.Add(_manager.CurrentIOUIManager.CurrentProject)
             End If
 
             Dim currentDocumentObject = GetSelectedDocumentObject()
@@ -72,13 +77,13 @@ Namespace UI
             Dim targets As New List(Of Object)
 
             'Add the current project to the targets if supported
-            If _manager.CurrentSolution IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentSolution) Then
-                targets.Add(_manager.CurrentSolution)
+            If _manager.CurrentIOUIManager.CurrentSolution IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentIOUIManager.CurrentSolution) Then
+                targets.Add(_manager.CurrentIOUIManager.CurrentSolution)
             End If
 
             'Add the current project if supported
-            If _manager.CurrentProject IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentProject) Then
-                targets.Add(_manager.CurrentProject)
+            If _manager.CurrentIOUIManager.CurrentProject IsNot Nothing AndAlso Action.SupportsObject(_manager.CurrentIOUIManager.CurrentProject) Then
+                targets.Add(_manager.CurrentIOUIManager.CurrentProject)
             End If
 
             If Action.TargetAll Then
@@ -137,8 +142,9 @@ Namespace UI
             ShowWelcomePage()
 
             _toolWindows = New List(Of ITargetedControl)
-            For Each item In _manager.GetRegisteredObjects(GetType(ITargetedControl).GetTypeInfo)
+            For Each item As ITargetedControl In _manager.GetRegisteredObjects(GetType(ITargetedControl).GetTypeInfo)
                 'Todo: filter so ony the control types we're expecting are retrieved
+                item.SetPluginManager(_manager)
                 _toolWindows.Add(item)
             Next
             For Each item In UiHelper.GenerateToolWindows(_toolWindows)
@@ -152,7 +158,7 @@ Namespace UI
                 End Select
             Next
 
-            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, PluginManager.GetInstance.CurrentSettingsProvider.GetIsDevMode))
+            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, _manager.CurrentSettingsProvider.GetIsDevMode), _manager)
                 menuMain.Items.Add(item)
                 RegisterEventMenuItemHandlers(item)
             Next
@@ -181,7 +187,7 @@ Namespace UI
         Private Sub MainWindow2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
             Dim editedTabs = From t In docPane.Children Where TypeOf t Is DocumentTab AndAlso DirectCast(t, DocumentTab).IsModified = True
 
-            Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentSolution IsNot Nothing AndAlso _manager.CurrentSolution.IsModified)
+            Dim editsMade As Boolean = editedTabs.Any OrElse (_manager.CurrentIOUIManager.CurrentSolution IsNot Nothing AndAlso _manager.CurrentIOUIManager.CurrentSolution.UnsavedChanges)
             If editsMade Then
                 If MessageBox.Show(My.Resources.Language.ExitConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.No Then
                     e.Cancel = True
@@ -215,16 +221,16 @@ Namespace UI
         '    End If
         'End Sub
 
-        Private Sub OnFileOpenRequested(sender As Object, e As EventArguments.FileOpenedEventArguments)
+        Private Sub OnFileOpenRequested(sender As Object, e As FileOpenedEventArguments)
             OpenDocumentTab(e.File, e.DisposeOnExit)
         End Sub
 
-        Private Sub OnExceptionThrown(sender As Object, e As EventArguments.ExceptionThrownEventArgs)
+        Private Sub OnExceptionThrown(sender As Object, e As ExceptionThrownEventArgs)
             MessageBox.Show(My.Resources.Language.GenericErrorSeeOutput)
             PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
         End Sub
 
-        Private Sub _manager_SolutionChanged(sender As Object, e As EventArgs) Handles _manager.SolutionChanged
+        Private Sub _manager_SolutionChanged(sender As Object, e As EventArgs) Handles _iouiManager.SolutionChanged
             Dispatcher.Invoke(Sub()
                                   Dim t = GetMenuActionTargets()
                                   UiHelper.UpdateMenuItemVisibility(t, menuMain)
@@ -233,7 +239,7 @@ Namespace UI
                               End Sub)
         End Sub
 
-        Private Sub _manager_ProjectChanged(sender As Object, e As EventArgs) Handles _manager.CurrentProjectChanged
+        Private Sub _manager_ProjectChanged(sender As Object, e As EventArgs) Handles _iouiManager.CurrentProjectChanged
             Dispatcher.Invoke(Sub()
                                   Dim t = GetMenuActionTargets()
                                   UiHelper.UpdateMenuItemVisibility(t, menuMain)
@@ -290,7 +296,7 @@ Namespace UI
             InitializeComponent()
 
             ' Add any initialization after the InitializeComponent() call.
-            _manager = PluginManager.GetInstance
+            _manager = New PluginManager
         End Sub
         Public Sub New(Manager As PluginManager)
 
@@ -299,6 +305,7 @@ Namespace UI
 
             ' Add any initialization after the InitializeComponent() call.
             _manager = Manager
+            _iouiManager = _manager.CurrentIOUIManager
         End Sub
     End Class
 

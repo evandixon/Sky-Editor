@@ -10,7 +10,7 @@ Namespace UI
             Dim item As New TreeViewItem
             item.Header = Collection.Name
             item.Tag = Collection
-            For Each child In Collection.GetChildCollections(PluginManager.GetInstance)
+            For Each child In Collection.GetChildCollections(CurrentPluginManager)
                 item.Items.Add(GetTVItem(child))
             Next
             Return item
@@ -28,7 +28,7 @@ Namespace UI
 
         Sub RefreshCurrentExtensionList()
             If tvCategories.SelectedItem IsNot Nothing Then
-                lvExtensions.ItemsSource = DirectCast(tvCategories.SelectedItem.Tag, IExtensionCollection).GetExtensions(PluginManager.GetInstance)
+                lvExtensions.ItemsSource = DirectCast(tvCategories.SelectedItem.Tag, IExtensionCollection).GetExtensions(CurrentPluginManager)
             End If
         End Sub
 
@@ -54,7 +54,7 @@ Namespace UI
             Dim o As New OpenFileDialog
             o.Filter = $"{My.Resources.Language.ZipFiles} (*.zip)|*.zip|{My.Resources.Language.AllFiles} (*.*)|*.*"
             If o.ShowDialog = DialogResult.OK Then
-                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, PluginHelper.GetExtensionDirectory, PluginManager.GetInstance)
+                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, PluginHelper.GetExtensionDirectory, CurrentPluginManager)
                 DisplayInstallResultMessage(result)
                 RefreshCurrentExtensionList()
             End If

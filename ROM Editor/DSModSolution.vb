@@ -1,9 +1,9 @@
-﻿Imports ROMEditor.Projects
-Imports SkyEditorBase
-Imports SkyEditorBase.EventArguments
-
+﻿Imports System.Reflection
+Imports ROMEditor.Projects
+Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
 Public Class DSModSolution
-    Inherits SkyEditorBase.SolutionOld
+    Inherits Solution
 
     Public Overrides Function CanCreateDirectory(Path As String) As Boolean
         Return True
@@ -13,13 +13,13 @@ Public Class DSModSolution
         Return (Path.Replace("\", "/").TrimStart("/") = "")
     End Function
 
-    Public Overrides Function GetSupportedProjectTypes(Path As String) As IEnumerable(Of Type)
+    Public Overrides Function GetSupportedProjectTypes(Path As String, manager As PluginManager) As IEnumerable(Of TypeInfo)
         Dim baseRomProject As BaseRomProject = GetProjectsByName(Me.Setting("BaseRomProject")).FirstOrDefault
         If baseRomProject Is Nothing OrElse baseRomProject.RomSystem Is Nothing OrElse baseRomProject.GameCode Is Nothing Then
             Return {}
         Else
             Dim matches As New List(Of Type)
-            For Each item In PluginManager.GetInstance.GetRegisteredObjects(GetType(GenericModProject))
+            For Each item In manager.GetRegisteredObjects(GetType(GenericModProject))
                 Dim games = item.GetSupportedGameCodes
                 Dim match As Boolean = False
                 For Each t In games
@@ -37,8 +37,8 @@ Public Class DSModSolution
     Private Sub DSModSolution_Created(sender As Object, e As EventArgs) Handles Me.Created
         Me.Setting("BaseRomProject") = "BaseRom"
         Me.Setting("ModPackProject") = "ModPack"
-        CreateProject("", "BaseRom", GetType(BaseRomProject))
-        CreateProject("", "ModPack", GetType(DSModPackProject))
+        CreateProject("", "BaseRom", GetType(BaseRomProject), CurrentPluginManager)
+        CreateProject("", "ModPack", GetType(DSModPackProject), CurrentPluginManager)
     End Sub
 
     Private Async Sub DSModSolution_ProjectAdded(sender As Object, e As ProjectAddedEventArgs) Handles Me.ProjectAdded
@@ -56,8 +56,8 @@ Public Class DSModSolution
             Try
                 Await m.Initialize(Me)
             Catch ex As Exception
-                PluginHelper.ReportExceptionThrown(Me, ex)
-                PluginHelper.SetLoadingStatusFailed()
+                SkyEditorBase.PluginHelper.ReportExceptionThrown(Me, ex)
+                SkyEditorBase.PluginHelper.SetLoadingStatusFailed()
             End Try
 
             For Each item In Me.GetAllProjects

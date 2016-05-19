@@ -1,12 +1,16 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Reflection
+Imports System.Windows.Forms
+Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
+
 Namespace UI
     Public Class NewSolutionWindow
         Implements IDisposable
-
+        Dim _manager As PluginManager
         Dim _folderBrowser As FolderBrowserDialog
         Private Sub btnOk_Click(sender As Object, e As RoutedEventArgs) Handles btnOk.Click
-            PluginManager.GetInstance.CurrentSettingsProvider.SetSetting("SkyEditor.Core.Solution.LastSolutionDirectory", txtLocation.Text)
-            PluginManager.GetInstance.CurrentSettingsProvider.Save(PluginManager.GetInstance.CurrentIOProvider)
+            _manager.CurrentSettingsProvider.SetSetting("SkyEditor.Core.Solution.LastSolutionDirectory", txtLocation.Text)
+            _manager.CurrentSettingsProvider.Save(_manager.CurrentIOProvider)
             DialogResult = True
             Me.Close()
         End Sub
@@ -19,10 +23,11 @@ Namespace UI
             ' This call is required by the designer.
             InitializeComponent()
 
+            _manager = Manager
             ' Add any initialization after the InitializeComponent() call.
             _folderBrowser = New FolderBrowserDialog
 
-            For Each item As SolutionOld In Manager.GetRegisteredObjects(GetType(SolutionOld))
+            For Each item As Solution In Manager.GetRegisteredObjects(GetType(Solution).GetTypeInfo)
                 ddType.Items.Add(item)
             Next
             If ddType.Items.Count > 0 Then ddType.SelectedIndex = 0
@@ -35,8 +40,8 @@ Namespace UI
         End Sub
 
         Private Sub NewProjectWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            If PluginManager.GetInstance.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory") IsNot Nothing Then
-                txtLocation.Text = PluginManager.GetInstance.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory")
+            If _manager.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory") IsNot Nothing Then
+                txtLocation.Text = _manager.CurrentSettingsProvider.GetSetting("SkyEditor.Core.Solution.LastSolutionDirectory")
             End If
         End Sub
 
@@ -58,11 +63,11 @@ Namespace UI
             End Set
         End Property
 
-        Public Property SelectedSolution As SolutionOld
+        Public Property SelectedSolution As Solution
             Get
                 Return ddType.LastSafeValue
             End Get
-            Set(value As SolutionOld)
+            Set(value As Solution)
                 ddType.LastSafeValue = value
             End Set
         End Property

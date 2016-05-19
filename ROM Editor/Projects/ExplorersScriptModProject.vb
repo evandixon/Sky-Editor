@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.Utilities
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
 Namespace Projects
@@ -7,14 +8,14 @@ Namespace Projects
         Public Overrides Function GetRawFilesDir() As String
             Return GetRootDirectory()
         End Function
-        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("data", "script")}
         End Function
         Public Overrides Function GetSupportedGameCodes() As IEnumerable(Of String)
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
             Dim projectDir = GetRootDirectory()
@@ -26,7 +27,7 @@ Namespace Projects
             Await f2.RunForEach(Async Function(Item As String) As Task
                                     Dim d = IO.Path.GetDirectoryName(Item).Replace(projectDir, "")
                                     Me.CreateDirectory(d)
-                                    Await Me.AddExistingFile(d, Item, False)
+                                    Await Me.AddExistingFile(d, Item, CurrentPluginManager.CurrentIOProvider)
                                 End Function, scriptFiles)
 
             PluginHelper.SetLoadingStatusFinished()

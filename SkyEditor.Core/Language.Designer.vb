@@ -66,11 +66,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to The following commands are available:.
+        '''</summary>
+        Friend Shared ReadOnly Property ConsoleAvailableCommands() As String
+            Get
+                Return ResourceManager.GetString("ConsoleAvailableCommands", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Unknown command &quot;{0}&quot;..
+        '''</summary>
+        Friend Shared ReadOnly Property ConsoleUnknownCommand() As String
+            Get
+                Return ResourceManager.GetString("ConsoleUnknownCommand", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to StepCount cannot be 0..
         '''</summary>
         Friend Shared ReadOnly Property ErrorAsyncForInfiniteLoop() As String
             Get
                 Return ResourceManager.GetString("ErrorAsyncForInfiniteLoop", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Cannot add a file at the given path: {0}.
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorCantAddFile() As String
+            Get
+                Return ResourceManager.GetString("ErrorCantAddFile", resourceCulture)
             End Get
         End Property
         

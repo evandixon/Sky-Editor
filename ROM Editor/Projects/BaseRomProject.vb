@@ -1,12 +1,12 @@
-﻿Imports SkyEditor.Core.IO
+﻿Imports System.IO
+Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.ROMEditor
-Imports SkyEditorBase
-Imports SkyEditorBase.EventArguments
 
 Namespace Projects
     Public Class BaseRomProject
-        Inherits SkyEditorBase.ProjectOld
+        Inherits Project
 
         Public Property RomSystem As String
             Get
@@ -47,7 +47,7 @@ Namespace Projects
             Return (FilePath.Replace("\", "/").TrimStart("/").ToLower = "baserom")
         End Function
 
-        Public Overrides Function GetImportIOFilter(ParentProjectPath As String) As String
+        Public Overrides Function GetImportIOFilter(ParentProjectPath As String, manager As PluginManager) As String
             Select Case Me.Setting("System")
                 Case "NDS"
                     Return $"{My.Resources.Language.NDSRomFile} (*.nds)|*.nds|{My.Resources.Language.AllFiles} (*.*)|*.*"
@@ -65,17 +65,17 @@ Namespace Projects
         Private Async Sub BaseRomProject_FileAdded(sender As Object, e As ProjectFileAddedEventArgs) Handles Me.FileAdded
             Dim mode As String = Nothing
 
-            If Me.Settings.ContainsKey("System") Then
-                If Me.Settings("System") = "NDS" Then
+            If Me.Settings.GetSetting("System") IsNot Nothing Then
+                If Me.Setting("System") = "NDS" Then
                     mode = "nds"
-                ElseIf Me.Settings("System") = "3DS" Then
+                ElseIf Me.Setting("System") = "3DS" Then
                     mode = "3ds"
                 End If
             End If
 
             If mode Is Nothing Then
                 Using f As New GenericFile
-                    Await f.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
+                    Await f.OpenFile(e.FullFilename, CurrentPluginManager.CurrentIOProvider)
                     'Then we have to detect the ROM type
                     Dim n As New GenericNDSRom
                     If Await n.IsFileOfType(f) Then
@@ -98,28 +98,27 @@ Namespace Projects
                 End Using
             End If
 
-            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             Select Case mode
                 Case "nds"
                     Dim nds As New GenericNDSRom
-                    Await nds.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
-                    Await nds.Unpack(GetRawFilesDir, New SkyEditor.Core.Windows.IOProvider)
+                    Await nds.OpenFile(e.FullFilename, CurrentPluginManager.CurrentIOProvider)
+                    Await nds.Unpack(GetRawFilesDir, CurrentPluginManager.CurrentIOProvider)
                     Setting("System") = "NDS"
                     Setting("GameCode") = nds.GameCode
                     nds.Dispose()
                 Case "3ds"
                     Dim threeDS As New Roms.Generic3DSRom
                     threeDS.IsReadOnly = True
-                    Await threeDS.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
-                    Await threeDS.Unpack(GetRawFilesDir)
+                    Await threeDS.OpenFile(e.FullFilename, CurrentPluginManager.CurrentIOProvider)
+                    Await threeDS.Unpack(GetRawFilesDir, CurrentPluginManager.CurrentIOProvider)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID
                     threeDS.Dispose()
                 Case "cxi"
                     Dim threeDS As New Roms.Cxi3DSRom
                     threeDS.IsReadOnly = True
-                    Await threeDS.OpenFile(e.FullFilename, New SkyEditor.Core.Windows.IOProvider)
-                    Await threeDS.Unpack(GetRawFilesDir)
+                    Await threeDS.OpenFile(e.FullFilename, CurrentPluginManager.CurrentIOProvider)
+                    Await threeDS.Unpack(GetRawFilesDir, CurrentPluginManager.CurrentIOProvider)
                     Setting("System") = "3DS"
                     Setting("GameCode") = threeDS.TitleID
                     threeDS.Dispose()
@@ -127,17 +126,15 @@ Namespace Projects
 
             Dim filename = Me.GetProjectItemByPath("/BaseRom").GetFilename
             DeleteFile("/BaseRom")
-            IO.File.Delete(filename)
-
-            PluginHelper.SetLoadingStatusFinished()
+            File.Delete(filename)
         End Sub
 
         Public Overridable Function GetRawFilesDir() As String
-            Return IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), "Raw Files")
+            Return Path.Combine(Path.GetDirectoryName(Me.Filename), "Raw Files")
         End Function
 
         Public Overridable Function GetIconPath() As String
-            Return IO.Path.Combine(GetRawFilesDir, "exefs", "icon.bin")
+            Return Path.Combine(GetRawFilesDir, "exefs", "icon.bin")
         End Function
     End Class
 

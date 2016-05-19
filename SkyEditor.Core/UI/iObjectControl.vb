@@ -33,6 +33,12 @@ Namespace UI
         Property IsModified As Boolean
 
         ''' <summary>
+        ''' Updates the current IObjectControl's reference to the current plugin manager
+        ''' </summary>
+        ''' <param name="manager">Instance of the current plugin manager</param>
+        Sub SetPluginManager(manager As PluginManager)
+
+        ''' <summary>
         ''' Returns an IEnumerable of every type that the iObjectControl is programmed to handle.
         ''' EditingObject will be of one of these types.
         ''' </summary>

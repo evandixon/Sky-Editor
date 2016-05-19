@@ -12,7 +12,7 @@ Namespace ConsoleCommands
                 Dim totalList As New Dictionary(Of UInteger, String)
                 For Each item In IO.Directory.GetFiles(Arguments(0))
                     Dim msg As New MessageBin
-                    Await msg.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
+                    Await msg.OpenFile(item, CurrentPluginManager.CurrentIOProvider)
                     languageEntries.Add(IO.Path.GetFileNameWithoutExtension(item), New Dictionary(Of UInteger, String))
                     For Each s In msg.Strings
                         languageEntries(IO.Path.GetFileNameWithoutExtension(item)).Add(s.Hash, s.Entry)

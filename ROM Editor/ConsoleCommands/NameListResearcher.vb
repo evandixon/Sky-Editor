@@ -19,8 +19,8 @@ Namespace ConsoleCommands
                     Dim nameOutput As New Text.StringBuilder
                     Dim msg As New GenericFile()
                     Dim msg2 As New MessageBin
-                    Await msg.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
-                    Await msg2.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
+                    Await msg.OpenFile(Arguments(0), CurrentPluginManager.CurrentIOProvider)
+                    Await msg2.OpenFile(Arguments(0), CurrentPluginManager.CurrentIOProvider)
                     Dim position = &HD0BA
                     For count = 0 To 2000
                         Dim s = msg.ReadNullTerminatedString(position, Text.Encoding.Unicode)

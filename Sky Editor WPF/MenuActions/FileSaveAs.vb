@@ -13,9 +13,9 @@ Namespace MenuActions
         End Function
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item As ISavableAs In Targets
-                SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(item.GetDefaultExtension))
+                SaveFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersStringSaveAs(IO.Path.GetExtension(item.GetDefaultExtension))
                 If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                    item.Save(SaveFileDialog1.FileName, PluginManager.GetInstance.CurrentIOProvider)
+                    item.Save(SaveFileDialog1.FileName, CurrentPluginManager.CurrentIOProvider)
                 End If
             Next
             Return Task.CompletedTask

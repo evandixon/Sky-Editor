@@ -12,6 +12,12 @@ Namespace UI
         Public ReadOnly Property ActionPath As List(Of String)
 
         ''' <summary>
+        ''' The current instance of the plugin manager
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property CurrentPluginManager As PluginManager
+
+        ''' <summary>
         ''' True to target all open files and the current project.
         ''' False to target only the selected file and the current project.
         ''' </summary>

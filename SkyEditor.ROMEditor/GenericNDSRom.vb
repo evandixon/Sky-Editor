@@ -449,7 +449,7 @@ Public Class GenericNDSRom
     ''' </summary>
     ''' <param name="TargetDir">Directory to store the extracted files.</param>
     ''' <returns></returns>
-    <Obsolete("Incomplete.")> Public Async Function Unpack(TargetDir As String, Provider As IOProvider) As Task
+    Public Async Function Unpack(TargetDir As String, Provider As IOProvider) As Task
         Dim fat = GetFAT()
 
         'Set up extraction dependencies

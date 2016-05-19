@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 
@@ -10,11 +11,11 @@ Namespace Projects
             Return {GameStrings.GTICode}
         End Function
 
-        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
             Return {IO.Path.Combine("romfs", "bg"), IO.Path.Combine("romfs", "font"), IO.Path.Combine("romfs", "image_2d")}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
             Dim rawFilesDir = GetRawFilesDir()
             Dim backDir = GetRootDirectory()
@@ -23,7 +24,7 @@ Namespace Projects
             Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New CteImage
-                                       Await b.OpenFile(Item, New SkyEditor.Core.Windows.IOProvider)
+                                       Await b.OpenFile(Item, CurrentPluginManager.CurrentIOProvider)
                                        Dim image = b.ContainedImage
                                        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(Item) & ".bmp")
                                        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
@@ -34,7 +35,7 @@ Namespace Projects
 
                                        Dim internalDir = IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "")
                                        Me.CreateDirectory(internalDir)
-                                       Await Me.AddExistingFile(internalDir, newFilename)
+                                       Await Me.AddExistingFile(internalDir, newFilename, CurrentPluginManager.CurrentIOProvider)
                                    End Using
                                End Function, backFiles)
 
@@ -58,7 +59,7 @@ Namespace Projects
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             'Convert BACK
             Dim sourceDir = GetRootDirectory()
             Dim rawFilesDir = GetRawFilesDir()
@@ -87,9 +88,9 @@ Namespace Projects
 
                 If includeInPack Then
                     Dim img As New CteImage
-                    Await img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"), New SkyEditor.Core.Windows.IOProvider)
+                    Await img.OpenFile(IO.Path.Combine(rawFilesDir, "romfs", IO.Path.GetDirectoryName(background).Replace(sourceDir, ""), IO.Path.GetFileNameWithoutExtension(background) & ".img"), CurrentPluginManager.CurrentIOProvider)
                     img.ContainedImage = Drawing.Image.FromFile(background)
-                    img.Save(PluginManager.GetInstance.CurrentIOProvider)
+                    img.Save(CurrentPluginManager.CurrentIOProvider)
                     img.Dispose()
                 End If
 

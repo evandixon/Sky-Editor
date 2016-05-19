@@ -11,7 +11,7 @@ Namespace ConsoleCommands
             If Arguments.Length > 0 Then
                 If IO.File.Exists(Arguments(0)) Then
                     Dim exp As New Experience
-                    Await exp.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
+                    Await exp.OpenFile(Arguments(0), CurrentPluginManager.CurrentIOProvider)
 
                     For Each item In exp.Entries
                         Dim s As New StringBuilder

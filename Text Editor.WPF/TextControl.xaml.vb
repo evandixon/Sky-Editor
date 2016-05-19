@@ -1,10 +1,16 @@
 ﻿Imports System.Windows.Controls
+Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 Imports SkyEditorBase
 
 Public Class TextControl
     Inherits UserControl
     Implements IObjectControl
+
+    Public Sub SetPluginManager(manager As PluginManager) Implements IObjectControl.SetPluginManager
+        'Do nothing, not needed for this control
+    End Sub
+
     Public Sub RefreshDisplay()
         txtText.Text = GetEditingObject(Of String)()
     End Sub

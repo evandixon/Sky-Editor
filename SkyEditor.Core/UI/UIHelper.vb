@@ -146,6 +146,7 @@ Namespace UI
                     End If
                 Next
             End If
+            out.SetPluginManager(Manager)
             Return out
         End Function
 
@@ -205,6 +206,7 @@ Namespace UI
                     'allTabs.Add(etab)
                     'Create another instance of etab, since etab is our cached, search-only instance.
                     Dim t As IObjectControl = ReflectionHelpers.CreateInstance(etab.GetType.GetTypeInfo)
+                    t.SetPluginManager(Manager)
                     t.EditingObject = ObjectToEdit
                     allTabs.Add(t)
                 End If

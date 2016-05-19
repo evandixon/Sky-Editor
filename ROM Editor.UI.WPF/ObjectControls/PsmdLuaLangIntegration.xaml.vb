@@ -12,7 +12,7 @@ Public Class PsmdLuaLangIntegration
     End Sub
 
     Public Overrides Async Sub RefreshDisplay()
-        With PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject) 'GetEditingObject(Of CodeFiles.LuaCodeFile)()
+        With CurrentPluginManager.CurrentIOUIManager.GetOpenedFileProject(GetEditingObject) 'GetEditingObject(Of CodeFiles.LuaCodeFile)()
             Dim messageFiles As New Dictionary(Of String, MessageBin)
             For Each item In IO.Directory.GetDirectories(IO.Path.Combine(.GetRootDirectory, "Languages"), "*", IO.SearchOption.TopDirectoryOnly)
                 Dim msgfile = New MessageBin
@@ -27,7 +27,7 @@ Public Class PsmdLuaLangIntegration
                 End If
 
                 If exists Then
-                    Await msgfile.OpenFile(filename, New SkyEditor.Core.Windows.IOProvider)
+                    Await msgfile.OpenFile(filename, CurrentPluginManager.CurrentIOProvider)
                     messageFiles.Add(IO.Path.GetFileName(item), msgfile)
                 End If
             Next
@@ -48,7 +48,7 @@ Public Class PsmdLuaLangIntegration
 
     Public Overrides Sub UpdateObject()
         For Each item As TabItem In tcTabs.Items
-            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).Save(PluginManager.GetInstance.CurrentIOProvider)
+            DirectCast(DirectCast(item.Content, MessageBinEditor).EditingObject, MessageBin).Save(CurrentPluginManager.CurrentIOProvider)
         Next
     End Sub
 
@@ -61,7 +61,7 @@ Public Class PsmdLuaLangIntegration
     End Function
 
     Public Overrides Function SupportsObject(Obj As Object) As Boolean
-        Return PluginManager.GetInstance.GetOpenedFileProject(Obj) IsNot Nothing
+        Return CurrentPluginManager.CurrentIOUIManager.GetOpenedFileProject(Obj) IsNot Nothing
     End Function
 
     Private Sub OnModified(sender As Object, e As EventArgs)
@@ -69,7 +69,7 @@ Public Class PsmdLuaLangIntegration
     End Sub
 
     Private Async Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
-        Dim p As Projects.PsmdLuaProject = PluginManager.GetInstance.GetOpenedFileProject(GetEditingObject)
+        Dim p As Projects.PsmdLuaProject = CurrentPluginManager.CurrentIOUIManager.GetOpenedFileProject(GetEditingObject)
         Dim oldText As String = btnAdd.Content
         If Not p.IsLanguageLoaded Then
             btnAdd.IsEnabled = False

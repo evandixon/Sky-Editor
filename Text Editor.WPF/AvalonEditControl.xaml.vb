@@ -2,6 +2,7 @@
 Imports System.Windows.Input
 Imports CodeFiles
 Imports ICSharpCode.AvalonEdit.CodeCompletion
+Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 Imports SkyEditorBase
 
@@ -10,6 +11,10 @@ Public Class AvalonEditControl
 
     Dim extraData As CodeExtraData
     Private WithEvents autoComplete As CompletionWindow
+
+    Public Sub SetPluginManager(manager As PluginManager) Implements IObjectControl.SetPluginManager
+        'Do nothing, not needed for this control
+    End Sub
 
     Public Sub RefreshDisplay()
         txtCode.ShowLineNumbers = True

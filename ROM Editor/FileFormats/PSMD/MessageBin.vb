@@ -96,8 +96,8 @@ Namespace FileFormats.PSMD
             Next
         End Sub
 
-        Public Async Function OpenFileOnlyIDs(Filename As String) As Task
-            Await MyBase.OpenFile(Filename, New SkyEditor.Core.Windows.IOProvider)
+        Public Async Function OpenFileOnlyIDs(Filename As String, provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, provider)
 
             Dim stringCount As Integer = BitConverter.ToInt32(Header, 0)
             Dim stringInfoPointer As Integer = BitConverter.ToInt32(Header, 4)

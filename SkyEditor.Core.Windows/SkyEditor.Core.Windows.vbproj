@@ -63,13 +63,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleModule.vb" />
     <Compile Include="ExecutableFile.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
+    <Compile Include="WindowsConsoleProvider.vb" />
     <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
     <Compile Include="IOProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

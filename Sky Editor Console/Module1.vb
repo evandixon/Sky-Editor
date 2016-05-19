@@ -1,18 +1,21 @@
-﻿Imports SkyEditorBase
+﻿Imports System.IO
+Imports SkyEditor.Core
+Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditorBase
 
 Module Module1
 
     Sub Main()
         Try
-            Dim manager As PluginManager = PluginManager.GetInstance
+            Dim manager As New PluginManager
             manager.LoadCore(New ConsoleCoreMod)
 
             PluginHelper.ShowConsole()
             Console.WriteLine("Sky Editor Console has successfully loaded.")
-            SkyEditor.Core.Windows.ConsoleModule.ConsoleMain(manager).Wait()
+            ConsoleHelper.RunConsole(manager).Wait()
         Catch ex As Exception
             Console.WriteLine(ex.ToString)
-            IO.File.WriteAllText("error.txt", ex.ToString)
+            File.WriteAllText("error.txt", ex.ToString)
             Console.WriteLine("Error details have been written to error.txt")
             Console.WriteLine("Press enter to exit...")
             Console.ReadLine()

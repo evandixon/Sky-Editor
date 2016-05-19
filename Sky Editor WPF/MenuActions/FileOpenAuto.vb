@@ -9,13 +9,12 @@ Namespace MenuActions
         Private WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            Dim _manager = PluginManager.GetInstance
-            OpenFileDialog1.Filter = _manager.IOFiltersString
+            OpenFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersString
             If OpenFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 If OpenFileDialog1.FileName.ToLower.EndsWith(".skysln") Then
-                    PluginManager.GetInstance.CurrentSolution = SolutionOld.OpenSolutionFile(OpenFileDialog1.FileName)
+                    CurrentPluginManager.CurrentIOUIManager.CurrentSolution = Solution.OpenSolutionFile(OpenFileDialog1.FileName, CurrentPluginManager)
                 Else
-                    PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(OpenFileDialog1.FileName, AddressOf IOHelper.PickFirstDuplicateMatchSelector, _manager), True)
+                    PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(OpenFileDialog1.FileName, AddressOf IOHelper.PickFirstDuplicateMatchSelector, CurrentPluginManager), True)
                 End If
             End If
         End Function

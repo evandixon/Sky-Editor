@@ -9,7 +9,7 @@ Namespace ConsoleCommands
             If Arguments.Length > 0 Then
                 If IO.Directory.Exists(Arguments(0)) Then
                     Dim data As New PsmdDir
-                    Await data.OpenFile(Arguments(0), New SkyEditor.Core.Windows.IOProvider)
+                    Await data.OpenFile(Arguments(0), CurrentPluginManager.CurrentIOProvider)
 
                     Dim doExit As Boolean = False
                     While Not doExit

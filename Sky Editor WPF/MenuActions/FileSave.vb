@@ -23,21 +23,21 @@ Namespace MenuActions
                         If TypeOf item Is IOnDisk AndAlso String.IsNullOrEmpty(DirectCast(item, IOnDisk).Filename) Then
                             'If it doesn't, then do a SaveAs.
                             If TypeOf item Is IOnDisk Then
-                                SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(item, IOnDisk).Filename))
+                                SaveFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersStringSaveAs(IO.Path.GetExtension(DirectCast(item, IOnDisk).Filename))
                             Else
-                                SaveFileDialog1.Filter = PluginManager.GetInstance.IOFiltersString(IsSaveAs:=True) 'Todo: use default extension
+                                SaveFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersString(IsSaveAs:=True) 'Todo: use default extension
                             End If
 
                             If SaveFileDialog1.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-                                DirectCast(sav, ISavableAs).Save(SaveFileDialog1.FileName, PluginManager.GetInstance.CurrentIOProvider)
+                                DirectCast(sav, ISavableAs).Save(SaveFileDialog1.FileName, CurrentPluginManager.CurrentIOProvider)
                             Else
-                                sav.Save(PluginManager.GetInstance.CurrentIOProvider)
+                                sav.Save(CurrentPluginManager.CurrentIOProvider)
                             End If
                         Else
-                            sav.Save(PluginManager.GetInstance.CurrentIOProvider)
+                            sav.Save(CurrentPluginManager.CurrentIOProvider)
                         End If
                     Else
-                        sav.Save(PluginManager.GetInstance.CurrentIOProvider)
+                        sav.Save(CurrentPluginManager.CurrentIOProvider)
                     End If
                 Else
                     'The act of getting to this point (calling DocumentTab.Document) forces any changes in the GUI to be applied to the underlying object.

@@ -3,6 +3,7 @@ Imports System.Text.RegularExpressions
 Imports CodeFiles
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.EventArguments
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
 Namespace Projects
@@ -89,7 +90,7 @@ Validate:
                                                       Dim f2 As New AsyncFor
                                                       Await f2.RunForEach(Async Function(File As String) As Task
                                                                               Using msg As New MessageBin(True)
-                                                                                  Await msg.OpenFileOnlyIDs(File)
+                                                                                  Await msg.OpenFileOnlyIDs(File, CurrentPluginManager.CurrentIOProvider)
 
                                                                                   For Each entry In msg.Strings
                                                                                       'If LanguageIDs(lang).Contains(entry.Hash) Then
@@ -117,10 +118,10 @@ Validate:
                 End If
 
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await FileSystem.ReCreateDirectory(destDir, PluginManager.GetInstance.CurrentIOProvider)
+                Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
 
                 Dim farc As New FarcF5
-                Await farc.OpenFile(item, New SkyEditor.Core.Windows.IOProvider)
+                Await farc.OpenFile(item, CurrentPluginManager.CurrentIOProvider)
                 Await farc.Extract(destDir)
             Next
 
@@ -135,8 +136,8 @@ Validate:
                 End If
 
                 Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await FileSystem.ReCreateDirectory(destDir, PluginManager.GetInstance.CurrentIOProvider)
-                Await FileSystem.CopyDirectory(item, destDir, PluginManager.GetInstance.CurrentIOProvider)
+                Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
+                Await FileSystem.CopyDirectory(item, destDir, CurrentPluginManager.CurrentIOProvider)
             Next
         End Function
 
@@ -161,7 +162,7 @@ Validate:
             End If
         End Sub
 
-        Public Overrides Async Function Initialize(Solution As SolutionOld) As Task
+        Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
 
             Await ExtractLanguages()
@@ -192,13 +193,13 @@ Validate:
             Await f2.RunForEach(Async Function(Item As String) As Task
                                     Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
                                     Me.CreateDirectory(d)
-                                    Await Me.AddExistingFile(d, Item, False)
+                                    Await Me.AddExistingFile(d, Item, CurrentPluginManager.CurrentIOProvider)
                                 End Function, filesToOpen)
 
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As SolutionOld) As Task
+        Public Overrides Async Function Build(Solution As Solution) As Task
             Dim farcMode As Boolean = False
 
             If IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*").Length > 0 Then
@@ -213,7 +214,7 @@ Validate:
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count)) & ".bin"
                                        Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_jp", "")))
-                                       Await FarcF5.Pack(dirs(count), newFilePath)
+                                       Await FarcF5.Pack(dirs(count), newFilePath, CurrentPluginManager.CurrentIOProvider)
                                    Next
                                    Me.BuildProgress = 1
                                End Function)
@@ -226,7 +227,7 @@ Validate:
                                        Me.BuildProgress = count / dirs.Length
                                        Dim newFilename As String = "message_" & IO.Path.GetFileNameWithoutExtension(dirs(count))
                                        Dim newFilePath As String = IO.Path.Combine(IO.Path.Combine(Me.GetRawFilesDir, "romfs", newFilename.Replace("_en", "")))
-                                       Await FileSystem.CopyDirectory(dirs(count), newFilePath, PluginManager.GetInstance.CurrentIOProvider)
+                                       Await FileSystem.CopyDirectory(dirs(count), newFilePath, CurrentPluginManager.CurrentIOProvider)
                                    Next
                                    Me.BuildProgress = 1
                                End Function)
@@ -258,8 +259,8 @@ Validate:
             Await MyBase.Build(Solution)
         End Function
 
-        Public Overrides Function GetFilesToCopy(Solution As SolutionOld, BaseRomProjectName As String) As IEnumerable(Of String)
-            Dim project As ProjectOld = Solution.GetProjectsByName(BaseRomProjectName).FirstOrDefault
+        Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)
+            Dim project As Project = Solution.GetProjectsByName(BaseRomProjectName).FirstOrDefault
             If project IsNot Nothing AndAlso TypeOf project Is BaseRomProject Then
                 Dim code = DirectCast(project, BaseRomProject).GameCode
                 Dim psmd As New Regex(GameStrings.PSMDCode)
@@ -297,7 +298,7 @@ Validate:
             Dim filenameCurrent = String.Format(filenameTemplate, "English") 'SettingsManager.Instance.Settings.CurrentLanguage)
             ' Dim filenameDefault = String.Format(filenameTemplate, SettingsManager.Instance.Settings.DefaultLanguage)
             If IO.File.Exists(filenameCurrent) Then
-                Return New CodeExtraDataFile(filenameCurrent)
+                Return New CodeExtraDataFile(filenameCurrent, CurrentPluginManager.CurrentIOProvider)
                 'ElseIf IO.File.Exists(filenameDefault) Then
                 '    Return New CodeExtraDataFile(filenameDefault)
             Else

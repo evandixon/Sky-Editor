@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.IO
+﻿Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditor.Core.IO
 ''' <summary>
 ''' A variant of SkyEditorPlugin that controls how the plugin manager loads other plugins.
 ''' </summary>
@@ -16,6 +17,10 @@ Public MustInherit Class CoreSkyEditorPlugin
     ''' </summary>
     ''' <returns></returns>
     Public MustOverride Function GetSettingsProvider(manager As PluginManager) As ISettingsProvider
+
+    Public Overridable Function GetConsoleProvider() As IConsoleProvider
+        Return New DummyConsoleProvider
+    End Function
 
     ''' <summary>
     ''' Gets the full path of the directory used to store extensions.

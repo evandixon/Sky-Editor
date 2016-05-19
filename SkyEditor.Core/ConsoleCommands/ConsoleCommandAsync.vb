@@ -9,6 +9,7 @@
         End Property
 
         Public Property CurrentPluginManager As PluginManager
+        Public Property Console As IConsoleProvider
 
     End Class
 

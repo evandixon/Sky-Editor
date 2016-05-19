@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 
 Namespace UI
@@ -82,6 +83,8 @@ Namespace UI
         End Property
         Dim _header As String
 
+        Public Property CurrentPluginManager As PluginManager
+
         ''' <summary>
         ''' Returns the current EditingObject, after casting it to type T.
         ''' </summary>
@@ -102,6 +105,10 @@ Namespace UI
 
         Protected Sub SetEditingObject(Of T)(Value As T)
             PluginHelper.CastUpdate(Of T)(_editingObject, Value)
+        End Sub
+
+        Public Sub SetPluginManager(manager As PluginManager) Implements IObjectControl.SetPluginManager
+            CurrentPluginManager = manager
         End Sub
 
         ''' <summary>

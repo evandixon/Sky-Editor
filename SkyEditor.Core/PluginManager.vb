@@ -4,15 +4,18 @@ Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Settings
 Imports SkyEditor.Core.Extensions
+Imports SkyEditor.Core.ConsoleCommands
 
 Public Class PluginManager
+    Implements IDisposable
 
 #Region "Constructors"
-    Protected Sub New()
+    Public Sub New()
         Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
         Me.FailedPluginLoads = New List(Of String)
         Me.Assemblies = New List(Of Assembly)
         Me.DependantPlugins = New Dictionary(Of Assembly, List(Of Assembly))
+        Me.CurrentIOUIManager = New IOUIManager
     End Sub
 #End Region
 
@@ -27,14 +30,6 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Protected Property DependantPlugins As Dictionary(Of Assembly, List(Of Assembly))
-
-    ''' <summary>
-    ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property IOFilters As New Dictionary(Of String, String)
 
     ''' <summary>
     ''' Contains the assemblies that contain plugin information.
@@ -84,6 +79,34 @@ Public Class PluginManager
     End Property
     Dim _currentSettingsProvider As ISettingsProvider
 
+    ''' <summary>
+    ''' The current Console Provider for the application.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property CurrentConsoleProvider As IConsoleProvider
+        Get
+            Return _currentConsoleProvider
+        End Get
+        Protected Set(value As IConsoleProvider)
+            _currentConsoleProvider = value
+        End Set
+    End Property
+    Dim _currentConsoleProvider As IConsoleProvider
+
+    ''' <summary>
+    ''' The current instance of the IO/UI Manager, helping manage open files and their associated UI.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property CurrentIOUIManager As IOUIManager
+        Get
+            Return _currentIOmanager
+        End Get
+        Protected Set(value As IOUIManager)
+            _currentIOmanager = value
+        End Set
+    End Property
+    Dim _currentIOmanager As IOUIManager
+
 #End Region
 
 #Region "Events"
@@ -114,6 +137,7 @@ Public Class PluginManager
         'Load providers
         CurrentIOProvider = Core.GetIOProvider
         CurrentSettingsProvider = Core.GetSettingsProvider(Me)
+        CurrentConsoleProvider = Core.GetConsoleProvider
 
         'Delete files and directories scheduled for deletion
         Dim deleteTasks As New List(Of Task)
@@ -141,16 +165,22 @@ Public Class PluginManager
         ExtensionDirectory = Core.GetExtensionDirectory
 
         'Load type registers
+        RegisterTypeRegister(GetType(ExtensionType).GetTypeInfo)
+        RegisterTypeRegister(GetType(Solution).GetTypeInfo)
+        RegisterTypeRegister(GetType(Project).GetTypeInfo)
+        RegisterTypeRegister(GetType(ICreatableFile).GetTypeInfo)
         RegisterTypeRegister(GetType(IOpenableFile).GetTypeInfo)
         RegisterTypeRegister(GetType(IDetectableFileType).GetTypeInfo)
         RegisterTypeRegister(GetType(IDirectoryTypeDetector).GetTypeInfo)
         RegisterTypeRegister(GetType(IFileTypeDetector).GetTypeInfo)
         RegisterTypeRegister(GetType(MenuAction).GetTypeInfo)
-        Me.RegisterTypeRegister(GetType(ExtensionType).GetTypeInfo)
+
 
         'Load types
         RegisterType(GetType(IFileTypeDetector).GetTypeInfo, GetType(DetectableFileTypeDetector).GetTypeInfo)
-        Me.RegisterType(GetType(ExtensionType).GetTypeInfo, GetType(PluginExtensionType).GetTypeInfo)
+        RegisterType(GetType(ExtensionType).GetTypeInfo, GetType(PluginExtensionType).GetTypeInfo)
+        RegisterType(GetType(Solution).GetTypeInfo, GetType(Solution).GetTypeInfo)
+        RegisterType(GetType(Project).GetTypeInfo, GetType(Project).GetTypeInfo)
 
         'Load plugins, if enabled
         Dim enablePluginLoading = Core.IsPluginLoadingEnabled
@@ -345,22 +375,6 @@ Public Class PluginManager
         RaiseEvent TypeRegistered(Me, New TypeRegisteredEventArgs With {.BaseType = Register, .RegisteredType = Type})
     End Sub
 
-    ''' <summary>
-    ''' Registers a filter for use in open and save file dialogs.
-    ''' </summary>
-    ''' <param name="FileExtension">Filter for the dialog.  If this is by extension, should be *.extension</param>
-    ''' <param name="FileFormatName">Name of the file format</param>
-    Public Sub RegisterIOFilter(FileExtension As String, FileFormatName As String)
-        Dim TempIOFilters As Dictionary(Of String, String) = IOFilters
-        If TempIOFilters Is Nothing Then
-            TempIOFilters = New Dictionary(Of String, String)
-        End If
-        If Not TempIOFilters.ContainsKey(FileExtension) Then
-            TempIOFilters.Add(FileExtension, FileFormatName)
-        End If
-        IOFilters = TempIOFilters
-    End Sub
-
 #End Region
 
 #Region "Functions"
@@ -422,6 +436,42 @@ Public Class PluginManager
     End Function
 #End Region
 
+#End Region
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' To detect redundant calls
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+                ' TODO: dispose managed state (managed objects).
+
+                For Each item In Plugins
+                    item.UnLoad(Me)
+                Next
+            End If
+
+            ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
+            ' TODO: set large fields to null.
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        Dispose(True)
+        ' TODO: uncomment the following line if Finalize() is overridden above.
+        ' GC.SuppressFinalize(Me)
+    End Sub
 #End Region
 
 End Class

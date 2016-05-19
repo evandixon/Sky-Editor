@@ -1,4 +1,7 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports System.IO
+Imports SkyEditor.Core
+Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 
 Namespace UI
     Public Class SolutionExplorer
@@ -8,8 +11,8 @@ Namespace UI
             Public Property IsRoot As Boolean
             Public Property IsProjectRoot As Boolean
             Public Property IsDirectory As Boolean
-            Public Property ParentProject As ProjectOld
-            Public Property ParentSolution As SolutionOld
+            Public Property ParentProject As Project
+            Public Property ParentSolution As Solution
             Public Property ParentPath As String
             Public Property Name As String
             Public Sub New()
@@ -38,7 +41,7 @@ Namespace UI
             InitializeComponent()
 
             ' Add any initialization after the InitializeComponent() call.
-            ProjectRegistry = New Dictionary(Of ProjectOld, TreeViewItem)
+            ProjectRegistry = New Dictionary(Of Project, TreeViewItem)
         End Sub
 
         Private Sub SolutionExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -53,6 +56,9 @@ Namespace UI
             menuAddExistingFile.Visibility = Visibility.Collapsed
             menuAddExistingProject.Visibility = Visibility.Collapsed
         End Sub
+
+
+        Public Property CurrentPluginManager As PluginManager
 
         Public Property Header As String Implements ITargetedControl.Header
             Get
@@ -77,7 +83,7 @@ Namespace UI
         End Property
         Dim _isVisible As Boolean
 
-        Private Property ProjectRegistry As Dictionary(Of ProjectOld, TreeViewItem)
+        Private Property ProjectRegistry As Dictionary(Of Project, TreeViewItem)
 
         Public Event HeaderChanged As ITargetedControl.HeaderChangedEventHandler Implements ITargetedControl.HeaderChanged
         Public Event VisibilityChanged As ITargetedControl.VisibilityChangedEventHandler Implements ITargetedControl.VisibilityChanged
@@ -108,8 +114,8 @@ Namespace UI
             tvSolution.Items.Clear()
 
             For Each item In Targets
-                If TypeOf item Is SolutionOld Then
-                    Dim sol = DirectCast(item, SolutionOld)
+                If TypeOf item Is Solution Then
+                    Dim sol = DirectCast(item, Solution)
 
                     Dim n As New TreeViewItem
                     Dim t As New NodeTag
@@ -141,13 +147,12 @@ Namespace UI
             ITargetedControl_IsVisible = (supported > 0)
         End Sub
 
-        Private Function GetNode(Solution As SolutionOld, Item As SolutionOld.SolutionItem, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As Solution, Item As Solution.SolutionNode, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name
-                Item.Children.Sort()
 
-                For Each child In Item.Children
+                For Each child In From c In Item.Children Order By Item.Name
                     n.Items.Add(GetNode(Solution, child, Path & "/" & Item.Name))
                 Next
                 Dim t As New NodeTag
@@ -185,12 +190,11 @@ Namespace UI
             Return n
         End Function
 
-        Private Function GetNode(Solution As SolutionOld, Project As ProjectOld, Item As ProjectOld.ProjectItem, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As Solution, Project As Project, Item As Project.ProjectNode, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name
-                Item.Children.Sort()
-                For Each child In Item.Children
+                For Each child In From c In Item.Children Order By c.Name
                     n.Items.Add(GetNode(Solution, Project, child, Path & "/" & Item.Name))
                 Next
                 Dim t As New NodeTag
@@ -279,7 +283,7 @@ Namespace UI
                         menuProperties.Visibility = Visibility.Visible
 
                         'Update the current project
-                        PluginManager.GetInstance.CurrentProject = tag.ParentProject
+                        CurrentPluginManager.CurrentIOUIManager.CurrentProject = tag.ParentProject
 
                     ElseIf tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                         'Then we're at the project level
@@ -305,7 +309,7 @@ Namespace UI
                         End If
 
                         'Update the current project
-                        PluginManager.GetInstance.CurrentProject = tag.ParentProject
+                        CurrentPluginManager.CurrentIOUIManager.CurrentProject = tag.ParentProject
 
                     Else
                         'Then we're somewhere else?
@@ -355,7 +359,7 @@ Namespace UI
                     Dim tag = DirectCast(node.Tag, NodeTag)
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
-                    For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath)
+                    For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath, CurrentPluginManager)
                         types.Add(PluginHelper.GetTypeName(item), item)
                     Next
                     w.AddGames(types.Keys)
@@ -364,9 +368,9 @@ Namespace UI
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
                             'Then we're at the solution level
                             If tag.IsRoot Then
-                                tag.ParentSolution.CreateProject("", w.SelectedName, types(w.SelectedGame))
+                                tag.ParentSolution.CreateProject("", w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
                             Else
-                                tag.ParentSolution.CreateProject(tag.ParentPath & "/" & tag.Name, w.SelectedName, types(w.SelectedGame))
+                                tag.ParentSolution.CreateProject(tag.ParentPath & "/" & tag.Name, w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
                             End If
 
                         Else
@@ -385,7 +389,7 @@ Namespace UI
                     Dim tag = DirectCast(node.Tag, NodeTag)
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
-                    For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath)
+                    For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath, CurrentPluginManager)
                         types.Add(PluginHelper.GetTypeName(item), item)
                     Next
                     w.AddGames(types.Keys)
@@ -414,11 +418,11 @@ Namespace UI
                 If TypeOf node.Tag Is NodeTag Then
                     Dim t = DirectCast(node.Tag, NodeTag)
                     Dim w As New Forms.OpenFileDialog
-                    w.Filter = t.ParentProject.GetImportIOFilter(t.ParentPath)
+                    w.Filter = t.ParentProject.GetImportIOFilter(t.ParentPath, CurrentPluginManager)
                     If w.ShowDialog = Forms.DialogResult.OK Then
                         If t.ParentProject IsNot Nothing Then
                             'Then we're at the project level
-                            t.ParentProject.AddExistingFile(t.ParentPath, w.FileName)
+                            t.ParentProject.AddExistingFile(t.ParentPath, w.FileName, CurrentPluginManager.CurrentIOProvider)
                         Else
                             'Then we're somewhere else?
                         End If
@@ -440,9 +444,9 @@ Namespace UI
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
                             'Then we're at the solution level
                             If tag.IsRoot Then
-                                tag.ParentSolution.AddExistingProject("", w.FileName)
+                                tag.ParentSolution.AddExistingProject("", w.FileName, CurrentPluginManager)
                             Else
-                                tag.ParentSolution.AddExistingProject(tag.ParentPath & " / " & tag.Name, w.FileName)
+                                tag.ParentSolution.AddExistingProject(tag.ParentPath & " / " & tag.Name, w.FileName, CurrentPluginManager)
                             End If
 
                         Else
@@ -477,7 +481,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub Solution_DirectoryCreated(sender As Object, e As EventArguments.DirectoryCreatedEventArgs)
+        Private Sub Solution_DirectoryCreated(sender As Object, e As DirectoryCreatedEventArgs)
             Dim parent = GetSolutionNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim t As New TreeViewItem
@@ -503,7 +507,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub Solution_ProjectAdded(sender As Object, e As EventArguments.ProjectAddedEventArgs)
+        Private Sub Solution_ProjectAdded(sender As Object, e As ProjectAddedEventArgs)
             Dim parent = GetSolutionNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim t As New TreeViewItem
@@ -539,7 +543,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub Solution_DirectoryDeleted(sender As Object, e As EventArguments.DirectoryDeletedEventArgs)
+        Private Sub Solution_DirectoryDeleted(sender As Object, e As DirectoryDeletedEventArgs)
             Dim parent = GetSolutionNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim child = (From c As TreeViewItem In parent.Items Where DirectCast(c.Tag, NodeTag).Name.ToLower = e.DirectoryName.ToLower).FirstOrDefault
@@ -549,7 +553,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub Solution_ProjectRemoving(sender As Object, e As EventArguments.ProjectRemovingEventArgs)
+        Private Sub Solution_ProjectRemoving(sender As Object, e As ProjectRemovingEventArgs)
             RemoveHandler e.Project.DirectoryCreated, AddressOf Project_DirectoryCreated
             RemoveHandler e.Project.DirectoryDeleted, AddressOf Project_DirectoryDeleted
             RemoveHandler e.Project.FileAdded, AddressOf Project_FileAdded
@@ -557,7 +561,7 @@ Namespace UI
             ProjectRegistry.Remove(e.Project)
         End Sub
 
-        Private Sub Solution_ProjectRemoved(sender As Object, e As EventArguments.ProjectRemovedEventArgs)
+        Private Sub Solution_ProjectRemoved(sender As Object, e As ProjectRemovedEventArgs)
             Dim parent = GetSolutionNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim child = (From c As TreeViewItem In parent.Items Where DirectCast(c.Tag, NodeTag).Name.ToLower = e.DirectoryName.ToLower).FirstOrDefault
@@ -567,7 +571,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Function GetSolutionNode(Solution As SolutionOld, Path As String) As TreeViewItem
+        Private Function GetSolutionNode(Solution As Solution, Path As String) As TreeViewItem
             Dim node As TreeViewItem = Nothing
 
             For Each item As TreeViewItem In tvSolution.Items
@@ -595,11 +599,11 @@ Namespace UI
             Return node
         End Function
 
-        Private Function GetProjectRootNode(Project As ProjectOld) As TreeViewItem
+        Private Function GetProjectRootNode(Project As Project) As TreeViewItem
             Return ProjectRegistry(Project)
         End Function
 
-        Private Function GetProjectNode(Project As ProjectOld, Path As String) As TreeViewItem
+        Private Function GetProjectNode(Project As Project, Path As String) As TreeViewItem
             Dim node As TreeViewItem = GetProjectRootNode(Project)
 
             If node IsNot Nothing AndAlso Not String.IsNullOrEmpty(Path) Then
@@ -643,7 +647,7 @@ Namespace UI
             Return node
         End Function
 
-        Private Sub Project_DirectoryCreated(sender As Object, e As EventArguments.DirectoryCreatedEventArgs)
+        Private Sub Project_DirectoryCreated(sender As Object, e As DirectoryCreatedEventArgs)
             Dispatcher.Invoke(Sub()
                                   Dim parent = GetProjectNode(sender, e.ParentPath)
                                   If parent IsNot Nothing Then
@@ -672,7 +676,7 @@ Namespace UI
                               End Sub)
         End Sub
 
-        Private Sub Project_FileAdded(sender As Object, e As EventArguments.ProjectFileAddedEventArgs)
+        Private Sub Project_FileAdded(sender As Object, e As ProjectFileAddedEventArgs)
             Dispatcher.Invoke(Sub()
                                   Dim parent = GetProjectNode(sender, e.ParentPath)
                                   If parent IsNot Nothing Then
@@ -702,7 +706,7 @@ Namespace UI
                               End Sub)
         End Sub
 
-        Private Sub Project_DirectoryDeleted(sender As Object, e As EventArguments.DirectoryDeletedEventArgs)
+        Private Sub Project_DirectoryDeleted(sender As Object, e As DirectoryDeletedEventArgs)
             Dim parent = GetProjectNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim child = (From c As TreeViewItem In parent.Items Where DirectCast(c.Tag, NodeTag).Name.ToLower = e.DirectoryName.ToLower).FirstOrDefault
@@ -712,7 +716,7 @@ Namespace UI
             End If
         End Sub
 
-        Private Sub Project_FileRemoved(sender As Object, e As EventArguments.ProjectFileRemovedEventArgs)
+        Private Sub Project_FileRemoved(sender As Object, e As ProjectFileRemovedEventArgs)
             Dim parent = GetProjectNode(sender, e.ParentPath)
             If parent IsNot Nothing Then
                 Dim child = (From c As TreeViewItem In parent.Items Where DirectCast(c.Tag, NodeTag).Name.ToLower = e.FileName.ToLower).FirstOrDefault
@@ -735,10 +739,10 @@ Namespace UI
                 If tag.ParentProject IsNot Nothing AndAlso Not tag.IsProjectRoot Then
                     Dim projItem = tag.ParentProject.GetProjectItemByPath(tag.ParentPath & "/" & tag.Name)
                     If projItem IsNot Nothing Then
-                        Dim obj = Await projItem?.GetFile
+                        Dim obj = Await projItem?.GetFile(CurrentPluginManager)
                         If obj Is Nothing Then
-                            Dim f = IO.Path.Combine(IO.Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
-                            If Not IO.File.Exists(f) Then
+                            Dim f = Path.Combine(Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
+                            If Not File.Exists(f) Then
                                 MessageBox.Show(String.Format(My.Resources.Language.ErrorCantFindFileAt, f))
                             End If
                         End If
@@ -757,6 +761,10 @@ Namespace UI
                     PluginHelper.RequestFileOpen(tag.ParentProject, tag.ParentProject)
                 End If
             End If
+        End Sub
+
+        Public Sub SetPluginManager(manager As PluginManager) Implements ITargetedControl.SetPluginManager
+            Me.CurrentPluginManager = manager
         End Sub
     End Class
 

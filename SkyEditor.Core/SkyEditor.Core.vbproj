@@ -92,8 +92,12 @@
     <Import Include="Windows.UI.Xaml.Media.Imaging" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleCommands\ConsoleColor.vb" />
     <Compile Include="ConsoleCommands\ConsoleCommand.vb" />
     <Compile Include="ConsoleCommands\ConsoleCommandAsync.vb" />
+    <Compile Include="ConsoleCommands\ConsoleHelper.vb" />
+    <Compile Include="ConsoleCommands\DummyConsoleProvider.vb" />
+    <Compile Include="ConsoleCommands\IConsoleProvider.vb" />
     <Compile Include="Extensions\ExtensionHelper.vb" />
     <Compile Include="Extensions\ExtensionInstallResult.vb" />
     <Compile Include="Extensions\ExtensionType.vb" />
@@ -102,8 +106,15 @@
     <Compile Include="Extensions\ExtensionInfo.vb" />
     <Compile Include="Extensions\InstalledExtensionCollection.vb" />
     <Compile Include="Extensions\PluginExtensionType.vb" />
+    <Compile Include="IOUIManager.vb" />
     <Compile Include="IO\DetectableFileTypeDetector.vb" />
+    <Compile Include="IO\DirectoryCreatedEventArgs.vb" />
+    <Compile Include="IO\DirectoryDeletedEventArgs.vb" />
+    <Compile Include="IO\DirectoryNotFoundException.vb" />
     <Compile Include="IO\DirectoryTypeDetectionResult.vb" />
+    <Compile Include="IO\FileClosedEventArgs.vb" />
+    <Compile Include="IO\FileOpenedEventArgs.vb" />
+    <Compile Include="IO\FileRemovedEventArgs.vb" />
     <Compile Include="IO\FileTypeDetectionResult.vb" />
     <Compile Include="IO\IDirectoryTypeDetector.vb" />
     <Compile Include="IO\IFileTypeDetector.vb" />
@@ -111,7 +122,13 @@
     <Compile Include="IO\ObjectFile.vb" />
     <Compile Include="IO\ObjectFileDetector.vb" />
     <Compile Include="IO\Project.vb" />
+    <Compile Include="IO\ProjectAddedEventArgs.vb" />
     <Compile Include="IO\ProjectBuildStatusChanged.vb" />
+    <Compile Include="IO\ProjectDirectoryCreatedEventArgs.vb" />
+    <Compile Include="IO\ProjectFileAddedEventArgs.vb" />
+    <Compile Include="IO\ProjectFileRemovedEventArgs.vb" />
+    <Compile Include="IO\ProjectRemovedEventArgs.vb" />
+    <Compile Include="IO\ProjectRemovingEventArgs.vb" />
     <Compile Include="ISettingsProvider.vb" />
     <Compile Include="SettingsProvider.vb" />
     <Compile Include="Settings\ISettingsProviderExtensions.vb" />
@@ -151,7 +168,6 @@
     <Compile Include="UI\ITargetedControl.vb" />
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
-    <Compile Include="UI\UIController.vb" />
     <Compile Include="UI\UIHelper.vb" />
     <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />

@@ -8,10 +8,9 @@ Namespace ConsoleCommands
         Inherits ConsoleCommandAsync
 
         Public Overrides Async Function MainAsync(Arguments() As String) As Task
-            Dim manager = PluginManager.GetInstance
-            For Each item In manager.Plugins
+            For Each item In CurrentPluginManager.Plugins
                 Dim a = item.GetType.Assembly
-                If Not manager.IsAssemblyDependant(a) Then
+                If Not CurrentPluginManager.IsAssemblyDependant(a) Then
                     Dim info As New ExtensionInfo
                     info.Name = item.PluginName
                     info.Author = item.PluginAuthor
@@ -20,7 +19,7 @@ Namespace ConsoleCommands
                     If Not IO.Directory.Exists(IO.Path.GetDirectoryName(path)) Then
                         IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(path))
                     End If
-                    Await RedistributionHelpers.PackPlugins({item}, path, info)
+                    Await RedistributionHelpers.PackPlugins({item}, path, info, CurrentPluginManager)
                 End If
             Next
         End Function

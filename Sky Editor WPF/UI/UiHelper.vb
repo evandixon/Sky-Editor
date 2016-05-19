@@ -1,6 +1,8 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 Namespace UI
     Public Class UiHelper
@@ -27,7 +29,7 @@ Namespace UI
         ''' </summary>
         ''' <param name="ObjectControls"></param>
         ''' <returns></returns>
-        Public Shared Function GenerateObjectTabs(ObjectControls As IEnumerable(Of iObjectControl)) As List(Of ObjectTab)
+        Public Shared Function GenerateObjectTabs(ObjectControls As IEnumerable(Of IObjectControl)) As List(Of ObjectTab)
             If ObjectControls Is Nothing Then
                 Throw New ArgumentNullException(NameOf(ObjectControls))
             End If
@@ -46,7 +48,7 @@ Namespace UI
         ''' </summary>
         ''' <param name="MenuItemInfo">IEnumerable of MenuItemInfo that will be used to create the MenuItems.</param>
         ''' <returns></returns>
-        Public Shared Function GenerateMenuItems(MenuItemInfo As IEnumerable(Of MenuItemInfo)) As List(Of MenuItem)
+        Public Shared Function GenerateMenuItems(MenuItemInfo As IEnumerable(Of MenuItemInfo), manager As PluginManager) As List(Of MenuItem)
             If MenuItemInfo Is Nothing Then
                 Throw New ArgumentNullException(NameOf(MenuItemInfo))
             End If
@@ -58,9 +60,11 @@ Namespace UI
                 m.Header = item.Header
                 m.Tag = New List(Of MenuAction)
                 For Each action In item.ActionTypes
-                    DirectCast(m.Tag, List(Of MenuAction)).Add(action.GetConstructor({}).Invoke({}))
+                    Dim a As MenuAction = ReflectionHelpers.CreateInstance(action)
+                    a.CurrentPluginManager = manager
+                    DirectCast(m.Tag, List(Of MenuAction)).Add(a)
                 Next
-                For Each child In GenerateMenuItems(item.Children)
+                For Each child In GenerateMenuItems(item.Children, manager)
                     m.Items.Add(child)
                 Next
                 output.Add(m)

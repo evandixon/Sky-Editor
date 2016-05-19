@@ -63,23 +63,5 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to The following commands are available:.
-        '''</summary>
-        Friend Shared ReadOnly Property ConsoleAvailableCommands() As String
-            Get
-                Return ResourceManager.GetString("ConsoleAvailableCommands", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Unknown command &quot;{0}&quot;..
-        '''</summary>
-        Friend Shared ReadOnly Property ConsoleUnknownCommand() As String
-            Get
-                Return ResourceManager.GetString("ConsoleUnknownCommand", resourceCulture)
-            End Get
-        End Property
     End Class
 End Namespace

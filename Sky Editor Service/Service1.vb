@@ -1,4 +1,5 @@
 ﻿Imports System.Timers
+Imports SkyEditor.Core
 Imports SkyEditorBase
 
 Public Class Service1
@@ -41,7 +42,7 @@ WaitForTask:
     End Sub
 
     Private Sub InitPluginManager()
-        manager = PluginManager.GetInstance
+        manager = New PluginManager
         manager.LoadCore(New ServiceCoreMod)
     End Sub
 

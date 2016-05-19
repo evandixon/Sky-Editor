@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Threading
 Imports SkyEditor.Core
+Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditorBase.Redistribution
 
 Public Class StartupHelpers
@@ -10,11 +11,11 @@ Public Class StartupHelpers
     ''' Will shut down the current application when complete.
     ''' </summary>
     Public Shared Async Function StartConsole() As Task
-        Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
+        Dim manager As New PluginManager
         Await manager.LoadCore(New ConsoleCoreMod)
 
         PluginHelper.ShowConsole()
-        Await SkyEditor.Core.Windows.ConsoleModule.ConsoleMain(manager)
+        Await ConsoleHelper.RunConsole(manager)
 
         Application.Current.Shutdown()
     End Function
@@ -23,13 +24,6 @@ Public Class StartupHelpers
     End Function
 
     Public Shared Async Function RunWPFStartupSequence(CoreMod As CoreSkyEditorPlugin) As Task
-        Try
-            Await RedistributionHelpers.DeleteScheduledFiles()
-        Catch ex As Exception
-            MessageBox.Show("An error has occurred during pre-startup: " & ex.ToString)
-            Application.Current.Shutdown()
-        End Try
-
         'Run the program
         Dim args As New List(Of String)
         args.AddRange(Environment.GetCommandLineArgs())
@@ -44,7 +38,7 @@ Public Class StartupHelpers
         If args.Contains("-console") Then
             Await StartupHelpers.StartConsole()
         Else
-            Dim manager As PluginManager = SkyEditorBase.PluginManager.GetInstance
+            Dim manager As New PluginManager
             Await manager.LoadCore(CoreMod)
 
             Dim checkForUpdates As Boolean = False 'PluginManager.GetInstance.CurrentSettingsProvider.UpdatePlugins
