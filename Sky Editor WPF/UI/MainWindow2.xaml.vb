@@ -7,6 +7,8 @@ Imports Xceed.Wpf.AvalonDock.Layout
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core
 Imports SkyEditorBase.EventArguments
+Imports SkyEditor.UI.WPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace UI
     Public Class MainWindow
@@ -35,9 +37,9 @@ Namespace UI
         ''' Opens the given object in a document tab, if it is not already open.
         ''' </summary>
         ''' <param name="Document"></param>
-        Private Sub OpenDocumentTab(Document As Object, DisposeOnExit As Boolean)
+        Private Sub OpenDocumentTab(Document As Object)
             If Not IsFileTabOpen(Document) Then
-                Dim t = New DocumentTab(Document, _manager, DisposeOnExit)
+                Dim t = New DocumentTab(Document, _manager)
                 docPane.Children.Add(t)
                 docPane.SelectedContentIndex = docPane.IndexOf(t)
                 RemoveWelcomePage()
@@ -147,7 +149,7 @@ Namespace UI
                 item.SetPluginManager(_manager)
                 _toolWindows.Add(item)
             Next
-            For Each item In UiHelper.GenerateToolWindows(_toolWindows)
+            For Each item In WPFUiHelper.GenerateToolWindows(_toolWindows)
                 Select Case item.ContainedControl.GetDefaultPane
                     Case ITargetedControl.Pane.Bottom
                         toolbarPaneBottom.Children.Add(item)
@@ -158,19 +160,18 @@ Namespace UI
                 End Select
             Next
 
-            For Each item In UiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, _manager.CurrentSettingsProvider.GetIsDevMode), _manager)
+            For Each item In WPFUiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(_manager, _manager.CurrentSettingsProvider.GetIsDevMode), _manager)
                 menuMain.Items.Add(item)
                 RegisterEventMenuItemHandlers(item)
             Next
 
             Dim t = GetMenuActionTargets()
-            UiHelper.UpdateMenuItemVisibility(t, menuMain)
+            WPFUiHelper.UpdateMenuItemVisibility(t, menuMain)
             UpdateTargetedControlTargets(t)
 
             AddHandler PluginHelper.LoadingMessageChanged, AddressOf OnLoadingMessageChanged
             'AddHandler PluginHelper.ConsoleLineWritten, AddressOf OnConsoleLineWritten
-            AddHandler PluginHelper.FileOpenRequested, AddressOf OnFileOpenRequested
-            AddHandler PluginHelper.ExceptionThrown, AddressOf OnExceptionThrown
+            AddHandler _manager.CurrentIOUIManager.FileOpened, AddressOf OnFileOpenRequested
         End Sub
 
         ''' <summary>
@@ -222,18 +223,13 @@ Namespace UI
         'End Sub
 
         Private Sub OnFileOpenRequested(sender As Object, e As FileOpenedEventArguments)
-            OpenDocumentTab(e.File, e.DisposeOnExit)
-        End Sub
-
-        Private Sub OnExceptionThrown(sender As Object, e As ExceptionThrownEventArgs)
-            MessageBox.Show(My.Resources.Language.GenericErrorSeeOutput)
-            PluginHelper.Writeline(e.Exception.ToString, PluginHelper.LineType.Error)
+            OpenDocumentTab(e.File)
         End Sub
 
         Private Sub _manager_SolutionChanged(sender As Object, e As EventArgs) Handles _iouiManager.SolutionChanged
             Dispatcher.Invoke(Sub()
                                   Dim t = GetMenuActionTargets()
-                                  UiHelper.UpdateMenuItemVisibility(t, menuMain)
+                                  WPFUiHelper.UpdateMenuItemVisibility(t, menuMain)
                                   UpdateTargetedControlTargets(t)
                                   RemoveWelcomePage()
                               End Sub)
@@ -242,7 +238,7 @@ Namespace UI
         Private Sub _manager_ProjectChanged(sender As Object, e As EventArgs) Handles _iouiManager.CurrentProjectChanged
             Dispatcher.Invoke(Sub()
                                   Dim t = GetMenuActionTargets()
-                                  UiHelper.UpdateMenuItemVisibility(t, menuMain)
+                                  WPFUiHelper.UpdateMenuItemVisibility(t, menuMain)
                                   RemoveWelcomePage()
                               End Sub)
         End Sub
@@ -258,7 +254,7 @@ Namespace UI
         Private Sub docPane_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles docPane.PropertyChanged
             If e.PropertyName = "SelectedContent" AndAlso _manager IsNot Nothing Then 'docPane.SelectedContent 
                 Dim t = GetMenuActionTargets()
-                UiHelper.UpdateMenuItemVisibility(t, menuMain)
+                WPFUiHelper.UpdateMenuItemVisibility(t, menuMain)
                 'UpdateTargetedControlTargets(t)
             End If
         End Sub

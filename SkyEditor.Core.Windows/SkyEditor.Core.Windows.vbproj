@@ -64,6 +64,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyReflectionManager.vb" />
+    <Compile Include="AssemblyReflectionProxy.vb" />
     <Compile Include="EnvironmentPaths.vb" />
     <Compile Include="ExecutableFile.vb" />
     <Compile Include="Language.Designer.vb">
@@ -89,6 +91,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="WindowsReflectionHelpers.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language.resx">

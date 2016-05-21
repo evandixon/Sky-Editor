@@ -192,10 +192,13 @@ Public Class PluginManager
             For Each item In supportedPlugins
                 Try
                     Dim assemblyActual = Core.LoadAssembly(item)
-                    Assemblies.Add(assemblyActual)
-                    For Each plg In From t In assemblyActual.DefinedTypes Where ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) AndAlso ReflectionHelpers.CanCreateInstance(t)
-                        Plugins.Add(ReflectionHelpers.CreateInstance(plg))
-                    Next
+                    If assemblyActual IsNot Nothing Then
+                        Assemblies.Add(assemblyActual)
+                        For Each plg In From t In assemblyActual.DefinedTypes Where ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) AndAlso ReflectionHelpers.CanCreateInstance(t)
+                            Plugins.Add(ReflectionHelpers.CreateInstance(plg))
+                        Next
+                    End If
+
                 Catch ex As BadImageFormatException
                     'The assembly we just tried to load is a bad assembly.  We can continue, but not with this assembly.
                     FailedPluginLoads.Add(item)

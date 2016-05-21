@@ -12,48 +12,6 @@ Imports SkyEditor.Core.IO
 ''' <remarks></remarks>
 Public Class PluginHelper
 
-
-#Region "Translation"
-    ''' <summary>
-    ''' Gets the name of the given type if its contained assembly has its name in its localized resource file, or the full name of the type if it does not.
-    ''' </summary>
-    ''' <param name="type">Type of which to get the name.</param>
-    ''' <returns></returns>
-    Public Shared Function GetTypeName(type As Type) As String
-        Dim output As String = Nothing
-        Dim parent = type.Assembly
-        Dim manager As ResourceManager = Nothing
-        Dim resxNames As New List(Of String)(parent.GetManifestResourceNames)
-        'Dim q = From r In resxNames Where String.Compare(r, "language", True, Globalization.CultureInfo.InvariantCulture) = 0
-        'If q.Any Then
-        '    'Then look in this one first.
-        '    manager = New ResourceManager(q.First, parent)
-        'End If
-
-        'If manager IsNot Nothing Then
-        '    output = manager.GetString(type.FullName.Replace(".", "_"))
-        'End If
-
-        If output Is Nothing Then
-            'Then either the language resources doesn't exist, or does not contain what we're looking for.
-            'In either case, we'll look at the other resource files.
-            For Each item In resxNames
-                manager = New ResourceManager(item.Replace(".resources", ""), parent)
-                output = manager.GetString(type.FullName.Replace(".", "_"))
-                If output IsNot Nothing Then
-                    Exit For 'We found something.  Time to return it.
-                End If
-            Next
-        End If
-
-        If output IsNot Nothing Then
-            Return output
-        Else
-            Return type.FullName
-        End If
-    End Function
-#End Region
-
 #Region "Program Running"
     ''' <summary>
     ''' 
@@ -194,31 +152,6 @@ Public Class PluginHelper
         RaiseEvent ConsoleLineWritten(Nothing, e)
     End Sub
     Public Shared Event ConsoleLineWritten(sender As Object, e As ConsoleLineWrittenEventArgs)
-#End Region
-
-#Region "Open/Close File"
-    Public Shared Event FileOpenRequested(sender As Object, e As FileOpenedEventArguments)
-    Public Shared Event FileClosed(sender As Object, e As FileClosedEventArgs)
-    Public Shared Sub RaiseFileClosed(sender As Object, e As FileClosedEventArgs)
-        RaiseEvent FileClosed(sender, e)
-    End Sub
-    Public Shared Sub RequestFileOpen(File As Object, DisposeOnClose As Boolean)
-        If File IsNot Nothing Then
-            RaiseEvent FileOpenRequested(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
-        End If
-    End Sub
-    Public Shared Sub RequestFileOpen(File As Object, ParentProject As Project)
-        If File IsNot Nothing Then
-            RaiseEvent FileOpenRequested(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
-        End If
-    End Sub
-#End Region
-
-#Region "Error Reporting"
-    Public Shared Event ExceptionThrown(sender As Object, e As EventArguments.ExceptionThrownEventArgs)
-    Public Shared Sub ReportExceptionThrown(sender As Object, ex As Exception)
-        RaiseEvent ExceptionThrown(sender, New EventArguments.ExceptionThrownEventArgs With {.Exception = ex})
-    End Sub
 #End Region
 
     ''' <summary>

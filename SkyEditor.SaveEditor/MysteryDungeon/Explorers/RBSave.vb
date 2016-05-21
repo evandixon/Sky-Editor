@@ -5,11 +5,7 @@ Imports SkyEditor.Core.IO
 Namespace Saves
     Public Class RBSave
         Inherits BinaryFile
-        Implements iDetectableFileType
-
-        Public Sub New()
-            MyBase.New()
-        End Sub
+        Implements IDetectableFileType
 
         Protected Class Offsets
             Public Const BackupSaveStart As Integer = &H6000

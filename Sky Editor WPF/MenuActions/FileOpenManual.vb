@@ -2,6 +2,7 @@
 Imports System.Threading.Tasks
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 Namespace MenuActions
     Public Class FileOpenManual
@@ -13,11 +14,11 @@ Namespace MenuActions
                 Dim w As New UI.GameTypeSelector()
                 Dim games As New Dictionary(Of String, TypeInfo)
                 For Each item In IOHelper.GetOpenableFileTypes(CurrentPluginManager)
-                    games.Add(PluginHelper.GetTypeName(item), item)
+                    games.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
                 Next
                 w.AddGames(games.Keys)
                 If w.ShowDialog Then
-                    PluginHelper.RequestFileOpen(Await IOHelper.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame), CurrentPluginManager), True)
+                    CurrentPluginManager.CurrentIOUIManager.OpenFile(Await IOHelper.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame), CurrentPluginManager), True)
                 End If
             End If
         End Function

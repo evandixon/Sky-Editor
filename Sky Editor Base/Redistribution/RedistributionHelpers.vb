@@ -99,7 +99,7 @@ Namespace Redistribution
                     plg.PrepareForDistribution()
                 Else
                     'Then the assembly isn't currently loaded.  In this case, we'll load it and tell it to prepare for distribution.
-                    Using reflector As New Utilities.AssemblyReflectionManager
+                    Using reflector As New AssemblyReflectionManager
                         reflector.LoadAssembly(plgAssembly.Location, "PackPlugin")
                         reflector.Reflect(plgAssembly.Location, Function(CurrentAssembly As Assembly, Args() As Object) As Object
                                                                     For Each result In From t In CurrentAssembly.GetTypes Where ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) AndAlso t.GetConstructor({}) IsNot Nothing

@@ -8,12 +8,16 @@ Public Class IOUIManager
 
     Public Sub New()
         Me.CurrentSolution = Nothing
-        Me.OpenedFiles = New Dictionary(Of Object, Project)
+        Me.OpenedProjectFiles = New Dictionary(Of Object, Project)
+        Me.FileDisposalSettings = New Dictionary(Of Object, Boolean)
+        Me.OpenFiles = New ObservableCollection(Of Object)
     End Sub
 
 #Region "Events"
     Public Event SolutionChanged(sender As Object, e As EventArgs)
     Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
+    Public Event FileOpened(sender As Object, e As FileOpenedEventArguments)
+    Public Event FileClosed(sender As Object, e As FileClosedEventArgs)
 #End Region
 
 #Region "Event Handlers"
@@ -33,10 +37,28 @@ Public Class IOUIManager
 #End Region
 
     ''' <summary>
+    ''' The files that are currently open
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property OpenFiles As ObservableCollection(Of Object)
+
+    ''' <summary>
+    ''' Gets or sets the selected file
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property SelectedFile As Object
+
+    ''' <summary>
+    ''' Stores whether or not to dispose of files on close
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property FileDisposalSettings As Dictionary(Of Object, Boolean)
+
+    ''' <summary>
     ''' Matches opened files to their parent projects
     ''' </summary>
     ''' <returns></returns>
-    Private Property OpenedFiles As Dictionary(Of Object, Project)
+    Private Property OpenedProjectFiles As Dictionary(Of Object, Project)
 
     ''' <summary>
     ''' Dictionary of (Extension, Friendly Name) used in the Open and Save file dialogs.
@@ -139,14 +161,64 @@ Public Class IOUIManager
     End Sub
 #End Region
 
+#Region "Open/Close File"
+
+    ''' <summary>
+    ''' Opens the given file
+    ''' </summary>
+    ''' <param name="File">File to open</param>
+    ''' <param name="DisposeOnClose">True to call the file's dispose method (if IDisposable) when closed.</param>
+    Public Sub OpenFile(File As Object, DisposeOnClose As Boolean)
+        If File IsNot Nothing Then
+            If Not OpenFiles.Contains(File) Then
+                OpenFiles.Add(File)
+                FileDisposalSettings.Add(File, DisposeOnClose)
+                RaiseEvent FileOpened(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Opens the file
+    ''' </summary>
+    ''' <param name="File">File to open</param>
+    ''' <param name="ParentProject">Project the file belongs to.  If the file does not belong to a project, don't use this overload.</param>
+    Public Sub OpenFile(File As Object, ParentProject As Project)
+        If File IsNot Nothing Then
+            If Not OpenFiles.Contains(File) Then
+                OpenFiles.Add(File)
+                OpenedProjectFiles.Add(File, ParentProject)
+                RaiseEvent FileOpened(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Closes the file
+    ''' </summary>
+    ''' <param name="File">File to close</param>
+    Public Sub CloseFile(File As Object)
+        If File IsNot Nothing Then
+            OpenFiles.Remove(File)
+            Dim doDispose = (FileDisposalSettings.ContainsKey(File) AndAlso FileDisposalSettings(File))
+            If doDispose Then
+                If TypeOf File Is IDisposable Then
+                    DirectCast(File, IDisposable).Dispose()
+                End If
+            End If
+            RaiseEvent FileClosed(Me, New FileClosedEventArgs With {.File = File, .Disposed = dodispose})
+        End If
+    End Sub
+#End Region
+
     ''' <summary>
     ''' Returns the file's parent project, if it exists.
     ''' </summary>
     ''' <param name="File">File of which to get the parent project.  Must be an open file, otherwise the function will return Nothing.</param>
     ''' <returns></returns>
     Public Function GetOpenedFileProject(File As Object) As Project
-        If Me.OpenedFiles.ContainsKey(File) Then
-            Return Me.OpenedFiles(File)
+        If Me.OpenedProjectFiles.ContainsKey(File) Then
+            Return Me.OpenedProjectFiles(File)
         Else
             Return Nothing
         End If

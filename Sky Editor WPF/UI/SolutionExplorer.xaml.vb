@@ -2,6 +2,7 @@
 Imports SkyEditor.Core
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 Namespace UI
     Public Class SolutionExplorer
@@ -360,7 +361,7 @@ Namespace UI
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath, CurrentPluginManager)
-                        types.Add(PluginHelper.GetTypeName(item), item)
+                        types.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
                     Next
                     w.AddGames(types.Keys)
                     If w.ShowDialog Then
@@ -390,7 +391,7 @@ Namespace UI
                     Dim w As New UI.NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath, CurrentPluginManager)
-                        types.Add(PluginHelper.GetTypeName(item), item)
+                        types.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
                     Next
                     w.AddGames(types.Keys)
                     If w.ShowDialog Then
@@ -746,7 +747,7 @@ Namespace UI
                                 MessageBox.Show(String.Format(My.Resources.Language.ErrorCantFindFileAt, f))
                             End If
                         End If
-                        PluginHelper.RequestFileOpen(obj, tag.ParentProject)
+                        CurrentPluginManager.CurrentIOUIManager.OpenFile(obj, tag.ParentProject)
                     End If
                 End If
             End If
@@ -756,9 +757,9 @@ Namespace UI
             If tvSolution.SelectedItem IsNot Nothing Then
                 Dim tag As NodeTag = DirectCast(tvSolution.SelectedItem, TreeViewItem).Tag
                 If tag.IsRoot Then
-                    PluginHelper.RequestFileOpen(tag.ParentSolution, False)
+                    CurrentPluginManager.CurrentIOUIManager.OpenFile(tag.ParentSolution, False)
                 ElseIf tag.IsProjectRoot Then
-                    PluginHelper.RequestFileOpen(tag.ParentProject, tag.ParentProject)
+                    CurrentPluginManager.CurrentIOUIManager.OpenFile(tag.ParentProject, tag.ParentProject)
                 End If
             End If
         End Sub

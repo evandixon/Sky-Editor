@@ -4,6 +4,7 @@ Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
+Imports SkyEditor.UI.WPF
 
 Namespace UI
     Public Class ObjectWindow
@@ -22,7 +23,7 @@ Namespace UI
         End Property
         Public Sub RefreshDisplay()
             tcTabs.Items.Clear()
-            For Each item In UiHelper.GenerateObjectTabs(SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(_objectToEdit, {GetType(UserControl)}, _manager))
+            For Each item In WPFUiHelper.GenerateObjectTabs(SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(_objectToEdit, {GetType(UserControl)}, _manager))
                 tcTabs.Items.Add(item)
             Next
 

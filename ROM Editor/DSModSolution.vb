@@ -53,12 +53,8 @@ Public Class DSModSolution
             m.ModAuthor = "Unknown"
             m.ModDescription = "A generic Mod"
             m.Homepage = ""
-            Try
-                Await m.Initialize(Me)
-            Catch ex As Exception
-                SkyEditorBase.PluginHelper.ReportExceptionThrown(Me, ex)
-                SkyEditorBase.PluginHelper.SetLoadingStatusFailed()
-            End Try
+
+            Await m.Initialize(Me)
 
             For Each item In Me.GetAllProjects
                 If TypeOf item Is DSModPackProject Then

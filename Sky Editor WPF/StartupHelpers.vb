@@ -73,7 +73,9 @@ Public Class StartupHelpers
             '    l.Visibility = Visibility.Collapsed
             'End If
 
-            Dim m As New UI.MainWindow(manager)
+            Dim m As New MainWindow3 'UI.MainWindow(manager)
+            m.CurrentPluginManager = manager
+            m.DataContext = manager.CurrentIOUIManager
             m.Show()
             If l IsNot Nothing Then
                 l.Close()

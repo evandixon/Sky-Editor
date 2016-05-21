@@ -135,22 +135,19 @@
     <Compile Include="Lists.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="Saves\GTIGameData.vb" />
-    <Compile Include="Saves\RBSave.HeldItem.vb" />
-    <Compile Include="Saves\RBSave.StoredPokemon.vb" />
-    <Compile Include="Saves\RBSave.vb" />
-    <Compile Include="Saves\RBSaveEU.StoredPokemon.vb" />
-    <Compile Include="Saves\RBSaveEU.vb" />
-    <Compile Include="Saves\SkySave.ActivePokemon.vb" />
-    <Compile Include="Saves\SkySave.AdventureLog.vb" />
-    <Compile Include="Saves\SkySave.HeldItem.vb" />
-    <Compile Include="Saves\SkySave.Quicksave.vb" />
-    <Compile Include="Saves\SkySave.StoredPokemon.vb" />
-    <Compile Include="Saves\SkySave.vb" />
-    <Compile Include="Saves\TDSave.ActivePokemon.vb" />
-    <Compile Include="Saves\TDSave.HeldItem.vb" />
-    <Compile Include="Saves\TDSave.StoredPokemon.vb" />
-    <Compile Include="Saves\TDSave.vb" />
+    <Compile Include="MysteryDungeon\GTIGameData.vb" />
+    <Compile Include="MysteryDungeon\Explorers\RBSave.HeldItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\RBSave.StoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\RBSave.vb" />
+    <Compile Include="MysteryDungeon\Explorers\RBSaveEU.StoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\RBSaveEU.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkySave.HeldItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkySave.StoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkySave.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDSave.ActivePokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDSave.HeldItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDSave.StoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDSave.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language.resx">
@@ -180,6 +177,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

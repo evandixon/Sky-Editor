@@ -10,7 +10,11 @@
             If setting.HasValue Then
                 Return setting.Value
             Else
+#If DEBUG Then
+                Return True
+#Else
                 Return False
+#End If
             End If
         End Function
 

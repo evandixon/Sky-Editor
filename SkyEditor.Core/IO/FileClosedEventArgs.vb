@@ -2,6 +2,6 @@
     Public Class FileClosedEventArgs
         Inherits EventArgs
         Public Property File As Object
-        Public Property WillDispose As Boolean
+        Public Property Disposed As Boolean
     End Class
 End Namespace

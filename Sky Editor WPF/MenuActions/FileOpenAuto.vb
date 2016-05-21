@@ -14,7 +14,7 @@ Namespace MenuActions
                 If OpenFileDialog1.FileName.ToLower.EndsWith(".skysln") Then
                     CurrentPluginManager.CurrentIOUIManager.CurrentSolution = Solution.OpenSolutionFile(OpenFileDialog1.FileName, CurrentPluginManager)
                 Else
-                    PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(OpenFileDialog1.FileName, AddressOf IOHelper.PickFirstDuplicateMatchSelector, CurrentPluginManager), True)
+                    CurrentPluginManager.CurrentIOUIManager.OpenFile(Await IOHelper.OpenObject(OpenFileDialog1.FileName, AddressOf IOHelper.PickFirstDuplicateMatchSelector, CurrentPluginManager), True)
                 End If
             End If
         End Function

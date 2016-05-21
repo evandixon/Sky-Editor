@@ -3,6 +3,8 @@
 Namespace Saves
     Partial Class RBSave
         Implements iItemStorage
+
+#Region "Child Classes"
         Public Class HeldItem
             Inherits Binary
             Implements iItem
@@ -187,6 +189,8 @@ Namespace Saves
                 End If
             End Function
         End Class
+#End Region
+
 
         Public Property HeldItems(Index As Integer) As HeldItem
             Get

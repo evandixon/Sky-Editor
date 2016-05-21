@@ -24,6 +24,23 @@ Public MustInherit Class WindowsCoreSkyEditorPlugin
     End Function
 
     Public Overrides Function LoadAssembly(assemblyPath As String) As Assembly
-        Return Assembly.LoadFrom(assemblyPath)
+        ''First, check to see if we already loaded it
+        'Dim name As AssemblyName = AssemblyName.GetAssemblyName(assemblyPath)
+        'Dim q1 = From a In AppDomain.CurrentDomain.GetAssemblies Where a.FullName = name.FullName
+
+        'If q1.Any Then
+        '    'If we did, then there's no point in loading it again.  In some cases, it could cause more problems
+        '    Return q1.First
+        'Else
+        '    'If we didn't, then load it
+        If WindowsReflectionHelpers.IsSupportedPlugin(assemblyPath) Then
+            Return Assembly.LoadFrom(assemblyPath)
+        Else
+            Return Nothing
+        End If
+
+        'End If
     End Function
+
+
 End Class

@@ -12,7 +12,7 @@ Namespace MenuActions
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             If dialog.ShowDialog Then
-                PluginHelper.RequestFileOpen(Await IOHelper.OpenObject(dialog.SelectedPath, AddressOf IOHelper.PickFirstDuplicateMatchSelector, CurrentPluginManager), True)
+                CurrentPluginManager.CurrentIOUIManager.OpenFile(Await IOHelper.OpenObject(dialog.SelectedPath, AddressOf IOHelper.PickFirstDuplicateMatchSelector, CurrentPluginManager), True)
             End If
         End Function
 
