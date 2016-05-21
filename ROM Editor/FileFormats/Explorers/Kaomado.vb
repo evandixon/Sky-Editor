@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
@@ -6,11 +7,11 @@ Namespace FileFormats.Explorers
         Public Property Filename As String
         Public ReadOnly Property UnpackDirectory As String
             Get
-                Return PluginHelper.GetResourceName("temp\" & IO.Path.GetFileName(Filename) & "\data\font\kaomado_unpack")
+                Return EnvironmentPaths.GetResourceName("temp\" & IO.Path.GetFileName(Filename) & "\data\font\kaomado_unpack")
             End Get
         End Property
         Public Async Function RunUnpack(Filename As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             If Not IO.Directory.Exists(UnpackDirectory) Then
                 IO.Directory.CreateDirectory(UnpackDirectory)
             End If
@@ -18,12 +19,12 @@ Namespace FileFormats.Explorers
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, UnpackDirectory))
         End Function
         Public Async Function RunPack(Filename As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), UnpackDirectory, Filename))
         End Function
         Public Shared Async Function RunUnpack(Filename As String, UnpackDirectory As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             If Not IO.Directory.Exists(UnpackDirectory) Then
                 IO.Directory.CreateDirectory(UnpackDirectory)
             End If
@@ -31,7 +32,7 @@ Namespace FileFormats.Explorers
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, UnpackDirectory))
         End Function
         Public Shared Async Function RunPack(Filename As String, UnpackDirectory As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), UnpackDirectory, Filename))
         End Function

@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace Projects
@@ -10,7 +11,7 @@ Namespace Projects
 
         Public Overrides Async Function Initialize(Solution As Solution) As Task
             Await MyBase.Initialize(Solution)
-            IO.File.Copy(PluginHelper.GetResourceName("pk3DS.exe"), IO.Path.Combine(GetRootDirectory, "pk3DS.exe"))
+            IO.File.Copy(EnvironmentPaths.GetResourceName("pk3DS.exe"), IO.Path.Combine(GetRootDirectory, "pk3DS.exe"))
             Await Me.AddExistingFile("", IO.Path.Combine(GetRootDirectory, "pk3DS.exe"), CurrentPluginManager.CurrentIOProvider)
             IO.File.WriteAllText(IO.Path.Combine(GetRootDirectory, "config.ini"), IO.Path.GetFileName(Me.GetRawFilesDir))
         End Function

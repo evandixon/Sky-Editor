@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.Devices
 
-Public Class IOProvider
+Public Class WindowsIOProvider
     Inherits SkyEditor.Core.IO.IOProvider
 
     Public Sub New()

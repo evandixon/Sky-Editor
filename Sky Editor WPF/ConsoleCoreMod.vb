@@ -40,10 +40,10 @@ Friend Class ConsoleCoreMod
     End Sub
 
     Public Overrides Function GetSettingsProvider(manager As SkyEditor.Core.PluginManager) As ISettingsProvider
-        Return SettingsProvider.Open(System.IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.json"), manager)
+        Return SettingsProvider.Open(EnvironmentPaths.GetSettingsFilename, manager)
     End Function
 
     Public Overrides Function GetExtensionDirectory() As String
-        Return PluginHelper.GetExtensionDirectory
+        Return EnvironmentPaths.GetExtensionDirectory
     End Function
 End Class

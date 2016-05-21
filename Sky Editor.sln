@@ -76,6 +76,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.ROMEditor", "SkyE
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.FlashcartManager.Windows", "SkyEditor.FlashcartManager.Windows\SkyEditor.FlashcartManager.Windows.vbproj", "{B024E927-6469-4FCE-84B3-E8AD49D505D1}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.UI.WPF", "SkyEditor.UI.WPF\SkyEditor.UI.WPF.vbproj", "{00AFCE08-71B5-4BF9-9155-C017F8151419}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -293,6 +295,14 @@ Global
 		{B024E927-6469-4FCE-84B3-E8AD49D505D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B024E927-6469-4FCE-84B3-E8AD49D505D1}.Release|x86.ActiveCfg = Release|Any CPU
 		{B024E927-6469-4FCE-84B3-E8AD49D505D1}.Release|x86.Build.0 = Release|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Debug|x86.Build.0 = Debug|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Release|x86.ActiveCfg = Release|Any CPU
+		{00AFCE08-71B5-4BF9-9155-C017F8151419}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

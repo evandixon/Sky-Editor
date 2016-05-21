@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Windows
 ''' <summary>
 ''' Most plugins need to call registration methods on load.  Sky Editor Base is no exception.  This class contains methods like the ones found in plugin definitions, without actually being its own plugin.
 ''' </summary>
@@ -36,12 +35,12 @@ Friend Class WpfCoreMod
         Manager.CurrentIOUIManager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)
     End Sub
 
-    Public Overrides Function GetSettingsProvider(manager As SkyEditor.Core.PluginManager) As ISettingsProvider
-        Return SettingsProvider.Open(System.IO.Path.Combine(PluginHelper.RootResourceDirectory, "settings.json"), manager)
+    Public Overrides Function GetSettingsProvider(manager As PluginManager) As ISettingsProvider
+        Return SettingsProvider.Open(System.IO.Path.Combine(EnvironmentPaths.GetRootResourceDirectory, "settings.json"), manager)
     End Function
 
     Public Overrides Function GetExtensionDirectory() As String
-        Return PluginHelper.GetExtensionDirectory
+        Return EnvironmentPaths.GetExtensionDirectory
     End Function
 
 End Class

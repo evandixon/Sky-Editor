@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
@@ -6,7 +7,7 @@ Namespace FileFormats.Explorers
         Inherits GenericFile
         'Public Property RawData As Byte()
         Public Shared Async Function RunDecompress(Filename As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename) & "\Decompressed")
             End If
@@ -14,7 +15,7 @@ Namespace FileFormats.Explorers
                                                   String.Format("""{0}"" ""{1}""", Filename, IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename)))
         End Function
         Public Shared Async Function RunCompress(Filename As String) As Task
-            Dim romDirectory As String = PluginHelper.GetResourceDirectory
+            Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
             Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
                                                   String.Format("""{0}"" ""{1}""", IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename), Filename))
             'Cleanup

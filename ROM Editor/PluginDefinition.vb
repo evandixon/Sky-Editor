@@ -6,6 +6,7 @@ Imports SkyEditorBase
 Imports System.Reflection
 Imports System.IO
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 
 Public Class PluginDefinition
     Inherits SkyEditorPlugin
@@ -53,9 +54,8 @@ Public Class PluginDefinition
         GameCodeRegistry.RegisterGameCode(My.Resources.Language.Game_PSMD, GameStrings.PSMDCode)
     End Sub
 
-    Public Overrides Sub UnLoad(Manager As SkyEditor.Core.PluginManager)
-        PluginHelper.Writeline("Deleting ROM Editor's temp directory")
-        Dim dir As String = PluginHelper.GetResourceName("Temp")
+    Public Overrides Sub UnLoad(Manager As PluginManager)
+        Dim dir As String = EnvironmentPaths.GetResourceName("Temp")
         If Directory.Exists(dir) Then
             On Error Resume Next
             Directory.Delete(dir, True)
@@ -64,26 +64,26 @@ Public Class PluginDefinition
     End Sub
 
     Public Overrides Sub PrepareForDistribution()
-        EnsureDirDeleted(PluginHelper.GetResourceName("Current"))
-        EnsureDirDeleted(PluginHelper.GetResourceName("temp"))
-        EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win32"))
-        EnsureDirDeleted(PluginHelper.GetResourceName("desmume-0.9.11-win64"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("Current.nds"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.pdb"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("3DS Builder.vshost.exe.manifest"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.pdb"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.vshost.exe.manifest"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("DSPatcher.xml"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("itemppatcher.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("itemppatcher.pdb"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("LanguageStringPatcher.exe.config"))
-        EnsureFileDeleted(PluginHelper.GetResourceName("LanguageStringPatcher.pdb"))
+        EnsureDirDeleted(EnvironmentPaths.GetResourceName("Current"))
+        EnsureDirDeleted(EnvironmentPaths.GetResourceName("temp"))
+        EnsureDirDeleted(EnvironmentPaths.GetResourceName("desmume-0.9.11-win32"))
+        EnsureDirDeleted(EnvironmentPaths.GetResourceName("desmume-0.9.11-win64"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("Current.nds"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("3DS Builder.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("3DS Builder.pdb"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("3DS Builder.vshost.exe"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("3DS Builder.vshost.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("3DS Builder.vshost.exe.manifest"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.pdb"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.vshost.exe"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.vshost.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.vshost.exe.manifest"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("DSPatcher.xml"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("itemppatcher.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("itemppatcher.pdb"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("LanguageStringPatcher.exe.config"))
+        EnsureFileDeleted(EnvironmentPaths.GetResourceName("LanguageStringPatcher.pdb"))
     End Sub
 
     Private Sub EnsureDirDeleted(Dir As String)

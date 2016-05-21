@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -11,7 +12,7 @@ Public Class RomSelector
     End Function
     Public Property RomName As String
     Sub OnOK()
-        Dim romDirectory As String = PluginHelper.GetResourceName("Roms/NDS/")
+        Dim romDirectory As String = EnvironmentPaths.GetResourceName("Roms/NDS/")
         If Not IO.Directory.Exists(romDirectory) Then
             IO.Directory.CreateDirectory(romDirectory)
         End If

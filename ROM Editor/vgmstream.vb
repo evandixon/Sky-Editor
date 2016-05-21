@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 
 Module vgmstream
     ''' <summary>
@@ -12,7 +13,7 @@ Module vgmstream
     ''' <param name="FadeDelay">Number of seconds to delay before fading.  Defaults to 0 seconds.</param>
     ''' <returns></returns>
     Async Function RunVGMStream(Input As String, Output As String, Optional LoopCount As Decimal? = Nothing, Optional FadeTime As Decimal? = Nothing, Optional FadeDelay As Decimal? = Nothing) As Task
-        Dim filename = PluginHelper.GetResourceName("vgmstream\test.exe")
+        Dim filename = EnvironmentPaths.GetResourceName("vgmstream\test.exe")
         Dim arguments As New Text.StringBuilder
 
         arguments.Append($"-o ""{Output}"" ")

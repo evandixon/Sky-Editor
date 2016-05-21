@@ -2,6 +2,7 @@
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace ConsoleCommands
@@ -55,7 +56,7 @@ Namespace ConsoleCommands
                         Next
 
                         'Save the matches to the appropriate file
-                        Dim destFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Arguments(0)) & ".txt"))
+                        Dim destFile = EnvironmentPaths.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Arguments(0)) & ".txt"))
                         Dim output As New Text.StringBuilder
                         For Each item In matches
                             output.Append(item.Key.ToString)

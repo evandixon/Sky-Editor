@@ -1,5 +1,6 @@
 ﻿Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace ConsoleCommands
@@ -37,7 +38,7 @@ Namespace ConsoleCommands
             For count = 0 To LanguageString.PokemonNameLength - 1
                 PokemonLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetPokemonName(count), ""))
             Next
-            Dim pkmFile = PluginHelper.GetResourceName(language & "/SkyPokemon.txt", "SkyEditor")
+            Dim pkmFile = EnvironmentPaths.GetResourceName(language & "/SkyPokemon.txt", "SkyEditor")
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(pkmFile)) Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(pkmFile))
             End If
@@ -49,7 +50,7 @@ Namespace ConsoleCommands
             For count = 0 To LanguageString.ItemLength - 1
                 ItemLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetItemName(count), ""))
             Next
-            Dim itemFile = PluginHelper.GetResourceName(language & "/SkyItems.txt", "SkyEditor")
+            Dim itemFile = EnvironmentPaths.GetResourceName(language & "/SkyItems.txt", "SkyEditor")
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(itemFile)) Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(itemFile))
             End If
@@ -61,7 +62,7 @@ Namespace ConsoleCommands
             For count = 0 To LanguageString.MoveLength - 1
                 MoveLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetMoveName(count), ""))
             Next
-            Dim moveFile = PluginHelper.GetResourceName(language & "/SkyMoves.txt", "SkyEditor")
+            Dim moveFile = EnvironmentPaths.GetResourceName(language & "/SkyMoves.txt", "SkyEditor")
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(moveFile)) Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(moveFile))
             End If
@@ -73,7 +74,7 @@ Namespace ConsoleCommands
             For count = 0 To LanguageString.LocationLength - 1
                 LocationLines.Add(count.ToString & "=" & formatRegex.Replace(ls.GetLocationName(count), ""))
             Next
-            Dim locFile = PluginHelper.GetResourceName(language & "/SkyLocations.txt", "SkyEditor")
+            Dim locFile = EnvironmentPaths.GetResourceName(language & "/SkyLocations.txt", "SkyEditor")
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(locFile)) Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(locFile))
             End If

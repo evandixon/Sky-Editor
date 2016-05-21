@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace ConsoleCommands
@@ -28,7 +29,7 @@ Namespace ConsoleCommands
             Next
             file.AutoCompleteChars.Clear()
             file.AutoCompleteChars.Add(":")
-            file.Save(PluginHelper.GetResourceName("Code/psmdLuaInfo-English.fdd"), CurrentPluginManager.CurrentIOProvider)
+            file.Save(EnvironmentPaths.GetResourceName("Code/psmdLuaInfo-English.fdd"), CurrentPluginManager.CurrentIOProvider)
         End Sub
         Private Function FullTrim(Input As String) As String
             Dim current As String = Input

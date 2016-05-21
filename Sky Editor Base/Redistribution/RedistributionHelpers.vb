@@ -5,6 +5,7 @@ Imports SkyEditor
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Extensions
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 
 Namespace Redistribution
     'Legacy code to deal with the old manor of handling plugins, some of which will still be used for plugin development.
@@ -25,7 +26,7 @@ Namespace Redistribution
 
         Private Shared Function GetAssemblyDependencies(SourceAssembly As Assembly) As List(Of String)
             Dim out As New List(Of String)
-            Dim devAssemblyPaths = PluginHelper.GetPluginAssemblies
+            Dim devAssemblyPaths = EnvironmentPaths.GetPluginAssemblies
 
             'Get the Sky Editor Plugin's resource directory
             Dim resourceDirectory = Path.Combine(Path.GetDirectoryName(SourceAssembly.Location), Path.GetFileNameWithoutExtension(SourceAssembly.Location))

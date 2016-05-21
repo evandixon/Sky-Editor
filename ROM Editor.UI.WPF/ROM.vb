@@ -1,18 +1,19 @@
 ﻿Imports System.Windows.Media.Imaging
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Public Class ROM
     Public Property Name As String
     Public ReadOnly Property Filename As String
         Get
-            Dim romDirectory As String = PluginHelper.GetResourceName("Roms/NDS/")
+            Dim romDirectory As String = EnvironmentPaths.GetResourceName("Roms/NDS/")
             Return IO.Path.Combine(romDirectory, Name.Replace(":", ""))
         End Get
     End Property
     Public ReadOnly Property ImageUri As Uri
         Get
             If IO.File.Exists(Filename) Then
-                Dim newpath = IO.Path.Combine(PluginHelper.GetResourceName("Temp"), IO.Path.GetFileNameWithoutExtension(Name.Replace(":", "")) & ".bmp")
+                Dim newpath = IO.Path.Combine(EnvironmentPaths.GetResourceName("Temp"), IO.Path.GetFileNameWithoutExtension(Name.Replace(":", "")) & ".bmp")
                 If Not IO.File.Exists(newpath) Then
                     If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newpath)) Then
                         IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newpath))

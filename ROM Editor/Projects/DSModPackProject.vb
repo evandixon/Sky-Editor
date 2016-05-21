@@ -1,6 +1,7 @@
 ﻿Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace Projects
@@ -175,14 +176,14 @@ Namespace Projects
                 If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram))) Then
                     IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram)))
                 End If
-                IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram), True)
+                IO.File.Copy(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(GetPatchersDir, item.ApplyPatchProgram), True)
                 '--Copy Dependencies
                 If item.ApplyPatchDependencies IsNot Nothing Then
                     For Each d In item.ApplyPatchDependencies
                         If Not IO.Directory.Exists(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, d.Value))) Then
                             IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(IO.Path.Combine(GetPatchersDir, d.Value)))
                         End If
-                        IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, d.Key), IO.Path.Combine(GetPatchersDir, d.Value), True)
+                        IO.File.Copy(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, d.Key), IO.Path.Combine(GetPatchersDir, d.Value), True)
                     Next
                 End If
             Next
@@ -214,20 +215,20 @@ Namespace Projects
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     '-Copy ctrtool
-                    IO.File.Copy(PluginHelper.GetResourceName("ctrtool.exe"), IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
+                    IO.File.Copy(EnvironmentPaths.GetResourceName("ctrtool.exe"), IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
                     'IO.File.Copy(PluginHelper.GetResourceName("makerom.exe"), IO.Path.Combine(GetToolsDir, "makerom.exe"), True)
                     'IO.File.Copy(PluginHelper.GetResourceName("rom_tool.exe"), IO.Path.Combine(GetToolsDir, "rom_tool.exe"), True)
-                    IO.File.Copy(PluginHelper.GetResourceName("3DS Builder.exe"), IO.Path.Combine(GetToolsDir, "3DS Builder.exe"), True)
+                    IO.File.Copy(EnvironmentPaths.GetResourceName("3DS Builder.exe"), IO.Path.Combine(GetToolsDir, "3DS Builder.exe"), True)
                 Case "NDS"
                     '-Copy ndstool
-                    IO.File.Copy(PluginHelper.GetResourceName("ndstool.exe"), IO.Path.Combine(GetToolsDir, "ndstool.exe"), True)
+                    IO.File.Copy(EnvironmentPaths.GetResourceName("ndstool.exe"), IO.Path.Combine(GetToolsDir, "ndstool.exe"), True)
                 Case Else
                     PluginHelper.Writeline("Unknown system.  Not copying appropriate tools.", PluginHelper.LineType.Error)
             End Select
 
             '-Copy patching wizard
-            IO.File.Copy(PluginHelper.GetResourceName("DSPatcher.exe"), IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), True)
-            IO.File.Copy(PluginHelper.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
+            IO.File.Copy(EnvironmentPaths.GetResourceName("DSPatcher.exe"), IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), True)
+            IO.File.Copy(EnvironmentPaths.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
         End Sub
 
         Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task

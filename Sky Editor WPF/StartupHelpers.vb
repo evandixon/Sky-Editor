@@ -2,6 +2,7 @@
 Imports System.Threading
 Imports SkyEditor.Core
 Imports SkyEditor.Core.ConsoleCommands
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase.Redistribution
 
 Public Class StartupHelpers
@@ -82,7 +83,7 @@ Public Class StartupHelpers
 
     Public Shared Sub RunExitSequence()
         'Delete .tmp files
-        For Each item In Directory.GetFiles(PluginHelper.RootResourceDirectory, "*.tmp", SearchOption.AllDirectories)
+        For Each item In Directory.GetFiles(EnvironmentPaths.GetRootResourceDirectory, "*.tmp", SearchOption.AllDirectories)
             Try
                 File.Delete(item)
             Catch ex As IOException

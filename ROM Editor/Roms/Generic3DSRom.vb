@@ -2,6 +2,7 @@
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Windows
 Imports SkyEditor.ROMEditor
 Imports SkyEditorBase
 
@@ -46,7 +47,7 @@ Namespace Roms
         Public Async Function Unpack(DestinationDirectory As String, provider As IOProvider) As Task
             PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
-                DestinationDirectory = Path.Combine(PluginHelper.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
+                DestinationDirectory = Path.Combine(EnvironmentPaths.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
             End If
             If Not Directory.Exists(DestinationDirectory) Then
                 Directory.CreateDirectory(DestinationDirectory)
@@ -121,7 +122,7 @@ Namespace Roms
         End Function
 
         Private Shared Async Function RunCtrTool(Arguments As String) As Task
-            Await PluginHelper.RunProgram(PluginHelper.GetResourceName("ctrtool.exe"), Arguments, False)
+            Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("ctrtool.exe"), Arguments, False)
         End Function
 
         Public Sub New()

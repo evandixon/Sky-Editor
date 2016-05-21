@@ -5,6 +5,7 @@ Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
@@ -252,7 +253,7 @@ Validate:
 
                                    If Not sourceText = sourceOrig Then
                                        Dim dest = Item.Replace(scriptSource, scriptDestination)
-                                       Await PluginHelper.RunProgram(PluginHelper.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""", False)
+                                       Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""", False)
                                    End If
                                End Function, toCompile)
             RemoveHandler f.LoadingStatusChanged, onProgressChanged
@@ -294,7 +295,7 @@ Validate:
         End Function
 
         Public Function GetExtraData(Code As CodeFile) As CodeExtraData Implements ICodeProject.GetExtraData
-            Dim filenameTemplate = PluginHelper.GetResourceName("Code/psmdLuaInfo-{0}.fdd")
+            Dim filenameTemplate = EnvironmentPaths.GetResourceName("Code/psmdLuaInfo-{0}.fdd")
             Dim filenameCurrent = String.Format(filenameTemplate, "English") 'SettingsManager.Instance.Settings.CurrentLanguage)
             ' Dim filenameDefault = String.Format(filenameTemplate, SettingsManager.Instance.Settings.DefaultLanguage)
             If IO.File.Exists(filenameCurrent) Then

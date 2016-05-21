@@ -3,6 +3,7 @@ Imports System.Text.RegularExpressions
 Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Namespace Projects
     Public Class GenericModProject
@@ -392,7 +393,7 @@ Namespace Projects
                                                           Dim newF As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
                                                           Dim patchFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
 
-                                                          Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
+                                                          Await PluginHelper.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
                                                           patchMade = True
                                                           Exit For
                                                       End If
@@ -404,15 +405,15 @@ Namespace Projects
                                                       End If
                                                       Dim tmpVal As String = Guid.NewGuid.ToString
                                                       Dim oldFile As String = IO.Path.Combine(sourceRoot, Item.Trim("\"))
-                                                      Dim oldFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"oldFile-{tmpVal}.bin")
+                                                      Dim oldFileTemp As String = IO.Path.Combine(EnvironmentPaths.GetResourceName("xdelta"), $"oldFile-{tmpVal}.bin")
                                                       Dim newFile As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
-                                                      Dim newFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"newFile-{tmpVal}.bin")
+                                                      Dim newFileTemp As String = IO.Path.Combine(EnvironmentPaths.GetResourceName("xdelta"), $"newFile-{tmpVal}.bin")
                                                       Dim deltaFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & ".xdelta")
-                                                      Dim deltaFileTemp As String = IO.Path.Combine(PluginHelper.GetResourceName("xdelta"), $"patch-{tmpVal}.xdelta")
+                                                      Dim deltaFileTemp As String = IO.Path.Combine(EnvironmentPaths.GetResourceName("xdelta"), $"patch-{tmpVal}.xdelta")
                                                       IO.File.Copy(oldFile, oldFileTemp, True)
                                                       IO.File.Copy(newFile, newFileTemp, True)
-                                                      Dim path = IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                                                      Await PluginHelper.RunProgram(IO.Path.Combine(PluginHelper.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", $"oldFile-{tmpVal}.bin", $"newFile-{tmpVal}.bin", $"patch-{tmpVal}.xdelta"), False)
+                                                      Dim path = IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, "xdelta", "xdelta3.exe")
+                                                      Await PluginHelper.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", $"oldFile-{tmpVal}.bin", $"newFile-{tmpVal}.bin", $"patch-{tmpVal}.xdelta"), False)
                                                       IO.File.Copy(deltaFileTemp, deltaFile)
                                                       IO.File.Delete(deltaFileTemp)
                                                       IO.File.Delete(oldFileTemp)
@@ -426,7 +427,7 @@ Namespace Projects
                 End If
                 For Each item In patchers
                     If item IsNot Nothing Then
-                        IO.File.Copy(IO.Path.Combine(PluginHelper.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
+                        IO.File.Copy(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, item.ApplyPatchProgram), IO.Path.Combine(modTempTools, IO.Path.GetFileName(item.ApplyPatchProgram)), True)
                     End If
                 Next
                 Json.SerializeToFile(IO.Path.Combine(modTempTools, "patchers.json"), patchers, CurrentPluginManager.CurrentIOProvider)

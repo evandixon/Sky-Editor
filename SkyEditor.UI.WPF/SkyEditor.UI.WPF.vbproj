@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8238A6A2-76AF-4741-8564-D1D2A4B067BB}</ProjectGuid>
+    <ProjectGuid>{00AFCE08-71B5-4BF9-9155-C017F8151419}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SkyEditor.Core.Windows</RootNamespace>
-    <AssemblyName>SkyEditor.Core.Windows</AssemblyName>
+    <RootNamespace>SkyEditor.UI.WPF</RootNamespace>
+    <AssemblyName>SkyEditor.UI.WPF</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>SkyEditor.Core.Windows.xml</DocumentationFile>
+    <DocumentationFile>SkyEditor.UI.WPF.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -27,7 +27,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>SkyEditor.Core.Windows.xml</DocumentationFile>
+    <DocumentationFile>SkyEditor.UI.WPF.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -45,7 +45,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,16 +63,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnvironmentPaths.vb" />
-    <Compile Include="ExecutableFile.vb" />
-    <Compile Include="Language.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Language.resx</DependentUpon>
-    </Compile>
-    <Compile Include="WindowsConsoleProvider.vb" />
-    <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
-    <Compile Include="IOProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -91,11 +80,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Language.resx">
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Language.Designer.vb</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -113,12 +97,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
-      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
-      <Name>SkyEditor.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

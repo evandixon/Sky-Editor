@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.Core.Windows
+Imports SkyEditorBase
 
 Public Class unluac
     ''' <summary>
@@ -10,7 +11,7 @@ Public Class unluac
 
         Instance = New Process
         Instance.StartInfo.FileName = "java"
-        Instance.StartInfo.Arguments = $"-jar ""{PluginHelper.GetResourceName("unluac.jar")}"" ""{Filename}"""
+        Instance.StartInfo.Arguments = $"-jar ""{EnvironmentPaths.GetResourceName("unluac.jar")}"" ""{Filename}"""
         Instance.StartInfo.RedirectStandardOutput = True
         Instance.StartInfo.UseShellExecute = False
         Instance.StartInfo.CreateNoWindow = True

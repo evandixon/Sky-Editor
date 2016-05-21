@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 
 Namespace FileFormats.PSMD
@@ -183,10 +184,10 @@ Namespace FileFormats.PSMD
             'Next
 
             Dim tempName As String = Guid.NewGuid.ToString
-            header.Save(PluginHelper.GetResourceName(tempName & ".tmp"), provider)
+            header.Save(EnvironmentPaths.GetResourceName(tempName & ".tmp"), provider)
             header.Dispose()
-            Dim headerData = IO.File.ReadAllBytes(PluginHelper.GetResourceName(tempName & ".tmp"))
-            IO.File.Delete(PluginHelper.GetResourceName(tempName & ".tmp"))
+            Dim headerData = IO.File.ReadAllBytes(EnvironmentPaths.GetResourceName(tempName & ".tmp"))
+            IO.File.Delete(EnvironmentPaths.GetResourceName(tempName & ".tmp"))
 
             Dim archiveBytes As New List(Of Byte)
             'Dim archive As New FarcF5
@@ -240,7 +241,7 @@ Namespace FileFormats.PSMD
 
         Private Shared Function GetReverseFileDictionary(Filename As String, provider As IOProvider) As Dictionary(Of String, UInteger)
             Dim out As New Dictionary(Of String, UInteger)
-            Dim resourceFile = PluginHelper.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Filename) & ".txt"))
+            Dim resourceFile = EnvironmentPaths.GetResourceName(IO.Path.Combine("farc", IO.Path.GetFileNameWithoutExtension(Filename) & ".txt"))
             If IO.File.Exists(resourceFile) Then
                 Dim i As New BasicIniFile
                 i.OpenFile(resourceFile, provider)

@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Windows.Forms
 Imports SkyEditor.Core.Extensions
+Imports SkyEditor.Core.Windows
 
 Namespace UI
     Public Class ExtensionManager
@@ -54,7 +55,7 @@ Namespace UI
             Dim o As New OpenFileDialog
             o.Filter = $"{My.Resources.Language.ZipFiles} (*.zip)|*.zip|{My.Resources.Language.AllFiles} (*.*)|*.*"
             If o.ShowDialog = DialogResult.OK Then
-                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, PluginHelper.GetExtensionDirectory, CurrentPluginManager)
+                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, EnvironmentPaths.GetExtensionDirectory, CurrentPluginManager)
                 DisplayInstallResultMessage(result)
                 RefreshCurrentExtensionList()
             End If

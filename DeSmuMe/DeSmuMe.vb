@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Public Module DeSmuMe
     Public Class DeSmuMeVersion
@@ -31,7 +32,7 @@ Public Module DeSmuMe
             searchFilter = "*32.zip"
         End If
         Dim files As New List(Of DeSmuMeVersion)
-        For Each item In (IO.Directory.GetFiles(PluginHelper.GetResourceDirectory, searchFilter, IO.SearchOption.TopDirectoryOnly))
+        For Each item In (IO.Directory.GetFiles(EnvironmentPaths.GetResourceDirectory, searchFilter, IO.SearchOption.TopDirectoryOnly))
             files.Add(New DeSmuMeVersion(item))
         Next
         If files.Count > 0 Then

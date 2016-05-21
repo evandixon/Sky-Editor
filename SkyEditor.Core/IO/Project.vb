@@ -136,6 +136,7 @@ Namespace IO
             Public Sub New(Project As Project)
                 Children = New ObservableCollection(Of ProjectNode)
                 ParentProject = Project
+                IsDirectory = True
             End Sub
 
             Public Sub New(Project As Project, File As Object)

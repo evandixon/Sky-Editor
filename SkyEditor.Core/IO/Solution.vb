@@ -243,6 +243,7 @@ Namespace IO
         End Sub
 
         Private Sub Project_Modified(sender As Object, e As EventArgs)
+            UnsavedChanges = True
             RaiseModified()
         End Sub
 
@@ -718,6 +719,7 @@ Namespace IO
             file.Projects = GetProjectDictionary(Root, "")
             Json.SerializeToFile(Filename, file, provider)
             RaiseEvent FileSaved(Me, New EventArgs)
+            UnsavedChanges = False
         End Sub
 
         Private Function GetProjectDictionary(ProjectNode As SolutionNode, CurrentPath As String) As Dictionary(Of String, String)

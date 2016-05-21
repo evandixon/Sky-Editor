@@ -4,6 +4,7 @@ Imports System.Text.RegularExpressions
 Imports ROMEditor.Projects
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Windows
 Imports SkyEditorBase
 Imports TagLib
 
@@ -97,8 +98,8 @@ Namespace MenuActions
 
                 'Todo: do error checks on input file
                 Dim trackNames As New Dictionary(Of String, String)
-                If IO.File.Exists(PluginHelper.GetResourceName("PSMD English Soundtrack.txt")) Then
-                    Dim lines = IO.File.ReadAllLines(PluginHelper.GetResourceName("PSMD English Soundtrack.txt"))
+                If IO.File.Exists(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt")) Then
+                    Dim lines = IO.File.ReadAllLines(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt"))
                     For Each item In lines
                         Dim parts = item.Split("=".ToCharArray, 2)
                         If parts.Count = 2 Then

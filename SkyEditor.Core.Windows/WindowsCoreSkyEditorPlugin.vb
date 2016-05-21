@@ -6,7 +6,7 @@ Public MustInherit Class WindowsCoreSkyEditorPlugin
     Inherits CoreSkyEditorPlugin
 
     Public Overrides Function GetIOProvider() As SkyEditor.Core.IO.IOProvider
-        Return New IOProvider
+        Return New WindowsIOProvider
     End Function
 
     Public Overrides Function GetConsoleProvider() As IConsoleProvider
