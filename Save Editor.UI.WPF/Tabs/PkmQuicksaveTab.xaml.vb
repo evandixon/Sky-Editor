@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
+Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Namespace Tabs
@@ -39,7 +40,7 @@ Namespace Tabs
             End Set
         End Property
         Public Overrides Sub RefreshDisplay()
-            Dim _pokemon = GetEditingObject(Of Saves.SkySave.QuicksavePkm)()
+            Dim _pokemon = GetEditingObject(Of SkySave.QuicksavePkm)()
 
             With _pokemon
                 PokemonDictionary = Lists.GetSkyPokemon
@@ -63,7 +64,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim _pokemon = GetEditingObject(Of Saves.SkySave.QuicksavePkm)()
+            Dim _pokemon = GetEditingObject(Of SkySave.QuicksavePkm)()
 
             With _pokemon
                 .ID = SelectedPokemonID
@@ -105,7 +106,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Saves.SkySave.QuicksavePkm)}
+            Return {GetType(SkySave.QuicksavePkm)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

@@ -1,4 +1,5 @@
-﻿Imports SkyEditorWPF.UI
+﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
+Imports SkyEditorWPF.UI
 
 Namespace Tabs
     Public Class QuicksavePokemonTab
@@ -12,7 +13,7 @@ Namespace Tabs
             Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim apkms As New List(Of Saves.SkySave.QuicksavePkm)
+            Dim apkms As New List(Of SkySave.QuicksavePkm)
             For Each item In lbActivePokemon.Items
                 apkms.Add(item)
             Next
@@ -22,7 +23,7 @@ Namespace Tabs
             Me.Header = My.Resources.Language.QuicksavePokemonTabHeader
         End Sub
         Sub RefreshActivePKMDisplay()
-            Dim pkms As New List(Of Saves.SkySave.QuicksavePkm)
+            Dim pkms As New List(Of SkySave.QuicksavePkm)
             For Each p In lbActivePokemon.Items
                 pkms.Add(p)
             Next

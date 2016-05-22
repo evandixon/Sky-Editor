@@ -218,6 +218,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Inventory.
+        '''</summary>
+        Public Shared ReadOnly Property Inventory() As String
+            Get
+                Return ResourceManager.GetString("Inventory", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to IQ.
         '''</summary>
         Public Shared ReadOnly Property IQ() As String

@@ -7,7 +7,7 @@ Namespace Saves
 #Region "Child Classes"
         Public Class HeldItem
             Inherits Binary
-            Implements iItem
+            Implements iItemOld
 
             Public Const Length As Integer = 23
             Public Const MimeType As String = "application/x-rb-item"
@@ -105,7 +105,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property Parameter As UInt16 Implements iItem.Parameter
+            Public Property Parameter As UInt16 Implements iItemOld.Parameter
                 Get
                     Return Int(0, 8, 7)
                 End Get
@@ -120,11 +120,11 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property ID As UInt16 Implements iItem.ID
+            Public Property ID As Integer Implements iItemOld.ID
                 Get
                     Return Int(0, 15, 8)
                 End Get
-                Set(value As UInt16)
+                Set(value As Integer)
                     Int(0, 15, 8) = value
                 End Set
             End Property
@@ -155,7 +155,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            <Obsolete("Not implemented; returns false so the rest of the code won't break")> Public ReadOnly Property IsBox As Boolean Implements iItem.IsBox
+            <Obsolete("Not implemented; returns false so the rest of the code won't break")> Public ReadOnly Property IsBox As Boolean Implements iItemOld.IsBox
                 Get
                     Return False
                 End Get
@@ -208,7 +208,7 @@ Namespace Saves
                 SetHeldItems(value)
             End Set
         End Property
-        Public Function GetHeldItems() As ICollection(Of iItem)
+        Public Function GetHeldItems() As ICollection(Of iItemOld)
             Dim output As New List(Of HeldItem)
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 Dim i = HeldItems(count)
@@ -216,7 +216,7 @@ Namespace Saves
             Next
             Return output.ToArray
         End Function
-        Public Sub SetHeldItems(Value As ICollection(Of iItem))
+        Public Sub SetHeldItems(Value As ICollection(Of iItemOld))
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 If Value.Count > count Then
                     HeldItems(count) = Value(count)
@@ -225,7 +225,7 @@ Namespace Saves
                 End If
             Next
         End Sub
-        Public Function NewHeldItem(ID As Integer, Parameter As Integer) As iItem
+        Public Function NewHeldItem(ID As Integer, Parameter As Integer) As iItemOld
             Return New HeldItem(ID, Parameter)
         End Function
 
@@ -245,8 +245,8 @@ Namespace Saves
             Return False
         End Function
 
-        Public Function HeldItemSlots() As ItemSlot() Implements iItemStorage.HeldItemSlots
-            Return {New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.RB_Toolbox, GetItemDicitonary, Offsets.HeldItemNumber)}
+        Public Function HeldItemSlots() As ItemSlotOld() Implements iItemStorage.HeldItemSlots
+            Return {New ItemSlotOld(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.RB_Toolbox, GetItemDicitonary, Offsets.HeldItemNumber)}
         End Function
     End Class
 

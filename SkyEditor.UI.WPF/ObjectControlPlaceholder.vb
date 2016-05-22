@@ -13,6 +13,7 @@ Public Class ObjectControlPlaceholder
 
     Public Shared ReadOnly CurrentPluginManagerProperty As DependencyProperty = DependencyProperty.Register("CurrentPluginManager", GetType(PluginManager), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnCurrentPluginManagerChanged))
     Public Shared ReadOnly ObjectToEditProperty As DependencyProperty = DependencyProperty.Register("ObjectToEdit", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnObjectToEditChanged))
+    Public Shared ReadOnly ContainedControlTagProperty As DependencyProperty = DependencyProperty.Register("ContainedControlTag", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnContainedControlTagChanged))
 
     Private Shared Sub OnCurrentPluginManagerChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         DirectCast(d, ObjectControlPlaceholder).CurrentPluginManager = e.NewValue
@@ -20,6 +21,10 @@ Public Class ObjectControlPlaceholder
 
     Private Shared Sub OnObjectToEditChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         DirectCast(d, ObjectControlPlaceholder).ObjectToEdit = e.NewValue
+    End Sub
+
+    Private Shared Sub OnContainedControlTagChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        DirectCast(d, ObjectControlPlaceholder).ContainedControlTag = e.NewValue
     End Sub
 
     ''' <summary>
@@ -109,9 +114,32 @@ Public Class ObjectControlPlaceholder
                     End If
                 End If
             End If
+
+            If Me.Content IsNot Nothing Then
+                DirectCast(Me.Content, UserControl).Tag = _pendingTag
+                _pendingTag = Nothing
+            End If
         End Set
     End Property
     Dim _object As Object
+
+    Public Property ContainedControlTag As Object
+        Get
+            If Me.Content IsNot Nothing Then
+                Return DirectCast(Me.Content, UserControl).Tag
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(value As Object)
+            If Me.Content IsNot Nothing Then
+                DirectCast(Me.Content, UserControl).Tag = value
+            Else
+                _pendingObject = value
+            End If
+        End Set
+    End Property
+    Dim _pendingTag As Object
 
     Public Property CurrentPluginManager As PluginManager
         Get

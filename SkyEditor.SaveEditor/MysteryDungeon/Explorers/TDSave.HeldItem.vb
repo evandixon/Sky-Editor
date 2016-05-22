@@ -5,7 +5,7 @@ Namespace Saves
         Implements iItemStorage
         Public Class HeldItem
             Inherits Binary
-            Implements iItem
+            Implements iItemOld
 
             Public Const Length As Integer = 31
             Public Const MimeType As String = "application/x-td-item"
@@ -95,7 +95,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property Parameter As UInt16 Implements iItem.Parameter
+            Public Property Parameter As UInt16 Implements iItemOld.Parameter
                 Get
                     Return Int(0, 7, 11)
                 End Get
@@ -110,11 +110,11 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property ID As UInt16 Implements iItem.ID
+            Public Property ID As Integer Implements iItemOld.ID
                 Get
                     Return Int(0, 18, 10)
                 End Get
-                Set(value As UInt16)
+                Set(value As Integer)
                     Int(0, 18, 10) = value
                 End Set
             End Property
@@ -145,7 +145,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public ReadOnly Property IsBox As Boolean Implements iItem.IsBox
+            Public ReadOnly Property IsBox As Boolean Implements iItemOld.IsBox
                 Get
                     Return ID > 363 AndAlso ID < 400
                 End Get
@@ -183,7 +183,7 @@ Namespace Saves
         End Class
 
         Public Class StoredItem
-            Implements iItem
+            Implements iItemOld
             Public Sub New(ID As Integer, Parameter As Integer)
                 Me.ID = ID
                 Me.Parameter = Parameter
@@ -205,7 +205,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property Parameter As UInt16 Implements iItem.Parameter
+            Public Property Parameter As UInt16 Implements iItemOld.Parameter
 
             ''' <summary>
             ''' The ID of the item.
@@ -213,7 +213,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property ID As UInt16 Implements iItem.ID
+            Public Property ID As Integer Implements iItemOld.ID
             ''' <summary>
             ''' Determines whether or not the ID is in the range of Box items.
             ''' If this is true, the Parameter is the ID of the contained item.
@@ -221,7 +221,7 @@ Namespace Saves
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public ReadOnly Property IsBox As Boolean Implements iItem.IsBox
+            Public ReadOnly Property IsBox As Boolean Implements iItemOld.IsBox
                 Get
                     Return ID > 363 AndAlso ID < 400
                 End Get
@@ -265,7 +265,7 @@ Namespace Saves
                 SetHeldItems(value)
             End Set
         End Property
-        Public Function GetHeldItems() As ICollection(Of iItem)
+        Public Function GetHeldItems() As ICollection(Of iItemOld)
             Dim output As New List(Of HeldItem)
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 Dim i = HeldItems(count)
@@ -273,7 +273,7 @@ Namespace Saves
             Next
             Return output.ToArray
         End Function
-        Public Sub SetHeldItems(Value As ICollection(Of iItem))
+        Public Sub SetHeldItems(Value As ICollection(Of iItemOld))
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 If Value.Count > count Then
                     HeldItems(count) = Value(count)
@@ -320,10 +320,10 @@ Namespace Saves
         '    Bits.Range(Offsets.StoredItemOffset, 11 * 1000) = ids
         '    Bits.Range(Offsets.StoredItemOffset + 11 * 1000, 11 * 1000) = params
         'End Sub
-        Public Function NewHeldItem(ID As Integer, Parameter As Integer) As iItem
+        Public Function NewHeldItem(ID As Integer, Parameter As Integer) As iItemOld
             Return New HeldItem(ID, Parameter)
         End Function
-        Public Function NewStoredItem(ID As Integer, Parameter As Integer) As iItem
+        Public Function NewStoredItem(ID As Integer, Parameter As Integer) As iItemOld
             Return New StoredItem(ID, Parameter)
         End Function
         Public Function MaxHeldItems() As Integer Implements iItemStorage.MaxHeldItems
@@ -341,9 +341,9 @@ Namespace Saves
         Public Function SupportsBoxes() As Boolean Implements iItemStorage.SupportsBoxes
             Return True
         End Function
-        Public Function HeldItemSlots() As ItemSlot() Implements iItemStorage.HeldItemSlots
+        Public Function HeldItemSlots() As ItemSlotOld() Implements iItemStorage.HeldItemSlots
             'Return {New HeldItemSlot(AddressOf GetStoredItems, AddressOf SetStoredItems, AddressOf NewStoredItem, "Stored Items", GetItemDicitonary, 1000),
-            Return {New ItemSlot(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.HeldItemsSlot, GetItemDicitonary, Offsets.HeldItemNumber)}
+            Return {New ItemSlotOld(AddressOf GetHeldItems, AddressOf SetHeldItems, AddressOf NewHeldItem, My.Resources.Language.HeldItemsSlot, GetItemDicitonary, Offsets.HeldItemNumber)}
         End Function
     End Class
 

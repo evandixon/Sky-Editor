@@ -122,18 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawingImageConverter.vb" />
-    <Compile Include="Explorers\ScriptCommands\BasicTalkCommand.xaml.vb">
-      <DependentUpon>BasicTalkCommand.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Explorers\ScriptCommands\MonologueCommand.xaml.vb">
-      <DependentUpon>MonologueCommand.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Explorers\ScriptCommands\RawCommand.xaml.vb">
-      <DependentUpon>RawCommand.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Explorers\SsbScriptToolbar.xaml.vb">
-      <DependentUpon>SsbScriptToolbar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FlashcartManager.xaml.vb">
       <DependentUpon>FlashcartManager.xaml</DependentUpon>
     </Compile>
@@ -180,9 +168,6 @@
     </Compile>
     <Compile Include="ObjectControls\PsmdLuaLangIntegration.xaml.vb">
       <DependentUpon>PsmdLuaLangIntegration.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Explorers\SSBScriptEditor.xaml.vb">
-      <DependentUpon>SSBScriptEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Explorers\SSBStringDictionaryEditor.xaml.vb">
       <DependentUpon>SSBStringDictionaryEditor.xaml</DependentUpon>
@@ -231,22 +216,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Explorers\ScriptCommands\BasicTalkCommand.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Explorers\ScriptCommands\MonologueCommand.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Explorers\ScriptCommands\RawCommand.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Explorers\SsbScriptToolbar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="FlashcartManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,10 +249,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\PsmdLuaLangIntegration.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Explorers\SSBScriptEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

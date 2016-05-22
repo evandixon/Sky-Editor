@@ -1,7 +1,6 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.Explorers.Script
-Imports ROMEditor.FileFormats.Explorers.Script.Commands
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 Imports WPF.JoshSmith.ServiceProviders.UI
 
 Namespace Explorers
@@ -33,7 +32,7 @@ Namespace Explorers
             Return {GetType(SSB)}
         End Function
 
-        Public Overrides Property EditingObject As Object
+        Public Overrides Property ObjectToEdit As Object
             Get
                 If _editing IsNot Nothing Then
                     With DirectCast(_editing, SSB)

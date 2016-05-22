@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.SaveEditor
+Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -53,7 +54,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Saves.SkySave)}
+            Return {GetType(SkySave)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

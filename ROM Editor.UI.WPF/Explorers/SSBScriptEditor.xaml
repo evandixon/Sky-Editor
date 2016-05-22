@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ROMEditor.UI.WPF"
-             xmlns:skywpf="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:skywpf="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:script="clr-namespace:ROMEditor.FileFormats.Explorers.Script;assembly=ROMEditor"
              xmlns:cmds="clr-namespace:ROMEditor.FileFormats.Explorers.Script.Commands;assembly=ROMEditor"
              xmlns:jas="clr-namespace:WPF.JoshSmith.ServiceProviders.UI;assembly=ListViewDragDropManager"

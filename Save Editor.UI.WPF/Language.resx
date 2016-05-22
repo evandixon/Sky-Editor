@@ -299,4 +299,7 @@ Demonic722 (Misc RAM and save addresses)</value>
   <data name="TransformedAsPkm" xml:space="preserve">
     <value>Transformed as Pokémon</value>
   </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
 </root>

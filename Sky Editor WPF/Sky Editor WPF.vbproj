@@ -127,7 +127,6 @@
     </Compile>
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
-    <Compile Include="UI\DataBoundObjectControl.vb" />
     <Compile Include="MenuActions\FileNewSolution.vb" />
     <Compile Include="MenuActions\FileSaveSolution.vb" />
     <Compile Include="MenuActions\SolutionBuild.vb" />
@@ -137,9 +136,6 @@
     </Compile>
     <Compile Include="UI\ExtensionManager.xaml.vb">
       <DependentUpon>ExtensionManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\MainWindow3.xaml.vb">
-      <DependentUpon>MainWindow3.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ObjectControl.vb" />
     <Compile Include="UI\ProjectReferences.xaml.vb">
@@ -284,10 +280,6 @@
     <Page Include="UI\ExtensionManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\MainWindow3.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectReferences.xaml">
       <SubType>Designer</SubType>

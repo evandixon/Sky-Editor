@@ -6,7 +6,7 @@ Imports SkyEditorWPF.UI
 Namespace Tabs
     Public Class HeldItemsTab
         Inherits ObjectControl
-        Dim slots As ItemSlot()
+        Dim slots As ItemSlotOld()
         Dim storage As iItemStorage
 
         Public Overrides Sub RefreshDisplay()
@@ -35,7 +35,7 @@ Namespace Tabs
             Next
         End Sub
         Private Sub SaveSlot(Index As Integer)
-            Dim heldItems As New Generic.List(Of iItem)
+            Dim heldItems As New Generic.List(Of iItemOld)
             'heldItems.Add(From i In lbHeldItems.Items Select i)
             For Each item In lbHeldItems.Items
                 heldItems.Add(item)

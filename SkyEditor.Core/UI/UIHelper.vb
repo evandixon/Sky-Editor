@@ -146,7 +146,9 @@ Namespace UI
                     End If
                 Next
             End If
-            out.SetPluginManager(Manager)
+            If out IsNot Nothing Then
+                out.SetPluginManager(Manager)
+            End If
             Return out
         End Function
 

@@ -1,5 +1,5 @@
 ﻿Namespace Interfaces
-    Public Class ItemSlot
+    Public Class ItemSlotOld
         Public Property Getter As iItemStorage.GetHeldItems
         Public Property Setter As iItemStorage.SetHeldItems
         Public Property Creator As iItemStorage.NewHeldItem
@@ -16,11 +16,11 @@
         End Sub
     End Class
     Public Interface iItemStorage
-        Delegate Function GetHeldItems() As iItem()
-        Delegate Sub SetHeldItems(Items As iItem())
-        Delegate Function NewHeldItem(ID As Integer, Parameter As Integer) As iItem
+        Delegate Function GetHeldItems() As iItemOld()
+        Delegate Sub SetHeldItems(Items As iItemOld())
+        Delegate Function NewHeldItem(ID As Integer, Parameter As Integer) As iItemOld
 
-        Function HeldItemSlots() As ItemSlot()
+        Function HeldItemSlots() As ItemSlotOld()
         Function MaxHeldItems() As Integer
         Function GetItemDictionary() As Dictionary(Of Integer, String)
         Function IsBox(ItemID As Integer) As Boolean

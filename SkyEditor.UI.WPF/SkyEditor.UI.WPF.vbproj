@@ -91,6 +91,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBoundObjectControl.vb" />
+    <Compile Include="MainWindow3.xaml.vb">
+      <DependentUpon>MainWindow3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\GenericEnumerable.xaml.vb">
+      <DependentUpon>GenericEnumerable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OverlappingStyleSelector.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="Language.Designer.vb">
@@ -153,6 +160,16 @@
       <Project>{6F869961-8D92-4FB1-9680-A1D5C6938350}</Project>
       <Name>SkyEditor.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainWindow3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ObjectControls\GenericEnumerable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

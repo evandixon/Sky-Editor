@@ -79,7 +79,7 @@ Public Class WindowsReflectionHelpers
                                                                 (Assembly.GetEntryAssembly IsNot Nothing AndAlso a.FullName = Assembly.GetEntryAssembly.FullName) OrElse
                                                                 a.FullName = Assembly.GetExecutingAssembly.FullName) Then
                                                           For Each t As Type In a.GetTypes
-                                                              Dim isPlg As Boolean = ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo)
+                                                              Dim isPlg As Boolean = ReflectionHelpers.IsOfType(t, GetType(SkyEditorPlugin).GetTypeInfo) AndAlso ReflectionHelpers.CanCreateInstance(t)
                                                               If isPlg Then
                                                                   out.Add(t.FullName)
                                                               End If

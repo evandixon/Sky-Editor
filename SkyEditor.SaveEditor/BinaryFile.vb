@@ -54,7 +54,7 @@ Public Class BinaryFile
 
     End Sub
 
-    Public Sub Save(Destination As String, provider As IOProvider) Implements ISavableAs.Save
+    Public Overridable Sub Save(Destination As String, provider As IOProvider) Implements ISavableAs.Save
         FixChecksum()
         Dim tmp(Math.Ceiling(Bits.Count / 8) - 1) As Byte
         Using f As New GenericFile(provider, tmp)

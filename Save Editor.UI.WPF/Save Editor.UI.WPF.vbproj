@@ -129,6 +129,9 @@
     <Compile Include="Controls\MDAttack.xaml.vb">
       <DependentUpon>MDAttack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InventoryTab.xaml.vb">
+      <DependentUpon>InventoryTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -150,6 +153,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="MysteryDungeon\Explorers\ExplorersItemList.xaml.vb">
+      <DependentUpon>ExplorersItemList.xaml</DependentUpon>
     </Compile>
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
@@ -182,10 +188,10 @@
     <Compile Include="Tabs\RBStoredItemsTab.xaml.vb">
       <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tabs\SkyHistory.xaml.vb">
+    <Compile Include="SkyHistory.xaml.vb">
       <DependentUpon>SkyHistory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tabs\SkyGeneralTab.xaml.vb">
+    <Compile Include="MysteryDungeon\Explorers\SkyGeneralTab.xaml.vb">
       <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tabs\StoredPokemonTab.xaml.vb">
@@ -233,6 +239,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="InventoryTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\ExplorersItemList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Tabs\ActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -273,11 +287,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Tabs\SkyHistory.xaml">
+    <Page Include="SkyHistory.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Tabs\SkyGeneralTab.xaml">
+    <Page Include="MysteryDungeon\Explorers\SkyGeneralTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
