@@ -91,9 +91,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AvalonDockManager.xaml.vb">
-      <DependentUpon>AvalonDockManager.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="OverlappingStyleSelector.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -144,12 +142,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="AvalonDockManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">

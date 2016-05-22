@@ -7,24 +7,27 @@
         xmlns:local="clr-namespace:SkyEditorWPF"
         xmlns:Core="clr-namespace:SkyEditor.Core;assembly=SkyEditor.Core"
         xmlns:coreui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
+        xmlns:coreui2="clr-namespace:SkyEditor.Core.UI;assembly=SkyEditor.Core"
         x:Class="MainWindow3"
         x:Name="MainWindow3"
         mc:Ignorable="d"
         Title="MainWindow3" Height="500.915" Width="520.551">
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <Core:IOUIManager/>
-    </Window.DataContext>
-    <Window.Resources>
-        <Core:PluginManager x:Key="CurrentPluginManager" />
-    </Window.Resources>
+    </Window.DataContext>-->
     <Grid>
         <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-        <ad:DockingManager x:Name="dockingManager" Margin="0,26,0,0" DocumentsSource="{Binding OpenFiles}" ActiveContent="{Binding SelectedFile}">
+        <ad:DockingManager x:Name="dockingManager" Margin="0,23,0,0" DocumentsSource="{Binding OpenFiles}" ActiveContent="{Binding SelectedFile, Mode=TwoWay}">
             <ad:DockingManager.LayoutItemTemplate>
-                <DataTemplate>
-                    <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" DataContext="{Binding .}" EnableTabs="True"/>
+                <DataTemplate DataType="{x:Type coreui2:AvalonDockFileWrapper}">
+                    <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding Content.File, UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>
                 </DataTemplate>
             </ad:DockingManager.LayoutItemTemplate>
+            <ad:DockingManager.LayoutItemContainerStyle>
+                <Style TargetType="{x:Type ad:LayoutItem}">
+                    <Setter Property="Title" Value="{Binding Model.Title}" />
+                </Style>
+            </ad:DockingManager.LayoutItemContainerStyle>
             <ad:LayoutRoot>
                 <ad:LayoutPanel Orientation="Vertical">
                     <ad:LayoutDocumentPane/>

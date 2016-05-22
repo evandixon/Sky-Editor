@@ -1,4 +1,6 @@
-﻿Imports SkyEditor.Core
+﻿Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Settings
 Imports SkyEditor.Core.UI
 Imports SkyEditor.UI.WPF
@@ -13,8 +15,9 @@ Public Class MainWindow3
 
     End Sub
     Public Property CurrentPluginManager As PluginManager
+
+    Public Property OpenFiles As ObservableCollection(Of AvalonDockFileWrapper)
     Private Sub MainWindow3_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        Me.Resources.Item("CurrentPluginManager") = CurrentPluginManager
         For Each item In WPFUiHelper.GenerateMenuItems(SkyEditor.Core.UI.UIHelper.GetMenuItemInfo(CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode), CurrentPluginManager)
             menuMain.Items.Add(item)
             RegisterEventMenuItemHandlers(item)
@@ -51,4 +54,5 @@ Public Class MainWindow3
             PluginHelper.SetLoadingStatusFailed()
         End Try
     End Sub
+
 End Class

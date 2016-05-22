@@ -1,16 +1,18 @@
 ﻿Imports System.Text
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 ''' <summary>
 ''' Class that manages open files, solutions, and projects, and helps with the UI display them.
 ''' </summary>
 Public Class IOUIManager
     Implements IDisposable
+    Implements INotifyPropertyChanged
 
     Public Sub New()
         Me.CurrentSolution = Nothing
         Me.OpenedProjectFiles = New Dictionary(Of Object, Project)
         Me.FileDisposalSettings = New Dictionary(Of Object, Boolean)
-        Me.OpenFiles = New ObservableCollection(Of Object)
+        Me.OpenFiles = New ObservableCollection(Of AvalonDockFileWrapper)
     End Sub
 
 #Region "Events"
@@ -18,6 +20,7 @@ Public Class IOUIManager
     Public Event CurrentProjectChanged(sender As Object, e As EventArgs)
     Public Event FileOpened(sender As Object, e As FileOpenedEventArguments)
     Public Event FileClosed(sender As Object, e As FileClosedEventArgs)
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 #End Region
 
 #Region "Event Handlers"
@@ -40,13 +43,26 @@ Public Class IOUIManager
     ''' The files that are currently open
     ''' </summary>
     ''' <returns></returns>
-    Public Property OpenFiles As ObservableCollection(Of Object)
+    Public Property OpenFiles As ObservableCollection(Of AvalonDockFileWrapper)
 
     ''' <summary>
     ''' Gets or sets the selected file
     ''' </summary>
     ''' <returns></returns>
-    Public Property SelectedFile As Object
+    Public Property SelectedFile As AvalonDockFileWrapper
+        Get
+            Return _selectedFile
+        End Get
+        Set(value As AvalonDockFileWrapper)
+            If _selectedFile IsNot value Then
+                _selectedFile = value
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SelectedFile)))
+            Else
+                _selectedFile = value
+            End If
+        End Set
+    End Property
+    Dim _selectedFile As AvalonDockFileWrapper
 
     ''' <summary>
     ''' Stores whether or not to dispose of files on close
@@ -170,10 +186,13 @@ Public Class IOUIManager
     ''' <param name="DisposeOnClose">True to call the file's dispose method (if IDisposable) when closed.</param>
     Public Sub OpenFile(File As Object, DisposeOnClose As Boolean)
         If File IsNot Nothing Then
-            If Not OpenFiles.Contains(File) Then
-                OpenFiles.Add(File)
+            If Not (From o In OpenFiles Where o.File Is File).Any Then
+                OpenFiles.Add(New AvalonDockFileWrapper(File))
                 FileDisposalSettings.Add(File, DisposeOnClose)
                 RaiseEvent FileOpened(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = DisposeOnClose})
+            End If
+            If SelectedFile Is Nothing AndAlso OpenFiles.Count > 0 Then
+                SelectedFile = OpenFiles.First
             End If
         End If
     End Sub
@@ -185,10 +204,13 @@ Public Class IOUIManager
     ''' <param name="ParentProject">Project the file belongs to.  If the file does not belong to a project, don't use this overload.</param>
     Public Sub OpenFile(File As Object, ParentProject As Project)
         If File IsNot Nothing Then
-            If Not OpenFiles.Contains(File) Then
-                OpenFiles.Add(File)
+            If Not (From o In OpenFiles Where o.File Is File).Any Then
+                OpenFiles.Add(New AvalonDockFileWrapper(File))
                 OpenedProjectFiles.Add(File, ParentProject)
                 RaiseEvent FileOpened(Nothing, New FileOpenedEventArguments With {.File = File, .DisposeOnExit = False, .ParentProject = ParentProject})
+            End If
+            If SelectedFile Is Nothing AndAlso OpenFiles.Count > 0 Then
+                SelectedFile = OpenFiles.First
             End If
         End If
     End Sub
@@ -199,14 +221,17 @@ Public Class IOUIManager
     ''' <param name="File">File to close</param>
     Public Sub CloseFile(File As Object)
         If File IsNot Nothing Then
-            OpenFiles.Remove(File)
+            Dim toDelete = (From o In OpenFiles Where o.File Is File)
+            For Each item In toDelete
+                OpenFiles.Remove(item)
+            Next
             Dim doDispose = (FileDisposalSettings.ContainsKey(File) AndAlso FileDisposalSettings(File))
             If doDispose Then
                 If TypeOf File Is IDisposable Then
                     DirectCast(File, IDisposable).Dispose()
                 End If
             End If
-            RaiseEvent FileClosed(Me, New FileClosedEventArgs With {.File = File, .Disposed = dodispose})
+            RaiseEvent FileClosed(Me, New FileClosedEventArgs With {.File = File, .Disposed = doDispose})
         End If
     End Sub
 #End Region

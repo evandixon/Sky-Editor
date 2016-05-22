@@ -12,9 +12,14 @@ Public Class ObjectControlPlaceholder
     Implements IDisposable
 
     Public Shared ReadOnly CurrentPluginManagerProperty As DependencyProperty = DependencyProperty.Register("CurrentPluginManager", GetType(PluginManager), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnCurrentPluginManagerChanged))
+    Public Shared ReadOnly ObjectToEditProperty As DependencyProperty = DependencyProperty.Register("ObjectToEdit", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnObjectToEditChanged))
 
     Private Shared Sub OnCurrentPluginManagerChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         DirectCast(d, ObjectControlPlaceholder).CurrentPluginManager = e.NewValue
+    End Sub
+
+    Private Shared Sub OnObjectToEditChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        DirectCast(d, ObjectControlPlaceholder).ObjectToEdit = e.NewValue
     End Sub
 
     ''' <summary>
@@ -50,35 +55,52 @@ Public Class ObjectControlPlaceholder
             Return _object
         End Get
         Set(value As Object)
-            If _object IsNot Nothing AndAlso TypeOf _object Is INotifyModified Then
-                RemoveHandler DirectCast(_object, INotifyModified).Modified, AddressOf OnModified
-            End If
+            If CurrentPluginManager Is Nothing Then
+                _pendingObject = value
+            Else
+                If _object IsNot Nothing AndAlso TypeOf _object Is INotifyModified Then
+                    RemoveHandler DirectCast(_object, INotifyModified).Modified, AddressOf OnModified
+                End If
 
-            _object = value
+                _object = value
 
-            If TypeOf value Is INotifyModified Then
-                AddHandler DirectCast(value, INotifyModified).Modified, AddressOf OnModified
-            End If
+                If TypeOf value Is INotifyModified Then
+                    AddHandler DirectCast(value, INotifyModified).Modified, AddressOf OnModified
+                End If
 
-            If EnableTabs Then
-                'Tab control if applicable
-                If value IsNot Nothing Then
-                    Dim tabs = SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(value, {GetType(UserControl)}, CurrentPluginManager)
-                    Dim ucTabs = (From t In tabs Where ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
-                    Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
-                    If count > 1 Then
-                        Dim tabControl As New TabControl
-                        tabControl.TabStripPlacement = Windows.Controls.Dock.Left
-                        For Each item In WPFUiHelper.GenerateObjectTabs(ucTabs)
-                            tabControl.Items.Add(item)
-                            AddHandler item.ContainedObjectControl.IsModifiedChanged, AddressOf OnModified
-                        Next
-                        Me.Content = tabControl
+                If EnableTabs Then
+                    'Tab control if applicable
+                    If value IsNot Nothing Then
+                        Dim tabs = SkyEditor.Core.UI.UIHelper.GetRefreshedTabs(value, {GetType(UserControl)}, CurrentPluginManager)
+                        Dim ucTabs = (From t In tabs Where ReflectionHelpers.IsOfType(t, GetType(UserControl))).ToList
+                        Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
+                        If count > 1 Then
+                            Dim tabControl As New TabControl
+                            tabControl.TabStripPlacement = Windows.Controls.Dock.Left
+                            For Each item In WPFUiHelper.GenerateObjectTabs(ucTabs)
+                                tabControl.Items.Add(item)
+                                AddHandler item.ContainedObjectControl.IsModifiedChanged, AddressOf OnModified
+                            Next
+                            Me.Content = tabControl
 
-                    ElseIf count = 1 Then
-                        Dim control = ucTabs.First '(From t In ucTabs Where t.GetSortOrder(value.GetType, True) >= 0).First
-                        Me.Content = control
-                        AddHandler control.IsModifiedChanged, AddressOf OnModified
+                        ElseIf count = 1 Then
+                            Dim control = ucTabs.First '(From t In ucTabs Where t.GetSortOrder(value.GetType, True) >= 0).First
+                            Me.Content = control
+                            AddHandler control.IsModifiedChanged, AddressOf OnModified
+                        Else
+                            'Nothing is registered to edit this object.
+                            Dim label As New Label
+                            label.Content = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.NoAvailableUI, value.GetType.FullName)
+                            Me.Content = label
+                        End If
+                    End If
+
+                Else
+                    'Always one control
+                    Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, CurrentPluginManager)
+                    If objControl IsNot Nothing Then
+                        Content = objControl
+                        objControl.EditingObject = value
                     Else
                         'Nothing is registered to edit this object.
                         Dim label As New Label
@@ -86,23 +108,7 @@ Public Class ObjectControlPlaceholder
                         Me.Content = label
                     End If
                 End If
-
-            Else
-                'Always one control
-                Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, CurrentPluginManager)
-                If objControl IsNot Nothing Then
-                    Content = objControl
-                    objControl.EditingObject = value
-                Else
-                    'Todo: display a "missing control" message?
-                End If
             End If
-
-
-
-
-
-
         End Set
     End Property
     Dim _object As Object
@@ -122,21 +128,21 @@ Public Class ObjectControlPlaceholder
     Dim _pendingObject As Object
 
     Private Sub ObjectControlPlaceholder_DataContextChanged(sender As Object, e As DependencyPropertyChangedEventArgs) Handles Me.DataContextChanged
-        If CurrentPluginManager IsNot Nothing Then
-            'Then the plugin manager has been set and we're good to go.
-            If TypeOf e.NewValue Is ContentPresenter Then
-                ObjectToEdit = DirectCast(e.NewValue, ContentPresenter).Content
-            Else
-                ObjectToEdit = e.NewValue
-            End If
-        Else
-            'The plugin manager hasn't been set yet.  Let's log the object we would use, and use it when the plugin manager is set
-            If TypeOf e.NewValue Is ContentPresenter Then
-                _pendingObject = DirectCast(e.NewValue, ContentPresenter).Content
-            Else
-                _pendingObject = e.NewValue
-            End If
-        End If
+        'If CurrentPluginManager IsNot Nothing Then
+        '    'Then the plugin manager has been set and we're good to go.
+        '    If TypeOf e.NewValue Is ContentPresenter Then
+        '        ObjectToEdit = DirectCast(e.NewValue, ContentPresenter).Content
+        '    Else
+        '        ObjectToEdit = e.NewValue
+        '    End If
+        'Else
+        '    'The plugin manager hasn't been set yet.  Let's log the object we would use, and use it when the plugin manager is set
+        '    If TypeOf e.NewValue Is ContentPresenter Then
+        '        _pendingObject = DirectCast(e.NewValue, ContentPresenter).Content
+        '    Else
+        '        _pendingObject = e.NewValue
+        '    End If
+        'End If
     End Sub
 
     Private Sub OnModified(sender As Object, e As EventArgs)

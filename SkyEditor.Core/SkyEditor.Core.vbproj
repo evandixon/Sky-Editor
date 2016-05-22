@@ -138,6 +138,7 @@
       <DependentUpon>SettingNames.resx</DependentUpon>
     </Compile>
     <Compile Include="IO\Solution.vb" />
+    <Compile Include="UI\AvalonDockFileWrapper.vb" />
     <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
     <Compile Include="CoreSkyEditorPlugin.vb" />
