@@ -138,6 +138,7 @@
       <DependentUpon>SettingNames.resx</DependentUpon>
     </Compile>
     <Compile Include="IO\Solution.vb" />
+    <Compile Include="UI\ActionMenuItem.vb" />
     <Compile Include="UI\AvalonDockFileWrapper.vb" />
     <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
@@ -169,6 +170,7 @@
     <Compile Include="UI\ITargetedControl.vb" />
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
+    <Compile Include="UI\RelayCommand.vb" />
     <Compile Include="UI\UIHelper.vb" />
     <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />
@@ -189,6 +191,9 @@
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

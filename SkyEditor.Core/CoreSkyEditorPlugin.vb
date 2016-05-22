@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 ''' <summary>
 ''' A variant of SkyEditorPlugin that controls how the plugin manager loads other plugins.
 ''' </summary>

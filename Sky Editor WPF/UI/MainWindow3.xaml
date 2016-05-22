@@ -12,12 +12,25 @@
         x:Name="MainWindow3"
         mc:Ignorable="d"
         Title="MainWindow3" Height="500.915" Width="520.551">
-    <!--<Window.DataContext>
-        <Core:IOUIManager/>
-    </Window.DataContext>-->
+    <Window.Resources>
+        <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
-        <Menu x:Name="menuMain" IsMainMenu="True" Height="21" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-        <ad:DockingManager x:Name="dockingManager" Margin="0,23,0,0" DocumentsSource="{Binding OpenFiles}" ActiveContent="{Binding SelectedFile, Mode=TwoWay}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="21"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="menuMain" IsMainMenu="True" Grid.Row="0" ItemsSource="{Binding RootMenuItems}">
+            <Menu.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Header" Value="{Binding Header}" />
+                    <Setter Property="Visibility" Value="{Binding IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Setter Property="ItemsSource" Value="{Binding Children}" />
+                    <Setter Property="Command" Value="{Binding Command}"/>
+                </Style>
+            </Menu.ItemContainerStyle>
+        </Menu>
+        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" ActiveContent="{Binding SelectedFile, Mode=TwoWay}">
             <ad:DockingManager.LayoutItemTemplate>
                 <DataTemplate DataType="{x:Type coreui2:AvalonDockFileWrapper}">
                     <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding Content.File, UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>

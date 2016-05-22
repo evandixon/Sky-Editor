@@ -1,11 +1,12 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.UI.WPF
 
 ''' <summary>
 ''' Core of a WPF Core Mod that handles environment specific things, like how to restart the application.
 ''' </summary>
 Public MustInherit Class WpfCoreModBase
-    Inherits WindowsCoreSkyEditorPlugin
+    Inherits WPFCoreSkyEditorPlugin
     Public MustOverride Overrides ReadOnly Property Credits As String
 
     Public MustOverride Overrides ReadOnly Property PluginAuthor As String

@@ -17,12 +17,12 @@ Namespace UI
         ''' <returns></returns>
         Public Property CurrentPluginManager As PluginManager
 
-        ''' <summary>
-        ''' True to target all open files and the current project.
-        ''' False to target only the selected file and the current project.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property TargetAll As Boolean
+        '''' <summary>
+        '''' True to target all open files and the current project.
+        '''' False to target only the selected file and the current project.
+        '''' </summary>
+        '''' <returns></returns>
+        'Public Property TargetAll As Boolean
 
         ''' <summary>
         ''' True to be visible regardless of current targets.

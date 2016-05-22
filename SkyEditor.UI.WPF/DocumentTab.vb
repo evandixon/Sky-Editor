@@ -42,7 +42,7 @@ Public Class DocumentTab
                 Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
                 If count > 1 Then
                     Dim tabControl As New TabControl
-                    tabControl.TabStripPlacement = Windows.Controls.Dock.Left
+                    tabControl.TabStripPlacement = System.Windows.Controls.Dock.Left
                     For Each item In WPFUiHelper.GenerateObjectTabs(ucTabs)
                         tabControl.Items.Add(item)
                         AddHandler item.ContainedObjectControl.IsModifiedChanged, AddressOf File_FileModified

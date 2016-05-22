@@ -1,6 +1,10 @@
-﻿Imports System.Text
+﻿Imports System.Reflection
+Imports System.Text
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
+Imports SkyEditor.Core.Settings
+Imports System.Windows.Input
 ''' <summary>
 ''' Class that manages open files, solutions, and projects, and helps with the UI display them.
 ''' </summary>
@@ -8,7 +12,8 @@ Public Class IOUIManager
     Implements IDisposable
     Implements INotifyPropertyChanged
 
-    Public Sub New()
+    Public Sub New(manager As PluginManager)
+        Me.CurrentPluginManager = manager
         Me.CurrentSolution = Nothing
         Me.OpenedProjectFiles = New Dictionary(Of Object, Project)
         Me.FileDisposalSettings = New Dictionary(Of Object, Boolean)
@@ -37,7 +42,14 @@ Public Class IOUIManager
     '    End If
     'End Sub
 
+    Private Sub IOUIManager_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+        For Each item In RootMenuItems
+            UpdateMenuItemVisibility(item, GetMenuActionTargets)
+        Next
+    End Sub
 #End Region
+
+    Public Property CurrentPluginManager As PluginManager
 
     ''' <summary>
     ''' The files that are currently open
@@ -55,10 +67,13 @@ Public Class IOUIManager
         End Get
         Set(value As AvalonDockFileWrapper)
             If _selectedFile IsNot value Then
+                'If we actually changed something...
+
+                'Update the current
                 _selectedFile = value
+
+                'And report something changed
                 RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SelectedFile)))
-            Else
-                _selectedFile = value
             End If
         End Set
     End Property
@@ -89,9 +104,21 @@ Public Class IOUIManager
             Return _currentSolution
         End Get
         Set(value As Solution)
-            If _currentSolution IsNot Nothing Then _currentSolution.Dispose()
-            _currentSolution = value
-            RaiseEvent SolutionChanged(Me, New EventArgs)
+            If _currentSolution IsNot value Then
+                'If we're actually changing values...
+
+                'Dispose of the old one
+                If _currentSolution IsNot Nothing Then
+                    _currentSolution.Dispose()
+                End If
+
+                'Update the current
+                _currentSolution = value
+
+                'And report that we changed something
+                RaiseEvent SolutionChanged(Me, New EventArgs)
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(CurrentSolution)))
+            End If
         End Set
     End Property
     Private WithEvents _currentSolution As Solution
@@ -101,11 +128,44 @@ Public Class IOUIManager
             Return _currentProject
         End Get
         Set(value As Project)
-            _currentProject = value
-            RaiseEvent CurrentProjectChanged(Me, New EventArgs)
+            If _currentProject IsNot value Then
+                'If we're actually changing values...
+
+                'Update the current
+                _currentProject = value
+
+                'And report that we changed something
+                RaiseEvent CurrentProjectChanged(Me, New EventArgs)
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(CurrentProject)))
+            End If
         End Set
     End Property
     Private WithEvents _currentProject As Project
+
+    Public Property RootMenuItems As ObservableCollection(Of ActionMenuItem)
+        Get
+            If _rootMenuItems Is Nothing Then
+                _rootMenuItems = New ObservableCollection(Of ActionMenuItem)
+                'Generate the menu items
+                For Each item In GenerateLogicalMenuItems(UIHelper.GetMenuItemInfo(CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode))
+                    _rootMenuItems.Add(item)
+                Next
+                'Update their visibility now that all of them have been created
+                'Doing this before they're all created will cause unintended behavior
+                Dim targets = GetMenuActionTargets()
+                For Each item In _rootMenuItems
+                    UpdateMenuItemVisibility(item, targets)
+                Next
+            End If
+            Return _rootMenuItems
+        End Get
+        Protected Set(value As ObservableCollection(Of ActionMenuItem))
+            _rootMenuItems = value
+        End Set
+    End Property
+    Dim _rootMenuItems As ObservableCollection(Of ActionMenuItem)
+
+
 
 #Region "Functions"
 
@@ -248,6 +308,141 @@ Public Class IOUIManager
             Return Nothing
         End If
     End Function
+
+    ''' <summary>
+    ''' Gets the possible targets for a menu action.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetMenuActionTargets() As IEnumerable(Of Object)
+        Dim out As New List(Of Object)
+
+        If CurrentSolution IsNot Nothing Then
+            out.Add(CurrentSolution)
+        End If
+
+        If CurrentProject IsNot Nothing Then
+            out.Add(CurrentProject)
+        End If
+
+        If SelectedFile IsNot Nothing Then
+            out.Add(SelectedFile)
+        End If
+
+        Return out
+    End Function
+
+    ''' <summary>
+    ''' Gets the targets for the given menu action
+    ''' </summary>
+    ''' <param name="action">The action for which to retrieve the targets</param>
+    ''' <returns></returns>
+    Public Function GetMenuActionTargets(action As MenuAction) As IEnumerable(Of Object)
+        Dim targets As New List(Of Object)
+
+        'Add the current project to the targets if supported
+        If CurrentSolution IsNot Nothing AndAlso action.SupportsObject(CurrentSolution) Then
+            targets.Add(CurrentSolution)
+        End If
+
+        'Add the current project if supported
+        If CurrentProject IsNot Nothing AndAlso action.SupportsObject(CurrentProject) Then
+            targets.Add(CurrentProject)
+        End If
+
+        'Add the selected file if supported
+        If SelectedFile IsNot Nothing AndAlso action.SupportsObject(SelectedFile) Then
+            targets.Add(SelectedFile)
+        End If
+
+        Return targets
+    End Function
+
+    ''' <summary>
+    ''' Updates the visibility for the given menu item and its children, and returns the updated visibility
+    ''' </summary>
+    ''' <param name="menuItem"></param>
+    ''' <param name="targets"></param>
+    ''' <returns></returns>
+    Private Function UpdateMenuItemVisibility(menuItem As ActionMenuItem, targets As IEnumerable(Of Object)) As Boolean
+
+        'Default to not visible
+        Dim isVisible = False
+
+        If menuItem.Actions IsNot Nothing Then
+            'Visibility is determined by every available action
+            'If any one of those actions is applicable, then this menu item is visible
+            For Each item In menuItem.Actions
+                If Not isVisible Then
+                    If item.AlwaysVisible Then
+                        'Then this action is always visible
+                        isVisible = True
+
+                        'And don't bother checking the rest
+                        Exit For
+                    Else
+                        For Each target In targets
+                            'Check to see if this target is supported
+                            If item.SupportsObject(target) Then
+                                'If it is, then this menu item should be visible
+                                isVisible = True
+
+                                'And don't bother checking the rest
+                                Exit For
+                            End If
+                        Next
+                    End If
+                Else
+                    'Then this menu item is visible, and don't bother checking the rest
+                    Exit For
+                End If
+            Next
+        End If
+
+        'Update children
+        For Each item In menuItem.Children
+            If UpdateMenuItemVisibility(item, targets) Then
+                isVisible = True
+            End If
+        Next
+
+        'Set the visibility to the value we calculated
+        menuItem.IsVisible = isVisible
+
+        'Set this item to visible if there's a visible
+        Return isVisible
+    End Function
+
+    ''' <summary>
+    ''' Generates MenuItems from the given IEnumerable of MenuItemInfo.
+    ''' </summary>
+    ''' <param name="MenuItemInfo">IEnumerable of MenuItemInfo that will be used to create the MenuItems.</param>
+    ''' <returns></returns>
+    Private Function GenerateLogicalMenuItems(MenuItemInfo As IEnumerable(Of MenuItemInfo)) As List(Of ActionMenuItem)
+        If MenuItemInfo Is Nothing Then
+            Throw New ArgumentNullException(NameOf(MenuItemInfo))
+        End If
+
+        Dim output As New List(Of ActionMenuItem)
+
+        'Create the menu items
+        For Each item In From m In MenuItemInfo Order By m.SortOrder, m.Header
+            Dim m As New ActionMenuItem '= ReflectionHelpers.CreateInstance(RootMenuItemType.GetTypeInfo)
+            m.Header = item.Header
+            m.CurrentIOUIManager = Me
+            For Each action In item.ActionTypes
+                Dim a As MenuAction = ReflectionHelpers.CreateInstance(action)
+                a.CurrentPluginManager = CurrentPluginManager
+                m.Actions.Add(a)
+            Next
+            For Each child In GenerateLogicalMenuItems(item.Children)
+                m.Children.Add(child)
+            Next
+            output.Add(m)
+        Next
+
+        Return output
+    End Function
+
 
 #End Region
 

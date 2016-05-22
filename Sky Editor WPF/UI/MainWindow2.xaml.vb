@@ -6,8 +6,6 @@ Imports SkyEditor.Core.Settings
 Imports Xceed.Wpf.AvalonDock.Layout
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core
-Imports SkyEditorBase.EventArguments
-Imports SkyEditor.UI.WPF.UI
 Imports SkyEditor.UI.WPF
 
 Namespace UI
@@ -88,21 +86,21 @@ Namespace UI
                 targets.Add(_manager.CurrentIOUIManager.CurrentProject)
             End If
 
-            If Action.TargetAll Then
-                For Each item In docPane.Children
-                    If TypeOf item Is DocumentTab Then
-                        Dim d = DirectCast(item, DocumentTab).Document
-                        If d IsNot Nothing AndAlso Action.SupportsObject(d) Then
-                            targets.Add(d)
-                        End If
-                    End If
-                Next
-            Else
-                Dim currentDocumentObject = GetSelectedDocumentObject()
+            'If Action.TargetAll Then
+            '    For Each item In docPane.Children
+            '        If TypeOf item Is DocumentTab Then
+            '            Dim d = DirectCast(item, DocumentTab).Document
+            '            If d IsNot Nothing AndAlso Action.SupportsObject(d) Then
+            '                targets.Add(d)
+            '            End If
+            '        End If
+            '    Next
+            'Else
+            Dim currentDocumentObject = GetSelectedDocumentObject()
                 If currentDocumentObject IsNot Nothing AndAlso Action.SupportsObject(currentDocumentObject) Then
                     targets.Add(currentDocumentObject)
                 End If
-            End If
+            'End If
 
             Return targets
         End Function
