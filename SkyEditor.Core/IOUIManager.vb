@@ -325,7 +325,7 @@ Public Class IOUIManager
         End If
 
         If SelectedFile IsNot Nothing Then
-            out.Add(SelectedFile)
+            out.Add(SelectedFile.File)
         End If
 
         Return out
@@ -350,8 +350,8 @@ Public Class IOUIManager
         End If
 
         'Add the selected file if supported
-        If SelectedFile IsNot Nothing AndAlso action.SupportsObject(SelectedFile) Then
-            targets.Add(SelectedFile)
+        If SelectedFile IsNot Nothing AndAlso action.SupportsObject(SelectedFile.File) Then
+            targets.Add(SelectedFile.File)
         End If
 
         Return targets
