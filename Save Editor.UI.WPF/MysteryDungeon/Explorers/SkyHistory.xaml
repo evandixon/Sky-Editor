@@ -1,28 +1,38 @@
-﻿<local:ObjectControl x:Class="Tabs.SkyHistory"
+﻿<skyui:DataBoundObjectControl x:Class="Tabs.SkyHistory"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:local="clr-namespace:SaveEditor.UI.WPF"
+             xmlns:saveEditor="clr-namespace:SkyEditor.SaveEditor;assembly=SkyEditor.SaveEditor"
+             xmlns:explorers="clr-namespace:SkyEditor.SaveEditor.MysteryDungeon.Explorers;assembly=SkyEditor.SaveEditor"
              xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              mc:Ignorable="d"
+             Header="{x:Static res:Language.History}"
+             TargetType="{x:Type explorers:SkySave}"
+             SortOrder="9"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="300" VerticalAlignment="Top">
-            <Label x:Name="lblPlayerName" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerName}" />
-            <TextBox x:Name="txtPlayerName" />
-            <Label x:Name="lblPlayerKind" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
-            <skyui:SearchableDropDown x:Name="cbPlayer" />
-            <Label x:Name="lblPlayerGender" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
-            <CheckBox x:Name="chbPlayerGender" VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"/>
-            <Label x:Name="lblPartnerName" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerName}" />
-            <TextBox x:Name="txtPartnerName" />
-            <Label x:Name="lblPartnerKind" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
-            <skyui:SearchableDropDown x:Name="cbPartner" />
-            <Label x:Name="lblPartnerGender" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
-            <CheckBox x:Name="chbPartnerGender" VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"/>
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerName}" />
+            <TextBox Text="{Binding OriginalPlayerName}" />
+            
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
+            <local:PokemonDropDown PokemonDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedPokemonID="{Binding OriginalPlayerID}" />
+            
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
+            <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}" IsChecked="{Binding OriginalPlayerIsFemale}" />
+            
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerName}" />
+            <TextBox Text="{Binding OriginalPartnerName}" />
+            
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
+            <local:PokemonDropDown PokemonDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedPokemonID="{Binding OriginalPartnerID}" />
+            
+            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
+            <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"  IsChecked="{Binding OriginalPartnerIsFemale}"/>
         </UniformGrid>
     </Grid>
-</local:ObjectControl>
+</skyui:DataBoundObjectControl>

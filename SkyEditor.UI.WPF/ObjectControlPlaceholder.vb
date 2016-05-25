@@ -115,7 +115,7 @@ Public Class ObjectControlPlaceholder
                 End If
             End If
 
-            If Me.Content IsNot Nothing Then
+            If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is UserControl AndAlso _pendingTag IsNot Nothing Then
                 DirectCast(Me.Content, UserControl).Tag = _pendingTag
                 _pendingTag = Nothing
             End If

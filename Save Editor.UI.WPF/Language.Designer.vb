@@ -344,6 +344,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Original Characters.
+        '''</summary>
+        Public Shared ReadOnly Property OriginalCharacters() As String
+            Get
+                Return ResourceManager.GetString("OriginalCharacters", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Original Partner Gender.
         '''</summary>
         Public Shared ReadOnly Property OriginalPartnerGender() As String

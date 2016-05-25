@@ -302,4 +302,7 @@ Demonic722 (Misc RAM and save addresses)</value>
   <data name="Inventory" xml:space="preserve">
     <value>Inventory</value>
   </data>
+  <data name="OriginalCharacters" xml:space="preserve">
+    <value>Original Characters</value>
+  </data>
 </root>

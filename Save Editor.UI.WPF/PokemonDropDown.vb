@@ -2,17 +2,36 @@
 
 Public Class PokemonDropDown
     Inherits SearchableDropDown
-    Private WriteOnly Property PokemonDictionary As IDictionary(Of Integer, String)
+
+    Public Shared ReadOnly PokemonDictionaryProperty As DependencyProperty = DependencyProperty.Register("PokemonDictionary", GetType(IDictionary(Of Integer, String)), GetType(PokemonDropDown), New FrameworkPropertyMetadata(AddressOf OnPokemonDictionaryChanged))
+    Public Shared ReadOnly SelectedPokemonIDProperty As DependencyProperty = DependencyProperty.Register("SelectedPokemonID", GetType(Integer), GetType(PokemonDropDown), New FrameworkPropertyMetadata(AddressOf OnSelectedPokemonIDChanged))
+
+    Private Shared Sub OnPokemonDictionaryChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        DirectCast(d, PokemonDropDown).PokemonDictionary = e.NewValue
+    End Sub
+    Private Shared Sub OnSelectedPokemonIDChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        DirectCast(d, PokemonDropDown).SelectedPokemonID = e.NewValue
+    End Sub
+
+    Public Property PokemonDictionary As IDictionary(Of Integer, String)
+        Get
+            Return _pkmDictionary
+        End Get
         Set(value As IDictionary(Of Integer, String))
-            Items.Clear()
+            _pkmDictionary = value
 
-            For Each item In (From v In value Order By v.Value)
-                Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
-            Next
+            If _pkmDictionary IsNot Nothing Then
+                Items.Clear()
 
-            SelectedIndex = 0
+                For Each item In (From v In value Order By v.Value)
+                    Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
+                Next
+
+                SelectedIndex = 0
+            End If
         End Set
     End Property
+    Dim _pkmDictionary As Dictionary(Of Integer, String)
 
     Public Property SelectedPokemonID As Integer
         Get

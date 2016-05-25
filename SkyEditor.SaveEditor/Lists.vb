@@ -9,7 +9,19 @@
     Private Shared Property SkyItems As Dictionary(Of Integer, String)
     Private Shared Property TDItems As Dictionary(Of Integer, String)
     Private Shared Property RBItems As Dictionary(Of Integer, String)
-    Private Shared Property SkyPokemon As Dictionary(Of Integer, String)
+
+    Public Shared ReadOnly Property SkyPokemon As Dictionary(Of Integer, String)
+        Get
+            If _skyPokemon Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.SkyPokemon)
+                _skyPokemon = i.Entries
+            End If
+            Return _skyPokemon
+        End Get
+    End Property
+    Private Shared _skyPokemon As Dictionary(Of Integer, String)
+
     Private Shared Property TDPokemon As Dictionary(Of Integer, String)
     Private Shared Property RBPokemon As Dictionary(Of Integer, String)
     Private Shared Property RBBaseTypes As Dictionary(Of Integer, String)
@@ -88,11 +100,6 @@
     End Function
 
     Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
-        If SkyPokemon Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.SkyPokemon)
-            SkyPokemon = i.Entries
-        End If
         Return SkyPokemon
     End Function
 

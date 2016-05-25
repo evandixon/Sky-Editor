@@ -8,28 +8,36 @@
              xmlns:explorers="clr-namespace:SkyEditor.SaveEditor.MysteryDungeon.Explorers;assembly=SkyEditor.SaveEditor"
              xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="700" d:DesignWidth="400"
              TargetType="{x:Type explorers:SkySave}"
              Header="{x:Static res:Language.General}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.TeamName}" />
-            <TextBox Text="{Binding TeamName}"/>
-            
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.HeldMoney}" />
-            <xctk:IntegerUpDown Minimum="0" Maximum="99999" VerticalContentAlignment="Top" Value="{Binding HeldMoney}" />
-            
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.SpEpisodeHeldMoney}" />
-            <xctk:IntegerUpDown Minimum="0" Maximum="99999" VerticalContentAlignment="Top" Value="{Binding SpEpisodeHeldMoney}" />
-            
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.StoredMoney}" />
-            <xctk:IntegerUpDown Minimum="0" Maximum="9999999" VerticalContentAlignment="Top" Value="{Binding StoredMoney}" />
-            
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.Adventures}" />
-            <xctk:IntegerUpDown VerticalContentAlignment="Top" Value="{Binding Adventures}" />
-            
-            <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.RankPoints}" />
-            <xctk:IntegerUpDown VerticalContentAlignment="Top" Value="{Binding ExplorerRank}" />
-        </UniformGrid>
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.TeamName}" />
+                <TextBox Text="{Binding TeamName}"/>
+
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.HeldMoney}" />
+                <xctk:IntegerUpDown Minimum="0" Maximum="99999" VerticalContentAlignment="Top" Value="{Binding HeldMoney}" />
+
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.SpEpisodeHeldMoney}" />
+                <xctk:IntegerUpDown Minimum="0" Maximum="99999" VerticalContentAlignment="Top" Value="{Binding SpEpisodeHeldMoney}" />
+
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.StoredMoney}" />
+                <xctk:IntegerUpDown Minimum="0" Maximum="9999999" VerticalContentAlignment="Top" Value="{Binding StoredMoney}" />
+
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.Adventures}" />
+                <xctk:IntegerUpDown VerticalContentAlignment="Top" Value="{Binding Adventures}" />
+
+                <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.RankPoints}" />
+                <xctk:IntegerUpDown VerticalContentAlignment="Top" Value="{Binding ExplorerRank}" />
+            </UniformGrid>           
     </Grid>
 </skyui:DataBoundObjectControl>
