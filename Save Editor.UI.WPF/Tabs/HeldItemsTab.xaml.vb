@@ -2,6 +2,7 @@
 Imports SkyEditor.SaveEditor
 Imports SkyEditorBase.Utilities
 Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class HeldItemsTab

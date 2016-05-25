@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              mc:Ignorable="d" Height="22" Width="184">
     <Grid>
-        <local:SearchableDropDown x:Name="cbMove" VerticalAlignment="Top" />
+        <skyui:SearchableDropDown x:Name="cbMove" VerticalAlignment="Top" />
     </Grid>
 </local:ObjectControl>

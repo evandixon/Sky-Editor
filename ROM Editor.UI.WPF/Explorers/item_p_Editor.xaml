@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:skyEditor="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:coreui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -29,13 +30,13 @@
             <toolkit:IntegerUpDown x:Name="numSellPrice"/>
             
             <Label Content="Category" HorizontalAlignment="Left" Width="84"/>
-            <skyEditor:SearchableDropDown x:Name="cbCategory"/>
+            <coreui:SearchableDropDown x:Name="cbCategory"/>
             
             <Label Content="Sprite" HorizontalAlignment="Left" Width="84"/>
-            <skyEditor:SearchableDropDown x:Name="cbSprite"/>
+            <coreui:SearchableDropDown x:Name="cbSprite"/>
             
             <Label Content="Move" HorizontalAlignment="Left" Width="84"/>
-            <skyEditor:SearchableDropDown x:Name="cbMove"/>
+            <coreui:SearchableDropDown x:Name="cbMove"/>
             
             <Label Content="Unknown 1" HorizontalAlignment="Left" Width="84"/>
             <toolkit:IntegerUpDown x:Name="numUnknown1"/>

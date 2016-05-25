@@ -1,6 +1,8 @@
 ﻿Imports SkyEditorBase
 Imports SkyEditor.SaveEditor
 Imports SkyEditorWPF.UI
+Imports SkyEditor.Core
+Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class PKMGeneralTab
@@ -9,7 +11,7 @@ Namespace Tabs
             Set(value As IDictionary(Of Integer, String))
                 cbPokemon.Items.Clear()
                 For Each item In (From v In value Order By v.Value)
-                    cbPokemon.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbPokemon.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
             End Set
         End Property
@@ -17,17 +19,17 @@ Namespace Tabs
             Set(value As IDictionary(Of Integer, String))
                 cbMetAt.Items.Clear()
                 For Each item In (From v In value Order By v.Value)
-                    cbMetAt.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbMetAt.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
             End Set
         End Property
         Private Property SelectedPokemonID As Integer
             Get
-                Return DirectCast(cbPokemon.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbPokemon.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbPokemon.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbPokemon.SelectedItem = item
                     End If
                 Next
@@ -35,11 +37,11 @@ Namespace Tabs
         End Property
         Private Property SelectedMetAtID As Integer
             Get
-                Return DirectCast(cbMetAt.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbMetAt.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbMetAt.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbMetAt.SelectedItem = item
                     End If
                 Next
@@ -55,12 +57,12 @@ Namespace Tabs
                 SelectedPokemonID = .ID
 
                 If TypeOf _pokemon Is Interfaces.iMDPkmGender Then
-                    lblIsFemale.Visibility = Windows.Visibility.Visible
-                    chbIsFemale.Visibility = Windows.Visibility.Visible
+                    lblIsFemale.Visibility = Visibility.Visible
+                    chbIsFemale.Visibility = Visibility.Visible
                     chbIsFemale.IsChecked = DirectCast(_pokemon, Interfaces.iMDPkmGender).IsFemale
                 Else
-                    lblIsFemale.Visibility = Windows.Visibility.Collapsed
-                    chbIsFemale.Visibility = Windows.Visibility.Collapsed
+                    lblIsFemale.Visibility = Visibility.Collapsed
+                    chbIsFemale.Visibility = Visibility.Collapsed
                 End If
 
                 txtName.Text = .Name
@@ -69,30 +71,30 @@ Namespace Tabs
                 SelectedMetAtID = .MetAt
 
                 If TypeOf _pokemon Is Interfaces.iMDPkmMetFloor Then
-                    lblMetFloor.Visibility = Windows.Visibility.Visible
-                    numMetFloor.Visibility = Windows.Visibility.Visible
+                    lblMetFloor.Visibility = Visibility.Visible
+                    numMetFloor.Visibility = Visibility.Visible
                     numMetFloor.Value = DirectCast(_pokemon, Interfaces.iMDPkmMetFloor).MetFloor
                 Else
-                    lblMetFloor.Visibility = Windows.Visibility.Collapsed
-                    numMetFloor.Visibility = Windows.Visibility.Collapsed
+                    lblMetFloor.Visibility = Visibility.Collapsed
+                    numMetFloor.Visibility = Visibility.Collapsed
                 End If
 
                 If TypeOf _pokemon Is Interfaces.iMDPkmIQ Then
-                    lblIQ.Visibility = Windows.Visibility.Visible
-                    numIQ.Visibility = Windows.Visibility.Visible
+                    lblIQ.Visibility = Visibility.Visible
+                    numIQ.Visibility = Visibility.Visible
                     numIQ.Value = DirectCast(_pokemon, Interfaces.iMDPkmIQ).IQ
                 Else
-                    lblIQ.Visibility = Windows.Visibility.Collapsed
-                    numIQ.Visibility = Windows.Visibility.Collapsed
+                    lblIQ.Visibility = Visibility.Collapsed
+                    numIQ.Visibility = Visibility.Collapsed
                 End If
 
                 If TypeOf _pokemon Is Interfaces.iMDPkmCurrentHP Then
-                    lblCurrentHP.Visibility = Windows.Visibility.Visible
-                    numCurrentHP.Visibility = Windows.Visibility.Visible
+                    lblCurrentHP.Visibility = Visibility.Visible
+                    numCurrentHP.Visibility = Visibility.Visible
                     numCurrentHP.Value = DirectCast(_pokemon, Interfaces.iMDPkmCurrentHP).CurrentHP
                 Else
-                    lblCurrentHP.Visibility = Windows.Visibility.Collapsed
-                    numCurrentHP.Visibility = Windows.Visibility.Collapsed
+                    lblCurrentHP.Visibility = Visibility.Collapsed
+                    numCurrentHP.Visibility = Visibility.Collapsed
                 End If
 
                 numMaxHP.Value = .MaxHP

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="UI.NewSolutionWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:skyEditorBase="clr-namespace:SkyEditorWPF.UI"
+    xmlns:skyEditorBase="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
     xmlns:res="clr-namespace:SkyEditorWPF.My.Resources"
     Title="{x:Static res:Language.NewSolution}" Height="161" Width="527" ResizeMode="NoResize">
     <Grid>

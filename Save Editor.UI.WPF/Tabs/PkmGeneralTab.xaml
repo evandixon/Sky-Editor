@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d" d:DesignWidth="326" d:DesignHeight="371">
     <Grid>
         <UniformGrid Columns="2" Rows="14" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Label x:Name="lblPkm" Content="{x:Static res:Language.Pokemon}" />            
-            <local:SearchableDropDown x:Name="cbPokemon" />
+            <Label x:Name="lblPkm" Content="{x:Static res:Language.Pokemon}" />
+            <skyui:SearchableDropDown x:Name="cbPokemon" />
             <Label x:Name="lblIsFemale" Content="{x:Static res:Language.IsFemale}" />
             <CheckBox x:Name="chbIsFemale"></CheckBox>
             <Label x:Name="lblName" Content="{x:Static res:Language.Name}" />
@@ -20,7 +21,7 @@
             <Label x:Name="lblExp" Content="{x:Static res:Language.Exp}" />
             <xctk:IntegerUpDown x:Name="numExp" />
             <Label x:Name="lblMetAt" Content="{x:Static res:Language.MetAt}" />
-            <local:SearchableDropDown x:Name="cbMetAt"></local:SearchableDropDown>
+            <skyui:SearchableDropDown x:Name="cbMetAt"></skyui:SearchableDropDown>
             <!--<xctk:IntegerUpDown x:Name="numMetAt" />-->
             <Label x:Name="lblMetFloor" Content="{x:Static res:Language.MetFloor}" />
             <xctk:IntegerUpDown x:Name="numMetFloor" />

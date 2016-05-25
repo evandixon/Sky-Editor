@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
              xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
+             xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -13,13 +14,13 @@
             <Label x:Name="lblPlayerName" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerName}" />
             <TextBox x:Name="txtPlayerName" />
             <Label x:Name="lblPlayerKind" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
-            <local:SearchableDropDown x:Name="cbPlayer" />
+            <skyui:SearchableDropDown x:Name="cbPlayer" />
             <Label x:Name="lblPlayerGender" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
             <CheckBox x:Name="chbPlayerGender" VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"/>
             <Label x:Name="lblPartnerName" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerName}" />
             <TextBox x:Name="txtPartnerName" />
             <Label x:Name="lblPartnerKind" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
-            <local:SearchableDropDown x:Name="cbPartner" />
+            <skyui:SearchableDropDown x:Name="cbPartner" />
             <Label x:Name="lblPartnerGender" HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
             <CheckBox x:Name="chbPartnerGender" VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"/>
         </UniformGrid>

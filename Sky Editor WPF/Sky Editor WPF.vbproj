@@ -141,7 +141,6 @@
     <Compile Include="UI\ProjectReferences.xaml.vb">
       <DependentUpon>ProjectReferences.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\SearchableDropDown.vb" />
     <Compile Include="UI\SettingsEditor.xaml.vb">
       <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>

@@ -188,7 +188,6 @@
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
     <Compile Include="PluginHelper.vb" />
-    <Compile Include="Utilities\GenericListItem.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />
   </ItemGroup>

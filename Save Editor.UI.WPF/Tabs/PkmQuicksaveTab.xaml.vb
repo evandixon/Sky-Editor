@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
+Imports SkyEditor.UI.WPF
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -10,18 +11,18 @@ Namespace Tabs
                 cbPokemon.Items.Clear()
                 cbPokemon2.Items.Clear()
                 For Each item In (From v In value Order By v.Value)
-                    cbPokemon.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
-                    cbPokemon2.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbPokemon.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbPokemon2.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
             End Set
         End Property
         Private Property SelectedPokemonID As Integer
             Get
-                Return DirectCast(cbPokemon.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbPokemon.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbPokemon.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbPokemon.SelectedItem = item
                     End If
                 Next
@@ -29,11 +30,11 @@ Namespace Tabs
         End Property
         Private Property SelectedPokemonID2 As Integer
             Get
-                Return DirectCast(cbPokemon2.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbPokemon2.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbPokemon.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbPokemon2.SelectedItem = item
                     End If
                 Next

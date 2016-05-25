@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SkyEditorWPF.UI;assembly=SkyEditor"
+             xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" Height="40" Width="448">
     <Grid HorizontalAlignment="Right" Width="448">
-        <local:SearchableDropDown x:Name="cbMove" Margin="20,18,278,0" Height="22" VerticalAlignment="Top" />
+        <skyui:SearchableDropDown x:Name="cbMove" Margin="20,18,278,0" Height="22" VerticalAlignment="Top" />
         <xctk:IntegerUpDown x:Name="numGinseng" Minimum="0" Maximum="128" VerticalAlignment="Top" Margin="0,18,184,0" HorizontalAlignment="Right" Width="41" Height="22" ToolTip="Ginseng" />
         <CheckBox x:Name="chbSwitched" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,21,0,0" ToolTip="Switched" />
         <CheckBox x:Name="chbLinked" Content="Linked" HorizontalAlignment="Right" Margin="0,21,124,0" VerticalAlignment="Top" />

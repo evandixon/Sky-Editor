@@ -1,6 +1,7 @@
 ﻿Imports System.Windows
 Imports System.Windows.Controls
 Imports SkyEditor.SaveEditor
+Imports SkyEditor.UI.WPF
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -23,7 +24,7 @@ Namespace Controls
             End Get
             Set(value As Interfaces.iMDActiveAttack)
                 For Each item In (From m In value.GetAttackDictionary Select m Order By m.Value)
-                    cbMove.Items.Add(New SkyEditorBase.Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbMove.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
                 SelectedMoveID = value.ID
                 numGinseng.Value = value.Ginseng
@@ -53,12 +54,12 @@ Namespace Controls
                 If cbMove.LastSafeValue Is Nothing Then
                     Return Nothing
                 Else
-                    Return DirectCast(cbMove.LastSafeValue, Utilities.GenericListItem(Of Integer)).Value
+                    Return DirectCast(cbMove.LastSafeValue, GenericListItem(Of Integer)).Value
                 End If
             End Get
             Set(value As Integer)
                 For Each item In cbMove.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbMove.SelectedItem = item
                     End If
                 Next

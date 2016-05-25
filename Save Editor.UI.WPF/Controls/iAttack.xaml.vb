@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.UI.WPF
+Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Namespace Controls
@@ -12,7 +13,7 @@ Namespace Controls
             End Get
             Set(value As SkyEditor.SaveEditor.Interfaces.iAttack)
                 For Each item In (From m In value.GetAttackDictionary Select m Order By m.Value)
-                    cbMove.Items.Add(New SkyEditorBase.Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbMove.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
                 SelectedMoveID = value.ID
                 _attack = value
@@ -21,11 +22,11 @@ Namespace Controls
 
         Private Property SelectedMoveID As Integer
             Get
-                Return DirectCast(cbMove.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbMove.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbMove.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbMove.SelectedItem = item
                     End If
                 Next

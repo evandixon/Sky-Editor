@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
+Imports SkyEditor.UI.WPF
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
@@ -12,8 +13,8 @@ Namespace Tabs
                 cbPartner.Items.Clear()
 
                 For Each item In (From v In value Order By v.Value)
-                    cbPlayer.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
-                    cbPartner.Items.Add(New Utilities.GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbPlayer.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
+                    cbPartner.Items.Add(New GenericListItem(Of Integer)(item.Value, item.Key))
                 Next
 
                 cbPlayer.SelectedIndex = 0
@@ -23,11 +24,11 @@ Namespace Tabs
 
         Private Property SelectedPlayerID As Integer
             Get
-                Return DirectCast(cbPlayer.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbPlayer.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbPlayer.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbPlayer.SelectedItem = item
                     End If
                 Next
@@ -36,11 +37,11 @@ Namespace Tabs
 
         Private Property SelectedPartnerID As Integer
             Get
-                Return DirectCast(cbPartner.SelectedItem, Utilities.GenericListItem(Of Integer)).Value
+                Return DirectCast(cbPartner.SelectedItem, GenericListItem(Of Integer)).Value
             End Get
             Set(value As Integer)
                 For Each item In cbPartner.Items
-                    If DirectCast(item, Utilities.GenericListItem(Of Integer)).Value = value Then
+                    If DirectCast(item, GenericListItem(Of Integer)).Value = value Then
                         cbPartner.SelectedItem = item
                     End If
                 Next

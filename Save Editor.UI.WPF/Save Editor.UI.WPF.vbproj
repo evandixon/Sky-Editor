@@ -157,6 +157,10 @@
     <Compile Include="MysteryDungeon\Explorers\ExplorersItemList.xaml.vb">
       <DependentUpon>ExplorersItemList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MysteryDungeon\Explorers\SkyHistory.xaml.vb">
+      <DependentUpon>SkyHistory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PokemonDropDown.vb" />
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
       <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
@@ -187,9 +191,6 @@
     </Compile>
     <Compile Include="Tabs\RBStoredItemsTab.xaml.vb">
       <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SkyHistory.xaml.vb">
-      <DependentUpon>SkyHistory.xaml</DependentUpon>
     </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyGeneralTab.xaml.vb">
       <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
@@ -247,6 +248,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MysteryDungeon\Explorers\SkyHistory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Tabs\ActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -284,10 +289,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\RBStoredItemsTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SkyHistory.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
