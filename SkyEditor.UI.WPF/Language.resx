@@ -120,8 +120,11 @@
   <data name="DocumentCloseConfirmation" xml:space="preserve">
     <value>Are you sure you want to close this file?  Any unsaved changes will be lost.</value>
   </data>
-  <data name="MainTitle" xml:space="preserve">
+  <data name="FormattedTitle" xml:space="preserve">
     <value>Sky Editor {0}{1}</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>Sky Editor</value>
   </data>
   <data name="NoAvailableUI" xml:space="preserve">
     <value>There is no available UI for this object of type "{0}".</value>

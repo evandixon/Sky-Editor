@@ -1,6 +1,4 @@
-﻿Imports SkyEditorBase.Utilities
-
-Namespace ARDS
+﻿Namespace ARDS
     Public Class Manager
         Public Property CodeDefinitions As List(Of CodeDefinition)
         Public Property GameIDs As Dictionary(Of String, String)

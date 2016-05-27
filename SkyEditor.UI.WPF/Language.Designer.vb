@@ -76,6 +76,15 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to Sky Editor {0}{1}.
         '''</summary>
+        Friend Shared ReadOnly Property FormattedTitle() As String
+            Get
+                Return ResourceManager.GetString("FormattedTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor.
+        '''</summary>
         Friend Shared ReadOnly Property MainTitle() As String
             Get
                 Return ResourceManager.GetString("MainTitle", resourceCulture)

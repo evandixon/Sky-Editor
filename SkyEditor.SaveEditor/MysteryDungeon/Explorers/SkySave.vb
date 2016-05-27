@@ -11,6 +11,7 @@ Namespace MysteryDungeon.Explorers
         Implements iParty
         Implements iPokemonStorage
         Implements IInventory
+        Implements INotifyPropertyChanged
 
 #Region "Child Classes"
 
@@ -1348,6 +1349,8 @@ Namespace MysteryDungeon.Explorers
             InitItemSlots()
         End Sub
 
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
         Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
             Await MyBase.OpenFile(Filename, Provider)
 
@@ -1367,6 +1370,7 @@ Namespace MysteryDungeon.Explorers
                 SpEpisodeHeldItems.Add(item)
             Next
 
+            LoadHistory()
 
         End Function
 
@@ -1374,6 +1378,8 @@ Namespace MysteryDungeon.Explorers
             SetStoredItems(StoredItems)
             SetHeldItems(HeldItems)
             SetSpEpisodeHeldItems(SpEpisodeHeldItems)
+
+            SaveHistory()
 
             MyBase.Save(Destination, provider)
         End Sub
@@ -1456,7 +1462,6 @@ Namespace MysteryDungeon.Explorers
 
 #Region "Team Info"
 
-
         ''' <summary>
         ''' Gets or sets the team's exploration rank points.
         ''' When set in certain ranges, the rank changes (ex. Silver, Gold, Master, etc).
@@ -1473,129 +1478,6 @@ Namespace MysteryDungeon.Explorers
             End Set
         End Property
 
-        ''' <summary>
-        ''' Gets or sets the original player Pokemon.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPlayerID As Integer
-            Get
-                Dim i = Bits.Int(&HBE, 0, 16)
-                If i > 600 Then
-                    i -= 600
-                End If
-                Return i
-            End Get
-            Set(value As Integer)
-                Dim f = OriginalPlayerIsFemale
-                Bits.Int(&HBE, 0, 16) = value
-                OriginalPlayerIsFemale = f
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the original player gender.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPlayerIsFemale As Boolean
-            Get
-                Dim i = Bits.Int(&HBE, 0, 16)
-                Return (i > 600)
-            End Get
-            Set(value As Boolean)
-                Dim i = Bits.Int(&HBE, 0, 16)
-                If i > 600 Then
-                    If value Then
-                        'do nothing
-                    Else
-                        Bits.Int(&HBE, 0, 16) -= 600
-                    End If
-                Else
-                    If value Then
-                        Bits.Int(&HBE, 0, 16) += 600
-                    Else
-                        'do nothing
-                    End If
-                End If
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the original partner Pokemon.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPartnerID As Integer
-            Get
-                Dim i = Bits.Int(&HC0, 0, 16)
-                If i > 600 Then
-                    i -= 600
-                End If
-                Return i
-            End Get
-            Set(value As Integer)
-                Dim f = OriginalPlayerIsFemale
-                Bits.Int(&HC0, 0, 16) = value
-                OriginalPlayerIsFemale = f
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the original partner gender.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPartnerIsFemale As Boolean
-            Get
-                Dim i = Bits.Int(&HC0, 0, 16)
-                Return (i > 600)
-            End Get
-            Set(value As Boolean)
-                Dim i = Bits.Int(&HC0, 0, 16)
-                If i > 600 Then
-                    If value Then
-                        'do nothing
-                    Else
-                        Bits.Int(&HC0, 0, 16) -= 600
-                    End If
-                Else
-                    If value Then
-                        Bits.Int(&HC0, 0, 16) += 600
-                    Else
-                        'do nothing
-                    End If
-                End If
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the original player name.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPlayerName As String
-            Get
-                Return Bits.StringPMD(&H13F, 0, 10)
-            End Get
-            Set(value As String)
-                Bits.StringPMD(&H13F, 0, 10) = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the original partner name.
-        ''' Used in-game for special episodes.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OriginalPartnerName As String
-            Get
-                Return Bits.StringPMD(&H149, 0, 10)
-            End Get
-            Set(value As String)
-                Bits.StringPMD(&H149, 0, 10) = value
-            End Set
-        End Property
 #End Region
 
 #Region "Items"
@@ -1857,6 +1739,170 @@ Namespace MysteryDungeon.Explorers
                 Next
             End Set
         End Property
+#End Region
+
+#Region "History"
+        Private Sub LoadHistory()
+            '----------
+            '--History
+            '----------
+
+            '-----Original Player ID & Gender
+            Dim rawOriginalPlayerID = Bits.Int(&HBE, 0, 16)
+            If rawOriginalPlayerID > 600 Then
+                OriginalPlayerID = rawOriginalPlayerID - 600
+                OriginalPlayerIsFemale = True
+            Else
+                OriginalPlayerID = rawOriginalPlayerID
+                OriginalPlayerIsFemale = False
+            End If
+
+            '-----Original Partner ID & Gender
+            Dim rawOriginalPartnerID = Bits.Int(&HC0, 0, 16)
+            If rawOriginalPartnerID > 600 Then
+                OriginalPartnerID = rawOriginalPartnerID - 600
+                OriginalPartnerIsFemale = True
+            Else
+                OriginalPartnerID = rawOriginalPartnerID
+                OriginalPartnerIsFemale = False
+            End If
+
+            '-----Original Names
+            OriginalPlayerName = Bits.StringPMD(&H13F, 0, 10)
+            OriginalPartnerName = Bits.StringPMD(&H149, 0, 10)
+        End Sub
+
+        Private Sub SaveHistory()
+            '----------
+            '--History
+            '----------
+
+            '-----Original Player ID & Gender
+            Dim rawOriginalPlayerID = OriginalPlayerID
+            If OriginalPlayerIsFemale Then
+                rawOriginalPlayerID += 600
+            End If
+            Bits.Int(&HBE, 0, 16) = rawOriginalPlayerID
+
+            '-----Original Partner ID & Gender
+            Dim rawOriginalPartnerID = OriginalPartnerIsFemale
+            If OriginalPartnerIsFemale Then
+                rawOriginalPartnerID += 600
+            End If
+            Bits.Int(&HC0, 0, 16) = rawOriginalPlayerID
+
+            '-----Original Names
+            Bits.StringPMD(&H13F, 0, 10) = OriginalPlayerName
+            Bits.StringPMD(&H149, 0, 10) = OriginalPartnerName
+        End Sub
+
+        ''' <summary>
+        ''' Gets or sets the original player Pokemon.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayerID As Integer
+            Get
+                Return _originalPlayerID
+            End Get
+            Set(value As Integer)
+                If Not value = _originalPlayerID Then
+                    _originalPlayerID = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPartnerID)))
+                End If
+            End Set
+        End Property
+        Dim _originalPlayerID As Integer
+
+        ''' <summary>
+        ''' Gets or sets the original player gender.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayerIsFemale As Boolean
+            Get
+                Return _originalPlayerIsFemale
+            End Get
+            Set(value As Boolean)
+                If Not value = _originalPlayerIsFemale Then
+                    _originalPlayerIsFemale = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPlayerIsFemale)))
+                End If
+            End Set
+        End Property
+        Dim _originalPlayerIsFemale As Boolean
+
+        ''' <summary>
+        ''' Gets or sets the original partner Pokemon.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartnerID As Integer
+            Get
+                Return _originalPartnerID
+            End Get
+            Set(value As Integer)
+                If Not _originalPartnerID = value Then
+                    _originalPartnerID = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPartnerID)))
+                End If
+            End Set
+        End Property
+        Dim _originalPartnerID As Integer
+
+        ''' <summary>
+        ''' Gets or sets the original partner gender.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartnerIsFemale As Boolean
+            Get
+                Return _originalPartnerIsFemale
+            End Get
+            Set(value As Boolean)
+                If Not _originalPartnerIsFemale = value Then
+                    _originalPartnerIsFemale = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPartnerIsFemale)))
+                End If
+            End Set
+        End Property
+        Dim _originalPartnerIsFemale As Boolean
+
+        ''' <summary>
+        ''' Gets or sets the original player name.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPlayerName As String
+            Get
+                Return _originalPlayerName
+            End Get
+            Set(value As String)
+                If Not _originalPlayerName = value Then
+                    _originalPlayerName = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPlayerName)))
+                End If
+            End Set
+        End Property
+        Dim _originalPlayerName As String
+
+        ''' <summary>
+        ''' Gets or sets the original partner name.
+        ''' Used in-game for special episodes.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OriginalPartnerName As String
+            Get
+                Return _originalPartnerName
+            End Get
+            Set(value As String)
+                If Not _originalPartnerName = value Then
+                    _originalPartnerName = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(OriginalPartnerName)))
+                End If
+            End Set
+        End Property
+        Dim _originalPartnerName As String
 #End Region
 
 #Region "Settings"

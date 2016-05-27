@@ -19,7 +19,7 @@
         ''' Returns whether or not the ITargetedControl should start, by default, collapsed.
         ''' </summary>
         ''' <returns></returns>
-        Function StartCollapsed() As Boolean
+        Function GetStartCollapsed() As Boolean
 
         ''' <summary>
         ''' Returns the default pane the ITargetedControl should be located in.

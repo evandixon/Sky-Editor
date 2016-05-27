@@ -1,7 +1,6 @@
 ﻿Imports System.Drawing
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
-Imports SkyEditorBase.Utilities
 
 Namespace FileFormats.Explorers
     Public Class BGP

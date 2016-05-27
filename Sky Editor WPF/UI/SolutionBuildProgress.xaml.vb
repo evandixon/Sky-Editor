@@ -60,7 +60,7 @@ Namespace UI
             Return ITargetedControl.Pane.Bottom
         End Function
 
-        Public Function StartCollapsed() As Boolean Implements ITargetedControl.StartCollapsed
+        Public Function StartCollapsed() As Boolean Implements ITargetedControl.GetStartCollapsed
             Return True
         End Function
         Private Sub SolutionExplorer_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

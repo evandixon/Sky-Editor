@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:avalonHelpers="clr-namespace:SkyEditor.UI.WPF.AvalonHelpers"
         xmlns:Core="clr-namespace:SkyEditor.Core;assembly=SkyEditor.Core"
         xmlns:coreui="clr-namespace:SkyEditor.UI.WPF"
         xmlns:coreui2="clr-namespace:SkyEditor.Core.UI;assembly=SkyEditor.Core"
@@ -29,17 +30,36 @@
                 </Style>
             </Menu.ItemContainerStyle>
         </Menu>
-        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" ActiveContent="{Binding SelectedFile, Mode=TwoWay}">
-            <ad:DockingManager.LayoutItemTemplate>
-                <DataTemplate DataType="{x:Type coreui2:AvalonDockFileWrapper}">
-                    <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding Content.File, UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>
-                </DataTemplate>
-            </ad:DockingManager.LayoutItemTemplate>
-            <ad:DockingManager.LayoutItemContainerStyle>
-                <Style TargetType="{x:Type ad:LayoutItem}">
-                    <Setter Property="Title" Value="{Binding Model.Title}" />
-                </Style>
-            </ad:DockingManager.LayoutItemContainerStyle>
+        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" AnchorablesSource="{Binding ToolWindows}" ActiveContent="{Binding ActiveContent, Mode=TwoWay}">
+            <ad:DockingManager.LayoutItemTemplateSelector>
+                <avalonHelpers:PanesTemplateSelector>
+                    <avalonHelpers:PanesTemplateSelector.DocumentTemplate>
+                        <DataTemplate DataType="{x:Type coreui2:AvalonDockFileWrapper}">
+                            <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding File, UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>
+                        </DataTemplate>                        
+                    </avalonHelpers:PanesTemplateSelector.DocumentTemplate>
+                    <avalonHelpers:PanesTemplateSelector.AnchorableTemplate>
+                        <DataTemplate>
+                            <Label Content="Tool Window Placeholder" />
+                        </DataTemplate>
+                    </avalonHelpers:PanesTemplateSelector.AnchorableTemplate>
+                </avalonHelpers:PanesTemplateSelector>
+            </ad:DockingManager.LayoutItemTemplateSelector>
+            <ad:DockingManager.LayoutItemContainerStyleSelector>
+                <avalonHelpers:PanesStyleSelector>
+                    <avalonHelpers:PanesStyleSelector.DocumentStyle>
+                        <Style TargetType="{x:Type ad:LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                        </Style>
+                    </avalonHelpers:PanesStyleSelector.DocumentStyle>
+                    <avalonHelpers:PanesStyleSelector.AnchorableStyle>
+                        <Style TargetType="{x:Type ad:LayoutAnchorableItem}">
+                            <Setter Property="Title" Value="{Binding Model.Header}" />
+                        </Style>
+                    </avalonHelpers:PanesStyleSelector.AnchorableStyle>
+                </avalonHelpers:PanesStyleSelector>
+            </ad:DockingManager.LayoutItemContainerStyleSelector>
             <ad:LayoutRoot>
                 <ad:LayoutPanel Orientation="Vertical">
                     <ad:LayoutDocumentPane/>

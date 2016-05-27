@@ -222,7 +222,7 @@ Namespace UI
             Return ITargetedControl.Pane.Right
         End Function
 
-        Public Function StartCollapsed() As Boolean Implements ITargetedControl.StartCollapsed
+        Public Function StartCollapsed() As Boolean Implements ITargetedControl.GetStartCollapsed
             Return False
         End Function
 

@@ -74,6 +74,8 @@ Public Class StartupHelpers
             '    l.Visibility = Visibility.Collapsed
             'End If
 
+            manager.CurrentIOUIManager.SupportedToolWindowTypes = {GetType(UserControl)}
+            manager.CurrentIOUIManager.WrapperFileType = GetType(AvalonHelpers.WPFAvalonDockFileWrapper)
             Dim m As New MainWindow3 'UI.MainWindow(manager)
             m.CurrentPluginManager = manager
             m.DataContext = manager.CurrentIOUIManager

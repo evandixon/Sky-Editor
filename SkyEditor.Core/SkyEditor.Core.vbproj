@@ -113,6 +113,7 @@
     <Compile Include="IO\DirectoryNotFoundException.vb" />
     <Compile Include="IO\DirectoryTypeDetectionResult.vb" />
     <Compile Include="IO\FileClosedEventArgs.vb" />
+    <Compile Include="IO\FileClosingEventArgs.vb" />
     <Compile Include="IO\FileOpenedEventArgs.vb" />
     <Compile Include="IO\FileRemovedEventArgs.vb" />
     <Compile Include="IO\FileTypeDetectionResult.vb" />
