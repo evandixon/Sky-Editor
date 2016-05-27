@@ -1,5 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Collections.Specialized
+Imports System.Globalization
+Imports System.Reflection
 Imports System.Windows
 Imports SkyEditor.Core
 Imports SkyEditor.Core.IO
@@ -14,7 +16,7 @@ Public Class MainWindow3
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-
+        Me.Title = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.MainTitle, My.Resources.Language.VersionPrefix, Assembly.GetExecutingAssembly.GetName.Version.ToString)
     End Sub
 
     Private Sub OnIOUIManagerFileClosing(sender As Object, e As FileClosingEventArgs)

@@ -129,4 +129,7 @@
   <data name="NoAvailableUI" xml:space="preserve">
     <value>There is no available UI for this object of type "{0}".</value>
   </data>
+  <data name="VersionPrefix" xml:space="preserve">
+    <value>Alpha</value>
+  </data>
 </root>
