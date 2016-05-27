@@ -1354,7 +1354,157 @@ Namespace MysteryDungeon.Explorers
         Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
             Await MyBase.OpenFile(Filename, Provider)
 
-            'Load items
+            LoadGeneral()
+            LoadItems()
+            LoadHistory()
+
+        End Function
+
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
+
+            SaveGeneral()
+            SaveItems()
+            SaveHistory()
+
+            MyBase.Save(Destination, provider)
+        End Sub
+
+#Region "Save Interaction"
+
+#Region "General"
+
+        Private Sub LoadGeneral()
+            TeamName = Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+            HeldMoney = Bits.Int(0, Offsets.HeldMoney, 24)
+            SpEpisodeHeldMoney = Bits.Int(0, Offsets.SPHeldMoney, 24)
+            StoredMoney = Bits.Int(0, Offsets.StoredMoney, 24)
+            Adventures = Bits.Int(0, Offsets.Adventures, 32)
+            ExplorerRank = Bits.Int(0, Offsets.ExplorerRank, 32)
+        End Sub
+
+        Private Sub SaveGeneral()
+            Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = TeamName
+            Bits.Int(0, Offsets.HeldMoney, 24) = HeldMoney
+            Bits.Int(0, Offsets.SPHeldMoney, 24) = SpEpisodeHeldMoney
+            Bits.Int(0, Offsets.StoredMoney, 24) = StoredMoney
+            Bits.Int(0, Offsets.Adventures, 32) = Adventures
+            Bits.Int(0, Offsets.ExplorerRank, 32) = ExplorerRank
+        End Sub
+
+        ''' <summary>
+        ''' Gets or sets the save file's Team Name.
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property TeamName As String
+            Get
+                Return Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+            End Get
+            Set(value As String)
+                If Not _teamName = value Then
+                    _teamName = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(TeamName)))
+                End If
+            End Set
+        End Property
+        Dim _teamName As String
+
+        ''' <summary>
+        ''' Gets or sets the held money in the main game
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property HeldMoney As Integer
+            Get
+                Return _heldMoney
+            End Get
+            Set(value As Integer)
+                If Not _heldMoney = value Then
+                    _heldMoney = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(_heldMoney))
+                End If
+            End Set
+        End Property
+        Dim _heldMoney As Integer
+
+        ''' <summary>
+        ''' Gets or sets the held money in the active special episode
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property SpEpisodeHeldMoney As Integer
+            Get
+                Return _spEpisodeHeldMoney
+            End Get
+            Set(value As Integer)
+                If Not _spEpisodeHeldMoney = value Then
+                    _spEpisodeHeldMoney = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SpEpisodeHeldMoney)))
+                End If
+            End Set
+        End Property
+        Dim _spEpisodeHeldMoney As Integer
+
+        ''' <summary>
+        ''' Gets or sets the money in storage
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property StoredMoney As Integer
+            Get
+                Return Bits.Int(0, Offsets.StoredMoney, 24)
+            End Get
+            Set(value As Integer)
+                If Not _storedMoney = value Then
+                    _storedMoney = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(StoredMoney)))
+                End If
+            End Set
+        End Property
+        Dim _storedMoney As Integer
+
+        ''' <summary>
+        ''' Gets or sets the number of adventures the team has had.
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks>This is displayed as a signed integer in-game, so if this is set to a negative number, it will appear negative.</remarks>
+        Public Property Adventures As Integer
+            Get
+                Return Bits.Int(0, Offsets.Adventures, 32)
+            End Get
+            Set(value As Integer)
+                If Not _numAdventures = value Then
+                    _numAdventures = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Adventures)))
+                End If
+            End Set
+        End Property
+        Dim _numAdventures As Integer
+
+        ''' <summary>
+        ''' Gets or sets the team's exploration rank points.
+        ''' When set in certain ranges, the rank changes (ex. Silver, Gold, Master, etc).
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ExplorerRank As Integer
+            Get
+                Return _explorerRank
+            End Get
+            Set(value As Integer)
+                If Not _explorerRank = value Then
+                    _explorerRank = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ExplorerRank)))
+                End If
+            End Set
+        End Property
+        Dim _explorerRank As Integer
+
+#End Region
+
+#Region "Items"
+
+        Private Sub LoadItems()
             StoredItems.Clear()
             For Each item In GetStoredItems()
                 StoredItems.Add(item)
@@ -1369,118 +1519,13 @@ Namespace MysteryDungeon.Explorers
             For Each item In GetSpEpisodeHeldItems()
                 SpEpisodeHeldItems.Add(item)
             Next
+        End Sub
 
-            LoadHistory()
-
-        End Function
-
-        Public Overrides Sub Save(Destination As String, provider As IOProvider)
+        Private Sub SaveItems()
             SetStoredItems(StoredItems)
             SetHeldItems(HeldItems)
             SetSpEpisodeHeldItems(SpEpisodeHeldItems)
-
-            SaveHistory()
-
-            MyBase.Save(Destination, provider)
         End Sub
-
-#Region "Save Interaction"
-
-#Region "General"
-        ''' <summary>
-        ''' Gets or sets the save file's Team Name.
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property TeamName As String
-            Get
-                Return Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
-            End Get
-            Set(value As String)
-                Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the held money in the main game
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property HeldMoney As Integer
-            Get
-                Return Bits.Int(0, Offsets.HeldMoney, 24)
-            End Get
-            Set(value As Integer)
-                Bits.Int(0, Offsets.HeldMoney, 32) = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the held money in the active special episode
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property SpEpisodeHeldMoney As Integer
-            Get
-                Return Bits.Int(0, Offsets.SPHeldMoney, 24)
-            End Get
-            Set(value As Integer)
-                Bits.Int(0, Offsets.SPHeldMoney, 32) = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the money in storage
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property StoredMoney As Integer
-            Get
-                Return Bits.Int(0, Offsets.StoredMoney, 24)
-            End Get
-            Set(value As Integer)
-                Bits.Int(0, Offsets.StoredMoney, 24) = value
-            End Set
-        End Property
-#End Region
-
-#Region "Adventure Log"
-
-        ''' <summary>
-        ''' Gets or sets the number of adventures the team has had.
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks>This is displayed as a signed integer in-game, so if this is set to a negative number, it will appear negative.</remarks>
-        Public Property Adventures As Integer
-            Get
-                Return Bits.Int(0, Offsets.Adventures, 32)
-            End Get
-            Set(value As Integer)
-                Bits.Int(0, Offsets.Adventures, 32) = value
-            End Set
-        End Property
-#End Region
-
-#Region "Team Info"
-
-        ''' <summary>
-        ''' Gets or sets the team's exploration rank points.
-        ''' When set in certain ranges, the rank changes (ex. Silver, Gold, Master, etc).
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property ExplorerRank As Integer
-            Get
-                Return Bits.Int(0, Offsets.ExplorerRank, 32)
-            End Get
-            Set(value As Integer)
-                Bits.Int(0, Offsets.ExplorerRank, 32) = value
-            End Set
-        End Property
-
-#End Region
-
-#Region "Items"
 
 #Region "Stored"
         Public Property StoredItems As ObservableCollection(Of SkyItem)
