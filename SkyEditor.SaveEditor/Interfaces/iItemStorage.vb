@@ -1,5 +1,5 @@
 ﻿Namespace Interfaces
-    Public Class ItemSlotOld
+    <Obsolete> Public Class ItemSlotOld
         Public Property Getter As iItemStorage.GetHeldItems
         Public Property Setter As iItemStorage.SetHeldItems
         Public Property Creator As iItemStorage.NewHeldItem
@@ -15,7 +15,7 @@
             Me.MaxItemCount = MaxItemCount
         End Sub
     End Class
-    Public Interface iItemStorage
+    <Obsolete> Public Interface iItemStorage
         Delegate Function GetHeldItems() As iItemOld()
         Delegate Sub SetHeldItems(Items As iItemOld())
         Delegate Function NewHeldItem(ID As Integer, Parameter As Integer) As iItemOld

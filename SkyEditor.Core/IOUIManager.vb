@@ -99,14 +99,14 @@ Public Class IOUIManager
             If _toolWindows Is Nothing Then
                 _toolWindows = New ObservableCollection(Of ITargetedControl)
 
-                For Each item In CurrentPluginManager.GetRegisteredObjects(Of ITargetedControl)
-                    For Each supported In SupportedToolWindowTypes
-                        If ReflectionHelpers.IsOfType(item, supported.GetTypeInfo) Then
-                            item.SetPluginManager(CurrentPluginManager)
-                            _toolWindows.Add(item)
-                        End If
-                    Next
-                Next
+                'For Each item In CurrentPluginManager.GetRegisteredObjects(Of ITargetedControl)
+                '    For Each supported In SupportedToolWindowTypes
+                '        If ReflectionHelpers.IsOfType(item, supported.GetTypeInfo) Then
+                '            item.SetPluginManager(CurrentPluginManager)
+                '            _toolWindows.Add(item)
+                '        End If
+                '    Next
+                'Next
             End If
             Return _toolWindows
         End Get

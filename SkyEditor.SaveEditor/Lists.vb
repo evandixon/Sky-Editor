@@ -6,7 +6,19 @@
     Private Shared Property SkyMoves As Dictionary(Of Integer, String)
     Private Shared Property TDMoves As Dictionary(Of Integer, String)
     Private Shared Property RBMoves As Dictionary(Of Integer, String)
-    Private Shared Property SkyItems As Dictionary(Of Integer, String)
+
+    Public Shared ReadOnly Property SkyItems As Dictionary(Of Integer, String)
+        Get
+            If _skyItems Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.SkyItems)
+                _skyItems = i.Entries
+            End If
+            Return _skyItems
+        End Get
+    End Property
+    Private Shared _skyItems As Dictionary(Of Integer, String)
+
     Private Shared Property TDItems As Dictionary(Of Integer, String)
     Private Shared Property RBItems As Dictionary(Of Integer, String)
 
@@ -73,11 +85,6 @@
     End Function
 
     Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
-        If SkyItems Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.SkyItems)
-            SkyItems = i.Entries
-        End If
         Return SkyItems
     End Function
 

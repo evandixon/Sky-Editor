@@ -197,7 +197,7 @@ Namespace IO
             Set(value As Boolean)
                 _unsavedChanges = value
                 If value Then
-                    RaiseModified()
+                    RaiseEvent Modified(Me, New EventArgs)
                 End If
             End Set
         End Property
@@ -235,16 +235,9 @@ Namespace IO
             RaiseEvent Created(Me, New EventArgs)
         End Sub
 
-        ''' <summary>
-        ''' Raises the Modified event
-        ''' </summary>
-        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
-            RaiseEvent Modified(Me, New EventArgs)
-        End Sub
-
         Private Sub Project_Modified(sender As Object, e As EventArgs)
             UnsavedChanges = True
-            RaiseModified()
+            RaiseEvent Modified(Me, New EventArgs)
         End Sub
 
         ''' <summary>
@@ -427,7 +420,7 @@ Namespace IO
                     Dim p = Project.CreateProject(Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType, manager)
                     item.Children.Add(New SolutionNode With {.Name = ProjectName, .Project = p})
                     AddHandler p.Modified, AddressOf Project_Modified
-                    RaiseModified()
+                    RaiseEvent Modified(Me, New EventArgs)
                     RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
                 Else
                     'There's already a project here
@@ -447,7 +440,7 @@ Namespace IO
                     'Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
                     item.Children.Add(New SolutionNode With {.Name = p.Name, .Project = p})
                     AddHandler p.Modified, AddressOf Project_Modified
-                    RaiseModified()
+                    RaiseEvent Modified(Me, New EventArgs)
                     RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
                 Else
                     'There's already a project here
@@ -471,7 +464,7 @@ Namespace IO
             If child IsNot Nothing Then
                 RaiseEvent ProjectRemoving(Me, New ProjectRemovingEventArgs With {.Project = child.Project})
                 RemoveHandler child.Project.Modified, AddressOf Project_Modified
-                RaiseModified()
+                RaiseEvent Modified(Me, New EventArgs)
                 parent.Children.Remove(child)
                 child.Dispose()
                 RaiseEvent ProjectRemoved(Me, New ProjectRemovedEventArgs With {.DirectoryName = pathParts.Last, .ParentPath = parentPathString, .FullPath = ProjectPath})

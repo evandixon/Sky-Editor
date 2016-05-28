@@ -18,7 +18,7 @@ Namespace FileFormats.PSMD
             End Get
             Set(value As Bitmap)
                 _containedImage = value
-                RaiseModified()
+                RaiseEvent Modified(Me, New EventArgs)
                 RaiseEvent ContainedImageUpdated(Me, New EventArgs)
             End Set
         End Property
@@ -155,10 +155,6 @@ Namespace FileFormats.PSMD
                 Return out
             End If
         End Function
-
-        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
-            RaiseEvent Modified(Me, New EventArgs)
-        End Sub
 
         Public Function IsOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
             Return Task.FromResult(File.RawData(0) = 0 AndAlso File.RawData(1) = &H63 AndAlso File.RawData(2) = &H74 AndAlso File.RawData(3) = &H65)

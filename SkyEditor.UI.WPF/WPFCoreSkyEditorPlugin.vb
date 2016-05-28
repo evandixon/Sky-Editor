@@ -10,7 +10,7 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
     Public Overrides Sub Load(manager As PluginManager)
         MyBase.Load(manager)
 
-        manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(GenericEnumerable))
+        manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(GenericIList))
     End Sub
 
 End Class

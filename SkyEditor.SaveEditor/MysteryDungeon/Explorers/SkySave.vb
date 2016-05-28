@@ -1,6 +1,7 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 Imports SkyEditor.SaveEditor.Interfaces
 Imports SkyEditor.SaveEditor.Modeling
 
@@ -12,6 +13,7 @@ Namespace MysteryDungeon.Explorers
         Implements iPokemonStorage
         Implements IInventory
         Implements INotifyPropertyChanged
+        Implements INotifyModified
 
 #Region "Child Classes"
 
@@ -70,16 +72,9 @@ Namespace MysteryDungeon.Explorers
             Public Const QuicksavePokemonOffset As Integer = &H19000 * 8 + (&H3170 * 8)
         End Class
 
-        Public Enum HeldBy As Byte
-            None
-            Player1
-            Player2
-            Player3
-            Player4
-        End Enum
+        Public Class HeldItem
+            Implements IClonable
 
-        Public Class SkyItem
-            Implements IExplorersItem
             Public Property IsValid As Boolean
             Private Property Flag1 As Boolean
             Private Property Flag2 As Boolean
@@ -88,16 +83,16 @@ Namespace MysteryDungeon.Explorers
             Private Property Flag5 As Boolean
             Private Property Flag6 As Boolean
             Private Property Flag7 As Boolean
-            Public Property ID As Integer Implements IExplorersItem.ID
+            Public Property ID As Integer
 
             ''' <summary>
             ''' The ID of the item inside this one, if this item is a box.
             ''' </summary>
             ''' <returns></returns>
-            Public Property ContainedItemID As Integer? Implements IExplorersItem.ContainedItemID
-            Public Property Quantity As Integer Implements IExplorersItem.Quantity
-            Public Property HeldBy As Byte Implements IExplorersItem.HeldBy
-            Public ReadOnly Property IsBox As Boolean Implements IExplorersItem.IsBox
+            Public Property ContainedItemID As Integer?
+            Public Property Quantity As Integer
+            Public Property HeldBy As Byte
+            Public ReadOnly Property IsBox As Boolean
                 Get
                     Return ID > 363 AndAlso ID < 400
                 End Get
@@ -105,6 +100,28 @@ Namespace MysteryDungeon.Explorers
 
             Public Overrides Function ToString() As String
                 Return Lists.GetSkyItemNames(ID)
+            End Function
+
+            Public Function Clone() As Object Implements IClonable.Clone
+                Dim out As New HeldItem
+                With out
+                    .IsValid = Me.IsValid
+                    .Flag1 = Me.Flag1
+                    .Flag2 = Me.Flag2
+                    .Flag3 = Me.Flag3
+                    .Flag4 = Me.Flag4
+                    .Flag5 = Me.Flag5
+                    .Flag6 = Me.Flag6
+                    .Flag7 = Me.Flag7
+
+                    .ContainedItemID = Me.ContainedItemID
+                    .Quantity = Me.Quantity
+
+                    .ID = Me.ID
+                    .HeldBy = Me.HeldBy
+
+                End With
+                Return out
             End Function
 
             Public Function GetParameter() As Integer
@@ -142,8 +159,8 @@ Namespace MysteryDungeon.Explorers
                 Return out
             End Function
 
-            Public Shared Function FromHeldItemBits(bits As Binary) As SkyItem
-                Dim out As New SkyItem
+            Public Shared Function FromHeldItemBits(bits As Binary) As HeldItem
+                Dim out As New HeldItem
                 With bits
                     out.IsValid = .Bit(0)
                     out.Flag1 = .Bit(1)
@@ -168,7 +185,7 @@ Namespace MysteryDungeon.Explorers
             End Function
 
             Public Shared Function FromStoredItemParts(itemID As Integer, parameter As Integer)
-                Dim out As New SkyItem
+                Dim out As New HeldItem
                 out.IsValid = True
                 out.ID = itemID
                 If out.IsBox Then
@@ -184,279 +201,6 @@ Namespace MysteryDungeon.Explorers
             Public Sub New()
 
             End Sub
-
-        End Class
-
-        <Obsolete> Public Class HeldItem
-            Inherits Binary
-            Implements iItemOld
-            Implements IItem
-
-            Public Const Length As Integer = 33
-            Public Const MimeType As String = "application/x-sky-item"
-
-            Public Sub New(Bits As Binary)
-                MyBase.New(Bits)
-            End Sub
-            Public Sub New(ID As Integer, Parameter As Integer)
-                MyBase.New(Length)
-                Me.ID = ID
-                Me.Parameter = Parameter
-                Me.IsValid = True
-            End Sub
-
-            ''' <summary>
-            ''' The bit the game uses to determine whether this item is valid.
-            ''' Must be true for the game to recognize it.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property IsValid As Boolean
-                Get
-                    Return Bits(0)
-                End Get
-                Set(value As Boolean)
-                    Bits(0) = value
-                End Set
-            End Property
-
-            Public Property Flag1 As Boolean
-                Get
-                    Return Bits(1)
-                End Get
-                Set(value As Boolean)
-                    Bits(1) = value
-                End Set
-            End Property
-            Public Property Flag2 As Boolean
-                Get
-                    Return Bits(2)
-                End Get
-                Set(value As Boolean)
-                    Bits(2) = value
-                End Set
-            End Property
-            Public Property Flag3 As Boolean
-                Get
-                    Return Bits(3)
-                End Get
-                Set(value As Boolean)
-                    Bits(3) = value
-                End Set
-            End Property
-            Public Property Flag4 As Boolean
-                Get
-                    Return Bits(4)
-                End Get
-                Set(value As Boolean)
-                    Bits(4) = value
-                End Set
-            End Property
-            Public Property Flag5 As Boolean
-                Get
-                    Return Bits(5)
-                End Get
-                Set(value As Boolean)
-                    Bits(5) = value
-                End Set
-            End Property
-            Public Property Flag6 As Boolean
-                Get
-                    Return Bits(6)
-                End Get
-                Set(value As Boolean)
-                    Bits(6) = value
-                End Set
-            End Property
-            Public Property Flag7 As Boolean
-                Get
-                    Return Bits(7)
-                End Get
-                Set(value As Boolean)
-                    Bits(7) = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' The extra parameter for an item.
-            '''
-            ''' For boxes, this is the contained item.
-            ''' For sticks, rocks, etc., this is the number of items in the stack.
-            ''' For the Used TM, this is the contained move.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property Parameter As UInt16 Implements iItemOld.Parameter
-                Get
-                    Return Int(0, 8, 11)
-                End Get
-                Set(value As UInt16)
-                    Int(0, 8, 11) = value
-                End Set
-            End Property
-
-            Public Property Quantity As Integer Implements IItem.Quantity
-                Get
-                    Return Parameter
-                End Get
-                Set(value As Integer)
-                    Parameter = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' The ID of the item.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property ID As Integer Implements iItemOld.ID, IItem.ID
-                Get
-                    Return Int(0, 19, 11)
-                End Get
-                Set(value As Integer)
-                    Int(0, 19, 11) = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' The team member who is holding this item.
-            '''
-            ''' Must be 0-4.
-            ''' 0 means held by no one.
-            ''' 1-4 is the number of the active team member holding it.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property HeldBy As Byte
-                Get
-                    Return Int(0, 30, 3)
-                End Get
-                Set(value As Byte)
-                    Int(0, 30, 3) = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' Determines whether or not the ID is in the range of Box items.
-            ''' If this is true, the Parameter is the ID of the contained item.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public ReadOnly Property IsBox As Boolean Implements iItemOld.IsBox
-                Get
-                    Return ID > 363 AndAlso ID < 400
-                End Get
-            End Property
-
-            Public Overrides Function ToString() As String
-                If IsValid Then
-                    Dim output As New Text.StringBuilder
-                    output.Append(Lists.GetSkyItemNames(ID))
-                    If Parameter > 0 Then
-                        If IsBox Then
-                            output.Append(" (")
-                            output.Append(Lists.GetSkyItemNames(Parameter))
-                            output.Append(")")
-                        Else
-                            output.Append(" (")
-                            output.Append(Parameter)
-                            output.Append(")")
-                        End If
-                    End If
-                    If HeldBy > 0 Then
-                        output.Append(" [")
-                        output.Append(My.Resources.Language.ItemToStringHeldBy)
-                        output.Append(" ")
-                        output.Append(HeldBy)
-                        output.Append("]")
-                    End If
-                    Return output.ToString
-                Else
-                    Return "----------"
-                End If
-            End Function
-        End Class
-
-        <Obsolete> Public Class StoredItemOld
-            Implements iItemOld
-            Implements IItem
-            Public Sub New(ID As Integer, Parameter As Integer)
-                Me.ID = ID
-                Me.Parameter = Parameter
-            End Sub
-
-            Public ReadOnly Property IsValid As Boolean
-                Get
-                    Return ID > 0
-                End Get
-            End Property
-
-            ''' <summary>
-            ''' The extra parameter for an item.
-            '''
-            ''' For boxes, this is the contained item.
-            ''' For sticks, rocks, etc., this is the number of items in the stack.
-            ''' For the Used TM, this is the contained move.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property Parameter As UInt16 Implements iItemOld.Parameter
-
-            ''' <summary>
-            ''' The ID of the item.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property ID As Integer Implements iItemOld.ID, IItem.ID
-            ''' <summary>
-            ''' Determines whether or not the ID is in the range of Box items.
-            ''' If this is true, the Parameter is the ID of the contained item.
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public ReadOnly Property IsBox As Boolean Implements iItemOld.IsBox
-                Get
-                    Return ID > 363 AndAlso ID < 400
-                End Get
-            End Property
-
-            Public Property Quantity As Integer Implements IItem.Quantity
-                Get
-                    Return Parameter
-                End Get
-                Set(value As Integer)
-                    Parameter = value
-                End Set
-            End Property
-
-            Public Overrides Function ToString() As String
-                If ID > 0 Then
-                    Dim output As New Text.StringBuilder
-                    output.Append(Lists.GetSkyItemNames(ID))
-                    If Parameter > 0 Then
-                        If Me.IsBox Then
-                            output.Append(" (")
-                            output.Append(Lists.GetSkyItemNames(Parameter))
-                            output.Append(")")
-                        Else
-                            output.Append(" (")
-                            output.Append(Parameter)
-                            output.Append(")")
-                        End If
-                    End If
-                    Return output.ToString
-                Else
-                    Return "----------"
-                End If
-            End Function
         End Class
 
         Public Class Attack
@@ -1343,13 +1087,13 @@ Namespace MysteryDungeon.Explorers
             MyBase.New
 
             'Init Items
-            StoredItems = New ObservableCollection(Of SkyItem)
-            HeldItems = New ObservableCollection(Of SkyItem)
-            SpEpisodeHeldItems = New ObservableCollection(Of SkyItem)
+            StoredItems = New ObservableCollection(Of SkyStoredItem)
+            HeldItems = New ObservableCollection(Of HeldItem)
+            SpEpisodeHeldItems = New ObservableCollection(Of HeldItem)
             InitItemSlots()
         End Sub
 
-        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
 
         Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
             Await MyBase.OpenFile(Filename, Provider)
@@ -1368,6 +1112,17 @@ Namespace MysteryDungeon.Explorers
 
             MyBase.Save(Destination, provider)
         End Sub
+
+#Region "Events"
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
+#End Region
+
+#Region "Event Handlers"
+        Private Sub OnCollectionChanged(sender As Object, e As EventArgs) Handles _storedItems.CollectionChanged, _heldItems.CollectionChanged, _spEpisodeHeldItems.CollectionChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
+#End Region
 
 #Region "Save Interaction"
 
@@ -1528,17 +1283,29 @@ Namespace MysteryDungeon.Explorers
         End Sub
 
 #Region "Stored"
-        Public Property StoredItems As ObservableCollection(Of SkyItem)
+        Public Property StoredItems As ObservableCollection(Of SkyStoredItem)
+            Get
+                Return _storedItems
+            End Get
+            Set(value As ObservableCollection(Of SkyStoredItem))
+                If _storedItems IsNot value Then
+                    _storedItems = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(StoredItems)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _storedItems As ObservableCollection(Of SkyStoredItem)
 
-        Private Function GetStoredItems() As List(Of SkyItem)
+
+        Private Function GetStoredItems() As List(Of SkyStoredItem)
             Dim ids = Bits.Range(Offsets.StoredItemOffset, 11 * Offsets.StoredItemNumber)
             Dim params = Bits.Range(Offsets.StoredItemOffset + 11 * Offsets.StoredItemNumber, 11 * Offsets.StoredItemNumber)
-            Dim items As New List(Of SkyItem)
+            Dim items As New List(Of SkyStoredItem)
             For count As Integer = 0 To 999
                 Dim id = ids.NextInt(11)
                 Dim p = params.NextInt(11)
                 If id > 0 Then
-                    items.Add(SkyItem.FromStoredItemParts(id, p))
+                    items.Add(New SkyStoredItem(id, p))
                 Else
                     Exit For
                 End If
@@ -1546,7 +1313,7 @@ Namespace MysteryDungeon.Explorers
             Return items
         End Function
 
-        Private Sub SetStoredItems(Value As IList(Of SkyItem))
+        Private Sub SetStoredItems(Value As IList(Of SkyStoredItem))
             Dim ids As New Binary(11 * Offsets.StoredItemNumber)
             Dim params As New Binary(11 * Offsets.StoredItemNumber)
             For count As Integer = 0 To Offsets.StoredItemNumber - 1
@@ -1564,13 +1331,24 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Held"
-        Public Property HeldItems As ObservableCollection(Of SkyItem)
+        Public Property HeldItems As ObservableCollection(Of HeldItem)
+            Get
+                Return _heldItems
+            End Get
+            Set(value As ObservableCollection(Of HeldItem))
+                If _heldItems IsNot value Then
+                    _heldItems = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HeldItems)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _heldItems As ObservableCollection(Of HeldItem)
 
-        Private Function GetHeldItems() As List(Of SkyItem)
-            Dim output As New List(Of SkyItem)
+        Private Function GetHeldItems() As List(Of HeldItem)
+            Dim output As New List(Of HeldItem)
 
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
-                Dim item = SkyItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                Dim item = HeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
                 If item.IsValid Then
                     output.Add(item)
                 Else
@@ -1581,7 +1359,7 @@ Namespace MysteryDungeon.Explorers
             Return output
         End Function
 
-        Private Sub SetHeldItems(items As IList(Of SkyItem))
+        Private Sub SetHeldItems(items As IList(Of HeldItem))
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
                 If items.Count > count Then
@@ -1594,13 +1372,24 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Special Episode Held"
-        Public Property SpEpisodeHeldItems As ObservableCollection(Of SkyItem)
+        Public Property SpEpisodeHeldItems As ObservableCollection(Of HeldItem)
+            Get
+                Return _spEpisodeHeldItems
+            End Get
+            Set(value As ObservableCollection(Of HeldItem))
+                If _spEpisodeHeldItems IsNot value Then
+                    _spEpisodeHeldItems = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SpEpisodeActivePokemon)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _spEpisodeHeldItems As ObservableCollection(Of HeldItem)
 
-        Private Function GetSpEpisodeHeldItems() As List(Of SkyItem)
-            Dim output As New List(Of SkyItem)
+        Private Function GetSpEpisodeHeldItems() As List(Of HeldItem)
+            Dim output As New List(Of HeldItem)
 
             For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
-                Dim item = SkyItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                Dim item = HeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
                 If item.IsValid Then
                     output.Add(item)
                 Else
@@ -1611,7 +1400,7 @@ Namespace MysteryDungeon.Explorers
             Return output
         End Function
 
-        Private Sub SetSpEpisodeHeldItems(items As IList(Of SkyItem))
+        Private Sub SetSpEpisodeHeldItems(items As IList(Of HeldItem))
             For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
                 Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
                 If items.Count > count Then
@@ -1635,9 +1424,9 @@ Namespace MysteryDungeon.Explorers
 
         Private Sub InitItemSlots()
             Dim slots As New ObservableCollection(Of IItemSlot)
-            slots.Add(New ItemSlot(My.Resources.Language.StoredItemsSlot, StoredItems, Offsets.StoredItemNumber))
-            slots.Add(New ItemSlot(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
-            slots.Add(New ItemSlot(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
+            slots.Add(New ItemSlot(Of SkyStoredItem)(My.Resources.Language.StoredItemsSlot, StoredItems, Offsets.StoredItemNumber))
+            slots.Add(New ItemSlot(Of HeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
+            slots.Add(New ItemSlot(Of HeldItem)(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
             ItemSlots = slots
         End Sub
 #End Region
@@ -2015,6 +1804,7 @@ Namespace MysteryDungeon.Explorers
                 Return Task.FromResult(False)
             End If
         End Function
+
 #End Region
 
 

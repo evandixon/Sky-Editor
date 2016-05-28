@@ -178,6 +178,7 @@
     <Compile Include="Utilities\FileSystem.vb" />
     <Compile Include="Utilities\GenericArrayOperations.vb" />
     <Compile Include="Utilities\Hex.vb" />
+    <Compile Include="Utilities\IClonable.vb" />
     <Compile Include="Utilities\ParsedAssemblyQualifiedName.vb" />
     <Compile Include="Utilities\ReflectionHelpers.vb" />
     <Compile Include="Utilities\Json.vb" />

@@ -132,6 +132,9 @@
     <Compile Include="InventoryTab.xaml.vb">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ItemSlotView.xaml.vb">
+      <DependentUpon>ItemSlotView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -154,13 +157,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="MysteryDungeon\Explorers\ExplorersItemList.xaml.vb">
-      <DependentUpon>ExplorersItemList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyHistory.xaml.vb">
       <DependentUpon>SkyHistory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PokemonDropDown.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml.vb">
+      <DependentUpon>SkyStoredItemEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DictionaryDropDown.vb" />
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
       <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
@@ -244,13 +247,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MysteryDungeon\Explorers\ExplorersItemList.xaml">
+    <Page Include="ItemSlotView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MysteryDungeon\Explorers\SkyHistory.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tabs\ActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>

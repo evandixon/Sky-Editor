@@ -204,10 +204,6 @@ Namespace IO
         Public Event FileRemoved(sender As Object, e As ProjectFileRemovedEventArgs)
 #End Region
 
-        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
-            RaiseEvent Modified(Me, New EventArgs)
-        End Sub
-
 #Region "Properties"
         ''' <summary>
         ''' Name of the project

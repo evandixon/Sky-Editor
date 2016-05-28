@@ -20,7 +20,7 @@
             <TextBox Text="{Binding OriginalPlayerName}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
-            <local:PokemonDropDown PokemonDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedPokemonID="{Binding OriginalPlayerID}" />
+            <local:DictionaryDropDown ItemDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedItemID="{Binding OriginalPlayerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}" IsChecked="{Binding OriginalPlayerIsFemale}" />
@@ -29,7 +29,7 @@
             <TextBox Text="{Binding OriginalPartnerName}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
-            <local:PokemonDropDown PokemonDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedPokemonID="{Binding OriginalPartnerID}" />
+            <local:DictionaryDropDown ItemDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedItemID="{Binding OriginalPartnerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"  IsChecked="{Binding OriginalPartnerIsFemale}"/>

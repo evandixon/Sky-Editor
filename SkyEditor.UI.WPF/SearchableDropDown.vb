@@ -3,7 +3,7 @@ Imports System.Windows.Controls
 Imports System.Windows.Input
 Imports System.Windows.Media
 
-Public Class SearchableDropDown
+<Obsolete> Public Class SearchableDropDown
     Inherits ComboBox
     Private DefaultValue As Object
     Private DefaultIndex As Integer

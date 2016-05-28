@@ -46,10 +46,6 @@ Public Class TextFile
         Return Task.CompletedTask
     End Function
 
-    Public Sub RaiseModified() Implements INotifyModified.RaiseModified
-        RaiseEvent Modified(Me, New EventArgs)
-    End Sub
-
     Public Sub Save(provider As IOProvider) Implements ISavable.Save
         provider.WriteAllText(Me.Filename, Text)
         RaiseEvent FileSaved(Me, New EventArgs)

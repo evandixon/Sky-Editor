@@ -119,6 +119,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Contained Item.
+        '''</summary>
+        Public Shared ReadOnly Property ContainedItem() As String
+            Get
+                Return ResourceManager.GetString("ContainedItem", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Current HP.
         '''</summary>
         Public Shared ReadOnly Property CurrentHP() As String
@@ -254,6 +263,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Items: .
+        '''</summary>
+        Public Shared ReadOnly Property ItemCountLabel() As String
+            Get
+                Return ResourceManager.GetString("ItemCountLabel", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Level.
         '''</summary>
         Public Shared ReadOnly Property Level() As String
@@ -340,6 +358,26 @@ Namespace My.Resources
         Public Shared ReadOnly Property Name() As String
             Get
                 Return ResourceManager.GetString("Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to New Item.
+        '''</summary>
+        Public Shared ReadOnly Property NewItem() As String
+            Get
+                Return ResourceManager.GetString("NewItem", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Quantity
+        '''
+        '''For stackable items like sticks and spikes, this lets you control how much is in this stack.  This is ignored for non-stackable items..
+        '''</summary>
+        Public Shared ReadOnly Property NewItemMDQuantityTooltip() As String
+            Get
+                Return ResourceManager.GetString("NewItemMDQuantityTooltip", resourceCulture)
             End Get
         End Property
         
@@ -615,6 +653,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property TransformedAsPkm() As String
             Get
                 Return ResourceManager.GetString("TransformedAsPkm", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to  of .
+        '''</summary>
+        Public Shared ReadOnly Property XofYItemsSeparator() As String
+            Get
+                Return ResourceManager.GetString("XofYItemsSeparator", resourceCulture)
             End Get
         End Property
     End Class

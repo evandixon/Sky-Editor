@@ -138,6 +138,8 @@
     <Compile Include="Modeling\IItemSlot.vb" />
     <Compile Include="Modeling\ItemSlot.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\IExplorersStoredItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyStoredItem.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="MysteryDungeon\GTIGameData.vb" />

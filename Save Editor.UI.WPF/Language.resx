@@ -305,4 +305,21 @@ Demonic722 (Misc RAM and save addresses)</value>
   <data name="OriginalCharacters" xml:space="preserve">
     <value>Original Characters</value>
   </data>
+  <data name="ContainedItem" xml:space="preserve">
+    <value>Contained Item</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>New Item</value>
+  </data>
+  <data name="ItemCountLabel" xml:space="preserve">
+    <value>Items: </value>
+  </data>
+  <data name="NewItemMDQuantityTooltip" xml:space="preserve">
+    <value>Quantity
+
+For stackable items like sticks and spikes, this lets you control how much is in this stack.  This is ignored for non-stackable items.</value>
+  </data>
+  <data name="XofYItemsSeparator" xml:space="preserve">
+    <value> of </value>
+  </data>
 </root>

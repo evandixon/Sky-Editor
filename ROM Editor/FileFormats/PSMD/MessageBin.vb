@@ -32,7 +32,7 @@ Namespace FileFormats.PSMD
             Dim newEntry = New MessageBinStringEntry With {.Hash = ID}
             AddHandler newEntry.PropertyChanged, AddressOf Entry_PropertyChanged
             Strings.Add(newEntry)
-            RaiseModified()
+            RaiseEvent Modified(Me, New EventArgs)
             RaiseEvent EntryAdded(Me, New EntryAddedEventArgs With {.NewID = ID})
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Strings)))
         End Sub
@@ -117,7 +117,7 @@ Namespace FileFormats.PSMD
 
         Private Sub Entry_PropertyChanged(sender As Object, e As EventArgs)
             If Strings.Contains(sender) Then
-                RaiseModified()
+                RaiseEvent Modified(Me, New EventArgs)
             End If
         End Sub
 
@@ -174,9 +174,6 @@ Namespace FileFormats.PSMD
             Strings = New ObservableCollection(Of MessageBinStringEntry)
         End Sub
 
-        Public Sub RaiseModified() Implements INotifyModified.RaiseModified
-            RaiseEvent Modified(Me, New EventArgs)
-        End Sub
     End Class
 End Namespace
 

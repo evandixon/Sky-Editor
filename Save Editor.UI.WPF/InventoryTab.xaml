@@ -21,7 +21,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <skyui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" ObjectToEdit="{Binding ItemCollection}" ContainedControlTag="{Binding MaxItemCount}"  EnableTabs="False"/>
+                    <skyui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" ObjectToEdit="{Binding .}" EnableTabs="False"/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

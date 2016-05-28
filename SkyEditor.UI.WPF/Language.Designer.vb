@@ -25,7 +25,7 @@ Namespace My.Resources
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
-    Friend Class Language
+    Public Class Language
         
         Private Shared resourceMan As Global.System.Resources.ResourceManager
         
@@ -40,7 +40,7 @@ Namespace My.Resources
         '''  Returns the cached ResourceManager instance used by this class.
         '''</summary>
         <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
-        Friend Shared ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
+        Public Shared ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
                     Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("SkyEditor.UI.WPF.Language", GetType(Language).Assembly)
@@ -55,7 +55,7 @@ Namespace My.Resources
         '''  resource lookups using this strongly typed resource class.
         '''</summary>
         <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
-        Friend Shared Property Culture() As Global.System.Globalization.CultureInfo
+        Public Shared Property Culture() As Global.System.Globalization.CultureInfo
             Get
                 Return resourceCulture
             End Get
@@ -65,9 +65,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Delete.
+        '''</summary>
+        Public Shared ReadOnly Property Delete() As String
+            Get
+                Return ResourceManager.GetString("Delete", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Are you sure you want to close this file?  Any unsaved changes will be lost..
         '''</summary>
-        Friend Shared ReadOnly Property DocumentCloseConfirmation() As String
+        Public Shared ReadOnly Property DocumentCloseConfirmation() As String
             Get
                 Return ResourceManager.GetString("DocumentCloseConfirmation", resourceCulture)
             End Get
@@ -76,7 +85,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to Sky Editor {0}{1}.
         '''</summary>
-        Friend Shared ReadOnly Property FormattedTitle() As String
+        Public Shared ReadOnly Property FormattedTitle() As String
             Get
                 Return ResourceManager.GetString("FormattedTitle", resourceCulture)
             End Get
@@ -85,7 +94,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to Sky Editor.
         '''</summary>
-        Friend Shared ReadOnly Property MainTitle() As String
+        Public Shared ReadOnly Property MainTitle() As String
             Get
                 Return ResourceManager.GetString("MainTitle", resourceCulture)
             End Get
@@ -94,7 +103,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to There is no available UI for this object of type &quot;{0}&quot;..
         '''</summary>
-        Friend Shared ReadOnly Property NoAvailableUI() As String
+        Public Shared ReadOnly Property NoAvailableUI() As String
             Get
                 Return ResourceManager.GetString("NoAvailableUI", resourceCulture)
             End Get
@@ -103,7 +112,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to Alpha.
         '''</summary>
-        Friend Shared ReadOnly Property VersionPrefix() As String
+        Public Shared ReadOnly Property VersionPrefix() As String
             Get
                 Return ResourceManager.GetString("VersionPrefix", resourceCulture)
             End Get
