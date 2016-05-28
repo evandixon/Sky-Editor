@@ -132,6 +132,12 @@
     <Compile Include="InventoryTab.xaml.vb">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IPartyView.xaml.vb">
+      <DependentUpon>IPartyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IPokemonStorageView.xaml.vb">
+      <DependentUpon>IPokemonStorageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ItemSlotView.xaml.vb">
       <DependentUpon>ItemSlotView.xaml</DependentUpon>
     </Compile>
@@ -157,13 +163,21 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="MysteryDungeon\Explorers\SkyHeldItemEditView.xaml.vb">
+      <DependentUpon>SkyHeldItemEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyHistory.xaml.vb">
       <DependentUpon>SkyHistory.xaml</DependentUpon>
     </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml.vb">
       <DependentUpon>SkyStoredItemEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DictionaryDropDown.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDGeneralTab.xaml.vb">
+      <DependentUpon>TDGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDungeon\Explorers\TDHeldItemEditView.xaml.vb">
+      <DependentUpon>TDHeldItemEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
       <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
@@ -200,9 +214,6 @@
     </Compile>
     <Compile Include="Tabs\StoredPokemonTab.xaml.vb">
       <DependentUpon>StoredPokemonTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\TDGeneralTab.xaml.vb">
-      <DependentUpon>TDGeneralTab.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -247,7 +258,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="IPartyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IPokemonStorageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ItemSlotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\SkyHeldItemEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,6 +279,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\TDGeneralTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\TDHeldItemEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -304,10 +335,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\StoredPokemonTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\TDGeneralTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

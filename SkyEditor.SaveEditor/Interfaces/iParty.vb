@@ -1,5 +1,5 @@
 ﻿Namespace Interfaces
-    Public Interface iParty
+    Public Interface iPartyOld
         Function GetPokemon() As iMDPkm()
         Sub SetPokemon(Pokemon As iMDPkm())
     End Interface

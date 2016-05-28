@@ -2,9 +2,9 @@
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 
-Namespace Saves
+Namespace MysteryDungeon.Explorers
     Partial Class TDSave
-        Implements iPokemonStorage
+        Implements iPokemonStorageOld
         Public Class Attack
             Inherits Binary
             Implements iAttack
@@ -73,12 +73,12 @@ Namespace Saves
             Implements iMDPkmMetFloor
             Implements iPkmAttack
             Implements ISavableAs
-            Implements iOnDisk
+            Implements IOnDisk
             Implements IOpenableFile
 
             Public Const Length As Integer = 388
             Public Const MimeType As String = "application/x-td-pokemon"
-            Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+            Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
 
             Public Sub New(Bits As Binary)
                 MyBase.New(Bits)
@@ -261,7 +261,7 @@ Namespace Saves
                 Return Lists.GetTDLocations
             End Function
 
-            Public Property Filename As String Implements iOnDisk.Filename
+            Public Property Filename As String Implements IOnDisk.Filename
 
             Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
                 Return ".tdpkm"
@@ -320,15 +320,15 @@ Namespace Saves
             End Set
         End Property
 
-        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorage.GetPokemon
+        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorageOld.GetPokemon
             Return StoredPokemon
         End Function
 
-        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
+        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorageOld.GetStoredPokemonOffsets
             Return StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.TDFriendAreaOffsets).ToArray
         End Function
 
-        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon
+        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorageOld.SetPokemon
             StoredPokemon = Pokemon
         End Sub
     End Class

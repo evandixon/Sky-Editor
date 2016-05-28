@@ -1,5 +1,5 @@
 ﻿Namespace MysteryDungeon.Explorers
-    Public Class SkyStoredItemEditView
+    Public Class TDGeneralTab
 
     End Class
 End Namespace

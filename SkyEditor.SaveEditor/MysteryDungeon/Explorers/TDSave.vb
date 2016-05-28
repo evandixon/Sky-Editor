@@ -1,23 +1,53 @@
-﻿Imports SkyEditor.Core
+﻿Imports System.Collections.Specialized
+Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.SaveEditor.Modeling
 
-Namespace Saves
+Namespace MysteryDungeon.Explorers
     Public Class TDSave
         Inherits BinaryFile
-        Implements iDetectableFileType
+        Implements IDetectableFileType
+        Implements INotifyPropertyChanged
+        Implements INotifyModified
+        Implements IInventory
 
         Public Sub New()
             MyBase.New()
         End Sub
-        'Public Sub New(Filename As String)
-        '    MyBase.New(Filename)
-        '    Bits = New Binary()
-        '    For count As Integer = 0 To Length - 1
-        '        Bits.AppendByte(RawData(count))
-        '    Next
-        'End Sub
-        Protected Class Offsets
+
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, Provider)
+
+            LoadGeneral()
+            LoadItems()
+        End Function
+
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
+            SaveGeneral()
+            SaveItems()
+
+            MyBase.Save(Destination, provider)
+        End Sub
+
+#Region "Events"
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
+#End Region
+
+#Region "Event Handlers"
+        Private Sub TDSave_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
+        Private Sub _heldItems_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs) Handles _heldItems.CollectionChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
+#End Region
+
+
+
+#Region "Child Classes"
+        Friend Class Offsets
             Public Const ChecksumEnd As Integer = &HDC7B
             Public Const BackupSaveStart As Integer = &H10000
             Public Const QuicksaveStart As Integer = &H2E000
@@ -39,9 +69,20 @@ Namespace Saves
             Public Const ActivePokemonLength As Integer = 544
             Public Const ActivePokemonNumber As Integer = 4
         End Class
+#End Region
 
-#Region "Properties"
-#Region "Team Info"
+#Region "Save Interaction"
+
+#Region "General"
+
+        Sub LoadGeneral()
+            TeamName = Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+        End Sub
+
+        Sub SaveGeneral()
+            Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = TeamName
+        End Sub
+
         ''' <summary>
         ''' Gets or sets the save file's Team Name.
         ''' </summary>
@@ -50,14 +91,77 @@ Namespace Saves
         ''' <remarks></remarks>
         Public Property TeamName As String
             Get
-                Return Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+                Return _teamName
             End Get
             Set(value As String)
-                Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = value
+                If Not _teamName = value Then
+                    _teamName = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(TeamName)))
+                End If
             End Set
         End Property
+        Dim _teamName As String
 #End Region
+
+#Region "Items"
+        Public Sub LoadItems()
+            _heldItems = New ObservableCollection(Of TDHeldItem)
+            For count As Integer = 0 To Offsets.HeldItemNumber - 1
+                Dim i = TDHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                If i.IsValid Then
+                    _heldItems.Add(i)
+                Else
+                    Exit For
+                End If
+            Next
+
+            InitItemSlots()
+        End Sub
+
+        Public Sub SaveItems()
+            For count As Integer = 0 To Offsets.HeldItemNumber - 1
+                If _heldItems.Count > count Then
+                    Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength) = _heldItems(count).GetHeldItemBits
+                Else
+                    Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
+                End If
+            Next
+        End Sub
+
+        Public Property HeldItems As ObservableCollection(Of TDHeldItem)
+            Get
+                Return _heldItems
+            End Get
+            Set(value As ObservableCollection(Of TDHeldItem))
+                If _heldItems IsNot value Then
+                    _heldItems = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HeldItems)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _heldItems As ObservableCollection(Of TDHeldItem)
+
+        Public Property ItemSlots As IEnumerable(Of IItemSlot) Implements IInventory.ItemSlots
+            Get
+                Return _itemSlots
+            End Get
+            Private Set(value As IEnumerable(Of IItemSlot))
+                _itemSlots = value
+            End Set
+        End Property
+        Dim _itemSlots As ObservableCollection(Of IItemSlot)
+
+        Private Sub InitItemSlots()
+            Dim slots As New ObservableCollection(Of IItemSlot)
+            slots.Add(New ItemSlot(Of TDHeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
+            ItemSlots = slots
+        End Sub
+
+
 #End Region
+
+#End Region
+
 #Region "Technical Stuff"
         Protected Overrides Sub FixChecksum()
             'Fix the first checksum
@@ -103,6 +207,7 @@ Namespace Saves
                 Return Task.FromResult(False)
             End If
         End Function
+
     End Class
 
 End Namespace

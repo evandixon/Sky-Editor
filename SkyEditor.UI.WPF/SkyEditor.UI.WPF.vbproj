@@ -95,7 +95,6 @@
     <Compile Include="AvalonHelpers\PanesTemplateSelector.vb" />
     <Compile Include="AvalonHelpers\WPFAvalonDockFileWrapper.vb" />
     <Compile Include="DataBoundObjectControl.vb" />
-    <Compile Include="DataboundToolWindow.vb" />
     <Compile Include="GenericListItem.vb" />
     <Compile Include="MainWindow3.xaml.vb">
       <DependentUpon>MainWindow3.xaml</DependentUpon>

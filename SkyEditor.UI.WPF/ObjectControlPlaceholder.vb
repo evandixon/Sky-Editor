@@ -13,8 +13,6 @@ Public Class ObjectControlPlaceholder
 
     Public Shared ReadOnly CurrentPluginManagerProperty As DependencyProperty = DependencyProperty.Register("CurrentPluginManager", GetType(PluginManager), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnCurrentPluginManagerChanged))
     Public Shared ReadOnly ObjectToEditProperty As DependencyProperty = DependencyProperty.Register("ObjectToEdit", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnObjectToEditChanged))
-    Public Shared ReadOnly ContainedControlTagProperty As DependencyProperty = DependencyProperty.Register("ContainedControlTag", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnContainedControlTagChanged))
-
     Private Shared Sub OnCurrentPluginManagerChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         DirectCast(d, ObjectControlPlaceholder).CurrentPluginManager = e.NewValue
     End Sub
@@ -23,9 +21,11 @@ Public Class ObjectControlPlaceholder
         DirectCast(d, ObjectControlPlaceholder).ObjectToEdit = e.NewValue
     End Sub
 
-    Private Shared Sub OnContainedControlTagChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
-        DirectCast(d, ObjectControlPlaceholder).ContainedControlTag = e.NewValue
+    Public Sub New()
+        MyBase.New
+        Me.TabControlOrientation = Dock.Left
     End Sub
+
 
     ''' <summary>
     ''' Raised when the contained object raises its Modified event, if it implements iModifiable
@@ -81,7 +81,7 @@ Public Class ObjectControlPlaceholder
                         Dim count = ucTabs.Count '- (From t In ucTabs Where t.GetSortOrder(value.GetType, True) < 0).Count
                         If count > 1 Then
                             Dim tabControl As New TabControl
-                            tabControl.TabStripPlacement = System.Windows.Controls.Dock.Left
+                            tabControl.TabStripPlacement = TabControlOrientation
                             For Each item In WPFUiHelper.GenerateObjectTabs(ucTabs)
                                 tabControl.Items.Add(item)
                                 AddHandler item.ContainedObjectControl.IsModifiedChanged, AddressOf OnModified
@@ -114,32 +114,11 @@ Public Class ObjectControlPlaceholder
                     End If
                 End If
             End If
-
-            If Me.Content IsNot Nothing AndAlso TypeOf Me.Content Is UserControl AndAlso _pendingTag IsNot Nothing Then
-                DirectCast(Me.Content, UserControl).Tag = _pendingTag
-                _pendingTag = Nothing
-            End If
         End Set
     End Property
     Dim _object As Object
 
-    Public Property ContainedControlTag As Object
-        Get
-            If Me.Content IsNot Nothing Then
-                Return DirectCast(Me.Content, UserControl).Tag
-            Else
-                Return Nothing
-            End If
-        End Get
-        Set(value As Object)
-            If Me.Content IsNot Nothing Then
-                DirectCast(Me.Content, UserControl).Tag = value
-            Else
-                _pendingObject = value
-            End If
-        End Set
-    End Property
-    Dim _pendingTag As Object
+    Public Property TabControlOrientation As Dock
 
     Public Property CurrentPluginManager As PluginManager
         Get

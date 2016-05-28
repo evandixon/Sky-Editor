@@ -2,7 +2,7 @@
 
 Namespace Saves
     Partial Class RBSaveEU
-        Implements Interfaces.iPokemonStorage
+        Implements Interfaces.iPokemonStorageOld
         Public Property StoredPokemon(Index As Integer) As Saves.RBSave.StoredPkm
             Get
                 Return New Saves.RBSave.StoredPkm(Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
@@ -33,15 +33,15 @@ Namespace Saves
             End Set
         End Property
 
-        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorage.GetPokemon
+        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorageOld.GetPokemon
             Return StoredPokemon
         End Function
 
-        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon
+        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorageOld.SetPokemon
             StoredPokemon = Pokemon
         End Sub
 
-        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
+        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorageOld.GetStoredPokemonOffsets
             Return StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets).ToArray
         End Function
     End Class

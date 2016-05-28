@@ -1,4 +1,4 @@
-﻿Public Class GenericListItem(Of T)
+﻿<Obsolete> Public Class GenericListItem(Of T)
     Implements IComparable
 
     Public Property Text As String

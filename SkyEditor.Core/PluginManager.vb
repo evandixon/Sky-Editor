@@ -12,6 +12,7 @@ Public Class PluginManager
 #Region "Constructors"
     Public Sub New()
         Me.TypeRegistery = New Dictionary(Of TypeInfo, List(Of TypeInfo))
+        Me.TypeInstances = New Dictionary(Of TypeInfo, Object)
         Me.FailedPluginLoads = New List(Of String)
         Me.Assemblies = New List(Of Assembly)
         Me.DependantPlugins = New Dictionary(Of Assembly, List(Of Assembly))
@@ -19,6 +20,17 @@ Public Class PluginManager
 #End Region
 
 #Region "Properties"
+
+    ''' <summary>
+    ''' Caches instances of types, so they are not constantly recreated to read metadata (such supported types on object controls)
+    ''' </summary>
+    ''' <returns></returns>
+    Protected Property TypeInstances As Dictionary(Of TypeInfo, Object)
+
+    ''' <summary>
+    ''' The core of the plugin manager: matches base types or interfaces to types that inherit or implement these
+    ''' </summary>
+    ''' <returns></returns>
     Protected Property TypeRegistery As Dictionary(Of TypeInfo, List(Of TypeInfo))
     Public Property CoreAssemblyName As String 'Todo: make readonly to the public
     Public Property ExtensionDirectory As String
@@ -382,6 +394,15 @@ Public Class PluginManager
 
 #Region "Functions"
 #Region "Read Type Registry"
+    Protected Function GetCachedInstance(type As TypeInfo) As Object
+        If TypeInstances.ContainsKey(type) Then
+            Return TypeInstances(type)
+        Else
+            Dim instance = ReflectionHelpers.CreateInstance(type)
+            TypeInstances.Add(type, instance)
+            Return instance
+        End If
+    End Function
     ''' <summary>
     ''' Returns an IEnumerable of all the registered types that inherit or implement the given BaseType.
     ''' </summary>
@@ -404,7 +425,8 @@ Public Class PluginManager
     End Function
 
     ''' <summary>
-    ''' Returns an IEnumerable of new instances of all the registered types that inherit or implement the given BaseType.
+    ''' Returns an IEnumerable of instances of all the registered types that inherit or implement the given type.
+    ''' These instances are not new instances, so create new ones if needed.
     ''' </summary>
     ''' <param name="BaseType">Type to get children or implementors of.</param>
     ''' <returns></returns>
@@ -413,7 +435,7 @@ Public Class PluginManager
 
         For Each item In GetRegisteredTypes(BaseType)
             If ReflectionHelpers.CanCreateInstance(item) AndAlso Not item.IsGenericType Then
-                output.Add(ReflectionHelpers.CreateInstance(item))
+                output.Add(GetCachedInstance(item))
             End If
         Next
 
@@ -421,21 +443,17 @@ Public Class PluginManager
     End Function
 
     ''' <summary>
-    ''' eturns an IEnumerable of new instances of all the registered types that inherit or implement the given type.
+    ''' Returns an IEnumerable of instances of all the registered types that inherit or implement the given type.
+    ''' These instances are not new instances, so create new ones if needed.
     ''' </summary>
     ''' <typeparam name="T">Type to get children or implementors of.</typeparam>
     ''' <returns></returns>
     Public Function GetRegisteredObjects(Of T)() As IEnumerable(Of T)
-        Dim output As New List(Of T)
-        Dim targetType = GetType(T).GetTypeInfo
-
-        For Each item In GetRegisteredTypes(targetType)
-            If ReflectionHelpers.CanCreateInstance(item) AndAlso Not item.IsGenericType Then
-                output.Add(ReflectionHelpers.CreateInstance(item))
-            End If
+        Dim out As New List(Of T)
+        For Each item In GetRegisteredObjects(GetType(T).GetTypeInfo)
+            out.Add(item)
         Next
-
-        Return output
+        Return out
     End Function
 #End Region
 
@@ -452,6 +470,12 @@ Public Class PluginManager
 
                 For Each item In Plugins
                     item.UnLoad(Me)
+                Next
+
+                For Each item In TypeInstances
+                    If item.Value IsNot Nothing AndAlso TypeOf item.Value Is IDisposable Then
+                        DirectCast(item.Value, IDisposable).Dispose()
+                    End If
                 Next
             End If
 

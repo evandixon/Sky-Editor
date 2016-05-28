@@ -29,7 +29,7 @@
             Return Name & " (" & CurrentPokemon & "/" & Length & ")"
         End Function
     End Class
-    Public Interface iPokemonStorage
+    Public Interface iPokemonStorageOld
         Function GetPokemon() As iMDPkm()
         Sub SetPokemon(Pokemon As iMDPkm())
 

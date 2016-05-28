@@ -8,7 +8,7 @@ Namespace Tabs
 
         Public Overrides Sub RefreshDisplay()
             lbActivePokemon.Items.Clear()
-            For Each apkm In GetEditingObject(Of iParty).GetPokemon
+            For Each apkm In GetEditingObject(Of iPartyOld).GetPokemon
                 If apkm.IsValid Then
                     lbActivePokemon.Items.Add(apkm)
                 End If
@@ -20,7 +20,7 @@ Namespace Tabs
             For Each item In lbActivePokemon.Items
                 apkms.Add(item)
             Next
-            GetEditingObject(Of iParty).SetPokemon(apkms.ToArray)
+            GetEditingObject(Of iPartyOld).SetPokemon(apkms.ToArray)
         End Sub
 
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -57,7 +57,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Interfaces.iParty)}
+            Return {GetType(Interfaces.iPartyOld)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

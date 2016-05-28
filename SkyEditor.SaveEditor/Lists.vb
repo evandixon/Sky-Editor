@@ -19,7 +19,18 @@
     End Property
     Private Shared _skyItems As Dictionary(Of Integer, String)
 
-    Private Shared Property TDItems As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property TDItems As Dictionary(Of Integer, String)
+        Get
+            If _tdItems Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.TDItems)
+                _tdItems = i.Entries
+            End If
+            Return _tdItems
+        End Get
+    End Property
+    Private Shared _tdItems As Dictionary(Of Integer, String)
+
     Private Shared Property RBItems As Dictionary(Of Integer, String)
 
     Public Shared ReadOnly Property SkyPokemon As Dictionary(Of Integer, String)
@@ -84,16 +95,11 @@
         Return RBMoves
     End Function
 
-    Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
+    <Obsolete("Use property SkyItems instead")> Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
         Return SkyItems
     End Function
 
-    Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
-        If TDItems Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.TDItems)
-            TDItems = i.Entries
-        End If
+    <Obsolete("Use property TDItems instead")> Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
         Return TDItems
     End Function
 
@@ -106,7 +112,7 @@
         Return RBItems
     End Function
 
-    Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
+    <Obsolete("Use property SkyPokemon instead")> Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
         Return SkyPokemon
     End Function
 

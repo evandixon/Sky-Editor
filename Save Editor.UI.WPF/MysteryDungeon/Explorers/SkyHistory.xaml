@@ -1,4 +1,4 @@
-﻿<skyui:DataBoundObjectControl x:Class="Tabs.SkyHistory"
+﻿<skyui:DataBoundObjectControl x:Class="MysteryDungeon.Explorers.SkyHistory"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -20,7 +20,7 @@
             <TextBox Text="{Binding OriginalPlayerName}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
-            <local:DictionaryDropDown ItemDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedItemID="{Binding OriginalPlayerID}" />
+            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPlayerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}" IsChecked="{Binding OriginalPlayerIsFemale}" />
@@ -29,7 +29,7 @@
             <TextBox Text="{Binding OriginalPartnerName}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
-            <local:DictionaryDropDown ItemDictionary="{x:Static saveEditor:Lists.SkyPokemon}" SelectedItemID="{Binding OriginalPartnerID}" />
+            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPartnerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"  IsChecked="{Binding OriginalPartnerIsFemale}"/>

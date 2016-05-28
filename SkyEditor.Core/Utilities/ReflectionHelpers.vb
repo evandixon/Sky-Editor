@@ -82,6 +82,24 @@ Namespace Utilities
         End Function
 
         ''' <summary>
+        ''' Creates a new instance of the given type.
+        ''' </summary>
+        ''' <param name="Type">Type to create an instance of.  Must have a default constructor.</param>
+        ''' <returns></returns>
+        Public Shared Function CreateInstance(Type As Type) As Object
+            Return Activator.CreateInstance(Type)
+        End Function
+
+        ''' <summary>
+        ''' Creates a new instance of the type of the given object.
+        ''' </summary>
+        ''' <param name="target">Instance of the type of which to create a new instance</param>
+        ''' <returns></returns>
+        Public Shared Function CreateNewInstance(target As Object) As Object
+            Return CreateInstance(target.GetType)
+        End Function
+
+        ''' <summary>
         ''' Gets the name of the given type if its contained assembly has its name in its localized resource file, or the full name of the type if it does not.
         ''' </summary>
         ''' <param name="type">Type of which to get the name.</param>

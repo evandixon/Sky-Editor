@@ -4,7 +4,7 @@ Imports SkyEditorWPF.UI
 Namespace Tabs
     Public Class StoredPokemonTab
         Inherits ObjectControl
-        Dim storage As iPokemonStorage
+        Dim storage As iPokemonStorageOld
         Dim pokemon As iMDPkm()
         Dim slots As StoredPokemonSlotDefinition()
         Private Sub gbPokemon_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles lbPokemon.MouseDoubleClick
@@ -38,7 +38,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Sub RefreshDisplay()
-            storage = GetEditingObject(Of iPokemonStorage)()
+            storage = GetEditingObject(Of iPokemonStorageOld)()
             pokemon = storage.GetPokemon
             slots = storage.GetStoredPokemonOffsets
             RefreshSlotDisplay()
@@ -102,7 +102,7 @@ Namespace Tabs
 
         Public Overrides Sub UpdateObject()
             SaveSlot(lbFriendArea.SelectedIndex)
-            GetEditingObject(Of iPokemonStorage).SetPokemon(pokemon)
+            GetEditingObject(Of iPokemonStorageOld).SetPokemon(pokemon)
         End Sub
 
         Private Sub StoredPokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -114,7 +114,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(iPokemonStorage)}
+            Return {GetType(iPokemonStorageOld)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

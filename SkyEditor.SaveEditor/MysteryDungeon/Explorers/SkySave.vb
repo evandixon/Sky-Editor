@@ -9,15 +9,15 @@ Namespace MysteryDungeon.Explorers
     Public Class SkySave
         Inherits BinaryFile
         Implements IDetectableFileType
-        Implements iParty
-        Implements iPokemonStorage
         Implements IInventory
+        Implements IParty
+        Implements IPokemonStorage
         Implements INotifyPropertyChanged
         Implements INotifyModified
 
 #Region "Child Classes"
 
-        Protected Class Offsets
+        Friend Class Offsets
             Public Const BackupSaveStart As Integer = &HC800
             Public Const ChecksumEnd As Integer = &HB65A
             Public Const QuicksaveStart As Integer = &H19000
@@ -48,7 +48,7 @@ Namespace MysteryDungeon.Explorers
 
             Public Const HeldItemOffset As Integer = &H8BA2 * 8
             Public Const HeldItemLength As Integer = 33
-            Public Const HeldItemNumber As Integer = 100 '1st 50 are the team's, 2nd 50 are the Sp. Episode
+            Public Const HeldItemNumber As Integer = 50 '1st 50 are the team's, 2nd 50 are the Sp. Episode
 
             Public Const StoredItemOffset As Integer = &H8E0C * 8 + 6
             Public Const StoredItemLength As Integer = 2 * 11
@@ -70,437 +70,6 @@ Namespace MysteryDungeon.Explorers
             Public Const QuicksavePokemonNumber As Integer = 20
             Public Const QuicksavePokemonLength As Integer = 429 * 8
             Public Const QuicksavePokemonOffset As Integer = &H19000 * 8 + (&H3170 * 8)
-        End Class
-
-        Public Class HeldItem
-            Implements IClonable
-
-            Public Property IsValid As Boolean
-            Private Property Flag1 As Boolean
-            Private Property Flag2 As Boolean
-            Private Property Flag3 As Boolean
-            Private Property Flag4 As Boolean
-            Private Property Flag5 As Boolean
-            Private Property Flag6 As Boolean
-            Private Property Flag7 As Boolean
-            Public Property ID As Integer
-
-            ''' <summary>
-            ''' The ID of the item inside this one, if this item is a box.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property ContainedItemID As Integer?
-            Public Property Quantity As Integer
-            Public Property HeldBy As Byte
-            Public ReadOnly Property IsBox As Boolean
-                Get
-                    Return ID > 363 AndAlso ID < 400
-                End Get
-            End Property
-
-            Public Overrides Function ToString() As String
-                Return Lists.GetSkyItemNames(ID)
-            End Function
-
-            Public Function Clone() As Object Implements IClonable.Clone
-                Dim out As New HeldItem
-                With out
-                    .IsValid = Me.IsValid
-                    .Flag1 = Me.Flag1
-                    .Flag2 = Me.Flag2
-                    .Flag3 = Me.Flag3
-                    .Flag4 = Me.Flag4
-                    .Flag5 = Me.Flag5
-                    .Flag6 = Me.Flag6
-                    .Flag7 = Me.Flag7
-
-                    .ContainedItemID = Me.ContainedItemID
-                    .Quantity = Me.Quantity
-
-                    .ID = Me.ID
-                    .HeldBy = Me.HeldBy
-
-                End With
-                Return out
-            End Function
-
-            Public Function GetParameter() As Integer
-                If IsBox Then
-                    Return ContainedItemID
-                Else
-                    Return Quantity
-                End If
-            End Function
-
-            Public Function GetHeldItemBits() As Binary
-                Dim out As New Binary(Offsets.HeldItemLength)
-                With out
-                    .Bit(0) = IsValid
-                    .Bit(1) = Flag1
-                    .Bit(2) = Flag2
-                    .Bit(3) = Flag3
-                    .Bit(4) = Flag4
-                    .Bit(5) = Flag5
-                    .Bit(6) = Flag6
-                    .Bit(7) = Flag7
-
-                    Dim parameter As Integer
-                    If IsBox Then
-                        parameter = ContainedItemID
-                    Else
-                        parameter = Quantity
-                    End If
-                    .Int(0, 8, 11) = parameter
-
-                    .Int(0, 19, 11) = ID
-                    .Int(0, 30, 3) = HeldBy
-
-                End With
-                Return out
-            End Function
-
-            Public Shared Function FromHeldItemBits(bits As Binary) As HeldItem
-                Dim out As New HeldItem
-                With bits
-                    out.IsValid = .Bit(0)
-                    out.Flag1 = .Bit(1)
-                    out.Flag2 = .Bit(2)
-                    out.Flag3 = .Bit(3)
-                    out.Flag4 = .Bit(4)
-                    out.Flag5 = .Bit(5)
-                    out.Flag6 = .Bit(6)
-                    out.Flag7 = .Bit(7)
-                    Dim parameter = .Int(0, 8, 11)
-                    out.ID = .Int(0, 19, 11)
-                    out.HeldBy = .Int(0, 30, 3)
-                    If out.IsBox Then
-                        out.ContainedItemID = parameter
-                        out.Quantity = 1
-                    Else
-                        out.ContainedItemID = Nothing
-                        out.Quantity = parameter
-                    End If
-                End With
-                Return out
-            End Function
-
-            Public Shared Function FromStoredItemParts(itemID As Integer, parameter As Integer)
-                Dim out As New HeldItem
-                out.IsValid = True
-                out.ID = itemID
-                If out.IsBox Then
-                    out.ContainedItemID = parameter
-                    out.Quantity = 1
-                Else
-                    out.ContainedItemID = Nothing
-                    out.Quantity = parameter
-                End If
-                Return out
-            End Function
-
-            Public Sub New()
-
-            End Sub
-        End Class
-
-        Public Class Attack
-            Inherits Binary
-            Implements iMDAttack
-
-            Public Const Length = 21
-            Public Sub New(Bits As Binary)
-                MyBase.New(Bits)
-            End Sub
-            Public Sub New(ID As Integer, Ginseng As Integer, IsSwitched As Boolean, IsLinked As Boolean, IsSet As Boolean)
-                Me.New(New Binary(Length))
-                Me.ID = ID
-                Me.Ginseng = Ginseng
-                Me.IsSwitched = IsSwitched
-                Me.IsLinked = IsLinked
-                Me.IsSet = IsSet
-            End Sub
-            Public Property IsValid As Boolean
-                Get
-                    Return Bits(0)
-                End Get
-                Set(value As Boolean)
-                    Bits(0) = value
-                End Set
-            End Property
-            Public Property IsLinked As Boolean Implements iMDAttack.IsLinked
-                Get
-                    Return Bits(1)
-                End Get
-                Set(value As Boolean)
-                    Bits(1) = value
-                End Set
-            End Property
-            Public Property IsSwitched As Boolean Implements iMDAttack.IsSwitched
-                Get
-                    Return Bits(2)
-                End Get
-                Set(value As Boolean)
-                    Bits(2) = value
-                End Set
-            End Property
-            Public Property IsSet As Boolean Implements iMDAttack.IsSet
-                Get
-                    Return Bits(3)
-                End Get
-                Set(value As Boolean)
-                    Bits(3) = value
-                End Set
-            End Property
-            Public Property ID As Integer Implements iMDAttack.ID
-                Get
-                    Return Int(0, 4, 10)
-                End Get
-                Set(value As Integer)
-                    Int(0, 4, 10) = value
-                End Set
-            End Property
-            Public Property Ginseng As Integer Implements iMDAttack.Ginseng
-                Get
-                    Return Int(0, 14, 7)
-                End Get
-                Set(value As Integer)
-                    Int(0, 14, 7) = value
-                End Set
-            End Property
-            Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iMDAttack.GetAttackDictionary
-                Return Lists.GetSkyMoves
-            End Function
-        End Class
-
-        Public Class StoredPkm
-            Inherits Binary
-            Implements iMDPkm
-            Implements iMDPkmGender
-            Implements iMDPkmMetFloor
-            Implements iMDPkmIQ
-            Implements iPkmAttack
-            Implements ISavableAs
-            Implements IOnDisk
-            Implements IOpenableFile
-            Public Const Length As Integer = 362
-            Public Const MimeType As String = "application/x-sky-pokemon"
-            Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
-
-            Public Sub New(Bits As Binary)
-                MyBase.New(Bits)
-            End Sub
-            Public Sub New()
-                MyBase.New(Length)
-            End Sub
-            Public ReadOnly Property IsValid As Boolean Implements iMDPkm.IsValid
-                Get
-                    Return Bits(0)
-                End Get
-            End Property
-            Public Property Level As Byte Implements iMDPkm.Level
-                Get
-                    Return Int(0, 1, 7)
-                End Get
-                Set(value As Byte)
-                    Int(0, 1, 7) = value
-                End Set
-            End Property
-            Public Property ID As Integer Implements iMDPkm.ID
-                Get
-                    Dim i = Int(0, 8, 11)
-                    If i > 600 Then
-                        i -= 600
-                    End If
-                    Return i
-                End Get
-                Set(value As Integer)
-                    Dim f = IsFemale
-                    Int(0, 8, 11) = value
-                    IsFemale = f
-                End Set
-            End Property
-            Public Property IsFemale As Boolean Implements iMDPkmGender.IsFemale
-                Get
-                    Dim i = Int(0, 8, 11)
-                    Return (i > 600)
-                End Get
-                Set(value As Boolean)
-                    Dim i = Int(0, 8, 11)
-                    If i > 600 Then
-                        If value Then
-                            'do nothing
-                        Else
-                            Int(0, 8, 11) -= 600
-                        End If
-                    Else
-                        If value Then
-                            Int(0, 8, 11) += 600
-                        Else
-                            'do nothing
-                        End If
-                    End If
-                End Set
-            End Property
-            Public Property MetAt As Integer Implements iMDPkm.MetAt
-                Get
-                    Return Int(0, 19, 8)
-                End Get
-                Set(value As Integer)
-                    Int(0, 19, 8) = value
-                End Set
-            End Property
-            Public Property MetFloor As Integer Implements iMDPkmMetFloor.MetFloor
-                Get
-                    Return Int(0, 27, 7)
-                End Get
-                Set(value As Integer)
-                    Int(0, 27, 7) = value
-                End Set
-            End Property
-            'Unknown Data: Length of 15 bits
-            Public Property IQ As Integer Implements iMDPkmIQ.IQ
-                Get
-                    Return Int(0, 49, 10)
-                End Get
-                Set(value As Integer)
-                    Int(0, 49, 10) = value
-                End Set
-            End Property
-            Public Property HP As Integer Implements iMDPkm.MaxHP
-                Get
-                    Return Int(0, 59, 10)
-                End Get
-                Set(value As Integer)
-                    Int(0, 59, 10) = value
-                End Set
-            End Property
-            Public Property StatAttack As Integer Implements iMDPkm.StatAttack
-                Get
-                    Return Int(0, 69, 8)
-                End Get
-                Set(value As Integer)
-                    Int(0, 69, 8) = value
-                End Set
-            End Property
-            Public Property StatDefense As Integer Implements iMDPkm.StatDefense
-                Get
-                    Return Int(0, 77, 8)
-                End Get
-                Set(value As Integer)
-                    Int(0, 77, 8) = value
-                End Set
-            End Property
-            Public Property StatSpAttack As Integer Implements iMDPkm.StatSpAttack
-                Get
-                    Return Int(0, 85, 8)
-                End Get
-                Set(value As Integer)
-                    Int(0, 85, 8) = value
-                End Set
-            End Property
-            Public Property StatSpDefense As Integer Implements iMDPkm.StatSpDefense
-                Get
-                    Return Int(0, 93, 8)
-                End Get
-                Set(value As Integer)
-                    Int(0, 93, 8) = value
-                End Set
-            End Property
-            Public Property Exp As Integer Implements iMDPkm.Exp
-                Get
-                    Return Int(0, 101, 24)
-                End Get
-                Set(value As Integer)
-                    Int(0, 101, 24) = value
-                End Set
-            End Property
-            'Unknown Data: Length of 73 bits
-            Public Property Attack1 As iAttack Implements iPkmAttack.Attack1
-                Get
-                    Return New Attack(Range(198, Attack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(198, Attack.Length) = value
-                End Set
-            End Property
-            Public Property Attack2 As iAttack Implements iPkmAttack.Attack2
-                Get
-                    Return New Attack(Range(219, Attack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(219, Attack.Length) = value
-                End Set
-            End Property
-            Public Property Attack3 As iAttack Implements iPkmAttack.Attack3
-                Get
-                    Return New Attack(Range(240, Attack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(240, Attack.Length) = value
-                End Set
-            End Property
-            Public Property Attack4 As iAttack Implements iPkmAttack.Attack4
-                Get
-                    Return New Attack(Range(261, Attack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(261, Attack.Length) = value
-                End Set
-            End Property
-            Public Property Name As String Implements iMDPkm.Name
-                Get
-                    Return StringPMD(0, 282, 10)
-                End Get
-                Set(value As String)
-                    StringPMD(0, 282, 10) = value
-                End Set
-            End Property
-
-            Public Property Filename As String Implements IOnDisk.Filename
-
-            Public Overrides Function ToString() As String
-                If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetSkyPokemon(ID))
-                Else
-                    Return "----------"
-                End If
-            End Function
-            Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.GetSkyPokemon
-            End Function
-
-            Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary
-                Return Lists.GetSkyLocations
-            End Function
-
-            Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
-                Return ".skypkm"
-            End Function
-
-            Public Async Function OpenFile(Filename As String, Provider As IOProvider) As Task Implements IOpenableFile.OpenFile
-                Dim toOpen As New BinaryFile
-                Await toOpen.OpenFile(Filename, Provider)
-                Me.Bits = toOpen.Bits.Bits
-                'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
-                For i = 1 To 8 - (Length Mod 8)
-                    Me.Bits.RemoveAt(0)
-                Next
-            End Function
-
-            Public Sub Save(provider As IOProvider) Implements ISavable.Save
-                Save(Filename, provider)
-            End Sub
-
-            Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
-                Dim toSave As New BinaryFile()
-                toSave.CreateFile(Path.GetFileNameWithoutExtension(Filename))
-                'matix2267's convention adds 6 bits to the beginning of a file so that the name will be byte-aligned
-                For i = 1 To 8 - (Length Mod 8)
-                    toSave.Bits.Bits.Add(0)
-                Next
-                toSave.Bits.Bits.AddRange(Me.Bits)
-                toSave.Save(Filename, provider)
-            End Sub
         End Class
 
         Public Class ActiveAttack
@@ -782,7 +351,7 @@ Namespace MysteryDungeon.Explorers
 
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetSkyPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
                 Else
                     Return "----------"
                 End If
@@ -1074,7 +643,7 @@ Namespace MysteryDungeon.Explorers
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("Lvl. {0} {1}", Level, Lists.GetSkyPokemon(ID))
+                    Return String.Format("Lvl. {0} {1}", Level, Lists.SkyPokemon(ID))
                 Else
                     Return "----------"
                 End If
@@ -1088,9 +657,8 @@ Namespace MysteryDungeon.Explorers
 
             'Init Items
             StoredItems = New ObservableCollection(Of SkyStoredItem)
-            HeldItems = New ObservableCollection(Of HeldItem)
-            SpEpisodeHeldItems = New ObservableCollection(Of HeldItem)
-            InitItemSlots()
+            HeldItems = New ObservableCollection(Of SkyHeldItem)
+            SpEpisodeHeldItems = New ObservableCollection(Of SkyHeldItem)
         End Sub
 
 
@@ -1100,6 +668,8 @@ Namespace MysteryDungeon.Explorers
 
             LoadGeneral()
             LoadItems()
+            LoadActivePokemon()
+            LoadStoredPokemon()
             LoadHistory()
 
         End Function
@@ -1108,6 +678,8 @@ Namespace MysteryDungeon.Explorers
 
             SaveGeneral()
             SaveItems()
+            SaveActivePokemon()
+            SaveStoredPokemon()
             SaveHistory()
 
             MyBase.Save(Destination, provider)
@@ -1274,6 +846,8 @@ Namespace MysteryDungeon.Explorers
             For Each item In GetSpEpisodeHeldItems()
                 SpEpisodeHeldItems.Add(item)
             Next
+
+            InitItemSlots()
         End Sub
 
         Private Sub SaveItems()
@@ -1331,24 +905,24 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Held"
-        Public Property HeldItems As ObservableCollection(Of HeldItem)
+        Public Property HeldItems As ObservableCollection(Of SkyHeldItem)
             Get
                 Return _heldItems
             End Get
-            Set(value As ObservableCollection(Of HeldItem))
+            Set(value As ObservableCollection(Of SkyHeldItem))
                 If _heldItems IsNot value Then
                     _heldItems = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HeldItems)))
                 End If
             End Set
         End Property
-        Private WithEvents _heldItems As ObservableCollection(Of HeldItem)
+        Private WithEvents _heldItems As ObservableCollection(Of SkyHeldItem)
 
-        Private Function GetHeldItems() As List(Of HeldItem)
-            Dim output As New List(Of HeldItem)
+        Private Function GetHeldItems() As List(Of SkyHeldItem)
+            Dim output As New List(Of SkyHeldItem)
 
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
-                Dim item = HeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
                 If item.IsValid Then
                     output.Add(item)
                 Else
@@ -1359,7 +933,7 @@ Namespace MysteryDungeon.Explorers
             Return output
         End Function
 
-        Private Sub SetHeldItems(items As IList(Of HeldItem))
+        Private Sub SetHeldItems(items As IList(Of SkyHeldItem))
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
                 If items.Count > count Then
@@ -1372,24 +946,24 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Special Episode Held"
-        Public Property SpEpisodeHeldItems As ObservableCollection(Of HeldItem)
+        Public Property SpEpisodeHeldItems As ObservableCollection(Of SkyHeldItem)
             Get
                 Return _spEpisodeHeldItems
             End Get
-            Set(value As ObservableCollection(Of HeldItem))
+            Set(value As ObservableCollection(Of SkyHeldItem))
                 If _spEpisodeHeldItems IsNot value Then
                     _spEpisodeHeldItems = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SpEpisodeActivePokemon)))
                 End If
             End Set
         End Property
-        Private WithEvents _spEpisodeHeldItems As ObservableCollection(Of HeldItem)
+        Private WithEvents _spEpisodeHeldItems As ObservableCollection(Of SkyHeldItem)
 
-        Private Function GetSpEpisodeHeldItems() As List(Of HeldItem)
-            Dim output As New List(Of HeldItem)
+        Private Function GetSpEpisodeHeldItems() As List(Of SkyHeldItem)
+            Dim output As New List(Of SkyHeldItem)
 
             For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
-                Dim item = HeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
                 If item.IsValid Then
                     output.Add(item)
                 Else
@@ -1400,7 +974,7 @@ Namespace MysteryDungeon.Explorers
             Return output
         End Function
 
-        Private Sub SetSpEpisodeHeldItems(items As IList(Of HeldItem))
+        Private Sub SetSpEpisodeHeldItems(items As IList(Of SkyHeldItem))
             For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
                 Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
                 If items.Count > count Then
@@ -1425,124 +999,116 @@ Namespace MysteryDungeon.Explorers
         Private Sub InitItemSlots()
             Dim slots As New ObservableCollection(Of IItemSlot)
             slots.Add(New ItemSlot(Of SkyStoredItem)(My.Resources.Language.StoredItemsSlot, StoredItems, Offsets.StoredItemNumber))
-            slots.Add(New ItemSlot(Of HeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
-            slots.Add(New ItemSlot(Of HeldItem)(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
+            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
+            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
             ItemSlots = slots
         End Sub
 #End Region
 
 #Region "Stored Pokemon"
-        Public Property StoredPokemon(Index As Integer) As StoredPkm
-            Get
-                Return New StoredPkm(Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
-            End Get
-            Set(value As StoredPkm)
-                Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength) = value
-            End Set
-        End Property
-        Public Property StoredPokemon() As StoredPkm()
-            Get
-                Dim output As New List(Of StoredPkm)
-                For count As Integer = 0 To Offsets.StoredPokemonNumber - 1
-                    Dim i = StoredPokemon(count)
-                    'If i.IsValid OrElse count < 9 Then 'Excepting when count < 9 because the first 8 pokemon slots are special
-                    output.Add(i)
-                    'End If
-                Next
-                Return output.ToArray
-            End Get
-            Set(value As StoredPkm())
-                For count As Integer = 0 To Offsets.StoredPokemonNumber - 1
-                    If value.Length > count Then
-                        StoredPokemon(count) = value(count)
-                    Else
-                        StoredPokemon(count) = New StoredPkm(New Binary(Offsets.StoredPokemonLength))
-                    End If
-                Next
-            End Set
-        End Property
-        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorage.GetPokemon
-            Return StoredPokemon
-        End Function
+        Private Sub LoadStoredPokemon()
+            StoredPlayerPartner = New ObservableCollection(Of SkyStoredPokemon)
+            StoredSpEpisodePokemon = New ObservableCollection(Of SkyStoredPokemon)
+            StoredPokemon = New ObservableCollection(Of SkyStoredPokemon)
 
-        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
-            Return StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.SkyFriendAreaOffsets).ToArray
-        End Function
+            For count = 0 To Offsets.StoredPokemonNumber
+                Dim pkm As New SkyStoredPokemon(Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+                If count < 2 Then 'Player Partner
+                    StoredPlayerPartner.Add(pkm)
+                ElseIf count < 5 Then 'Sp. Episode
+                    StoredSpEpisodePokemon.Add(pkm)
+                Else 'Others
+                    StoredPokemon.Add(pkm)
+                End If
+            Next
 
-        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon
-            StoredPokemon = Pokemon
+            _storage = New ObservableCollection(Of IPokemonBox)
+            _storage.Add(New BasicPokemonBox(My.Resources.Language.PlayerPartnerPokemonSlot, StoredPlayerPartner))
+            _storage.Add(New BasicPokemonBox(My.Resources.Language.SpEpisodePokemonSlot, StoredSpEpisodePokemon))
+            _storage.Add(New BasicPokemonBox(My.Resources.Language.StoredPokemonSlot, StoredPokemon))
         End Sub
+        Private Sub SaveStoredPokemon()
+            For count = 0 To Offsets.StoredPokemonNumber
+                Dim pkm As SkyStoredPokemon
+                If count < 2 Then 'Player Partner
+                    pkm = StoredPlayerPartner(count)
+                ElseIf count < 5 Then 'Sp. Episode
+                    pkm = StoredSpEpisodePokemon(count - 2)
+                Else 'Others
+                    pkm = StoredPokemon(count - 5)
+                End If
+                Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength) = pkm.GetStoredPokemonBits
+            Next
+        End Sub
+        Public Property StoredPlayerPartner As ObservableCollection(Of SkyStoredPokemon)
+        Public Property StoredSpEpisodePokemon As ObservableCollection(Of SkyStoredPokemon)
+        Public Property StoredPokemon As ObservableCollection(Of SkyStoredPokemon)
+
+        Public ReadOnly Property Storage As IEnumerable(Of IPokemonBox) Implements IPokemonStorage.Storage
+            Get
+                Return _storage
+            End Get
+        End Property
+        Dim _storage As ObservableCollection(Of IPokemonBox)
+
 #End Region
 
 #Region "Active Pokemon"
 
-        Public Property ActivePokemon(Index As Integer) As ActivePkm
-            Get
-                Return New ActivePkm(Me.Bits.Range(Offsets.ActivePokemonOffset + Index * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength))
-            End Get
-            Set(value As ActivePkm)
-                Me.Bits.Range(Offsets.ActivePokemonOffset + Index * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = value
-            End Set
-        End Property
-        Public Property ActivePokemon() As iMDPkm()
-            Get
-                Dim output As New List(Of ActivePkm)
-                For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                    Dim i = ActivePokemon(count)
-                    If i.IsValid OrElse count < 9 Then 'Excepting when count < 9 because the first 8 pokemon slots are special
-                        output.Add(i)
-                    End If
-                Next
-                Return output.ToArray
-            End Get
-            Set(value As iMDPkm())
-                For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                    If value.Length > count Then
-                        ActivePokemon(count) = value(count)
-                    Else
-                        ActivePokemon(count) = New ActivePkm(New Binary(Offsets.ActivePokemonLength))
-                    End If
-                Next
-            End Set
-        End Property
+        Private Sub LoadActivePokemon()
+            Dim activePokemon As New ObservableCollection(Of ActivePkm)
+            Dim spEpisodeActivePokemon As New ObservableCollection(Of ActivePkm)
+            For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
+                activePokemon.Add(New ActivePkm(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
+                spEpisodeActivePokemon.Add(New ActivePkm(Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
+            Next
 
-        Public Property SpEpisodeActivePokemon(Index As Integer) As ActivePkm
-            Get
-                Return New ActivePkm(Me.Bits.Range(Offsets.SpActivePokemonOffset + Index * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength))
-            End Get
-            Set(value As ActivePkm)
-                Me.Bits.Range(Offsets.SpActivePokemonOffset + Index * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = value
-            End Set
-        End Property
-        Public Property SpEpisodeActivePokemon() As iMDPkm()
-            Get
-                Dim output As New List(Of ActivePkm)
-                For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                    Dim i = SpEpisodeActivePokemon(count)
-                    If i.IsValid OrElse count < 9 Then 'Excepting when count < 9 because the first 8 pokemon slots are special
-                        output.Add(i)
-                    End If
-                Next
-                Return output.ToArray
-            End Get
-            Set(value As iMDPkm())
-                For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                    If value.Length > count Then
-                        SpEpisodeActivePokemon(count) = value(count)
-                    Else
-                        SpEpisodeActivePokemon(count) = New ActivePkm(New Binary(Offsets.ActivePokemonLength))
-                    End If
-                Next
-            End Set
-        End Property
-
-        Public Function GetActivePokemon() As Interfaces.iMDPkm() Implements Interfaces.iParty.GetPokemon
-            Return ActivePokemon
-        End Function
-
-        Public Sub SetActivePokemon(Pokemon() As Interfaces.iMDPkm) Implements Interfaces.iParty.SetPokemon
-            ActivePokemon = Pokemon
+            Me.ActivePokemon = activePokemon
+            Me.SpEpisodeActivePokemon = spEpisodeActivePokemon
         End Sub
+
+        Private Sub SaveActivePokemon()
+            For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
+                Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = ActivePokemon(count)
+                Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = SpEpisodeActivePokemon(count)
+            Next
+        End Sub
+
+        Public Property ActivePokemon As ObservableCollection(Of ActivePkm)
+            Get
+                Return _activePokemon
+            End Get
+            Set(value As ObservableCollection(Of ActivePkm))
+                If _activePokemon IsNot value Then
+                    _activePokemon = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ActivePokemon)))
+                End If
+            End Set
+        End Property
+        Dim _activePokemon As ObservableCollection(Of ActivePkm)
+
+        Private Property IParty_Party As IEnumerable Implements IParty.Party
+            Get
+                Return ActivePokemon
+            End Get
+            Set(value As IEnumerable)
+                ActivePokemon = value
+            End Set
+        End Property
+
+        Public Property SpEpisodeActivePokemon As ObservableCollection(Of ActivePkm)
+            Get
+                Return _spEpisodeActivePokemon
+            End Get
+            Set(value As ObservableCollection(Of ActivePkm))
+                If _spEpisodeActivePokemon IsNot value Then
+                    _spEpisodeActivePokemon = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SpEpisodeActivePokemon)))
+                End If
+            End Set
+        End Property
+        Dim _spEpisodeActivePokemon As ObservableCollection(Of ActivePkm)
+
 #End Region
 
 #Region "Quicksave Pokemon"
@@ -1754,6 +1320,7 @@ Namespace MysteryDungeon.Explorers
                 Bits.Int(0, Offsets.WindowFrameType, 3) = value
             End Set
         End Property
+
 #End Region
 
 #End Region

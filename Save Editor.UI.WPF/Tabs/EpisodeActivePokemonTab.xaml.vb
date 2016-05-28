@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.SaveEditor
+﻿Imports System.Collections.ObjectModel
+Imports SkyEditor.SaveEditor
 Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
@@ -15,11 +16,11 @@ Namespace Tabs
             Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim apkms As New List(Of Interfaces.iMDPkm)
+            Dim apkms As New ObservableCollection(Of SkySave.ActivePkm)
             For Each item In lbActivePokemon.Items
                 apkms.Add(item)
             Next
-            GetEditingObject(Of SkySave).SpEpisodeActivePokemon = apkms.ToArray
+            GetEditingObject(Of SkySave).SpEpisodeActivePokemon = apkms
         End Sub
         Private Sub ActivePokemonTab_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Me.Header = My.Resources.Language.SpEpisodeActivePokemonHeader

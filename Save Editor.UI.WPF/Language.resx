@@ -322,4 +322,7 @@ For stackable items like sticks and spikes, this lets you control how much is in
   <data name="XofYItemsSeparator" xml:space="preserve">
     <value> of </value>
   </data>
+  <data name="Party" xml:space="preserve">
+    <value>Party</value>
+  </data>
 </root>

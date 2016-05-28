@@ -152,4 +152,19 @@ Demonic722 (Misc RAM and save addresses)</value>
   <data name="StoredItemsSlot" xml:space="preserve">
     <value>Stored Items</value>
   </data>
+  <data name="BlankPokemon" xml:space="preserve">
+    <value>----------</value>
+  </data>
+  <data name="SkyStoredPokemonToString" xml:space="preserve">
+    <value>{0} (Lvl. {1} {2})</value>
+  </data>
+  <data name="PlayerPartnerPokemonSlot" xml:space="preserve">
+    <value>Player and Partner</value>
+  </data>
+  <data name="SpEpisodePokemonSlot" xml:space="preserve">
+    <value>Special Episode Pokemon</value>
+  </data>
+  <data name="StoredPokemonSlot" xml:space="preserve">
+    <value>Others</value>
+  </data>
 </root>

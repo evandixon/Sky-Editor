@@ -133,13 +133,21 @@
       <DependentUpon>ListResources.it.resx</DependentUpon>
     </Compile>
     <Compile Include="Lists.vb" />
+    <Compile Include="Modeling\BasicPokemonBox.vb" />
     <Compile Include="Modeling\IInventory.vb" />
     <Compile Include="Modeling\IItem.vb" />
     <Compile Include="Modeling\IItemSlot.vb" />
+    <Compile Include="Modeling\IParty.vb" />
+    <Compile Include="Modeling\IPokemonBox.vb" />
+    <Compile Include="Modeling\IPokemonStorage.vb" />
     <Compile Include="Modeling\ItemSlot.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersStoredItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyAttack.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyHeldItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItem.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyStoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDHeldItem.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="MysteryDungeon\GTIGameData.vb" />
@@ -150,7 +158,6 @@
     <Compile Include="MysteryDungeon\Rescue\RBSaveEU.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkySave.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.ActivePokemon.vb" />
-    <Compile Include="MysteryDungeon\Explorers\TDSave.HeldItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.StoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.vb" />
   </ItemGroup>

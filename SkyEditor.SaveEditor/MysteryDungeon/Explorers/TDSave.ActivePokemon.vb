@@ -1,4 +1,4 @@
-﻿Namespace Saves
+﻿Namespace MysteryDungeon.Explorers
     Partial Class TDSave
         Public Class ActiveAttack
             Inherits Binary

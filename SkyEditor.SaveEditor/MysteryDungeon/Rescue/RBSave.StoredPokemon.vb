@@ -4,7 +4,7 @@ Imports SkyEditor.Core.IO
 
 Namespace Saves
     Partial Class RBSave
-        Implements iPokemonStorage
+        Implements iPokemonStorageOld
         Public Class Attack
             Inherits Binary
             Implements iAttack
@@ -279,15 +279,15 @@ Namespace Saves
             End Set
         End Property
 
-        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorage.GetPokemon
+        Public Function GetPokemon() As iMDPkm() Implements iPokemonStorageOld.GetPokemon
             Return StoredPokemon
         End Function
 
-        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorage.SetPokemon
+        Public Sub SetPokemon(Pokemon() As iMDPkm) Implements iPokemonStorageOld.SetPokemon
             StoredPokemon = Pokemon
         End Sub
 
-        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorage.GetStoredPokemonOffsets
+        Public Function GetStoredPokemonOffsets() As StoredPokemonSlotDefinition() Implements iPokemonStorageOld.GetStoredPokemonOffsets
             Return StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets).ToArray
         End Function
     End Class

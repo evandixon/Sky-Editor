@@ -147,6 +147,9 @@ Namespace UI
                 Next
             End If
             If out IsNot Nothing Then
+                'GetObjectControls above returns cached instances.
+                'Create a new instance before returning
+                out = ReflectionHelpers.CreateNewInstance(out)
                 out.SetPluginManager(Manager)
             End If
             Return out
@@ -207,7 +210,7 @@ Namespace UI
                     'etab.EditingObject = ObjectToEdit
                     'allTabs.Add(etab)
                     'Create another instance of etab, since etab is our cached, search-only instance.
-                    Dim t As IObjectControl = ReflectionHelpers.CreateInstance(etab.GetType.GetTypeInfo)
+                    Dim t As IObjectControl = ReflectionHelpers.CreateNewInstance(etab)
                     t.SetPluginManager(Manager)
                     t.EditingObject = ObjectToEdit
                     allTabs.Add(t)

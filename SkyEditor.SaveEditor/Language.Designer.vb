@@ -66,6 +66,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to ----------.
+        '''</summary>
+        Friend Shared ReadOnly Property BlankPokemon() As String
+            Get
+                Return ResourceManager.GetString("BlankPokemon", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to DeSmuMe Save File.
         '''</summary>
         Friend Shared ReadOnly Property DeSmuMeSaveFile() As String
@@ -98,6 +107,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property ItemToStringHeldBy() As String
             Get
                 Return ResourceManager.GetString("ItemToStringHeldBy", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Player and Partner.
+        '''</summary>
+        Friend Shared ReadOnly Property PlayerPartnerPokemonSlot() As String
+            Get
+                Return ResourceManager.GetString("PlayerPartnerPokemonSlot", resourceCulture)
             End Get
         End Property
         
@@ -152,11 +170,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to {0} (Lvl. {1} {2}).
+        '''</summary>
+        Friend Shared ReadOnly Property SkyStoredPokemonToString() As String
+            Get
+                Return ResourceManager.GetString("SkyStoredPokemonToString", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Special Episode Pokemon.
+        '''</summary>
+        Friend Shared ReadOnly Property SpEpisodePokemonSlot() As String
+            Get
+                Return ResourceManager.GetString("SpEpisodePokemonSlot", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Stored Items.
         '''</summary>
         Friend Shared ReadOnly Property StoredItemsSlot() As String
             Get
                 Return ResourceManager.GetString("StoredItemsSlot", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Others.
+        '''</summary>
+        Friend Shared ReadOnly Property StoredPokemonSlot() As String
+            Get
+                Return ResourceManager.GetString("StoredPokemonSlot", resourceCulture)
             End Get
         End Property
     End Class

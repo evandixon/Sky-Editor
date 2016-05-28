@@ -445,6 +445,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Party.
+        '''</summary>
+        Public Shared ReadOnly Property Party() As String
+            Get
+                Return ResourceManager.GetString("Party", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Please select your SD Card.
         '''</summary>
         Public Shared ReadOnly Property PleaseSelectSD() As String
