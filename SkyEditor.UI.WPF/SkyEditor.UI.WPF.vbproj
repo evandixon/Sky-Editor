@@ -102,6 +102,9 @@
     <Compile Include="ObjectControls\GenericIList.xaml.vb">
       <DependentUpon>GenericIList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\SolutionExplorer.xaml.vb">
+      <DependentUpon>SolutionExplorer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OverlappingStyleSelector.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="Language.Designer.vb">
@@ -172,6 +175,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\GenericIList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\SolutionExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

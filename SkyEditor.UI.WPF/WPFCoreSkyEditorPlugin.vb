@@ -11,6 +11,7 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
         MyBase.Load(manager)
 
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(GenericIList))
+        manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(SolutionExplorer))
     End Sub
 
 End Class

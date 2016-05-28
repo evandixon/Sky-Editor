@@ -123,6 +123,9 @@
   <data name="ConsoleUnknownCommand" xml:space="preserve">
     <value>Unknown command "{0}".</value>
   </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Directory</value>
+  </data>
   <data name="ErrorAsyncForInfiniteLoop" xml:space="preserve">
     <value>StepCount cannot be 0.</value>
     <comment>Message for an exception that's thrown when the Step of a logical For statement is 0.</comment>
@@ -158,6 +161,9 @@
     <value>Attempted to write to a read-only file.</value>
     <comment>Message for an exception that's thrown when attempting to alter a read-only file.</comment>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
   <data name="PluginDevExtAuthor" xml:space="preserve">
     <value>You!</value>
   </data>
@@ -169,5 +175,11 @@
   </data>
   <data name="PluginDevExtVersion" xml:space="preserve">
     <value>0.0</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="SolutionExplorerToolWindowTitle" xml:space="preserve">
+    <value>Solution Explorer</value>
   </data>
 </root>

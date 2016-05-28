@@ -84,6 +84,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Directory.
+        '''</summary>
+        Friend Shared ReadOnly Property Directory() As String
+            Get
+                Return ResourceManager.GetString("Directory", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to StepCount cannot be 0..
         '''</summary>
         Friend Shared ReadOnly Property ErrorAsyncForInfiniteLoop() As String
@@ -174,6 +183,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to File.
+        '''</summary>
+        Friend Shared ReadOnly Property File() As String
+            Get
+                Return ResourceManager.GetString("File", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to You!.
         '''</summary>
         Friend Shared ReadOnly Property PluginDevExtAuthor() As String
@@ -206,6 +224,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property PluginDevExtVersion() As String
             Get
                 Return ResourceManager.GetString("PluginDevExtVersion", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Project.
+        '''</summary>
+        Friend Shared ReadOnly Property Project() As String
+            Get
+                Return ResourceManager.GetString("Project", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Solution Explorer.
+        '''</summary>
+        Friend Shared ReadOnly Property SolutionExplorerToolWindowTitle() As String
+            Get
+                Return ResourceManager.GetString("SolutionExplorerToolWindowTitle", resourceCulture)
             End Get
         End Property
     End Class

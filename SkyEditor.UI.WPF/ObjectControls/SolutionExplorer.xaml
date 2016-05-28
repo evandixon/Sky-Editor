@@ -1,0 +1,38 @@
+﻿<local:DataBoundObjectControl x:Class="ObjectControls.SolutionExplorer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:coreUI="clr-namespace:SkyEditor.Core.UI;assembly=SkyEditor.Core"
+             xmlns:coreIO="clr-namespace:SkyEditor.Core.IO;assembly=SkyEditor.Core"
+             xmlns:local="clr-namespace:SkyEditor.UI.WPF"
+             mc:Ignorable="d"
+             TargetType="{x:Type coreUI:SolutionExplorerViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <TreeView ItemsSource="{Binding Solutions}">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type coreIO:Solution}" ItemsSource="{Binding Root.Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="[Solution] "/>
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>                    
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type coreIO:SolutionNode}" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Prefix}"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type coreIO:ProjectNode}" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Prefix}"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+</local:DataBoundObjectControl>

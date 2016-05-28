@@ -13,7 +13,7 @@ Namespace AvalonHelpers
         Public Overrides Function SelectTemplate(item As Object, container As DependencyObject) As DataTemplate
             If TypeOf item Is AvalonDockFileWrapper Then
                 Return DocumentTemplate
-            ElseIf TypeOf item Is ITargetedControl Then
+            ElseIf TypeOf item Is AnchorableViewModel Then
                 Return AnchorableTemplate
             Else
                 Return MyBase.SelectTemplate(item, container)

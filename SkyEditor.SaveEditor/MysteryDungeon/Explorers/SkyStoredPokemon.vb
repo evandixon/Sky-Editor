@@ -2,6 +2,7 @@
 
 Namespace MysteryDungeon.Explorers
     Public Class SkyStoredPokemon
+        Implements IExplorersStoredPokemon
         Implements IOpenableFile
         Implements ISavableAs
         Implements IOnDisk
@@ -88,10 +89,10 @@ Namespace MysteryDungeon.Explorers
 
                 .Range(125, 73) = Unk2
 
-                .Range(198, SkyAttack.Length) = Attack1.GetAttackBits
-                .Range(219, SkyAttack.Length) = Attack1.GetAttackBits
-                .Range(240, SkyAttack.Length) = Attack1.GetAttackBits
-                .Range(261, SkyAttack.Length) = Attack1.GetAttackBits
+                .Range(198, SkyAttack.Length) = _attack1.GetAttackBits
+                .Range(219, SkyAttack.Length) = _attack2.GetAttackBits
+                .Range(240, SkyAttack.Length) = _attack3.GetAttackBits
+                .Range(261, SkyAttack.Length) = _attack4.GetAttackBits
                 .StringPMD(0, 282, 10) = Name
             End With
             Return out
@@ -160,7 +161,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _isValid As Boolean
 
-        Public Property Level As Byte
+        Public Property Level As Byte Implements IExplorersStoredPokemon.Level
             Get
                 Return _level
             End Get
@@ -173,7 +174,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _level As Byte
 
-        Public Property ID As Integer
+        Public Property ID As Integer Implements IExplorersStoredPokemon.ID
             Get
                 Return _id
             End Get
@@ -186,7 +187,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _id As Integer
 
-        Public Property IsFemale As Boolean
+        Public Property IsFemale As Boolean Implements IExplorersStoredPokemon.IsFemale
             Get
                 Return _isFemale
             End Get
@@ -199,7 +200,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _isFemale As Boolean
 
-        Public Property MetAt As Integer
+        Public Property MetAt As Integer Implements IExplorersStoredPokemon.MetAt
             Get
                 Return _metAt
             End Get
@@ -212,7 +213,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _metAt As Integer
 
-        Public Property MetFloor As Integer
+        Public Property MetFloor As Integer Implements IExplorersStoredPokemon.MetFloor
             Get
                 Return _metFloor
             End Get
@@ -224,7 +225,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _metFloor As Integer
 
-        Public Property IQ As Integer
+        Public Property IQ As Integer Implements IExplorersStoredPokemon.IQ
             Get
                 Return _iq
             End Get
@@ -237,7 +238,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _iq As Integer
 
-        Public Property HP As Integer
+        Public Property HP As Integer Implements IExplorersStoredPokemon.HP
             Get
                 Return _hp
             End Get
@@ -250,7 +251,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _hp As Integer
 
-        Public Property Attack As Byte
+        Public Property Attack As Byte Implements IExplorersStoredPokemon.Attack
             Get
                 Return _attack
             End Get
@@ -263,7 +264,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _attack As Byte
 
-        Public Property Defense As Byte
+        Public Property Defense As Byte Implements IExplorersStoredPokemon.Defense
             Get
                 Return _defense
             End Get
@@ -276,7 +277,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _defense As Byte
 
-        Public Property SpAttack As Byte
+        Public Property SpAttack As Byte Implements IExplorersStoredPokemon.SpAttack
             Get
                 Return _spAttack
             End Get
@@ -289,7 +290,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _spAttack As Byte
 
-        Public Property SpDefense As Byte
+        Public Property SpDefense As Byte Implements IExplorersStoredPokemon.SpDefense
             Get
                 Return _spDefense
             End Get
@@ -302,7 +303,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _spDefense As Byte
 
-        Public Property Exp As Integer
+        Public Property Exp As Integer Implements IExplorersStoredPokemon.Exp
             Get
                 Return _exp
             End Get
@@ -315,11 +316,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _exp As Integer
 
-        Public Property Attack1 As SkyAttack
+        Public Property Attack1 As IExplorersAttack Implements IExplorersStoredPokemon.Attack1
             Get
                 Return _attack1
             End Get
-            Set(value As SkyAttack)
+            Set(value As IExplorersAttack)
                 If _attack1 IsNot value Then
                     _attack1 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack1)))
@@ -328,11 +329,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack1 As SkyAttack
 
-        Public Property Attack2 As SkyAttack
+        Public Property Attack2 As IExplorersAttack Implements IExplorersStoredPokemon.Attack2
             Get
                 Return _attack2
             End Get
-            Set(value As SkyAttack)
+            Set(value As IExplorersAttack)
                 If _attack2 IsNot value Then
                     _attack2 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack2)))
@@ -341,11 +342,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack2 As SkyAttack
 
-        Public Property Attack3 As SkyAttack
+        Public Property Attack3 As IExplorersAttack Implements IExplorersStoredPokemon.Attack3
             Get
                 Return _attack3
             End Get
-            Set(value As SkyAttack)
+            Set(value As IExplorersAttack)
                 If _attack3 IsNot value Then
                     _attack3 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack3)))
@@ -354,11 +355,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack3 As SkyAttack
 
-        Public Property Attack4 As SkyAttack
+        Public Property Attack4 As IExplorersAttack Implements IExplorersStoredPokemon.Attack4
             Get
                 Return _attack4
             End Get
-            Set(value As SkyAttack)
+            Set(value As IExplorersAttack)
                 If _attack4 IsNot value Then
                     _attack4 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack4)))
@@ -367,7 +368,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack4 As SkyAttack
 
-        Public Property Name As String
+        Public Property Name As String Implements IExplorersStoredPokemon.Name
             Get
                 Return _name
             End Get
@@ -379,6 +380,18 @@ Namespace MysteryDungeon.Explorers
             End Set
         End Property
         Dim _name As String
+
+        Private ReadOnly Property PokemonNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.PokemonNames
+            Get
+                Return Lists.SkyPokemon
+            End Get
+        End Property
+
+        Private ReadOnly Property LocationNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.LocationNames
+            Get
+                Return Lists.GetSkyLocations
+            End Get
+        End Property
 
 #End Region
     End Class

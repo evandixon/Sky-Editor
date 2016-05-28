@@ -163,6 +163,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="MysteryDungeon\Explorers\ExplorersStoredPokemonGeneralTab.xaml.vb">
+      <DependentUpon>ExplorersStoredPokemonGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDungeon\Explorers\ExplorersStoredPokemonMovesTab.xaml.vb">
+      <DependentUpon>ExplorersStoredPokemonMovesTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDungeon\Explorers\IExplorersAttackEditView.xaml.vb">
+      <DependentUpon>IExplorersAttackEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyHeldItemEditView.xaml.vb">
       <DependentUpon>SkyHeldItemEditView.xaml</DependentUpon>
     </Compile>
@@ -267,6 +276,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ItemSlotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\ExplorersStoredPokemonGeneralTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\ExplorersStoredPokemonMovesTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\IExplorersAttackEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

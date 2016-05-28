@@ -30,7 +30,7 @@
                 </Style>
             </Menu.ItemContainerStyle>
         </Menu>
-        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" AnchorablesSource="{Binding ToolWindows}" ActiveContent="{Binding ActiveContent, Mode=TwoWay}">
+        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" AnchorablesSource="{Binding AnchorableViewModels}" ActiveContent="{Binding ActiveContent, Mode=TwoWay}">
             <ad:DockingManager.LayoutItemTemplateSelector>
                 <avalonHelpers:PanesTemplateSelector>
                     <avalonHelpers:PanesTemplateSelector.DocumentTemplate>
@@ -40,7 +40,7 @@
                     </avalonHelpers:PanesTemplateSelector.DocumentTemplate>
                     <avalonHelpers:PanesTemplateSelector.AnchorableTemplate>
                         <DataTemplate>
-                            <Label Content="Tool Window Placeholder" />
+                            <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding ., UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>
                         </DataTemplate>
                     </avalonHelpers:PanesTemplateSelector.AnchorableTemplate>
                 </avalonHelpers:PanesTemplateSelector>
@@ -61,9 +61,9 @@
                 </avalonHelpers:PanesStyleSelector>
             </ad:DockingManager.LayoutItemContainerStyleSelector>
             <ad:LayoutRoot>
-                <ad:LayoutPanel Orientation="Vertical">
+                <ad:LayoutPanel Orientation="Horizontal">
                     <ad:LayoutDocumentPane/>
-                    <ad:LayoutAnchorablePane Name="ToolsPane" DockHeight="150">
+                    <ad:LayoutAnchorablePane Name="ToolsPane" DockWidth="200">
                     </ad:LayoutAnchorablePane>
                 </ad:LayoutPanel>
             </ad:LayoutRoot>

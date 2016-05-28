@@ -128,8 +128,10 @@
     <Compile Include="IO\ProjectDirectoryCreatedEventArgs.vb" />
     <Compile Include="IO\ProjectFileAddedEventArgs.vb" />
     <Compile Include="IO\ProjectFileRemovedEventArgs.vb" />
+    <Compile Include="IO\ProjectNode.vb" />
     <Compile Include="IO\ProjectRemovedEventArgs.vb" />
     <Compile Include="IO\ProjectRemovingEventArgs.vb" />
+    <Compile Include="IO\SolutionNode.vb" />
     <Compile Include="ISettingsProvider.vb" />
     <Compile Include="SettingsProvider.vb" />
     <Compile Include="Settings\ISettingsProviderExtensions.vb" />
@@ -140,6 +142,7 @@
     </Compile>
     <Compile Include="IO\Solution.vb" />
     <Compile Include="UI\ActionMenuItem.vb" />
+    <Compile Include="UI\AnchorableViewModel.vb" />
     <Compile Include="UI\AvalonDockFileWrapper.vb" />
     <Compile Include="UI\HeaderUpdatedEventArgs.vb" />
     <Compile Include="Legacy EventArguments\LoadingStatusChangedEventArgs.vb" />
@@ -153,6 +156,7 @@
     <Compile Include="Legacy Interfaces\iGenericFile.vb" />
     <Compile Include="IO\INotifyModified.vb" />
     <Compile Include="Legacy Interfaces\iNamed.vb" />
+    <Compile Include="UI\IHiearchyItem.vb" />
     <Compile Include="UI\IObjectControl.vb" />
     <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
     <Compile Include="IO\IOnDisk.vb" />
@@ -172,6 +176,7 @@
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
     <Compile Include="UI\RelayCommand.vb" />
+    <Compile Include="UI\SolutionExplorerViewModel.vb" />
     <Compile Include="UI\UIHelper.vb" />
     <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />

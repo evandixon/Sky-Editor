@@ -10,6 +10,7 @@ Namespace IO
 
         Public Sub New()
             RootNode = New ProjectNode(Me)
+            Settings = New SettingsProvider
         End Sub
 
 
@@ -25,6 +26,7 @@ Namespace IO
         End Class
 
         Private Class ProjectFile
+            Public Const CurrentVersion As String = "v2"
             Public Property FileFormat As String
             Public Property AssemblyQualifiedTypeName As String
             Public Property Name As String
@@ -36,7 +38,6 @@ Namespace IO
             Public Property InternalSettings As String
             Public Sub New()
                 Files = New Dictionary(Of String, FileValue)
-                FileFormat = "v2"
             End Sub
         End Class
 
@@ -55,136 +56,6 @@ Namespace IO
             End Sub
         End Class
 
-        Public Class ProjectNode
-            Implements IDisposable
-            Implements IComparable(Of ProjectNode)
-
-            ''' <summary>
-            ''' Project to which this ProjectItem belongs.
-            ''' </summary>
-            ''' <returns></returns>
-            Private Property ParentProject As Project
-
-            ''' <summary>
-            ''' Cached instance of the file.  Null if the file has not been opened or if this is a directory.
-            ''' </summary>
-            ''' <returns></returns>
-            Private Property File As Object
-
-            ''' <summary>
-            ''' Whether or not this node is a directory.  If False, it's a file.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property IsDirectory As Boolean
-
-            ''' <summary>
-            ''' Name of the file or directory.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property Name As String
-
-            ''' <summary>
-            ''' Path of the file, relative to the project directory.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property Filename As String
-
-            ''' <summary>
-            ''' The child nodes of this node.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property Children As ObservableCollection(Of ProjectNode)
-
-            ''' <summary>
-            ''' Assembly qualified name of the type of the file, if this is node is a file.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property AssemblyQualifiedTypeName As String
-
-            ''' <summary>
-            ''' Gets the file at this node, opening it if it hasn't already been.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Async Function GetFile(manager As PluginManager) As Task(Of Object)
-
-                If File Is Nothing Then
-                    Dim f = GetFilename()
-                    If String.IsNullOrEmpty(AssemblyQualifiedTypeName) Then
-                        Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, manager)
-                    Else
-                        Dim t = ReflectionHelpers.GetTypeByName(AssemblyQualifiedTypeName, manager)
-                        If t Is Nothing Then
-                            Return Await IOHelper.OpenObject(f, AddressOf IOHelper.PickFirstDuplicateMatchSelector, manager)
-                        Else
-                            Return IOHelper.OpenFile(f, t, manager)
-                        End If
-                    End If
-                Else
-                    Return File
-                End If
-
-            End Function
-
-            Public Function GetFilename() As String
-                Return Path.Combine(Path.GetDirectoryName(ParentProject.Filename), Filename?.TrimStart("\"))
-            End Function
-
-            Public Function CompareTo(other As ProjectNode) As Integer Implements IComparable(Of ProjectNode).CompareTo
-                Return Me.Name.CompareTo(other.Name)
-            End Function
-
-            Public Sub New(Project As Project)
-                Children = New ObservableCollection(Of ProjectNode)
-                ParentProject = Project
-                IsDirectory = True
-            End Sub
-
-            Public Sub New(Project As Project, File As Object)
-                Me.New(Project)
-                Me.File = File
-                IsDirectory = False
-                AssemblyQualifiedTypeName = File.GetType.AssemblyQualifiedName
-            End Sub
-
-#Region "IDisposable Support"
-            Private disposedValue As Boolean ' To detect redundant calls
-
-            ' IDisposable
-            Protected Overridable Sub Dispose(disposing As Boolean)
-                If Not disposedValue Then
-                    If disposing Then
-                        ' TODO: dispose managed state (managed objects).
-                        For Each item In Children
-                            item.Dispose()
-                        Next
-                        If _File IsNot Nothing AndAlso TypeOf _File Is IDisposable Then
-                            DirectCast(_File, IDisposable).Dispose()
-                        End If
-                    End If
-
-                    ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                    ' TODO: set large fields to null.
-                End If
-                disposedValue = True
-            End Sub
-
-            ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-            'Protected Overrides Sub Finalize()
-            '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-            '    Dispose(False)
-            '    MyBase.Finalize()
-            'End Sub
-
-            ' This code added by Visual Basic to correctly implement the disposable pattern.
-            Public Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-                Dispose(True)
-                ' TODO: uncomment the following line if Finalize() is overridden above.
-                ' GC.SuppressFinalize(Me)
-            End Sub
-#End Region
-
-        End Class
 #End Region
 
 #Region "Events"
@@ -392,7 +263,7 @@ Namespace IO
                 CreateDirectory(parentPathString, pathParts.Last)
                 item = GetProjectItemByPath(Path)
             End If
-            Dim q = (From c In item.Children Where c.Name.ToLower = DirectoryName.ToLower AndAlso c.IsDirectory = True).FirstOrDefault
+            Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = DirectoryName.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = True).FirstOrDefault
             If q Is Nothing Then
                 item.Children.Add(New ProjectNode(Me) With {.IsDirectory = True, .Name = DirectoryName})
                 RaiseEvent DirectoryCreated(Me, New DirectoryCreatedEventArgs With {.DirectoryName = DirectoryName, .ParentPath = Path, .FullPath = Path & "/" & DirectoryName})
@@ -440,7 +311,7 @@ Namespace IO
             Next
             Dim parentPathString = parentPath.ToString.TrimEnd("/")
             Dim parent = GetProjectItemByPath(parentPathString)
-            Dim child = (From c In parent.Children Where c.Name.ToLower = pathParts.Last.ToLower AndAlso c.IsDirectory = True).FirstOrDefault
+            Dim child = (From c In parent.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = pathParts.Last.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = True Select DirectCast(c, ProjectNode)).FirstOrDefault
             If child IsNot Nothing Then
                 parent.Children.Remove(child)
                 child.Dispose()
@@ -468,7 +339,7 @@ Namespace IO
             Dim item = GetProjectItemByPath(ParentPath)
             If item IsNot Nothing Then
                 FileName = FileName.Replace("\", "/").TrimStart("/")
-                Dim q = (From c In item.Children Where c.Name.ToLower = FileName.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+                Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = FileName.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     Dim fileObj As ICreatableFile = ReflectionHelpers.CreateInstance(FileType.GetTypeInfo)
                     fileObj.CreateFile(FileName)
@@ -512,7 +383,7 @@ Namespace IO
             Dim filename = Path.GetFileName(FilePath)
             If item IsNot Nothing Then
                 filename = filename.Replace("\", "/").TrimStart("/")
-                Dim q = (From c In item.Children Where c.Name.ToLower = filename.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+                Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = filename.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     Dim projItem As New ProjectNode(Me)
                     projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
@@ -552,7 +423,7 @@ Namespace IO
             Next
             Dim parentPathString = parentPath.ToString.TrimEnd("/")
             Dim parent = GetProjectItemByPath(parentPathString)
-            Dim child = (From c In parent.Children Where c.Name.ToLower = pathParts.Last.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+            Dim child = (From c In parent.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = pathParts.Last.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = False Select DirectCast(c, ProjectNode)).FirstOrDefault
             If child IsNot Nothing Then
                 parent.Children.Remove(child)
                 child.Dispose()
@@ -659,6 +530,7 @@ Namespace IO
             output.CurrentPluginManager = manager
 
             Dim projFile As New ProjectFile With {.Name = ProjectName, .AssemblyQualifiedTypeName = ProjectType.AssemblyQualifiedName}
+            projFile.FileFormat = ProjectFile.CurrentVersion
             output.LoadProjectFile(projFile, manager)
 
             Return output
@@ -771,6 +643,7 @@ Namespace IO
 #Region "Save"
         Public Sub Save(provider As IOProvider) Implements ISavable.Save
             Dim file As New ProjectFile
+            file.FileFormat = ProjectFile.CurrentVersion
             file.AssemblyQualifiedTypeName = Me.GetType.AssemblyQualifiedName
             file.Name = Me.Name
             file.InternalSettings = Me.Settings.Serialize

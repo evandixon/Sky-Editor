@@ -3,7 +3,18 @@
     Private Shared Property SkyLocations As Dictionary(Of Integer, String)
     Private Shared Property TDLocations As Dictionary(Of Integer, String)
     Private Shared Property RBLocations As Dictionary(Of Integer, String)
-    Private Shared Property SkyMoves As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property SkyMoves As Dictionary(Of Integer, String)
+        Get
+            If _skyMoves Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.SkyMoves)
+                _skyMoves = i.Entries
+            End If
+            Return _skyMoves
+        End Get
+    End Property
+    Private Shared _skyMoves As Dictionary(Of Integer, String)
+
     Private Shared Property TDMoves As Dictionary(Of Integer, String)
     Private Shared Property RBMoves As Dictionary(Of Integer, String)
 
@@ -77,12 +88,7 @@
         Return RBLocations
     End Function
 
-    Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
-        If SkyMoves Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.SkyMoves)
-            SkyMoves = i.Entries
-        End If
+    <Obsolete("Use property SkyMoves instead")> Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
         Return SkyMoves
     End Function
 

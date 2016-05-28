@@ -148,7 +148,7 @@ Namespace UI
             ITargetedControl_IsVisible = (supported > 0)
         End Sub
 
-        Private Function GetNode(Solution As Solution, Item As Solution.SolutionNode, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As Solution, Item As SolutionNode, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name
@@ -191,7 +191,7 @@ Namespace UI
             Return n
         End Function
 
-        Private Function GetNode(Solution As Solution, Project As Project, Item As Project.ProjectNode, Path As String) As TreeViewItem
+        Private Function GetNode(Solution As Solution, Project As Project, Item As ProjectNode, Path As String) As TreeViewItem
             Dim n As New TreeViewItem
             If Item.IsDirectory Then
                 n.Header = "[Dir] " & Item.Name

@@ -94,27 +94,23 @@ Public Class IOUIManager
     End Property
     Private WithEvents _openFiles As ObservableCollection(Of AvalonDockFileWrapper)
 
-    Public Property ToolWindows As ObservableCollection(Of ITargetedControl)
+    Public Property AnchorableViewModels As ObservableCollection(Of AnchorableViewModel)
         Get
-            If _toolWindows Is Nothing Then
-                _toolWindows = New ObservableCollection(Of ITargetedControl)
-
-                'For Each item In CurrentPluginManager.GetRegisteredObjects(Of ITargetedControl)
-                '    For Each supported In SupportedToolWindowTypes
-                '        If ReflectionHelpers.IsOfType(item, supported.GetTypeInfo) Then
-                '            item.SetPluginManager(CurrentPluginManager)
-                '            _toolWindows.Add(item)
-                '        End If
-                '    Next
-                'Next
+            If _anchorableViewModels Is Nothing Then
+                _anchorableViewModels = New ObservableCollection(Of AnchorableViewModel)
+                For Each item In CurrentPluginManager.GetRegisteredObjects(Of AnchorableViewModel)
+                    Dim i As AnchorableViewModel = ReflectionHelpers.CreateNewInstance(item)
+                    i.CurrentIOUIManager = Me
+                    _anchorableViewModels.Add(i)
+                Next
             End If
-            Return _toolWindows
+            Return _anchorableViewModels
         End Get
-        Set(value As ObservableCollection(Of ITargetedControl))
-            _toolWindows = value
+        Set(value As ObservableCollection(Of AnchorableViewModel))
+            _anchorableViewModels = value
         End Set
     End Property
-    Dim _toolWindows As ObservableCollection(Of ITargetedControl)
+    Dim _anchorableViewModels As ObservableCollection(Of AnchorableViewModel)
 
     Public Property SupportedToolWindowTypes As IEnumerable(Of Type)
     Public Property WrapperFileType As Type

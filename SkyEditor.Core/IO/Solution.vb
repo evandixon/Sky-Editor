@@ -40,98 +40,6 @@ Namespace IO
             End Sub
         End Class
 
-        ''' <summary>
-        ''' Models a node in the solution's logical heiarchy.
-        ''' </summary>
-        Public Class SolutionNode
-            Implements IDisposable
-            Implements IComparable(Of SolutionNode)
-
-            Public ReadOnly Property IsDirectory As Boolean
-                Get
-                    Return (Project Is Nothing)
-                End Get
-            End Property
-
-            Public Property Name As String
-                Get
-                    If IsDirectory Then
-                        Return _name
-                    Else
-                        Return Project.Name
-                    End If
-                End Get
-                Set(value As String)
-                    If IsDirectory Then
-                        _name = value
-                    Else
-                        Project.Name = value
-                    End If
-                End Set
-            End Property
-            Dim _name As String
-
-            ''' <summary>
-            ''' The node's contained project, if the node is not a solution directory.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property Project As Project
-
-            ''' <summary>
-            ''' The solution-level children.
-            ''' </summary>
-            ''' <returns></returns>
-            Public Property Children As ObservableCollection(Of SolutionNode)
-
-            Public Sub New()
-                _name = ""
-                Children = New ObservableCollection(Of SolutionNode)
-            End Sub
-
-            Public Function CompareTo(other As SolutionNode) As Integer Implements IComparable(Of SolutionNode).CompareTo
-                Return Me.Name.CompareTo(other.Name)
-            End Function
-
-#Region "IDisposable Support"
-            Private disposedValue As Boolean ' To detect redundant calls
-
-            ' IDisposable
-            Protected Overridable Sub Dispose(disposing As Boolean)
-                If Not disposedValue Then
-                    If disposing Then
-                        ' TODO: dispose managed state (managed objects).
-                        For Each item In Children
-                            item.Dispose()
-                        Next
-                        If Project IsNot Nothing Then
-                            Project.Dispose()
-                        End If
-                    End If
-
-                    ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                    ' TODO: set large fields to null.
-                End If
-                disposedValue = True
-            End Sub
-
-            ' TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-            'Protected Overrides Sub Finalize()
-            '    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-            '    Dispose(False)
-            '    MyBase.Finalize()
-            'End Sub
-
-            ' This code added by Visual Basic to correctly implement the disposable pattern.
-            Public Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-                Dispose(True)
-                ' TODO: uncomment the following line if Finalize() is overridden above.
-                ' GC.SuppressFinalize(Me)
-            End Sub
-#End Region
-
-        End Class
-
         Public Class ProjectAlreadyExistsException
             Inherits Exception
             Public Sub New()
@@ -377,7 +285,7 @@ Namespace IO
         Public Overridable Sub CreateDirectory(Path As String, DirectoryName As String)
             Dim item = GetSolutionItemByPath(Path)
             If item IsNot Nothing Then
-                Dim q = (From c In item.Children Where c.Name.ToLower = DirectoryName.ToLower AndAlso c.IsDirectory = True).FirstOrDefault
+                Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = DirectoryName.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = True).FirstOrDefault
                 If q Is Nothing Then
                     item.Children.Add(New SolutionNode With {.Name = DirectoryName})
                     RaiseEvent DirectoryCreated(Me, New DirectoryCreatedEventArgs With {.DirectoryName = DirectoryName, .ParentPath = Path, .FullPath = Path & "/" & DirectoryName})
@@ -404,7 +312,7 @@ Namespace IO
             Next
             Dim parentPathString = parentPath.ToString.TrimEnd("/")
             Dim parent = GetSolutionItemByPath(parentPathString)
-            Dim child = (From c In parent.Children Where c.Name.ToLower = pathParts.Last.ToLower AndAlso c.IsDirectory = True).FirstOrDefault
+            Dim child = (From c In parent.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = pathParts.Last.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = True Select DirectCast(c, SolutionNode)).FirstOrDefault
             If child IsNot Nothing Then
                 parent.Children.Remove(child)
                 child.Dispose()
@@ -415,7 +323,7 @@ Namespace IO
         Public Overridable Sub CreateProject(ParentPath As String, ProjectName As String, ProjectType As Type, manager As PluginManager)
             Dim item = GetSolutionItemByPath(ParentPath)
             If item IsNot Nothing Then
-                Dim q = (From c In item.Children Where c.Name.ToLower = ProjectName.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+                Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = ProjectName.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     Dim p = Project.CreateProject(Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType, manager)
                     item.Children.Add(New SolutionNode With {.Name = ProjectName, .Project = p})
@@ -435,7 +343,7 @@ Namespace IO
             Dim item = GetSolutionItemByPath(ParentPath)
             If item IsNot Nothing Then
                 Dim p = Project.OpenProjectFile(ProjectFilename, manager)
-                Dim q = (From c In item.Children Where c.Name.ToLower = p.Name.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+                Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = p.Name.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     'Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
                     item.Children.Add(New SolutionNode With {.Name = p.Name, .Project = p})
@@ -460,7 +368,7 @@ Namespace IO
             Next
             Dim parentPathString = parentPath.ToString.TrimEnd("/")
             Dim parent = GetSolutionItemByPath(parentPathString)
-            Dim child = (From c In parent.Children Where c.Name.ToLower = pathParts.Last.ToLower AndAlso c.IsDirectory = False).FirstOrDefault
+            Dim child = (From c In parent.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = pathParts.Last.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False Select DirectCast(c, SolutionNode)).FirstOrDefault
             If child IsNot Nothing Then
                 RaiseEvent ProjectRemoving(Me, New ProjectRemovingEventArgs With {.Project = child.Project})
                 RemoveHandler child.Project.Modified, AddressOf Project_Modified

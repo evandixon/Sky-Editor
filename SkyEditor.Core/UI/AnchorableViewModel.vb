@@ -1,0 +1,21 @@
+﻿Namespace UI
+    Public MustInherit Class AnchorableViewModel
+        Protected Event CurrentSolutionChanged(sender As Object, e As EventArgs)
+        Public Property CurrentIOUIManager As IOUIManager
+            Get
+                Return _iouiManager
+            End Get
+            Set(value As IOUIManager)
+                _iouiManager = value
+            End Set
+        End Property
+        Protected WithEvents _iouiManager As IOUIManager
+
+        Public Property Header As String
+
+        Private Sub _iouiManager_SolutionChanged(sender As Object, e As EventArgs) Handles _iouiManager.SolutionChanged
+            RaiseEvent CurrentSolutionChanged(sender, e)
+        End Sub
+    End Class
+End Namespace
+
