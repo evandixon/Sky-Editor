@@ -3,7 +3,7 @@ Imports SkyEditor.Core.IO
 
 Namespace UI
     Public Class ProjectReferences
-        Inherits ObjectControl
+        Inherits SkyEditor.UI.WPF.ObjectControl
 
         Public Overrides Sub RefreshDisplay()
             MyBase.RefreshDisplay()

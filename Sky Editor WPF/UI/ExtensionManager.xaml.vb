@@ -5,7 +5,7 @@ Imports SkyEditor.Core.Windows
 
 Namespace UI
     Public Class ExtensionManager
-        Inherits ObjectControl
+        Inherits SkyEditor.UI.WPF.ObjectControl
 
         Private Function GetTVItem(Collection As IExtensionCollection)
             Dim item As New TreeViewItem

@@ -11,8 +11,8 @@ Public Class ObjectControlPlaceholder
     Inherits UserControl
     Implements IDisposable
 
-    Public Shared ReadOnly CurrentPluginManagerProperty As DependencyProperty = DependencyProperty.Register("CurrentPluginManager", GetType(PluginManager), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnCurrentPluginManagerChanged))
-    Public Shared ReadOnly ObjectToEditProperty As DependencyProperty = DependencyProperty.Register("ObjectToEdit", GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnObjectToEditChanged))
+    Public Shared ReadOnly CurrentPluginManagerProperty As DependencyProperty = DependencyProperty.Register(NameOf(CurrentPluginManager), GetType(PluginManager), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnCurrentPluginManagerChanged))
+    Public Shared ReadOnly ObjectToEditProperty As DependencyProperty = DependencyProperty.Register(NameOf(ObjectToEdit), GetType(Object), GetType(ObjectControlPlaceholder), New FrameworkPropertyMetadata(AddressOf OnObjectToEditChanged))
     Private Shared Sub OnCurrentPluginManagerChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         DirectCast(d, ObjectControlPlaceholder).CurrentPluginManager = e.NewValue
     End Sub

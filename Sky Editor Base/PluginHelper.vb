@@ -155,13 +155,6 @@ Public Class PluginHelper
 #End Region
 
     ''' <summary>
-    ''' Shows the application's underlying console to the user.
-    ''' </summary>
-    Public Shared Sub ShowConsole()
-        Internal.ConsoleManager.Show()
-    End Sub
-
-    ''' <summary>
     ''' Casts the given object to type T, or returns its contained item if it implements the interface iContainer(Of T).
     ''' </summary>
     ''' <typeparam name="T">Type to cast to.</typeparam>

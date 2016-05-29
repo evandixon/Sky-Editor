@@ -5,7 +5,7 @@ Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class HeldItemsTab
-        Inherits ObjectControl
+        Inherits SkyEditorWPF.UI.ObjectControl
         Dim slots As ItemSlotOld()
         Dim storage As iItemStorage
 

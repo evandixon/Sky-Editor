@@ -9,6 +9,15 @@ Namespace IO
         Implements IHiearchyItem
         Implements IComparable(Of SolutionNode)
 
+        Public Sub New(parentSolution As Solution, parentNode As SolutionNode)
+            _name = ""
+            _children = New ObservableCollection(Of IHiearchyItem)
+            Me.ParentSolution = parentSolution
+        End Sub
+
+        Public ReadOnly Property ParentSolution As Solution
+        Public ReadOnly Property ParentNode As SolutionNode
+
         Public ReadOnly Property IsDirectory As Boolean
             Get
                 Return (Project Is Nothing)
@@ -65,17 +74,35 @@ Namespace IO
                 _children = value
             End Set
         End Property
-
         Dim _children As ObservableCollection(Of IHiearchyItem)
-
-        Public Sub New()
-            _name = ""
-            _children = New ObservableCollection(Of IHiearchyItem)
-        End Sub
 
         Public Function CompareTo(other As SolutionNode) As Integer Implements IComparable(Of SolutionNode).CompareTo
             Return Me.Name.CompareTo(other.Name)
         End Function
+
+        Public Function GetParentPath() As String
+            If ParentNode Is Nothing Then
+                Return ""
+            Else
+                Return ParentNode.GetParentPath & "/"
+            End If
+        End Function
+
+        Public Function GetCurrentPath() As String
+            Return GetParentPath() & "/" & Name
+        End Function
+
+        Public Function CanCreateChildDirectory() As Boolean
+            Return Me.IsDirectory AndAlso ParentSolution.CanCreateDirectory(GetCurrentPath)
+        End Function
+
+        Public Sub CreateChildDirectory(name As String)
+            If CanCreateChildDirectory() Then
+                Dim node As New SolutionNode(ParentSolution, Me)
+                node.Name = name
+                Children.Add(node)
+            End If
+        End Sub
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls

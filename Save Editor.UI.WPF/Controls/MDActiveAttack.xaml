@@ -1,4 +1,4 @@
-﻿<local:ObjectControl x:Class="Controls.MDActiveAttack"
+﻿<UserControl x:Class="Controls.MDActiveAttack"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,4 +18,4 @@
         <Label x:Name="lblPP" Content="PP" HorizontalAlignment="Left" Margin="177,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
         <Label x:Name="lblGinseng" Content="Ginseng" HorizontalAlignment="Left" Margin="218,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
     </Grid>
-</local:ObjectControl>
+</UserControl>

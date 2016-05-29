@@ -3,6 +3,7 @@ Imports SkyEditor.Core
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
+Imports SkyEditor.UI.WPF
 
 Namespace UI
     Public Class SolutionExplorer
@@ -326,7 +327,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New UI.NewNameWindow(My.Resources.Language.NewFolderQuestion, My.Resources.Language.NewFolder)
+                    Dim w As New NewNameWindow '(My.Resources.Language.NewFolderQuestion, My.Resources.Language.NewFolder)
                     If w.ShowDialog Then
 
                         If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
@@ -358,7 +359,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New UI.NewFileWindow
+                    Dim w As New NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentSolution.GetSupportedProjectTypes(tag.ParentPath, CurrentPluginManager)
                         types.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
@@ -388,7 +389,7 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    Dim w As New UI.NewFileWindow
+                    Dim w As New NewFileWindow
                     Dim types As New Dictionary(Of String, Type)
                     For Each item In tag.ParentProject.GetSupportedFileTypes(tag.ParentPath, CurrentPluginManager)
                         types.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)

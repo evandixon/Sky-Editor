@@ -14,17 +14,13 @@ Namespace UI
         ''' <param name="pluginManager">Instance of the current plugin manager.</param>
         ''' <param name="isDevMode">Whether or not to get the dev-only menu items.</param>
         ''' <returns></returns>
-        Public Shared Function GetMenuItemInfo(pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
+        Private Shared Function GetMenuItemInfo(requireTarget As Boolean, target As Object, pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
             Dim menuItems As New List(Of MenuItemInfo)
-            For Each ActionType In pluginManager.GetRegisteredTypes(GetType(MenuAction).GetTypeInfo)
-                'While we're registering the type, we need an instance to get extra information, like where to put it
-                Dim ActionInstance As MenuAction = ReflectionHelpers.CreateInstance(ActionType)
-
+            For Each ActionInstance In pluginManager.GetRegisteredObjects(Of MenuAction)
                 'DevOnly menu actions are only supported if we're in dev mode.
-                If isDevMode OrElse Not ActionInstance.DevOnly Then
+                If (Not requireTarget OrElse ActionInstance.SupportsObject(target)) AndAlso (isDevMode OrElse Not ActionInstance.DevOnly) Then
 
                     'Generate the MenuItem
-
                     If ActionInstance.ActionPath.Count >= 1 Then
                         'Create parent menu items
                         Dim parent = From m In menuItems Where m.Header = ActionInstance.ActionPath(0)
@@ -42,7 +38,7 @@ Namespace UI
                             m.ActionTypes = New List(Of TypeInfo)
                             m.SortOrder = ActionInstance.SortOrder
                             If ActionInstance.ActionPath.Count = 1 Then
-                                m.ActionTypes.Add(ActionType)
+                                m.ActionTypes.Add(ActionInstance.GetType.GetTypeInfo)
                             End If
                             menuItems.Add(m)
                             current = m
@@ -79,7 +75,7 @@ Namespace UI
                             If parent.Any Then
                                 Dim m = DirectCast(parent.First, MenuItemInfo)
                                 m.ActionTypes = New List(Of TypeInfo)
-                                m.ActionTypes.Add(ActionType)
+                                m.ActionTypes.Add(ActionInstance.GetType.GetTypeInfo)
                             Else
                                 'Add the menu item, and give it a proper tag
                                 Dim m As New MenuItemInfo
@@ -87,7 +83,7 @@ Namespace UI
                                 m.Header = ActionInstance.ActionPath.Last
                                 m.SortOrder = ActionInstance.SortOrder
                                 m.ActionTypes = New List(Of TypeInfo)
-                                m.ActionTypes.Add(ActionType)
+                                m.ActionTypes.Add(ActionInstance.GetType.GetTypeInfo)
                                 current.Children.Add(m)
                             End If
                         End If
@@ -98,6 +94,14 @@ Namespace UI
                 End If
             Next
             Return menuItems
+        End Function
+
+        Public Shared Function GetMenuItemInfo(pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
+            Return GetMenuItemInfo(False, Nothing, pluginManager, isDevMode)
+        End Function
+
+        Public Shared Function GetContextMenuItemInfo(target As Object, pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
+            Return GetMenuItemInfo(True, target, pluginManager, isDevMode)
         End Function
 
         ''' <summary>

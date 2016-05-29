@@ -7,7 +7,7 @@ Imports SkyEditor.Core.UI
 Imports SkyEditor.UI.WPF
 
 Namespace UI
-    Public Class ObjectWindow
+    <Obsolete("Either obsolete or needs refactoring")> Public Class ObjectWindow
         Implements iObjectWindow
         Dim _objectToEdit As Object
         Dim _manager As PluginManager

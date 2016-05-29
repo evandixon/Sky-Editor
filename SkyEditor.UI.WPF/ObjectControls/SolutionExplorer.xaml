@@ -10,7 +10,7 @@
              TargetType="{x:Type coreUI:SolutionExplorerViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TreeView ItemsSource="{Binding Solutions}">
+        <TreeView x:Name="tvSolutions" ItemsSource="{Binding Solutions}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type coreIO:Solution}" ItemsSource="{Binding Root.Children}">
                     <StackPanel Orientation="Horizontal">
@@ -33,6 +33,9 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
+            <TreeView.ContextMenu>
+                <local:TargetedContextMenu x:Name="menuContext" />
+            </TreeView.ContextMenu>
         </TreeView>
     </Grid>
 </local:DataBoundObjectControl>

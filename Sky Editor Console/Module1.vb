@@ -10,7 +10,6 @@ Module Module1
             Dim manager As New PluginManager
             manager.LoadCore(New ConsoleCoreMod)
 
-            PluginHelper.ShowConsole()
             Console.WriteLine("Sky Editor Console has successfully loaded.")
             ConsoleHelper.RunConsole(manager).Wait()
         Catch ex As Exception

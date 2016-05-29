@@ -6,6 +6,12 @@ Namespace UI
     Public MustInherit Class MenuAction
 
         ''' <summary>
+        ''' Whether or not the menu item appears in context menus.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property IsContextBased As Boolean
+
+        ''' <summary>
         ''' Names representing the action's location in a heiarchy of menu items.
         ''' </summary>
         ''' <returns></returns>

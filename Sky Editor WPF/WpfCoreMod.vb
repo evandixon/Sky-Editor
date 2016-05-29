@@ -15,7 +15,7 @@ Friend Class WpfCoreMod
 
     Public Overrides ReadOnly Property PluginAuthor As String
         Get
-            Return My.Resources.Language.Author
+            Return My.Resources.Language.PluginAuthor
         End Get
     End Property
 

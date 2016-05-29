@@ -1,9 +1,10 @@
-﻿<local:ObjectControl x:Class="UI.ProjectReferences"
+﻿<skyWPF:ObjectControl x:Class="UI.ProjectReferences"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SkyEditorWPF.UI"
+             xmlns:skyWPF="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:res="clr-namespace:SkyEditorWPF.My.Resources"
              mc:Ignorable="d" 
              Header="{x:Static res:Language.References}"
@@ -12,4 +13,4 @@
         <ListBox x:Name="listReferences">
         </ListBox>
     </Grid>
-</local:ObjectControl>
+</skyWPF:ObjectControl>

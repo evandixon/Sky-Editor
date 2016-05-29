@@ -11,14 +11,14 @@
         <TreeView x:Name="tvSolution">
             <TreeView.ContextMenu>
                 <ContextMenu x:Name="menuContext">
-                    <MenuItem x:Name="menuOpen" Header="{x:Static res:Language.MenuFileOpen}" />
-                    <MenuItem x:Name="menuAddFolder" Header="{x:Static res:Language.MenuCreateFolder}" />
-                    <MenuItem x:Name="menuCreateProject" Header="{x:Static res:Language.MenuCreateProject}" />
-                    <MenuItem x:Name="menuCreateFile" Header="{x:Static res:Language.MenuCreateFile}" />
-                    <MenuItem x:Name="menuAddExistingProject" Header="{x:Static res:Language.MenuAddProject}"/>
-                    <MenuItem x:Name="menuAddExistingFile" Header="{x:Static res:Language.MenuAddFile}"/>
-                    <MenuItem x:Name="menuDelete" Header="{x:Static res:Language.MenuDelete}" />
-                    <MenuItem x:Name="menuProperties" Header="{x:Static res:Language.MenuProperties}"/>
+                    <MenuItem x:Name="menuOpen" Header="Open" />
+                    <MenuItem x:Name="menuAddFolder" Header="" />
+                    <MenuItem x:Name="menuCreateProject" Header="" />
+                    <MenuItem x:Name="menuCreateFile" Header="" />
+                    <MenuItem x:Name="menuAddExistingProject" Header=""/>
+                    <MenuItem x:Name="menuAddExistingFile" Header=""/>
+                    <MenuItem x:Name="menuDelete" Header="" />
+                    <MenuItem x:Name="menuProperties" Header=""/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

@@ -52,7 +52,7 @@ Namespace IO
 #End Region
 
         Public Sub New()
-            Root = New SolutionNode
+            Root = New SolutionNode(Me, Nothing)
         End Sub
 
 
@@ -249,7 +249,7 @@ Namespace IO
                     Dim child = (From c In current.Children Where c.Name.ToLower = path(i).ToLower).FirstOrDefault
 
                     If child Is Nothing Then
-                        Dim newNode As New SolutionNode
+                        Dim newNode As New SolutionNode(Me, current)
                         newNode.Name = path(count)
                         current.Children.Add(newNode)
                         current = newNode
@@ -287,7 +287,7 @@ Namespace IO
             If item IsNot Nothing Then
                 Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = DirectoryName.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = True).FirstOrDefault
                 If q Is Nothing Then
-                    item.Children.Add(New SolutionNode With {.Name = DirectoryName})
+                    item.Children.Add(New SolutionNode(Me, item) With {.Name = DirectoryName})
                     RaiseEvent DirectoryCreated(Me, New DirectoryCreatedEventArgs With {.DirectoryName = DirectoryName, .ParentPath = Path, .FullPath = Path & "/" & DirectoryName})
                 Else
                     'There's already a directory here.
@@ -326,7 +326,7 @@ Namespace IO
                 Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = ProjectName.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     Dim p = Project.CreateProject(Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType, manager)
-                    item.Children.Add(New SolutionNode With {.Name = ProjectName, .Project = p})
+                    item.Children.Add(New SolutionNode(Me, item) With {.Name = ProjectName, .Project = p})
                     AddHandler p.Modified, AddressOf Project_Modified
                     RaiseEvent Modified(Me, New EventArgs)
                     RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
@@ -346,7 +346,7 @@ Namespace IO
                 Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = p.Name.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     'Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
-                    item.Children.Add(New SolutionNode With {.Name = p.Name, .Project = p})
+                    item.Children.Add(New SolutionNode(Me, item) With {.Name = p.Name, .Project = p})
                     AddHandler p.Modified, AddressOf Project_Modified
                     RaiseEvent Modified(Me, New EventArgs)
                     RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
@@ -578,7 +578,7 @@ Namespace IO
 
                     If child Is Nothing Then
                         'Create it if it doesn't exist
-                        Dim newNode As New SolutionNode
+                        Dim newNode As New SolutionNode(Me, current)
                         newNode.Name = projectPath(count)
                         current.Children.Add(newNode)
                         current = newNode
@@ -592,7 +592,7 @@ Namespace IO
                 Dim proj = (From c In current.Children Where c.Name.ToLower = projectPath.Last.ToLower).FirstOrDefault
                 If proj Is Nothing Then
                     'If it doesn't exist, create it
-                    Dim newNode As New SolutionNode
+                    Dim newNode As New SolutionNode(Me, current)
                     newNode.Name = projectPath.Last
                     If item.Value IsNot Nothing Then
                         newNode.Project = Project.OpenProjectFile(Path.Combine(Path.GetDirectoryName(Filename), item.Value.Replace("/", "\").TrimStart("\")), manager)

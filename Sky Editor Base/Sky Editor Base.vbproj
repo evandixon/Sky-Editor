@@ -189,7 +189,6 @@
     </Compile>
     <Compile Include="PluginHelper.vb" />
     <Compile Include="Redistribution\RedistributionHelpers.vb" />
-    <Compile Include="Internal\ConsoleManager.vb" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Linq" />

@@ -6,7 +6,7 @@ Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class PKMGeneralTab
-        Inherits ObjectControl
+        Inherits SkyEditorWPF.UI.ObjectControl
         Private WriteOnly Property PokemonDictionary As IDictionary(Of Integer, String)
             Set(value As IDictionary(Of Integer, String))
                 cbPokemon.Items.Clear()

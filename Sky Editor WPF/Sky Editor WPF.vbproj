@@ -119,7 +119,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="LanguageHelper.vb" />
-    <Compile Include="MenuActions\ToolsExtensions.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -127,13 +126,6 @@
     </Compile>
     <Compile Include="ConsoleCommands\DistPrep.vb" />
     <Compile Include="ConsoleCoreMod.vb" />
-    <Compile Include="MenuActions\FileNewSolution.vb" />
-    <Compile Include="MenuActions\FileSaveSolution.vb" />
-    <Compile Include="MenuActions\SolutionBuild.vb" />
-    <Compile Include="MenuActions\DevPlugins.vb" />
-    <Compile Include="UI\ExtensionInfoControl.xaml.vb">
-      <DependentUpon>ExtensionInfoControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\ExtensionManager.xaml.vb">
       <DependentUpon>ExtensionManager.xaml</DependentUpon>
     </Compile>
@@ -144,14 +136,6 @@
     <Compile Include="UI\SettingsEditor.xaml.vb">
       <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuActions\DevConsole.vb" />
-    <Compile Include="MenuActions\FileNewFile.vb" />
-    <Compile Include="MenuActions\FileOpenAuto.vb" />
-    <Compile Include="MenuActions\FileOpenManual.vb" />
-    <Compile Include="MenuActions\FileSave.vb" />
-    <Compile Include="MenuActions\FileSaveAll.vb" />
-    <Compile Include="MenuActions\FileSaveAs.vb" />
-    <Compile Include="MenuActions\ToolsSettings.vb" />
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
     </Compile>
@@ -174,20 +158,8 @@
     <Compile Include="UI\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\GameTypeSelector.xaml.vb">
-      <DependentUpon>GameTypeSelector.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\MainWindow2.xaml.vb">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\NewFileWindow.xaml.vb">
-      <DependentUpon>NewFileWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\NewNameWindow.xaml.vb">
-      <DependentUpon>NewNameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\NewSolutionWindow.xaml.vb">
-      <DependentUpon>NewSolutionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
@@ -272,10 +244,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\ExtensionInfoControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\ExtensionManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,23 +276,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\GameTypeSelector.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\MainWindow2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\NewFileWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\NewNameWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\NewSolutionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

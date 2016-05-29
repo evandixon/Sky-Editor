@@ -47,6 +47,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -95,9 +96,40 @@
     <Compile Include="AvalonHelpers\PanesTemplateSelector.vb" />
     <Compile Include="AvalonHelpers\WPFAvalonDockFileWrapper.vb" />
     <Compile Include="DataBoundObjectControl.vb" />
+    <Compile Include="GameTypeSelector.xaml.vb">
+      <DependentUpon>GameTypeSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenericListItem.vb" />
+    <Compile Include="Internal\ConsoleManager.vb" />
     <Compile Include="MainWindow3.xaml.vb">
       <DependentUpon>MainWindow3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuActions\Context\SolutionProjectAddFolder.vb" />
+    <Compile Include="MenuActions\DevConsole.vb" />
+    <Compile Include="MenuActions\DevPlugins.vb" />
+    <Compile Include="MenuActions\FileNewFile.vb" />
+    <Compile Include="MenuActions\FileNewSolution.vb" />
+    <Compile Include="MenuActions\FileOpenAuto.vb" />
+    <Compile Include="MenuActions\FileOpenManual.vb" />
+    <Compile Include="MenuActions\FileSave.vb" />
+    <Compile Include="MenuActions\FileSaveAll.vb" />
+    <Compile Include="MenuActions\FileSaveAs.vb" />
+    <Compile Include="MenuActions\FileSaveSolution.vb" />
+    <Compile Include="MenuActions\SolutionBuild.vb" />
+    <Compile Include="MenuActions\ToolsExtensions.vb" />
+    <Compile Include="MenuActions\ToolsSettings.vb" />
+    <Compile Include="NewFileWindow.xaml.vb">
+      <DependentUpon>NewFileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewNameWindow.xaml.vb">
+      <DependentUpon>NewNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewSolutionWindow.xaml.vb">
+      <DependentUpon>NewSolutionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControl.vb" />
+    <Compile Include="ObjectControls\ExtensionInfoControl.xaml.vb">
+      <DependentUpon>ExtensionInfoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\GenericIList.xaml.vb">
       <DependentUpon>GenericIList.xaml</DependentUpon>
@@ -130,11 +162,13 @@
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectTab.vb" />
     <Compile Include="SearchableDropDown.vb" />
+    <Compile Include="TargetedContextMenu.vb" />
     <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="WPFCoreSkyEditorPlugin.vb" />
     <Compile Include="WPFUiHelper.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Language.fr.resx" />
     <EmbeddedResource Include="Language.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -170,7 +204,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GameTypeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewFileWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewNameWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewSolutionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ObjectControls\ExtensionInfoControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

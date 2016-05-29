@@ -8,19 +8,19 @@ Imports SkyEditorBase.Redistribution
 
 Public Class StartupHelpers
 
-    ''' <summary>
-    ''' Starts the console core.
-    ''' Will shut down the current application when complete.
-    ''' </summary>
-    Public Shared Async Function StartConsole() As Task
-        Dim manager As New PluginManager
-        Await manager.LoadCore(New ConsoleCoreMod)
+    '''' <summary>
+    '''' Starts the console core.
+    '''' Will shut down the current application when complete.
+    '''' </summary>
+    'Public Shared Async Function StartConsole() As Task
+    '    Dim manager As New PluginManager
+    '    Await manager.LoadCore(New ConsoleCoreMod)
 
-        PluginHelper.ShowConsole()
-        Await ConsoleHelper.RunConsole(manager)
+    '    PluginHelper.ShowConsole()
+    '    Await ConsoleHelper.RunConsole(manager)
 
-        Application.Current.Shutdown()
-    End Function
+    '    Application.Current.Shutdown()
+    'End Function
     Public Shared Async Function RunWPFStartupSequence() As Task
         Await RunWPFStartupSequence(New WpfCoreMod)
     End Function
@@ -37,10 +37,10 @@ Public Class StartupHelpers
                 Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(culture)
             End If
         End If
-        If args.Contains("-console") Then
-            Await StartupHelpers.StartConsole()
-        Else
-            Dim manager As New PluginManager
+        'If args.Contains("-console") Then
+        '    Await StartupHelpers.StartConsole()
+        'Else
+        Dim manager As New PluginManager
             Await manager.LoadCore(CoreMod)
 
             Dim checkForUpdates As Boolean = False 'PluginManager.GetInstance.CurrentSettingsProvider.UpdatePlugins
@@ -83,7 +83,7 @@ Public Class StartupHelpers
             If l IsNot Nothing Then
                 l.Close()
             End If
-        End If
+        'End If
     End Function
 
     Public Shared Sub RunExitSequence()

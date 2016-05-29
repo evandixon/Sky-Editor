@@ -120,14 +120,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\iAttack.xaml.vb">
-      <DependentUpon>iAttack.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\MDActiveAttack.xaml.vb">
       <DependentUpon>MDActiveAttack.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MDAttack.xaml.vb">
-      <DependentUpon>MDAttack.xaml</DependentUpon>
     </Compile>
     <Compile Include="InventoryTab.xaml.vb">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
@@ -251,15 +245,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\iAttack.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\MDActiveAttack.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MDAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
