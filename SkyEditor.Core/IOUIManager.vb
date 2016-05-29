@@ -224,7 +224,7 @@ Public Class IOUIManager
             If _rootMenuItems Is Nothing Then
                 _rootMenuItems = New ObservableCollection(Of ActionMenuItem)
                 'Generate the menu items
-                For Each item In GenerateLogicalMenuItems(UIHelper.GetMenuItemInfo(CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode))
+                For Each item In UIHelper.GenerateLogicalMenuItems(UIHelper.GetMenuItemInfo(CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode), Me, Nothing)
                     _rootMenuItems.Add(item)
                 Next
                 'Update their visibility now that all of them have been created
@@ -312,6 +312,14 @@ Public Class IOUIManager
         End If
         IOFilters = TempIOFilters
     End Sub
+
+    ''' <summary>
+    ''' Gets the filter for a Windows Forms Open or Save File Dialog for use with Sky Editor Projects.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetProjectIOFilter() As String
+        Return $"{My.Resources.Language.SkyEditorProjects} (*.skyproj)|*.skyproj|{My.Resources.Language.AllFiles} (*.*)|*.*"
+    End Function
 #End Region
 
 #Region "Open/Close File"
@@ -495,38 +503,6 @@ Public Class IOUIManager
         'Set this item to visible if there's a visible
         Return isVisible
     End Function
-
-    ''' <summary>
-    ''' Generates MenuItems from the given IEnumerable of MenuItemInfo.
-    ''' </summary>
-    ''' <param name="MenuItemInfo">IEnumerable of MenuItemInfo that will be used to create the MenuItems.</param>
-    ''' <returns></returns>
-    Private Function GenerateLogicalMenuItems(MenuItemInfo As IEnumerable(Of MenuItemInfo)) As List(Of ActionMenuItem)
-        If MenuItemInfo Is Nothing Then
-            Throw New ArgumentNullException(NameOf(MenuItemInfo))
-        End If
-
-        Dim output As New List(Of ActionMenuItem)
-
-        'Create the menu items
-        For Each item In From m In MenuItemInfo Order By m.SortOrder, m.Header
-            Dim m As New ActionMenuItem '= ReflectionHelpers.CreateInstance(RootMenuItemType.GetTypeInfo)
-            m.Header = item.Header
-            m.CurrentIOUIManager = Me
-            For Each action In item.ActionTypes
-                Dim a As MenuAction = ReflectionHelpers.CreateInstance(action)
-                a.CurrentPluginManager = CurrentPluginManager
-                m.Actions.Add(a)
-            Next
-            For Each child In GenerateLogicalMenuItems(item.Children)
-                m.Children.Add(child)
-            Next
-            output.Add(m)
-        Next
-
-        Return output
-    End Function
-
 
 #End Region
 

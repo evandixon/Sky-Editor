@@ -8,27 +8,31 @@ Namespace MenuActions.Context
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each obj In Targets
-                If TypeOf obj Is SolutionNode Then
-                    Dim w As New NewNameWindow(My.Resources.Language.NewFolderQuestion, My.Resources.Language.NewFolder)
-                    If w.ShowDialog Then
+                Dim w As New NewNameWindow(My.Resources.Language.NewFolderQuestion, My.Resources.Language.NewFolder)
+                If w.ShowDialog Then
+                    If TypeOf obj Is Solution Then
+                        DirectCast(obj, Solution).CreateDirectory("", w.SelectedName)
+                    ElseIf TypeOf obj Is SolutionNode Then
                         DirectCast(obj, SolutionNode).CreateChildDirectory(w.SelectedName)
+                    ElseIf TypeOf obj Is ProjectNode Then
+                        DirectCast(obj, ProjectNode).CreateChildDirectory(w.SelectedName)
                     End If
-                ElseIf TypeOf obj Is ProjectNode Then
-                    Throw New NotImplementedException
                 End If
             Next
             Return Task.CompletedTask
         End Function
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
-            Return {GetType(SolutionNode).GetTypeInfo, GetType(ProjectNode).GetTypeInfo}
+            Return {GetType(Solution).GetTypeInfo, GetType(SolutionNode).GetTypeInfo, GetType(ProjectNode).GetTypeInfo}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
-            If TypeOf Obj Is SolutionNode Then
+            If TypeOf Obj Is Solution Then
+                Return DirectCast(Obj, Solution).CanCreateDirectory("")
+            ElseIf TypeOf Obj Is SolutionNode Then
                 Return DirectCast(Obj, SolutionNode).CanCreateChildDirectory
             ElseIf TypeOf Obj Is ProjectNode Then
-                Throw New NotImplementedException
+                Return DirectCast(Obj, ProjectNode).CanCreateChildDirectory
             Else
                 Return False
             End If

@@ -139,9 +139,6 @@
     <Compile Include="UI\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\SolutionExplorer2.xaml.vb">
-      <DependentUpon>SolutionExplorer2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="Application.xaml.vb">
       <DependentUpon>Application.xaml</DependentUpon>
@@ -261,10 +258,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\SolutionExplorer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\SolutionExplorer2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

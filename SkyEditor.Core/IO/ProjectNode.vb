@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports System.Reflection
+Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 
 Namespace IO
@@ -7,11 +8,27 @@ Namespace IO
         Implements IHiearchyItem
         Implements IComparable(Of ProjectNode)
 
+        Public Sub New(Project As Project, parentNode As ProjectNode)
+            Me.Children = New ObservableCollection(Of IHiearchyItem)
+            Me.ParentNode = parentNode
+            Me.ParentProject = Project
+            Me.IsDirectory = True
+        End Sub
+
+        Public Sub New(Project As Project, parentNode As ProjectNode, File As Object)
+            Me.New(Project, parentNode)
+            Me.File = File
+            Me.IsDirectory = False
+            Me.AssemblyQualifiedTypeName = File.GetType.AssemblyQualifiedName
+        End Sub
+
         ''' <summary>
         ''' Project to which this ProjectItem belongs.
         ''' </summary>
         ''' <returns></returns>
-        Private Property ParentProject As Project
+        Public Property ParentProject As Project
+
+        Public Property ParentNode As ProjectNode
 
         ''' <summary>
         ''' Cached instance of the file.  Null if the file has not been opened or if this is a directory.
@@ -91,18 +108,52 @@ Namespace IO
         Public Function CompareTo(other As ProjectNode) As Integer Implements IComparable(Of ProjectNode).CompareTo
             Return Me.Name.CompareTo(other.Name)
         End Function
+        Public Function GetParentPath() As String
+            If ParentNode Is Nothing Then
+                Return ""
+            Else
+                Return ParentNode.GetParentPath & "/"
+            End If
+        End Function
 
-        Public Sub New(Project As Project)
-            Children = New ObservableCollection(Of IHiearchyItem)
-            ParentProject = Project
-            IsDirectory = True
+        Public Function GetCurrentPath() As String
+            Return GetParentPath() & "/" & Name
+        End Function
+
+        Public Function CanCreateChildDirectory() As Boolean
+            Return Me.IsDirectory AndAlso ParentProject.CanCreateDirectory(GetCurrentPath)
+        End Function
+
+        Public Function CanCreateFile() As Boolean
+            Return Me.IsDirectory AndAlso ParentProject.CanCreateFile(GetCurrentPath)
+        End Function
+
+        Public Function CanDeleteCurrentNode() As Boolean
+            If Me.IsDirectory Then
+                Return ParentProject.CanDeleteDirectory(GetCurrentPath)
+            Else
+                Return ParentProject.CanDeleteFile(GetCurrentPath)
+            End If
+        End Function
+
+        Public Sub CreateChildDirectory(name As String)
+            If CanCreateChildDirectory() Then
+                Dim node As New ProjectNode(ParentProject, Me)
+                node.Name = name
+                Children.Add(node)
+            End If
         End Sub
 
-        Public Sub New(Project As Project, File As Object)
-            Me.New(Project)
-            Me.File = File
-            IsDirectory = False
-            AssemblyQualifiedTypeName = File.GetType.AssemblyQualifiedName
+        Public Sub CreateFile(name As String, type As Type)
+            If CanCreateFile() Then
+                ParentProject.CreateFile(GetCurrentPath, name, type)
+            End If
+        End Sub
+
+        Public Sub DeleteCurrentNode()
+            If CanDeleteCurrentNode() AndAlso ParentNode IsNot Nothing Then
+                ParentNode.Children.Remove(Me)
+            End If
         End Sub
 
 #Region "IDisposable Support"
@@ -114,7 +165,9 @@ Namespace IO
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
                     For Each item In Children
-                        DirectCast(item, Project).Dispose()
+                        If TypeOf item Is IDisposable Then
+                            DirectCast(item, IDisposable).Dispose()
+                        End If
                     Next
                     If _File IsNot Nothing AndAlso TypeOf _File Is IDisposable Then
                         DirectCast(_File, IDisposable).Dispose()

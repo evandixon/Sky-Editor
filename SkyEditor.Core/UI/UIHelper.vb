@@ -14,11 +14,15 @@ Namespace UI
         ''' <param name="pluginManager">Instance of the current plugin manager.</param>
         ''' <param name="isDevMode">Whether or not to get the dev-only menu items.</param>
         ''' <returns></returns>
-        Private Shared Function GetMenuItemInfo(requireTarget As Boolean, target As Object, pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
+        Private Shared Function GetMenuItemInfo(isContextBased As Boolean, target As Object, pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
             Dim menuItems As New List(Of MenuItemInfo)
             For Each ActionInstance In pluginManager.GetRegisteredObjects(Of MenuAction)
-                'DevOnly menu actions are only supported if we're in dev mode.
-                If (Not requireTarget OrElse ActionInstance.SupportsObject(target)) AndAlso (isDevMode OrElse Not ActionInstance.DevOnly) Then
+                '1: If this is a context menu, only get actions that support the target and are context based
+                '2: Ensure menu actions are only visible based on their environment: non-context in regular menu, context in context menu
+                '3: DevOnly menu actions are only supported if we're in dev mode.
+                If (Not isContextBased OrElse (ActionInstance.SupportsObject(target) AndAlso ActionInstance.IsContextBased)) AndAlso
+                    (isContextBased = ActionInstance.IsContextBased) AndAlso
+                    (isDevMode OrElse Not ActionInstance.DevOnly) Then
 
                     'Generate the MenuItem
                     If ActionInstance.ActionPath.Count >= 1 Then
@@ -105,6 +109,39 @@ Namespace UI
         End Function
 
         ''' <summary>
+        ''' Generates MenuItems from the given IEnumerable of MenuItemInfo.
+        ''' </summary>
+        ''' <param name="MenuItemInfo">IEnumerable of MenuItemInfo that will be used to create the MenuItems.</param>
+        ''' <param name="targets">Direct targets of the action, if applicable.  If Nothing, the IOUIManager will control the targets</param>
+        ''' <returns></returns>
+        Public Shared Function GenerateLogicalMenuItems(MenuItemInfo As IEnumerable(Of MenuItemInfo), ioui As IOUIManager, targets As IEnumerable(Of Object)) As List(Of ActionMenuItem)
+            If MenuItemInfo Is Nothing Then
+                Throw New ArgumentNullException(NameOf(MenuItemInfo))
+            End If
+
+            Dim output As New List(Of ActionMenuItem)
+
+            'Create the menu items
+            For Each item In From m In MenuItemInfo Order By m.SortOrder, m.Header
+                Dim m As New ActionMenuItem '= ReflectionHelpers.CreateInstance(RootMenuItemType.GetTypeInfo)
+                m.Header = item.Header
+                m.CurrentIOUIManager = ioui
+                m.ContextTargets = targets
+                For Each action In item.ActionTypes
+                    Dim a As MenuAction = ReflectionHelpers.CreateInstance(action)
+                    a.CurrentPluginManager = ioui.CurrentPluginManager
+                    m.Actions.Add(a)
+                Next
+                For Each child In GenerateLogicalMenuItems(item.Children, ioui, targets)
+                    m.Children.Add(child)
+                Next
+                output.Add(m)
+            Next
+
+            Return output
+        End Function
+
+        ''' <summary>
         ''' Returns a new instance of each registered ObjectControl.
         ''' </summary>
         ''' <returns></returns>
@@ -183,6 +220,7 @@ Namespace UI
             End If
 
             For Each etab In (From e In objControls Order By e.GetSortOrder(objType, True) Ascending)
+                etab.SetPluginManager(Manager)
                 Dim isMatch = False
                 'Check to see if the tab itself is supported
                 'It must be one of the types in RequestedTabTypes

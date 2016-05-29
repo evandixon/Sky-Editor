@@ -1,7 +1,7 @@
 ﻿Imports SkyEditor.Core.UI
 Imports Xceed.Wpf.AvalonDock.Layout
 
-Public Class TargetedToolWindow
+<Obsolete> Public Class TargetedToolWindow
         Inherits LayoutAnchorable
 
         Public Property ContainedControl As ITargetedControl

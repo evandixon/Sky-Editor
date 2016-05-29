@@ -22,15 +22,16 @@ Public Class TargetedContextMenu
         End Get
         Set(value As Object)
             _target = value
-            Me.Items.Clear()
-            For Each item In WPFUiHelper.GenerateMenuItems(UIHelper.GetContextMenuItemInfo(_target, CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode), CurrentPluginManager)
-                Me.Items.Add(item)
-            Next
-            'Todo: something to register event handler
+            UpdateDataContext()
         End Set
     End Property
     Dim _target As Object
 
     Public Property CurrentPluginManager As PluginManager
+
+    Private Sub UpdateDataContext()
+        Dim actions = UIHelper.GenerateLogicalMenuItems(UIHelper.GetContextMenuItemInfo(_target, CurrentPluginManager, CurrentPluginManager.CurrentSettingsProvider.GetIsDevMode), CurrentPluginManager.CurrentIOUIManager, {Target})
+        Me.DataContext = actions
+    End Sub
 
 End Class

@@ -177,9 +177,11 @@ Namespace IO
         Public Overridable Function GetAllProjects(node As SolutionNode) As IEnumerable(Of Project)
             Dim output As New List(Of Project)
             If node.Children.Count > 0 Then
-                For Each item In node.Children
-                    output.AddRange(GetAllProjects(item))
-                Next
+                If node.IsDirectory Then
+                    For Each item In node.Children
+                        output.AddRange(GetAllProjects(item))
+                    Next
+                End If
             End If
 
             If node.IsDirectory = False AndAlso node.Project IsNot Nothing Then

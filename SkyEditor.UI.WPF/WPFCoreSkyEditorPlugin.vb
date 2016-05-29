@@ -30,6 +30,13 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ToolsSettings).GetTypeInfo)
 
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectAddFolder).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectNodeOpenFile).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionCreateProject).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectNewFile).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionAddExistingProject).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectAddExistingFile).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectProperties).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectDelete).GetTypeInfo)
     End Sub
 
 End Class

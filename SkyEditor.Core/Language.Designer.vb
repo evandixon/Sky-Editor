@@ -66,6 +66,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to All Files.
+        '''</summary>
+        Friend Shared ReadOnly Property AllFiles() As String
+            Get
+                Return ResourceManager.GetString("AllFiles", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The following commands are available:.
         '''</summary>
         Friend Shared ReadOnly Property ConsoleAvailableCommands() As String
@@ -233,6 +242,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property Project() As String
             Get
                 Return ResourceManager.GetString("Project", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor Projects.
+        '''</summary>
+        Friend Shared ReadOnly Property SkyEditorProjects() As String
+            Get
+                Return ResourceManager.GetString("SkyEditorProjects", resourceCulture)
             End Get
         End Property
         

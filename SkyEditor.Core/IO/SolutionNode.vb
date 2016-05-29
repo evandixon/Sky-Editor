@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.Core.UI
+﻿Imports System.Reflection
+Imports SkyEditor.Core.UI
 
 Namespace IO
     ''' <summary>
@@ -96,11 +97,35 @@ Namespace IO
             Return Me.IsDirectory AndAlso ParentSolution.CanCreateDirectory(GetCurrentPath)
         End Function
 
+        Public Function CanCreateChildProject() As Boolean
+            Return Me.IsDirectory AndAlso ParentSolution.CanCreateProject(GetCurrentPath)
+        End Function
+
+        Public Function CanDeleteCurrentNode() As Boolean
+            If Me.IsDirectory Then
+                Return ParentSolution.CanDeleteDirectory(GetCurrentPath)
+            Else
+                Return ParentSolution.CanDeleteProject(GetCurrentPath)
+            End If
+        End Function
+
         Public Sub CreateChildDirectory(name As String)
             If CanCreateChildDirectory() Then
                 Dim node As New SolutionNode(ParentSolution, Me)
                 node.Name = name
                 Children.Add(node)
+            End If
+        End Sub
+
+        Public Sub CreateChildProject(name As String, type As Type, manager As PluginManager)
+            If CanCreateChildProject() Then
+                ParentSolution.CreateProject(GetCurrentPath, name, type, manager)
+            End If
+        End Sub
+
+        Public Sub DeleteCurrentNode()
+            If CanDeleteCurrentNode() AndAlso ParentNode IsNot Nothing Then
+                ParentNode.Children.Remove(Me)
             End If
         End Sub
 

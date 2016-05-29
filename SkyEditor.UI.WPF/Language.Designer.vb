@@ -110,6 +110,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Are you sure you want to delete this?.
+        '''</summary>
+        Public Shared ReadOnly Property DeleteItemConfirmation() As String
+            Get
+                Return ResourceManager.GetString("DeleteItemConfirmation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Description.
         '''</summary>
         Public Shared ReadOnly Property Description() As String
@@ -124,6 +133,24 @@ Namespace My.Resources
         Public Shared ReadOnly Property DocumentCloseConfirmation() As String
             Get
                 Return ResourceManager.GetString("DocumentCloseConfirmation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Unable to find file at &quot;{0}&quot;..
+        '''</summary>
+        Public Shared ReadOnly Property ErrorCantFindFileAt() As String
+            Get
+                Return ResourceManager.GetString("ErrorCantFindFileAt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The type &quot;{0}&quot; of the given object is not supported..
+        '''</summary>
+        Public Shared ReadOnly Property ErrorUnsupportedType() As String
+            Get
+                Return ResourceManager.GetString("ErrorUnsupportedType", resourceCulture)
             End Get
         End Property
         

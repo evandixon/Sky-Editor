@@ -104,7 +104,14 @@
     <Compile Include="MainWindow3.xaml.vb">
       <DependentUpon>MainWindow3.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MenuActions\Context\ProjectAddExistingFile.vb" />
+    <Compile Include="MenuActions\Context\ProjectNewFile.vb" />
+    <Compile Include="MenuActions\Context\ProjectNodeOpenFile.vb" />
+    <Compile Include="MenuActions\Context\SolutionAddExistingProject.vb" />
+    <Compile Include="MenuActions\Context\SolutionCreateProject.vb" />
     <Compile Include="MenuActions\Context\SolutionProjectAddFolder.vb" />
+    <Compile Include="MenuActions\Context\SolutionProjectDelete.vb" />
+    <Compile Include="MenuActions\Context\SolutionProjectProperties.vb" />
     <Compile Include="MenuActions\DevConsole.vb" />
     <Compile Include="MenuActions\DevPlugins.vb" />
     <Compile Include="MenuActions\FileNewFile.vb" />
@@ -162,7 +169,9 @@
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectTab.vb" />
     <Compile Include="SearchableDropDown.vb" />
-    <Compile Include="TargetedContextMenu.vb" />
+    <Compile Include="TargetedContextMenu.xaml.vb">
+      <DependentUpon>TargetedContextMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="WPFCoreSkyEditorPlugin.vb" />
     <Compile Include="WPFUiHelper.vb" />
@@ -233,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ObjectControls\SolutionExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TargetedContextMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -101,15 +101,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Are you sure you want to delete this?.
-        '''</summary>
-        Public Shared ReadOnly Property DeleteItemConfirmation() As String
-            Get
-                Return ResourceManager.GetString("DeleteItemConfirmation", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to Are you sure you want to close this file?  Any unsaved changes will be lost..
         '''</summary>
         Public Shared ReadOnly Property DocumentCloseConfirmation() As String
@@ -151,15 +142,6 @@ Namespace My.Resources
         Public Shared ReadOnly Property EnableVerboseOutput() As String
             Get
                 Return ResourceManager.GetString("EnableVerboseOutput", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Unable to find file at &quot;{0}&quot;..
-        '''</summary>
-        Public Shared ReadOnly Property ErrorCantFindFileAt() As String
-            Get
-                Return ResourceManager.GetString("ErrorCantFindFileAt", resourceCulture)
             End Get
         End Property
         

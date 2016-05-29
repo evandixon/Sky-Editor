@@ -9,7 +9,7 @@ Namespace IO
         Implements ISavable
 
         Public Sub New()
-            RootNode = New ProjectNode(Me)
+            RootNode = New ProjectNode(Me, Nothing)
             Settings = New SettingsProvider
         End Sub
 
@@ -206,7 +206,7 @@ Namespace IO
                     Dim child = (From c In current.Children Where c.Name.ToLower = path(i).ToLower).FirstOrDefault
 
                     If child Is Nothing Then
-                        Dim newNode As New ProjectNode(Me)
+                        Dim newNode As New ProjectNode(Me, current)
                         newNode.IsDirectory = True
                         newNode.Name = path(count)
                         current.Children.Add(newNode)
@@ -265,7 +265,7 @@ Namespace IO
             End If
             Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = DirectoryName.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = True).FirstOrDefault
             If q Is Nothing Then
-                item.Children.Add(New ProjectNode(Me) With {.IsDirectory = True, .Name = DirectoryName})
+                item.Children.Add(New ProjectNode(Me, item) With {.IsDirectory = True, .Name = DirectoryName})
                 RaiseEvent DirectoryCreated(Me, New DirectoryCreatedEventArgs With {.DirectoryName = DirectoryName, .ParentPath = Path, .FullPath = Path & "/" & DirectoryName})
             Else
                 'There's already a directory here.
@@ -345,7 +345,7 @@ Namespace IO
                     fileObj.CreateFile(FileName)
                     fileObj.Filename = Path.Combine(Path.GetDirectoryName(Me.Filename), ParentPath.Replace("/", "\").TrimStart("\"), FileName)
 
-                    Dim projItem As New ProjectNode(Me, fileObj)
+                    Dim projItem As New ProjectNode(Me, item, fileObj)
                     projItem.Filename = ParentPath & "/" & FileName
                     projItem.Name = FileName
                     item.Children.Add(projItem)
@@ -385,7 +385,7 @@ Namespace IO
                 filename = filename.Replace("\", "/").TrimStart("/")
                 Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = filename.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
-                    Dim projItem As New ProjectNode(Me)
+                    Dim projItem As New ProjectNode(Me, item)
                     projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
 
                     Dim source = FilePath
@@ -603,7 +603,7 @@ Namespace IO
 
                     If child Is Nothing Then
                         'Create it if it doesn't exist
-                        Dim newNode As New ProjectNode(Me)
+                        Dim newNode As New ProjectNode(Me, current)
                         newNode.IsDirectory = True
                         newNode.Name = path(count)
                         current.Children.Add(newNode)
@@ -618,7 +618,7 @@ Namespace IO
                 Dim proj = (From c In current.Children Where c.Name.ToLower = path.Last.ToLower).FirstOrDefault
                 If proj Is Nothing Then
                     'If it doesn't exist, create it
-                    Dim newNode As New ProjectNode(Me)
+                    Dim newNode As New ProjectNode(Me, current)
                     newNode.Name = path.Last
                     If item.Value IsNot Nothing Then
                         newNode.IsDirectory = False

@@ -465,8 +465,8 @@ Namespace UI
                 Dim node = DirectCast(tvSolution.SelectedItem, TreeViewItem)
                 If TypeOf node.Tag Is NodeTag Then
                     Dim tag = DirectCast(node.Tag, NodeTag)
-                    If MessageBox.Show(My.Resources.Language.DeleteItemConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
-                        If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
+                    'If MessageBox.Show(My.Resources.Language.DeleteItemConfirmation, My.Resources.Language.MainTitle, MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                    If tag.ParentProject Is Nothing AndAlso tag.ParentSolution IsNot Nothing Then
                             'Then we're at the solution level
                             tag.ParentSolution.DeleteDirectory(tag.ParentPath & "/" & tag.Name)
                         ElseIf tag.ParentProject IsNot Nothing AndAlso tag.IsProjectRoot Then
@@ -478,8 +478,8 @@ Namespace UI
                         Else
                             'Then we're somewhere else?
                         End If
+                        'End If
                     End If
-                End If
             End If
         End Sub
 
@@ -745,7 +745,7 @@ Namespace UI
                         If obj Is Nothing Then
                             Dim f = Path.Combine(Path.GetDirectoryName(tag.ParentProject.Filename), projItem.Filename)
                             If Not File.Exists(f) Then
-                                MessageBox.Show(String.Format(My.Resources.Language.ErrorCantFindFileAt, f))
+                                'MessageBox.Show(String.Format(My.Resources.Language.ErrorCantFindFileAt, f))
                             End If
                         End If
                         CurrentPluginManager.CurrentIOUIManager.OpenFile(obj, tag.ParentProject)

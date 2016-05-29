@@ -132,11 +132,20 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="DeleteItemConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete this?</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
   <data name="DocumentCloseConfirmation" xml:space="preserve">
     <value>Are you sure you want to close this file?  Any unsaved changes will be lost.</value>
+  </data>
+  <data name="ErrorCantFindFileAt" xml:space="preserve">
+    <value>Unable to find file at "{0}".</value>
+  </data>
+  <data name="ErrorUnsupportedType" xml:space="preserve">
+    <value>The type "{0}" of the given object is not supported.</value>
   </data>
   <data name="ExtensionInfo" xml:space="preserve">
     <value>Extension Info</value>

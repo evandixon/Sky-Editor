@@ -84,9 +84,13 @@ Namespace UI
         End Function
 
         Public Overridable Function SupportsObject(Obj As Object) As Boolean
-            Dim q = From t In SupportedTypes() Where ReflectionHelpers.IsOfType(Obj.GetType, t)
+            If Obj Is Nothing Then
+                Return AlwaysVisible
+            Else
+                Dim q = From t In SupportedTypes() Where ReflectionHelpers.IsOfType(Obj.GetType, t)
 
-            Return q.Any
+                Return q.Any
+            End If
         End Function
 
         Public Overridable Function SupportsObjects(Objects As IEnumerable(Of Object)) As Boolean

@@ -4,6 +4,14 @@ Imports SkyEditor.Core.UI
 Public Class ActionMenuItem
     Implements INotifyPropertyChanged
 
+    Public Sub New()
+        Me.Actions = New List(Of MenuAction)
+        Me.Children = New ObservableCollection(Of ActionMenuItem)
+        Command = New RelayCommand(AddressOf RunActions)
+    End Sub
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
     Public Property CurrentIOUIManager As IOUIManager
     Public Property Header As String
         Get
@@ -37,19 +45,22 @@ Public Class ActionMenuItem
 
     Public Property Command As ICommand
 
+    Public Property ContextTargets As IEnumerable(Of Object)
+
     Private Async Sub RunActions()
         Dim tasks As New List(Of Task)
         For Each t In Actions
-            tasks.Add(t.DoAction(CurrentIOUIManager.GetMenuActionTargets(t)))
+            tasks.Add(t.DoAction(GetTargets(t)))
         Next
         Await Task.WhenAll(tasks)
     End Sub
 
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    Private Function GetTargets(t As MenuAction) As IEnumerable(Of Object)
+        If ContextTargets IsNot Nothing Then
+            Return ContextTargets
+        Else
+            Return CurrentIOUIManager.GetMenuActionTargets(t)
+        End If
+    End Function
 
-    Public Sub New()
-        Me.Actions = New List(Of MenuAction)
-        Me.Children = New ObservableCollection(Of ActionMenuItem)
-        Command = New RelayCommand(AddressOf RunActions)
-    End Sub
 End Class

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
   <data name="ConsoleAvailableCommands" xml:space="preserve">
     <value>The following commands are available:</value>
   </data>
@@ -178,6 +181,9 @@
   </data>
   <data name="Project" xml:space="preserve">
     <value>Project</value>
+  </data>
+  <data name="SkyEditorProjects" xml:space="preserve">
+    <value>Sky Editor Projects</value>
   </data>
   <data name="SolutionExplorerToolWindowTitle" xml:space="preserve">
     <value>Solution Explorer</value>
