@@ -48,11 +48,10 @@ Public Class ActionMenuItem
     Public Property ContextTargets As IEnumerable(Of Object)
 
     Private Async Sub RunActions()
-        Dim tasks As New List(Of Task)
+        'Dim tasks As New List(Of Task) 
         For Each t In Actions
-            tasks.Add(t.DoAction(GetTargets(t)))
+            Await t.DoAction(GetTargets(t))
         Next
-        Await Task.WhenAll(tasks)
     End Sub
 
     Private Function GetTargets(t As MenuAction) As IEnumerable(Of Object)

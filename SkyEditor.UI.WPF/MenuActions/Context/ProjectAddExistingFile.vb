@@ -40,7 +40,7 @@ Namespace MenuActions.Context
             If TypeOf Obj Is ProjectNode Then
                 Return DirectCast(Obj, ProjectNode).IsDirectory AndAlso DirectCast(Obj, ProjectNode).CanCreateFile
             ElseIf TypeOf Obj Is SolutionNode Then
-                Return Not DirectCast(Obj, SolutionNode).IsDirectory AndAlso DirectCast(Obj, SolutionNode).Project.CanCreateFile("")
+                Return Not DirectCast(Obj, SolutionNode).IsDirectory AndAlso DirectCast(Obj, SolutionNode).Project.CanAddExistingFile("")
             Else
                 Return False
             End If

@@ -459,6 +459,7 @@ Namespace IO
 
         Private Sub CreateFileInternal(Name As String, FileContents As Byte(), EnableInMemoryLoad As Boolean)
             'Load the file
+            Me.EnableInMemoryLoad = EnableInMemoryLoad
             If EnableInMemoryLoad Then
                 'Set the in-memory file to the given contents
                 Me.InMemoryFile = FileContents

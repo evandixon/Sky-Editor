@@ -112,12 +112,17 @@ Namespace Projects
             Return IO.Path.Combine(GetRootDirectory, "Modpack.smdh")
         End Function
 
-        Public Overrides Function CanBuild(Solution As Solution) As Boolean
-            Dim p As BaseRomProject = Solution.GetProjectsByName(BaseRomProject).FirstOrDefault
+        Public Overrides Function CanBuild() As Boolean
+            Dim p As BaseRomProject = ParentSolution.GetProjectsByName(BaseRomProject).FirstOrDefault
             Return (p IsNot Nothing)
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Public Overrides Async Function Build() As Task
+            Await DoBuild()
+            Await MyBase.Build()
+        End Function
+
+        Protected Async Function DoBuild() As Task
             Const patcherVersion As String = "alpha 4"
             Dim modpackDir = GetModPackDir()
             Dim modpackModsDir = GetModsDir()
@@ -150,7 +155,7 @@ Namespace Projects
             Next
 
             'Copy mods from other projects
-            For Each item In Me.GetReferences(Solution)
+            For Each item In Me.GetReferences(ParentSolution)
                 If TypeOf item Is GenericModProject Then
                     Dim sourceFilename = DirectCast(item, GenericModProject).GetModOutputFilename(BaseRomProject)
                     Dim destFilename = IO.Path.Combine(modpackModsDir, IO.Path.GetFileName(sourceFilename))
@@ -188,11 +193,11 @@ Namespace Projects
                 End If
             Next
 
-            CopyPatcherProgram(Solution)
+            CopyPatcherProgram(ParentSolution)
 
             'Update modpack info
-            Me.Info.GameCode = GetBaseGameCode(Solution)
-            Me.Info.System = GetBaseRomSystem(Solution)
+            Me.Info.GameCode = GetBaseGameCode(ParentSolution)
+            Me.Info.System = GetBaseRomSystem(ParentSolution)
             If IO.File.Exists(GetLocalSmdhPath) Then
                 IO.File.Copy(GetLocalSmdhPath, IO.Path.Combine(modpackModsDir, "Modpack.smdh"), True)
             End If
@@ -205,7 +210,7 @@ Namespace Projects
             Me.BuildProgress = 0.9
             Me.BuildStatusMessage = My.Resources.Language.LoadingApplyingPatch
 
-            Await ApplyPatchAsync(Solution)
+            Await ApplyPatchAsync(ParentSolution)
 
             Me.BuildProgress = 1
             Me.BuildStatusMessage = My.Resources.Language.Complete

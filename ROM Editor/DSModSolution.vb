@@ -18,7 +18,7 @@ Public Class DSModSolution
         If baseRomProject Is Nothing OrElse baseRomProject.RomSystem Is Nothing OrElse baseRomProject.GameCode Is Nothing Then
             Return {}
         Else
-            Dim matches As New List(Of Type)
+            Dim matches As New List(Of TypeInfo)
             For Each item In manager.GetRegisteredObjects(GetType(GenericModProject))
                 Dim games = item.GetSupportedGameCodes
                 Dim match As Boolean = False
@@ -54,7 +54,7 @@ Public Class DSModSolution
             m.ModDescription = "A generic Mod"
             m.Homepage = ""
 
-            Await m.Initialize(Me)
+            Await m.RunInitialize
 
             For Each item In Me.GetAllProjects
                 If TypeOf item Is DSModPackProject Then

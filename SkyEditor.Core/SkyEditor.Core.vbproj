@@ -176,7 +176,6 @@
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
     <Compile Include="UI\RelayCommand.vb" />
-    <Compile Include="UI\SolutionExplorerViewModel.vb" />
     <Compile Include="UI\UIHelper.vb" />
     <Compile Include="UI\VisibilityUpdatedEventArgs.vb" />
     <Compile Include="Utilities\AsyncFor.vb" />

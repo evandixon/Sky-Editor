@@ -120,6 +120,9 @@
   <data name="AllFiles" xml:space="preserve">
     <value>All Files</value>
   </data>
+  <data name="BuildProgress" xml:space="preserve">
+    <value>Build Progress</value>
+  </data>
   <data name="ConsoleAvailableCommands" xml:space="preserve">
     <value>The following commands are available:</value>
   </data>
@@ -184,8 +187,5 @@
   </data>
   <data name="SkyEditorProjects" xml:space="preserve">
     <value>Sky Editor Projects</value>
-  </data>
-  <data name="SolutionExplorerToolWindowTitle" xml:space="preserve">
-    <value>Solution Explorer</value>
   </data>
 </root>

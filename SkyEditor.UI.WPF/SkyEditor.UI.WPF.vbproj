@@ -141,6 +141,9 @@
     <Compile Include="ObjectControls\GenericIList.xaml.vb">
       <DependentUpon>GenericIList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\SolutionBuildProgress.xaml.vb">
+      <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\SolutionExplorer.xaml.vb">
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,8 @@
       <DependentUpon>TargetedContextMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="TargetedToolWindow.vb" />
+    <Compile Include="ViewModels\SolutionBuildProgressViewModel.vb" />
+    <Compile Include="ViewModels\SolutionExplorerViewModel.vb" />
     <Compile Include="WPFCoreSkyEditorPlugin.vb" />
     <Compile Include="WPFUiHelper.vb" />
   </ItemGroup>
@@ -238,6 +243,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\GenericIList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\SolutionBuildProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

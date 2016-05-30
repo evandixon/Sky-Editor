@@ -15,8 +15,8 @@ Namespace Projects
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
 
             Dim projectDir = GetRootDirectory()
             Dim sourceDir = GetRawFilesDir()

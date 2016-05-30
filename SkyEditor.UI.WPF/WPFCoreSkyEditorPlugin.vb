@@ -5,6 +5,7 @@ Imports SkyEditor.Core.Windows
 Imports SkyEditor.UI.WPF.MenuActions
 Imports SkyEditor.UI.WPF.MenuActions.Context
 Imports SkyEditor.UI.WPF.ObjectControls
+Imports SkyEditor.UI.WPF.ViewModels
 
 Public MustInherit Class WPFCoreSkyEditorPlugin
     Inherits WindowsCoreSkyEditorPlugin
@@ -14,6 +15,10 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
 
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(GenericIList).GetTypeInfo)
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(SolutionExplorer).GetTypeInfo)
+        manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(SolutionBuildProgress).GetTypeInfo)
+
+        manager.RegisterType(GetType(AnchorableViewModel).GetTypeInfo, GetType(SolutionExplorerViewModel).GetTypeInfo)
+        manager.RegisterType(GetType(AnchorableViewModel).GetTypeInfo, GetType(SolutionBuildProgressViewModel).GetTypeInfo)
 
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(DevConsole).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(DevPlugins).GetTypeInfo)

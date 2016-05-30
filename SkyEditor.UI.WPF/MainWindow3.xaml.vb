@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Collections.Specialized
+Imports System.ComponentModel
 Imports System.Globalization
 Imports System.Reflection
 Imports System.Windows
@@ -20,6 +21,7 @@ Public Class MainWindow3
         ' Add any initialization after the InitializeComponent() call.
         Me.Title = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.MainTitle, My.Resources.Language.VersionPrefix, Assembly.GetExecutingAssembly.GetName.Version.ToString)
         SaveLayoutCommand = New RelayCommand(AddressOf SaveLayout, AddressOf CanSaveLayout)
+        LoadLayoutCommand = New RelayCommand(AddressOf LoadLayout, AddressOf CanLoadLayout)
     End Sub
 
     Private Sub OnIOUIManagerFileClosing(sender As Object, e As FileClosingEventArgs)
@@ -64,8 +66,11 @@ Public Class MainWindow3
     End Function
 
     Private Function LoadLayout() As Task
-        Dim layoutSerializer As New XmlLayoutSerializer(dockingManager)
-        layoutSerializer.Deserialize("AvalonDock.Layout.config")
+        If CanLoadLayout() Then
+            Dim layoutSerializer As New XmlLayoutSerializer(dockingManager)
+            layoutSerializer.Deserialize("AvalonDock.Layout.config")
+        End If
+
 
         'Todo: handle tool windows as described in AvalonDock's example project:
         '//Here I've implemented the LayoutSerializationCallback just to show
@@ -86,4 +91,11 @@ Public Class MainWindow3
         Return Task.CompletedTask
     End Function
 
+    Private Sub MainWindow3_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        LoadLayoutCommand.Execute(Nothing)
+    End Sub
+
+    Private Sub MainWindow3_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        SaveLayoutCommand.Execute(Nothing)
+    End Sub
 End Class

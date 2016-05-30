@@ -6,8 +6,9 @@
              xmlns:coreUI="clr-namespace:SkyEditor.Core.UI;assembly=SkyEditor.Core"
              xmlns:coreIO="clr-namespace:SkyEditor.Core.IO;assembly=SkyEditor.Core"
              xmlns:local="clr-namespace:SkyEditor.UI.WPF"
+             xmlns:vm="clr-namespace:SkyEditor.UI.WPF.ViewModels"
              mc:Ignorable="d"
-             TargetType="{x:Type coreUI:SolutionExplorerViewModel}"
+             TargetType="{x:Type vm:SolutionExplorerViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TreeView x:Name="tvSolutions" ItemsSource="{Binding Solutions}">

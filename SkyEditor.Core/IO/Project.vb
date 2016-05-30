@@ -56,6 +56,11 @@ Namespace IO
             End Sub
         End Class
 
+        Public Class AddExistingFileBatchOperation
+            Public Property ParentPath As String
+            Public Property ActualFilename As String
+        End Class
+
 #End Region
 
 #Region "Events"
@@ -75,7 +80,13 @@ Namespace IO
         Public Event FileRemoved(sender As Object, e As ProjectFileRemovedEventArgs)
 #End Region
 
+        Private Sub _rootNode_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles _rootNode.PropertyChanged
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(RootNode)))
+        End Sub
+
 #Region "Properties"
+        Public Property ParentSolution As Solution
+
         ''' <summary>
         ''' Name of the project
         ''' </summary>
@@ -93,6 +104,17 @@ Namespace IO
         ''' </summary>
         ''' <returns></returns>
         Public Property RootNode As ProjectNode
+            Get
+                Return _rootNode
+            End Get
+            Set(value As ProjectNode)
+                If _rootNode IsNot value Then
+                    _rootNode = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(RootNode)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _rootNode As ProjectNode
 
         ''' <summary>
         ''' The project's settings
@@ -162,6 +184,18 @@ Namespace IO
         End Property
         Private _buildStatusMessage As String
 
+        Public Property IsBuildProgressIndeterminate As Boolean
+            Get
+                Return _isBuildProgressIndeterminate
+            End Get
+            Set(value As Boolean)
+                _isBuildProgressIndeterminate = value
+                RaiseEvent BuildStatusChanged(Me, New ProjectBuildStatusChanged With {.Progress = BuildProgress, .StatusMessage = BuildStatusMessage})
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(IsBuildProgressIndeterminate)))
+            End Set
+        End Property
+        Dim _isBuildProgressIndeterminate As Boolean
+
         Public Property CurrentPluginManager As PluginManager
 #End Region
 
@@ -196,18 +230,28 @@ Namespace IO
         ''' <param name="ItemPath">Path to look for a project item.</param>
         ''' <returns></returns>
         Public Function GetProjectItemByPath(ItemPath As String) As ProjectNode
+            Return GetProjectItemByPath(RootNode, ItemPath)
+        End Function
+
+        ''' <summary>
+        ''' Gets the project item at the given path.
+        ''' Returns Nothing if there is no project item at that path.
+        ''' </summary>
+        ''' <param name="ItemPath">Path to look for a project item.</param>
+        ''' <returns></returns>
+        Public Function GetProjectItemByPath(rootNode As ProjectNode, ItemPath As String) As ProjectNode
             If ItemPath Is Nothing OrElse ItemPath = "" Then
-                Return RootNode
+                Return rootNode
             Else
                 Dim path = ItemPath.Replace("\", "/").TrimStart("/").Split("/")
-                Dim current = Me.RootNode
+                Dim current = rootNode
                 For count = 0 To path.Length - 2
                     Dim i = count 'I got a warning about using an iterator variable in the line below
                     Dim child = (From c In current.Children Where c.Name.ToLower = path(i).ToLower).FirstOrDefault
 
                     If child Is Nothing Then
                         Dim newNode As New ProjectNode(Me, current)
-                        newNode.IsDirectory = True
+                        'newNode.IsDirectory = True
                         newNode.Name = path(count)
                         current.Children.Add(newNode)
                         current = newNode
@@ -250,7 +294,16 @@ Namespace IO
         ''' <param name="Path">Path to put the new directory in.</param>
         ''' <param name="DirectoryName">Name of the new directory.</param>
         Public Overridable Sub CreateDirectory(Path As String, DirectoryName As String)
-            Dim item = GetProjectItemByPath(Path)
+            CreateDirectory(RootNode, Path, DirectoryName)
+        End Sub
+
+        ''' <summary>
+        ''' Creates a directory at the given location if it does not exist.
+        ''' </summary>
+        ''' <param name="Path">Path to put the new directory in.</param>
+        ''' <param name="DirectoryName">Name of the new directory.</param>
+        Public Overridable Sub CreateDirectory(rootNode As ProjectNode, Path As String, DirectoryName As String)
+            Dim item = GetProjectItemByPath(rootNode, Path)
             If item Is Nothing Then
                 'Throw New IO.DirectoryNotFoundException("Cannot create a solution directory at the given path: " & Path)
                 Dim pathParts = Path.Replace("\", "/").TrimStart("/").Split("/")
@@ -260,12 +313,12 @@ Namespace IO
                     parentPath.Append("/")
                 Next
                 Dim parentPathString = parentPath.ToString.TrimEnd("/")
-                CreateDirectory(parentPathString, pathParts.Last)
-                item = GetProjectItemByPath(Path)
+                CreateDirectory(rootNode, parentPathString, pathParts.Last)
+                item = GetProjectItemByPath(rootNode, Path)
             End If
             Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = DirectoryName.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = True).FirstOrDefault
             If q Is Nothing Then
-                item.Children.Add(New ProjectNode(Me, item) With {.IsDirectory = True, .Name = DirectoryName})
+                item.Children.Add(New ProjectNode(Me, item) With {.Name = DirectoryName})
                 RaiseEvent DirectoryCreated(Me, New DirectoryCreatedEventArgs With {.DirectoryName = DirectoryName, .ParentPath = Path, .FullPath = Path & "/" & DirectoryName})
             Else
                 'There's already a directory here.
@@ -278,6 +331,14 @@ Namespace IO
         ''' </summary>
         ''' <param name="FullPath"></param>
         Public Overridable Sub CreateDirectory(FullPath As String)
+            CreateDirectory(RootNode, FullPath)
+        End Sub
+
+        ''' <summary>
+        ''' Creates a directory with the given full path.
+        ''' </summary>
+        ''' <param name="FullPath"></param>
+        Public Overridable Sub CreateDirectory(rootNode As ProjectNode, FullPath As String)
             Dim pathParts = FullPath.Replace("\", "/").TrimStart("/").Split("/")
             Dim parentPath As New Text.StringBuilder
             For count = 0 To pathParts.Length - 2
@@ -285,7 +346,7 @@ Namespace IO
                 parentPath.Append("/")
             Next
             Dim parentPathString = parentPath.ToString.TrimEnd("/")
-            CreateDirectory(parentPathString, pathParts.Last)
+            CreateDirectory(rootNode, parentPathString, pathParts.Last)
         End Sub
 
         ''' <summary>
@@ -379,14 +440,18 @@ Namespace IO
         End Function
 
         Public Overridable Async Function AddExistingFile(ParentProjectPath As String, FilePath As String, provider As IOProvider) As Task
-            Dim item = GetProjectItemByPath(ParentProjectPath)
-            Dim filename = Path.GetFileName(FilePath)
+            Await AddExistingFile(RootNode, ParentProjectPath, FilePath, provider)
+        End Function
+
+        Protected Overridable Async Function AddExistingFile(rootProjectNode As ProjectNode, projectPath As String, FilePath As String, provider As IOProvider) As Task
+            Dim item = GetProjectItemByPath(rootProjectNode, projectPath)
             If item IsNot Nothing Then
+                Dim filename = Path.GetFileName(FilePath)
                 filename = filename.Replace("\", "/").TrimStart("/")
                 Dim q = (From c In item.Children Where TypeOf c Is ProjectNode AndAlso c.Name.ToLower = filename.ToLower AndAlso DirectCast(c, ProjectNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     Dim projItem As New ProjectNode(Me, item)
-                    projItem.Filename = GetImportedFilePath(ParentProjectPath, FilePath)
+                    projItem.Filename = GetImportedFilePath(projectPath, FilePath)
 
                     Dim source = FilePath
                     Dim dest = Path.Combine(Path.GetDirectoryName(Me.Filename), projItem.Filename.Replace("/", "\").TrimStart("\"))
@@ -399,15 +464,22 @@ Namespace IO
 
                     projItem.Name = Path.GetFileName(projItem.Filename)
                     item.Children.Add(projItem)
-                    RaiseEvent FileAdded(Me, New ProjectFileAddedEventArgs With {.ParentPath = ParentProjectPath, .Filename = projItem.Name, .FullFilename = dest})
+                    RaiseEvent FileAdded(Me, New ProjectFileAddedEventArgs With {.Filename = projItem.Name, .FullFilename = dest})
                 Else
                     'There's already a project here
                     'Todo: throw exception
                     'Throw New ProjectAlreadyExistsException("A project with the name """ & ProjectName & """ already exists in the given path: " & ParentPath)
                 End If
-            Else
-                Throw New DirectoryNotFoundException(String.Format(My.Resources.Language.ErrorCantAddFile, ParentProjectPath))
             End If
+        End Function
+
+        Public Overridable Async Function RecreateRootWithExistingFiles(files As IEnumerable(Of AddExistingFileBatchOperation), provider As IOProvider) As Task
+            Dim newRoot As New ProjectNode(Me, Nothing)
+            For Each item In files
+                CreateDirectory(newRoot, item.ParentPath)
+                Await AddExistingFile(newRoot, item.ParentPath, item.ActualFilename, provider)
+            Next
+            RootNode.Children = newRoot.Children
         End Function
 
         Public Overridable Function CanDeleteFile(FilePath As String) As Boolean
@@ -431,11 +503,11 @@ Namespace IO
             End If
         End Sub
 
-        Public Overridable Function Build(Solution As Solution) As Task
+        Public Overridable Function Build() As Task
             Return Task.FromResult(0)
         End Function
 
-        Public Overridable Function CanBuild(Solution As Solution) As Boolean
+        Public Overridable Function CanBuild() As Boolean
             Return False
         End Function
 
@@ -494,8 +566,8 @@ Namespace IO
         ''' <param name="ProjectDirectory">Directory to store the Project.  Project will be stored in a sub directory of the one given.</param>
         ''' <param name="ProjectName">Name of the Project.</param>
         ''' <returns></returns>
-        Public Shared Function CreateProject(ProjectDirectory As String, ProjectName As String, manager As PluginManager) As Project
-            Return CreateProject(ProjectDirectory, ProjectName, GetType(Project), manager)
+        Public Shared Function CreateProject(ProjectDirectory As String, ProjectName As String, parent As Solution, manager As PluginManager) As Project
+            Return CreateProject(ProjectDirectory, ProjectName, GetType(Project), parent, manager)
         End Function
 
         ''' <summary>
@@ -505,7 +577,7 @@ Namespace IO
         ''' <param name="ProjectName">Name of the Project.</param>
         ''' <param name="ProjectType">Type of the Project to create.  Must inherit from Project.</param>
         ''' <returns></returns>
-        Public Shared Function CreateProject(ProjectDirectory As String, ProjectName As String, ProjectType As Type, manager As PluginManager) As Project
+        Public Shared Function CreateProject(ProjectDirectory As String, ProjectName As String, ProjectType As Type, parent As Solution, manager As PluginManager) As Project
             If ProjectDirectory Is Nothing Then
                 Throw New ArgumentNullException(NameOf(ProjectDirectory))
             End If
@@ -528,6 +600,7 @@ Namespace IO
             output.Filename = Path.Combine(dir, ProjectName & ".skyproj")
             output.Name = ProjectName
             output.CurrentPluginManager = manager
+            output.ParentSolution = parent
 
             Dim projFile As New ProjectFile With {.Name = ProjectName, .AssemblyQualifiedTypeName = ProjectType.AssemblyQualifiedName}
             projFile.FileFormat = ProjectFile.CurrentVersion
@@ -543,7 +616,7 @@ Namespace IO
         ''' </summary>
         ''' <param name="Filename"></param>
         ''' <returns></returns>
-        Public Shared Function OpenProjectFile(Filename As String, manager As PluginManager) As Project
+        Public Shared Function OpenProjectFile(Filename As String, parent As Solution, manager As PluginManager) As Project
             If Filename Is Nothing Then
                 Throw New ArgumentNullException(NameOf(Filename))
             End If
@@ -581,6 +654,7 @@ Namespace IO
             out.Filename = Filename
             out.LoadProjectFile(projectInfo, manager)
             out.CurrentPluginManager = manager
+            out.ParentSolution = parent
 
             Return out
         End Function
@@ -604,7 +678,6 @@ Namespace IO
                     If child Is Nothing Then
                         'Create it if it doesn't exist
                         Dim newNode As New ProjectNode(Me, current)
-                        newNode.IsDirectory = True
                         newNode.Name = path(count)
                         current.Children.Add(newNode)
                         current = newNode
@@ -621,11 +694,9 @@ Namespace IO
                     Dim newNode As New ProjectNode(Me, current)
                     newNode.Name = path.Last
                     If item.Value IsNot Nothing Then
-                        newNode.IsDirectory = False
                         newNode.Filename = item.Value.Filename 'IO.Path.Combine(IO.Path.GetDirectoryName(Me.Filename), item.Value.Filename.Replace("/", "\").TrimStart("\"))
                         newNode.AssemblyQualifiedTypeName = item.Value.AssemblyQualifiedTypeName
                     Else
-                        newNode.IsDirectory = True
                         newNode.Filename = Nothing
                     End If
                     current.Children.Add(newNode)

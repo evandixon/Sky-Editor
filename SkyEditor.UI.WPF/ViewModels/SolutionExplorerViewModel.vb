@@ -1,6 +1,8 @@
-﻿Imports SkyEditor.Core.IO
+﻿Imports System.Collections.ObjectModel
+Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.UI
 
-Namespace UI
+Namespace ViewModels
     Public Class SolutionExplorerViewModel
         Inherits AnchorableViewModel
 

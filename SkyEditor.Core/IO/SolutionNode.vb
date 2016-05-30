@@ -8,12 +8,22 @@ Namespace IO
     Public Class SolutionNode
         Implements IDisposable
         Implements IHiearchyItem
+        Implements INotifyPropertyChanged
         Implements IComparable(Of SolutionNode)
 
         Public Sub New(parentSolution As Solution, parentNode As SolutionNode)
             _name = ""
             _children = New ObservableCollection(Of IHiearchyItem)
             Me.ParentSolution = parentSolution
+            Me.ParentNode = parentNode
+        End Sub
+
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+        Private Sub _project_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles _project.PropertyChanged
+            If e.PropertyName = NameOf(Project.RootNode) AndAlso Not IsDirectory Then
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Children)))
+            End If
         End Sub
 
         Public ReadOnly Property ParentSolution As Solution
@@ -58,6 +68,17 @@ Namespace IO
         ''' </summary>
         ''' <returns></returns>
         Public Property Project As Project
+            Get
+                Return _project
+            End Get
+            Set(value As Project)
+                If _project IsNot value Then
+                    _project = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Project)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _project As Project
 
         ''' <summary>
         ''' The solution-level children.
@@ -117,11 +138,11 @@ Namespace IO
             End If
         End Sub
 
-        Public Sub CreateChildProject(name As String, type As Type, manager As PluginManager)
+        Public Async Function CreateChildProject(name As String, type As Type, manager As PluginManager) As Task
             If CanCreateChildProject() Then
-                ParentSolution.CreateProject(GetCurrentPath, name, type, manager)
+                Await ParentSolution.CreateProject(GetCurrentPath, name, type, manager)
             End If
-        End Sub
+        End Function
 
         Public Sub DeleteCurrentNode()
             If CanDeleteCurrentNode() AndAlso ParentNode IsNot Nothing Then

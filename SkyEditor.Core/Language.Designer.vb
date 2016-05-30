@@ -75,6 +75,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Build Progress.
+        '''</summary>
+        Friend Shared ReadOnly Property BuildProgress() As String
+            Get
+                Return ResourceManager.GetString("BuildProgress", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The following commands are available:.
         '''</summary>
         Friend Shared ReadOnly Property ConsoleAvailableCommands() As String
@@ -251,15 +260,6 @@ Namespace My.Resources
         Friend Shared ReadOnly Property SkyEditorProjects() As String
             Get
                 Return ResourceManager.GetString("SkyEditorProjects", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Solution Explorer.
-        '''</summary>
-        Friend Shared ReadOnly Property SolutionExplorerToolWindowTitle() As String
-            Get
-                Return ResourceManager.GetString("SolutionExplorerToolWindowTitle", resourceCulture)
             End Get
         End Property
     End Class

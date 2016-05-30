@@ -7,7 +7,7 @@ Namespace MenuActions.Context
     Public Class SolutionCreateProject
         Inherits MenuAction
 
-        Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
+        Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item In Targets
                 Dim ParentSolution As Solution
                 Dim ParentPath As String
@@ -31,13 +31,12 @@ Namespace MenuActions.Context
 
                 If w.ShowDialog Then
                     If TypeOf item Is Solution Then
-                        DirectCast(item, Solution).CreateProject("", w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
+                        Await DirectCast(item, Solution).CreateProject("", w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
                     ElseIf TypeOf item Is SolutionNode Then
-                        DirectCast(item, SolutionNode).CreateChildProject(w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
+                        Await DirectCast(item, SolutionNode).CreateChildProject(w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
                     End If
                 End If
             Next
-            Return Task.CompletedTask
         End Function
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)

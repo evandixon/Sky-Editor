@@ -123,6 +123,9 @@
   <data name="Browse" xml:space="preserve">
     <value>Browse...</value>
   </data>
+  <data name="BuildProgress" xml:space="preserve">
+    <value>Build Progress</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -279,6 +282,18 @@
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="SolutionExplorerToolWindowTitle" xml:space="preserve">
+    <value>Solution Explorer</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>

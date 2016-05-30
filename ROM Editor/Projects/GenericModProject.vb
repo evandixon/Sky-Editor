@@ -99,7 +99,7 @@ Namespace Projects
             Return {".*"}
         End Function
 
-        Public Overrides Function CanBuild(Solution As Solution) As Boolean
+        Public Overrides Function CanBuild() As Boolean
             Return True
         End Function
 #End Region
@@ -164,11 +164,35 @@ Namespace Projects
             Return out
         End Function
 
-        Public Overridable Async Function Initialize(Solution As Solution) As Task
+        Public Async Function RunInitialize() As Task
+            RequiresInitialization = True
+            Await ParentSolution.Build({Me})
+        End Function
+
+        Private Property RequiresInitialization As Boolean
+
+        Public NotOverridable Overrides Async Function Build() As Task
+            If RequiresInitialization Then
+                Await Initialize()
+            Else
+                Await DoBuild()
+            End If
+
+            Me.BuildProgress = 1
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildStatusMessage = My.Resources.Language.Complete
+        End Function
+
+        Protected Overridable Async Function Initialize() As Task
             If Me.ProjectReferences.Count > 0 Then
-                Dim filesToCopy = Me.GetFilesToCopy(Solution, Me.ProjectReferences(0))
-                Dim sourceRoot = GetRawFilesSourceDir(Solution, Me.ProjectReferences(0))
+                Me.BuildProgress = 0
+                Me.BuildStatusMessage = My.Resources.Language.LoadingCopyingFiles
+
+                Dim filesToCopy = Me.GetFilesToCopy(ParentSolution, Me.ProjectReferences(0))
+                Dim sourceRoot = GetRawFilesSourceDir(ParentSolution, Me.ProjectReferences(0))
                 If filesToCopy.Count = 1 Then
+                    Me.IsBuildProgressIndeterminate = True
+
                     Dim source As String = IO.Path.Combine(sourceRoot, filesToCopy(0))
                     Dim dest As String = IO.Path.Combine(GetRawFilesDir, filesToCopy(0))
                     If IO.File.Exists(source) Then
@@ -180,7 +204,12 @@ Namespace Projects
                         Await FileSystem.CopyDirectory(source, dest, CurrentPluginManager.CurrentIOProvider)
                     End If
                 ElseIf filesToCopy.Count > 0 Then
+                    Me.IsBuildProgressIndeterminate = False
+
                     Dim a As New AsyncFor(My.Resources.Language.LoadingCopyingFiles)
+                    AddHandler a.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                           Me.BuildProgress = e.Progress
+                                                       End Sub
                     Await a.RunForEach(Sub(Item As String)
                                            Dim source As String = IO.Path.Combine(sourceRoot, Item)
                                            If IO.File.Exists(source) Then
@@ -203,6 +232,10 @@ Namespace Projects
                 Else
                     Await FileSystem.CopyDirectory(sourceRoot, GetRawFilesDir, CurrentPluginManager.CurrentIOProvider)
                 End If
+
+                Me.BuildProgress = 1
+                Me.IsBuildProgressIndeterminate = False
+                Me.BuildStatusMessage = My.Resources.Language.Complete
             Else
                 'Since there's no source project, we'll leave it up to the user to supply the needed files.
                 If Not IO.Directory.Exists(GetRawFilesDir) Then
@@ -214,12 +247,11 @@ Namespace Projects
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="Solution"></param>
         ''' <returns></returns>
         ''' <remarks>If this is overridden, do custom work, THEN use MyBase.Build</remarks>
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overridable Async Function DoBuild() As Task
             For Each sourceProjectName In Me.ProjectReferences
-                Dim sourceRoot = GetRawFilesSourceDir(Solution, sourceProjectName)
+                Dim sourceRoot = GetRawFilesSourceDir(ParentSolution, sourceProjectName)
                 Dim currentFiles = GetRawFilesDir()
                 Dim modTemp = GetModTempDir()
                 Dim modTempFiles = IO.Path.Combine(modTemp, "Files")

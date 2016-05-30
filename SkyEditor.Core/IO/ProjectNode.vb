@@ -7,20 +7,22 @@ Namespace IO
         Implements IDisposable
         Implements IHiearchyItem
         Implements IComparable(Of ProjectNode)
+        Implements INotifyPropertyChanged
 
         Public Sub New(Project As Project, parentNode As ProjectNode)
             Me.Children = New ObservableCollection(Of IHiearchyItem)
             Me.ParentNode = parentNode
             Me.ParentProject = Project
-            Me.IsDirectory = True
         End Sub
 
         Public Sub New(Project As Project, parentNode As ProjectNode, File As Object)
             Me.New(Project, parentNode)
             Me.File = File
-            Me.IsDirectory = False
             Me.AssemblyQualifiedTypeName = File.GetType.AssemblyQualifiedName
         End Sub
+
+
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
         ''' <summary>
         ''' Project to which this ProjectItem belongs.
@@ -40,7 +42,11 @@ Namespace IO
         ''' Whether or not this node is a directory.  If False, it's a file.
         ''' </summary>
         ''' <returns></returns>
-        Public Property IsDirectory As Boolean
+        Public ReadOnly Property IsDirectory As Boolean
+            Get
+                Return Filename Is Nothing AndAlso File Is Nothing
+            End Get
+        End Property
 
         Public ReadOnly Property Prefix As String Implements IHiearchyItem.Prefix
             Get
@@ -69,6 +75,17 @@ Namespace IO
         ''' </summary>
         ''' <returns></returns>
         Public Property Children As ObservableCollection(Of IHiearchyItem) Implements IHiearchyItem.Children
+            Get
+                Return _children
+            End Get
+            Set(value As ObservableCollection(Of IHiearchyItem))
+                If _children IsNot value Then
+                    _children = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Children)))
+                End If
+            End Set
+        End Property
+        Dim _children As ObservableCollection(Of IHiearchyItem)
 
 
         ''' <summary>
@@ -101,6 +118,10 @@ Namespace IO
 
         End Function
 
+        ''' <summary>
+        ''' Gets the full path of the file
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetFilename() As String
             Return Path.Combine(Path.GetDirectoryName(ParentProject.Filename), Filename?.TrimStart("\"))
         End Function

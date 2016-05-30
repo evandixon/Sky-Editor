@@ -83,6 +83,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Build Progress.
+        '''</summary>
+        Public Shared ReadOnly Property BuildProgress() As String
+            Get
+                Return ResourceManager.GetString("BuildProgress", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Cancel.
         '''</summary>
         Public Shared ReadOnly Property Cancel() As String
@@ -538,6 +547,42 @@ Namespace My.Resources
         Public Shared ReadOnly Property OK() As String
             Get
                 Return ResourceManager.GetString("OK", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Progress.
+        '''</summary>
+        Public Shared ReadOnly Property Progress() As String
+            Get
+                Return ResourceManager.GetString("Progress", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Project Name.
+        '''</summary>
+        Public Shared ReadOnly Property ProjectName() As String
+            Get
+                Return ResourceManager.GetString("ProjectName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Solution Explorer.
+        '''</summary>
+        Public Shared ReadOnly Property SolutionExplorerToolWindowTitle() As String
+            Get
+                Return ResourceManager.GetString("SolutionExplorerToolWindowTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Status.
+        '''</summary>
+        Public Shared ReadOnly Property Status() As String
+            Get
+                Return ResourceManager.GetString("Status", resourceCulture)
             End Get
         End Property
         

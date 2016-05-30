@@ -107,39 +107,50 @@ Validate:
         End Sub
 
         Private Async Function StartExtractLanguages() As Task
-            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingExtractingLanguages)
+            'PSMD style
             Dim languageNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)\.bin", RegexOptions.IgnoreCase)
             Dim languageFileNames = IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*.bin", IO.SearchOption.TopDirectoryOnly)
-            For Each item In languageFileNames
-                Dim lang = "jp"
+            Dim f As New AsyncFor
+            AddHandler f.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                   Me.BuildProgress = e.Progress
+                                               End Sub
+            f.RunSynchronously = True
+            Await f.RunForEach(Async Function(item As String) As Task
+                                   Dim lang = "jp"
 
-                Dim match = languageNameRegex.Match(item)
-                If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
-                    lang = match.Groups(1).Value
-                End If
+                                   Dim match = languageNameRegex.Match(item)
+                                   If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
+                                       lang = match.Groups(1).Value
+                                   End If
 
-                Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
+                                   Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
+                                   Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
 
-                Dim farc As New FarcF5
-                Await farc.OpenFile(item, CurrentPluginManager.CurrentIOProvider)
-                Await farc.Extract(destDir)
-            Next
+                                   Dim farc As New FarcF5
+                                   Await farc.OpenFile(item, CurrentPluginManager.CurrentIOProvider)
+                                   Await farc.Extract(destDir)
+                               End Function, languageFileNames)
 
+            'GTI style
             Dim languageDirNameRegex As New Text.RegularExpressions.Regex(".*message_?(.*)", RegexOptions.IgnoreCase)
             Dim languageDirFilenames = IO.Directory.GetDirectories(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*", IO.SearchOption.TopDirectoryOnly)
-            For Each item In languageDirFilenames
-                Dim lang = "en"
+            Dim f2 As New AsyncFor
+            AddHandler f2.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                    Me.BuildProgress = e.Progress
+                                                End Sub
+            f.RunSynchronously = True
+            Await f2.RunForEach(Async Function(item As String) As Task
+                                    Dim lang = "en"
 
-                Dim match = languageDirNameRegex.Match(item)
-                If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
-                    lang = match.Groups(1).Value
-                End If
+                                    Dim match = languageDirNameRegex.Match(item)
+                                    If match.Success AndAlso Not String.IsNullOrEmpty(match.Groups(1).Value) Then
+                                        lang = match.Groups(1).Value
+                                    End If
 
-                Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
-                Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
-                Await FileSystem.CopyDirectory(item, destDir, CurrentPluginManager.CurrentIOProvider)
-            Next
+                                    Dim destDir = IO.Path.Combine(Me.GetRootDirectory, "Languages", lang)
+                                    Await FileSystem.ReCreateDirectory(destDir, CurrentPluginManager.CurrentIOProvider)
+                                    Await FileSystem.CopyDirectory(item, destDir, CurrentPluginManager.CurrentIOProvider)
+                                End Function, languageDirFilenames)
         End Function
 
         Private _languageExtractTask As Task
@@ -163,16 +174,30 @@ Validate:
             End If
         End Sub
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
+
+            Me.BuildStatusMessage = My.Resources.Language.LoadingExtractingLanguages
+            Me.BuildProgress = 0
+            Me.IsBuildProgressIndeterminate = False
 
             Await ExtractLanguages()
+
+            Me.BuildStatusMessage = My.Resources.Language.LoadingDecompilingScripts
+            Me.BuildProgress = 0
 
             Dim scriptSource As String = IO.Path.Combine(Me.GetRawFilesDir, "romfs", "script")
             Dim scriptDestination As String = IO.Path.Combine(Me.GetRootDirectory, "script")
             Dim filesToOpen As New List(Of String)
 
-            Dim f As New AsyncFor(My.Resources.Language.LoadingDecompilingScripts)
+            Dim f As New AsyncFor
+
+            AddHandler f.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                   Me.BuildProgress = e.Progress
+                                               End Sub
+
+            'f.BatchSize = Environment.ProcessorCount * 2
+
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Dim dest = Item.Replace(scriptSource, scriptDestination)
                                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(dest)) Then
@@ -189,18 +214,33 @@ Validate:
                                    'Await Me.AddExistingFile(d, Item, False)
                                End Function, IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories))
 
-            Dim f2 As New AsyncFor(My.Resources.Language.LoadingAddingFiles)
-            f2.RunSynchronously = True
-            Await f2.RunForEach(Async Function(Item As String) As Task
-                                    Dim d = IO.Path.GetDirectoryName(Item).Replace(scriptDestination, "script")
-                                    Me.CreateDirectory(d)
-                                    Await Me.AddExistingFile(d, Item, CurrentPluginManager.CurrentIOProvider)
-                                End Function, filesToOpen)
+            'Me.BuildStatusMessage = My.Resources.Language.LoadingAddingFiles
+            'Me.BuildProgress = 0
+            'Dim f2 As New AsyncFor()
+            'f2.RunSynchronously = True
 
-            PluginHelper.SetLoadingStatusFinished()
+            'AddHandler f2.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+            '                                        Me.BuildProgress = e.Progress
+            '                                    End Sub
+
+            'Await f2.RunForEach(Async Function(Item As String) As Task
+
+            '                        Me.CreateDirectory(d)
+            '                        Await Me.AddExistingFile(d, Item, CurrentPluginManager.CurrentIOProvider)
+            '                    End Function, filesToOpen)
+
+            Dim batchAdd As New List(Of Project.AddExistingFileBatchOperation)
+            For Each item In filesToOpen
+                Dim d = IO.Path.GetDirectoryName(item).Replace(scriptDestination, "script")
+                batchAdd.Add(New Project.AddExistingFileBatchOperation With {.ParentPath = d, .ActualFilename = item})
+            Next
+            Await Me.RecreateRootWithExistingFiles(batchAdd, CurrentPluginManager.CurrentIOProvider)
+
+            BuildProgress = 1
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overrides Async Function DoBuild() As Task
             Dim farcMode As Boolean = False
 
             If IO.Directory.GetFiles(IO.Path.Combine(Me.GetRawFilesDir, "romfs"), "message*").Length > 0 Then
@@ -257,7 +297,7 @@ Validate:
                                    End If
                                End Function, toCompile)
             RemoveHandler f.LoadingStatusChanged, onProgressChanged
-            Await MyBase.Build(Solution)
+            Await MyBase.DoBuild
         End Function
 
         Public Overrides Function GetFilesToCopy(Solution As Solution, BaseRomProjectName As String) As IEnumerable(Of String)

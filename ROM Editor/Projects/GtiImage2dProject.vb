@@ -15,8 +15,8 @@ Namespace Projects
             Return {IO.Path.Combine("romfs", "bg"), IO.Path.Combine("romfs", "font"), IO.Path.Combine("romfs", "image_2d")}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
             Dim rawFilesDir = GetRawFilesDir()
             Dim backDir = GetRootDirectory()
 
@@ -59,7 +59,7 @@ Namespace Projects
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overrides Async Function DoBuild() As Task
             'Convert BACK
             Dim sourceDir = GetRootDirectory()
             Dim rawFilesDir = GetRawFilesDir()
@@ -95,7 +95,7 @@ Namespace Projects
                 End If
 
             Next
-            Await MyBase.Build(Solution)
+            Await MyBase.DoBuild
         End Function
     End Class
 

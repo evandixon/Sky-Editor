@@ -39,8 +39,8 @@ Namespace Projects
             Return patchers
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
 
             Dim rawDir = GetRawFilesDir()
             Dim projDir = GetRootDirectory()
@@ -79,7 +79,7 @@ Namespace Projects
             PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overrides Async Function DoBuild() As Task
             Dim rawDir = GetRawFilesDir()
             Dim projDir = GetRootDirectory()
 
@@ -117,7 +117,7 @@ Namespace Projects
                 End If
             Next
 
-            Await MyBase.Build(Solution)
+            Await MyBase.DoBuild
         End Function
     End Class
 

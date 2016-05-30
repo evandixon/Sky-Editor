@@ -19,6 +19,7 @@ Public Class IOUIManager
         Me.OpenedProjectFiles = New Dictionary(Of Object, Project)
         Me.FileDisposalSettings = New Dictionary(Of Object, Boolean)
         Me.OpenFiles = New ObservableCollection(Of AvalonDockFileWrapper)
+        Me.RunningTasks = New ObservableCollection(Of Task)
         WrapperFileType = GetType(AvalonDockFileWrapper)
     End Sub
 
@@ -113,7 +114,7 @@ Public Class IOUIManager
     Dim _anchorableViewModels As ObservableCollection(Of AnchorableViewModel)
 
     Public Property SupportedToolWindowTypes As IEnumerable(Of Type)
-    Public Property WrapperFileType As Type
+    <Obsolete> Public Property WrapperFileType As Type
 
     ''' <summary>
     ''' Gets or sets the selected file
@@ -242,7 +243,7 @@ Public Class IOUIManager
     End Property
     Dim _rootMenuItems As ObservableCollection(Of ActionMenuItem)
 
-
+    Public Property RunningTasks As ObservableCollection(Of Task)
 
 #Region "Functions"
 
@@ -448,6 +449,21 @@ Public Class IOUIManager
 
         Return targets
     End Function
+
+    ''' <summary>
+    ''' Lets the IOUIManager keep track of the current task
+    ''' </summary>
+    ''' <param name="task">Task to keep track of.</param>
+    Public Sub LogTask(task As Task)
+        Dim watchTask = Task.Run(Async Function() As Task
+                                     Await task
+                                     RemoveTask(task)
+                                 End Function)
+    End Sub
+
+    Private Sub RemoveTask(task As Task)
+        RunningTasks.Remove(task)
+    End Sub
 
     ''' <summary>
     ''' Updates the visibility for the given menu item and its children, and returns the updated visibility

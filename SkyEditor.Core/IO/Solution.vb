@@ -322,16 +322,18 @@ Namespace IO
             End If
         End Sub
 
-        Public Overridable Sub CreateProject(ParentPath As String, ProjectName As String, ProjectType As Type, manager As PluginManager)
+        Public Overridable Async Function CreateProject(ParentPath As String, ProjectName As String, ProjectType As Type, manager As PluginManager) As Task
             Dim item = GetSolutionItemByPath(ParentPath)
             If item IsNot Nothing Then
                 Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = ProjectName.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
-                    Dim p = Project.CreateProject(Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType, manager)
+                    Dim p = Project.CreateProject(Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType, Me, manager)
                     item.Children.Add(New SolutionNode(Me, item) With {.Name = ProjectName, .Project = p})
                     AddHandler p.Modified, AddressOf Project_Modified
                     RaiseEvent Modified(Me, New EventArgs)
-                    RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
+                    Await Task.Run(Sub()
+                                       RaiseEvent ProjectAdded(Me, New ProjectAddedEventArgs With {.ParentPath = ParentPath, .Project = p})
+                                   End Sub)
                 Else
                     'There's already a project here
                     Throw New ProjectAlreadyExistsException("A project with the name """ & ProjectName & """ already exists in the given path: " & ParentPath)
@@ -339,12 +341,12 @@ Namespace IO
             Else
                 Throw New DirectoryNotFoundException("Cannot create a project at the given path: " & ParentPath)
             End If
-        End Sub
+        End Function
 
         Public Overridable Sub AddExistingProject(ParentPath As String, ProjectFilename As String, manager As PluginManager)
             Dim item = GetSolutionItemByPath(ParentPath)
             If item IsNot Nothing Then
-                Dim p = Project.OpenProjectFile(ProjectFilename, manager)
+                Dim p = Project.OpenProjectFile(ProjectFilename, Me, manager)
                 Dim q = (From c In item.Children Where TypeOf c Is SolutionNode AndAlso c.Name.ToLower = p.Name.ToLower AndAlso DirectCast(c, SolutionNode).IsDirectory = False).FirstOrDefault
                 If q Is Nothing Then
                     'Dim p = Project.CreateProject(IO.Path.GetDirectoryName(Me.Filename), ProjectName, ProjectType)
@@ -412,14 +414,18 @@ Namespace IO
 
 #Region "Building"
         Public Overridable Function GetProjectsToBuild() As IEnumerable(Of Project)
-            Return From p In Me.GetAllProjects Where p.CanBuild(Me)
+            Return From p In Me.GetAllProjects Where p.CanBuild
         End Function
 
         Public Overridable Async Function Build() As Task
+            Await Build(GetProjectsToBuild)
+        End Function
+
+        Public Overridable Async Function Build(projects As IEnumerable(Of Project)) As Task
             RaiseEvent SolutionBuildStarted(Me, New EventArgs)
             Dim toBuild As New Dictionary(Of Project, Boolean)
 
-            For Each item In GetProjectsToBuild()
+            For Each item In projects
                 If Not item.HasCircularReferences(Me) Then
                     toBuild.Add(item, False)
                 Else
@@ -441,7 +447,7 @@ Namespace IO
 
         Private Async Function BuildProjects(ToBuild As Dictionary(Of Project, Boolean), CurrentProject As Project) As Task
             Dim buildTasks As New List(Of Task)
-            For Each item In From p In CurrentProject.GetReferences(Me) Where p.CanBuild(Me)
+            For Each item In From p In CurrentProject.GetReferences(Me) Where p.CanBuild
                 buildTasks.Add(BuildProjects(ToBuild, item))
             Next
             Await Task.WhenAll(buildTasks)
@@ -450,11 +456,11 @@ Namespace IO
                 'Todo: make sure we won't get here twice, with all the async stuff going on
                 ToBuild(CurrentProject) = True
                 UpdateBuildLoadingStatus(ToBuild)
-                Await CurrentProject.Build(Me)
+                Await CurrentProject.Build
             End If
         End Function
 
-        Private Sub UpdateBuildLoadingStatus(toBuild As Dictionary(Of Project, Boolean))
+        <Obsolete> Private Sub UpdateBuildLoadingStatus(toBuild As Dictionary(Of Project, Boolean))
             'Dim built As Integer = (From v In toBuild.Values Where v = True).Count
             'PluginHelper.SetLoadingStatus(String.Format(My.Resources.Language.LoadingBuildingProjectsXofY, built, toBuild.Count), built / toBuild.Count)
         End Sub
@@ -597,7 +603,7 @@ Namespace IO
                     Dim newNode As New SolutionNode(Me, current)
                     newNode.Name = projectPath.Last
                     If item.Value IsNot Nothing Then
-                        newNode.Project = Project.OpenProjectFile(Path.Combine(Path.GetDirectoryName(Filename), item.Value.Replace("/", "\").TrimStart("\")), manager)
+                        newNode.Project = Project.OpenProjectFile(Path.Combine(Path.GetDirectoryName(Filename), item.Value.Replace("/", "\").TrimStart("\")), Me, manager)
                         AddHandler newNode.Project.Modified, AddressOf Project_Modified
                     Else
                         newNode.Project = Nothing

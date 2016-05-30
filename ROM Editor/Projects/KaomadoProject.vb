@@ -15,8 +15,8 @@ Namespace Projects
             Return {IO.Path.Combine("Data", "FONT", "kaomado.kao")}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
             Dim rootDir = GetRootDirectory()
             Dim portraitDir = IO.Path.Combine(rootDir, "Pokemon", "Portraits")
             If Not IO.Directory.Exists(portraitDir) Then
@@ -40,11 +40,11 @@ Namespace Projects
             'PluginHelper.SetLoadingStatusFinished()
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overrides Async Function DoBuild() As Task
             If IO.Directory.Exists(IO.Path.Combine(GetRootDirectory, "Pokemon", "Portraits")) Then
                 Await Kaomado.RunPack(IO.Path.Combine(GetRawFilesDir, "data", "FONT", "kaomado.kao"), IO.Path.Combine(GetRootDirectory, "Pokemon", "Portraits"))
             End If
-            Await MyBase.Build(Solution)
+            Await MyBase.DoBuild
         End Function
     End Class
 End Namespace

@@ -61,12 +61,18 @@
                 </avalonHelpers:PanesStyleSelector>
             </ad:DockingManager.LayoutItemContainerStyleSelector>
             <ad:LayoutRoot>
-                <ad:LayoutPanel Orientation="Horizontal">
-                    <ad:LayoutDocumentPane/>
-                    <ad:LayoutAnchorablePane Name="ToolsPane" DockWidth="200">
-                    </ad:LayoutAnchorablePane>
-                </ad:LayoutPanel>
+                <ad:LayoutPanel Orientation="Vertical">
+                    <ad:LayoutPanel Orientation="Horizontal">
+                        <ad:LayoutDocumentPane/>
+                        <ad:LayoutAnchorablePane DockWidth="200"/>
+                    </ad:LayoutPanel>
+                    <ad:LayoutAnchorablePane DockHeight="200"/>
+                </ad:LayoutPanel>                
             </ad:LayoutRoot>
         </ad:DockingManager>
+        <!--<StatusBar Grid.Row="2">
+            <TextBlock Text="{Binding RunningTasks.Count}"/>
+            <TextBlock Text=" Running Tasks"/>
+        </StatusBar>-->
     </Grid>
 </Window>

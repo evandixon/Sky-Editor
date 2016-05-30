@@ -15,8 +15,8 @@ Namespace Projects
             Return {GameStrings.SkyCode}
         End Function
 
-        Public Overrides Async Function Initialize(Solution As Solution) As Task
-            Await MyBase.Initialize(Solution)
+        Protected Overrides Async Function Initialize() As Task
+            Await MyBase.Initialize
 
             Dim projectDir = GetRootDirectory()
             Dim sourceDir = GetRawFilesDir()
@@ -41,7 +41,7 @@ Namespace Projects
                                End Function, backFiles)
         End Function
 
-        Public Overrides Async Function Build(Solution As Solution) As Task
+        Protected Overrides Async Function DoBuild() As Task
             'Convert BACK
             Dim projectDir = GetRootDirectory()
             Dim rawDir = GetRawFilesDir()
@@ -83,7 +83,7 @@ Namespace Projects
                 IO.Directory.Delete(IO.Path.Combine(rawDir, "Data", "BACK", "Decompressed"), True)
             End If
 
-            Await MyBase.Build(Solution)
+            Await MyBase.DoBuild
         End Function
     End Class
 End Namespace

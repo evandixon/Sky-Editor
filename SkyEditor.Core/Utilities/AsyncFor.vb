@@ -19,7 +19,7 @@ Namespace Utilities
             SetLoadingStatusOnFinish = False
             RunningTasks = New List(Of Task)
         End Sub
-        Public Sub New(ProgressMessage As String)
+        <Obsolete> Public Sub New(ProgressMessage As String)
             Me.New
             SetLoadingStatus = True
             SetLoadingStatusOnFinish = True
@@ -100,7 +100,7 @@ Namespace Utilities
                 taskItemQueue.Enqueue(item)
             Next
 
-            TotalTasks = RunningTasks.Count
+            TotalTasks = taskItemQueue.Count
 
             'While there's either more tasks to start or while there's still tasks running
             While (taskItemQueue.Count > 0 OrElse (taskItemQueue.Count = 0 AndAlso RunningTasks.Count > 0))
@@ -111,12 +111,14 @@ Namespace Utilities
                     Dim item = taskItemQueue.Dequeue 'The item in Collection to process
 
                     'Start the task
-                    Dim tTask = DelegateFunction(item)
+                    Dim tTask = Task.Run(Async Function() As Task
+                                             Await DelegateFunction(item)
+                                             System.Threading.Interlocked.Increment(CompletedTasks)
+                                         End Function)
 
                     'Either wait for it or move on
                     If RunSynchronously Then
                         Await tTask
-                        CompletedTasks += 1
                     Else
                         RunningTasks.Add(tTask)
                     End If
@@ -128,7 +130,6 @@ Namespace Utilities
                         'Remove completed tasks
                         For count = RunningTasks.Count - 1 To 0 Step -1
                             If RunningTasks(count).IsCompleted Then
-                                CompletedTasks += 1
                                 RunningTasks.RemoveAt(count)
                             End If
                         Next
@@ -148,7 +149,7 @@ Namespace Utilities
             End If
 
             'Find how many tasks there are to run
-            'Ex. For i = 0 to 10 gives us 11 tasks
+            'The +1 here makes the behavior "For i = 0 to 10" have 11 loops
             TotalTasks = Math.Ceiling((EndValue - StartValue + 1) / StepCount)
 
             If TotalTasks < 0 Then
@@ -160,28 +161,31 @@ Namespace Utilities
 
             Dim i As Integer = StartValue
 
-            Dim tasksRemaining As Integer = TotalTasks
+            Dim tasksRemaining As Integer = TotalTasks 'The tasks that still need to be queued
 
             'While there's either more tasks to start or while there's still tasks running
             While (tasksRemaining > 0 OrElse (tasksRemaining = 0 AndAlso RunningTasks.Count > 0))
                 If RunningTasks.Count < BatchSize AndAlso tasksRemaining > 0 Then
                     'We can run more tasks
 
-                    'Get the next task item to run
-                    Dim item = i 'The item in Collection to process
-                    i += StepCount
+                    Dim item = i 'To avoid async weirdness with having this in the below lambda
 
                     'Start the task
-                    Dim tTask = DelegateFunction(item)
+                    Dim tTask = Task.Run(Async Function() As Task
+                                             Await DelegateFunction(item)
+                                             System.Threading.Interlocked.Increment(CompletedTasks)
+                                         End Function)
+
+                    'Increment for the next run
+                    i += StepCount
 
                     'Either wait for it or move on
                     If RunSynchronously Then
                         Await tTask
-                        CompletedTasks += 1
-                        tasksRemaining -= 1
                     Else
                         RunningTasks.Add(tTask)
                     End If
+                    tasksRemaining -= 1
                 Else
                     If tasksRemaining > 0 Then
                         'We can't start any more tasks, so we have to wait on one.
@@ -190,8 +194,6 @@ Namespace Utilities
                         'Remove completed tasks
                         For count = RunningTasks.Count - 1 To 0 Step -1
                             If RunningTasks(count).IsCompleted Then
-                                CompletedTasks += 1
-                                tasksRemaining -= 1
                                 RunningTasks.RemoveAt(count)
                             End If
                         Next
