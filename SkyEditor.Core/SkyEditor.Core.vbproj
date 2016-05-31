@@ -152,7 +152,6 @@
     <Compile Include="Legacy Interfaces\iContainer.vb" />
     <Compile Include="IO\ICreatableFile.vb" />
     <Compile Include="IO\IDetectableFileType.vb" />
-    <Compile Include="Legacy Interfaces\iGameTypeSelector.vb" />
     <Compile Include="Legacy Interfaces\iGenericFile.vb" />
     <Compile Include="IO\INotifyModified.vb" />
     <Compile Include="Legacy Interfaces\iNamed.vb" />

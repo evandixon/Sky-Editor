@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Windows
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 
@@ -20,7 +21,9 @@ Namespace ViewModels
         End Sub
 
         Private Sub Solution_BuildStarted(sender As Object, e As EventArgs) Handles CurrentSolution.SolutionBuildStarted
-            BuildingProjects.Clear()
+            Application.Current.Dispatcher.Invoke(Sub()
+                                                      BuildingProjects.Clear()
+                                                  End Sub)
 
             For Each item In DirectCast(sender, Solution).GetAllProjects
                 AddHandler item.BuildStatusChanged, AddressOf Project_BuildStatusChanged
@@ -35,7 +38,9 @@ Namespace ViewModels
 
         Private Sub Project_BuildStatusChanged(sender As Object, e As ProjectBuildStatusChanged)
             If Not BuildingProjects.Contains(sender) Then
-                BuildingProjects.Add(sender)
+                Application.Current.Dispatcher.Invoke(Sub()
+                                                          BuildingProjects.Add(sender)
+                                                      End Sub)
             End If
         End Sub
     End Class

@@ -49,34 +49,33 @@ Public Class StartupHelpers
             End If
 
             Dim l As UI.BackgroundTaskWait = Nothing
-            'If checkForUpdates Then
-            '    l = New UI.BackgroundTaskWait
-            '    l.ChangeMessage(PluginHelper.GetLanguageItem("Updating plugins..."))
-            '    l.Show()
+        'If checkForUpdates Then
+        '    l = New UI.BackgroundTaskWait
+        '    l.ChangeMessage(PluginHelper.GetLanguageItem("Updating plugins..."))
+        '    l.Show()
 
-            '    Try
-            '        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Updating plugins..."))
-            '        If Await Task.Run(Function() As Boolean
-            '                              Return RedistributionHelpers.DownloadAllPlugins(manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
-            '                          End Function) Then
-            '            PluginHelper.SetLoadingStatusFailed()
-            '            manager.Dispose()
-            '            RedistributionHelpers.RequestRestartProgram()
-            '            Application.Current.Shutdown()
-            '        End If
-            '        PluginHelper.SetLoadingStatusFinished()
-            '    Catch ex As Net.WebException
-            '        'Do nothing, we simply won't update the plugins
-            '    Catch ex As Exception
-            '        PluginHelper.SetLoadingStatusFinished()
-            '        PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
-            '    End Try
-            '    l.Visibility = Visibility.Collapsed
-            'End If
+        '    Try
+        '        PluginHelper.SetLoadingStatus(PluginHelper.GetLanguageItem("Updating plugins..."))
+        '        If Await Task.Run(Function() As Boolean
+        '                              Return RedistributionHelpers.DownloadAllPlugins(manager, SettingsManager.Instance.Settings.PluginUpdateUrl)
+        '                          End Function) Then
+        '            PluginHelper.SetLoadingStatusFailed()
+        '            manager.Dispose()
+        '            RedistributionHelpers.RequestRestartProgram()
+        '            Application.Current.Shutdown()
+        '        End If
+        '        PluginHelper.SetLoadingStatusFinished()
+        '    Catch ex As Net.WebException
+        '        'Do nothing, we simply won't update the plugins
+        '    Catch ex As Exception
+        '        PluginHelper.SetLoadingStatusFinished()
+        '        PluginHelper.Writeline("Unable to update plugins.  Error: " & ex.ToString, PluginHelper.LineType.Error)
+        '    End Try
+        '    l.Visibility = Visibility.Collapsed
+        'End If
 
-            manager.CurrentIOUIManager.SupportedToolWindowTypes = {GetType(UserControl)}
-            manager.CurrentIOUIManager.WrapperFileType = GetType(AvalonHelpers.WPFAvalonDockFileWrapper)
-            Dim m As New MainWindow3 'UI.MainWindow(manager)
+        manager.CurrentIOUIManager.SupportedToolWindowTypes = {GetType(UserControl)}
+        Dim m As New MainWindow3 'UI.MainWindow(manager)
             m.CurrentPluginManager = manager
             m.DataContext = manager.CurrentIOUIManager
             m.Show()

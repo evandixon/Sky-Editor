@@ -42,7 +42,17 @@
     End Property
     Private Shared _tdItems As Dictionary(Of Integer, String)
 
-    Private Shared Property RBItems As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property RBItems As Dictionary(Of Integer, String)
+        Get
+            If _rbItems Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.RBItems)
+                _rbItems = i.Entries
+            End If
+            Return _rbItems
+        End Get
+    End Property
+    Private Shared _rbItems As Dictionary(Of Integer, String)
 
     Public Shared ReadOnly Property SkyPokemon As Dictionary(Of Integer, String)
         Get
@@ -88,10 +98,6 @@
         Return RBLocations
     End Function
 
-    <Obsolete("Use property SkyMoves instead")> Public Shared Function GetSkyMoves() As Dictionary(Of Integer, String)
-        Return SkyMoves
-    End Function
-
     Public Shared Function GetRBMoves() As Dictionary(Of Integer, String)
         If RBMoves Is Nothing Then
             Dim i As New BasicDictionaryIniFile
@@ -99,27 +105,6 @@
             RBMoves = i.Entries
         End If
         Return RBMoves
-    End Function
-
-    <Obsolete("Use property SkyItems instead")> Public Shared Function GetSkyItemNames() As Dictionary(Of Integer, String)
-        Return SkyItems
-    End Function
-
-    <Obsolete("Use property TDItems instead")> Public Shared Function GetTDItemNames() As Dictionary(Of Integer, String)
-        Return TDItems
-    End Function
-
-    Public Shared Function RBItemNames() As Dictionary(Of Integer, String)
-        If RBItems Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.RBItems)
-            RBItems = i.Entries
-        End If
-        Return RBItems
-    End Function
-
-    <Obsolete("Use property SkyPokemon instead")> Public Shared Function GetSkyPokemon() As Dictionary(Of Integer, String)
-        Return SkyPokemon
     End Function
 
     Public Shared Function GetRBPokemon() As Dictionary(Of Integer, String)

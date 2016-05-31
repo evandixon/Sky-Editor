@@ -44,7 +44,7 @@ Namespace Tabs
             Dim _pokemon = GetEditingObject(Of SkySave.QuicksavePkm)()
 
             With _pokemon
-                PokemonDictionary = Lists.GetSkyPokemon
+                PokemonDictionary = Lists.SkyPokemon
 
                 SelectedPokemonID = .ID
                 chbIsFemale.IsChecked = .IsFemale

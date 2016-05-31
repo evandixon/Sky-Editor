@@ -96,8 +96,8 @@
     <Compile Include="AvalonHelpers\PanesTemplateSelector.vb" />
     <Compile Include="AvalonHelpers\WPFAvalonDockFileWrapper.vb" />
     <Compile Include="DataBoundObjectControl.vb" />
-    <Compile Include="GameTypeSelector.xaml.vb">
-      <DependentUpon>GameTypeSelector.xaml</DependentUpon>
+    <Compile Include="FileTypeSelector.xaml.vb">
+      <DependentUpon>FileTypeSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="GenericListItem.vb" />
     <Compile Include="Internal\ConsoleManager.vb" />
@@ -218,7 +218,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GameTypeSelector.xaml">
+    <Page Include="FileTypeSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -27,7 +27,7 @@ Namespace MysteryDungeon.Explorers
         End Property
 
         Public Overrides Function ToString() As String
-            Return Lists.GetSkyItemNames(ID)
+            Return Lists.SkyItems(ID)
         End Function
 
         Public Function Clone() As Object Implements IClonable.Clone

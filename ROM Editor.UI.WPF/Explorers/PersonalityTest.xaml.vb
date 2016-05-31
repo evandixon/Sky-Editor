@@ -291,8 +291,8 @@ Namespace Explorers
 
         Private Sub PersonalityTest_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
             'Me.Header = "Personality Test"
-            For Each count In SkyEditor.SaveEditor.Lists.GetSkyPokemon.Keys
-                Dim item As String = SkyEditor.SaveEditor.Lists.GetSkyPokemon(count)
+            For Each count In SkyEditor.SaveEditor.Lists.SkyPokemon.Keys
+                Dim item As String = SkyEditor.SaveEditor.Lists.SkyPokemon(count)
                 cbPartner01.Items.Add(item)
                 cbPartner02.Items.Add(item)
                 cbPartner03.Items.Add(item)

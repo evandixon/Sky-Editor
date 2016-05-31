@@ -2,7 +2,7 @@
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 
-Namespace Saves
+Namespace MysteryDungeon.Rescue
     Partial Class RBSave
         Implements iPokemonStorageOld
         Public Class Attack
@@ -69,11 +69,11 @@ Namespace Saves
             Implements iMDPkm
             Implements iPkmAttack
             Implements ISavableAs
-            Implements iOnDisk
+            Implements IOnDisk
             Implements IOpenableFile
             Public Const Length As Integer = 323
             Public Const MimeType As String = "application/x-rb-pokemon"
-            Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+            Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
 
             Public Sub New(Bits As Binary)
                 MyBase.New(Bits)
@@ -220,7 +220,7 @@ Namespace Saves
                 Return Lists.GetRBLocations
             End Function
 
-            Public Property Filename As String Implements iOnDisk.Filename
+            Public Property Filename As String Implements IOnDisk.Filename
 
             Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
                 Return ".rbpkm"

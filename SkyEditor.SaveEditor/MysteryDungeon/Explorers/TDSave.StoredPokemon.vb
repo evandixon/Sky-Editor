@@ -63,7 +63,7 @@ Namespace MysteryDungeon.Explorers
             End Property
 
             Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.GetSkyMoves
+                Return Lists.SkyMoves
             End Function
         End Class
         Public Class StoredPkm
@@ -248,13 +248,13 @@ Namespace MysteryDungeon.Explorers
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.GetSkyPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
                 Else
                     Return "----------"
                 End If
             End Function
             Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.GetSkyPokemon
+                Return Lists.SkyPokemon
             End Function
 
             Public Function GetMetAtDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetMetAtDictionary

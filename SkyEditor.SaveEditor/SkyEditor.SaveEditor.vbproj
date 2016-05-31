@@ -91,7 +91,6 @@
     <Compile Include="Checksums.vb" />
     <Compile Include="Interfaces\iAttack.vb" />
     <Compile Include="Interfaces\iItem.vb" />
-    <Compile Include="Interfaces\iItemStorage.vb" />
     <Compile Include="Interfaces\iMDActiveAttack.vb" />
     <Compile Include="Interfaces\iMDAttack.vb" />
     <Compile Include="Interfaces\iMDPkm.vb" />
@@ -150,10 +149,10 @@
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyStoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDHeldItem.vb" />
+    <Compile Include="MysteryDungeon\Rescue\RBHeldItem.vb" />
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="MysteryDungeon\GTIGameData.vb" />
-    <Compile Include="MysteryDungeon\Rescue\RBSave.HeldItem.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSave.StoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSave.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSaveEU.StoredPokemon.vb" />

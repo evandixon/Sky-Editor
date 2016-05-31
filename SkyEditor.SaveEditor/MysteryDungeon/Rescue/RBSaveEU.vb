@@ -1,7 +1,8 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
-Namespace Saves
+
+Namespace MysteryDungeon.Rescue
     Public Class RBSaveEU
         Inherits BinaryFile
         Implements IOpenableFile

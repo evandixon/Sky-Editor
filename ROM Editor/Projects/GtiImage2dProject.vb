@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
@@ -20,8 +21,16 @@ Namespace Projects
             Dim rawFilesDir = GetRawFilesDir()
             Dim backDir = GetRootDirectory()
 
+            Me.BuildStatusMessage = My.Resources.Language.LoadingConvertingBackgrounds
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildProgress = 0
+
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(rawFilesDir, "romfs"), "*.img", IO.SearchOption.AllDirectories)
-            Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
+            Dim toAdd As New List(Of Project.AddExistingFileBatchOperation)
+            Dim f As New AsyncFor
+            AddHandler f.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                   Me.BuildProgress = e.Progress
+                                               End Sub
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New CteImage
                                        Await b.OpenFile(Item, CurrentPluginManager.CurrentIOProvider)
@@ -34,29 +43,14 @@ Namespace Projects
                                        IO.File.Copy(newFilename, newFilename & ".original")
 
                                        Dim internalDir = IO.Path.GetDirectoryName(Item).Replace(rawFilesDir, "").Replace("\romfs", "")
-                                       Me.CreateDirectory(internalDir)
-                                       Await Me.AddExistingFile(internalDir, newFilename, CurrentPluginManager.CurrentIOProvider)
+                                       toAdd.Add(New AddExistingFileBatchOperation With {.ActualFilename = newFilename, .ParentPath = internalDir})
                                    End Using
                                End Function, backFiles)
 
-            'For count = 0 To backFiles.Count - 1
-            '    PluginHelper.StartLoading(String.Format(PluginHelper.GetLanguageItem("Converting backgrounds... ({0} of {1})"), count, backFiles.Count), count / backFiles.Count)
-            '    Dim item = backFiles(count)
-            '    Using b As New FileFormats.CteImage(item)
-            '        Dim image = b.ContainedImage
-            '        Dim newFilename = IO.Path.Combine(backDir, IO.Path.GetDirectoryName(item).Replace(rawFilesDir, "").Replace("\romfs", "").Trim("\"), IO.Path.GetFileNameWithoutExtension(item) & ".bmp")
-            '        If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newFilename)) Then
-            '            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newFilename))
-            '        End If
-            '        image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
-            '        IO.File.Copy(newFilename, newFilename & ".original")
+            Await Me.RecreateRootWithExistingFiles(toAdd, CurrentPluginManager.CurrentIOProvider)
 
-            '        Dim internalDir = IO.Path.GetDirectoryName(item).Replace(rawFilesDir, "").Replace("\romfs", "")
-            '        Me.CreateDirectory(internalDir)
-            '        Await Me.AddExistingFile(internalDir, item)
-            '    End Using
-            'Next
-            PluginHelper.SetLoadingStatusFinished()
+            Me.BuildProgress = 1
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
         Protected Overrides Async Function DoBuild() As Task

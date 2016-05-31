@@ -20,7 +20,7 @@ Namespace Explorers
                     '    englishLanguage.Items.CopyTo(6773, ItemNames, 0, 1959)
                     'End Using
                 Else
-                    ItemNames = SkyEditor.SaveEditor.Lists.GetSkyItemNames.Values.ToArray
+                    ItemNames = SkyEditor.SaveEditor.Lists.SkyItems.Values.ToArray
                 End If
             End With
             RefreshItems()

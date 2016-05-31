@@ -148,7 +148,7 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
             Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.GetSkyMoves
+                Return Lists.SkyMoves
             End Function
         End Class
 
@@ -362,7 +362,7 @@ Namespace MysteryDungeon.Explorers
             End Function
 
             Public Function GetPokemonDictionary() As IDictionary(Of Integer, String) Implements iMDPkm.GetPokemonDictionary
-                Return Lists.GetSkyPokemon
+                Return Lists.SkyPokemon
             End Function
         End Class
 
@@ -441,7 +441,7 @@ Namespace MysteryDungeon.Explorers
             End Property
 
             Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-                Return Lists.GetSkyMoves
+                Return Lists.SkyMoves
             End Function
         End Class
 
@@ -918,7 +918,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _heldItems As ObservableCollection(Of SkyHeldItem)
 
-        Private Function GetHeldItems() As List(Of SkyHeldItem)
+        <Obsolete("Only one reference, should be merged with caller")> Private Function GetHeldItems() As List(Of SkyHeldItem)
             Dim output As New List(Of SkyHeldItem)
 
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
@@ -933,7 +933,7 @@ Namespace MysteryDungeon.Explorers
             Return output
         End Function
 
-        Private Sub SetHeldItems(items As IList(Of SkyHeldItem))
+        <Obsolete("Only one reference, should be merged with caller")> Private Sub SetHeldItems(items As IList(Of SkyHeldItem))
             For count As Integer = 0 To Offsets.HeldItemNumber - 1
                 Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
                 If items.Count > count Then

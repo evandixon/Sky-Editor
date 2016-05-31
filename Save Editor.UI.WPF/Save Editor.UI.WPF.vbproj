@@ -181,6 +181,9 @@
     <Compile Include="MysteryDungeon\Explorers\TDHeldItemEditView.xaml.vb">
       <DependentUpon>TDHeldItemEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MysteryDungeon\Rescue\RBHeldItemEditView.xaml.vb">
+      <DependentUpon>RBHeldItemEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
       <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
@@ -190,9 +193,6 @@
     </Compile>
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\HeldItemsTab.xaml.vb">
-      <DependentUpon>HeldItemsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tabs\PkmGeneralTab.xaml.vb">
       <DependentUpon>PkmGeneralTab.xaml</DependentUpon>
@@ -297,6 +297,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MysteryDungeon\Rescue\RBHeldItemEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Tabs\ActivePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -306,10 +310,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\GIGDGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\HeldItemsTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

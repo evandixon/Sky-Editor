@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.SaveEditor.Saves
+﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Rescue
+Imports SkyEditor.SaveEditor.Saves
 Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 

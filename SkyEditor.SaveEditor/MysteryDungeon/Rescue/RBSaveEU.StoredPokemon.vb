@@ -1,19 +1,19 @@
 ﻿Imports SkyEditor.SaveEditor.Interfaces
 
-Namespace Saves
+Namespace MysteryDungeon.Rescue
     Partial Class RBSaveEU
         Implements Interfaces.iPokemonStorageOld
-        Public Property StoredPokemon(Index As Integer) As Saves.RBSave.StoredPkm
+        Public Property StoredPokemon(Index As Integer) As RBSave.StoredPkm
             Get
-                Return New Saves.RBSave.StoredPkm(Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+                Return New RBSave.StoredPkm(Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
             End Get
-            Set(value As Saves.RBSave.StoredPkm)
+            Set(value As RBSave.StoredPkm)
                 Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength) = value
             End Set
         End Property
-        Public Property StoredPokemon() As Saves.RBSave.StoredPkm()
+        Public Property StoredPokemon() As RBSave.StoredPkm()
             Get
-                Dim output As New List(Of Saves.RBSave.StoredPkm)
+                Dim output As New List(Of RBSave.StoredPkm)
                 For count As Integer = 0 To Offsets.StoredPokemonNumber - 1
                     Dim i = StoredPokemon(count)
                     'If i.IsValid OrElse count < 5 Then 'Excepting when count < 5 because the first 4 pokemon slots are special
@@ -22,12 +22,12 @@ Namespace Saves
                 Next
                 Return output.ToArray
             End Get
-            Set(value As Saves.RBSave.StoredPkm())
+            Set(value As RBSave.StoredPkm())
                 For count As Integer = 0 To Offsets.StoredPokemonNumber - 1
                     If value.Length > count Then
                         StoredPokemon(count) = value(count)
                     Else
-                        StoredPokemon(count) = New Saves.RBSave.StoredPkm(New Binary(Offsets.StoredPokemonLength))
+                        StoredPokemon(count) = New RBSave.StoredPkm(New Binary(Offsets.StoredPokemonLength))
                     End If
                 Next
             End Set

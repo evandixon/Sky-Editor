@@ -47,12 +47,12 @@ Namespace MysteryDungeon.Explorers
 
         Public Overrides Function ToString() As String
             If IsBox Then
-                Return $"{Lists.GetSkyItemNames(ID)} ({Lists.GetSkyItemNames(ContainedItemID)})"
+                Return $"{Lists.SkyItems(ID)} ({Lists.SkyItems(ContainedItemID)})"
             Else
                 If Quantity > 1 Then
-                    Return $"{Lists.GetSkyItemNames(ID)} ({Quantity})"
+                    Return $"{Lists.SkyItems(ID)} ({Quantity})"
                 Else
-                    Return Lists.GetSkyItemNames(ID)
+                    Return Lists.SkyItems(ID)
                 End If
             End If
         End Function

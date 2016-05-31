@@ -1,4 +1,5 @@
-﻿Imports SkyEditorBase
+﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Rescue
+Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Namespace Tabs
@@ -8,7 +9,7 @@ Namespace Tabs
             Dim x = GetEditingObject(Of RBSave).StoredItemCounts
             For count As Integer = 0 To 238
                 If x(count) > 0 Then
-                    txtDisplay.Text &= Lists.RBItemNames(count + 1) & ": " & x(count) & vbCrLf
+                    txtDisplay.Text &= Lists.RBItems(count + 1) & ": " & x(count) & vbCrLf
                 End If
             Next
         End Sub
@@ -18,7 +19,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Saves.RBSave)}
+            Return {GetType(RBSave)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

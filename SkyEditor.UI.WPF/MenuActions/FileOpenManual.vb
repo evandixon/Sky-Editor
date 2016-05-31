@@ -12,14 +12,14 @@ Namespace MenuActions
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             OpenFileDialog1.Filter = CurrentPluginManager.CurrentIOUIManager.IOFiltersString
             If OpenFileDialog1.ShowDialog = DialogResult.OK Then
-                Dim w As New GameTypeSelector()
+                Dim w As New FileTypeSelector()
                 Dim games As New Dictionary(Of String, TypeInfo)
                 For Each item In IOHelper.GetOpenableFileTypes(CurrentPluginManager)
                     games.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
                 Next
-                w.AddGames(games.Keys)
+                w.SetFileTypeSource(games)
                 If w.ShowDialog Then
-                    CurrentPluginManager.CurrentIOUIManager.OpenFile(Await IOHelper.OpenFile(OpenFileDialog1.FileName, games(w.SelectedGame), CurrentPluginManager), True)
+                    CurrentPluginManager.CurrentIOUIManager.OpenFile(Await IOHelper.OpenFile(OpenFileDialog1.FileName, w.SelectedFileType, CurrentPluginManager), True)
                 End If
             End If
         End Function

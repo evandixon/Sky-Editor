@@ -1,11 +1,14 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.SaveEditor.Modeling
 
-Namespace Saves
+Namespace MysteryDungeon.Rescue
     Public Class RBSave
         Inherits BinaryFile
         Implements IDetectableFileType
+        Implements IInventory
+        Implements INotifyPropertyChanged
 
         Protected Class Offsets
             Public Const BackupSaveStart As Integer = &H6000
@@ -36,7 +39,25 @@ Namespace Saves
             Public Const StoredPokemonNumber As Integer = 407 + 6
         End Class
 
-#Region "Properties"
+        Public Sub New()
+            MyBase.New
+        End Sub
+
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+        Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
+            Await MyBase.OpenFile(Filename, Provider)
+
+            LoadItems()
+        End Function
+
+        Public Overrides Sub Save(Destination As String, provider As IOProvider)
+            SaveItems()
+
+            MyBase.Save(Destination, provider)
+        End Sub
+
+#Region "Save Interaction"
 
 #Region "Team Info"
         ''' <summary>
@@ -89,6 +110,64 @@ Namespace Saves
                 Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength) = value
             End Set
         End Property
+
+#End Region
+
+#Region "Held Items"
+        Private Sub LoadItems()
+            HeldItems = New ObservableCollection(Of RBHeldItem)
+            For count = 0 To Offsets.HeldItemNumber
+                Dim i As RBHeldItem = RBHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                If i.IsValid Then
+                    HeldItems.Add(i)
+                Else
+                    Exit For
+                End If
+            Next
+
+            InitItemSlots()
+        End Sub
+
+        Private Sub SaveItems()
+            For count = 0 To Offsets.HeldItemNumber
+                If HeldItems.Count > count Then
+                    Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength) = HeldItems(count).GetHeldItemBits
+                Else
+                    Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
+                End If
+            Next
+        End Sub
+
+        Public Property HeldItems As ObservableCollection(Of RBHeldItem)
+            Get
+                Return _heldItems
+            End Get
+            Set(value As ObservableCollection(Of RBHeldItem))
+                If _heldItems IsNot value Then
+                    _heldItems = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HeldItems)))
+                End If
+            End Set
+        End Property
+        Private WithEvents _heldItems As ObservableCollection(Of RBHeldItem)
+
+        Public Property ItemSlots As IEnumerable(Of IItemSlot) Implements IInventory.ItemSlots
+            Get
+                Return _itemSlots
+            End Get
+            Private Set(value As IEnumerable(Of IItemSlot))
+                _itemSlots = value
+            End Set
+        End Property
+        Dim _itemSlots As ObservableCollection(Of IItemSlot)
+
+
+        Private Sub InitItemSlots()
+            Dim slots As New ObservableCollection(Of IItemSlot)
+            slots.Add(New ItemSlot(Of RBHeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
+            ItemSlots = slots
+        End Sub
+
 
 #End Region
 

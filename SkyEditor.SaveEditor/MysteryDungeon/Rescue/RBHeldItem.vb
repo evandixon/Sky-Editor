@@ -1,8 +1,11 @@
 ﻿Imports SkyEditor.Core.Utilities
 
-Namespace MysteryDungeon.Explorers
-    Public Class SkyHeldItem
+Namespace MysteryDungeon.Rescue
+    Public Class RBHeldItem
         Implements IClonable
+
+        Public Const Length As Integer = 23
+        Public Const MimeType As String = "application/x-rb-item"
 
         Public Property IsValid As Boolean
         Private Property Flag1 As Boolean
@@ -14,25 +17,15 @@ Namespace MysteryDungeon.Explorers
         Private Property Flag7 As Boolean
         Public Property ID As Integer
 
-        ''' <summary>
-        ''' The ID of the item inside this one, if this item is a box.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property ContainedItemID As Integer?
-        Public Property Quantity As Integer
-        Public Property HeldBy As Byte
-        Public ReadOnly Property IsBox As Boolean
-            Get
-                Return ID > 363 AndAlso ID < 400
-            End Get
-        End Property
+        ''' <remarks>For sticks and other stackable items, this is the number in the stack.  For used TMs, this is the contained move</remarks>
+        Public Property Parameter As Integer
 
         Public Overrides Function ToString() As String
-            Return Lists.SkyItems(ID)
+            Return Lists.RBItems(ID)
         End Function
 
         Public Function Clone() As Object Implements IClonable.Clone
-            Dim out As New SkyHeldItem
+            Dim out As New RBHeldItem
             With out
                 .IsValid = Me.IsValid
                 .Flag1 = Me.Flag1
@@ -43,26 +36,20 @@ Namespace MysteryDungeon.Explorers
                 .Flag6 = Me.Flag6
                 .Flag7 = Me.Flag7
 
-                .ContainedItemID = Me.ContainedItemID
-                .Quantity = Me.Quantity
+                .Parameter = Me.Parameter
 
                 .ID = Me.ID
-                .HeldBy = Me.HeldBy
 
             End With
             Return out
         End Function
 
         Public Function GetParameter() As Integer
-            If IsBox Then
-                Return ContainedItemID
-            Else
-                Return Quantity
-            End If
+            Return Parameter
         End Function
 
         Public Function GetHeldItemBits() As Binary
-            Dim out As New Binary(SkySave.Offsets.HeldItemLength)
+            Dim out As New Binary(Length)
             With out
                 .Bit(0) = IsValid
                 .Bit(1) = Flag1
@@ -73,23 +60,16 @@ Namespace MysteryDungeon.Explorers
                 .Bit(6) = Flag6
                 .Bit(7) = Flag7
 
-                Dim parameter As Integer
-                If IsBox Then
-                    parameter = ContainedItemID
-                Else
-                    parameter = Quantity
-                End If
-                .Int(0, 8, 11) = parameter
+                .Int(0, 8, 7) = Me.Parameter
 
-                .Int(0, 19, 11) = ID
-                .Int(0, 30, 3) = HeldBy
+                .Int(0, 15, 8) = ID
 
             End With
             Return out
         End Function
 
-        Public Shared Function FromHeldItemBits(bits As Binary) As SkyHeldItem
-            Dim out As New SkyHeldItem
+        Public Shared Function FromHeldItemBits(bits As Binary) As RBHeldItem
+            Dim out As New RBHeldItem
             With bits
                 out.IsValid = .Bit(0)
                 out.Flag1 = .Bit(1)
@@ -99,39 +79,24 @@ Namespace MysteryDungeon.Explorers
                 out.Flag5 = .Bit(5)
                 out.Flag6 = .Bit(6)
                 out.Flag7 = .Bit(7)
-                Dim parameter = .Int(0, 8, 11)
-                out.ID = .Int(0, 19, 11)
-                out.HeldBy = .Int(0, 30, 3)
-                If out.IsBox Then
-                    out.ContainedItemID = parameter
-                    out.Quantity = 1
-                Else
-                    out.ContainedItemID = Nothing
-                    out.Quantity = parameter
-                End If
+                out.Parameter = .Int(0, 8, 7)
+                out.ID = .Int(0, 15, 8)
             End With
             Return out
         End Function
 
         Public Shared Function FromStoredItemParts(itemID As Integer, parameter As Integer)
-            Dim out As New SkyHeldItem
+            Dim out As New RBHeldItem
             out.IsValid = True
             out.ID = itemID
-            If out.IsBox Then
-                out.ContainedItemID = parameter
-                out.Quantity = 1
-            Else
-                out.ContainedItemID = Nothing
-                out.Quantity = parameter
-            End If
+            out.Parameter = parameter
             Return out
         End Function
 
         Public Sub New()
             IsValid = True
             ID = 1
-            Quantity = 1
-            ContainedItemID = 0
+            Parameter = 1
         End Sub
     End Class
 End Namespace
