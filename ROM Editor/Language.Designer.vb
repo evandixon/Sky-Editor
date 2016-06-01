@@ -326,6 +326,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Packing....
+        '''</summary>
+        Friend Shared ReadOnly Property LoadingPacking() As String
+            Get
+                Return ResourceManager.GetString("LoadingPacking", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Unpacking....
         '''</summary>
         Friend Shared ReadOnly Property LoadingUnpacking() As String

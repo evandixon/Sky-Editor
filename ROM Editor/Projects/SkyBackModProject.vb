@@ -1,4 +1,6 @@
-﻿Imports ROMEditor.FileFormats.Explorers
+﻿Imports System.Collections.Concurrent
+Imports ROMEditor.FileFormats.Explorers
+Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditorBase
@@ -18,14 +20,22 @@ Namespace Projects
         Protected Overrides Async Function Initialize() As Task
             Await MyBase.Initialize
 
+            'Stop loading
+            Me.BuildProgress = 0
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildStatusMessage = My.Resources.Language.LoadingConvertingBackgrounds
+
             Dim projectDir = GetRootDirectory()
             Dim sourceDir = GetRawFilesDir()
 
             Dim BACKdir As String = IO.Path.Combine(projectDir, "Backgrounds")
             Me.CreateDirectory("Backgrounds")
             Dim backFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "BACK"), "*.bgp")
-            Dim f As New AsyncFor(My.Resources.Language.LoadingConvertingBackgrounds)
-
+            Dim toAdd As New ConcurrentBag(Of AddExistingFileBatchOperation)
+            Dim f As New AsyncFor
+            AddHandler f.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
+                                                   Me.BuildProgress = e.Progress
+                                               End Sub
             Await f.RunForEach(Async Function(Item As String) As Task
                                    Using b As New BGP
                                        Await b.OpenFile(Item, CurrentPluginManager.CurrentIOProvider)
@@ -36,9 +46,15 @@ Namespace Projects
                                        End If
                                        image.Save(newFilename, Drawing.Imaging.ImageFormat.Bmp)
                                        IO.File.Copy(newFilename, newFilename & ".original")
-                                       Await Me.AddExistingFile("Backgrounds", newFilename, CurrentPluginManager.CurrentIOProvider)
+                                       toAdd.Add(New AddExistingFileBatchOperation With {.ActualFilename = newFilename, .ParentPath = "Backgrounds"})
                                    End Using
                                End Function, backFiles)
+            Await Me.RecreateRootWithExistingFiles(toAdd, CurrentPluginManager.CurrentIOProvider)
+
+            'Stop loading
+            Me.BuildProgress = 1
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
         Protected Overrides Async Function DoBuild() As Task

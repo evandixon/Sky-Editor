@@ -45,8 +45,12 @@ Namespace Projects
             Dim rawDir = GetRawFilesDir()
             Dim projDir = GetRootDirectory()
 
+
+            Me.BuildProgress = 0
+            Me.IsBuildProgressIndeterminate = True
+            Me.BuildStatusMessage = My.Resources.Language.LoadingConvertingLanguages
+
             'Convert Languages
-            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingLanguages)
             Dim languageDictionary As New Dictionary(Of String, String)
             languageDictionary.Add("text_e.str", "English")
             languageDictionary.Add("text_f.str", "Français")
@@ -75,8 +79,11 @@ Namespace Projects
             Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)(CurrentPluginManager.CurrentIOProvider)
             personalityTest.ContainedObject = New PersonalityTestContainer(overlay13)
             personalityTest.Save(IO.Path.Combine(projDir, "Starter Pokemon"), CurrentPluginManager.CurrentIOProvider)
-            Await Me.AddExistingFile("", IO.Path.Combine(projDir, "Starter Pokemon"), CurrentPluginManager.CurrentIOProvider)
-            PluginHelper.SetLoadingStatusFinished()
+            Await Me.RecreateRootWithExistingFiles({New AddExistingFileBatchOperation With {.ActualFilename = IO.Path.Combine(projDir, "Starter Pokemon"), .ParentPath = ""}}, CurrentPluginManager.CurrentIOProvider)
+
+            Me.BuildProgress = 1
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
         Protected Overrides Async Function DoBuild() As Task

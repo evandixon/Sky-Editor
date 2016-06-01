@@ -259,4 +259,7 @@ evandixon (Personality test, bgp files)</value>
     <value>The property with the CommandParameter Attribute was not applied to the correct type.</value>
     <comment>The message for an exception that's thrown when a CommandParameterAttribute is applied to a property that is not of the correct type.</comment>
   </data>
+  <data name="LoadingPacking" xml:space="preserve">
+    <value>Packing...</value>
+  </data>
 </root>

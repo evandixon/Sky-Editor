@@ -476,7 +476,9 @@ Namespace IO
         Public Overridable Async Function RecreateRootWithExistingFiles(files As IEnumerable(Of AddExistingFileBatchOperation), provider As IOProvider) As Task
             Dim newRoot As New ProjectNode(Me, Nothing)
             For Each item In files
-                CreateDirectory(newRoot, item.ParentPath)
+                If Not String.IsNullOrEmpty(item.ParentPath) Then
+                    CreateDirectory(newRoot, item.ParentPath)
+                End If
                 Await AddExistingFile(newRoot, item.ParentPath, item.ActualFilename, provider)
             Next
             RootNode.Children = newRoot.Children

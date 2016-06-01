@@ -22,15 +22,15 @@ Namespace Projects
             Dim sourceDir = GetRawFilesDir()
 
             Dim scriptFiles = IO.Directory.GetFiles(IO.Path.Combine(sourceDir, "Data", "SCRIPT"), "*", IO.SearchOption.AllDirectories)
-            Dim f2 As New AsyncFor(My.Resources.Language.LoadingAddingFiles)
-            f2.RunSynchronously = True
-            Await f2.RunForEach(Async Function(Item As String) As Task
-                                    Dim d = IO.Path.GetDirectoryName(Item).Replace(projectDir, "")
-                                    Me.CreateDirectory(d)
-                                    Await Me.AddExistingFile(d, Item, CurrentPluginManager.CurrentIOProvider)
-                                End Function, scriptFiles)
+            Dim toAdd As New List(Of AddExistingFileBatchOperation)
+            For Each item In scriptFiles
+                toAdd.Add(New AddExistingFileBatchOperation With {.ActualFilename = item, .ParentPath = IO.Path.GetDirectoryName(item).Replace(projectDir, "")})
+            Next
+            Await Me.RecreateRootWithExistingFiles(toAdd, CurrentPluginManager.CurrentIOProvider)
 
-            PluginHelper.SetLoadingStatusFinished()
+            Me.BuildProgress = 1
+            Me.IsBuildProgressIndeterminate = False
+            Me.BuildStatusMessage = My.Resources.Language.Complete
         End Function
 
     End Class
