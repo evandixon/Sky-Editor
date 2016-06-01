@@ -14,6 +14,12 @@ Namespace Utilities
         Public FoundType As Lazy(Of Type)
         Public ReadOnly AssemblyDescriptionString As String
         Public ReadOnly TypeName As String
+
+        ''' <summary>
+        ''' The name of the base type, if this is a generic type.  Otherwise, equal to TypeName.
+        ''' </summary>
+        Public ReadOnly GenericTypeName As String
+        Public ReadOnly IsGenericType As Boolean
         Public ReadOnly ShortAssemblyName As String
         Public ReadOnly Version As String
         Public ReadOnly Culture As String
@@ -21,8 +27,11 @@ Namespace Utilities
         Public ReadOnly GenericParameters As New List(Of ParsedAssemblyQualifiedName)()
         Public ReadOnly CSharpStyleName As Lazy(Of String)
         Public ReadOnly VBNetStyleName As Lazy(Of String)
+        Public ReadOnly AssemblyQualifiedName As String
 
-        Public Sub New(AssemblyQualifiedName As String, Assemblies As IEnumerable(Of Assembly))
+        Public Sub New(AssemblyQualifiedName As String, Assemblies As IEnumerable(Of Assembly), manager As PluginManager)
+            Me.AssemblyQualifiedName = AssemblyQualifiedName
+
             Dim index As Integer = -1
             Dim rootBlock As New block()
             If True Then
@@ -42,7 +51,7 @@ Namespace Utilities
                     ElseIf c = "]"c Then
                         currentBlock.iEnd = i - 1
                         If AssemblyQualifiedName(currentBlock.iStart) <> "["c Then
-                            currentBlock.parsedAssemblyQualifiedName = New ParsedAssemblyQualifiedName(AssemblyQualifiedName.Substring(currentBlock.iStart, i - currentBlock.iStart), Assemblies)
+                            currentBlock.parsedAssemblyQualifiedName = New ParsedAssemblyQualifiedName(AssemblyQualifiedName.Substring(currentBlock.iStart, i - currentBlock.iStart), Assemblies, manager)
                             If bcount = 2 Then
                                 Me.GenericParameters.Add(currentBlock.parsedAssemblyQualifiedName)
                             End If
@@ -57,6 +66,15 @@ Namespace Utilities
             End If
 
             Me.TypeName = AssemblyQualifiedName.Substring(0, index)
+
+            If Me.TypeName.Contains("`") Then
+                Me.GenericTypeName = Me.TypeName.Substring(0, Me.TypeName.IndexOf("`"c) + 2)
+                IsGenericType = True
+            Else
+                Me.GenericTypeName = Me.TypeName
+                IsGenericType = False
+            End If
+
 
             Me.CSharpStyleName = New Lazy(Of String)(Function()
                                                          Return Me.LanguageStyle("<", ">")
@@ -88,10 +106,22 @@ Namespace Utilities
                                                      Return searchedType
                                                  End If
                                                  For Each assem In Assemblies
-                                                     searchedType = assem.GetType(TypeName)
-                                                     If searchedType IsNot Nothing Then
-                                                         Return searchedType
+                                                     If IsGenericType Then
+                                                         searchedType = assem.GetType(GenericTypeName)
+                                                         If searchedType IsNot Nothing Then
+                                                             Dim types As New List(Of Type)
+                                                             For Each item In GenericParameters
+                                                                 types.Add(ReflectionHelpers.GetTypeByName(item.AssemblyQualifiedName, manager).AsType)
+                                                             Next
+                                                             Return searchedType.MakeGenericType(types.ToArray)
+                                                         End If
+                                                     Else
+                                                         searchedType = assem.GetType(GenericTypeName)
+                                                         If searchedType IsNot Nothing Then
+                                                             Return searchedType
+                                                         End If
                                                      End If
+
                                                  Next
                                                  ' Not found.
                                                  Return Nothing

@@ -32,7 +32,7 @@ Public Class PluginManager
     ''' </summary>
     ''' <returns></returns>
     Protected Property TypeRegistery As Dictionary(Of TypeInfo, List(Of TypeInfo))
-    Public Property CoreAssemblyName As String 'Todo: make readonly to the public
+    Protected Property CoreModAssembly As Assembly
     Public Property ExtensionDirectory As String
 
     ''' <summary>
@@ -172,6 +172,7 @@ Public Class PluginManager
         Await Task.WhenAll(deleteTasks)
 
         'Load the provided core
+        Me.CoreModAssembly = Core.GetType.GetTypeInfo.Assembly
         Core.Load(Me)
 
         ExtensionDirectory = Core.GetExtensionDirectory
@@ -191,6 +192,7 @@ Public Class PluginManager
 
         'Load types
         RegisterType(GetType(IFileTypeDetector).GetTypeInfo, GetType(DetectableFileTypeDetector).GetTypeInfo)
+        RegisterType(GetType(IFileTypeDetector).GetTypeInfo, GetType(ObjectFileDetector).GetTypeInfo)
         RegisterType(GetType(ExtensionType).GetTypeInfo, GetType(PluginExtensionType).GetTypeInfo)
         RegisterType(GetType(Solution).GetTypeInfo, GetType(Solution).GetTypeInfo)
         RegisterType(GetType(Project).GetTypeInfo, GetType(Project).GetTypeInfo)
@@ -457,6 +459,26 @@ Public Class PluginManager
         Return out
     End Function
 #End Region
+
+    Public Function GetLoadedAssemblies() As List(Of Assembly)
+        Dim out As New List(Of Assembly)
+
+        For Each item In Me.Assemblies
+            out.Add(item)
+        Next
+
+        Dim currentAssembly As Assembly = GetType(PluginManager).GetTypeInfo.Assembly
+
+        If Not out.Contains(currentAssembly) Then
+            out.Add(currentAssembly)
+        End If
+
+        If Not out.Contains(CoreModAssembly) Then
+            out.Add(CoreModAssembly)
+        End If
+
+        Return out
+    End Function
 
 #End Region
 

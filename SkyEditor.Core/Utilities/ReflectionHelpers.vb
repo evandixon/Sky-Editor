@@ -57,7 +57,7 @@ Namespace Utilities
             If t Is Nothing Then
                 'Can't find the type.  Time to parse it and search the plugin manager's assemblies to find it.
                 'We could have done this to begin with, but Type.GetType is probably a little faster.
-                Dim name As New ParsedAssemblyQualifiedName(AssemblyQualifiedName, Manager.Assemblies)
+                Dim name As New ParsedAssemblyQualifiedName(AssemblyQualifiedName, Manager.GetLoadedAssemblies, Manager)
                 t = name.FoundType.Value
             End If
             Return t?.GetTypeInfo

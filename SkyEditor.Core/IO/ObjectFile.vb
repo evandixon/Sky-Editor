@@ -18,6 +18,9 @@ Namespace IO
             Public Property ContainedTypeName As String
         End Class
 
+        Public Sub New()
+        End Sub
+
         Public Sub New(FileProvider As IOProvider)
             Me.CurrentIOProvider = FileProvider
         End Sub
