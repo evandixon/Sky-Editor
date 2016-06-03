@@ -10,16 +10,16 @@ Namespace UI
         Implements ICommand
 
 #Region "Declarations"
-        Private ReadOnly _CanExecute As Func(Of Boolean)
-        Private ReadOnly _Execute As Action
+        Private ReadOnly _CanExecute As Func(Of Object, Boolean)
+        Private ReadOnly _Execute As Action(Of Object)
 #End Region
 
 #Region "Constructors"
-        Public Sub New(execute As Action)
+        Public Sub New(execute As Action(Of Object))
             Me.New(execute, Nothing)
         End Sub
 
-        Public Sub New(execute As Action, canExecute As Func(Of Boolean))
+        Public Sub New(execute As Action(Of Object), canExecute As Func(Of Object, Boolean))
             If execute Is Nothing Then
                 Throw New ArgumentNullException(NameOf(execute))
             End If
@@ -52,12 +52,12 @@ Namespace UI
             If _CanExecute Is Nothing Then
                 Return True
             Else
-                Return _CanExecute.Invoke
+                Return _CanExecute.Invoke(parameter)
             End If
         End Function
 
         Public Sub Execute(parameter As Object) Implements ICommand.Execute
-            _Execute.Invoke()
+            _Execute.Invoke(parameter)
         End Sub
 #End Region
     End Class

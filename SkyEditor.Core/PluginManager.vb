@@ -149,7 +149,7 @@ Public Class PluginManager
         CurrentIOProvider = Core.GetIOProvider
         CurrentSettingsProvider = Core.GetSettingsProvider(Me)
         CurrentConsoleProvider = Core.GetConsoleProvider
-        CurrentIOUIManager = New IOUIManager(Me)
+        CurrentIOUIManager = Core.GetIOUIManager(Me)
 
         'Delete files and directories scheduled for deletion
         Dim deleteTasks As New List(Of Task)

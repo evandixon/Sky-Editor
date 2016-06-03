@@ -23,6 +23,10 @@ Public MustInherit Class CoreSkyEditorPlugin
         Return New DummyConsoleProvider
     End Function
 
+    Public Overridable Function GetIOUIManager(manager As PluginManager) As IOUIManager
+        Return New IOUIManager(manager)
+    End Function
+
     ''' <summary>
     ''' Gets the full path of the directory used to store extensions.
     ''' </summary>

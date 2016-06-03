@@ -470,6 +470,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to _View.
+        '''</summary>
+        Public Shared ReadOnly Property MenuView() As String
+            Get
+                Return ResourceManager.GetString("MenuView", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Solution _Build Progress.
+        '''</summary>
+        Public Shared ReadOnly Property MenuViewSolutionBuildProgress() As String
+            Get
+                Return ResourceManager.GetString("MenuViewSolutionBuildProgress", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Solution _Explorer.
+        '''</summary>
+        Public Shared ReadOnly Property MenuViewSolutionExplorer() As String
+            Get
+                Return ResourceManager.GetString("MenuViewSolutionExplorer", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Name.
         '''</summary>
         Public Shared ReadOnly Property Name() As String

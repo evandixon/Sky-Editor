@@ -20,6 +20,7 @@ Public Class IOUIManager
         Me.FileDisposalSettings = New Dictionary(Of Object, Boolean)
         Me.OpenFiles = New ObservableCollection(Of AvalonDockFileWrapper)
         Me.RunningTasks = New ObservableCollection(Of Task)
+        AnchorableViewModels = New ObservableCollection(Of AnchorableViewModel)
         WrapperFileType = GetType(AvalonDockFileWrapper)
     End Sub
 
@@ -97,14 +98,6 @@ Public Class IOUIManager
 
     Public Property AnchorableViewModels As ObservableCollection(Of AnchorableViewModel)
         Get
-            If _anchorableViewModels Is Nothing Then
-                _anchorableViewModels = New ObservableCollection(Of AnchorableViewModel)
-                For Each item In CurrentPluginManager.GetRegisteredObjects(Of AnchorableViewModel)
-                    Dim i As AnchorableViewModel = ReflectionHelpers.CreateNewInstance(item)
-                    i.CurrentIOUIManager = Me
-                    _anchorableViewModels.Add(i)
-                Next
-            End If
             Return _anchorableViewModels
         End Get
         Set(value As ObservableCollection(Of AnchorableViewModel))
@@ -519,6 +512,13 @@ Public Class IOUIManager
         'Set this item to visible if there's a visible
         Return isVisible
     End Function
+
+    Public Sub ShowAnchorable(model As AnchorableViewModel)
+        Dim targetType = model.GetType
+        If Not (From m In AnchorableViewModels Where ReflectionHelpers.IsOfType(m, targetType.GetTypeInfo, False)).Any Then
+            AnchorableViewModels.Add(model)
+        End If
+    End Sub
 
 #End Region
 

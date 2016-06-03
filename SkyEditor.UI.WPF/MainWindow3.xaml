@@ -30,7 +30,13 @@
                 </Style>
             </Menu.ItemContainerStyle>
         </Menu>
-        <ad:DockingManager x:Name="dockingManager" Grid.Row="1" DocumentsSource="{Binding OpenFiles}" AnchorablesSource="{Binding AnchorableViewModels}" ActiveContent="{Binding ActiveContent, Mode=TwoWay}">
+        <ad:DockingManager x:Name="dockingManager"
+                           Grid.Row="1"
+                           DocumentsSource="{Binding OpenFiles}"
+                           AnchorablesSource="{Binding AnchorableViewModels}"
+                           ActiveContent="{Binding ActiveContent, Mode=TwoWay}"
+                           avalonHelpers:AvalonDockLayoutSerializer.LoadLayoutCommand="{Binding AvalonDockLayout.LoadLayoutCommand}"
+                           avalonHelpers:AvalonDockLayoutSerializer.SaveLayoutCommand="{Binding AvalonDockLayout.SaveLayoutCommand}">
             <ad:DockingManager.LayoutItemTemplateSelector>
                 <avalonHelpers:PanesTemplateSelector>
                     <avalonHelpers:PanesTemplateSelector.DocumentTemplate>
@@ -56,6 +62,7 @@
                     <avalonHelpers:PanesStyleSelector.AnchorableStyle>
                         <Style TargetType="{x:Type ad:LayoutAnchorableItem}">
                             <Setter Property="Title" Value="{Binding Model.Header}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ModelID}" />
                         </Style>
                     </avalonHelpers:PanesStyleSelector.AnchorableStyle>
                 </avalonHelpers:PanesStyleSelector>

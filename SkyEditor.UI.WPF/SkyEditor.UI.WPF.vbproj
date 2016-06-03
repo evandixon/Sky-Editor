@@ -92,6 +92,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvalonHelpers\AvalonDockLayoutSerializer.vb" />
+    <Compile Include="AvalonHelpers\AvalonDockLayoutViewModel.vb" />
     <Compile Include="AvalonHelpers\PanesStyleSelector.vb" />
     <Compile Include="AvalonHelpers\PanesTemplateSelector.vb" />
     <Compile Include="AvalonHelpers\WPFAvalonDockFileWrapper.vb" />
@@ -125,6 +127,8 @@
     <Compile Include="MenuActions\SolutionBuild.vb" />
     <Compile Include="MenuActions\ToolsExtensions.vb" />
     <Compile Include="MenuActions\ToolsSettings.vb" />
+    <Compile Include="MenuActions\View\MenuViewSolutionBuildProgress.vb" />
+    <Compile Include="MenuActions\View\MenuViewSolutionExplorer.vb" />
     <Compile Include="NewFileWindow.xaml.vb">
       <DependentUpon>NewFileWindow.xaml</DependentUpon>
     </Compile>
@@ -179,6 +183,7 @@
     <Compile Include="ViewModels\SolutionBuildProgressViewModel.vb" />
     <Compile Include="ViewModels\SolutionExplorerViewModel.vb" />
     <Compile Include="WPFCoreSkyEditorPlugin.vb" />
+    <Compile Include="WPFIOUIManager.vb" />
     <Compile Include="WPFUiHelper.vb" />
   </ItemGroup>
   <ItemGroup>

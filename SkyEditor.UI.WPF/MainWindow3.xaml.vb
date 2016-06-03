@@ -20,8 +20,6 @@ Public Class MainWindow3
 
         ' Add any initialization after the InitializeComponent() call.
         Me.Title = String.Format(CultureInfo.InvariantCulture, My.Resources.Language.MainTitle, My.Resources.Language.VersionPrefix, Assembly.GetExecutingAssembly.GetName.Version.ToString)
-        SaveLayoutCommand = New RelayCommand(AddressOf SaveLayout, AddressOf CanSaveLayout)
-        LoadLayoutCommand = New RelayCommand(AddressOf LoadLayout, AddressOf CanLoadLayout)
     End Sub
 
     Private Sub OnIOUIManagerFileClosing(sender As Object, e As FileClosingEventArgs)
@@ -30,6 +28,11 @@ Public Class MainWindow3
         End If
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks>Currently, this window only supports plugin managers that have a WPFIOUIManager as the CurrentIOUIManager</remarks>
     Public Property CurrentPluginManager As PluginManager
         Get
             Return _currentPluginManager
@@ -48,54 +51,4 @@ Public Class MainWindow3
     End Property
     Dim _currentPluginManager As PluginManager
 
-    Public Property SaveLayoutCommand As ICommand
-    Public Property LoadLayoutCommand As ICommand
-
-    Private Function CanSaveLayout() As Boolean
-        Return True
-    End Function
-
-    Private Function CanLoadLayout() As Boolean
-        Return CurrentPluginManager.CurrentIOProvider.FileExists("AvalonDock.Layout.config")
-    End Function
-
-    Private Function SaveLayout() As Task
-        Dim layoutSerializer As New XmlLayoutSerializer(dockingManager)
-        layoutSerializer.Serialize("AvalonDock.Layout.config")
-        Return Task.CompletedTask
-    End Function
-
-    Private Function LoadLayout() As Task
-        If CanLoadLayout() Then
-            Dim layoutSerializer As New XmlLayoutSerializer(dockingManager)
-            layoutSerializer.Deserialize("AvalonDock.Layout.config")
-        End If
-
-
-        'Todo: handle tool windows as described in AvalonDock's example project:
-        '//Here I've implemented the LayoutSerializationCallback just to show
-        '// a way to feed layout desarialization with content loaded at runtime
-        '//Actually I could in this case let AvalonDock to attach the contents
-        '//from current layout using the content ids
-        '//LayoutSerializationCallback should anyway be handled to attach contents
-        '//Not currently loaded
-        'layoutSerializer.LayoutSerializationCallback += (s, e) =>
-        '    {
-        '        //if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
-        '        //    e.Content = Workspace.This.FileStats;
-        '        //else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
-        '        //    File.Exists(e.Model.ContentId))
-        '        //    e.Content = Workspace.This.Open(e.Model.ContentId);
-        '    };
-
-        Return Task.CompletedTask
-    End Function
-
-    Private Sub MainWindow3_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        LoadLayoutCommand.Execute(Nothing)
-    End Sub
-
-    Private Sub MainWindow3_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        SaveLayoutCommand.Execute(Nothing)
-    End Sub
 End Class

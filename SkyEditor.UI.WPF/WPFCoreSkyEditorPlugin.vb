@@ -4,6 +4,7 @@ Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.UI.WPF.MenuActions
 Imports SkyEditor.UI.WPF.MenuActions.Context
+Imports SkyEditor.UI.WPF.MenuActions.View
 Imports SkyEditor.UI.WPF.ObjectControls
 Imports SkyEditor.UI.WPF.ViewModels
 
@@ -33,6 +34,8 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionBuild).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ToolsExtensions).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ToolsSettings).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(MenuViewSolutionExplorer).GetTypeInfo)
+        manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(MenuViewSolutionBuildProgress).GetTypeInfo)
 
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectAddFolder).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectNodeOpenFile).GetTypeInfo)
@@ -43,5 +46,9 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectProperties).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectDelete).GetTypeInfo)
     End Sub
+
+    Public Overrides Function GetIOUIManager(manager As PluginManager) As IOUIManager
+        Return New WPFIOUIManager(manager)
+    End Function
 
 End Class

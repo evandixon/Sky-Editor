@@ -256,6 +256,15 @@
   <data name="MenuToolsSettings" xml:space="preserve">
     <value>_Settings</value>
   </data>
+  <data name="MenuView" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="MenuViewSolutionBuildProgress" xml:space="preserve">
+    <value>Solution _Build Progress</value>
+  </data>
+  <data name="MenuViewSolutionExplorer" xml:space="preserve">
+    <value>Solution _Explorer</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
