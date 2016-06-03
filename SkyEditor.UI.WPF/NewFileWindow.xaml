@@ -14,7 +14,7 @@
         <TextBox x:Name="txtName" Margin="56,0,10,74" Height="22" VerticalAlignment="Bottom" />
         
         <Label x:Name="lbGame" Content="{x:Static res:Language.Type}" HorizontalAlignment="Left" Margin="10,0,0,47" VerticalAlignment="Bottom" />
-        <local:SearchableDropDown x:Name="cbType" Margin="56,0,10,47" Height="22" VerticalAlignment="Bottom" />
+        <ComboBox x:Name="cbType" Margin="56,0,10,47" Height="22" VerticalAlignment="Bottom" IsEditable="True" DisplayMemberPath="Key" SelectedValuePath="Value" />
         
         <Button x:Name="btnOK" Content="{x:Static res:Language.OK}" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="Button_Click" />    
     </Grid>

@@ -136,27 +136,17 @@
     <Compile Include="UI\SettingsEditor.xaml.vb">
       <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\SolutionBuildProgress.xaml.vb">
-      <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="Application.xaml.vb">
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UI\SolutionExplorer.xaml.vb">
-      <DependentUpon>SolutionExplorer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="StartupHelpers.vb" />
-    <Compile Include="UI\ToolWindow.vb" />
     <Compile Include="UI\WelcomeTabContent.xaml.vb">
       <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\MainWindow2.xaml.vb">
-      <DependentUpon>MainWindow2.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
@@ -253,23 +243,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\SolutionBuildProgress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\SolutionExplorer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\WelcomeTabContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\BackgroundTaskWait.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\MainWindow2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

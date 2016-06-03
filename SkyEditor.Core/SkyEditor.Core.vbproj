@@ -97,7 +97,9 @@
     <Compile Include="ConsoleCommands\ConsoleCommandAsync.vb" />
     <Compile Include="ConsoleCommands\ConsoleHelper.vb" />
     <Compile Include="ConsoleCommands\DummyConsoleProvider.vb" />
+    <Compile Include="ConsoleCommands\GeneratePluginExtensions.vb" />
     <Compile Include="ConsoleCommands\IConsoleProvider.vb" />
+    <Compile Include="ConsoleCommands\InstallExtension.vb" />
     <Compile Include="Extensions\ExtensionHelper.vb" />
     <Compile Include="Extensions\ExtensionInstallResult.vb" />
     <Compile Include="Extensions\ExtensionType.vb" />
@@ -171,7 +173,6 @@
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="PluginManager.vb" />
     <Compile Include="TypeRegisteredEventArgs.vb" />
-    <Compile Include="UI\ITargetedControl.vb" />
     <Compile Include="UI\MenuAction.vb" />
     <Compile Include="UI\MenuItemInfo.vb" />
     <Compile Include="UI\RelayCommand.vb" />
@@ -202,6 +203,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Français.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.VisualBasic.targets" />

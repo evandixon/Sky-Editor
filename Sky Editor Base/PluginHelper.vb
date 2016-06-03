@@ -10,7 +10,7 @@ Imports SkyEditor.Core.IO
 ''' A collection of methods that are useful to Sky Editor plugins.
 ''' </summary>
 ''' <remarks></remarks>
-Public Class PluginHelper
+<Obsolete> Public Class PluginHelper
 
 #Region "Program Running"
     ''' <summary>

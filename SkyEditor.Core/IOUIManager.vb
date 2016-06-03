@@ -21,7 +21,6 @@ Public Class IOUIManager
         Me.OpenFiles = New ObservableCollection(Of AvalonDockFileWrapper)
         Me.RunningTasks = New ObservableCollection(Of Task)
         AnchorableViewModels = New ObservableCollection(Of AnchorableViewModel)
-        WrapperFileType = GetType(AvalonDockFileWrapper)
     End Sub
 
 #Region "Events"
@@ -107,7 +106,6 @@ Public Class IOUIManager
     Dim _anchorableViewModels As ObservableCollection(Of AnchorableViewModel)
 
     Public Property SupportedToolWindowTypes As IEnumerable(Of Type)
-    <Obsolete> Public Property WrapperFileType As Type
 
     ''' <summary>
     ''' Gets or sets the selected file
@@ -326,7 +324,7 @@ Public Class IOUIManager
     Public Sub OpenFile(File As Object, DisposeOnClose As Boolean)
         If File IsNot Nothing Then
             If Not (From o In OpenFiles Where o.File Is File).Any Then
-                Dim wrapper As AvalonDockFileWrapper = ReflectionHelpers.CreateInstance(WrapperFileType.GetTypeInfo)
+                Dim wrapper As New AvalonDockFileWrapper
                 wrapper.File = File
                 OpenFiles.Add(wrapper)
                 FileDisposalSettings.Add(File, DisposeOnClose)
@@ -346,7 +344,7 @@ Public Class IOUIManager
     Public Sub OpenFile(File As Object, ParentProject As Project)
         If File IsNot Nothing Then
             If Not (From o In OpenFiles Where o.File Is File).Any Then
-                Dim wrapper As AvalonDockFileWrapper = ReflectionHelpers.CreateInstance(WrapperFileType.GetTypeInfo)
+                Dim wrapper As New AvalonDockFileWrapper
                 wrapper.File = File
                 OpenFiles.Add(wrapper)
                 OpenedProjectFiles.Add(File, ParentProject)

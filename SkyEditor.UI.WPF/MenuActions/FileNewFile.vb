@@ -13,9 +13,9 @@ Namespace MenuActions
             For Each item In IOHelper.GetCreatableFileTypes(CurrentPluginManager)
                 games.Add(ReflectionHelpers.GetTypeFriendlyName(item), item)
             Next
-            w.AddGames(games.Keys)
+            w.SetGames(games)
             If w.ShowDialog Then
-                Dim file As Object = IOHelper.CreateNewFile(w.SelectedName, games(w.SelectedGame))
+                Dim file As Object = IOHelper.CreateNewFile(w.SelectedName, w.SelectedType)
                 CurrentPluginManager.CurrentIOUIManager.OpenFile(file, True)
             End If
             Return Task.CompletedTask

@@ -9,7 +9,7 @@
         <Label Content="{x:Static res:Language.Type}" HorizontalAlignment="Left" Margin="19,28,0,0" VerticalAlignment="Top"/>
         <Label Content="{x:Static res:Language.Location}" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtName" Height="23" Margin="62,4,90,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <skyEditorBase:SearchableDropDown x:Name="ddType" Margin="63,31,90,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="ddType" Margin="63,31,90,0" VerticalAlignment="Top" IsEditable="True" DisplayMemberPath="Key" SelectedValuePath="Value"/>
         <TextBox x:Name="txtLocation" Height="23" Margin="63,58,90,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
         <Button x:Name="btnBrowse" Content="{x:Static res:Language.Browse}" HorizontalAlignment="Right" Margin="0,60,10,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="btnCancel" Content="{x:Static res:Language.Cancel}" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75"/>

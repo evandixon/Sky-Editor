@@ -185,7 +185,6 @@
     <Compile Include="TargetedContextMenu.xaml.vb">
       <DependentUpon>TargetedContextMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TargetedToolWindow.vb" />
     <Compile Include="ViewModels\SolutionBuildProgressViewModel.vb" />
     <Compile Include="ViewModels\SolutionExplorerViewModel.vb" />
     <Compile Include="WPFCoreSkyEditorPlugin.vb" />

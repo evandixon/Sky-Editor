@@ -8,12 +8,12 @@ Public Class NewFileWindow
         Me.Close()
     End Sub
 
-    Public Property SelectedGame As String
+    Public Property SelectedType As Type
         Get
-            Return cbType.LastSafeValue
+            Return cbType.SelectedValue
         End Get
-        Set(value As String)
-            cbType.SelectedItem = value
+        Set(value As Type)
+            cbType.SelectedValue = value
         End Set
     End Property
 
@@ -23,14 +23,8 @@ Public Class NewFileWindow
         End Get
     End Property
 
-    Public Sub ResetGames()
-        cbType.Items.Clear()
-    End Sub
-    Public Sub AddGames(Games As Dictionary(Of String, Type).KeyCollection)
-        For Each item In Games
-            cbType.Items.Add(item)
-        Next
-        If cbType.Items.Count > 0 Then cbType.SelectedIndex = 0
+    Public Sub SetGames(Games As Dictionary(Of String, Type))
+        cbType.ItemsSource = Games
     End Sub
 
     Public Shadows Function ShowDialog() As Boolean

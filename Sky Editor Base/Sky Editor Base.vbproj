@@ -176,12 +176,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicIniFile.vb" />
-    <Compile Include="ConsoleCommands\GeneratePluginExtensions.vb" />
-    <Compile Include="ConsoleCommands\InstallExtension.vb" />
-    <Compile Include="EventArguments\ExceptionThrownEventArgs.vb" />
-    <Compile Include="EventArguments\IoFilterRegisteredEventArgs.vb" />
-    <Compile Include="EventArguments\MenuActionAddedEventArgs.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -234,8 +228,6 @@
     </None>
     <AppDesigner Include="My Project\" />
     <None Include="packages.config" />
-    <None Include="Resources\Languages\English.json" />
-    <None Include="Resources\Languages\Français.json" />
     <None Include="Sky Editor Base_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -273,7 +265,9 @@
       <Name>SkyEditor.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ConsoleCommands\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -91,6 +91,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicIniFile.vb" />
     <Compile Include="ConsoleCommands\ImportFunctionList.vb" />
     <Compile Include="ConsoleCommands\MessageFarcFilenameAnalysis.vb" />
     <Compile Include="ConsoleCommands\NameListResearcher.vb" />

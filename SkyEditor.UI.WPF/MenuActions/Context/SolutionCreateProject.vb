@@ -27,13 +27,13 @@ Namespace MenuActions.Context
                 For Each supported In ParentSolution.GetSupportedProjectTypes(ParentPath, CurrentPluginManager)
                     types.Add(ReflectionHelpers.GetTypeFriendlyName(supported), supported)
                 Next
-                w.AddGames(types.Keys)
+                w.SetGames(types)
 
                 If w.ShowDialog Then
                     If TypeOf item Is Solution Then
-                        Await DirectCast(item, Solution).CreateProject("", w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
+                        Await DirectCast(item, Solution).CreateProject("", w.SelectedName, w.SelectedType, CurrentPluginManager)
                     ElseIf TypeOf item Is SolutionNode Then
-                        Await DirectCast(item, SolutionNode).CreateChildProject(w.SelectedName, types(w.SelectedGame), CurrentPluginManager)
+                        Await DirectCast(item, SolutionNode).CreateChildProject(w.SelectedName, w.SelectedType, CurrentPluginManager)
                     End If
                 End If
             Next

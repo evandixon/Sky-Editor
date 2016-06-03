@@ -3,6 +3,7 @@ Imports System.Windows
 Imports System.Windows.Forms
 Imports SkyEditor.Core
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 
 Public Class NewSolutionWindow
     Implements IDisposable
@@ -27,9 +28,12 @@ Public Class NewSolutionWindow
         ' Add any initialization after the InitializeComponent() call.
         _folderBrowser = New FolderBrowserDialog
 
+        Dim itemSource As New Dictionary(Of String, Object)
         For Each item As Solution In Manager.GetRegisteredObjects(GetType(Solution).GetTypeInfo)
-            ddType.Items.Add(item)
+            Dim t = item.GetType
+            itemSource.Add(ReflectionHelpers.GetTypeFriendlyName(t), t)
         Next
+        ddType.ItemsSource = itemSource
         If ddType.Items.Count > 0 Then ddType.SelectedIndex = 0
     End Sub
 
@@ -65,10 +69,10 @@ Public Class NewSolutionWindow
 
     Public Property SelectedSolution As Solution
         Get
-            Return ddType.LastSafeValue
+            Return ddType.SelectedValue
         End Get
         Set(value As Solution)
-            ddType.LastSafeValue = value
+            ddType.SelectedValue = value
         End Set
     End Property
 

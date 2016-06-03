@@ -29,7 +29,6 @@ Friend Class WpfCoreMod
         MyBase.Load(Manager)
         'CoreMod stuff
         Manager.RegisterTypeRegister(GetType(IObjectControl))
-        Manager.RegisterTypeRegister(GetType(ITargetedControl))
         'End CoreMod stuff
 
         Manager.CurrentIOUIManager.RegisterIOFilter("*.skysln", My.Resources.Language.SkyEditorSolution)

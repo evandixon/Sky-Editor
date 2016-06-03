@@ -25,9 +25,9 @@ Namespace MenuActions.Context
                 For Each supported In ParentProject.GetSupportedFileTypes(CurrentPath, CurrentPluginManager)
                     types.Add(ReflectionHelpers.GetTypeFriendlyName(supported), supported)
                 Next
-                w.AddGames(types.Keys)
+                w.SetGames(types)
                 If w.ShowDialog Then
-                    ParentProject.CreateFile(CurrentPath, w.SelectedName, types(w.SelectedGame))
+                    ParentProject.CreateFile(CurrentPath, w.SelectedName, w.SelectedType)
                 End If
             Next
             Return Task.CompletedTask
