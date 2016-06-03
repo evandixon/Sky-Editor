@@ -136,7 +136,9 @@ Namespace AvalonHelpers
             Else
                 Dim targetType = ReflectionHelpers.GetTypeByName(args.Model.ContentId, CurrentPluginManager)
                 If targetType IsNot Nothing AndAlso ReflectionHelpers.IsOfType(targetType, GetType(AnchorableViewModel).GetTypeInfo, False) Then
-                    args.Content = ReflectionHelpers.CreateInstance(targetType)
+                    Dim model As AnchorableViewModel = ReflectionHelpers.CreateInstance(targetType)
+                    model.CurrentIOUIManager = CurrentPluginManager.CurrentIOUIManager
+                    args.Content = model
                 End If
             End If
         End Sub
