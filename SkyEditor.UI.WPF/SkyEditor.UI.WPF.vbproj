@@ -176,6 +176,12 @@
     <Compile Include="ObjectControlPlaceholder.vb" />
     <Compile Include="ObjectTab.vb" />
     <Compile Include="SearchableDropDown.vb" />
+    <Compile Include="Settings\ISettingsProviderExtensions.vb" />
+    <Compile Include="Settings\SettingNames.Designer.vb">
+      <DependentUpon>SettingNames.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TargetedContextMenu.xaml.vb">
       <DependentUpon>TargetedContextMenu.xaml</DependentUpon>
     </Compile>
@@ -198,6 +204,11 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\SettingNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingNames.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

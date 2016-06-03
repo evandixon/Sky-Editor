@@ -97,13 +97,10 @@ Namespace AvalonHelpers
         Private Sub LoadDockingManagerLayout(docManager As DockingManager)
             Dim layoutFileName As String = Path.Combine(EnvironmentPaths.GetRootResourceDirectory, AvalonDockLayoutFilename)
 
-            If System.IO.File.Exists(layoutFileName) = False Then
-                Return
-            End If
+            If File.Exists(layoutFileName) Then
+                Dim LayoutSerializer = New XmlLayoutSerializer(docManager)
 
-            Dim layoutSerializer = New XmlLayoutSerializer(docManager)
-
-            AddHandler layoutSerializer.LayoutSerializationCallback, Sub(sender As Object, e As LayoutSerializationCallbackEventArgs)
+                AddHandler LayoutSerializer.LayoutSerializationCallback, Sub(sender As Object, e As LayoutSerializationCallbackEventArgs)
                                                                          ' This can happen if the previous session was loading a file
                                                                          ' but was unable to initialize the view ...
                                                                          If e.Model.ContentId IsNot Nothing Then
@@ -114,7 +111,9 @@ Namespace AvalonHelpers
 
                                                                      End Sub
 
-            layoutSerializer.Deserialize(layoutFileName)
+                LayoutSerializer.Deserialize(layoutFileName)
+            End If
+
         End Sub
 
         Private Sub ReloadContentOnStartUp(args As LayoutSerializationCallbackEventArgs)
