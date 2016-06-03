@@ -70,8 +70,12 @@ Public Class MainWindow3
 
     Private Sub MainWindow3_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         With CurrentPluginManager.CurrentSettingsProvider
-            .SetMainWindowHeight(Me.Height)
-            .SetMainWindowWidth(Me.Width)
+            If Not Me.WindowState = WindowState.Maximized Then
+                'Setting width and height while maximized results in the window being the same size when restored
+                .SetMainWindowHeight(Me.Height)
+                .SetMainWindowWidth(Me.Width)
+            End If
+
             .SetMainWindowIsMaximized(Me.WindowState = WindowState.Maximized)
             .Save(CurrentPluginManager.CurrentIOProvider)
         End With
