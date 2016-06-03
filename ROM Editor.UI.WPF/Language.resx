@@ -384,4 +384,7 @@ evandixon (Personality test, bgp files)</value>
   <data name="BasicTalk" xml:space="preserve">
     <value>Say</value>
   </data>
+  <data name="Partner22" xml:space="preserve">
+    <value>Partner 22:</value>
+  </data>
 </root>

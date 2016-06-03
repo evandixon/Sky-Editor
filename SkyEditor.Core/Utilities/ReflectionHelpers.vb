@@ -52,6 +52,37 @@ Namespace Utilities
             Return match
         End Function
 
+        Public Shared Function IsIContainerOfType(obj As Object, typeToCheck As TypeInfo, Optional checkContainer As Boolean = False) As Boolean
+            Dim Original As TypeInfo = Nothing
+
+            'Check if the object we're checking is itself a TypeInfo
+            If TypeOf obj Is TypeInfo Then
+                'If so, we'll Obj to compare
+                Original = obj
+            Else
+                'If not, we'll compare the type of the object we're checking
+                Original = obj.GetType.GetTypeInfo
+            End If
+            Return IsOfType(Original,
+                            GetType(IContainer(Of Object)).GetGenericTypeDefinition.MakeGenericType(typeToCheck.AsType).GetTypeInfo, 'Get the type definition of "IContainer(Of TypeToCheck)".
+                            False 'If this was true, then we'd be in an infinite loop, checking for "IContainer(Of IContainer(Of TypeToCheck)", "IContainer(Of IContainer(Of IContainer(Of TypeToCheck))", and so on.  The plugin management code will only handle IContainer(Of T), so we only want to check one level.
+                            )
+        End Function
+
+        Public Shared Function GetIContainerContents(container As Object, containedType As Type) As Object
+            Dim interfaceType As Type = (From t In container.GetType.GetTypeInfo.ImplementedInterfaces Where t.IsConstructedGenericType AndAlso t.GenericTypeArguments.Length = 1 AndAlso t.GenericTypeArguments(0).Equals(containedType)).FirstOrDefault
+            Dim targetProperty = (From p In interfaceType?.GetTypeInfo.DeclaredProperties Where p.Name = NameOf(IContainer(Of Object).Item)).FirstOrDefault
+
+            Return targetProperty.GetValue(container)
+        End Function
+
+        Public Shared Sub SetIContainerContents(container As Object, containedType As TypeInfo, value As Object)
+            Dim interfaceType As Type = (From t In container.GetType.GetTypeInfo.ImplementedInterfaces Where t.IsConstructedGenericType AndAlso t.GenericTypeArguments.Length = 1 AndAlso t.GenericTypeArguments(0).Equals(containedType)).FirstOrDefault
+            Dim targetProperty = (From p In interfaceType?.GetTypeInfo.DeclaredProperties Where p.Name = NameOf(IContainer(Of Object).Item)).FirstOrDefault
+
+            targetProperty.SetValue(container, value)
+        End Sub
+
         Public Shared Function GetTypeByName(AssemblyQualifiedName As String, Manager As PluginManager) As TypeInfo
             Dim t = Type.GetType(AssemblyQualifiedName, False)
             If t Is Nothing Then

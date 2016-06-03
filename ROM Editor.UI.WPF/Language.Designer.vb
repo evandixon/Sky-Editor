@@ -632,6 +632,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Partner 22:.
+        '''</summary>
+        Public Shared ReadOnly Property Partner22() As String
+            Get
+                Return ResourceManager.GetString("Partner22", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Player.
         '''</summary>
         Public Shared ReadOnly Property Player() As String

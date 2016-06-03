@@ -105,7 +105,6 @@ Public Class ObjectControlPlaceholder
                     Dim objControl = SkyEditor.Core.UI.UIHelper.GetObjectControl(value, {GetType(UserControl)}, CurrentPluginManager)
                     If objControl IsNot Nothing Then
                         Content = objControl
-                        objControl.EditingObject = value
                     Else
                         'Nothing is registered to edit this object.
                         Dim label As New Label

@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.Utilities
 
 Namespace UI
@@ -192,6 +193,18 @@ Namespace UI
                 'Create a new instance before returning
                 out = ReflectionHelpers.CreateNewInstance(out)
                 out.SetPluginManager(Manager)
+
+                'Set editing object based on IContainer support
+                If out.SupportsObject(ObjectToEdit) Then
+                    out.EditingObject = ObjectToEdit
+                Else
+                    For Each type In out.GetSupportedTypes
+                        If ReflectionHelpers.IsIContainerOfType(ObjectToEdit, type.GetTypeInfo, True) Then
+                            out.EditingObject = ReflectionHelpers.GetIContainerContents(ObjectToEdit, type)
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
             Return out
         End Function
@@ -225,7 +238,7 @@ Namespace UI
                 'Check to see if the tab itself is supported
                 'It must be one of the types in RequestedTabTypes
                 For Each t In RequestedTabTypes
-                    If ReflectionHelpers.IsOfType(etab, t.GetTypeInfo) Then
+                    If ReflectionHelpers.IsOfType(etab, t.GetTypeInfo, False) Then
                         isMatch = True
                         Exit For
                     End If
@@ -237,7 +250,7 @@ Namespace UI
                 End If
                 If isMatch Then
                     For Each t In supportedTypes
-                        If ObjectToEdit Is Nothing OrElse Not ReflectionHelpers.IsOfType(ObjectToEdit, t.GetTypeInfo) Then
+                        If ObjectToEdit Is Nothing OrElse Not ReflectionHelpers.IsOfType(ObjectToEdit, t.GetTypeInfo, True) Then
                             isMatch = False
                             Exit For
                         End If
@@ -254,7 +267,28 @@ Namespace UI
                     'Create another instance of etab, since etab is our cached, search-only instance.
                     Dim t As IObjectControl = ReflectionHelpers.CreateNewInstance(etab)
                     t.SetPluginManager(Manager)
-                    t.EditingObject = ObjectToEdit
+
+                    'Set editing object based on IContainer support
+                    Dim direct As Boolean = False
+
+                    For Each type In supportedTypes
+                        If ReflectionHelpers.IsOfType(ObjectToEdit, type.GetTypeInfo, False) Then
+                            t.EditingObject = ObjectToEdit
+                            direct = True
+                            Exit For
+                        End If
+                    Next
+
+                    If Not direct Then
+                        For Each type In supportedTypes
+                            If ReflectionHelpers.IsIContainerOfType(ObjectToEdit, type.GetTypeInfo, True) Then
+                                t.EditingObject = ReflectionHelpers.GetIContainerContents(ObjectToEdit, type)
+                                Exit For
+                            End If
+                        Next
+                    End If
+
+
                     allTabs.Add(t)
                 End If
             Next

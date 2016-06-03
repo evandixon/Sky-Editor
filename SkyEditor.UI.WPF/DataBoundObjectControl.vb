@@ -3,6 +3,7 @@ Imports System.Reflection
 Imports System.Windows.Controls
 Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 ''' <summary>
 ''' An IObjectControl that directly supports WPF DataBinding.

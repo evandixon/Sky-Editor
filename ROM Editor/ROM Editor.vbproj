@@ -107,6 +107,7 @@
     <Compile Include="FileFormats\CTR\Level3Header.vb" />
     <Compile Include="FileFormats\CTR\RomFs.vb" />
     <Compile Include="FileFormats\CTR\RomFSHeader.vb" />
+    <Compile Include="FileFormats\Explorers\PersonalityTestContainer.vb" />
     <Compile Include="FileFormats\Explorers\Script\CommandParameterAttribute.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\BasicTalkCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\BgmFadeIn.vb" />
