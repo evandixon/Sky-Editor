@@ -14,7 +14,6 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Header="{x:Static res:Language.Script}">
     <DockPanel>
-        <Explorers:SsbScriptToolbar x:Name="tbScript" DockPanel.Dock="Top" />
         <ListView x:Name="lvScript" ItemsSource="{Binding}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>

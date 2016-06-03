@@ -183,6 +183,9 @@
     <Compile Include="DeploySetup.xaml.vb">
       <DependentUpon>DeploySetup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Explorers\SSBScriptEditor.xaml.vb">
+      <DependentUpon>SSBScriptEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GameCodeSelector.xaml.vb">
       <DependentUpon>GameCodeSelector.xaml</DependentUpon>
     </Compile>
@@ -267,6 +270,10 @@
     <Page Include="DeploySetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Explorers\SSBScriptEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\GameCodeSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
