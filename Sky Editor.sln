@@ -54,8 +54,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CheatGenerator", "CheatGene
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DungeonBalance", "DungeonBalance\DungeonBalance.vbproj", "{A6CCC5E0-904C-4250-8963-936E2220380E}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor Online", "Sky Editor Online\Sky Editor Online.vbproj", "{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core", "SkyEditor.Core\SkyEditor.Core.vbproj", "{6F869961-8D92-4FB1-9680-A1D5C6938350}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.Core.Windows", "SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj", "{8238A6A2-76AF-4741-8564-D1D2A4B067BB}"
@@ -223,14 +221,6 @@ Global
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A6CCC5E0-904C-4250-8963-936E2220380E}.Release|x86.Build.0 = Release|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Debug|x86.Build.0 = Debug|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|x86.ActiveCfg = Release|Any CPU
-		{2B92F7E9-E76C-466F-AED9-41EDEBAEF234}.Release|x86.Build.0 = Release|Any CPU
 		{6F869961-8D92-4FB1-9680-A1D5C6938350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6F869961-8D92-4FB1-9680-A1D5C6938350}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F869961-8D92-4FB1-9680-A1D5C6938350}.Debug|x86.ActiveCfg = Debug|Any CPU
