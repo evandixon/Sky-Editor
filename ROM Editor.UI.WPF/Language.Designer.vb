@@ -200,11 +200,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to English.
+        '''</summary>
+        Public Shared ReadOnly Property English() As String
+            Get
+                Return ResourceManager.GetString("English", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Entry.
         '''</summary>
         Public Shared ReadOnly Property Entry() As String
             Get
                 Return ResourceManager.GetString("Entry", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to French.
+        '''</summary>
+        Public Shared ReadOnly Property French() As String
+            Get
+                Return ResourceManager.GetString("French", resourceCulture)
             End Get
         End Property
         
@@ -223,6 +241,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property GenericLoading() As String
             Get
                 Return ResourceManager.GetString("GenericLoading", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to German.
+        '''</summary>
+        Public Shared ReadOnly Property German() As String
+            Get
+                Return ResourceManager.GetString("German", resourceCulture)
             End Get
         End Property
         
@@ -304,6 +331,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property IsFemale() As String
             Get
                 Return ResourceManager.GetString("IsFemale", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Italian.
+        '''</summary>
+        Public Shared ReadOnly Property Italian() As String
+            Get
+                Return ResourceManager.GetString("Italian", resourceCulture)
             End Get
         End Property
         
@@ -815,11 +851,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Spanish.
+        '''</summary>
+        Public Shared ReadOnly Property Spanish() As String
+            Get
+                Return ResourceManager.GetString("Spanish", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Strings.
         '''</summary>
         Public Shared ReadOnly Property Strings() As String
             Get
                 Return ResourceManager.GetString("Strings", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Text.
+        '''</summary>
+        Public Shared ReadOnly Property Text() As String
+            Get
+                Return ResourceManager.GetString("Text", resourceCulture)
             End Get
         End Property
         

@@ -9,11 +9,12 @@
              xmlns:cmds="clr-namespace:ROMEditor.FileFormats.Explorers.Script.Commands;assembly=ROMEditor"
              xmlns:jas="clr-namespace:WPF.JoshSmith.ServiceProviders.UI;assembly=ListViewDragDropManager"
              xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
-             xmlns:Explorers="clr-namespace:ROMEditor.UI.WPF.Explorers"
+             xmlns:explorersUI="clr-namespace:ROMEditor.UI.WPF.Explorers"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Header="{x:Static res:Language.Script}">
     <DockPanel>
+        <explorersUI:SsbScriptToolbar x:Name="scriptToolbar" DockPanel.Dock="Top" />
         <ListView x:Name="lvScript" ItemsSource="{Binding}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -35,7 +36,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <!--<skywpf:ObjectControlPlaceholder DataContext="{Binding Item}" />-->
-                    <Label Content="{Binding Item}" />
+                    <Label Content="{Binding AsString}" />
                 </DataTemplate>            
             </ListView.ItemTemplate>
         </ListView>

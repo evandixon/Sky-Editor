@@ -39,14 +39,14 @@ Namespace Tabs
             Next
         End Sub
         Sub ShowActivePkmEditDialog()
-            If lbActivePokemon.SelectedIndex > -1 Then
-                Dim w As New ObjectWindow(CurrentPluginManager)
-                w.ObjectToEdit = lbActivePokemon.SelectedItem
-                w.ShowDialog()
-                lbActivePokemon.SelectedItem = w.ObjectToEdit
-                IsModified = True
-                RefreshActivePKMDisplay()
-            End If
+            'If lbActivePokemon.SelectedIndex > -1 Then
+            '    Dim w As New ObjectWindow(CurrentPluginManager)
+            '    w.ObjectToEdit = lbActivePokemon.SelectedItem
+            '    w.ShowDialog()
+            '    lbActivePokemon.SelectedItem = w.ObjectToEdit
+            '    IsModified = True
+            '    RefreshActivePKMDisplay()
+            'End If
         End Sub
         Private Sub btnEditActivePokemon_Click(sender As Object, e As RoutedEventArgs) Handles btnEditActivePokemon.Click
             ShowActivePkmEditDialog()

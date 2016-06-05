@@ -1,5 +1,9 @@
-﻿Imports System.Windows.Controls
+﻿Imports System.Collections.Specialized
+Imports System.ComponentModel
+Imports System.Windows.Controls
+Imports System.Windows.Input
 Imports ROMEditor.FileFormats.Explorers.Script
+Imports ROMEditor.FileFormats.Explorers.Script.Commands
 Imports SkyEditor.UI.WPF
 Imports WPF.JoshSmith.ServiceProviders.UI
 
@@ -12,17 +16,38 @@ Namespace Explorers
         ''' Container class that's used to bypass a bug in ListViewDragDropManager.
         ''' </summary>
         Public Class ObjectContainer
-            Public Property Item As Commands.LogicalCommand
+            Implements INotifyPropertyChanged
+
+            Public Property Item As LogicalCommand
+                Get
+                    Return _item
+                End Get
+                Set(value As LogicalCommand)
+                    _item = value
+
+                    'Normally we want to avoid raising this property if nothing has changed,
+                    'but in this case this serves to refresh the AsString display.
+                    'When the ObjectWindow in lvScript_MouseDoubleClick below exits, it will set Item, which may be the same reference,
+                    'and we need the ListView display to update
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Item)))
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(AsString)))
+                End Set
+            End Property
+            Dim _item As LogicalCommand
+
             Public ReadOnly Property AsString As String
                 Get
                     Return Item.ToString
                 End Get
             End Property
+
+            Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
         End Class
 #End Region
 
+        Private enableRaiseModified As Boolean
         Private WithEvents dragManager As ListViewDragDropManager(Of ObjectContainer)
-        Protected Property Items As ObjectModel.ObservableCollection(Of ObjectContainer)
+        Protected WithEvents Items As ObjectModel.ObservableCollection(Of ObjectContainer)
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer
             Return 1
@@ -34,18 +59,10 @@ Namespace Explorers
 
         Public Overrides Property ObjectToEdit As Object
             Get
-                If _editing IsNot Nothing Then
-                    With DirectCast(_editing, SSB)
-                        .Commands.Clear()
-                        For Each item In Items
-                            .Commands.Add(item.Item)
-                        Next
-                    End With
-                End If
-
                 Return _editing
             End Get
             Set(value As Object)
+                enableRaiseModified = False
                 _editing = value
                 If value IsNot Nothing Then
                     With DirectCast(value, SSB)
@@ -55,9 +72,11 @@ Namespace Explorers
                         Next
                     End With
                 End If
+                scriptToolbar.ScriptFile = value
+                enableRaiseModified = True
             End Set
         End Property
-        Dim _editing As Object
+        Private WithEvents _editing As SSB
 
         Public Sub New()
             ' This call is required by the designer.
@@ -67,10 +86,40 @@ Namespace Explorers
             Items = New ObjectModel.ObservableCollection(Of ObjectContainer)
             lvScript.DataContext = Items
             dragManager = New ListViewDragDropManager(Of ObjectContainer)(lvScript)
+            scriptToolbar.Target = lvScript
+            enableRaiseModified = False
         End Sub
 
         Private Sub lvScript_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lvScript.SelectionChanged
 
+        End Sub
+
+        Private Sub Items_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs) Handles Items.CollectionChanged
+            If enableRaiseModified AndAlso TypeOf _editing Is SSB Then
+                DirectCast(_editing, SSB).RaiseModified()
+            End If
+        End Sub
+
+        Private Sub lvScript_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs) Handles lvScript.MouseDoubleClick
+            If lvScript.SelectedItem IsNot Nothing Then
+                Dim item As ObjectContainer = lvScript.SelectedItem
+                Dim command = item.Item
+
+                Dim window As New ObjectWindow(CurrentPluginManager)
+                window.ObjectToEdit = command
+                'Todo: use "If window.ShowDialog() Then" when ObjectWindow gives a better result
+                window.ShowDialog()
+                item.Item = window.ObjectToEdit
+            End If
+        End Sub
+
+        Private Sub _editing_FileSaving(sender As Object, e As EventArgs) Handles _editing.FileSaving
+            With DirectCast(_editing, SSB)
+                .Commands.Clear()
+                For Each item In Items
+                    .Commands.Add(item.Item)
+                Next
+            End With
         End Sub
     End Class
 End Namespace

@@ -148,9 +148,6 @@
     <Compile Include="UI\BackgroundTaskWait.xaml.vb">
       <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ObjectWindow.xaml.vb">
-      <DependentUpon>ObjectWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreModBase.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -244,10 +241,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\BackgroundTaskWait.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ObjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

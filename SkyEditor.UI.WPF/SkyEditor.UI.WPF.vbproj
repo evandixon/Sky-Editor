@@ -151,6 +151,9 @@
     <Compile Include="ObjectControls\SolutionExplorer.xaml.vb">
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectWindow.xaml.vb">
+      <DependentUpon>ObjectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OverlappingStyleSelector.vb" />
     <Compile Include="DocumentTab.vb" />
     <Compile Include="Language.Designer.vb">
@@ -268,6 +271,10 @@
     <Page Include="ObjectControls\SolutionExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TargetedContextMenu.xaml">
       <SubType>Designer</SubType>

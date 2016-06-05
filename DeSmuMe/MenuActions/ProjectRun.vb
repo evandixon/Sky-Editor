@@ -1,23 +1,39 @@
-﻿Imports System.Reflection
+﻿Imports System.IO
+Imports System.Reflection
+Imports ROMEditor.Projects
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class ProjectRun
         Inherits MenuAction
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
-            Return {GetType(ROMEditor.Projects.DSModPackProject).GetTypeInfo}
+            Return {GetType(SolutionNode).GetTypeInfo}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
-            Return TypeOf Obj Is ROMEditor.Projects.DSModPackProject AndAlso IO.File.Exists(IO.Path.Combine(DirectCast(Obj, ROMEditor.Projects.DSModPackProject).OutputDir, "PatchedRom.nds"))
+            Dim out = False
+            If TypeOf Obj Is SolutionNode Then
+                Dim node = DirectCast(Obj, SolutionNode)
+                If Not node.IsDirectory Then
+                    Dim proj = DirectCast(node.Project, Project)
+                    If TypeOf proj Is DSModPackProject Then
+                        Dim mp = DirectCast(proj, DSModPackProject)
+                        If CurrentPluginManager.CurrentIOProvider.FileExists(Path.Combine(mp.OutputDir, "PatchedRom.nds")) Then
+                            out = True
+                        End If
+                    End If
+                End If
+            End If
+            Return out
         End Function
 
         Public Overrides Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each item As ROMEditor.Projects.DSModPackProject In Targets
-                Dim romPath As String = IO.Path.Combine(item.OutputDir, "PatchedRom.nds")
-                If IO.File.Exists(romPath) Then
+            For Each item As SolutionNode In Targets
+                If SupportsObject(item) Then 'Checks again for type validity and existance of our target file
+                    Dim mp = DirectCast(item.Project, DSModPackProject)
+                    Dim romPath As String = IO.Path.Combine(mp.OutputDir, "PatchedRom.nds")
                     DeSmuMe.RunDeSmuMe(romPath)
                 End If
             Next
@@ -25,7 +41,8 @@ Namespace MenuActions
         End Function
 
         Public Sub New()
-            MyBase.New({My.Resources.Language.MenuProject, My.Resources.Language.MenuProjectRun})
+            MyBase.New({My.Resources.Language.MenuProjectRun})
+            Me.IsContextBased = True
             SortOrder = 2.2
         End Sub
     End Class

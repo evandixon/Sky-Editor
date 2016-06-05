@@ -122,6 +122,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawingImageConverter.vb" />
+    <Compile Include="Explorers\SingleStringParameterCommandEditor.xaml.vb">
+      <DependentUpon>SingleStringParameterCommandEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorers\SsbScriptToolbar.xaml.vb">
+      <DependentUpon>SsbScriptToolbar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorers\MultiLangStringParameterEditor.xaml.vb">
+      <DependentUpon>MultiLangStringParameterEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorers\StringParameterEditor.xaml.vb">
+      <DependentUpon>StringParameterEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FlashcartManager.xaml.vb">
       <DependentUpon>FlashcartManager.xaml</DependentUpon>
     </Compile>
@@ -219,6 +231,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Explorers\SingleStringParameterCommandEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Explorers\SsbScriptToolbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Explorers\MultiLangStringParameterEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Explorers\StringParameterEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FlashcartManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -165,7 +165,6 @@
     <Compile Include="Legacy Interfaces\iNamed.vb" />
     <Compile Include="UI\IHiearchyItem.vb" />
     <Compile Include="UI\IObjectControl.vb" />
-    <Compile Include="Legacy Interfaces\iObjectWindow.vb" />
     <Compile Include="IO\IOnDisk.vb" />
     <Compile Include="IO\IOpenableFile.vb" />
     <Compile Include="IO\iSavable.vb" />

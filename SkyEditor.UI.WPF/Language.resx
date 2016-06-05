@@ -144,6 +144,9 @@
   <data name="DocumentCloseConfirmation" xml:space="preserve">
     <value>Are you sure you want to close this file?  Any unsaved changes will be lost.</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="ErrorCantFindFileAt" xml:space="preserve">
     <value>Unable to find file at "{0}".</value>
   </data>

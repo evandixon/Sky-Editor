@@ -1,0 +1,16 @@
+﻿<Window xmlns:WPF="clr-namespace:SkyEditor.UI.WPF"  x:Class="ObjectWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:res="clr-namespace:SkyEditor.UI.WPF.My.Resources"
+    Title="{x:Static res:Language.Edit}" Height="490" Width="466">
+    <Grid>
+        <!--<Menu x:Name="menuMain" IsMainMenu="True" Height="21" Margin="0,0,0,0" VerticalAlignment="Top">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem x:Name="menuFileOpen" Header="_Open" />
+                <MenuItem x:Name="menuFileSave" Header="_Save" />
+                <MenuItem x:Name="menuFileSaveAs" Header="Save _As..." />
+            </MenuItem>
+        </Menu>-->
+        <WPF:ObjectControlPlaceholder x:Name="placeholder" EnableTabs="True" />
+    </Grid>
+</Window>

@@ -387,4 +387,22 @@ evandixon (Personality test, bgp files)</value>
   <data name="Partner22" xml:space="preserve">
     <value>Partner 22:</value>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Italian" xml:space="preserve">
+    <value>Italian</value>
+  </data>
+  <data name="Spanish" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
 </root>

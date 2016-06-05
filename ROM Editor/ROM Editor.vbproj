@@ -120,6 +120,7 @@
     <Compile Include="FileFormats\Explorers\Script\Commands\GotoLabel.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\GroupLabel.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\ImagePos.vb" />
+    <Compile Include="FileFormats\Explorers\Script\Commands\ISingleStringParamCommand.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\LoadBottomPic.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\LoadTopPic.vb" />
     <Compile Include="FileFormats\Explorers\Script\Commands\NoParamCommand.vb" />

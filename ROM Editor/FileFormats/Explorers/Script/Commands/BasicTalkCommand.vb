@@ -1,8 +1,8 @@
 ﻿Namespace FileFormats.Explorers.Script.Commands
     Public Class BasicTalkCommand
         Inherits RawCommand
-
-        <CommandParameter(0)> Public Property Line As StringCommandParameter
+        Implements ISingleStringParamCommand
+        <CommandParameter(0)> Public Property Line As StringCommandParameter Implements ISingleStringParamCommand.Line
 
     End Class
 

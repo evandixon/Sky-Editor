@@ -146,6 +146,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Edit.
+        '''</summary>
+        Public Shared ReadOnly Property Edit() As String
+            Get
+                Return ResourceManager.GetString("Edit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Unable to find file at &quot;{0}&quot;..
         '''</summary>
         Public Shared ReadOnly Property ErrorCantFindFileAt() As String

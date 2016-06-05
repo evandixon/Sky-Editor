@@ -6,13 +6,29 @@ Imports SkyEditor.Core.IO
 
 Namespace FileFormats.Explorers.Script
     Partial Public Class SSB
+        Implements INotifyModified
         Implements IOpenableFile
         Implements ISavableAs
-        Implements iDetectableFileType
-        Implements iOnDisk
+        Implements IDetectableFileType
+        Implements IOnDisk
         Implements iNamed
 
-        Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+        ''' <summary>
+        ''' Raised when the file starts saving
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
+        Public Event FileSaving(sender As Object, e As EventArgs)
+
+        ''' <summary>
+        ''' Raised after the file has saved
+        ''' </summary>
+        Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
+
+        ''' <summary>
+        ''' Raised when the file is modified
+        ''' </summary>
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
         Public Sub New()
             GotoTargetCommands = New List(Of RawCommand)
@@ -29,7 +45,7 @@ Namespace FileFormats.Explorers.Script
         Public Property Spanish As New List(Of String)
         Public Property isMultiLang As Boolean
 
-        Public Property Filename As String Implements iOnDisk.Filename
+        Public Property Filename As String Implements IOnDisk.Filename
 
         Public ReadOnly Property Name As String Implements iNamed.Name
             Get
@@ -289,6 +305,8 @@ Namespace FileFormats.Explorers.Script
         End Function
 
         Public Sub Save(Filename As String, provider As IOProvider) Implements ISavableAs.Save
+            RaiseEvent FileSaving(Me, New EventArgs)
+
             'Preprocess the constants and strings
             'The function that converts commands into byte arrays will add strings to the proper tables where appropriate
             'However, not all commands are known, and some could be referencing strings or constants we're not aware of.
@@ -540,6 +558,10 @@ Namespace FileFormats.Explorers.Script
             'Todo: actually look at the file contents to verify its integrity
             Return Task.FromResult(File.OriginalFilename.ToLower.EndsWith(".ssb"))
         End Function
+
+        Public Sub RaiseModified()
+            RaiseEvent Modified(Me, New EventArgs)
+        End Sub
 #End Region
 
 

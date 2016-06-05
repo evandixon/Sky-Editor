@@ -1,0 +1,47 @@
+﻿<skyWPF:DataBoundObjectControl x:Class="MultiLangStringParameterEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ROMEditor.UI.WPF"
+             xmlns:skyWPF="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
+             xmlns:script="clr-namespace:ROMEditor.FileFormats.Explorers.Script;assembly=ROMEditor"
+             xmlns:res="clr-namespace:ROMEditor.UI.WPF.My.Resources"
+             mc:Ignorable="d" 
+             TargetType="{x:Type script:MultiLangStringCommandParameter}"
+             SortOrder="1"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="3" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static res:Language.English}" />
+        <TextBox Grid.Row="0" AcceptsReturn="True" Grid.Column="2" Text="{Binding English}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static res:Language.French}" />
+        <TextBox Grid.Row="2" AcceptsReturn="True" Grid.Column="2" Text="{Binding French}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="{x:Static res:Language.German}" />
+        <TextBox Grid.Row="4" AcceptsReturn="True" Grid.Column="2" Text="{Binding German}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="{x:Static res:Language.Italian}" />
+        <TextBox Grid.Row="6" AcceptsReturn="True" Grid.Column="2" Text="{Binding Italian}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="{x:Static res:Language.Spanish}" />
+        <TextBox Grid.Row="8" AcceptsReturn="True" Grid.Column="2" Text="{Binding Spanish}" />
+    </Grid>
+</skyWPF:DataBoundObjectControl>

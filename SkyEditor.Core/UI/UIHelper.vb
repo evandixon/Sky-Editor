@@ -18,6 +18,7 @@ Namespace UI
         Private Shared Function GetMenuItemInfo(isContextBased As Boolean, target As Object, pluginManager As PluginManager, isDevMode As Boolean) As List(Of MenuItemInfo)
             Dim menuItems As New List(Of MenuItemInfo)
             For Each ActionInstance In pluginManager.GetRegisteredObjects(Of MenuAction)
+                ActionInstance.CurrentPluginManager = pluginManager
                 '1: If this is a context menu, only get actions that support the target and are context based
                 '2: Ensure menu actions are only visible based on their environment: non-context in regular menu, context in context menu
                 '3: DevOnly menu actions are only supported if we're in dev mode.

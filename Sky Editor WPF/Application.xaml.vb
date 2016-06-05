@@ -1,8 +1,4 @@
-﻿Imports System.IO
-Imports System.Reflection
-Imports SkyEditorBase.Redistribution
-
-Class Application
+﻿Class Application
 
     ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
     ' can be handled in this file.

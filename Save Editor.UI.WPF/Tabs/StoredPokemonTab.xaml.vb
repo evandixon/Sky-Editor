@@ -14,14 +14,14 @@ Namespace Tabs
             ShowPkmEditDialog()
         End Sub
         Sub ShowPkmEditDialog()
-            If lbPokemon.SelectedIndex > -1 Then
-                Dim w As New ObjectWindow(CurrentPluginManager)
-                w.ObjectToEdit = lbPokemon.SelectedItem
-                w.ShowDialog()
-                lbPokemon.SelectedItem = w.ObjectToEdit
-                IsModified = True
-                RefreshPKMDisplay()
-            End If
+            'If lbPokemon.SelectedIndex > -1 Then
+            '    Dim w As New ObjectWindow(CurrentPluginManager)
+            '    w.ObjectToEdit = lbPokemon.SelectedItem
+            '    w.ShowDialog()
+            '    lbPokemon.SelectedItem = w.ObjectToEdit
+            '    IsModified = True
+            '    RefreshPKMDisplay()
+            'End If
         End Sub
         Sub RefreshPKMDisplay()
             Dim pkms As New List(Of Object)
