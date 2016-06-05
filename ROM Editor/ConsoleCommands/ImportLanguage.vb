@@ -1,7 +1,7 @@
 ﻿Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
+
 
 Namespace ConsoleCommands
     Public Class ImportLanguage

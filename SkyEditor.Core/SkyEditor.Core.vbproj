@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework and Windows SDK is automatically included -->
+    <EmbeddedResource Include="Language.fr.resx" />
     <EmbeddedResource Include="Language.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Language.Designer.vb</LastGenOutput>
@@ -135,6 +136,11 @@
     <Compile Include="IO\ProjectRemovingEventArgs.vb" />
     <Compile Include="IO\SolutionNode.vb" />
     <Compile Include="ISettingsProvider.vb" />
+    <Compile Include="Language.fr.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Language.fr.resx</DependentUpon>
+    </Compile>
     <Compile Include="SettingsProvider.vb" />
     <Compile Include="Settings\ISettingsProviderExtensions.vb" />
     <Compile Include="Settings\SettingNames.Designer.vb">

@@ -74,7 +74,7 @@ Namespace Projects
             Next
 
             'Convert Personality Test
-            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingConvertingPersonalityTest)
+            Me.BuildStatusMessage = My.Resources.Language.LoadingConvertingPersonalityTest
             Dim overlay13 As New Overlay13(IO.Path.Combine(rawDir, "Overlay", "overlay_0013.bin"))
             Dim personalityTest As New ObjectFile(Of PersonalityTestContainer)(CurrentPluginManager.CurrentIOProvider)
             personalityTest.ContainedObject = New PersonalityTestContainer(overlay13)

@@ -80,6 +80,7 @@
     <Compile Include="Processes\ConsoleDataRecievedEventArgs.vb" />
     <Compile Include="Processes\ServerStatus.vb" />
     <Compile Include="Processes\StatusChangedEventArgs.vb" />
+    <Compile Include="RedistributionHelpers.vb" />
     <Compile Include="WindowsConsoleProvider.vb" />
     <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
     <Compile Include="IOProvider.vb" />

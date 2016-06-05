@@ -1,9 +1,7 @@
 ﻿Imports System.Runtime.Serialization
-Imports CodeFiles
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
-Imports SkyEditorBase
 
 ''' <summary>
 ''' An instance of CodeExtraData that reads its information from disk.

@@ -138,10 +138,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
-      <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
-      <Name>Sky Editor Base</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
       <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
       <Name>SkyEditor.SaveEditor</Name>

@@ -143,13 +143,13 @@
       <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
       <Name>CodeFiles</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
-      <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
-      <Name>Sky Editor Base</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
       <Project>{6F869961-8D92-4FB1-9680-A1D5C6938350}</Project>
       <Name>SkyEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkyEditor.UI.WPF\SkyEditor.UI.WPF.vbproj">
+      <Project>{00afce08-71b5-4bf9-9155-c017f8151419}</Project>
+      <Name>SkyEditor.UI.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

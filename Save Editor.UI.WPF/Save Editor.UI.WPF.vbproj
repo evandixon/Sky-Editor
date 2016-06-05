@@ -347,10 +347,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sky Editor Base\Sky Editor Base.vbproj">
-      <Project>{f3e6313c-4337-4d20-b4e2-ed41420c9d05}</Project>
-      <Name>Sky Editor Base</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sky Editor WPF\Sky Editor WPF.vbproj">
       <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
       <Name>Sky Editor WPF</Name>

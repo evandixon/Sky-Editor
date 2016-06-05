@@ -2,6 +2,7 @@
 Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Settings
+Imports SkyEditor.Core.Interfaces
 
 Namespace UI
     Public Class SettingsEditor
@@ -76,7 +77,14 @@ Namespace UI
         ''' <typeparam name="T"></typeparam>
         ''' <returns></returns>
         Protected Function GetEditingObject(Of T)() As T
-            Return PluginHelper.Cast(Of T)(_editingObject)
+            If TypeOf _editingObject Is T Then
+                Return DirectCast(_editingObject, T)
+            ElseIf TypeOf _editingObject Is IContainer(Of T) Then
+                Return DirectCast(_editingObject, IContainer(Of T)).Item
+            Else
+                'I should probably throw my own exception here, since I'm casting EditingObject to T even though I just found that EditingObject is NOT T, but there will be an exception anyway
+                Return DirectCast(_editingObject, T)
+            End If
         End Function
 
         ''' <summary>
