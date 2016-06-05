@@ -3,6 +3,7 @@ Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditor.ROMEditor
 Imports SkyEditorBase
 
@@ -45,7 +46,6 @@ Namespace Roms
         End Property
 
         Public Async Function Unpack(DestinationDirectory As String, provider As IOProvider) As Task
-            PluginHelper.SetLoadingStatus(My.Resources.Language.LoadingUnpacking)
             If DestinationDirectory Is Nothing Then
                 DestinationDirectory = Path.Combine(EnvironmentPaths.GetResourceName(Path.GetFileNameWithoutExtension(Me.PhysicalFilename)))
             End If
@@ -118,11 +118,10 @@ Namespace Roms
             Utilities.FileSystem.DeleteFile(dlPlayBinPath, provider)
             Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath, provider)
             Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath, provider)
-            PluginHelper.SetLoadingStatusFinished()
         End Function
 
         Private Shared Async Function RunCtrTool(Arguments As String) As Task
-            Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("ctrtool.exe"), Arguments, False)
+            Await ConsoleApp.RunProgram(EnvironmentPaths.GetResourceName("ctrtool.exe"), Arguments)
         End Function
 
         Public Sub New()

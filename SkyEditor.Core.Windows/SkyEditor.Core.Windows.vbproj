@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="AssemblyReflectionManager.vb" />
     <Compile Include="AssemblyReflectionProxy.vb" />
+    <Compile Include="Processes\ConsoleApp.vb" />
     <Compile Include="EnvironmentPaths.vb" />
     <Compile Include="ExecutableFile.vb" />
     <Compile Include="Language.Designer.vb">
@@ -76,6 +77,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Language.resx</DependentUpon>
     </Compile>
+    <Compile Include="Processes\ConsoleDataRecievedEventArgs.vb" />
+    <Compile Include="Processes\ServerStatus.vb" />
+    <Compile Include="Processes\StatusChangedEventArgs.vb" />
     <Compile Include="WindowsConsoleProvider.vb" />
     <Compile Include="WindowsCoreSkyEditorPlugin.vb" />
     <Compile Include="IOProvider.vb" />

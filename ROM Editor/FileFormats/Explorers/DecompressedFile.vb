@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
@@ -11,12 +12,12 @@ Namespace FileFormats.Explorers
             If Not IO.Directory.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(Filename) & "\Decompressed")
             End If
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_unpx.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_unpx.exe"),
                                                   String.Format("""{0}"" ""{1}""", Filename, IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename)))
         End Function
         Public Shared Async Function RunCompress(Filename As String) As Task
             Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_pxcomp.exe"),
                                                   String.Format("""{0}"" ""{1}""", IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename), Filename))
             'Cleanup
             If IO.File.Exists(IO.Path.GetDirectoryName(Filename) & "\Decompressed\" & IO.Path.GetFileName(Filename)) Then

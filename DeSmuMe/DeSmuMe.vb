@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 Public Module DeSmuMe
     Public Class DeSmuMeVersion
@@ -61,6 +62,6 @@ Public Module DeSmuMe
         End If
     End Function
     Sub RunDeSmuMe(romPath As String)
-        SkyEditorBase.PluginHelper.RunProgramInBackground(GetBestVersionExecutableName, String.Format("""{0}""", romPath))
+        ConsoleApp.RunProgramInBackground(GetBestVersionExecutableName, String.Format("""{0}""", romPath))
     End Sub
 End Module

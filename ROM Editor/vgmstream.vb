@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 
 Module vgmstream
@@ -32,6 +33,6 @@ Module vgmstream
 
         arguments.Append($"""{Input}""")
 
-        Await PluginHelper.RunProgram(filename, arguments.ToString, False)
+        Await ConsoleApp.RunProgram(filename, arguments.ToString)
     End Function
 End Module

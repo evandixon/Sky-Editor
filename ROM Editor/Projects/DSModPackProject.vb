@@ -2,6 +2,7 @@
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 
 Namespace Projects
@@ -228,7 +229,7 @@ Namespace Projects
                     '-Copy ndstool
                     IO.File.Copy(EnvironmentPaths.GetResourceName("ndstool.exe"), IO.Path.Combine(GetToolsDir, "ndstool.exe"), True)
                 Case Else
-                    PluginHelper.Writeline("Unknown system.  Not copying appropriate tools.", PluginHelper.LineType.Error)
+                    Throw New NotSupportedException(String.Format(My.Resources.Language.ErrorModPackTypeNotSupported, GetBaseRomSystem(Solution)))
             End Select
 
             '-Copy patching wizard
@@ -240,17 +241,16 @@ Namespace Projects
             Select Case GetBaseRomSystem(Solution)
                 Case "3DS"
                     If Output3DSFile Then
-                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.3ds")), False)
+                        Await ConsoleApp.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.3ds")))
                     End If
                     If OutputCIAFile Then
-                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.cia")), False)
+                        Await ConsoleApp.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.cia")))
                     End If
                     If OutputHans Then
-                        Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}"" -hans", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "Hans SD")), False)
+                        Await ConsoleApp.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}"" -hans", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "Hans SD")))
                     End If
-                    'Todo: enable outputting to hans
                 Case "NDS"
-                    Await PluginHelper.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.nds")), False)
+                    Await ConsoleApp.RunProgram(IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), String.Format("""{0}"" ""{1}""", GetBaseRomFilename(Solution), IO.Path.Combine(OutputDir, "PatchedRom.nds")))
             End Select
         End Function
     End Class

@@ -262,4 +262,7 @@ evandixon (Personality test, bgp files)</value>
   <data name="LoadingPacking" xml:space="preserve">
     <value>Packing...</value>
   </data>
+  <data name="ErrorModPackTypeNotSupported" xml:space="preserve">
+    <value>The given system type "{0}" is not supported.</value>
+  </data>
 </root>

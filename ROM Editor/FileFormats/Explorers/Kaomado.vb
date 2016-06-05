@@ -1,5 +1,6 @@
 ﻿Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
@@ -15,12 +16,12 @@ Namespace FileFormats.Explorers
             If Not IO.Directory.Exists(UnpackDirectory) Then
                 IO.Directory.CreateDirectory(UnpackDirectory)
             End If
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, UnpackDirectory))
         End Function
         Public Async Function RunPack(Filename As String) As Task
             Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), UnpackDirectory, Filename))
         End Function
         Public Shared Async Function RunUnpack(Filename As String, UnpackDirectory As String) As Task
@@ -28,12 +29,12 @@ Namespace FileFormats.Explorers
             If Not IO.Directory.Exists(UnpackDirectory) Then
                 IO.Directory.CreateDirectory(UnpackDirectory)
             End If
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), Filename, UnpackDirectory))
         End Function
         Public Shared Async Function RunPack(Filename As String, UnpackDirectory As String) As Task
             Dim romDirectory As String = EnvironmentPaths.GetResourceDirectory
-            Await SkyEditorBase.PluginHelper.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
+            Await ConsoleApp.RunProgram(IO.Path.Combine(romDirectory, "ppmd_kaoutil.exe"),
                                                   String.Format("-fn ""{0}"" -pn ""{1}"" ""{2}"" ""{3}""", IO.Path.Combine(romDirectory, "facenames.txt"), IO.Path.Combine(romDirectory, "pokenames.txt"), UnpackDirectory, Filename))
         End Function
         Public Async Function Save(Filename As String) As Task

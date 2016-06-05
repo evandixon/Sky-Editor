@@ -110,6 +110,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to The given system type &quot;{0}&quot; is not supported..
+        '''</summary>
+        Friend Shared ReadOnly Property ErrorModPackTypeNotSupported() As String
+            Get
+                Return ResourceManager.GetString("ErrorModPackTypeNotSupported", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The property with the CommandParameter Attribute was not applied to the correct type..
         '''</summary>
         Friend Shared ReadOnly Property ErrorScriptCommandAttributeInvalidType() As String

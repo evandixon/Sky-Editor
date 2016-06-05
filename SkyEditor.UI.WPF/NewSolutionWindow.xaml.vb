@@ -31,7 +31,7 @@ Public Class NewSolutionWindow
         Dim itemSource As New Dictionary(Of String, Object)
         For Each item As Solution In Manager.GetRegisteredObjects(GetType(Solution).GetTypeInfo)
             Dim t = item.GetType
-            itemSource.Add(ReflectionHelpers.GetTypeFriendlyName(t), t)
+            itemSource.Add(ReflectionHelpers.GetTypeFriendlyName(t), item)
         Next
         ddType.ItemsSource = itemSource
         If ddType.Items.Count > 0 Then ddType.SelectedIndex = 0

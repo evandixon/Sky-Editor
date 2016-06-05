@@ -6,6 +6,7 @@ Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
@@ -279,11 +280,9 @@ Validate:
 
             Dim toCompile = From d In IO.Directory.GetFiles(scriptSource, "*.lua", IO.SearchOption.AllDirectories) Where Not d.StartsWith(scriptDestination) Select d
 
-            Dim f As New AsyncFor(My.Resources.Language.LoadingCompilingScripts)
-            f.SetLoadingStatus = False
-            f.SetLoadingStatusOnFinish = False
+            Me.BuildStatusMessage = My.Resources.Language.LoadingCompilingScripts
+            Dim f As New AsyncFor
             Dim onProgressChanged = Sub(sender As Object, e As LoadingStatusChangedEventArgs)
-                                        Me.BuildStatusMessage = e.Message
                                         Me.BuildProgress = e.Progress
                                     End Sub
             AddHandler f.LoadingStatusChanged, onProgressChanged
@@ -293,7 +292,7 @@ Validate:
 
                                    If Not sourceText = sourceOrig Then
                                        Dim dest = Item.Replace(scriptSource, scriptDestination)
-                                       Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""", False)
+                                       Await ConsoleApp.RunProgram(EnvironmentPaths.GetResourceName("lua/luac5.1.exe"), $"-o ""{dest}"" ""{Item}""")
                                    End If
                                End Function, toCompile)
             RemoveHandler f.LoadingStatusChanged, onProgressChanged

@@ -1,4 +1,5 @@
 ﻿Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 
 Public Module Makerom
@@ -9,10 +10,10 @@ Public Module Makerom
         CCI
         CIA
     End Enum
-    Async Function CreateCXI(RsfFilename As String, OutputFilename As String, Optional ShowLoadingWindow As Boolean = True) As Task
-        Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("makerom.exe"), $"-o ""{OutputFilename}"" -rsf ""{RsfFilename}"" -target t ", ShowLoadingWindow)
+    Async Function CreateCXI(RsfFilename As String, OutputFilename As String) As Task
+        Await ConsoleApp.RunProgram(EnvironmentPaths.GetResourceName("makerom.exe"), $"-o ""{OutputFilename}"" -rsf ""{RsfFilename}"" -target t ")
     End Function
-    Async Function CreateCCI(OutputFilename As String, Optional ShowLoadingWindow As Boolean = True) As Task
-        Await PluginHelper.RunProgram(EnvironmentPaths.GetResourceName("makerom.exe"), $"-f cia -o ""{OutputFilename}"" -target t ", ShowLoadingWindow)
+    Async Function CreateCCI(OutputFilename As String) As Task
+        Await ConsoleApp.RunProgram(EnvironmentPaths.GetResourceName("makerom.exe"), $"-f cia -o ""{OutputFilename}"" -target t ")
     End Function
 End Module

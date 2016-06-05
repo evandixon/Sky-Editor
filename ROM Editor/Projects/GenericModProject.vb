@@ -4,6 +4,7 @@ Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditorBase
 Namespace Projects
     Public Class GenericModProject
@@ -205,8 +206,7 @@ Namespace Projects
                     End If
                 ElseIf filesToCopy.Count > 0 Then
                     Me.IsBuildProgressIndeterminate = False
-
-                    Dim a As New AsyncFor(My.Resources.Language.LoadingCopyingFiles)
+                    Dim a As New AsyncFor
                     AddHandler a.LoadingStatusChanged, Sub(sender As Object, e As LoadingStatusChangedEventArgs)
                                                            Me.BuildProgress = e.Progress
                                                        End Sub
@@ -399,11 +399,9 @@ Namespace Projects
                     End If
                 Next
 
-                Dim f As New AsyncFor(My.Resources.Language.LoadingGeneratingPatch)
-                f.SetLoadingStatus = False
-                f.SetLoadingStatusOnFinish = False
+                Dim f As New AsyncFor
+                Me.BuildStatusMessage = My.Resources.Language.LoadingGeneratingPatch
                 Dim onProgressChanged = Sub(sender As Object, e As LoadingStatusChangedEventArgs)
-                                            Me.BuildStatusMessage = e.Message
                                             Me.BuildProgress = e.Progress
                                         End Sub
                 AddHandler f.LoadingStatusChanged, onProgressChanged
@@ -425,7 +423,7 @@ Namespace Projects
                                                           Dim newF As String = IO.Path.Combine(currentFiles, Item.Trim("\"))
                                                           Dim patchFile As String = IO.Path.Combine(modTempFiles, Item.Trim("\") & "." & patcher.PatchExtension.Trim("*").Trim("."))
 
-                                                          Await PluginHelper.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile), False)
+                                                          Await ConsoleApp.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, patcher.CreatePatchProgram), String.Format(patcher.CreatePatchArguments, oldF, newF, patchFile))
                                                           patchMade = True
                                                           Exit For
                                                       End If
@@ -445,7 +443,7 @@ Namespace Projects
                                                       IO.File.Copy(oldFile, oldFileTemp, True)
                                                       IO.File.Copy(newFile, newFileTemp, True)
                                                       Dim path = IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, "xdelta", "xdelta3.exe")
-                                                      Await PluginHelper.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", $"oldFile-{tmpVal}.bin", $"newFile-{tmpVal}.bin", $"patch-{tmpVal}.xdelta"), False)
+                                                      Await ConsoleApp.RunProgram(IO.Path.Combine(EnvironmentPaths.GetResourceDirectory, "xdelta", "xdelta3.exe"), String.Format("-e -s ""{0}"" ""{1}"" ""{2}""", $"oldFile-{tmpVal}.bin", $"newFile-{tmpVal}.bin", $"patch-{tmpVal}.xdelta"))
                                                       IO.File.Copy(deltaFileTemp, deltaFile)
                                                       IO.File.Delete(deltaFileTemp)
                                                       IO.File.Delete(oldFileTemp)

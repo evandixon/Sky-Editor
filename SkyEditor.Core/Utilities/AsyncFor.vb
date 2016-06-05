@@ -15,37 +15,14 @@ Namespace Utilities
 #Region "Constructors"
         Public Sub New()
             BatchSize = Integer.MaxValue
-            SetLoadingStatus = False
-            SetLoadingStatusOnFinish = False
             RunningTasks = New List(Of Task)
         End Sub
         <Obsolete> Public Sub New(ProgressMessage As String)
             Me.New
-            SetLoadingStatus = True
-            SetLoadingStatusOnFinish = True
-            Me.ProgressMessage = ProgressMessage
         End Sub
 #End Region
 
 #Region "Properties"
-        ''' <summary>
-        ''' Gets or sets whether or not progress will be reported to PluginHelper.SetLoadingStatus after each operation.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property SetLoadingStatus As Boolean
-
-        ''' <summary>
-        ''' Gets or sets whether or not progress will be set to "Ready" once all operations are complete.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property SetLoadingStatusOnFinish As Boolean
-
-        ''' <summary>
-        ''' Message template to set the loading status with.
-        ''' Ex. Value of "Copying Files..." will be displayed as "Copying Files... (7 of 100)"
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property ProgressMessage As String
 
         ''' <summary>
         ''' Whether or not to run each task sequentially.
@@ -83,7 +60,6 @@ Namespace Utilities
                 _completedTasks = value
                 RaiseEvent LoadingStatusChanged(Me, New LoadingStatusChangedEventArgs With {.Complete = (value = TotalTasks),
                                                 .Completed = value,
-                                                .Message = ProgressMessage,
                                                 .Progress = If((TotalTasks > 0), (value / TotalTasks), 1),
                                                 .Total = TotalTasks})
             End Set
