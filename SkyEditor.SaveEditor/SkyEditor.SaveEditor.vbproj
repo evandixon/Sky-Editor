@@ -89,17 +89,13 @@
     <Compile Include="Binary.vb" />
     <Compile Include="BinaryFile.vb" />
     <Compile Include="Checksums.vb" />
-    <Compile Include="Interfaces\iAttack.vb" />
     <Compile Include="Interfaces\iItem.vb" />
-    <Compile Include="Interfaces\iMDActiveAttack.vb" />
-    <Compile Include="Interfaces\iMDAttack.vb" />
     <Compile Include="Interfaces\iMDPkm.vb" />
     <Compile Include="Interfaces\iMDPkmCurrentHP.vb" />
     <Compile Include="Interfaces\iMDPkmGender.vb" />
     <Compile Include="Interfaces\iMDPkmIQ.vb" />
     <Compile Include="Interfaces\iMDPkmMetFloor.vb" />
     <Compile Include="Interfaces\iParty.vb" />
-    <Compile Include="Interfaces\iPkmAttack.vb" />
     <Compile Include="Interfaces\iPokemonStorage.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -140,10 +136,13 @@
     <Compile Include="Modeling\IPokemonBox.vb" />
     <Compile Include="Modeling\IPokemonStorage.vb" />
     <Compile Include="Modeling\ItemSlot.vb" />
+    <Compile Include="MysteryDungeon\Explorers\IExplorersActiveAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersStoredItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersStoredPokemon.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyActiveAttack.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyActivePokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyHeldItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItem.vb" />

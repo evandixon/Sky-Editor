@@ -1,9 +1,9 @@
 ﻿Namespace MysteryDungeon.Explorers
-    Public Class SkyAttack
-        Implements IExplorersAttack
+    Public Class SkyActiveAttack
+        Implements IExplorersActiveAttack
         Implements INotifyPropertyChanged
 
-        Public Const Length = 21
+        Public Const Length = 29
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
@@ -16,8 +16,10 @@
                 IsLinked = .Bit(1)
                 IsSwitched = .Bit(2)
                 IsSet = .Bit(3)
-                ID = .Int(0, 4, 10)
-                Ginseng = .Int(0, 14, 7)
+                IsSealed = .Bit(4)
+                ID = .Int(0, 5, 10)
+                PP = .Int(0, 15, 7)
+                Ginseng = .Int(0, 22, 7)
             End With
         End Sub
         Public Function GetAttackBits() As Binary
@@ -27,8 +29,10 @@
                 .Bit(1) = IsLinked
                 .Bit(2) = IsSwitched
                 .Bit(3) = IsSet
-                .Int(0, 4, 10) = ID
-                .Int(0, 14, 7) = Ginseng
+                .Bit(4) = IsSealed
+                .Int(0, 5, 10) = ID
+                .Int(0, 15, 7) = PP
+                .Int(0, 22, 7) = Ginseng
             End With
             Return out
         End Function
@@ -85,6 +89,19 @@
         End Property
         Dim _isSet As Boolean
 
+        Public Property IsSealed As Boolean Implements IExplorersActiveAttack.IsSealed
+            Get
+                Return _isSealed
+            End Get
+            Set(value As Boolean)
+                If Not _isSealed = value Then
+                    _isSealed = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(IsSealed)))
+                End If
+            End Set
+        End Property
+        Dim _isSealed As Boolean
+
         Public Property ID As Integer Implements IExplorersAttack.ID
             Get
                 Return _id
@@ -97,6 +114,19 @@
             End Set
         End Property
         Dim _id As Integer
+
+        Public Property PP As Integer Implements IExplorersActiveAttack.PP
+            Get
+                Return _pp
+            End Get
+            Set(value As Integer)
+                If Not _pp = value Then
+                    _pp = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(PP)))
+                End If
+            End Set
+        End Property
+        Dim _pp As Integer
 
         Public Property Ginseng As Integer Implements IExplorersAttack.Ginseng
             Get
