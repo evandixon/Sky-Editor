@@ -17,7 +17,7 @@ Namespace Extensions
             End Get
         End Property
 
-        Public Shared Async Function InstallExtension(ExtensionZipPath As String, extensionDirectory As String, manager As PluginManager) As Task(Of ExtensionInstallResult)
+        Public Shared Async Function InstallExtensionZip(ExtensionZipPath As String, extensionDirectory As String, manager As PluginManager) As Task(Of ExtensionInstallResult)
             Dim provider = manager.CurrentIOProvider
             Dim result As ExtensionInstallResult
 
@@ -34,7 +34,7 @@ Namespace Extensions
             Dim infoFilename As String = Path.Combine(tempDir, "info.skyext")
             If provider.FileExists(infoFilename) Then
                 'Open the file itself
-                Dim info = ExtensionInfo.Open(infoFilename, provider)
+                Dim info = ExtensionInfo.OpenFromFile(infoFilename, provider)
                 'Get the type
                 Dim extType = ReflectionHelpers.GetTypeByName(info.ExtensionTypeName, manager)
                 'Determine if the type is supported
@@ -45,7 +45,7 @@ Namespace Extensions
                     Dim extInst As ExtensionType = ReflectionHelpers.CreateInstance(extType)
                     extInst.RootExtensionDirectory = extensionDirectory
                     extInst.CurrentPluginManager = manager
-                    result = Await extInst.InstallExtension(info, tempDir)
+                    result = Await extInst.InstallExtension(info.ID, tempDir)
                 End If
             Else
                 result = ExtensionInstallResult.InvalidFormat

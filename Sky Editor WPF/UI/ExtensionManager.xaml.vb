@@ -55,7 +55,7 @@ Namespace UI
             Dim o As New OpenFileDialog
             o.Filter = $"{My.Resources.Language.ZipFiles} (*.zip)|*.zip|{My.Resources.Language.AllFiles} (*.*)|*.*"
             If o.ShowDialog = DialogResult.OK Then
-                Dim result = Await ExtensionHelper.InstallExtension(o.FileName, EnvironmentPaths.GetExtensionDirectory, CurrentPluginManager)
+                Dim result = Await ExtensionHelper.InstallExtensionZip(o.FileName, EnvironmentPaths.GetExtensionDirectory, CurrentPluginManager)
                 DisplayInstallResultMessage(result)
                 RefreshCurrentExtensionList()
             End If
@@ -66,9 +66,9 @@ Namespace UI
                 Dim repo = DirectCast(tvCategories.SelectedItem.Tag, IExtensionCollection)
                 Dim info = DirectCast(lvExtensions.SelectedItem, ExtensionInfo)
                 If info.IsInstalled Then
-                    DisplayUninstallResultMessage(Await repo.UninstallExtension(info))
+                    DisplayUninstallResultMessage(Await repo.UninstallExtension(info.ID))
                 Else
-                    DisplayInstallResultMessage(Await repo.InstallExtension(info))
+                    DisplayInstallResultMessage(Await repo.InstallExtension(info.ID))
                 End If
             End If
         End Sub

@@ -7,7 +7,7 @@ Namespace ConsoleCommands
         Public Overrides Async Function MainAsync(Arguments() As String) As Task
             If Arguments.Length > 0 Then
                 If CurrentPluginManager.CurrentIOProvider.FileExists(Arguments(0)) Then
-                    Dim result = Await ExtensionHelper.InstallExtension(Arguments(0), CurrentPluginManager.ExtensionDirectory, CurrentPluginManager)
+                    Dim result = Await ExtensionHelper.InstallExtensionZip(Arguments(0), CurrentPluginManager.ExtensionDirectory, CurrentPluginManager)
                     Select Case result
                         Case ExtensionInstallResult.Success
                             Console.WriteLine("Extension install was successful.")

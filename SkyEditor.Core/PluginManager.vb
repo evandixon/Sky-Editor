@@ -264,7 +264,7 @@ Public Class PluginManager
         For Each item In pluginExtType.GetInstalledExtensions(Me)
             Dim extAssemblies As New List(Of String)
             For Each file In item.ExtensionFiles
-                extAssemblies.Add(Path.Combine(pluginExtType.GetExtensionDirectory(item), file))
+                extAssemblies.Add(Path.Combine(pluginExtType.GetExtensionDirectory(item.ID), file))
             Next
             ''Todo: somehow verify the assemblies.
             ''It's probably OK to not do so, relying only on the extension's manifest of plugin entrypoints, but it would be better to check them.
