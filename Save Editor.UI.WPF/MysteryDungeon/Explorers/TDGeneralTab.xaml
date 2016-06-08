@@ -13,7 +13,7 @@
     <Grid>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.TeamName}" />
-            <TextBox Text="{Binding TeamName}"/>
+            <TextBox Text="{Binding TeamName, UpdateSourceTrigger=PropertyChanged}"/>
         </UniformGrid>
     </Grid>
 </skyui:DataBoundObjectControl>

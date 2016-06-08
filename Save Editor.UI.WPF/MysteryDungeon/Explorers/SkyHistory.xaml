@@ -17,7 +17,7 @@
     <Grid>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="300" VerticalAlignment="Top">
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerName}" />
-            <TextBox Text="{Binding OriginalPlayerName}" />
+            <TextBox Text="{Binding OriginalPlayerName, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
             <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPlayerID}" />
@@ -26,7 +26,7 @@
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}" IsChecked="{Binding OriginalPlayerIsFemale}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerName}" />
-            <TextBox Text="{Binding OriginalPartnerName}" />
+            <TextBox Text="{Binding OriginalPartnerName, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
             <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPartnerID}" />
