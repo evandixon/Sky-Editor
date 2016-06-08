@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <UniformGrid Columns="2" HorizontalAlignment="Left" Width="274" VerticalAlignment="Top">
                 <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.TeamName}" />
-                <TextBox Text="{Binding TeamName}"/>
+                <TextBox Text="{Binding TeamName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.HeldMoney}" />
                 <xctk:IntegerUpDown Minimum="0" Maximum="99999" VerticalContentAlignment="Top" Value="{Binding HeldMoney}" />
