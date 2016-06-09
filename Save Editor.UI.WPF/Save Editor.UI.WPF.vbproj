@@ -194,9 +194,6 @@
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tabs\PkmGeneralTab.xaml.vb">
-      <DependentUpon>PkmGeneralTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
       <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
     </Compile>
@@ -307,10 +304,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\GIGDGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\PkmGeneralTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

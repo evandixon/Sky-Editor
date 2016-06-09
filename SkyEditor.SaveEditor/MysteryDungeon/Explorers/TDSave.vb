@@ -11,6 +11,7 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyPropertyChanged
         Implements INotifyModified
         Implements IInventory
+        Implements IPokemonStorage
 
         Public Sub New()
             MyBase.New()
@@ -21,11 +22,13 @@ Namespace MysteryDungeon.Explorers
 
             LoadGeneral()
             LoadItems()
+            LoadStoredPokemon()
         End Function
 
         Public Overrides Sub Save(Destination As String, provider As IOProvider)
             SaveGeneral()
             SaveItems()
+            SaveStoredPokemon()
 
             MyBase.Save(Destination, provider)
         End Sub
@@ -157,6 +160,48 @@ Namespace MysteryDungeon.Explorers
             ItemSlots = slots
         End Sub
 
+
+#End Region
+
+#Region "Stored Pokemon"
+        Private Sub LoadStoredPokemon()
+            StoredPlayerPartner = New ObservableCollection(Of TDStoredPokemon)
+            StoredPokemon = New ObservableCollection(Of TDStoredPokemon)
+
+            For count = 0 To Offsets.StoredPokemonNumber
+                Dim pkm As New TDStoredPokemon(Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+                If count < 2 Then 'Player Partner
+                    StoredPlayerPartner.Add(pkm)
+                Else 'Others
+                    StoredPokemon.Add(pkm)
+                End If
+            Next
+
+            _storage = New ObservableCollection(Of IPokemonBox)
+            _storage.Add(New BasicPokemonBox(My.Resources.Language.PlayerPartnerPokemonSlot, StoredPlayerPartner))
+            _storage.Add(New BasicPokemonBox(My.Resources.Language.StoredPokemonSlot, StoredPokemon))
+        End Sub
+        Private Sub SaveStoredPokemon()
+            For count = 0 To Offsets.StoredPokemonNumber
+                Dim pkm As TDStoredPokemon
+                If count < 2 Then 'Player Partner
+                    pkm = StoredPlayerPartner(count)
+                Else 'Others
+                    pkm = StoredPokemon(count - 2)
+                End If
+                Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength) = pkm.GetStoredPokemonBits
+            Next
+        End Sub
+        Public Property StoredPlayerPartner As ObservableCollection(Of TDStoredPokemon)
+        Public Property StoredSpEpisodePokemon As ObservableCollection(Of TDStoredPokemon)
+        Public Property StoredPokemon As ObservableCollection(Of TDStoredPokemon)
+
+        Public ReadOnly Property Storage As IEnumerable(Of IPokemonBox) Implements IPokemonStorage.Storage
+            Get
+                Return _storage
+            End Get
+        End Property
+        Dim _storage As ObservableCollection(Of IPokemonBox)
 
 #End Region
 

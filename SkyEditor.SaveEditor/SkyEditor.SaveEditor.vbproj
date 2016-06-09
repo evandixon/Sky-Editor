@@ -89,13 +89,6 @@
     <Compile Include="Binary.vb" />
     <Compile Include="BinaryFile.vb" />
     <Compile Include="Checksums.vb" />
-    <Compile Include="Interfaces\iItem.vb" />
-    <Compile Include="Interfaces\iMDPkm.vb" />
-    <Compile Include="Interfaces\iMDPkmCurrentHP.vb" />
-    <Compile Include="Interfaces\iMDPkmGender.vb" />
-    <Compile Include="Interfaces\iMDPkmIQ.vb" />
-    <Compile Include="Interfaces\iMDPkmMetFloor.vb" />
-    <Compile Include="Interfaces\iParty.vb" />
     <Compile Include="Interfaces\iPokemonStorage.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -164,8 +157,8 @@
     <Compile Include="MysteryDungeon\Rescue\RBSaveEU.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkySave.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.ActivePokemon.vb" />
-    <Compile Include="MysteryDungeon\Explorers\TDSave.StoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.vb" />
+    <Compile Include="StoredPokemonSlotDefinition.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language.resx">
