@@ -197,9 +197,6 @@
     <Compile Include="Tabs\PkmGeneralTab.xaml.vb">
       <DependentUpon>PkmGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tabs\PkmMovesTab.xaml.vb">
-      <DependentUpon>PkmMovesTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
       <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
     </Compile>
@@ -314,10 +311,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\PkmGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\PkmMovesTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

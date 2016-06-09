@@ -130,7 +130,7 @@ Namespace MysteryDungeon.Explorers
 
         Public Overrides Function ToString() As String
             If IsValid Then
-                Return String.Format(My.Resources.Language.SkyStoredPokemonToString, Name, Level, Lists.SkyPokemon(ID))
+                Return String.Format(My.Resources.Language.SkyStoredPokemonToString, Name, Level, Lists.ExplorersPokemon(ID))
             Else
                 Return My.Resources.Language.BlankPokemon
             End If
@@ -411,7 +411,7 @@ Namespace MysteryDungeon.Explorers
 
         Private ReadOnly Property PokemonNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.PokemonNames
             Get
-                Return Lists.SkyPokemon
+                Return Lists.ExplorersPokemon
             End Get
         End Property
 

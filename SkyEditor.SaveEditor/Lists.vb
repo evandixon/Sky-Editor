@@ -1,9 +1,31 @@
 ﻿Public Class Lists
 
     Private Shared Property SkyLocations As Dictionary(Of Integer, String)
-    Private Shared Property TDLocations As Dictionary(Of Integer, String)
-    Private Shared Property RBLocations As Dictionary(Of Integer, String)
-    Public Shared ReadOnly Property SkyMoves As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property TDLocations As Dictionary(Of Integer, String)
+        Get
+            If _tdLocations Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.TDLocations)
+                _tdLocations = i.Entries
+            End If
+            Return _tdLocations
+        End Get
+    End Property
+    Private Shared _tdLocations As Dictionary(Of Integer, String)
+
+    Public Shared ReadOnly Property RBLocations As Dictionary(Of Integer, String)
+        Get
+            If _rbLocations Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.RBLocations)
+                _rbLocations = i.Entries
+            End If
+            Return _rbLocations
+        End Get
+    End Property
+    Private Shared _rbLocations As Dictionary(Of Integer, String)
+
+    Public Shared ReadOnly Property ExplorersMoves As Dictionary(Of Integer, String)
         Get
             If _skyMoves Is Nothing Then
                 Dim i As New BasicDictionaryIniFile
@@ -15,8 +37,17 @@
     End Property
     Private Shared _skyMoves As Dictionary(Of Integer, String)
 
-    Private Shared Property TDMoves As Dictionary(Of Integer, String)
-    Private Shared Property RBMoves As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property RBMoves As Dictionary(Of Integer, String)
+        Get
+            If _rbMoves Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.RBMoves)
+                _rbMoves = i.Entries
+            End If
+            Return _rbMoves
+        End Get
+    End Property
+    Private Shared _rbMoves As Dictionary(Of Integer, String)
 
     Public Shared ReadOnly Property SkyItems As Dictionary(Of Integer, String)
         Get
@@ -54,7 +85,7 @@
     End Property
     Private Shared _rbItems As Dictionary(Of Integer, String)
 
-    Public Shared ReadOnly Property SkyPokemon As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property ExplorersPokemon As Dictionary(Of Integer, String)
         Get
             If _skyPokemon Is Nothing Then
                 Dim i As New BasicDictionaryIniFile
@@ -66,9 +97,29 @@
     End Property
     Private Shared _skyPokemon As Dictionary(Of Integer, String)
 
-    Private Shared Property TDPokemon As Dictionary(Of Integer, String)
-    Private Shared Property RBPokemon As Dictionary(Of Integer, String)
-    Private Shared Property RBBaseTypes As Dictionary(Of Integer, String)
+    Public Shared ReadOnly Property RBPokemon As Dictionary(Of Integer, String)
+        Get
+            If _rbPokemon Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.RBPokemon)
+                _rbPokemon = i.Entries
+            End If
+            Return _rbPokemon
+        End Get
+    End Property
+    Private Shared _rbPokemon As Dictionary(Of Integer, String)
+
+    Public Shared ReadOnly Property RBBaseTypes As Dictionary(Of Integer, String)
+        Get
+            If _rbBaseTypes Is Nothing Then
+                Dim i As New BasicDictionaryIniFile
+                i.CreateFile(My.Resources.ListResources.RBBaseTypes)
+                _rbBaseTypes = i.Entries
+            End If
+            Return _rbBaseTypes
+        End Get
+    End Property
+    Private Shared _rbBaseTypes As Dictionary(Of Integer, String)
 
 
     Public Shared Function GetSkyLocations() As Dictionary(Of Integer, String)
@@ -78,51 +129,6 @@
             SkyLocations = i.Entries
         End If
         Return SkyLocations
-    End Function
-
-    Public Shared Function GetTDLocations() As Dictionary(Of Integer, String)
-        If TDLocations Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.TDLocations)
-            TDLocations = i.Entries
-        End If
-        Return TDLocations
-    End Function
-
-    Public Shared Function GetRBLocations() As Dictionary(Of Integer, String)
-        If RBLocations Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.RBLocations)
-            RBLocations = i.Entries
-        End If
-        Return RBLocations
-    End Function
-
-    Public Shared Function GetRBMoves() As Dictionary(Of Integer, String)
-        If RBMoves Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.RBMoves)
-            RBMoves = i.Entries
-        End If
-        Return RBMoves
-    End Function
-
-    Public Shared Function GetRBPokemon() As Dictionary(Of Integer, String)
-        If RBPokemon Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.RBPokemon)
-            RBPokemon = i.Entries
-        End If
-        Return RBPokemon
-    End Function
-
-    Public Shared Function GetRBBaseTypes() As Dictionary(Of Integer, String)
-        If RBBaseTypes Is Nothing Then
-            Dim i As New BasicDictionaryIniFile
-            i.CreateFile(My.Resources.ListResources.RBBaseTypes)
-            RBBaseTypes = i.Entries
-        End If
-        Return RBBaseTypes
     End Function
 
 End Class

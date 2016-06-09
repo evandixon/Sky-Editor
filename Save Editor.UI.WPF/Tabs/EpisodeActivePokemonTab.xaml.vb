@@ -16,7 +16,7 @@ Namespace Tabs
             Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim apkms As New ObservableCollection(Of SkySave.ActivePkm)
+            Dim apkms As New ObservableCollection(Of SkyActivePokemon)
             For Each item In lbActivePokemon.Items
                 apkms.Add(item)
             Next

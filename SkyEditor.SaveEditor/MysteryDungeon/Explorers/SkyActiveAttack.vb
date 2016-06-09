@@ -143,7 +143,7 @@
 
         Private ReadOnly Property MoveNames As Dictionary(Of Integer, String) Implements IExplorersAttack.MoveNames
             Get
-                Return Lists.SkyMoves
+                Return Lists.ExplorersMoves
             End Get
         End Property
 

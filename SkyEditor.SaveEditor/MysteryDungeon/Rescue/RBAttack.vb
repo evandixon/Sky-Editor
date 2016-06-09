@@ -1,9 +1,9 @@
-﻿Namespace MysteryDungeon.Explorers
-    Public Class SkyAttack
-        Implements IExplorersAttack
+﻿Namespace MysteryDungeon.Rescue
+    Public Class RBAttack
+        'Implements IExplorersAttack
         Implements INotifyPropertyChanged
 
-        Public Const Length = 21
+        Public Const Length = 20
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
@@ -46,7 +46,7 @@
         End Property
         Dim _isValid As Boolean
 
-        Public Property IsLinked As Boolean Implements IExplorersAttack.IsLinked
+        Public Property IsLinked As Boolean 'Implements IExplorersAttack.IsLinked
             Get
                 Return _isLinked
             End Get
@@ -59,7 +59,7 @@
         End Property
         Dim _isLinked As Boolean
 
-        Public Property IsSwitched As Boolean Implements IExplorersAttack.IsSwitched
+        Public Property IsSwitched As Boolean ' Implements IExplorersAttack.IsSwitched
             Get
                 Return _isSwitched
             End Get
@@ -72,7 +72,7 @@
         End Property
         Dim _isSwitched As Boolean
 
-        Public Property IsSet As Boolean Implements IExplorersAttack.IsSet
+        Public Property IsSet As Boolean 'Implements IExplorersAttack.IsSet
             Get
                 Return _isSet
             End Get
@@ -85,7 +85,7 @@
         End Property
         Dim _isSet As Boolean
 
-        Public Property ID As Integer Implements IExplorersAttack.ID
+        Public Property ID As Integer 'Implements IExplorersAttack.ID
             Get
                 Return _id
             End Get
@@ -98,7 +98,7 @@
         End Property
         Dim _id As Integer
 
-        Public Property Ginseng As Integer Implements IExplorersAttack.Ginseng
+        Public Property Ginseng As Integer 'Implements IExplorersAttack.Ginseng
             Get
                 Return _ginseng
             End Get
@@ -111,12 +111,11 @@
         End Property
         Dim _ginseng As Integer
 
-        Private ReadOnly Property MoveNames As Dictionary(Of Integer, String) Implements IExplorersAttack.MoveNames
+        Private ReadOnly Property MoveNames As Dictionary(Of Integer, String) 'Implements IExplorersAttack.MoveNames
             Get
-                Return Lists.SkyMoves
+                Return Lists.RBMoves
             End Get
         End Property
-
     End Class
-
 End Namespace
+

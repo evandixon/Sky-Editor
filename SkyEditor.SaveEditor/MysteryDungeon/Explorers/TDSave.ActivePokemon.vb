@@ -261,7 +261,7 @@
             End Property
             Public Overrides Function ToString() As String
                 If IsValid Then
-                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.SkyPokemon(ID))
+                    Return String.Format("{0} (Lvl. {1} {2})", Name, Level, Lists.ExplorersPokemon(ID))
                 Else
                     Return "----------"
                 End If

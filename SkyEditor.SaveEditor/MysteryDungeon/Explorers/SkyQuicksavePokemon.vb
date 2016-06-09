@@ -395,7 +395,7 @@ Namespace MysteryDungeon.Explorers
 
         Private ReadOnly Property PokemonNames As Dictionary(Of Integer, String)
             Get
-                Return Lists.SkyPokemon
+                Return Lists.ExplorersPokemon
             End Get
         End Property
 
@@ -409,7 +409,7 @@ Namespace MysteryDungeon.Explorers
 
         Public Overrides Function ToString() As String
             If IsValid Then
-                Return String.Format("Lvl. {0} {1}", Level, Lists.SkyPokemon(ID))
+                Return String.Format("Lvl. {0} {1}", Level, Lists.ExplorersPokemon(ID))
             Else
                 Return "----------"
             End If

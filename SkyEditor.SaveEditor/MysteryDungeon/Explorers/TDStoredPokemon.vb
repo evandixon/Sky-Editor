@@ -1,7 +1,7 @@
 ﻿Imports SkyEditor.Core.IO
 
 Namespace MysteryDungeon.Explorers
-    Public Class SkyStoredPokemon
+    Public Class TDStoredPokemon
         Implements IExplorersStoredPokemon
         Implements IOpenableFile
         Implements ISavableAs
@@ -10,7 +10,7 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyModified
 
         Public Const Length = 362
-        Public Const MimeType As String = "application/x-sky-pokemon"
+        Public Const MimeType As String = "application/x-td-pokemon"
 
         Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
@@ -27,7 +27,7 @@ Namespace MysteryDungeon.Explorers
 
         Private Sub Initialize(bits As Binary)
             With bits
-                IsValid = .Bit(0)
+                'IsValid = .Bit(0) 'Not 100% sure about this
                 Level = .Int(0, 1, 7)
 
                 Dim idRaw As Integer = .Int(0, 8, 11)
@@ -52,20 +52,20 @@ Namespace MysteryDungeon.Explorers
                 SpDefense = .Int(0, 93, 8)
                 Exp = .Int(0, 101, 24)
 
-                Unk2 = .Range(125, 73)
+                Unk2 = .Range(125, 96)
 
-                Attack1 = New ExplorersAttack(.Range(198, ExplorersAttack.Length))
-                Attack2 = New ExplorersAttack(.Range(219, ExplorersAttack.Length))
-                Attack3 = New ExplorersAttack(.Range(240, ExplorersAttack.Length))
-                Attack4 = New ExplorersAttack(.Range(261, ExplorersAttack.Length))
-                Name = .StringPMD(0, 282, 10)
+                Attack1 = New ExplorersAttack(.Range(221, ExplorersAttack.Length))
+                Attack2 = New ExplorersAttack(.Range(242, ExplorersAttack.Length))
+                Attack3 = New ExplorersAttack(.Range(263, ExplorersAttack.Length))
+                Attack4 = New ExplorersAttack(.Range(284, ExplorersAttack.Length))
+                Name = .StringPMD(0, 305, 10)
             End With
         End Sub
 
         Public Function GetStoredPokemonBits() As Binary
             Dim out As New Binary(Length)
             With out
-                .Bit(0) = IsValid
+                '.Bit(0) = IsValid
                 .Int(0, 1, 7) = Level
 
                 If IsFemale Then
@@ -87,13 +87,13 @@ Namespace MysteryDungeon.Explorers
                 .Int(0, 93, 8) = SpDefense
                 .Int(0, 101, 24) = Exp
 
-                .Range(125, 73) = Unk2
+                .Range(125, 96) = Unk2
 
-                .Range(198, ExplorersAttack.Length) = _attack1.GetAttackBits
-                .Range(219, ExplorersAttack.Length) = _attack2.GetAttackBits
-                .Range(240, ExplorersAttack.Length) = _attack3.GetAttackBits
-                .Range(261, ExplorersAttack.Length) = _attack4.GetAttackBits
-                .StringPMD(0, 282, 10) = Name
+                .Range(221, ExplorersAttack.Length) = _attack1.GetAttackBits
+                .Range(242, ExplorersAttack.Length) = _attack2.GetAttackBits
+                .Range(263, ExplorersAttack.Length) = _attack3.GetAttackBits
+                .Range(284, ExplorersAttack.Length) = _attack4.GetAttackBits
+                .StringPMD(0, 305, 10) = Name
             End With
             Return out
         End Function
@@ -123,7 +123,7 @@ Namespace MysteryDungeon.Explorers
         End Sub
 
         Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
-            Return ".skypkm"
+            Return ".tdpkm"
         End Function
 
         Public Sub Save(provider As IOProvider) Implements ISavable.Save
@@ -148,18 +148,11 @@ Namespace MysteryDungeon.Explorers
         Private Property Unk1 As Binary
         Private Property Unk2 As Binary
 
-        Public Property IsValid As Boolean
+        Public ReadOnly Property IsValid As Boolean
             Get
-                Return _isValid
+                Return ID > 0
             End Get
-            Set(value As Boolean)
-                If Not _isValid = value Then
-                    _isValid = value
-                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(IsValid)))
-                End If
-            End Set
         End Property
-        Dim _isValid As Boolean
 
         Public Property Level As Byte Implements IExplorersStoredPokemon.Level
             Get
@@ -389,11 +382,11 @@ Namespace MysteryDungeon.Explorers
 
         Public ReadOnly Property LocationNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.LocationNames
             Get
-                Return Lists.GetSkyLocations
+                Return Lists.TDLocations
             End Get
         End Property
 
 #End Region
     End Class
-End Namespace
 
+End Namespace

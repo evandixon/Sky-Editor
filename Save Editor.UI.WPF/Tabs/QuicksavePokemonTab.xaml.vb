@@ -13,7 +13,7 @@ Namespace Tabs
             Next
         End Sub
         Public Overrides Sub UpdateObject()
-            Dim apkms As New List(Of SkySave.QuicksavePkm)
+            Dim apkms As New List(Of SkyQuicksavePokemon)
             For Each item In lbActivePokemon.Items
                 apkms.Add(item)
             Next
@@ -23,7 +23,7 @@ Namespace Tabs
             Me.Header = My.Resources.Language.QuicksavePokemonTabHeader
         End Sub
         Sub RefreshActivePKMDisplay()
-            Dim pkms As New List(Of SkySave.QuicksavePkm)
+            Dim pkms As New List(Of SkyQuicksavePokemon)
             For Each p In lbActivePokemon.Items
                 pkms.Add(p)
             Next

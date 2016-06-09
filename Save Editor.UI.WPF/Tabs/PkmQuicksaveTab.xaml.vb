@@ -41,10 +41,10 @@ Namespace Tabs
             End Set
         End Property
         Public Overrides Sub RefreshDisplay()
-            Dim _pokemon = GetEditingObject(Of SkySave.QuicksavePkm)()
+            Dim _pokemon = GetEditingObject(Of SkyQuicksavePokemon)()
 
             With _pokemon
-                PokemonDictionary = Lists.SkyPokemon
+                PokemonDictionary = Lists.ExplorersPokemon
 
                 SelectedPokemonID = .ID
                 chbIsFemale.IsChecked = .IsFemale
@@ -56,16 +56,16 @@ Namespace Tabs
                 numExp.Value = .Exp
 
                 numCurrentHP.Value = _pokemon.CurrentHP
-                numMaxHP.Value = .BaseHP
-                numAttack.Value = .StatAttack
-                numDefense.Value = .StatDefense
-                numSpAttack.Value = .StatSpAttack
-                numSpDefense.Value = .StatSpDefense
+                numMaxHP.Value = .MaxHP
+                numAttack.Value = .Attack
+                numDefense.Value = .Defense
+                numSpAttack.Value = .SpAttack
+                numSpDefense.Value = .SpDefense
             End With
         End Sub
 
         Public Overrides Sub UpdateObject()
-            Dim _pokemon = GetEditingObject(Of SkySave.QuicksavePkm)()
+            Dim _pokemon = GetEditingObject(Of SkyQuicksavePokemon)()
 
             With _pokemon
                 .ID = SelectedPokemonID
@@ -79,11 +79,11 @@ Namespace Tabs
                 .Exp = numExp.Value
 
                 _pokemon.CurrentHP = numCurrentHP.Value
-                .BaseHP = numMaxHP.Value
-                .StatAttack = numAttack.Value
-                .StatDefense = numDefense.Value
-                .StatSpAttack = numSpAttack.Value
-                .StatSpDefense = numSpDefense.Value
+                .MaxHP = numMaxHP.Value
+                .Attack = numAttack.Value
+                .Defense = numDefense.Value
+                .SpAttack = numSpAttack.Value
+                .SpDefense = numSpDefense.Value
             End With
         End Sub
 
@@ -107,7 +107,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(SkySave.QuicksavePkm)}
+            Return {GetType(SkyQuicksavePokemon)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer
