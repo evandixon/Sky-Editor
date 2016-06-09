@@ -146,6 +146,7 @@
     <Compile Include="MysteryDungeon\Explorers\SkyAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyHeldItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyQuicksaveAttack.vb" />
+    <Compile Include="MysteryDungeon\Explorers\SkyQuicksavePokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyStoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDHeldItem.vb" />

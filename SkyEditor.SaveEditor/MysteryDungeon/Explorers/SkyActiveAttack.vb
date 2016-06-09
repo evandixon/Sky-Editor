@@ -23,7 +23,7 @@
             End With
         End Sub
         Public Function GetAttackBits() As Binary
-            Dim out As New Binary
+            Dim out As New Binary(Length)
             With out
                 .Bit(0) = IsValid
                 .Bit(1) = IsLinked

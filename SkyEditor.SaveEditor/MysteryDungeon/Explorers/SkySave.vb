@@ -72,210 +72,6 @@ Namespace MysteryDungeon.Explorers
             Public Const QuicksavePokemonOffset As Integer = &H19000 * 8 + (&H3170 * 8)
         End Class
 
-        Public Class QuicksavePkm
-            Inherits Binary
-            Public Const Length As Integer = 429 * 8
-            Public Sub New(Bits As Binary)
-                MyBase.New(Bits)
-            End Sub
-            Public Sub New()
-                MyBase.New(New Binary(Length))
-            End Sub
-            Public ReadOnly Property IsValid As Boolean
-                Get
-                    Return ID > 0
-                End Get
-            End Property
-            'Unknown data: 80 bits
-            Public Property TransformedID As Integer
-                Get
-                    Dim i = Int(0, 80, 16)
-                    If i > 600 Then
-                        i -= 600
-                    End If
-                    Return i
-                End Get
-                Set(value As Integer)
-                    Dim f = IsFemale
-                    Int(0, 80, 16) = value
-                    IsFemale = f
-                End Set
-            End Property
-            Public Property TransformedIsFemale As Boolean
-                Get
-                    Dim i = Int(0, 80, 16)
-                    Return (i > 600)
-                End Get
-                Set(value As Boolean)
-                    Dim i = Int(0, 80, 16)
-                    If i > 600 Then
-                        If value Then
-                            'do nothing
-                        Else
-                            Int(0, 80, 16) -= 600
-                        End If
-                    Else
-                        If value Then
-                            Int(0, 80, 16) += 600
-                        Else
-                            'do nothing
-                        End If
-                    End If
-                End Set
-            End Property
-            Public Property ID As Integer
-                Get
-                    Dim i = Int(0, 96, 16)
-                    If i > 600 Then
-                        i -= 600
-                    End If
-                    Return i
-                End Get
-                Set(value As Integer)
-                    Dim f = IsFemale
-                    Int(0, 96, 16) = value
-                    IsFemale = f
-                End Set
-            End Property
-            Public Property IsFemale As Boolean
-                Get
-                    Dim i = Int(0, 96, 16)
-                    Return (i > 600)
-                End Get
-                Set(value As Boolean)
-                    Dim i = Int(0, 96, 16)
-                    If i > 600 Then
-                        If value Then
-                            'do nothing
-                        Else
-                            Int(0, 96, 16) -= 600
-                        End If
-                    Else
-                        If value Then
-                            Int(0, 96, 16) += 600
-                        Else
-                            'do nothing
-                        End If
-                    End If
-                End Set
-            End Property
-            'Unknown data
-            Public Property Level As Byte
-                Get
-                    Return Int(0, 144, 8)
-                End Get
-                Set(value As Byte)
-                    Int(0, 144, 8) = value
-                End Set
-            End Property
-            'Unknown data
-            Public Property CurrentHP As UInt16
-                Get
-                    Return Int(0, 192, 16)
-                End Get
-                Set(value As UInt16)
-                    Int(0, 192, 16) = value
-                End Set
-            End Property
-            Public Property BaseHP As UInt16
-                Get
-                    Return Int(0, 208, 16)
-                End Get
-                Set(value As UInt16)
-                    Int(0, 208, 16) = value
-                End Set
-            End Property
-            Public Property HPBoost As UInt16
-                Get
-                    Return Int(0, 224, 16)
-                End Get
-                Set(value As UInt16)
-                    Int(0, 224, 16) = value
-                End Set
-            End Property
-            'Unknown Data:
-            Public Property StatAttack As Byte
-                Get
-                    Return Int(0, 256, 8)
-                End Get
-                Set(value As Byte)
-                    Int(0, 256, 8) = value
-                End Set
-            End Property
-            Public Property StatDefense As Byte
-                Get
-                    Return Int(0, 264, 8)
-                End Get
-                Set(value As Byte)
-                    Int(0, 264, 8) = value
-                End Set
-            End Property
-            Public Property StatSpAttack As Byte
-                Get
-                    Return Int(0, 272, 8)
-                End Get
-                Set(value As Byte)
-                    Int(0, 272, 8) = value
-                End Set
-            End Property
-            Public Property StatSpDefense As Byte
-                Get
-                    Return Int(0, 280, 8)
-                End Get
-                Set(value As Byte)
-                    Int(0, 280, 8) = value
-                End Set
-            End Property
-            Public Property Exp As Integer
-                Get
-                    Return Int(0, 288, 32)
-                End Get
-                Set(value As Integer)
-                    Int(0, 288, 32) = value
-                End Set
-            End Property
-            'Unknown Data
-            Public Property Attack1 As iAttack
-                Get
-                    Return New QuicksaveAttack(Range(2696, QuicksaveAttack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(2696, QuicksaveAttack.Length) = value
-                End Set
-            End Property
-            Public Property Attack2 As iAttack
-                Get
-                    Return New QuicksaveAttack(Range(2696 + 1 * QuicksaveAttack.Length, QuicksaveAttack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(2696 + 1 * QuicksaveAttack.Length, QuicksaveAttack.Length) = value
-                End Set
-            End Property
-            Public Property Attack3 As iAttack
-                Get
-                    Return New QuicksaveAttack(Range(2696 + 2 * QuicksaveAttack.Length, QuicksaveAttack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(2696 + 2 * QuicksaveAttack.Length, QuicksaveAttack.Length) = value
-                End Set
-            End Property
-            Public Property Attack4 As iAttack
-                Get
-                    Return New QuicksaveAttack(Range(2696 + 3 * QuicksaveAttack.Length, QuicksaveAttack.Length))
-                End Get
-                Set(value As iAttack)
-                    Range(2696 + 3 * QuicksaveAttack.Length, QuicksaveAttack.Length) = value
-                End Set
-            End Property
-            Public Overrides Function ToString() As String
-                If IsValid Then
-                    Return String.Format("Lvl. {0} {1}", Level, Lists.SkyPokemon(ID))
-                Else
-                    Return "----------"
-                End If
-            End Function
-        End Class
-
 #End Region
 
         Public Sub New()
@@ -682,11 +478,11 @@ Namespace MysteryDungeon.Explorers
 #Region "Active Pokemon"
 
         Private Sub LoadActivePokemon()
-            Dim activePokemon As New ObservableCollection(Of ActivePkm)
-            Dim spEpisodeActivePokemon As New ObservableCollection(Of ActivePkm)
+            Dim activePokemon As New ObservableCollection(Of SkyActivePokemon)
+            Dim spEpisodeActivePokemon As New ObservableCollection(Of SkyActivePokemon)
             For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                activePokemon.Add(New ActivePkm(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
-                spEpisodeActivePokemon.Add(New ActivePkm(Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
+                activePokemon.Add(New SkyActivePokemon(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
+                spEpisodeActivePokemon.Add(New SkyActivePokemon(Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
             Next
 
             Me.ActivePokemon = activePokemon
@@ -695,23 +491,23 @@ Namespace MysteryDungeon.Explorers
 
         Private Sub SaveActivePokemon()
             For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = ActivePokemon(count)
-                Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = SpEpisodeActivePokemon(count)
+                Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = ActivePokemon(count).GetActivePokemonBits
+                Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = SpEpisodeActivePokemon(count).GetActivePokemonBits
             Next
         End Sub
 
-        Public Property ActivePokemon As ObservableCollection(Of ActivePkm)
+        Public Property ActivePokemon As ObservableCollection(Of SkyActivePokemon)
             Get
                 Return _activePokemon
             End Get
-            Set(value As ObservableCollection(Of ActivePkm))
+            Set(value As ObservableCollection(Of SkyActivePokemon))
                 If _activePokemon IsNot value Then
                     _activePokemon = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ActivePokemon)))
                 End If
             End Set
         End Property
-        Dim _activePokemon As ObservableCollection(Of ActivePkm)
+        Dim _activePokemon As ObservableCollection(Of SkyActivePokemon)
 
         Private Property IParty_Party As IEnumerable Implements IParty.Party
             Get
@@ -722,45 +518,45 @@ Namespace MysteryDungeon.Explorers
             End Set
         End Property
 
-        Public Property SpEpisodeActivePokemon As ObservableCollection(Of ActivePkm)
+        Public Property SpEpisodeActivePokemon As ObservableCollection(Of SkyActivePokemon)
             Get
                 Return _spEpisodeActivePokemon
             End Get
-            Set(value As ObservableCollection(Of ActivePkm))
+            Set(value As ObservableCollection(Of SkyActivePokemon))
                 If _spEpisodeActivePokemon IsNot value Then
                     _spEpisodeActivePokemon = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(SpEpisodeActivePokemon)))
                 End If
             End Set
         End Property
-        Dim _spEpisodeActivePokemon As ObservableCollection(Of ActivePkm)
+        Dim _spEpisodeActivePokemon As ObservableCollection(Of SkyActivePokemon)
 
 #End Region
 
 #Region "Quicksave Pokemon"
-        Public Property QuicksavePokemon(Index As Integer) As QuicksavePkm
+        Public Property QuicksavePokemon(Index As Integer) As SkyQuicksavePokemon
             Get
-                Return New QuicksavePkm(Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength))
+                Return New SkyQuicksavePokemon(Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength))
             End Get
-            Set(value As QuicksavePkm)
-                Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength) = value
+            Set(value As SkyQuicksavePokemon)
+                Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength) = value.GetQuicksavePokemonBits
             End Set
         End Property
 
-        Public Property QuicksavePokemon As QuicksavePkm()
+        Public Property QuicksavePokemon As SkyQuicksavePokemon()
             Get
-                Dim out As New List(Of QuicksavePkm)
+                Dim out As New List(Of SkyQuicksavePokemon)
                 For count = 0 To Offsets.QuicksavePokemonNumber - 1
                     out.Add(QuicksavePokemon(count))
                 Next
                 Return out.ToArray
             End Get
-            Set(value As QuicksavePkm())
+            Set(value As SkyQuicksavePokemon())
                 For count = 0 To Offsets.QuicksavePokemonNumber - 1
                     If value.Length > count Then
                         QuicksavePokemon(count) = value(count)
                     Else
-                        QuicksavePokemon(count) = New QuicksavePkm()
+                        QuicksavePokemon(count) = New SkyQuicksavePokemon()
                     End If
                 Next
             End Set
