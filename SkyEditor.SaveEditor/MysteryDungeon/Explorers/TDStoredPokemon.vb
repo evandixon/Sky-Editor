@@ -9,7 +9,7 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyPropertyChanged
         Implements INotifyModified
 
-        Public Const Length = 362
+        Public Const Length = 388
         Public Const MimeType As String = "application/x-td-pokemon"
 
         Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
@@ -213,6 +213,7 @@ Namespace MysteryDungeon.Explorers
             Set(value As Integer)
                 If Not _metFloor = value Then
                     _metFloor = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(MetFloor)))
                 End If
             End Set
         End Property

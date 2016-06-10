@@ -42,7 +42,10 @@ Namespace MysteryDungeon.Explorers
         Private Sub TDSave_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
             RaiseEvent Modified(Me, e)
         End Sub
-        Private Sub _heldItems_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs) Handles _heldItems.CollectionChanged
+        Private Sub On_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs) Handles _heldItems.CollectionChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
+        Private Sub OnModified(sender As Object, e As EventArgs)
             RaiseEvent Modified(Me, e)
         End Sub
 #End Region
@@ -170,6 +173,9 @@ Namespace MysteryDungeon.Explorers
 
             For count = 0 To Offsets.StoredPokemonNumber
                 Dim pkm As New TDStoredPokemon(Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+                AddHandler pkm.Modified, AddressOf OnModified
+                AddHandler pkm.PropertyChanged, AddressOf OnModified
+
                 If count < 2 Then 'Player Partner
                     StoredPlayerPartner.Add(pkm)
                 Else 'Others
