@@ -1,5 +1,5 @@
 ﻿Namespace MysteryDungeon.Explorers
-    Public Class SkyActiveAttack
+    Public Class ExplorersActiveAttack
         Implements IExplorersActiveAttack
         Implements INotifyPropertyChanged
 

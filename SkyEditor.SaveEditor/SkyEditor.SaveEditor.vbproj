@@ -130,12 +130,13 @@
     <Compile Include="Modeling\IPokemonStorage.vb" />
     <Compile Include="Modeling\ItemSlot.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersActiveAttack.vb" />
+    <Compile Include="MysteryDungeon\Explorers\TDActivePokemon.vb" />
     <Compile Include="MysteryDungeon\I4Moves.vb" />
     <Compile Include="MysteryDungeon\IExplorersAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersStoredItem.vb" />
     <Compile Include="MysteryDungeon\Explorers\IExplorersStoredPokemon.vb" />
-    <Compile Include="MysteryDungeon\Explorers\SkyActiveAttack.vb" />
+    <Compile Include="MysteryDungeon\Explorers\ExplorersActiveAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyActivePokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\ExplorersAttack.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkyHeldItem.vb" />
@@ -155,7 +156,6 @@
     <Compile Include="MysteryDungeon\Rescue\RBSave.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSaveEU.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkySave.vb" />
-    <Compile Include="MysteryDungeon\Explorers\TDSave.ActivePokemon.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.vb" />
     <Compile Include="StoredPokemonSlotDefinition.vb" />
   </ItemGroup>

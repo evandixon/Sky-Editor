@@ -12,6 +12,7 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyModified
         Implements IInventory
         Implements IPokemonStorage
+        Implements IParty
 
         Public Sub New()
             MyBase.New()
@@ -23,12 +24,14 @@ Namespace MysteryDungeon.Explorers
             LoadGeneral()
             LoadItems()
             LoadStoredPokemon()
+            LoadActivePokemon
         End Function
 
         Public Overrides Sub Save(Destination As String, provider As IOProvider)
             SaveGeneral()
             SaveItems()
             SaveStoredPokemon()
+            SaveActivePokemon
 
             MyBase.Save(Destination, provider)
         End Sub
@@ -208,6 +211,53 @@ Namespace MysteryDungeon.Explorers
             End Get
         End Property
         Dim _storage As ObservableCollection(Of IPokemonBox)
+
+#End Region
+
+#Region "Active Pokemon"
+
+        Private Sub LoadActivePokemon()
+            Dim activePokemon As New ObservableCollection(Of TDActivePokemon)
+            Dim spEpisodeActivePokemon As New ObservableCollection(Of TDActivePokemon)
+            For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
+                Dim main = New TDActivePokemon(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength))
+
+                AddHandler main.Modified, AddressOf OnModified
+                AddHandler main.PropertyChanged, AddressOf OnModified
+
+                activePokemon.Add(main)
+            Next
+
+            Me.ActivePokemon = activePokemon
+        End Sub
+
+        Private Sub SaveActivePokemon()
+            For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
+                Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength) = ActivePokemon(count).GetActivePokemonBits
+            Next
+        End Sub
+
+        Public Property ActivePokemon As ObservableCollection(Of TDActivePokemon)
+            Get
+                Return _activePokemon
+            End Get
+            Set(value As ObservableCollection(Of TDActivePokemon))
+                If _activePokemon IsNot value Then
+                    _activePokemon = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ActivePokemon)))
+                End If
+            End Set
+        End Property
+        Dim _activePokemon As ObservableCollection(Of TDActivePokemon)
+
+        Private Property IParty_Party As IEnumerable Implements IParty.Party
+            Get
+                Return ActivePokemon
+            End Get
+            Set(value As IEnumerable)
+                ActivePokemon = value
+            End Set
+        End Property
 
 #End Region
 
