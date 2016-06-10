@@ -5,7 +5,6 @@ Imports ICSharpCode.AvalonEdit.CodeCompletion
 Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase
 
 Public Class AvalonEditControl
     Implements IObjectControl

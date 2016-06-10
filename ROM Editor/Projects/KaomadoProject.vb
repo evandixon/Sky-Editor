@@ -1,7 +1,6 @@
 ﻿Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.IO
-Imports SkyEditorBase
 
 Namespace Projects
     Public Class KaomadoProject

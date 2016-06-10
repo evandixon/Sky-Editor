@@ -7,7 +7,6 @@ Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 Namespace Projects
     Public Class PsmdLuaProject
         Inherits GenericModProject

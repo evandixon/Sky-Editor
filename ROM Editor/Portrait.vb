@@ -1,5 +1,4 @@
 ﻿Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
 
 Public Class Portrait
     Public Property Name As String

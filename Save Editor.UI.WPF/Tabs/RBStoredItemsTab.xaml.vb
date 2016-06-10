@@ -1,5 +1,4 @@
 ﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Rescue
-Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Namespace Tabs

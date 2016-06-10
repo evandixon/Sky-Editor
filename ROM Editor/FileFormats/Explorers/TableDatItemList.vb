@@ -1,5 +1,4 @@
 ﻿Imports SkyEditor.Core.IO
-Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class TableDatItemList

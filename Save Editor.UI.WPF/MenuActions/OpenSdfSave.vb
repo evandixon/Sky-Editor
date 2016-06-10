@@ -1,7 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class OpenSdfSave

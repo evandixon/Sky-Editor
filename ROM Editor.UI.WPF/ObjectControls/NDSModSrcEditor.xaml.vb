@@ -1,7 +1,6 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor
 Imports ROMEditor.Projects
-Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Namespace ObjectControls

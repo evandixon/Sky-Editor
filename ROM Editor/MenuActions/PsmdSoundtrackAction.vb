@@ -5,7 +5,6 @@ Imports ROMEditor.Projects
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
 Imports TagLib
 
 Namespace MenuActions

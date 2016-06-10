@@ -1,5 +1,4 @@
 ﻿Imports SkyEditor.Core.ConsoleCommands
-Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class PokemonStatsCalculator

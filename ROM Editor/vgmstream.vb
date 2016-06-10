@@ -1,6 +1,5 @@
 ﻿Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 
 Module vgmstream
     ''' <summary>

@@ -1,6 +1,5 @@
 ﻿Imports ROMEditor
 Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Public Class RomSelector

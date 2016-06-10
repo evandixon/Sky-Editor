@@ -1,10 +1,8 @@
 ﻿Imports System.IO
 Imports System.Threading
 Imports SkyEditor.Core
-Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.UI.WPF
-Imports SkyEditorBase.Redistribution
 
 Public Class StartupHelpers
 

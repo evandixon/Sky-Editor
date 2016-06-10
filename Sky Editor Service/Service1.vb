@@ -1,6 +1,5 @@
 ﻿Imports System.Timers
 Imports SkyEditor.Core
-Imports SkyEditorBase
 
 Public Class Service1
 

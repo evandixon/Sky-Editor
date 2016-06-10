@@ -5,7 +5,6 @@ Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
 Imports SkyEditor.ROMEditor
-Imports SkyEditorBase
 
 Namespace Roms
     Public Class Generic3DSRom

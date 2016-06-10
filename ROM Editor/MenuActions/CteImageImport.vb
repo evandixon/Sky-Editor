@@ -1,7 +1,6 @@
 ﻿Imports System.Reflection
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.Core.UI
-Imports SkyEditorBase
 
 Namespace MenuActions
     Public Class CteImageImport

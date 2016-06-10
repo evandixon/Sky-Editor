@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports SkyEditor.Core
 Imports SkyEditor.Core.ConsoleCommands
-Imports SkyEditorBase
 
 Module Module1
 

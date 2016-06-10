@@ -2,7 +2,6 @@
 Imports SkyEditor.Core.ConsoleCommands
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
 
 Namespace ConsoleCommands
     Public Class NameListResearcher

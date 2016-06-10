@@ -1,6 +1,5 @@
 ﻿Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 
 Public Module DSIconTool
     Sub ExtractIcon(RomPath As String, OutputPath As String)

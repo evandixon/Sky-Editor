@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     <Obsolete("Needs rewriting")> Public Class DecomressedFile

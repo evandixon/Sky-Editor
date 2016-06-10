@@ -1,5 +1,4 @@
-﻿Imports SkyEditorBase
-Namespace UI
+﻿Namespace UI
     Public Class WelcomeTabContent
         Inherits UserControl
 

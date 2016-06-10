@@ -2,7 +2,6 @@
 Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
-Imports SkyEditorBase
 
 Namespace Projects
     Public Class GtiImage2dProject

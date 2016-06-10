@@ -1,6 +1,5 @@
 ﻿Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 
 Public Module romTool3ds
     <Obsolete("Untested")> Async Function CompressCodeBin(SourceFilename As String, OutputFilename As String) As Task

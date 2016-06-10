@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core
 Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
-Imports SkyEditorBase
 
 Namespace FileFormats.CTR
     ''' <summary>

@@ -2,7 +2,6 @@
 Imports System.Windows.Controls
 Imports CheatGenerator.ARDS
 Imports SkyEditor.Core
-Imports SkyEditorBase
 
 Namespace UI
     Public Class CodeGenerator

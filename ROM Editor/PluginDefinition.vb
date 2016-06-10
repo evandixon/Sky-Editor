@@ -1,11 +1,6 @@
-﻿Imports ROMEditor.Roms
-Imports ROMEditor.Projects
-Imports ROMEditor.FileFormats.PSMD
+﻿Imports ROMEditor.Projects
 Imports SkyEditor.Core
-Imports SkyEditorBase
-Imports System.Reflection
 Imports System.IO
-Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 
 Public Class PluginDefinition

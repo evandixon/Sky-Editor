@@ -1,5 +1,4 @@
-﻿Imports SkyEditorBase
-
+﻿
 Namespace ARDS
     Public Class CheatFormat
         Public Property Name As String

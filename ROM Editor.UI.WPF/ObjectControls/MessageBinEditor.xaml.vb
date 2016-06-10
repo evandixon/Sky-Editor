@@ -5,7 +5,6 @@ Imports System.Windows.Controls
 Imports System.Windows.Forms
 Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditorBase
 Imports SkyEditorWPF.UI
 
 Public Class MessageBinEditor

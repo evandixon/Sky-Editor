@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 Public Module DeSmuMe
     Public Class DeSmuMeVersion
         Implements IComparable(Of DeSmuMeVersion)

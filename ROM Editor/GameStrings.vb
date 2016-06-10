@@ -1,5 +1,4 @@
-﻿Imports SkyEditorBase
-Public Class GameStrings
+﻿Public Class GameStrings
     Public Const PokemonXCode = "0004000000055D00"
     Public Const PokemonYCode = "0004000000055E00"
     Public Const ORCode = "000400000011C400"

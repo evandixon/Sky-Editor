@@ -1,6 +1,5 @@
 ﻿Imports System.Windows.Media.Imaging
 Imports SkyEditor.Core.Windows
-Imports SkyEditorBase
 
 Public Class ROM
     Public Property Name As String

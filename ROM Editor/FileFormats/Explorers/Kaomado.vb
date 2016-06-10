@@ -1,7 +1,6 @@
 ﻿Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes
-Imports SkyEditorBase
 
 Namespace FileFormats.Explorers
     Public Class Kaomado
