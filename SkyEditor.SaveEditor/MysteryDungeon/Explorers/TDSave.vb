@@ -250,7 +250,7 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _activePokemon As ObservableCollection(Of TDActivePokemon)
 
-        Private Property IParty_Party As IEnumerable Implements IParty.Party
+        Protected Property Party As IEnumerable Implements IParty.Party
             Get
                 Return ActivePokemon
             End Get
