@@ -64,7 +64,7 @@
         <CheckBox Grid.Column="2" Grid.Row="2" IsChecked="{Binding Path=(explorers:IExplorersStoredPokemon.IsFemale)}" VerticalAlignment="Center"></CheckBox>
 
         <TextBlock Grid.Column="0" Grid.Row="4" Text="{x:Static res:Language.Name}" VerticalAlignment="Center" />
-        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Path=(explorers:IExplorersStoredPokemon.Name)}"></TextBox>
+        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Path=(explorers:IExplorersStoredPokemon.Name), UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <TextBlock Grid.Column="0" Grid.Row="6" Text="{x:Static res:Language.Level}" VerticalAlignment="Center" />
         <xctk:IntegerUpDown Grid.Column="2" Grid.Row="6" Value="{Binding Path=(explorers:IExplorersStoredPokemon.Level)}" />

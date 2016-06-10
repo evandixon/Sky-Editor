@@ -156,7 +156,7 @@ Namespace MysteryDungeon.Explorers
         ''' <remarks></remarks>
         Public Property TeamName As String
             Get
-                Return Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+                Return _teamName
             End Get
             Set(value As String)
                 If Not _teamName = value Then
