@@ -345,11 +345,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _exp As Integer
 
-        Public Property Attack1 As IExplorersAttack Implements IExplorersStoredPokemon.Attack1
+        Public Property Attack1 As IMDAttack Implements IExplorersStoredPokemon.Attack1
             Get
                 Return _attack1
             End Get
-            Set(value As IExplorersAttack)
+            Set(value As IMDAttack)
                 If _attack1 IsNot value Then
                     _attack1 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack1)))
@@ -358,11 +358,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack1 As SkyActiveAttack
 
-        Public Property Attack2 As IExplorersAttack Implements IExplorersStoredPokemon.Attack2
+        Public Property Attack2 As IMDAttack Implements IExplorersStoredPokemon.Attack2
             Get
                 Return _attack2
             End Get
-            Set(value As IExplorersAttack)
+            Set(value As IMDAttack)
                 If _attack2 IsNot value Then
                     _attack2 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack2)))
@@ -371,11 +371,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack2 As SkyActiveAttack
 
-        Public Property Attack3 As IExplorersAttack Implements IExplorersStoredPokemon.Attack3
+        Public Property Attack3 As IMDAttack Implements IExplorersStoredPokemon.Attack3
             Get
                 Return _attack3
             End Get
-            Set(value As IExplorersAttack)
+            Set(value As IMDAttack)
                 If _attack3 IsNot value Then
                     _attack3 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack3)))
@@ -384,11 +384,11 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _attack3 As SkyActiveAttack
 
-        Public Property Attack4 As IExplorersAttack Implements IExplorersStoredPokemon.Attack4
+        Public Property Attack4 As IMDAttack Implements IExplorersStoredPokemon.Attack4
             Get
                 Return _attack4
             End Get
-            Set(value As IExplorersAttack)
+            Set(value As IMDAttack)
                 If _attack4 IsNot value Then
                     _attack4 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack4)))

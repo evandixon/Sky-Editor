@@ -10,6 +10,7 @@ Namespace MysteryDungeon.Rescue
         Implements IInventory
         Implements INotifyPropertyChanged
         Implements IPokemonStorage
+        Implements INotifyModified
 
         Protected Class RBOffsets
             Public Overridable ReadOnly Property BackupSaveStart As Integer = &H6000
@@ -38,15 +39,18 @@ Namespace MysteryDungeon.Rescue
         End Sub
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+        Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
         Public Overrides Async Function OpenFile(Filename As String, Provider As IOProvider) As Task
             Await MyBase.OpenFile(Filename, Provider)
 
+            LoadGeneral()
             LoadItems()
             LoadStoredPokemon()
         End Function
 
         Public Overrides Sub Save(Destination As String, provider As IOProvider)
+            SaveGeneral()
             SaveItems()
             SaveStoredPokemon()
 
@@ -55,9 +59,37 @@ Namespace MysteryDungeon.Rescue
 
         Protected Overridable ReadOnly Property Offsets As RBOffsets
 
+#Region "Event Handlers"
+        Private Sub Me_OnPropertyChanged(sender As Object, e As EventArgs) Handles Me.PropertyChanged
+            RaiseEvent Modified(Me, New EventArgs)
+        End Sub
+        Private Sub OnModified(sender As Object, e As EventArgs)
+            RaiseEvent Modified(sender, e)
+        End Sub
+        Private Sub OnCollectionChanged(sender As Object, e As EventArgs) Handles _heldItems.CollectionChanged
+            RaiseEvent Modified(Me, New EventArgs)
+        End Sub
+#End Region
+
 #Region "Save Interaction"
 
-#Region "Team Info"
+#Region "General"
+        Private Sub LoadGeneral()
+            TeamName = Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+            HeldMoney = Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength)
+            StoredMoney = Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength)
+            RescuePoints = Bits.Int(0, Offsets.RescuePointsOffset, Offsets.RescuePointsLength)
+            BaseType = Bits.Int(0, Offsets.BaseTypeOffset, 8)
+        End Sub
+
+        Private Sub SaveGeneral()
+            Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = TeamName
+            Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength) = HeldMoney
+            Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength) = StoredMoney
+            Bits.Int(0, Offsets.RescuePointsOffset, Offsets.RescuePointsLength) = RescuePoints
+            Bits.Int(0, Offsets.BaseTypeOffset, 8) = BaseType
+        End Sub
+
         ''' <summary>
         ''' Gets or sets the save file's Team Name.
         ''' </summary>
@@ -66,48 +98,68 @@ Namespace MysteryDungeon.Rescue
         ''' <remarks></remarks>
         Public Property TeamName As String
             Get
-                Return Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength)
+                Return _teamName
             End Get
             Set(value As String)
-                Bits.StringPMD(0, Offsets.TeamNameStart, Offsets.TeamNameLength) = value
+                If Not _teamName = value Then
+                    _teamName = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(TeamName)))
+                End If
             End Set
         End Property
-        Public Property BaseType As Byte
+        Dim _teamName As String
+
+        Public Property BaseType As Integer
             Get
-                Return Bits.Int(0, Offsets.BaseTypeOffset, 8)
+                Return _baseType
             End Get
-            Set(value As Byte)
-                Bits.Int(0, Offsets.BaseTypeOffset, 8) = value
+            Set(value As Integer)
+                If Not _baseType = value Then
+                    _baseType = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(BaseType)))
+                End If
             End Set
         End Property
+        Dim _baseType As Integer
 
         Public Property RescuePoints As Integer
             Get
-                Return Bits.Int(0, Offsets.RescuePointsOffset, Offsets.RescuePointsLength)
+                Return _rescuePoints
             End Get
             Set(value As Integer)
-                Bits.Int(0, Offsets.RescuePointsOffset, Offsets.RescuePointsLength) = value
+                If Not _rescuePoints = value Then
+                    _rescuePoints = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(RescuePoints)))
+                End If
             End Set
         End Property
-#End Region
+        Dim _rescuePoints As Integer
 
-#Region "Money"
         Public Property HeldMoney As Integer
             Get
-                Return Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength)
+                Return _heldMoney
             End Get
             Set(value As Integer)
-                Bits.Int(0, Offsets.HeldMoneyOffset, Offsets.HeldMoneyLength) = value
+                If Not _heldMoney = value Then
+                    _heldMoney = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HeldMoney)))
+                End If
             End Set
         End Property
+        Dim _heldMoney As Integer
+
         Public Property StoredMoney As Integer
             Get
-                Return Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength)
+                Return _storedMoney
             End Get
             Set(value As Integer)
-                Bits.Int(0, Offsets.StoredMoneyOffset, Offsets.StoredMoneyLength) = value
+                If Not _storedMoney = value Then
+                    _storedMoney = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(StoredMoney)))
+                End If
             End Set
         End Property
+        Dim _storedMoney As Integer
 
 #End Region
 
@@ -176,19 +228,25 @@ Namespace MysteryDungeon.Rescue
             Dim offset As Integer = 0
             For Each item In defs
                 Dim pokemon As New ObservableCollection(Of RBStoredPokemon)
+                AddHandler pokemon.CollectionChanged, AddressOf OnCollectionChanged
+
                 For count = offset To offset + item.Length - 1
-                    pokemon.Add(RawStoredPokemon(count))
+                    Dim p = RawStoredPokemon(count)
+                    AddHandler p.Modified, AddressOf OnModified
+                    AddHandler p.PropertyChanged, AddressOf OnModified
+
+                    pokemon.Add(p)
                 Next
+                offset += item.Length - 1
                 _storage.Add(New BasicPokemonBox(item.Name, pokemon))
             Next
         End Sub
 
         Private Sub SaveStoredPokemon()
             Dim defs = StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets)
-            Dim offset As Integer = 0
             For i = 0 To defs.Count - 1
-                For j = 0 To defs(i).Length
-                    RawStoredPokemon(offset + j) = _storage(i).ItemCollection(j)
+                For j = 0 To defs(i).Length - 1
+                    RawStoredPokemon(i + j) = _storage(i).ItemCollection(j)
                 Next
             Next
         End Sub
@@ -221,7 +279,6 @@ Namespace MysteryDungeon.Rescue
                 Return out
             End Get
         End Property
-
 
 #End Region
 

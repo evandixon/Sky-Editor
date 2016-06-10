@@ -1,5 +1,5 @@
-﻿Namespace MysteryDungeon.Explorers
-    Public Interface IExplorersAttack
+﻿Namespace MysteryDungeon
+    Public Interface IMDAttack
         Property IsLinked As Boolean
         Property IsSwitched As Boolean
         Property IsSet As Boolean

@@ -160,11 +160,14 @@
     <Compile Include="MysteryDungeon\Explorers\ExplorersStoredPokemonGeneralTab.xaml.vb">
       <DependentUpon>ExplorersStoredPokemonGeneralTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MysteryDungeon\Explorers\ExplorersStoredPokemonMovesTab.xaml.vb">
-      <DependentUpon>ExplorersStoredPokemonMovesTab.xaml</DependentUpon>
+    <Compile Include="MysteryDungeon\I4MovesTab.xaml.vb">
+      <DependentUpon>I4MovesTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MysteryDungeon\Explorers\IExplorersAttackEditView.xaml.vb">
-      <DependentUpon>IExplorersAttackEditView.xaml</DependentUpon>
+    <Compile Include="MysteryDungeon\IMDAttackEditView.xaml.vb">
+      <DependentUpon>IMDAttackEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDungeon\Rescue\RBStoredPokemonGeneralTab.xaml.vb">
+      <DependentUpon>RBStoredPokemonGeneralTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyHeldItemEditView.xaml.vb">
       <DependentUpon>SkyHeldItemEditView.xaml</DependentUpon>
@@ -187,15 +190,15 @@
     <Compile Include="MysteryDungeon\Explorers\TDHeldItemEditView.xaml.vb">
       <DependentUpon>TDHeldItemEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MysteryDungeon\Rescue\RBGeneral.xaml.vb">
+      <DependentUpon>RBGeneral.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MysteryDungeon\Rescue\RBHeldItemEditView.xaml.vb">
       <DependentUpon>RBHeldItemEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SkyEditorInfo.vb" />
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\RBGeneral.xaml.vb">
-      <DependentUpon>RBGeneral.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tabs\RBStoredItemsTab.xaml.vb">
       <DependentUpon>RBStoredItemsTab.xaml</DependentUpon>
@@ -254,11 +257,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MysteryDungeon\Explorers\ExplorersStoredPokemonMovesTab.xaml">
+    <Page Include="MysteryDungeon\I4MovesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MysteryDungeon\Explorers\IExplorersAttackEditView.xaml">
+    <Page Include="MysteryDungeon\IMDAttackEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Rescue\RBStoredPokemonGeneralTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,15 +297,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MysteryDungeon\Rescue\RBGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MysteryDungeon\Rescue\RBHeldItemEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Tabs\GIGDGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\RBGeneral.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

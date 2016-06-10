@@ -11,17 +11,19 @@
              SortOrder="1"
              TargetType="{x:Type modeling:IPokemonStorage}"
              Header="{x:Static res:Language.StoredPokemonTab}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="700">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="160" />
             <ColumnDefinition Width="3" />
             <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <ComboBox Grid.Column="0" Height="20" VerticalAlignment="Top" Name="cbBoxes" ItemsSource="{Binding Storage}" DisplayMemberPath="Name" SelectedValuePath="ItemCollection" SelectedIndex="0" />
-        <ListView Grid.Column="0" ItemsSource="{Binding ElementName=cbBoxes,Path=SelectedValue}" ScrollViewer.CanContentScroll="True" SelectedItem="{Binding SelectedPokemon,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" Margin="0,25,0,0">
-        </ListView>
+        </Grid.ColumnDefinitions>        
+        <ListView Grid.Column="0" Name="cbBoxes" ItemsSource="{Binding Storage}" SelectedValuePath="ItemCollection" SelectedIndex="0" />
         <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" VerticalAlignment="Stretch"/>
-        <skyui:ObjectControlPlaceholder Grid.Column="2" CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" ObjectToEdit="{Binding SelectedPokemon,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" EnableTabs="True" TabControlOrientation="Top"/>
+        <ListView Grid.Column="2" ItemsSource="{Binding ElementName=cbBoxes,Path=SelectedValue}" ScrollViewer.CanContentScroll="True" SelectedItem="{Binding SelectedPokemon,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}"/>
+        <GridSplitter Grid.Column="3" ResizeBehavior="PreviousAndNext" Width="3" VerticalAlignment="Stretch"/>
+        <skyui:ObjectControlPlaceholder Grid.Column="4" CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" ObjectToEdit="{Binding SelectedPokemon,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" EnableTabs="True" TabControlOrientation="Top"/>
     </Grid>
 </skyui:DataBoundObjectControl>

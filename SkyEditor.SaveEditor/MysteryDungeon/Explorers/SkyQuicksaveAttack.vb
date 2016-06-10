@@ -54,7 +54,7 @@
         End Property
         Dim _isValid As Boolean
 
-        Public Property IsLinked As Boolean Implements IExplorersAttack.IsLinked
+        Public Property IsLinked As Boolean Implements IMDAttack.IsLinked
             Get
                 Return _isLinked
             End Get
@@ -67,7 +67,7 @@
         End Property
         Dim _isLinked As Boolean
 
-        Public Property IsSwitched As Boolean Implements IExplorersAttack.IsSwitched
+        Public Property IsSwitched As Boolean Implements IMDAttack.IsSwitched
             Get
                 Return _isSwitched
             End Get
@@ -80,7 +80,7 @@
         End Property
         Dim _isSwitched As Boolean
 
-        Public Property IsSet As Boolean Implements IExplorersAttack.IsSet
+        Public Property IsSet As Boolean Implements IMDAttack.IsSet
             Get
                 Return _isSet
             End Get
@@ -106,7 +106,7 @@
         End Property
         Dim _isSealed As Boolean
 
-        Public Property ID As Integer Implements IExplorersAttack.ID
+        Public Property ID As Integer Implements IMDAttack.ID
             Get
                 Return _id
             End Get
@@ -132,7 +132,7 @@
         End Property
         Dim _pp As Integer
 
-        Public Property Ginseng As Integer Implements IExplorersAttack.Ginseng
+        Public Property Ginseng As Integer Implements IMDAttack.Ginseng
             Get
                 Return _ginseng
             End Get
@@ -145,7 +145,7 @@
         End Property
         Dim _ginseng As Integer
 
-        Private ReadOnly Property MoveNames As Dictionary(Of Integer, String) Implements IExplorersAttack.MoveNames
+        Private ReadOnly Property MoveNames As Dictionary(Of Integer, String) Implements IMDAttack.MoveNames
             Get
                 Return Lists.ExplorersMoves
             End Get

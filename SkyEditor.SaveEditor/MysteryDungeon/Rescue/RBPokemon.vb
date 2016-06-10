@@ -7,6 +7,7 @@ Namespace MysteryDungeon.Rescue
         Implements IOnDisk
         Implements INotifyPropertyChanged
         Implements INotifyModified
+        Implements I4Moves
 
         Public Const Length = 362
         Public Const MimeType As String = "application/x-rb-pokemon"
@@ -95,7 +96,7 @@ Namespace MysteryDungeon.Rescue
         End Sub
 
         Public Function GetDefaultExtension() As String Implements ISavableAs.GetDefaultExtension
-            Return ".skypkm"
+            Return ".rbpkm"
         End Function
 
         Public Sub Save(provider As IOProvider) Implements ISavable.Save
@@ -106,7 +107,7 @@ Namespace MysteryDungeon.Rescue
 
         Public Overrides Function ToString() As String
             If ID > 0 Then
-                Return String.Format(My.Resources.Language.SkyStoredPokemonToString, Name, Level, Lists.ExplorersPokemon(ID))
+                Return String.Format(My.Resources.Language.SkyStoredPokemonToString, Name, Level, Lists.RBPokemon(ID))
             Else
                 Return My.Resources.Language.BlankPokemon
             End If
@@ -262,11 +263,11 @@ Namespace MysteryDungeon.Rescue
         End Property
         Dim _exp As Integer
 
-        Public Property Attack1 As RBAttack
+        Public Property Attack1 As IMDAttack Implements I4Moves.Attack1
             Get
                 Return _attack1
             End Get
-            Set(value As RBAttack)
+            Set(value As IMDAttack)
                 If _attack1 IsNot value Then
                     _attack1 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack1)))
@@ -275,11 +276,11 @@ Namespace MysteryDungeon.Rescue
         End Property
         Private WithEvents _attack1 As RBAttack
 
-        Public Property Attack2 As RBAttack
+        Public Property Attack2 As IMDAttack Implements I4Moves.Attack2
             Get
                 Return _attack2
             End Get
-            Set(value As RBAttack)
+            Set(value As IMDAttack)
                 If _attack2 IsNot value Then
                     _attack2 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack2)))
@@ -288,11 +289,11 @@ Namespace MysteryDungeon.Rescue
         End Property
         Private WithEvents _attack2 As RBAttack
 
-        Public Property Attack3 As RBAttack
+        Public Property Attack3 As IMDAttack Implements I4Moves.Attack3
             Get
                 Return _attack3
             End Get
-            Set(value As RBAttack)
+            Set(value As IMDAttack)
                 If _attack3 IsNot value Then
                     _attack3 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack3)))
@@ -301,11 +302,11 @@ Namespace MysteryDungeon.Rescue
         End Property
         Private WithEvents _attack3 As RBAttack
 
-        Public Property Attack4 As RBAttack
+        Public Property Attack4 As IMDAttack Implements I4Moves.Attack4
             Get
                 Return _attack4
             End Get
-            Set(value As RBAttack)
+            Set(value As IMDAttack)
                 If _attack4 IsNot value Then
                     _attack4 = value
                     RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Attack4)))
