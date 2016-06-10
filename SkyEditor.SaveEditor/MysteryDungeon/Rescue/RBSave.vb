@@ -9,38 +9,32 @@ Namespace MysteryDungeon.Rescue
         Implements IDetectableFileType
         Implements IInventory
         Implements INotifyPropertyChanged
+        Implements IPokemonStorage
 
-        Protected Class Offsets
-            Public Const BackupSaveStart As Integer = &H6000
-            Public Const ChecksumEnd As Integer = &H57D0
-
-            Public Const BaseTypeOffset As Integer = &H67 * 8
-
-            Public Const TeamNameStart As Integer = &H4EC8 * 8
-            Public Const TeamNameLength As Integer = 10
-
-            Public Const HeldMoneyOffset As Integer = &H4E6C * 8
-            Public Const HeldMoneyLength As Integer = 24
-
-            Public Const StoredMoneyOffset As Integer = &H4E6F * 8
-            Public Const StoredMoneyLength As Integer = 24
-
-            Public Const RescuePointsOffset As Integer = &H4ED3 * 8
-            Public Const RescuePointsLength As Integer = 16
-
-            Public Const HeldItemOffset As Integer = &H4CF0 * 8
-            Public Const HeldItemLength As Integer = 23
-            Public Const HeldItemNumber As Integer = 20
-
-            Public Const StoredItemOffset As Integer = &H4D2B * 8 - 2
-
-            Public Const StoredPokemonOffset As Integer = (&H5B3 * 8 + 3) - (323 * 9)
-            Public Const StoredPokemonLength As Integer = 323
-            Public Const StoredPokemonNumber As Integer = 407 + 6
+        Protected Class RBOffsets
+            Public Overridable ReadOnly Property BackupSaveStart As Integer = &H6000
+            Public Overridable ReadOnly Property ChecksumEnd As Integer = &H57D0
+            Public Overridable ReadOnly Property BaseTypeOffset As Integer = &H67 * 8
+            Public Overridable ReadOnly Property TeamNameStart As Integer = &H4EC8 * 8
+            Public Overridable ReadOnly Property TeamNameLength As Integer = 10
+            Public Overridable ReadOnly Property HeldMoneyOffset As Integer = &H4E6C * 8
+            Public Overridable ReadOnly Property HeldMoneyLength As Integer = 24
+            Public Overridable ReadOnly Property StoredMoneyOffset As Integer = &H4E6F * 8
+            Public Overridable ReadOnly Property StoredMoneyLength As Integer = 24
+            Public Overridable ReadOnly Property RescuePointsOffset As Integer = &H4ED3 * 8
+            Public Overridable ReadOnly Property RescuePointsLength As Integer = 16
+            Public Overridable ReadOnly Property HeldItemOffset As Integer = &H4CF0 * 8
+            Public Overridable ReadOnly Property HeldItemLength As Integer = 23
+            Public Overridable ReadOnly Property HeldItemNumber As Integer = 20
+            Public Overridable ReadOnly Property StoredItemOffset As Integer = &H4D2B * 8 - 2
+            Public Overridable ReadOnly Property StoredPokemonOffset As Integer = (&H5B3 * 8 + 3) - (323 * 9)
+            Public Overridable ReadOnly Property StoredPokemonLength As Integer = 323
+            Public Overridable ReadOnly Property StoredPokemonNumber As Integer = 407 + 6
         End Class
 
         Public Sub New()
             MyBase.New
+            Me.Offsets = New RBOffsets
         End Sub
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
@@ -49,13 +43,17 @@ Namespace MysteryDungeon.Rescue
             Await MyBase.OpenFile(Filename, Provider)
 
             LoadItems()
+            LoadStoredPokemon()
         End Function
 
         Public Overrides Sub Save(Destination As String, provider As IOProvider)
             SaveItems()
+            SaveStoredPokemon()
 
             MyBase.Save(Destination, provider)
         End Sub
+
+        Protected Overridable ReadOnly Property Offsets As RBOffsets
 
 #Region "Save Interaction"
 
@@ -171,6 +169,48 @@ Namespace MysteryDungeon.Rescue
 
 #End Region
 
+#Region "Stored Pokemon"
+        Private Sub LoadStoredPokemon()
+            _storage = New ObservableCollection(Of IPokemonBox)
+            Dim defs = StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets)
+            Dim offset As Integer = 0
+            For Each item In defs
+                Dim pokemon As New ObservableCollection(Of RBStoredPokemon)
+                For count = offset To offset + item.Length - 1
+                    pokemon.Add(RawStoredPokemon(count))
+                Next
+                _storage.Add(New BasicPokemonBox(item.Name, pokemon))
+            Next
+        End Sub
+
+        Private Sub SaveStoredPokemon()
+            Dim defs = StoredPokemonSlotDefinition.FromLines(My.Resources.ListResources.RBFriendAreaOffsets)
+            Dim offset As Integer = 0
+            For i = 0 To defs.Count - 1
+                For j = 0 To defs(i).Length
+                    RawStoredPokemon(offset + j) = _storage(i).ItemCollection(j)
+                Next
+            Next
+        End Sub
+
+        Private Property RawStoredPokemon(Index As Integer) As RBStoredPokemon
+            Get
+                Return New RBStoredPokemon(Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+            End Get
+            Set(value As RBStoredPokemon)
+                Me.Bits.Range(Offsets.StoredPokemonOffset + Index * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength) = value.GetStoredPokemonBits
+            End Set
+        End Property
+
+        Public ReadOnly Property Storage As IEnumerable(Of IPokemonBox) Implements IPokemonStorage.Storage
+            Get
+                Return _storage
+            End Get
+        End Property
+        Dim _storage As ObservableCollection(Of IPokemonBox)
+
+#End Region
+
         Public ReadOnly Property StoredItemCounts As Integer()
             Get
                 Dim out(239) As Integer
@@ -181,6 +221,7 @@ Namespace MysteryDungeon.Rescue
                 Return out
             End Get
         End Property
+
 
 #End Region
 
@@ -213,7 +254,7 @@ Namespace MysteryDungeon.Rescue
         '    Return GameStrings.RBSave
         'End Function
 #End Region
-        Public Function IsFileOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
+        Public Overridable Function IsFileOfType(File As GenericFile) As Task(Of Boolean) Implements IDetectableFileType.IsOfType
             If File.Length > Offsets.ChecksumEnd Then
                 Dim buffer = BitConverter.GetBytes(Checksums.Calculate32BitChecksum(File, 4, Offsets.ChecksumEnd))
                 Return Task.FromResult(File.RawData(0) = buffer(0) AndAlso File.RawData(1) = buffer(1) AndAlso File.RawData(2) = buffer(2) AndAlso File.RawData(3) = buffer(3))

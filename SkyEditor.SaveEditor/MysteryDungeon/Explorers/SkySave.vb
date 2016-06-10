@@ -15,8 +15,6 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyPropertyChanged
         Implements INotifyModified
 
-#Region "Child Classes"
-
         Friend Class Offsets
             Public Const BackupSaveStart As Integer = &HC800
             Public Const ChecksumEnd As Integer = &HB65A
@@ -72,8 +70,6 @@ Namespace MysteryDungeon.Explorers
             Public Const QuicksavePokemonOffset As Integer = &H19000 * 8 + (&H3170 * 8)
         End Class
 
-#End Region
-
         Public Sub New()
             MyBase.New
 
@@ -92,7 +88,9 @@ Namespace MysteryDungeon.Explorers
             LoadItems()
             LoadActivePokemon()
             LoadStoredPokemon()
+            LoadQuicksavePokemon()
             LoadHistory()
+            LoadSettings()
 
         End Function
 
@@ -102,7 +100,9 @@ Namespace MysteryDungeon.Explorers
             SaveItems()
             SaveActivePokemon()
             SaveStoredPokemon()
+            SaveQuicksavePokemon()
             SaveHistory()
+            SaveSettings()
 
             MyBase.Save(Destination, provider)
         End Sub
@@ -114,6 +114,10 @@ Namespace MysteryDungeon.Explorers
 
 #Region "Event Handlers"
         Private Sub OnCollectionChanged(sender As Object, e As EventArgs) Handles _storedItems.CollectionChanged, _heldItems.CollectionChanged, _spEpisodeHeldItems.CollectionChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
+
+        Private Sub OnModified(sender As Object, e As EventArgs)
             RaiseEvent Modified(Me, e)
         End Sub
 #End Region
@@ -254,31 +258,87 @@ Namespace MysteryDungeon.Explorers
 #Region "Items"
 
         Private Sub LoadItems()
-            StoredItems.Clear()
-            For Each item In GetStoredItems()
-                StoredItems.Add(item)
+            'Stored Items
+            StoredItems = New ObservableCollection(Of SkyStoredItem)
+            Dim ids = Bits.Range(Offsets.StoredItemOffset, 11 * Offsets.StoredItemNumber)
+            Dim params = Bits.Range(Offsets.StoredItemOffset + 11 * Offsets.StoredItemNumber, 11 * Offsets.StoredItemNumber)
+            For count As Integer = 0 To 999
+                Dim id = ids.NextInt(11)
+                Dim p = params.NextInt(11)
+                If id > 0 Then
+                    StoredItems.Add(New SkyStoredItem(id, p))
+                Else
+                    Exit For
+                End If
             Next
 
-            HeldItems.Clear()
-            For Each item In GetHeldItems()
-                HeldItems.Add(item)
+            'Held Items
+            HeldItems = New ObservableCollection(Of SkyHeldItem)
+            For count As Integer = 0 To Offsets.HeldItemNumber - 1
+                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                If item.IsValid Then
+                    HeldItems.Add(item)
+                Else
+                    Exit For
+                End If
             Next
 
-            SpEpisodeHeldItems.Clear()
-            For Each item In GetSpEpisodeHeldItems()
-                SpEpisodeHeldItems.Add(item)
+            'Special Episode Held Items
+            SpEpisodeHeldItems = New ObservableCollection(Of SkyHeldItem)
+            For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
+                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
+                If item.IsValid Then
+                    SpEpisodeHeldItems.Add(item)
+                Else
+                    Exit For
+                End If
             Next
 
-            InitItemSlots()
+            'Item slots
+            Dim slots As New ObservableCollection(Of IItemSlot)
+            slots.Add(New ItemSlot(Of SkyStoredItem)(My.Resources.Language.StoredItemsSlot, StoredItems, Offsets.StoredItemNumber))
+            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
+            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
+            ItemSlots = slots
         End Sub
 
         Private Sub SaveItems()
-            SetStoredItems(StoredItems)
-            SetHeldItems(HeldItems)
-            SetSpEpisodeHeldItems(SpEpisodeHeldItems)
+            'Stored Items
+            Dim ids As New Binary(11 * Offsets.StoredItemNumber)
+            Dim params As New Binary(11 * Offsets.StoredItemNumber)
+            For count As Integer = 0 To Offsets.StoredItemNumber - 1
+                If StoredItems.Count > count Then
+                    ids.NextInt(11) = StoredItems(count).ID
+                    params.NextInt(11) = StoredItems(count).GetParameter
+                Else
+                    ids.NextInt(11) = 0
+                    params.NextInt(11) = 0
+                End If
+            Next
+            Bits.Range(Offsets.StoredItemOffset, 11 * Offsets.StoredItemNumber) = ids
+            Bits.Range(Offsets.StoredItemOffset + 11 * Offsets.StoredItemNumber, 11 * Offsets.StoredItemNumber) = params
+
+            'Held Items
+            For count As Integer = 0 To Offsets.HeldItemNumber - 1
+                Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
+                If HeldItems.Count > count Then
+                    Me.Bits.Range(index, Offsets.HeldItemLength) = HeldItems(count).GetHeldItemBits
+                Else
+                    Me.Bits.Range(index, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
+                End If
+            Next
+
+            'Special Episode Held Items
+            For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
+                Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
+                If SpEpisodeHeldItems.Count > count Then
+                    Me.Bits.Range(index, Offsets.HeldItemLength) = SpEpisodeHeldItems(count).GetHeldItemBits
+                Else
+                    Me.Bits.Range(index, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
+                End If
+            Next
         End Sub
 
-#Region "Stored"
         Public Property StoredItems As ObservableCollection(Of SkyStoredItem)
             Get
                 Return _storedItems
@@ -292,41 +352,6 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _storedItems As ObservableCollection(Of SkyStoredItem)
 
-
-        Private Function GetStoredItems() As List(Of SkyStoredItem)
-            Dim ids = Bits.Range(Offsets.StoredItemOffset, 11 * Offsets.StoredItemNumber)
-            Dim params = Bits.Range(Offsets.StoredItemOffset + 11 * Offsets.StoredItemNumber, 11 * Offsets.StoredItemNumber)
-            Dim items As New List(Of SkyStoredItem)
-            For count As Integer = 0 To 999
-                Dim id = ids.NextInt(11)
-                Dim p = params.NextInt(11)
-                If id > 0 Then
-                    items.Add(New SkyStoredItem(id, p))
-                Else
-                    Exit For
-                End If
-            Next
-            Return items
-        End Function
-
-        Private Sub SetStoredItems(Value As IList(Of SkyStoredItem))
-            Dim ids As New Binary(11 * Offsets.StoredItemNumber)
-            Dim params As New Binary(11 * Offsets.StoredItemNumber)
-            For count As Integer = 0 To Offsets.StoredItemNumber - 1
-                If Value.Count > count Then
-                    ids.NextInt(11) = Value(count).ID
-                    params.NextInt(11) = Value(count).GetParameter
-                Else
-                    ids.NextInt(11) = 0
-                    params.NextInt(11) = 0
-                End If
-            Next
-            Bits.Range(Offsets.StoredItemOffset, 11 * Offsets.StoredItemNumber) = ids
-            Bits.Range(Offsets.StoredItemOffset + 11 * Offsets.StoredItemNumber, 11 * Offsets.StoredItemNumber) = params
-        End Sub
-#End Region
-
-#Region "Held"
         Public Property HeldItems As ObservableCollection(Of SkyHeldItem)
             Get
                 Return _heldItems
@@ -340,34 +365,6 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _heldItems As ObservableCollection(Of SkyHeldItem)
 
-        <Obsolete("Only one reference, should be merged with caller")> Private Function GetHeldItems() As List(Of SkyHeldItem)
-            Dim output As New List(Of SkyHeldItem)
-
-            For count As Integer = 0 To Offsets.HeldItemNumber - 1
-                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
-                If item.IsValid Then
-                    output.Add(item)
-                Else
-                    Exit For
-                End If
-            Next
-
-            Return output
-        End Function
-
-        <Obsolete("Only one reference, should be merged with caller")> Private Sub SetHeldItems(items As IList(Of SkyHeldItem))
-            For count As Integer = 0 To Offsets.HeldItemNumber - 1
-                Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
-                If items.Count > count Then
-                    Me.Bits.Range(index, Offsets.HeldItemLength) = items(count).GetHeldItemBits
-                Else
-                    Me.Bits.Range(index, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
-                End If
-            Next
-        End Sub
-#End Region
-
-#Region "Special Episode Held"
         Public Property SpEpisodeHeldItems As ObservableCollection(Of SkyHeldItem)
             Get
                 Return _spEpisodeHeldItems
@@ -381,33 +378,6 @@ Namespace MysteryDungeon.Explorers
         End Property
         Private WithEvents _spEpisodeHeldItems As ObservableCollection(Of SkyHeldItem)
 
-        Private Function GetSpEpisodeHeldItems() As List(Of SkyHeldItem)
-            Dim output As New List(Of SkyHeldItem)
-
-            For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
-                Dim item = SkyHeldItem.FromHeldItemBits(Me.Bits.Range(Offsets.HeldItemOffset + count * Offsets.HeldItemLength, Offsets.HeldItemLength))
-                If item.IsValid Then
-                    output.Add(item)
-                Else
-                    Exit For
-                End If
-            Next
-
-            Return output
-        End Function
-
-        Private Sub SetSpEpisodeHeldItems(items As IList(Of SkyHeldItem))
-            For count As Integer = Offsets.HeldItemNumber To Offsets.HeldItemNumber + Offsets.HeldItemNumber - 1
-                Dim index = Offsets.HeldItemOffset + count * Offsets.HeldItemLength
-                If items.Count > count Then
-                    Me.Bits.Range(index, Offsets.HeldItemLength) = items(count).GetHeldItemBits
-                Else
-                    Me.Bits.Range(index, Offsets.HeldItemLength) = New Binary(Offsets.HeldItemLength)
-                End If
-            Next
-        End Sub
-#End Region
-
         Public Property ItemSlots As IEnumerable(Of IItemSlot) Implements IInventory.ItemSlots
             Get
                 Return _itemSlots
@@ -418,13 +388,6 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _itemSlots As ObservableCollection(Of IItemSlot)
 
-        Private Sub InitItemSlots()
-            Dim slots As New ObservableCollection(Of IItemSlot)
-            slots.Add(New ItemSlot(Of SkyStoredItem)(My.Resources.Language.StoredItemsSlot, StoredItems, Offsets.StoredItemNumber))
-            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.HeldItemsSlot, HeldItems, Offsets.HeldItemNumber))
-            slots.Add(New ItemSlot(Of SkyHeldItem)(My.Resources.Language.EpisodeHeldItems, SpEpisodeHeldItems, Offsets.HeldItemNumber))
-            ItemSlots = slots
-        End Sub
 #End Region
 
 #Region "Stored Pokemon"
@@ -435,6 +398,9 @@ Namespace MysteryDungeon.Explorers
 
             For count = 0 To Offsets.StoredPokemonNumber
                 Dim pkm As New SkyStoredPokemon(Bits.Range(Offsets.StoredPokemonOffset + count * Offsets.StoredPokemonLength, Offsets.StoredPokemonLength))
+                AddHandler pkm.Modified, AddressOf OnModified
+                AddHandler pkm.PropertyChanged, AddressOf OnModified
+
                 If count < 2 Then 'Player Partner
                     StoredPlayerPartner.Add(pkm)
                 ElseIf count < 5 Then 'Sp. Episode
@@ -481,8 +447,16 @@ Namespace MysteryDungeon.Explorers
             Dim activePokemon As New ObservableCollection(Of SkyActivePokemon)
             Dim spEpisodeActivePokemon As New ObservableCollection(Of SkyActivePokemon)
             For count As Integer = 0 To Offsets.ActivePokemonNumber - 1
-                activePokemon.Add(New SkyActivePokemon(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
-                spEpisodeActivePokemon.Add(New SkyActivePokemon(Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength)))
+                Dim main = New SkyActivePokemon(Me.Bits.Range(Offsets.ActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength))
+                Dim special = New SkyActivePokemon(Me.Bits.Range(Offsets.SpActivePokemonOffset + count * Offsets.ActivePokemonLength, Offsets.ActivePokemonLength))
+
+                AddHandler main.Modified, AddressOf OnModified
+                AddHandler main.PropertyChanged, AddressOf OnModified
+                AddHandler special.Modified, AddressOf OnModified
+                AddHandler special.PropertyChanged, AddressOf OnModified
+
+                activePokemon.Add(main)
+                spEpisodeActivePokemon.Add(special)
             Next
 
             Me.ActivePokemon = activePokemon
@@ -534,33 +508,38 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Quicksave Pokemon"
-        Public Property QuicksavePokemon(Index As Integer) As SkyQuicksavePokemon
-            Get
-                Return New SkyQuicksavePokemon(Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength))
-            End Get
-            Set(value As SkyQuicksavePokemon)
-                Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * Index, Offsets.QuicksavePokemonLength) = value.GetQuicksavePokemonBits
-            End Set
-        End Property
+        Private Sub LoadQuicksavePokemon()
+            _quicksavePokemon = New ObservableCollection(Of SkyQuicksavePokemon)
+            For count = 0 To Offsets.QuicksavePokemonNumber - 1
+                Dim quick = New SkyQuicksavePokemon(Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * count, Offsets.QuicksavePokemonLength))
+                AddHandler quick.Modified, AddressOf OnModified
+                AddHandler quick.PropertyChanged, AddressOf OnModified
+                _quicksavePokemon.Add(quick)
+            Next
+        End Sub
+        Private Sub SaveQuicksavePokemon()
+            For count = 0 To Offsets.QuicksavePokemonNumber - 1
+                If QuicksavePokemon.Count > count Then
+                    Bits.Range(Offsets.QuicksavePokemonOffset + Offsets.QuicksavePokemonLength * count, Offsets.QuicksavePokemonLength) = QuicksavePokemon(count).GetQuicksavePokemonBits
+                Else
+                    QuicksavePokemon(count) = New SkyQuicksavePokemon()
+                End If
+            Next
+        End Sub
 
-        Public Property QuicksavePokemon As SkyQuicksavePokemon()
+        Public Property QuicksavePokemon As ObservableCollection(Of SkyQuicksavePokemon)
             Get
-                Dim out As New List(Of SkyQuicksavePokemon)
-                For count = 0 To Offsets.QuicksavePokemonNumber - 1
-                    out.Add(QuicksavePokemon(count))
-                Next
-                Return out.ToArray
+                Return _quicksavePokemon
             End Get
-            Set(value As SkyQuicksavePokemon())
-                For count = 0 To Offsets.QuicksavePokemonNumber - 1
-                    If value.Length > count Then
-                        QuicksavePokemon(count) = value(count)
-                    Else
-                        QuicksavePokemon(count) = New SkyQuicksavePokemon()
-                    End If
-                Next
+            Set(value As ObservableCollection(Of SkyQuicksavePokemon))
+                If _quicksavePokemon IsNot value Then
+                    _quicksavePokemon = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(QuicksavePokemon)))
+                End If
             End Set
         End Property
+        Dim _quicksavePokemon As ObservableCollection(Of SkyQuicksavePokemon)
+
 #End Region
 
 #Region "History"
@@ -728,6 +707,13 @@ Namespace MysteryDungeon.Explorers
 #End Region
 
 #Region "Settings"
+        Private Sub LoadSettings()
+            WindowFrameType = Bits.Int(0, Offsets.WindowFrameType, 3)
+        End Sub
+        Private Sub SaveSettings()
+            Bits.Int(0, Offsets.WindowFrameType, 3) = WindowFrameType
+        End Sub
+
         ''' <summary>
         ''' Gets or sets the type of window frame used in the game.  Must be 1-5.
         ''' </summary>
@@ -736,12 +722,16 @@ Namespace MysteryDungeon.Explorers
         ''' <remarks></remarks>
         Public Property WindowFrameType As Byte
             Get
-                Return Bits.Int(0, Offsets.WindowFrameType, 3)
+                Return _windowFrameType
             End Get
             Set(value As Byte)
-                Bits.Int(0, Offsets.WindowFrameType, 3) = value
+                If Not _windowFrameType = value Then
+                    _windowFrameType = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(WindowFrameType)))
+                End If
             End Set
         End Property
+        Dim _windowFrameType As Byte
 
 #End Region
 
@@ -795,8 +785,6 @@ Namespace MysteryDungeon.Explorers
         End Function
 
 #End Region
-
-
 
     End Class
 

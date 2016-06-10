@@ -151,9 +151,7 @@
     <Compile Include="PluginDefinition.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="MysteryDungeon\GTIGameData.vb" />
-    <Compile Include="MysteryDungeon\Rescue\RBSave.StoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSave.vb" />
-    <Compile Include="MysteryDungeon\Rescue\RBSaveEU.StoredPokemon.vb" />
     <Compile Include="MysteryDungeon\Rescue\RBSaveEU.vb" />
     <Compile Include="MysteryDungeon\Explorers\SkySave.vb" />
     <Compile Include="MysteryDungeon\Explorers\TDSave.ActivePokemon.vb" />

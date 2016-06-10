@@ -16,8 +16,8 @@
                 IsLinked = .Bit(1)
                 IsSwitched = .Bit(2)
                 IsSet = .Bit(3)
-                ID = .Int(0, 4, 10)
-                Ginseng = .Int(0, 14, 7)
+                ID = .Int(0, 4, 9)
+                Ginseng = .Int(0, 13, 7)
             End With
         End Sub
         Public Function GetAttackBits() As Binary
@@ -27,8 +27,8 @@
                 .Bit(1) = IsLinked
                 .Bit(2) = IsSwitched
                 .Bit(3) = IsSet
-                .Int(0, 4, 10) = ID
-                .Int(0, 14, 7) = Ginseng
+                .Int(0, 4, 9) = ID
+                .Int(0, 13, 7) = Ginseng
             End With
             Return out
         End Function

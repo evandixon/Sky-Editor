@@ -9,7 +9,7 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyPropertyChanged
         Implements INotifyModified
 
-        Public Const Length = 362
+        Public Const Length = 546
         Public Const MimeType As String = "application/x-sky-active-pokemon"
 
         Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved

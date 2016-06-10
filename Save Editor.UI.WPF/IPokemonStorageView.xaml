@@ -18,7 +18,7 @@
             <ColumnDefinition Width="3" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ComboBox Grid.Column="0" Height="20" VerticalAlignment="Top" Name="cbBoxes" ItemsSource="{Binding Storage}" DisplayMemberPath="Name" SelectedValuePath="ItemCollection" />
+        <ComboBox Grid.Column="0" Height="20" VerticalAlignment="Top" Name="cbBoxes" ItemsSource="{Binding Storage}" DisplayMemberPath="Name" SelectedValuePath="ItemCollection" SelectedIndex="0" />
         <ListView Grid.Column="0" ItemsSource="{Binding ElementName=cbBoxes,Path=SelectedValue}" ScrollViewer.CanContentScroll="True" SelectedItem="{Binding SelectedPokemon,RelativeSource={RelativeSource AncestorType=skyui:DataBoundObjectControl}}" Margin="0,25,0,0">
         </ListView>
         <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" VerticalAlignment="Stretch"/>

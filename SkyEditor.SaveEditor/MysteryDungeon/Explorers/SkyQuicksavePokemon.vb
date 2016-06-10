@@ -393,7 +393,7 @@ Namespace MysteryDungeon.Explorers
         Private WithEvents _attack4 As SkyQuicksaveAttack
 
 
-        Private ReadOnly Property PokemonNames As Dictionary(Of Integer, String)
+        Public ReadOnly Property PokemonNames As Dictionary(Of Integer, String)
             Get
                 Return Lists.ExplorersPokemon
             End Get

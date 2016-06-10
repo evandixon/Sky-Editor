@@ -172,6 +172,12 @@
     <Compile Include="MysteryDungeon\Explorers\SkyHistory.xaml.vb">
       <DependentUpon>SkyHistory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MysteryDungeon\Explorers\SkyQuicksavePokemonGeneralTab.xaml.vb">
+      <DependentUpon>SkyQuicksavePokemonGeneralTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDungeon\Explorers\SkyQuicksaveTab.xaml.vb">
+      <DependentUpon>SkyQuicksaveTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml.vb">
       <DependentUpon>SkyStoredItemEditView.xaml</DependentUpon>
     </Compile>
@@ -185,20 +191,8 @@
       <DependentUpon>RBHeldItemEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SkyEditorInfo.vb" />
-    <Compile Include="Tabs\ActivePokemonTab.xaml.vb">
-      <DependentUpon>ActivePokemonTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\EpisodeActivePokemonTab.xaml.vb">
-      <DependentUpon>EpisodeActivePokemonTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tabs\GIGDGeneralTab.xaml.vb">
       <DependentUpon>GIGDGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\PkmQuicksaveTab.xaml.vb">
-      <DependentUpon>PkmQuicksaveTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\QuicksavePokemonTab.xaml.vb">
-      <DependentUpon>QuicksavePokemonTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tabs\RBGeneral.xaml.vb">
       <DependentUpon>RBGeneral.xaml</DependentUpon>
@@ -208,9 +202,6 @@
     </Compile>
     <Compile Include="MysteryDungeon\Explorers\SkyGeneralTab.xaml.vb">
       <DependentUpon>SkyGeneralTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tabs\StoredPokemonTab.xaml.vb">
-      <DependentUpon>StoredPokemonTab.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -279,6 +270,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="MysteryDungeon\Explorers\SkyQuicksavePokemonGeneralTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MysteryDungeon\Explorers\SkyQuicksaveTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MysteryDungeon\Explorers\SkyStoredItemEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -295,23 +294,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Tabs\ActivePokemonTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\EpisodeActivePokemonTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Tabs\GIGDGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\PkmQuicksaveTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\QuicksavePokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -324,10 +307,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MysteryDungeon\Explorers\SkyGeneralTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Tabs\StoredPokemonTab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

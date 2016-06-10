@@ -2,12 +2,12 @@
     Public Property Index As Integer
     Public Property Name As String
     Public Property Length As Integer
-    Public Property CurrentPokemon As Integer
+    Public Property CurrentPokemonCount As Integer
     Public Sub New(Index As Integer, AreaName As String, Length As Integer)
         Me.Index = Index
         Me.Name = AreaName
         Me.Length = Length
-        Me.CurrentPokemon = 0
+        Me.CurrentPokemonCount = 0
     End Sub
     Public Shared Function FromLine(Line As String, Index As Integer) As StoredPokemonSlotDefinition
         Dim parts = Line.Split(":")
@@ -25,6 +25,6 @@
         Return out
     End Function
     Public Overrides Function ToString() As String
-        Return Name & " (" & CurrentPokemon & "/" & Length & ")"
+        Return Name & " (" & CurrentPokemonCount & "/" & Length & ")"
     End Function
 End Class

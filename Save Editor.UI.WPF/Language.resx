@@ -325,4 +325,7 @@ For stackable items like sticks and spikes, this lets you control how much is in
   <data name="Party" xml:space="preserve">
     <value>Party</value>
   </data>
+  <data name="HPBoost" xml:space="preserve">
+    <value>HP Boost</value>
+  </data>
 </root>
