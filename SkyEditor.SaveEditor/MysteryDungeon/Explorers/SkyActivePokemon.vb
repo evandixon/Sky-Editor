@@ -65,7 +65,7 @@ Namespace MysteryDungeon.Explorers
             With out
                 .Bit(0) = IsValid
                 .Range(1, 4) = Unk1
-                .Int(0, 1, 7) = Level
+                .Int(0, 5, 7) = Level
                 .Int(0, 12, 8) = MetAt
                 .Int(0, 20, 7) = MetFloor
                 .Range(27, 1) = Unk2
@@ -235,6 +235,7 @@ Namespace MysteryDungeon.Explorers
             Set(value As Integer)
                 If Not _metFloor = value Then
                     _metFloor = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(MetFloor)))
                 End If
             End Set
         End Property

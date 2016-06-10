@@ -220,6 +220,7 @@ Namespace MysteryDungeon.Explorers
             Set(value As Integer)
                 If Not _metFloor = value Then
                     _metFloor = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(MetFloor)))
                 End If
             End Set
         End Property

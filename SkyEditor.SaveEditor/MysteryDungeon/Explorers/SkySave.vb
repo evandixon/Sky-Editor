@@ -120,6 +120,10 @@ Namespace MysteryDungeon.Explorers
         Private Sub OnModified(sender As Object, e As EventArgs)
             RaiseEvent Modified(Me, e)
         End Sub
+
+        Private Sub Me_OnPropertyChanged(sender As Object, e As EventArgs) Handles Me.PropertyChanged
+            RaiseEvent Modified(Me, e)
+        End Sub
 #End Region
 
 #Region "Save Interaction"
