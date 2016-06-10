@@ -37,7 +37,7 @@ Namespace Controls
         '    End Set
         'End Property
 
-        'Private Sub SkyAttack_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        'Private Sub ExplorersAttack_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         '    numGinseng.ToolTip = My.Resources.Language.Ginseng
         '    lblGinseng.Content = My.Resources.Language.Ginseng
 

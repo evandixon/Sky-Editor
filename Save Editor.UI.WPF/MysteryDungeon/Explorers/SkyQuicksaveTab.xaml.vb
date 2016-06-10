@@ -1,5 +1,5 @@
 ﻿Namespace MysteryDungeon.Explorers
-    Public Class IExplorersAttackEditView
+    Public Class SkyQuicksaveTab
 
     End Class
 End Namespace

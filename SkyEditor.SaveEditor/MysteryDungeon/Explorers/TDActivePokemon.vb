@@ -1,7 +1,7 @@
 ﻿Imports SkyEditor.Core.IO
 
 Namespace MysteryDungeon.Explorers
-    Public Class SkyStoredPokemon
+    Public Class TDActivePokemon
         Implements IExplorersStoredPokemon
         Implements IOpenableFile
         Implements ISavableAs
@@ -9,16 +9,15 @@ Namespace MysteryDungeon.Explorers
         Implements INotifyPropertyChanged
         Implements INotifyModified
 
-        Public Const Length = 362
-        Public Const MimeType As String = "application/x-sky-pokemon"
+        Public Const Length = 544
+        Public Const MimeType As String = "application/x-td-active-pokemon"
 
         Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
         Public Event Modified As INotifyModified.ModifiedEventHandler Implements INotifyModified.Modified
 
         Public Sub New()
-            Unk1 = New Binary(15)
-            Unk2 = New Binary(73)
+
         End Sub
 
         Public Sub New(bits As Binary)
@@ -27,10 +26,15 @@ Namespace MysteryDungeon.Explorers
 
         Private Sub Initialize(bits As Binary)
             With bits
-                IsValid = .Bit(0)
-                Level = .Int(0, 1, 7)
-
-                Dim idRaw As Integer = .Int(0, 8, 11)
+                Unk1 = .Range(0, 5)
+                Level = .Int(0, 5, 7)
+                MetAt = .Int(0, 12, 8)
+                MetFloor = .Int(0, 20, 7)
+                Unk2 = .Range(27, 1)
+                IQ = .Int(0, 28, 10)
+                RosterNumber = .Int(0, 38, 10)
+                Unk3 = .Range(47, 21)
+                Dim idRaw As Integer = .Int(0, 70, 11)
                 If idRaw > 600 Then
                     IsFemale = True
                     ID = idRaw - 600
@@ -38,62 +42,51 @@ Namespace MysteryDungeon.Explorers
                     IsFemale = False
                     ID = idRaw
                 End If
-
-                MetAt = .Int(0, 19, 8)
-                MetFloor = .Int(0, 27, 7)
-
-                Unk1 = .Range(34, 15)
-
-                IQ = .Int(0, 49, 10)
-                HP = .Int(0, 59, 10)
-                Attack = .Int(0, 69, 8)
-                Defense = .Int(0, 77, 8)
-                SpAttack = .Int(0, 85, 8)
-                SpDefense = .Int(0, 93, 8)
-                Exp = .Int(0, 101, 24)
-
-                Unk2 = .Range(125, 73)
-
-                Attack1 = New ExplorersAttack(.Range(198, ExplorersAttack.Length))
-                Attack2 = New ExplorersAttack(.Range(219, ExplorersAttack.Length))
-                Attack3 = New ExplorersAttack(.Range(240, ExplorersAttack.Length))
-                Attack4 = New ExplorersAttack(.Range(261, ExplorersAttack.Length))
-                Name = .StringPMD(0, 282, 10)
+                HP1 = .Int(0, 81, 10)
+                HP2 = .Int(0, 91, 10)
+                Attack = .Int(0, 101, 8)
+                Defense = .Int(0, 109, 8)
+                SpAttack = .Int(0, 117, 8)
+                SpDefense = .Int(0, 125, 8)
+                Exp = .Int(0, 133, 24)
+                Attack1 = New ExplorersActiveAttack(.Range(157, ExplorersActiveAttack.Length))
+                Attack2 = New ExplorersActiveAttack(.Range(186, ExplorersActiveAttack.Length))
+                Attack3 = New ExplorersActiveAttack(.Range(215, ExplorersActiveAttack.Length))
+                Attack4 = New ExplorersActiveAttack(.Range(244, ExplorersActiveAttack.Length))
+                Unk4 = .Range(273, 191)
+                Name = .StringPMD(0, 464, 10)
             End With
         End Sub
 
-        Public Function GetStoredPokemonBits() As Binary
+        Public Function GetActivePokemonBits() As Binary
             Dim out As New Binary(Length)
             With out
-                .Bit(0) = IsValid
-                .Int(0, 1, 7) = Level
-
+                .Range(0, 5) = Unk1
+                .Int(0, 5, 7) = Level
+                .Int(0, 12, 8) = MetAt
+                .Int(0, 20, 7) = MetFloor
+                .Range(27, 1) = Unk2
+                .Int(0, 28, 10) = IQ
+                .Int(0, 38, 10) = RosterNumber
+                .Range(47, 21) = Unk3
                 If IsFemale Then
-                    .Int(0, 8, 11) = ID + 600
+                    .Int(0, 70, 11) = ID + 600
                 Else
-                    .Int(0, 8, 11) = ID
+                    .Int(0, 70, 11) = ID
                 End If
-
-                .Int(0, 19, 8) = MetAt
-                .Int(0, 27, 7) = MetFloor
-
-                .Range(34, 15) = Unk1
-
-                .Int(0, 49, 10) = IQ
-                .Int(0, 59, 10) = HP
-                .Int(0, 69, 8) = Attack
-                .Int(0, 77, 8) = Defense
-                .Int(0, 85, 8) = SpAttack
-                .Int(0, 93, 8) = SpDefense
-                .Int(0, 101, 24) = Exp
-
-                .Range(125, 73) = Unk2
-
-                .Range(198, ExplorersAttack.Length) = _attack1.GetAttackBits
-                .Range(219, ExplorersAttack.Length) = _attack2.GetAttackBits
-                .Range(240, ExplorersAttack.Length) = _attack3.GetAttackBits
-                .Range(261, ExplorersAttack.Length) = _attack4.GetAttackBits
-                .StringPMD(0, 282, 10) = Name
+                .Int(0, 81, 10) = HP1
+                .Int(0, 91, 10) = HP2
+                .Int(0, 101, 8) = Attack
+                .Int(0, 109, 8) = Defense
+                .Int(0, 117, 8) = SpAttack
+                .Int(0, 125, 8) = SpDefense
+                .Int(0, 133, 24) = Exp
+                .Range(157, ExplorersActiveAttack.Length) = _attack1.GetAttackBits
+                .Range(186, ExplorersActiveAttack.Length) = _attack2.GetAttackBits
+                .Range(215, ExplorersActiveAttack.Length) = _attack3.GetAttackBits
+                .Range(244, ExplorersActiveAttack.Length) = _attack4.GetAttackBits
+                .Range(273, 191) = Unk4
+                .StringPMD(0, 464, 10) = Name
             End With
             Return out
         End Function
@@ -117,7 +110,7 @@ Namespace MysteryDungeon.Explorers
             For i = 1 To 8 - (Length Mod 8)
                 toSave.Bits.Bits.Add(0)
             Next
-            toSave.Bits.Bits.AddRange(GetStoredPokemonBits)
+            toSave.Bits.Bits.AddRange(GetActivePokemonBits)
             toSave.Save(Filename, provider)
             RaiseEvent FileSaved(Me, New EventArgs)
         End Sub
@@ -147,19 +140,14 @@ Namespace MysteryDungeon.Explorers
 #Region "Properties"
         Private Property Unk1 As Binary
         Private Property Unk2 As Binary
+        Private Property Unk3 As Binary
+        Private Property Unk4 As Binary
 
-        Public Property IsValid As Boolean
+        Public ReadOnly Property IsValid As Boolean
             Get
-                Return _isValid
+                Return ID > 0
             End Get
-            Set(value As Boolean)
-                If Not _isValid = value Then
-                    _isValid = value
-                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(IsValid)))
-                End If
-            End Set
         End Property
-        Dim _isValid As Boolean
 
         Public Property Level As Byte Implements IExplorersStoredPokemon.Level
             Get
@@ -186,6 +174,23 @@ Namespace MysteryDungeon.Explorers
             End Set
         End Property
         Dim _id As Integer
+
+        ''' <summary>
+        ''' The index of the Pokemon in storage as stored in the save file.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property RosterNumber As Integer
+            Get
+                Return _rosterNumber
+            End Get
+            Set(value As Integer)
+                If Not _rosterNumber = value Then
+                    _rosterNumber = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(RosterNumber)))
+                End If
+            End Set
+        End Property
+        Dim _rosterNumber As Integer
 
         Public Property IsFemale As Boolean Implements IExplorersStoredPokemon.IsFemale
             Get
@@ -239,18 +244,31 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _iq As Integer
 
-        Public Property HP As Integer Implements IExplorersStoredPokemon.HP
+        Public Property HP1 As Integer Implements IExplorersStoredPokemon.HP
             Get
-                Return _hp
+                Return _hp1
             End Get
             Set(value As Integer)
-                If Not _hp = value Then
-                    _hp = value
-                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HP)))
+                If Not _hp1 = value Then
+                    _hp1 = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HP1)))
                 End If
             End Set
         End Property
-        Dim _hp As Integer
+        Dim _hp1 As Integer
+
+        Public Property HP2 As Integer
+            Get
+                Return _hp2
+            End Get
+            Set(value As Integer)
+                If Not _hp2 = value Then
+                    _hp2 = value
+                    RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(HP2)))
+                End If
+            End Set
+        End Property
+        Dim _hp2 As Integer
 
         Public Property Attack As Byte Implements IExplorersStoredPokemon.Attack
             Get
@@ -328,7 +346,7 @@ Namespace MysteryDungeon.Explorers
                 End If
             End Set
         End Property
-        Private WithEvents _attack1 As ExplorersAttack
+        Private WithEvents _attack1 As ExplorersActiveAttack
 
         Public Property Attack2 As IMDAttack Implements IExplorersStoredPokemon.Attack2
             Get
@@ -341,7 +359,7 @@ Namespace MysteryDungeon.Explorers
                 End If
             End Set
         End Property
-        Private WithEvents _attack2 As ExplorersAttack
+        Private WithEvents _attack2 As ExplorersActiveAttack
 
         Public Property Attack3 As IMDAttack Implements IExplorersStoredPokemon.Attack3
             Get
@@ -354,7 +372,7 @@ Namespace MysteryDungeon.Explorers
                 End If
             End Set
         End Property
-        Private WithEvents _attack3 As ExplorersAttack
+        Private WithEvents _attack3 As ExplorersActiveAttack
 
         Public Property Attack4 As IMDAttack Implements IExplorersStoredPokemon.Attack4
             Get
@@ -367,7 +385,7 @@ Namespace MysteryDungeon.Explorers
                 End If
             End Set
         End Property
-        Private WithEvents _attack4 As ExplorersAttack
+        Private WithEvents _attack4 As ExplorersActiveAttack
 
         Public Property Name As String Implements IExplorersStoredPokemon.Name
             Get
@@ -382,13 +400,13 @@ Namespace MysteryDungeon.Explorers
         End Property
         Dim _name As String
 
-        Public ReadOnly Property PokemonNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.PokemonNames
+        Private ReadOnly Property PokemonNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.PokemonNames
             Get
                 Return Lists.ExplorersPokemon
             End Get
         End Property
 
-        Public ReadOnly Property LocationNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.LocationNames
+        Private ReadOnly Property LocationNames As Dictionary(Of Integer, String) Implements IExplorersStoredPokemon.LocationNames
             Get
                 Return Lists.GetSkyLocations
             End Get
@@ -396,5 +414,5 @@ Namespace MysteryDungeon.Explorers
 
 #End Region
     End Class
-End Namespace
 
+End Namespace

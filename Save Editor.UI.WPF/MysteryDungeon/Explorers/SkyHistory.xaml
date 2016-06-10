@@ -20,7 +20,7 @@
             <TextBox Text="{Binding OriginalPlayerName, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerPkm}" />
-            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPlayerID}" />
+            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.ExplorersPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPlayerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPlayerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}" IsChecked="{Binding OriginalPlayerIsFemale}" />
@@ -29,7 +29,7 @@
             <TextBox Text="{Binding OriginalPartnerName, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerPkm}" />
-            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.SkyPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPartnerID}" />
+            <ComboBox IsEditable="True" ItemsSource="{x:Static saveEditor:Lists.ExplorersPokemon}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding OriginalPartnerID}" />
             
             <Label HorizontalAlignment="Left" Width="170" Content="{x:Static res:Language.OriginalPartnerGender}" />
             <CheckBox VerticalAlignment="Center" Content="{x:Static res:Language.IsFemale}"  IsChecked="{Binding OriginalPartnerIsFemale}"/>

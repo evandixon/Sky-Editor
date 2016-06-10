@@ -32,7 +32,7 @@ Namespace Utilities
             If Not match Then
                 'For every interface the type we're checking defines, we'll check to see if that interface is TypeToCheck.
                 For Each item In Original.ImplementedInterfaces
-                    If item.Equals(typeToCheck) Then
+                    If IsOfType(item.GetTypeInfo, typeToCheck) Then
                         match = True
                         Exit For
                     End If

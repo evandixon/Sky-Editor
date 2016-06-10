@@ -2,7 +2,6 @@
 
 Partial Class PokemonLib
     Class mMoves
-        Implements iAttack
         Public Value As Moves
         Public Name As String
         Public Power As UInt16
@@ -41,22 +40,5 @@ Partial Class PokemonLib
             BattleCategory = New mBattleCategory(Val(dPKMMoves(index)(11)))
             ContestCategory = New mContestCategory(Val(dPKMMoves(index)(12)))
         End Sub
-
-        Public Function GetAttackDictionary() As IDictionary(Of Integer, String) Implements iAttack.GetAttackDictionary
-            Dim out As New Dictionary(Of Integer, String)
-            For Each item In dPKMMoves
-                out.Add(item.Key, item.Value(0))
-            Next
-            Return out
-        End Function
-
-        Public Property ID As Integer Implements iAttack.ID
-            Get
-                Return Value
-            End Get
-            Set(value As Integer)
-                Me.Value = value
-            End Set
-        End Property
     End Class
 End Class
