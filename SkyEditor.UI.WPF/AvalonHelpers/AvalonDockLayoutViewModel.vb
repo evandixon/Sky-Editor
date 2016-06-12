@@ -101,15 +101,15 @@ Namespace AvalonHelpers
                 Dim LayoutSerializer = New XmlLayoutSerializer(docManager)
 
                 AddHandler LayoutSerializer.LayoutSerializationCallback, Sub(sender As Object, e As LayoutSerializationCallbackEventArgs)
-                                                                         ' This can happen if the previous session was loading a file
-                                                                         ' but was unable to initialize the view ...
-                                                                         If e.Model.ContentId IsNot Nothing Then
-                                                                             ReloadContentOnStartUp(e)
-                                                                         Else
-                                                                             e.Cancel = True
-                                                                         End If
+                                                                             ' This can happen if the previous session was loading a file
+                                                                             ' but was unable to initialize the view ...
+                                                                             If e.Model.ContentId IsNot Nothing Then
+                                                                                 ReloadContentOnStartUp(e)
+                                                                             Else
+                                                                                 e.Cancel = True
+                                                                             End If
 
-                                                                     End Sub
+                                                                         End Sub
 
                 LayoutSerializer.Deserialize(layoutFileName)
             End If

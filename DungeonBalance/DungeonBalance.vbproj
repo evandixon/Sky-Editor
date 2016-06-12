@@ -47,6 +47,22 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkyEditor.Core, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.Core.1.0.7\lib\portable45-net45+win8+wpa81\SkyEditor.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkyEditor.Core.Windows, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.Core.Windows.1.0.7\lib\net46\SkyEditor.Core.Windows.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -104,16 +120,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SkyEditor.Core.Windows\SkyEditor.Core.Windows.vbproj">
-      <Project>{8238a6a2-76af-4741-8564-d1d2a4b067bb}</Project>
-      <Name>SkyEditor.Core.Windows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
-      <Project>{6f869961-8d92-4fb1-9680-a1d5c6938350}</Project>
-      <Name>SkyEditor.Core</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

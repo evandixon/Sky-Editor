@@ -26,6 +26,7 @@ Namespace UI
 
         Private Sub chb_Checked(sender As Object, e As RoutedEventArgs) Handles chbDevelopment.Checked, chbVerbose.Checked, chbDevelopment.Unchecked, chbVerbose.Unchecked
             IsModified = True
+            UpdateObject()
         End Sub
 
         Public Function GetSupportedTypes() As IEnumerable(Of Type) Implements IObjectControl.GetSupportedTypes
