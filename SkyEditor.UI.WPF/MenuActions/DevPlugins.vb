@@ -12,7 +12,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({My.Resources.Language.MenuDev, My.Resources.Language.MenuDevPlugins})
             Me.AlwaysVisible = True
-            Me.DevOnly = False
+            Me.DevOnly = True
             SortOrder = 10.3
         End Sub
     End Class

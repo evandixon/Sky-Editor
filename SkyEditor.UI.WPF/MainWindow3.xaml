@@ -40,7 +40,7 @@
             <ad:DockingManager.LayoutItemTemplateSelector>
                 <avalonHelpers:PanesTemplateSelector>
                     <avalonHelpers:PanesTemplateSelector.DocumentTemplate>
-                        <DataTemplate DataType="{x:Type coreui2:AvalonDockFileWrapper}">
+                        <DataTemplate DataType="{x:Type avalonHelpers:AvalonDockFileWrapper}">
                             <coreui:ObjectControlPlaceholder CurrentPluginManager="{Binding Path=CurrentPluginManager,RelativeSource={RelativeSource AncestorType=Window}}" ObjectToEdit="{Binding File, UpdateSourceTrigger=PropertyChanged}" EnableTabs="True"/>
                         </DataTemplate>                        
                     </avalonHelpers:PanesTemplateSelector.DocumentTemplate>

@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Input
+Imports SkyEditor.Core.UI
 
 Namespace Modeling
     Public Interface IItemSlot
@@ -6,7 +7,7 @@ Namespace Modeling
         ReadOnly Property MaxItemCount As Integer
         Property ItemCollection As IList
         Property NewItem As Object
-        ReadOnly Property AddCommand As ICommand
+        ReadOnly Property AddCommand As RelayCommand
     End Interface
 End Namespace
 

@@ -57,8 +57,24 @@
       <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SkyEditor.Core, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.Core.1.0.7\lib\portable45-net45+win8+wpa81\SkyEditor.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkyEditor.Core.Windows, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.Core.Windows.1.0.7\lib\net46\SkyEditor.Core.Windows.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -142,10 +158,6 @@
     <ProjectReference Include="..\CodeFiles\CodeFiles.vbproj">
       <Project>{9e2fc9a8-ca27-4b5d-a79f-e92aa066a839}</Project>
       <Name>CodeFiles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.Core\SkyEditor.Core.vbproj">
-      <Project>{6F869961-8D92-4FB1-9680-A1D5C6938350}</Project>
-      <Name>SkyEditor.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SkyEditor.UI.WPF\SkyEditor.UI.WPF.vbproj">
       <Project>{00afce08-71b5-4bf9-9155-c017f8151419}</Project>
