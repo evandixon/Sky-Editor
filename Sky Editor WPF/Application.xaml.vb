@@ -1,4 +1,6 @@
-﻿Class Application
+﻿Imports SkyEditor.UI.WPF
+
+Class Application
 
     ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
     ' can be handled in this file.
