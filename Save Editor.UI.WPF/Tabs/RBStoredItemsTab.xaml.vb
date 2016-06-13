@@ -1,5 +1,5 @@
 ﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Rescue
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class RBStoredItemsTab

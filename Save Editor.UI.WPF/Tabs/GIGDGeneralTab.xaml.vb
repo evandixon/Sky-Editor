@@ -1,5 +1,4 @@
-﻿Imports SkyEditor.SaveEditor
-Imports SkyEditorWPF.UI
+﻿Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class GIGDGeneralTab
@@ -27,7 +26,7 @@ Namespace Tabs
         End Sub
 
         Public Overrides Function GetSupportedTypes() As IEnumerable(Of Type)
-            Return {GetType(Saves.GTIGameData)}
+            Return {GetType(GTIGameData)}
         End Function
 
         Public Overrides Function GetSortOrder(CurrentType As Type, IsTab As Boolean) As Integer

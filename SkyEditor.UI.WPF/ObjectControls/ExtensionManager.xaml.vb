@@ -1,7 +1,9 @@
-﻿Imports System.Reflection
+﻿Imports System.Windows
+Imports System.Windows.Controls
 Imports System.Windows.Forms
 Imports SkyEditor.Core.Extensions
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.Utilities
 
 Namespace ObjectControls
     Public Class ExtensionManager
@@ -76,30 +78,30 @@ Namespace ObjectControls
         Private Sub DisplayInstallResultMessage(Result As ExtensionInstallResult)
             Select Case Result
                 Case ExtensionInstallResult.Success
-                    MessageBox.Show(My.Resources.Language.ExtensionInstallSuccess)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionInstallSuccess)
                 Case ExtensionInstallResult.RestartRequired
-                    If MessageBox.Show(My.Resources.Language.ExtensionInstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
-                        Redistribution.RedistributionHelpers.RequestRestartProgram()
+                    If Forms.MessageBox.Show(My.Resources.Language.ExtensionInstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
+                        RedistributionHelpers.RequestRestartProgram()
                     End If
                 Case ExtensionInstallResult.InvalidFormat
-                    MessageBox.Show(My.Resources.Language.ExtensionInstallInvalid, My.Resources.Language.MainTitle)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionInstallInvalid, My.Resources.Language.MainTitle)
                 Case ExtensionInstallResult.UnsupportedFormat
-                    MessageBox.Show(My.Resources.Language.ExtensionInstallUnsupported, My.Resources.Language.MainTitle)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionInstallUnsupported, My.Resources.Language.MainTitle)
                 Case Else
-                    MessageBox.Show(My.Resources.Language.ExtensionInstallUnknownFailure, My.Resources.Language.MainTitle)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionInstallUnknownFailure, My.Resources.Language.MainTitle)
             End Select
         End Sub
 
         Private Sub DisplayUninstallResultMessage(Result As ExtensionUninstallResult)
             Select Case Result
                 Case ExtensionUninstallResult.Success
-                    MessageBox.Show(My.Resources.Language.ExtensionUninstallSuccess)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionUninstallSuccess)
                 Case ExtensionUninstallResult.RestartRequired
-                    If MessageBox.Show(My.Resources.Language.ExtensionUninstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
-                        Redistribution.RedistributionHelpers.RequestRestartProgram()
+                    If Forms.MessageBox.Show(My.Resources.Language.ExtensionUninstallRestart, My.Resources.Language.MainTitle, MessageBoxButtons.YesNo) = DialogResult.Yes Then
+                        RedistributionHelpers.RequestRestartProgram()
                     End If
                 Case Else
-                    MessageBox.Show(My.Resources.Language.ExtensionUninstallUnknownFailure, My.Resources.Language.MainTitle)
+                    Forms.MessageBox.Show(My.Resources.Language.ExtensionUninstallUnknownFailure, My.Resources.Language.MainTitle)
             End Select
         End Sub
     End Class

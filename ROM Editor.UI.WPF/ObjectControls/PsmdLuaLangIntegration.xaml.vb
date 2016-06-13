@@ -1,10 +1,9 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.PSMD
 Imports SkyEditor.UI.WPF
-Imports SkyEditorWPF.UI
 
 Public Class PsmdLuaLangIntegration
-    Inherits SkyEditorWPF.UI.ObjectControl
+    Inherits ObjectControl
     Implements IDisposable
 
     Private Sub PsmdLuaLangIntegration_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

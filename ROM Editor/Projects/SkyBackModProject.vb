@@ -1,6 +1,5 @@
 ﻿Imports System.Collections.Concurrent
 Imports ROMEditor.FileFormats.Explorers
-Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 

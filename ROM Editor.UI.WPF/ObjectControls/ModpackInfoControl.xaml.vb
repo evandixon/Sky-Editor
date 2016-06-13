@@ -1,7 +1,5 @@
-﻿Imports System.Windows
-Imports System.Windows.Controls
-Imports ROMEditor
-Imports SkyEditorWPF.UI
+﻿Imports System.Windows.Controls
+Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls
     Public Class ModpackInfoControl

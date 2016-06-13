@@ -1,5 +1,5 @@
 ﻿Imports SkyEditor.Core.ConsoleCommands
-Imports SkyEditor.Core.Windows.Redistribution
+Imports SkyEditor.Core.Windows.Utilities
 
 Namespace ConsoleCommands
     Public Class DistPrep

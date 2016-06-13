@@ -2,7 +2,6 @@
 Imports System.Windows.Controls
 Imports SkyEditor.SaveEditor
 Imports SkyEditor.UI.WPF
-Imports SkyEditorWPF.UI
 
 Namespace Controls
     Public Class MDActiveAttack

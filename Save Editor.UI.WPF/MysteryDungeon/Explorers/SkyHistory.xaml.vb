@@ -1,7 +1,5 @@
 ﻿Imports SkyEditor.SaveEditor.MysteryDungeon.Explorers
 Imports SkyEditor.UI.WPF
-Imports SkyEditorWPF.UI
-
 Namespace MysteryDungeon.Explorers
     Public Class SkyHistory
         Inherits DataBoundObjectControl

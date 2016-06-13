@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Media
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls
     Public Class CteImageControl

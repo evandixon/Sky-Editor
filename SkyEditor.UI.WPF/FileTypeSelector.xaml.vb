@@ -1,6 +1,5 @@
 ﻿Imports System.Reflection
 Imports System.Windows
-Imports SkyEditor.Core.Interfaces
 
 Public Class FileTypeSelector
     Private Sub Button_Click(sender As Object, e As RoutedEventArgs)

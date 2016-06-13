@@ -1,8 +1,8 @@
 ﻿Imports System.Reflection
 Imports System.Windows.Controls
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 <Obsolete> Public Class ObjectControl
     Inherits UserControl

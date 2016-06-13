@@ -5,7 +5,7 @@ Imports System.Windows.Controls
 Imports System.Windows.Forms
 Imports ROMEditor.FileFormats
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Public Class MessageBinEditor
     Inherits ObjectControl

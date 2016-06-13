@@ -2,7 +2,7 @@
 Imports System.ComponentModel
 Imports System.Timers
 Imports System.Windows.Controls
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace Explorers
     Public Class SSBStringDictionaryEditor

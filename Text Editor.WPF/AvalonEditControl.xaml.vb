@@ -3,8 +3,8 @@ Imports System.Windows.Input
 Imports CodeFiles
 Imports ICSharpCode.AvalonEdit.CodeCompletion
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.UI
+Imports SkyEditor.Core.Utilities
 
 Public Class AvalonEditControl
     Implements IObjectControl

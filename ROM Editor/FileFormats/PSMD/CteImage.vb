@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 
 Namespace FileFormats.PSMD

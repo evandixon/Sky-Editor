@@ -183,7 +183,6 @@
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="OverlappingStyleSelector.vb" />
-    <Compile Include="DocumentTab.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

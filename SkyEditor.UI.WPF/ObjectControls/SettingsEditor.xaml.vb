@@ -2,8 +2,9 @@
 Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Settings
-Imports SkyEditor.Core.Interfaces
 Imports System.Windows.Controls
+Imports System.Windows
+Imports SkyEditor.Core.Utilities
 
 Namespace ObjectControls
     Public Class SettingsEditor

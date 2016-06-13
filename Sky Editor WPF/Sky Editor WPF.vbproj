@@ -135,13 +135,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ConsoleCommands\DistPrep.vb" />
-    <Compile Include="WpfCoreMod.vb" />
     <Compile Include="Application.xaml.vb">
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StartupHelpers.vb" />
-    <Compile Include="WpfCoreModBase.vb" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="SkyEditorBase" />
@@ -208,8 +206,6 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

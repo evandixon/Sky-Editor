@@ -1,8 +1,7 @@
 ﻿Imports System.IO
 Imports ROMEditor.FileFormats.Explorers.Script.Commands
-Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 
 Namespace FileFormats.Explorers.Script
     Partial Public Class SSB
@@ -11,7 +10,7 @@ Namespace FileFormats.Explorers.Script
         Implements ISavableAs
         Implements IDetectableFileType
         Implements IOnDisk
-        Implements iNamed
+        Implements INamed
 
         ''' <summary>
         ''' Raised when the file starts saving
@@ -47,7 +46,7 @@ Namespace FileFormats.Explorers.Script
 
         Public Property Filename As String Implements IOnDisk.Filename
 
-        Public ReadOnly Property Name As String Implements iNamed.Name
+        Public ReadOnly Property Name As String Implements INamed.Name
             Get
                 Return Path.GetFileName(Filename)
             End Get

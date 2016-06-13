@@ -20,7 +20,7 @@ Public Class StartupHelpers
     '    Application.Current.Shutdown()
     'End Function
     Public Shared Async Function RunWPFStartupSequence() As Task
-        Await RunWPFStartupSequence(New WpfCoreMod)
+        Await RunWPFStartupSequence(New WPFCoreSkyEditorPlugin)
     End Function
 
     Public Shared Async Function RunWPFStartupSequence(CoreMod As CoreSkyEditorPlugin) As Task
