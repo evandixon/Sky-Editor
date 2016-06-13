@@ -84,7 +84,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleCoreMod.vb" />
     <Compile Include="Language.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Author</value>
+  </data>
+  <data name="BackgroundTask" xml:space="preserve">
+    <value>Background Task</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Browse...</value>
@@ -126,11 +132,17 @@
   <data name="BuildProgress" xml:space="preserve">
     <value>Build Progress</value>
   </data>
+  <data name="BuildStatus" xml:space="preserve">
+    <value>Build Status</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="ContextMenuAddFolder" xml:space="preserve">
     <value>Add _Folder</value>
+  </data>
+  <data name="CreateExtension" xml:space="preserve">
+    <value>Create Extension</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -144,8 +156,23 @@
   <data name="DocumentCloseConfirmation" xml:space="preserve">
     <value>Are you sure you want to close this file?  Any unsaved changes will be lost.</value>
   </data>
+  <data name="DocumentCloseConfirmation1" xml:space="preserve">
+    <value>Are you sure you want to close this file?  Any unsaved changes will be lost.</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="Edit1" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="EnableDevMode" xml:space="preserve">
+    <value>Enable Development Mode</value>
+  </data>
+  <data name="EnableVerboseOutput" xml:space="preserve">
+    <value>Enable Verbose Output</value>
   </data>
   <data name="ErrorCantFindFileAt" xml:space="preserve">
     <value>Unable to find file at "{0}".</value>
@@ -153,8 +180,41 @@
   <data name="ErrorUnsupportedType" xml:space="preserve">
     <value>The type "{0}" of the given object is not supported.</value>
   </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost.</value>
+  </data>
   <data name="ExtensionInfo" xml:space="preserve">
     <value>Extension Info</value>
+  </data>
+  <data name="ExtensionInstallInvalid" xml:space="preserve">
+    <value>The provided file is not a valid extension.</value>
+  </data>
+  <data name="ExtensionInstallRestart" xml:space="preserve">
+    <value>The application must be restarted to complete installation.  Would you like to restart now?</value>
+  </data>
+  <data name="ExtensionInstallSuccess" xml:space="preserve">
+    <value>Extension was installed successfully.</value>
+  </data>
+  <data name="ExtensionInstallUnknownFailure" xml:space="preserve">
+    <value>Unknown error installing extension.</value>
+  </data>
+  <data name="ExtensionInstallUnsupported" xml:space="preserve">
+    <value>The provided extension is not supported.  This may be an extension to another extension that's not currently installed.</value>
+  </data>
+  <data name="ExtensionManager" xml:space="preserve">
+    <value>Extension Manager</value>
+  </data>
+  <data name="ExtensionUninstallRestart" xml:space="preserve">
+    <value>The application must be restarted to complete uninstallation.  Would you like to restart now?</value>
+  </data>
+  <data name="ExtensionUninstallSuccess" xml:space="preserve">
+    <value>Extension was uninstalled successfully.</value>
+  </data>
+  <data name="ExtensionUninstallUnknownFailure" xml:space="preserve">
+    <value>Unknown error uninstalling extension.</value>
+  </data>
+  <data name="Filename" xml:space="preserve">
+    <value>Filename</value>
   </data>
   <data name="FileTypeSelector" xml:space="preserve">
     <value>File Type Selector</value>
@@ -165,11 +225,20 @@
   <data name="FormattedTitle" xml:space="preserve">
     <value>Sky Editor {0}{1}</value>
   </data>
+  <data name="GenericErrorSeeOutput" xml:space="preserve">
+    <value>An error has occurred.  See output for details.</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>
   <data name="MainTitle" xml:space="preserve">
     <value>Sky Editor</value>
+  </data>
+  <data name="MainTitle1" xml:space="preserve">
+    <value>Sky Editor {0}{1}</value>
   </data>
   <data name="MenuAddFile" xml:space="preserve">
     <value>Add _Existing File</value>
@@ -292,14 +361,59 @@
   <data name="NoAvailableUI" xml:space="preserve">
     <value>There is no available UI for this object of type "{0}".</value>
   </data>
+  <data name="NoAvailableUI1" xml:space="preserve">
+    <value>There is no available UI for this object of type "{0}".</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="PluginAuthor" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PluginCredits" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Sky Editor (WPF)</value>
+  </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>Plugins</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Progress</value>
   </data>
+  <data name="Progress1" xml:space="preserve">
+    <value>Progress</value>
+  </data>
   <data name="ProjectName" xml:space="preserve">
     <value>Project Name</value>
+  </data>
+  <data name="ProjectName1" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="References" xml:space="preserve">
+    <value>References</value>
+  </data>
+  <data name="SettingsApplyRestartWarning" xml:space="preserve">
+    <value>Changes will not be applied until the program has been restarted.</value>
+  </data>
+  <data name="SkyEditorConsole" xml:space="preserve">
+    <value>Sky Editor Console</value>
+  </data>
+  <data name="SkyEditorSolution" xml:space="preserve">
+    <value>Sky Editor Solution</value>
+  </data>
+  <data name="SolutionBuildFailedSeeOutput" xml:space="preserve">
+    <value>Failed to build solution.  See output for details.</value>
+  </data>
+  <data name="SolutionExplorer" xml:space="preserve">
+    <value>Solution Explorer</value>
   </data>
   <data name="SolutionExplorerToolWindowTitle" xml:space="preserve">
     <value>Solution Explorer</value>
@@ -307,13 +421,31 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Status1" xml:space="preserve">
+    <value>Status</value>
+  </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="Uninstall" xml:space="preserve">
+    <value>Uninstall</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="VersionBeta" xml:space="preserve">
+    <value>Beta </value>
+  </data>
   <data name="VersionPrefix" xml:space="preserve">
     <value>Alpha</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Welcome to Sky Editor!  To begin, use File -&gt; Open to open a supported save file.</value>
+  </data>
+  <data name="ZipFiles" xml:space="preserve">
+    <value>Zip Files</value>
   </data>
 </root>

@@ -65,11 +65,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to All Files.
+        '''</summary>
+        Public Shared ReadOnly Property AllFiles() As String
+            Get
+                Return ResourceManager.GetString("AllFiles", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Author.
         '''</summary>
         Public Shared ReadOnly Property Author() As String
             Get
                 Return ResourceManager.GetString("Author", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Background Task.
+        '''</summary>
+        Public Shared ReadOnly Property BackgroundTask() As String
+            Get
+                Return ResourceManager.GetString("BackgroundTask", resourceCulture)
             End Get
         End Property
         
@@ -92,6 +110,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Build Status.
+        '''</summary>
+        Public Shared ReadOnly Property BuildStatus() As String
+            Get
+                Return ResourceManager.GetString("BuildStatus", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Cancel.
         '''</summary>
         Public Shared ReadOnly Property Cancel() As String
@@ -106,6 +133,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property ContextMenuAddFolder() As String
             Get
                 Return ResourceManager.GetString("ContextMenuAddFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Create Extension.
+        '''</summary>
+        Public Shared ReadOnly Property CreateExtension() As String
+            Get
+                Return ResourceManager.GetString("CreateExtension", resourceCulture)
             End Get
         End Property
         
@@ -146,11 +182,56 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Are you sure you want to close this file?  Any unsaved changes will be lost..
+        '''</summary>
+        Public Shared ReadOnly Property DocumentCloseConfirmation1() As String
+            Get
+                Return ResourceManager.GetString("DocumentCloseConfirmation1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Edit.
         '''</summary>
         Public Shared ReadOnly Property Edit() As String
             Get
                 Return ResourceManager.GetString("Edit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Edit.
+        '''</summary>
+        Public Shared ReadOnly Property Edit1() As String
+            Get
+                Return ResourceManager.GetString("Edit1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Enabled.
+        '''</summary>
+        Public Shared ReadOnly Property Enabled() As String
+            Get
+                Return ResourceManager.GetString("Enabled", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Enable Development Mode.
+        '''</summary>
+        Public Shared ReadOnly Property EnableDevMode() As String
+            Get
+                Return ResourceManager.GetString("EnableDevMode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Enable Verbose Output.
+        '''</summary>
+        Public Shared ReadOnly Property EnableVerboseOutput() As String
+            Get
+                Return ResourceManager.GetString("EnableVerboseOutput", resourceCulture)
             End Get
         End Property
         
@@ -173,11 +254,110 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Are you sure you want to exit Sky Editor?  Any unsaved changes will be lost..
+        '''</summary>
+        Public Shared ReadOnly Property ExitConfirmation() As String
+            Get
+                Return ResourceManager.GetString("ExitConfirmation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Extension Info.
         '''</summary>
         Public Shared ReadOnly Property ExtensionInfo() As String
             Get
                 Return ResourceManager.GetString("ExtensionInfo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The provided file is not a valid extension..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionInstallInvalid() As String
+            Get
+                Return ResourceManager.GetString("ExtensionInstallInvalid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The application must be restarted to complete installation.  Would you like to restart now?.
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionInstallRestart() As String
+            Get
+                Return ResourceManager.GetString("ExtensionInstallRestart", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Extension was installed successfully..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionInstallSuccess() As String
+            Get
+                Return ResourceManager.GetString("ExtensionInstallSuccess", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Unknown error installing extension..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionInstallUnknownFailure() As String
+            Get
+                Return ResourceManager.GetString("ExtensionInstallUnknownFailure", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The provided extension is not supported.  This may be an extension to another extension that&apos;s not currently installed..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionInstallUnsupported() As String
+            Get
+                Return ResourceManager.GetString("ExtensionInstallUnsupported", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Extension Manager.
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionManager() As String
+            Get
+                Return ResourceManager.GetString("ExtensionManager", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The application must be restarted to complete uninstallation.  Would you like to restart now?.
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionUninstallRestart() As String
+            Get
+                Return ResourceManager.GetString("ExtensionUninstallRestart", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Extension was uninstalled successfully..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionUninstallSuccess() As String
+            Get
+                Return ResourceManager.GetString("ExtensionUninstallSuccess", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Unknown error uninstalling extension..
+        '''</summary>
+        Public Shared ReadOnly Property ExtensionUninstallUnknownFailure() As String
+            Get
+                Return ResourceManager.GetString("ExtensionUninstallUnknownFailure", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Filename.
+        '''</summary>
+        Public Shared ReadOnly Property Filename() As String
+            Get
+                Return ResourceManager.GetString("Filename", resourceCulture)
             End Get
         End Property
         
@@ -209,6 +389,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to An error has occurred.  See output for details..
+        '''</summary>
+        Public Shared ReadOnly Property GenericErrorSeeOutput() As String
+            Get
+                Return ResourceManager.GetString("GenericErrorSeeOutput", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Install.
+        '''</summary>
+        Public Shared ReadOnly Property Install() As String
+            Get
+                Return ResourceManager.GetString("Install", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Location.
         '''</summary>
         Public Shared ReadOnly Property Location() As String
@@ -223,6 +421,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property MainTitle() As String
             Get
                 Return ResourceManager.GetString("MainTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor {0}{1}.
+        '''</summary>
+        Public Shared ReadOnly Property MainTitle1() As String
+            Get
+                Return ResourceManager.GetString("MainTitle1", resourceCulture)
             End Get
         End Property
         
@@ -578,11 +785,65 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to There is no available UI for this object of type &quot;{0}&quot;..
+        '''</summary>
+        Public Shared ReadOnly Property NoAvailableUI1() As String
+            Get
+                Return ResourceManager.GetString("NoAvailableUI1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to OK.
         '''</summary>
         Public Shared ReadOnly Property OK() As String
             Get
                 Return ResourceManager.GetString("OK", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Output.
+        '''</summary>
+        Public Shared ReadOnly Property Output() As String
+            Get
+                Return ResourceManager.GetString("Output", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to .
+        '''</summary>
+        Public Shared ReadOnly Property PluginAuthor() As String
+            Get
+                Return ResourceManager.GetString("PluginAuthor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to .
+        '''</summary>
+        Public Shared ReadOnly Property PluginCredits() As String
+            Get
+                Return ResourceManager.GetString("PluginCredits", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor (WPF).
+        '''</summary>
+        Public Shared ReadOnly Property PluginName() As String
+            Get
+                Return ResourceManager.GetString("PluginName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Plugins.
+        '''</summary>
+        Public Shared ReadOnly Property Plugins() As String
+            Get
+                Return ResourceManager.GetString("Plugins", resourceCulture)
             End Get
         End Property
         
@@ -596,11 +857,92 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Progress.
+        '''</summary>
+        Public Shared ReadOnly Property Progress1() As String
+            Get
+                Return ResourceManager.GetString("Progress1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Project Name.
         '''</summary>
         Public Shared ReadOnly Property ProjectName() As String
             Get
                 Return ResourceManager.GetString("ProjectName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Project Name.
+        '''</summary>
+        Public Shared ReadOnly Property ProjectName1() As String
+            Get
+                Return ResourceManager.GetString("ProjectName1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Ready.
+        '''</summary>
+        Public Shared ReadOnly Property Ready() As String
+            Get
+                Return ResourceManager.GetString("Ready", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to References.
+        '''</summary>
+        Public Shared ReadOnly Property References() As String
+            Get
+                Return ResourceManager.GetString("References", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Changes will not be applied until the program has been restarted..
+        '''</summary>
+        Public Shared ReadOnly Property SettingsApplyRestartWarning() As String
+            Get
+                Return ResourceManager.GetString("SettingsApplyRestartWarning", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor Console.
+        '''</summary>
+        Public Shared ReadOnly Property SkyEditorConsole() As String
+            Get
+                Return ResourceManager.GetString("SkyEditorConsole", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Sky Editor Solution.
+        '''</summary>
+        Public Shared ReadOnly Property SkyEditorSolution() As String
+            Get
+                Return ResourceManager.GetString("SkyEditorSolution", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Failed to build solution.  See output for details..
+        '''</summary>
+        Public Shared ReadOnly Property SolutionBuildFailedSeeOutput() As String
+            Get
+                Return ResourceManager.GetString("SolutionBuildFailedSeeOutput", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Solution Explorer.
+        '''</summary>
+        Public Shared ReadOnly Property SolutionExplorer() As String
+            Get
+                Return ResourceManager.GetString("SolutionExplorer", resourceCulture)
             End Get
         End Property
         
@@ -623,11 +965,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Status.
+        '''</summary>
+        Public Shared ReadOnly Property Status1() As String
+            Get
+                Return ResourceManager.GetString("Status1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Type.
         '''</summary>
         Public Shared ReadOnly Property Type() As String
             Get
                 Return ResourceManager.GetString("Type", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Uninstall.
+        '''</summary>
+        Public Shared ReadOnly Property Uninstall() As String
+            Get
+                Return ResourceManager.GetString("Uninstall", resourceCulture)
             End Get
         End Property
         
@@ -641,11 +1001,47 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Beta .
+        '''</summary>
+        Public Shared ReadOnly Property VersionBeta() As String
+            Get
+                Return ResourceManager.GetString("VersionBeta", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Alpha.
         '''</summary>
         Public Shared ReadOnly Property VersionPrefix() As String
             Get
                 Return ResourceManager.GetString("VersionPrefix", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Welcome.
+        '''</summary>
+        Public Shared ReadOnly Property Welcome() As String
+            Get
+                Return ResourceManager.GetString("Welcome", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Welcome to Sky Editor!  To begin, use File -&gt; Open to open a supported save file..
+        '''</summary>
+        Public Shared ReadOnly Property WelcomeMessage() As String
+            Get
+                Return ResourceManager.GetString("WelcomeMessage", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Zip Files.
+        '''</summary>
+        Public Shared ReadOnly Property ZipFiles() As String
+            Get
+                Return ResourceManager.GetString("ZipFiles", resourceCulture)
             End Get
         End Property
     End Class

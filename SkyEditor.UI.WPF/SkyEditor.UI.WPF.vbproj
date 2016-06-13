@@ -158,14 +158,26 @@
     <Compile Include="ObjectControls\ExtensionInfoControl.xaml.vb">
       <DependentUpon>ExtensionInfoControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectControls\ExtensionManager.xaml.vb">
+      <DependentUpon>ExtensionManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ObjectControls\GenericIList.xaml.vb">
       <DependentUpon>GenericIList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\ProjectReferences.xaml.vb">
+      <DependentUpon>ProjectReferences.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\SettingsEditor.xaml.vb">
+      <DependentUpon>SettingsEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\SolutionBuildProgress.xaml.vb">
       <DependentUpon>SolutionBuildProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectControls\SolutionExplorer.xaml.vb">
       <DependentUpon>SolutionExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectControls\WelcomeTabContent.xaml.vb">
+      <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectWindow.xaml.vb">
       <DependentUpon>ObjectWindow.xaml</DependentUpon>
@@ -266,9 +278,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ObjectControls\ExtensionManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ObjectControls\GenericIList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\ProjectReferences.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ObjectControls\SettingsEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectControls\SolutionBuildProgress.xaml">
       <SubType>Designer</SubType>
@@ -277,6 +301,10 @@
     <Page Include="ObjectControls\SolutionExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ObjectControls\WelcomeTabContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ObjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

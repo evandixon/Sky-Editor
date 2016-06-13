@@ -134,36 +134,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LanguageHelper.vb" />
-    <Compile Include="Language.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Language.resx</DependentUpon>
-    </Compile>
     <Compile Include="ConsoleCommands\DistPrep.vb" />
-    <Compile Include="ConsoleCoreMod.vb" />
-    <Compile Include="UI\ExtensionManager.xaml.vb">
-      <DependentUpon>ExtensionManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ObjectControl.vb" />
-    <Compile Include="UI\ProjectReferences.xaml.vb">
-      <DependentUpon>ProjectReferences.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\SettingsEditor.xaml.vb">
-      <DependentUpon>SettingsEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreMod.vb" />
     <Compile Include="Application.xaml.vb">
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StartupHelpers.vb" />
-    <Compile Include="UI\WelcomeTabContent.xaml.vb">
-      <DependentUpon>WelcomeTabContent.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\BackgroundTaskWait.xaml.vb">
-      <DependentUpon>BackgroundTaskWait.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WpfCoreModBase.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -204,15 +181,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Language.fr.resx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Language.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Language.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="My Project\Settings.settings">
@@ -232,33 +203,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\ExtensionManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\ProjectReferences.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\SettingsEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\WelcomeTabContent.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\BackgroundTaskWait.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
