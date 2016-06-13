@@ -66,6 +66,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.UI.WPF", "SkyEdit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C264D2E9-2651-4207-8F12-10F55EE8E6CB}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		README.MD = README.MD
 	EndProjectSection
 EndProject
