@@ -43,7 +43,7 @@ Namespace My.Resources
         Public Shared ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
-                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("SaveEditor.UI.WPF.Language", GetType(Language).Assembly)
+                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("SkyEditor.SaveEditor.UI.WPF.Language", GetType(Language).Assembly)
                     resourceMan = temp
                 End If
                 Return resourceMan

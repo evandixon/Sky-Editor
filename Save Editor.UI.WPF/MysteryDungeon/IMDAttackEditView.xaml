@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
              xmlns:mysteryDungeon="clr-namespace:SkyEditor.SaveEditor.MysteryDungeon;assembly=SkyEditor.SaveEditor"
-             xmlns:res="clr-namespace:SaveEditor.UI.WPF.My.Resources"
+             xmlns:res="clr-namespace:SkyEditor.SaveEditor.UI.WPF.My.Resources"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="400"
              TargetType="{x:Type mysteryDungeon:IMDAttack}"
