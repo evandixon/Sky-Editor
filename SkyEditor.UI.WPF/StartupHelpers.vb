@@ -20,11 +20,11 @@ Public Class StartupHelpers
 
     '    Application.Current.Shutdown()
     'End Function
-    Public Shared Async Function RunWPFStartupSequence() As Task
-        Await RunWPFStartupSequence(New WPFCoreSkyEditorPlugin)
-    End Function
+    Public Shared Sub RunWPFStartupSequence()
+        RunWPFStartupSequence(New WPFCoreSkyEditorPlugin)
+    End Sub
 
-    Public Shared Async Function RunWPFStartupSequence(CoreMod As CoreSkyEditorPlugin) As Task
+    Public Shared Sub RunWPFStartupSequence(CoreMod As CoreSkyEditorPlugin)
         'Run the program
         Dim args As New List(Of String)
         args.AddRange(Environment.GetCommandLineArgs())
@@ -40,7 +40,7 @@ Public Class StartupHelpers
         '    Await StartupHelpers.StartConsole()
         'Else
         Dim manager As New PluginManager
-        Await manager.LoadCore(CoreMod)
+        manager.LoadCore(CoreMod).Wait()
 
 
         manager.CurrentIOUIManager.SupportedToolWindowTypes = {GetType(UserControl)}
@@ -48,7 +48,7 @@ Public Class StartupHelpers
         m.CurrentPluginManager = manager
         m.DataContext = manager.CurrentIOUIManager
         m.Show()
-    End Function
+    End Sub
 
     Public Shared Sub RunExitSequence()
         'Delete .tmp files

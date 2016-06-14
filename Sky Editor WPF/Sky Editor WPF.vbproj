@@ -140,7 +140,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Import Include="SkyEditorBase" />
     <Import Include="System.Threading.Tasks" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />

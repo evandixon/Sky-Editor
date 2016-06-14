@@ -10,6 +10,22 @@ Imports SkyEditor.UI.WPF.ViewModels
 
 Public Class WPFCoreSkyEditorPlugin
     Inherits WindowsCoreSkyEditorPlugin
+
+    ''' <summary>
+    ''' Creates a new instance of <see cref="WPFCoreSkyEditorPlugin"/>
+    ''' </summary>
+    Public Sub New()
+
+    End Sub
+
+    ''' <summary>
+    ''' Creates a new instance of <see cref="WPFCoreSkyEditorPlugin"/> that directly loads the given plugin
+    ''' </summary>
+    ''' <param name="plugin">Plugin to load</param>
+    Public Sub New(plugin As SkyEditorPlugin)
+        _plugin = plugin
+    End Sub
+    Dim _plugin As SkyEditorPlugin
     Public Overrides ReadOnly Property Credits As String
         Get
             Return My.Resources.Language.PluginCredits
@@ -63,6 +79,10 @@ Public Class WPFCoreSkyEditorPlugin
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectAddExistingFile).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectProperties).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectDelete).GetTypeInfo)
+
+        If _plugin IsNot Nothing Then
+            manager.LoadRequiredPlugin(_plugin, Me)
+        End If
     End Sub
 
     Public Overrides Function GetIOUIManager(manager As PluginManager) As IOUIManager

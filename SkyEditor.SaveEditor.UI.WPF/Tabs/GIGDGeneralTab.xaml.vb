@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.UI.WPF
+﻿Imports SkyEditor.SaveEditor.Saves
+Imports SkyEditor.UI.WPF
 
 Namespace Tabs
     Public Class GIGDGeneralTab

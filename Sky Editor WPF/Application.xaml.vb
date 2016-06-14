@@ -8,14 +8,14 @@ Class Application
         StartupHelpers.RunExitSequence()
     End Sub
 
-    Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+    Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
 #If DEBUG Then
         PresentationTraceSources.Refresh()
         PresentationTraceSources.DataBindingSource.Listeners.Add(New ConsoleTraceListener)
         PresentationTraceSources.DataBindingSource.Listeners.Add(New DebugTraceListener)
         PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning Or SourceLevels.Error
 #End If
-        Await StartupHelpers.RunWPFStartupSequence
+        StartupHelpers.RunWPFStartupSequence()
     End Sub
 End Class
 
