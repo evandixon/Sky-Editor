@@ -32,7 +32,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Sky Editor WPF", "Sky Edito
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ROM Editor.UI.WPF", "ROM Editor.UI.WPF\ROM Editor.UI.WPF.vbproj", "{80EE8542-3060-4ACF-8C4F-7868255EED8A}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.SaveEditor.UI.WPF", "Save Editor.UI.WPF\SkyEditor.SaveEditor.UI.WPF.vbproj", "{81176732-8BFA-46F0-AB6D-94ACAEC2B9FC}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SkyEditor.SaveEditor.UI.WPF", "SkyEditor.SaveEditor.UI.WPF\SkyEditor.SaveEditor.UI.WPF.vbproj", "{81176732-8BFA-46F0-AB6D-94ACAEC2B9FC}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Text Editor.WPF", "Text Editor.WPF\Text Editor.WPF.vbproj", "{142E3B2B-19E9-4560-B411-4AD40FF8BD1B}"
 EndProject

@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Controls.MDActiveAttack"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:skyui="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" Height="40" Width="448">
+    <Grid HorizontalAlignment="Right" Width="448">
+        <skyui:SearchableDropDown x:Name="cbMove" Margin="20,18,278,0" Height="22" VerticalAlignment="Top" />
+        <xctk:IntegerUpDown x:Name="numGinseng" Minimum="0" Maximum="128" VerticalAlignment="Top" Margin="0,18,184,0" HorizontalAlignment="Right" Width="41" Height="22" ToolTip="Ginseng" />
+        <CheckBox x:Name="chbSwitched" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,21,0,0" ToolTip="Switched" />
+        <CheckBox x:Name="chbLinked" Content="Linked" HorizontalAlignment="Right" Margin="0,21,124,0" VerticalAlignment="Top" />
+        <CheckBox x:Name="chbSet" Content="Set" HorizontalAlignment="Right" Margin="0,21,82,0" VerticalAlignment="Top" />
+        <CheckBox x:Name="chbSealed" Content="Sealed" HorizontalAlignment="Right" Margin="0,21,22,0" VerticalAlignment="Top" />
+        <xctk:IntegerUpDown x:Name="numPP" Minimum="0" Maximum="128" Margin="0,18,230,0" ToolTip="PP" HorizontalAlignment="Right" Width="41" Height="22" VerticalAlignment="Top" />
+        <Label x:Name="lblPP" Content="PP" HorizontalAlignment="Left" Margin="177,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
+        <Label x:Name="lblGinseng" Content="Ginseng" HorizontalAlignment="Left" Margin="218,0,0,0" VerticalAlignment="Top" Height="30" FontSize="10"/>
+    </Grid>
+</UserControl>
