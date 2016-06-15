@@ -1,8 +1,9 @@
 ﻿Imports System.IO
 Imports SkyEditor.Core
+Imports SkyEditor.UI.WPF
 
 Public Class SkyEditorInfo
-    Inherits SkyEditor.UI.WPF.WPFCoreSkyEditorPlugin
+    Inherits WPFCoreSkyEditorPlugin
     Public Overrides ReadOnly Property PluginAuthor As String
         Get
             Return My.Resources.Language.PluginAuthor
