@@ -78,6 +78,10 @@
       <HintPath>..\packages\SkyEditor.Core.Windows.1.0.12\lib\net46\SkyEditor.Core.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SkyEditor.SaveEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.SaveEditor.1.0.0\lib\portable45-net45+win8\SkyEditor.SaveEditor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -382,10 +386,6 @@
     <ProjectReference Include="..\SkyEditor.ROMEditor\SkyEditor.ROMEditor.vbproj">
       <Project>{b7f1e33d-ede9-42ba-8932-6cca5891d2e0}</Project>
       <Name>SkyEditor.ROMEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
-      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
-      <Name>SkyEditor.SaveEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

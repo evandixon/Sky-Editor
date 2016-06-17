@@ -87,6 +87,14 @@
       <HintPath>..\packages\SkyEditor.Core.Windows.1.0.12\lib\net46\SkyEditor.Core.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SkyEditor.SaveEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.SaveEditor.1.0.0\lib\portable45-net45+win8\SkyEditor.SaveEditor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkyEditor.SaveEditor.UI.WPF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.SaveEditor.UI.WPF.1.0.0\lib\net46\SkyEditor.SaveEditor.UI.WPF.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SkyEditor.UI.WPF, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SkyEditor.UI.WPF.1.0.2\lib\net46\SkyEditor.UI.WPF.dll</HintPath>
       <Private>True</Private>
@@ -344,10 +352,6 @@
     <ProjectReference Include="..\Sky Editor WPF\Sky Editor WPF.vbproj">
       <Project>{e3e3b897-05c3-4a48-b1ea-7964e9aefc4e}</Project>
       <Name>Sky Editor WPF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
-      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
-      <Name>SkyEditor.SaveEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
