@@ -138,12 +138,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SkyEditor.SaveEditor\SkyEditor.SaveEditor.vbproj">
-      <Project>{ab874ac2-d497-49f0-9eb4-cd57397f757f}</Project>
-      <Name>SkyEditor.SaveEditor</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\_4930113.png" />
   </ItemGroup>
   <ItemGroup>

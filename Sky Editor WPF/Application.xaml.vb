@@ -15,7 +15,9 @@ Class Application
         PresentationTraceSources.DataBindingSource.Listeners.Add(New DebugTraceListener)
         PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning Or SourceLevels.Error
 #End If
-        StartupHelpers.RunWPFStartupSequence()
+        Application.Current.Dispatcher.BeginInvoke(Sub()
+                                                       StartupHelpers.RunWPFStartupSequence()
+                                                   End Sub)
     End Sub
 End Class
 
