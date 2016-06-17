@@ -67,48 +67,50 @@ Namespace Roms
             Dim o3dsUpdateDirPath = Path.Combine(DestinationDirectory, "O3DSUpdate")
             Dim onlineHeaderBinPath = Path.Combine(DestinationDirectory, "OnlineHeader.bin")
 
-            'Unpack portions
-            Dim exheaderTask = RunCtrTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{PhysicalFilename}""")
-            Dim exefsBinTask = RunCtrTool($"-p --ncch=0 --exefs=""{exefsBinPath}"" ""{PhysicalFilename}""")
-            Dim romfsBinTask = RunCtrTool($"-p --ncch=0 --romfs=""{romfsBinPath}"" ""{PhysicalFilename}""")
-            Dim manualBinTask = RunCtrTool($"-p --ncch=1 --romfs=""{manualBinPath}"" ""{PhysicalFilename}"" --decompresscode")
-            Dim dlPlayBinTask = RunCtrTool($"-p --ncch=2 --romfs=""{dlPlayBinPath}"" ""{PhysicalFilename}"" --decompresscode")
-            Dim n3dsUpdateBinTask = RunCtrTool($"-p --ncch=6 --romfs=""{n3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
-            Dim o3dsUpdateBinTask = RunCtrTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+            Using external As New ExternalProgramManager
+                'Unpack portions
+                Dim exheaderTask = external.RunCtrTool($"-p --ncch=0 --exheader=""{exHeaderPath}"" ""{PhysicalFilename}""")
+                Dim exefsBinTask = external.RunCtrTool($"-p --ncch=0 --exefs=""{exefsBinPath}"" ""{PhysicalFilename}""")
+                Dim romfsBinTask = external.RunCtrTool($"-p --ncch=0 --romfs=""{romfsBinPath}"" ""{PhysicalFilename}""")
+                Dim manualBinTask = external.RunCtrTool($"-p --ncch=1 --romfs=""{manualBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+                Dim dlPlayBinTask = external.RunCtrTool($"-p --ncch=2 --romfs=""{dlPlayBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+                Dim n3dsUpdateBinTask = external.RunCtrTool($"-p --ncch=6 --romfs=""{n3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
+                Dim o3dsUpdateBinTask = external.RunCtrTool($"-p --ncch=7 --romfs=""{o3dsUpdateBinPath}"" ""{PhysicalFilename}"" --decompresscode")
 
-            'Save online header
-            File.WriteAllBytes(onlineHeaderBinPath, OnlineHeaderBinary)
+                'Save online header
+                File.WriteAllBytes(onlineHeaderBinPath, OnlineHeaderBinary)
 
-            'Unpack romfs
-            Await romfsBinTask
-            Dim romfsDirTask = RunCtrTool($"-t romfs --romfsdir=""{romfsDirPath}"" ""{romfsBinPath}""")
+                'Unpack romfs
+                Await romfsBinTask
+                Dim romfsDirTask = external.RunCtrTool($"-t romfs --romfsdir=""{romfsDirPath}"" ""{romfsBinPath}""")
 
-            'Unpack exefs
-            Await exefsBinTask
-            Dim exefsDirTask = RunCtrTool($"-t exefs --exefsdir=""{exefsDirPath}"" ""{exefsBinPath}"" --decompresscode")
+                'Unpack exefs
+                Await exefsBinTask
+                Dim exefsDirTask = external.RunCtrTool($"-t exefs --exefsdir=""{exefsDirPath}"" ""{exefsBinPath}"" --decompresscode")
 
-            'Unpack manual
-            Await manualBinTask
-            Dim manualDirTask = RunCtrTool($"-t romfs --romfsdir=""{manualDirPath}"" ""{manualBinPath}""")
+                'Unpack manual
+                Await manualBinTask
+                Dim manualDirTask = external.RunCtrTool($"-t romfs --romfsdir=""{manualDirPath}"" ""{manualBinPath}""")
 
-            'Unpack n3ds update
-            Await n3dsUpdateBinTask
-            Dim n3dsUpdateDirTask = RunCtrTool($"-t romfs --romfsdir=""{n3dsUpdateDirPath}"" ""{n3dsUpdateBinPath}""")
+                'Unpack n3ds update
+                Await n3dsUpdateBinTask
+                Dim n3dsUpdateDirTask = external.RunCtrTool($"-t romfs --romfsdir=""{n3dsUpdateDirPath}"" ""{n3dsUpdateBinPath}""")
 
-            'Unpack o3ds update
-            Await o3dsUpdateBinTask
-            Dim o3dsUpdateDirTask = RunCtrTool($"-t romfs --romfsdir=""{o3dsUpdateDirPath}"" ""{o3dsUpdateBinPath}""")
+                'Unpack o3ds update
+                Await o3dsUpdateBinTask
+                Dim o3dsUpdateDirTask = external.RunCtrTool($"-t romfs --romfsdir=""{o3dsUpdateDirPath}"" ""{o3dsUpdateBinPath}""")
 
-            'Unpack download play
-            Await dlPlayBinTask
-            Dim dlPlayDirTask = RunCtrTool($"-t romfs --romfsdir=""{dlPlayDirPath}"" ""{dlPlayBinPath}""")
+                'Unpack download play
+                Await dlPlayBinTask
+                Dim dlPlayDirTask = external.RunCtrTool($"-t romfs --romfsdir=""{dlPlayDirPath}"" ""{dlPlayBinPath}""")
 
 
-            Await romfsDirTask
-            Await exefsDirTask
-            Await manualDirTask
-            Await n3dsUpdateDirTask
-            Await dlPlayDirTask
+                Await romfsDirTask
+                Await exefsDirTask
+                Await manualDirTask
+                Await n3dsUpdateDirTask
+                Await dlPlayDirTask
+            End Using
 
             Utilities.FileSystem.DeleteFile(exefsBinPath, provider)
             Utilities.FileSystem.DeleteFile(romfsBinPath, provider)
@@ -116,10 +118,6 @@ Namespace Roms
             Utilities.FileSystem.DeleteFile(dlPlayBinPath, provider)
             Utilities.FileSystem.DeleteFile(n3dsUpdateBinPath, provider)
             Utilities.FileSystem.DeleteFile(o3dsUpdateBinPath, provider)
-        End Function
-
-        Private Shared Async Function RunCtrTool(Arguments As String) As Task
-            Await ConsoleApp.RunProgram(EnvironmentPaths.GetResourceName("ctrtool.exe"), Arguments)
         End Function
 
         Public Sub New()

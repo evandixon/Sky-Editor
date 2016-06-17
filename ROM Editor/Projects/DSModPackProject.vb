@@ -216,23 +216,25 @@ Namespace Projects
         End Function
 
         Public Overridable Sub CopyPatcherProgram(Solution As Solution)
-            Select Case GetBaseRomSystem(Solution)
-                Case "3DS"
-                    '-Copy ctrtool
-                    IO.File.Copy(EnvironmentPaths.GetResourceName("ctrtool.exe"), IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
-                    'IO.File.Copy(PluginHelper.GetResourceName("makerom.exe"), IO.Path.Combine(GetToolsDir, "makerom.exe"), True)
-                    'IO.File.Copy(PluginHelper.GetResourceName("rom_tool.exe"), IO.Path.Combine(GetToolsDir, "rom_tool.exe"), True)
-                    IO.File.Copy(EnvironmentPaths.GetResourceName("3DS Builder.exe"), IO.Path.Combine(GetToolsDir, "3DS Builder.exe"), True)
-                Case "NDS"
-                    '-Copy ndstool
-                    IO.File.Copy(EnvironmentPaths.GetResourceName("ndstool.exe"), IO.Path.Combine(GetToolsDir, "ndstool.exe"), True)
-                Case Else
-                    Throw New NotSupportedException(String.Format(My.Resources.Language.ErrorModPackTypeNotSupported, GetBaseRomSystem(Solution)))
-            End Select
+            Using external As New ExternalProgramManager
+                Select Case GetBaseRomSystem(Solution)
+                    Case "3DS"
+                        '-Copy ctrtool
+                        IO.File.Copy(external.GetCtrToolPath, IO.Path.Combine(GetToolsDir, "ctrtool.exe"), True)
+                        'IO.File.Copy(PluginHelper.GetResourceName("makerom.exe"), IO.Path.Combine(GetToolsDir, "makerom.exe"), True)
+                        'IO.File.Copy(PluginHelper.GetResourceName("rom_tool.exe"), IO.Path.Combine(GetToolsDir, "rom_tool.exe"), True)
+                        IO.File.Copy(EnvironmentPaths.GetResourceName("3DS Builder.exe"), IO.Path.Combine(GetToolsDir, "3DS Builder.exe"), True)
+                    Case "NDS"
+                        '-Copy ndstool
+                        IO.File.Copy(EnvironmentPaths.GetResourceName("ndstool.exe"), IO.Path.Combine(GetToolsDir, "ndstool.exe"), True)
+                    Case Else
+                        Throw New NotSupportedException(String.Format(My.Resources.Language.ErrorModPackTypeNotSupported, GetBaseRomSystem(Solution)))
+                End Select
 
-            '-Copy patching wizard
-            IO.File.Copy(EnvironmentPaths.GetResourceName("DSPatcher.exe"), IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), True)
-            IO.File.Copy(EnvironmentPaths.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
+                '-Copy patching wizard
+                IO.File.Copy(EnvironmentPaths.GetResourceName("DSPatcher.exe"), IO.Path.Combine(GetModPackDir, "DSPatcher.exe"), True)
+                IO.File.Copy(EnvironmentPaths.GetResourceName("ICSharpCode.SharpZipLib.dll"), IO.Path.Combine(GetModPackDir, "ICSharpCode.SharpZipLib.dll"), True)
+            End Using
         End Sub
 
         Public Overridable Async Function ApplyPatchAsync(Solution As Solution) As Task

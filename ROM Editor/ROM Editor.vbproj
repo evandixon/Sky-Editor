@@ -120,6 +120,7 @@
     <Compile Include="ConsoleCommands\PSMDExpTableCsv.vb" />
     <Compile Include="ConsoleCommands\PSMDLangSearch.vb" />
     <Compile Include="ConsoleCommands\Sir0Ptrs.vb" />
+    <Compile Include="ExternalProgramHelpers.vb" />
     <Compile Include="FarcFilenames.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -287,6 +288,7 @@
     </None>
     <None Include="packages.config" />
     <Content Include="App.ico" />
+    <Content Include="Resources\ctrtool.exe" />
     <Content Include="ROMEditor\3DS Builder.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -389,9 +391,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ROMEditor\ctrtool.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="ROMEditor\dsicontool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
