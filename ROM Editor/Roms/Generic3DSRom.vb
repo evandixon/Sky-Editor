@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Windows
 Imports SkyEditor.Core.Windows.Processes

@@ -2,7 +2,6 @@
 Imports System.Windows
 Imports System.Windows.Controls
 Imports SkyEditor.Core
-Imports SkyEditor.Core.Interfaces
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities

@@ -1,5 +1,4 @@
-﻿Imports SkyEditor.SaveEditor.Interfaces
-
+﻿
 Partial Class PokemonLib
     Class mMoves
         Public Value As Moves

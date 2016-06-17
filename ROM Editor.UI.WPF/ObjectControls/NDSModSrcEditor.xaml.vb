@@ -1,7 +1,5 @@
-﻿Imports System.Windows.Controls
-Imports ROMEditor
-Imports ROMEditor.Projects
-Imports SkyEditorWPF.UI
+﻿Imports ROMEditor.Projects
+Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls
     Public Class NDSModSrcEditor

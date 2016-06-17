@@ -1,11 +1,11 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 
 Public Class BinaryFile
-    Implements iCreatableFile
+    Implements ICreatableFile
     Implements IOpenableFile
-    Implements iNamed
-    Implements iOnDisk
+    Implements INamed
+    Implements IOnDisk
     Implements ISavableAs
 
     Public Sub New()
@@ -36,7 +36,7 @@ Public Class BinaryFile
     ''' Name of the file.
     ''' </summary>
     ''' <returns></returns>
-    Public Property Name As String Implements iNamed.Name
+    Public Property Name As String Implements INamed.Name
         Get
             If _name Is Nothing Then
                 Return IO.Path.GetFileName(Filename)
@@ -70,13 +70,13 @@ Public Class BinaryFile
         Return ".sav"
     End Function
 
-    Public Event FileSaved As iSavable.FileSavedEventHandler Implements iSavable.FileSaved
+    Public Event FileSaved As ISavable.FileSavedEventHandler Implements ISavable.FileSaved
 
     Public Sub Save(provider As IOProvider) Implements ISavable.Save
         Save(Filename, provider)
     End Sub
 
-    Public Sub CreateFile(Name As String) Implements iCreatableFile.CreateFile
+    Public Sub CreateFile(Name As String) Implements ICreatableFile.CreateFile
         Me.Name = ""
     End Sub
 End Class

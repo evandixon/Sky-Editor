@@ -1,7 +1,7 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.IO
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace Explorers
     Public Class item_p_Editor

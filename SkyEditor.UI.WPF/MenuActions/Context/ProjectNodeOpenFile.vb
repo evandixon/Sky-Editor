@@ -10,7 +10,7 @@ Namespace MenuActions.Context
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
             For Each item As ProjectNode In Targets
-                Dim obj = Await item.GetFile(CurrentPluginManager)
+                Dim obj = Await item.GetFile(CurrentPluginManager, AddressOf IOHelper.PickFirstDuplicateMatchSelector)
                 If obj IsNot Nothing Then
                     CurrentPluginManager.CurrentIOUIManager.OpenFile(obj, item.ParentProject)
                 Else

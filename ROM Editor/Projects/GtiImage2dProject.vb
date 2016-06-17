@@ -1,5 +1,4 @@
 ﻿Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 

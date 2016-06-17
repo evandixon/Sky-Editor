@@ -1,6 +1,5 @@
 ﻿Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
-Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows

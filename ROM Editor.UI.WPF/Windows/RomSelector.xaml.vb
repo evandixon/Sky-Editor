@@ -1,6 +1,5 @@
 ﻿Imports ROMEditor
 Imports SkyEditor.Core.Windows
-Imports SkyEditorWPF.UI
 
 Public Class RomSelector
     Public Overloads Function ShowDialog(Roms As List(Of String)) As Boolean

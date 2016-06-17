@@ -1,9 +1,5 @@
 ﻿Imports System.ComponentModel
-Imports System.Windows.Input
-Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
-Imports SkyEditor.Core.Utilities
 
 Namespace AvalonHelpers
     Public Class AvalonDockFileWrapper

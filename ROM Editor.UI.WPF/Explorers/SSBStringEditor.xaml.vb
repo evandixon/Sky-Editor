@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.Explorers.Script
-Imports SkyEditorWPF.UI
+Imports SkyEditor.UI.WPF
 
 Namespace Explorers
     Public Class SSBStringEditor

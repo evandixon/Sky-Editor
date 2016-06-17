@@ -1,15 +1,15 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 
 Namespace FileFormats.Explorers.Script
     Public Class SSA
         Implements IOpenableFile
-        Implements iOnDisk
-        Implements iNamed
+        Implements IOnDisk
+        Implements INamed
 
-        Public Property Filename As String Implements iOnDisk.Filename
+        Public Property Filename As String Implements IOnDisk.Filename
 
-        Public ReadOnly Property Name As String Implements iNamed.Name
+        Public ReadOnly Property Name As String Implements INamed.Name
             Get
                 Return IO.Path.GetFileName(Filename)
             End Get

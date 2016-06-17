@@ -1,4 +1,4 @@
-﻿Imports SkyEditorWPF.UI
+﻿Imports SkyEditor.UI.WPF
 
 Public Class MessageBinEntryEditor
     Inherits ObjectControl

@@ -1,19 +1,53 @@
 ﻿Imports System.Reflection
 Imports SkyEditor.Core
 Imports SkyEditor.Core.UI
-Imports SkyEditor.Core.Windows
+Imports SkyEditor.Core.Windows.CoreMods
 Imports SkyEditor.UI.WPF.MenuActions
 Imports SkyEditor.UI.WPF.MenuActions.Context
 Imports SkyEditor.UI.WPF.MenuActions.View
 Imports SkyEditor.UI.WPF.ObjectControls
 Imports SkyEditor.UI.WPF.ViewModels
 
-Public MustInherit Class WPFCoreSkyEditorPlugin
+Public Class WPFCoreSkyEditorPlugin
     Inherits WindowsCoreSkyEditorPlugin
+
+    ''' <summary>
+    ''' Creates a new instance of <see cref="WPFCoreSkyEditorPlugin"/>
+    ''' </summary>
+    Public Sub New()
+
+    End Sub
+
+    ''' <summary>
+    ''' Creates a new instance of <see cref="WPFCoreSkyEditorPlugin"/> that directly loads the given plugin
+    ''' </summary>
+    ''' <param name="plugin">Plugin to load</param>
+    Public Sub New(plugin As SkyEditorPlugin)
+        _plugin = plugin
+    End Sub
+    Dim _plugin As SkyEditorPlugin
+    Public Overrides ReadOnly Property Credits As String
+        Get
+            Return My.Resources.Language.PluginCredits
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property PluginAuthor As String
+        Get
+            Return My.Resources.Language.PluginAuthor
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property PluginName As String
+        Get
+            Return My.Resources.Language.PluginName
+        End Get
+    End Property
 
     Public Overrides Sub Load(manager As PluginManager)
         MyBase.Load(manager)
 
+        manager.RegisterTypeRegister(GetType(IObjectControl))
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(GenericIList).GetTypeInfo)
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(SolutionExplorer).GetTypeInfo)
         manager.RegisterType(GetType(IObjectControl).GetTypeInfo, GetType(SolutionBuildProgress).GetTypeInfo)
@@ -45,6 +79,10 @@ Public MustInherit Class WPFCoreSkyEditorPlugin
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(ProjectAddExistingFile).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectProperties).GetTypeInfo)
         manager.RegisterType(GetType(MenuAction).GetTypeInfo, GetType(SolutionProjectDelete).GetTypeInfo)
+
+        If _plugin IsNot Nothing Then
+            manager.LoadRequiredPlugin(_plugin, Me)
+        End If
     End Sub
 
     Public Overrides Function GetIOUIManager(manager As PluginManager) As IOUIManager

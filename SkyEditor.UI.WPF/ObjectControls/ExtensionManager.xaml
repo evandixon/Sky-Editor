@@ -1,0 +1,38 @@
+﻿<skyWPF:ObjectControl x:Class="ObjectControls.ExtensionManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:skyWPF="clr-namespace:SkyEditor.UI.WPF"
+             xmlns:Extensions="clr-namespace:SkyEditor.Core.Extensions;assembly=SkyEditor.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TreeView x:Name="tvCategories" Grid.Column="0"/>
+        <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="3" Background="#FFBCBCBC" />
+        <ListView x:Name="lvExtensions" Grid.Column="2" Margin="0,0,0,33">
+            <ListView.DataContext>
+                <Extensions:ExtensionInfo/>
+            </ListView.DataContext>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" FontSize="16"/>
+                        <TextBlock x:Name="lblAuthor" Text="Author: "  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,31,0,0"/>
+                        <TextBlock Text="{Binding Author}"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="75,31,0,0"/>
+                        <TextBlock x:Name="lblVersion" Text="Version: "  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,52,0,0"/>
+                        <TextBlock Text="{Binding Version}"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="75,52,0,0" />
+                        <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,73,0,0" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button x:Name="btnBrowse" Content="Browse..." Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,8" VerticalAlignment="Bottom" Width="75"/>
+        <Button x:Name="btnToggleInstall" Content="Install" Grid.Column="2" HorizontalAlignment="Left" Margin="90,0,0,8" VerticalAlignment="Bottom" Width="75" Visibility="Collapsed"/>
+    </Grid>
+</skyWPF:ObjectControl>

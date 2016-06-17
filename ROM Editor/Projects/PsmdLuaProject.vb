@@ -2,7 +2,6 @@
 Imports System.Text.RegularExpressions
 Imports CodeFiles
 Imports ROMEditor.FileFormats.PSMD
-Imports SkyEditor.Core.EventArguments
 Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
