@@ -2,6 +2,7 @@
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ROMEditor.Projects
+Imports SkyEditor.Core.IO
 Imports SkyEditor.Core.UI
 Imports SkyEditor.Core.Utilities
 Imports SkyEditor.Core.Windows
@@ -78,90 +79,95 @@ Namespace MenuActions
         End Class
 
         Public Overrides Function SupportedTypes() As IEnumerable(Of TypeInfo)
-            Return {GetType(BaseRomProject).GetTypeInfo}
+            Return {GetType(SolutionNode).GetTypeInfo}
         End Function
 
         Public Overrides Function SupportsObject(Obj As Object) As Boolean
-            If TypeOf Obj Is BaseRomProject Then
+            If TypeOf Obj Is SolutionNode AndAlso DirectCast(Obj, SolutionNode).Project IsNot Nothing AndAlso TypeOf DirectCast(Obj, SolutionNode).Project Is BaseRomProject Then
+                Dim proj As BaseRomProject = DirectCast(Obj, SolutionNode).Project
                 Dim psmd As New Regex(GameStrings.PSMDCode)
-                Return DirectCast(Obj, BaseRomProject).RomSystem = "3DS" AndAlso psmd.IsMatch(DirectCast(Obj, BaseRomProject).GameCode)
+
+                Return proj.RomSystem = "3DS" AndAlso psmd.IsMatch(proj.GameCode)
             Else
                 Return False
             End If
         End Function
 
         Public Overrides Async Function DoAction(Targets As IEnumerable(Of Object)) As Task
-            For Each Project As BaseRomProject In Targets
-                Dim sourceDir As String = IO.Path.Combine(Project.GetRawFilesDir, "romfs", "sound", "stream")
-                Dim destDir As String = IO.Path.Combine(Project.GetRootDirectory, "Soundtrack")
+            For Each node As SolutionNode In Targets
+                If SupportsObject(node) Then
+                    Dim project As BaseRomProject = DirectCast(node, SolutionNode).Project
+                    Dim sourceDir As String = IO.Path.Combine(Project.GetRawFilesDir, "romfs", "sound", "stream")
+                    Dim destDir As String = IO.Path.Combine(Project.GetRootDirectory, "Soundtrack")
 
-                'Todo: do error checks on input file
-                Dim trackNames As New Dictionary(Of String, String)
-                If IO.File.Exists(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt")) Then
-                    Dim lines = IO.File.ReadAllLines(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt"))
-                    For Each item In lines
-                        Dim parts = item.Split("=".ToCharArray, 2)
-                        If parts.Count = 2 Then
-                            trackNames.Add(parts(0), parts(1))
-                        End If
+                    'Todo: do error checks on input file
+                    Dim trackNames As New Dictionary(Of String, String)
+                    If IO.File.Exists(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt")) Then
+                        Dim lines = IO.File.ReadAllLines(EnvironmentPaths.GetResourceName("PSMD English Soundtrack.txt"))
+                        For Each item In lines
+                            Dim parts = item.Split("=".ToCharArray, 2)
+                            If parts.Count = 2 Then
+                                trackNames.Add(parts(0), parts(1))
+                            End If
+                        Next
+                    End If
+
+                    If Not IO.Directory.Exists(destDir) Then
+                        IO.Directory.CreateDirectory(destDir)
+                    End If
+
+                    For Each item In IO.Directory.GetFiles(destDir)
+                        IO.File.Delete(item)
                     Next
-                End If
 
-                If Not IO.Directory.Exists(destDir) Then
-                    IO.Directory.CreateDirectory(destDir)
-                End If
+                    'PluginHelper.SetLoadingStatus(My.Resources.Language.ConvertingStreams)
 
-                For Each item In IO.Directory.GetFiles(destDir)
-                    IO.File.Delete(item)
-                Next
+                    Dim f As New AsyncFor '(My.Resources.Language.ConvertingStreams)
+                    Await f.RunForEach(Async Function(Item As String) As Task
+                                           Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
 
-                'PluginHelper.SetLoadingStatus(My.Resources.Language.ConvertingStreams)
+                                           'Create the wav
+                                           Dim destinationWav = source.Replace(sourceDir, destDir).Replace("dspadpcm.bcstm", "wav")
 
-                Dim f As New AsyncFor '(My.Resources.Language.ConvertingStreams)
-                Await f.RunForEach(Async Function(Item As String) As Task
-                                       Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
+                                           Dim filename = IO.Path.GetFileNameWithoutExtension(destinationWav)
 
-                                       'Create the wav
-                                       Dim destinationWav = source.Replace(sourceDir, destDir).Replace("dspadpcm.bcstm", "wav")
+                                           If trackNames.ContainsKey(filename) Then
+                                               destinationWav = destinationWav.Replace(filename, trackNames(filename).Replace(":", "").Replace("é", "e"))
+                                           End If
 
-                                       Dim filename = IO.Path.GetFileNameWithoutExtension(destinationWav)
+                                           For Each c In "!?,".ToCharArray
+                                               destinationWav = destinationWav.Replace(c, "")
+                                           Next
 
-                                       If trackNames.ContainsKey(filename) Then
-                                           destinationWav = destinationWav.Replace(filename, trackNames(filename).Replace(":", "").Replace("é", "e"))
-                                       End If
+                                           Dim destinationMp3 = destinationWav.Replace(".wav", ".mp3")
 
-                                       For Each c In "!?,".ToCharArray
-                                           destinationWav = destinationWav.Replace(c, "")
-                                       Next
+                                           Await vgmstream.RunVGMStream(source, destinationWav)
 
-                                       Dim destinationMp3 = destinationWav.Replace(".wav", ".mp3")
+                                           'Convert to mp3
+                                           Await ffmpeg.ConvertToMp3(destinationWav, destinationMp3)
 
-                                       Await vgmstream.RunVGMStream(source, destinationWav)
+                                           IO.File.Delete(destinationWav)
 
-                                       'Convert to mp3
-                                       Await ffmpeg.ConvertToMp3(destinationWav, destinationMp3)
+                                           'Add the tag
+                                           Using abs As New FileAbstraction(destinationMp3)
+                                               Dim t As New TagLib.Mpeg.AudioFile(abs)
+                                               With t.Tag
+                                                   .Album = My.Resources.Language.PSMDSoundTrackAlbum
+                                                   .AlbumArtists = {My.Resources.Language.PSMDSoundTrackArtist}
+                                                   .Year = 2015
+                                                   Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
+                                                   If filenameParts.Count = 2 Then
+                                                       If IsNumeric(filenameParts(0)) Then
+                                                           .Track = CInt(filenameParts(0))
+                                                       End If
 
-                                       IO.File.Delete(destinationWav)
-
-                                       'Add the tag
-                                       Using abs As New FileAbstraction(destinationMp3)
-                                           Dim t As New TagLib.Mpeg.AudioFile(abs)
-                                           With t.Tag
-                                               .Album = My.Resources.Language.PSMDSoundTrackAlbum
-                                               .AlbumArtists = {My.Resources.Language.PSMDSoundTrackArtist}
-                                               .Year = 2015
-                                               Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
-                                               If filenameParts.Count = 2 Then
-                                                   If IsNumeric(filenameParts(0)) Then
-                                                       .Track = CInt(filenameParts(0))
+                                                       .Title = filenameParts(1)
                                                    End If
-
-                                                   .Title = filenameParts(1)
-                                               End If
-                                           End With
-                                           t.Save()
-                                       End Using
-                                   End Function, trackNames.Keys)
+                                               End With
+                                               t.Save()
+                                           End Using
+                                       End Function, trackNames.Keys)
+                End If
             Next
             'PluginHelper.SetLoadingStatusFinished()
         End Function
@@ -169,6 +175,7 @@ Namespace MenuActions
         Public Sub New()
             MyBase.New({My.Resources.Language.MenuUtilities, My.Resources.Language.MenuUtilitiesExportSoundtrack})
             SortOrder = 4.1
+            IsContextBased = True
         End Sub
     End Class
 

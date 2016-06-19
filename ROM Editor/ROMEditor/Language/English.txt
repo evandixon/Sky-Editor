@@ -1,6 +1,0 @@
-﻿Generic3DSModProject=3DS Mod Project
-GenericNDSModProject=NDS Mod Project
-GenericMod=Generic Mod
-KaomadoNDSMod=Pokemon Portrait Mod
-SkyStarterMod=Edit Starters
-SkyBackMod=Background Mod

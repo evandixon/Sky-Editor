@@ -71,6 +71,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property ffmpeg() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ffmpeg", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to 150118018
         '''781321446
         '''-1427025407

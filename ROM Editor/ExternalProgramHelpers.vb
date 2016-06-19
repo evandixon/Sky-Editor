@@ -1,6 +1,16 @@
 ﻿Public Class ExternalProgramManager
     Implements IDisposable
 
+    Public Sub New()
+        ToDelete = New List(Of String)
+    End Sub
+
+    ''' <summary>
+    ''' Tracks which files to delete on dispose
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property ToDelete As List(Of String)
+
     Private Function GetToolsDir() As String
         Dim path = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SkyEditor.ROMEditor")
         If Not IO.Directory.Exists(path) Then
@@ -18,6 +28,7 @@
         Dim path = IO.Path.Combine(GetToolsDir, "ctrtool.exe")
         If Not IO.File.Exists(path) Then
             IO.File.WriteAllBytes(path, My.Resources.ctrtool)
+            ToDelete.Add(path)
         End If
         Return path
     End Function
@@ -31,6 +42,29 @@
         Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetCtrToolPath, arguments)
     End Function
 
+    ''' <summary>
+    ''' Gets the path for ffmpeg.exe
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetFFMpegPath() As String
+        'Ensure ctrtool exists
+        Dim path = IO.Path.Combine(GetToolsDir, "ffmpeg.exe")
+        If Not IO.File.Exists(path) Then
+            IO.File.WriteAllBytes(path, My.Resources.ffmpeg)
+            ToDelete.Add(path)
+        End If
+        Return path
+    End Function
+
+    ''' <summary>
+    ''' Runs ffmpeg.exe with the given arguments
+    ''' </summary>
+    ''' <param name="arguments"></param>
+    ''' <returns></returns>
+    Public Async Function RunFFMpeg(arguments As String) As Task
+        Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetFFMpegPath, arguments)
+    End Function
+
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 
@@ -39,6 +73,9 @@
         If Not disposedValue Then
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
+                For Each item In ToDelete
+                    IO.File.Delete(item)
+                Next
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
