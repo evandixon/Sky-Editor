@@ -131,5 +131,15 @@ Namespace My.Resources
                 Return ResourceManager.GetString("PSMD_Pokemon_Name_Hashes", resourceCulture)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property vgmstream() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("vgmstream", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
     End Module
 End Namespace

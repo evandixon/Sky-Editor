@@ -18,7 +18,7 @@
         End If
         Return path
     End Function
-
+#Region "Paths"
     ''' <summary>
     ''' Gets the path for ctrtool.exe
     ''' </summary>
@@ -34,26 +34,45 @@
     End Function
 
     ''' <summary>
-    ''' Runs ctrtool.exe with the given arguments
-    ''' </summary>
-    ''' <param name="arguments"></param>
-    ''' <returns></returns>
-    Public Async Function RunCtrTool(arguments As String) As Task
-        Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetCtrToolPath, arguments)
-    End Function
-
-    ''' <summary>
     ''' Gets the path for ffmpeg.exe
     ''' </summary>
     ''' <returns></returns>
     Public Function GetFFMpegPath() As String
-        'Ensure ctrtool exists
+        'Ensure ffmpeg exists
         Dim path = IO.Path.Combine(GetToolsDir, "ffmpeg.exe")
         If Not IO.File.Exists(path) Then
             IO.File.WriteAllBytes(path, My.Resources.ffmpeg)
             ToDelete.Add(path)
         End If
         Return path
+    End Function
+
+    Public Function GetVgmStreamPath() As String
+        'Ensure the zip exists
+        Dim zipPath = IO.Path.Combine(GetToolsDir, "vgmstream.zip")
+        Dim fullPath = IO.Path.Combine(GetToolsDir, "vgmstream")
+        If Not IO.File.Exists(zipPath) Then
+            IO.File.WriteAllBytes(zipPath, My.Resources.vgmstream)
+            ToDelete.Add(zipPath)
+
+            'Extract the zip
+            SkyEditor.Core.Utilities.Zip.Unzip(zipPath, fullPath)
+            ToDelete.Add(IO.Path.Combine(fullPath))
+        End If
+
+        Return IO.Path.Combine(fullPath, "test.exe")
+    End Function
+#End Region
+
+#Region "Run"
+
+    ''' <summary>
+    ''' Runs ctrtool.exe with the given arguments
+    ''' </summary>
+    ''' <param name="arguments"></param>
+    ''' <returns></returns>
+    Public Async Function RunCtrTool(arguments As String) As Task
+        Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetCtrToolPath, arguments)
     End Function
 
     ''' <summary>
@@ -65,6 +84,12 @@
         Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetFFMpegPath, arguments)
     End Function
 
+    Public Async Function RunVgmStream(arguments As String) As Task
+        Await SkyEditor.Core.Windows.Processes.ConsoleApp.RunProgram(GetVgmStreamPath, arguments)
+    End Function
+
+#End Region
+
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 
@@ -74,7 +99,11 @@
             If disposing Then
                 ' TODO: dispose managed state (managed objects).
                 For Each item In ToDelete
-                    IO.File.Delete(item)
+                    If IO.File.Exists(item) Then
+                        IO.File.Delete(item)
+                    ElseIf IO.Directory.Exists(item) Then
+                        IO.Directory.Delete(item, True)
+                    End If
                 Next
             End If
 

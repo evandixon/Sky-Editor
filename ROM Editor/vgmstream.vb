@@ -12,26 +12,25 @@ Module vgmstream
     ''' <param name="FadeTime">Number of seconds to take when fading.  Defaults to 10 seconds.</param>
     ''' <param name="FadeDelay">Number of seconds to delay before fading.  Defaults to 0 seconds.</param>
     ''' <returns></returns>
-    Async Function RunVGMStream(Input As String, Output As String, Optional LoopCount As Decimal? = Nothing, Optional FadeTime As Decimal? = Nothing, Optional FadeDelay As Decimal? = Nothing) As Task
-        Dim filename = EnvironmentPaths.GetResourceName("vgmstream\test.exe")
+    Async Function RunVGMStream(filePath As String, Input As String, Output As String, Optional LoopCount As Decimal? = Nothing, Optional FadeTime As Decimal? = Nothing, Optional FadeDelay As Decimal? = Nothing) As Task
         Dim arguments As New Text.StringBuilder
 
         arguments.Append($"-o ""{Output}"" ")
 
-        If LoopCount IsNot Nothing Then
-            arguments.Append($"-l {LoopCount} ")
-        End If
+            If LoopCount IsNot Nothing Then
+                arguments.Append($"-l {LoopCount} ")
+            End If
 
-        If FadeTime IsNot Nothing Then
-            arguments.Append($"-f {FadeTime} ")
-        End If
+            If FadeTime IsNot Nothing Then
+                arguments.Append($"-f {FadeTime} ")
+            End If
 
-        If FadeDelay IsNot Nothing Then
-            arguments.Append($"-d {FadeDelay} ")
-        End If
+            If FadeDelay IsNot Nothing Then
+                arguments.Append($"-d {FadeDelay} ")
+            End If
 
-        arguments.Append($"""{Input}""")
+            arguments.Append($"""{Input}""")
 
-        Await ConsoleApp.RunProgram(filename, arguments.ToString)
+        Await ConsoleApp.RunProgram(filePath, arguments.ToString)
     End Function
 End Module

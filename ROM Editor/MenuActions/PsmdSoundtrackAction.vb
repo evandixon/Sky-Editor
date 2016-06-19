@@ -121,52 +121,57 @@ Namespace MenuActions
                     Next
 
                     'PluginHelper.SetLoadingStatus(My.Resources.Language.ConvertingStreams)
+                    Using external As New ExternalProgramManager
+                        Dim vgmPath = external.GetVgmStreamPath()
+                        Dim ffmpegPath = external.GetFFMpegPath()
 
-                    Dim f As New AsyncFor '(My.Resources.Language.ConvertingStreams)
-                    Await f.RunForEach(Async Function(Item As String) As Task
-                                           Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
+                        Dim f As New AsyncFor '(My.Resources.Language.ConvertingStreams)
+                        f.BatchSize = Environment.ProcessorCount * 2
+                        Await f.RunForEach(Async Function(Item As String) As Task
+                                               Dim source = IO.Path.Combine(sourceDir, Item) & ".dspadpcm.bcstm"
 
-                                           'Create the wav
-                                           Dim destinationWav = source.Replace(sourceDir, destDir).Replace("dspadpcm.bcstm", "wav")
+                                               'Create the wav
+                                               Dim destinationWav = source.Replace(sourceDir, destDir).Replace("dspadpcm.bcstm", "wav")
 
-                                           Dim filename = IO.Path.GetFileNameWithoutExtension(destinationWav)
+                                               Dim filename = IO.Path.GetFileNameWithoutExtension(destinationWav)
 
-                                           If trackNames.ContainsKey(filename) Then
-                                               destinationWav = destinationWav.Replace(filename, trackNames(filename).Replace(":", "").Replace("é", "e"))
-                                           End If
+                                               If trackNames.ContainsKey(filename) Then
+                                                   destinationWav = destinationWav.Replace(filename, trackNames(filename).Replace(":", "").Replace("é", "e"))
+                                               End If
 
-                                           For Each c In "!?,".ToCharArray
-                                               destinationWav = destinationWav.Replace(c, "")
-                                           Next
+                                               For Each c In "!?,".ToCharArray
+                                                   destinationWav = destinationWav.Replace(c, "")
+                                               Next
 
-                                           Dim destinationMp3 = destinationWav.Replace(".wav", ".mp3")
+                                               Dim destinationMp3 = destinationWav.Replace(".wav", ".mp3")
 
-                                           Await vgmstream.RunVGMStream(source, destinationWav)
+                                               Await vgmstream.RunVGMStream(vgmPath, source, destinationWav)
 
-                                           'Convert to mp3
-                                           Await ffmpeg.ConvertToMp3(destinationWav, destinationMp3)
+                                               'Convert to mp3
+                                               Await ffmpeg.ConvertToMp3(ffmpegPath, destinationWav, destinationMp3)
 
-                                           IO.File.Delete(destinationWav)
+                                               IO.File.Delete(destinationWav)
 
-                                           'Add the tag
-                                           Using abs As New FileAbstraction(destinationMp3)
-                                               Dim t As New TagLib.Mpeg.AudioFile(abs)
-                                               With t.Tag
-                                                   .Album = My.Resources.Language.PSMDSoundTrackAlbum
-                                                   .AlbumArtists = {My.Resources.Language.PSMDSoundTrackArtist}
-                                                   .Year = 2015
-                                                   Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
-                                                   If filenameParts.Count = 2 Then
-                                                       If IsNumeric(filenameParts(0)) Then
-                                                           .Track = CInt(filenameParts(0))
+                                               'Add the tag
+                                               Using abs As New FileAbstraction(destinationMp3)
+                                                   Dim t As New TagLib.Mpeg.AudioFile(abs)
+                                                   With t.Tag
+                                                       .Album = My.Resources.Language.PSMDSoundTrackAlbum
+                                                       .AlbumArtists = {My.Resources.Language.PSMDSoundTrackArtist}
+                                                       .Year = 2015
+                                                       Dim filenameParts = trackNames(filename).Split(" ".ToCharArray, 2)
+                                                       If filenameParts.Count = 2 Then
+                                                           If IsNumeric(filenameParts(0)) Then
+                                                               .Track = CInt(filenameParts(0))
+                                                           End If
+
+                                                           .Title = filenameParts(1)
                                                        End If
-
-                                                       .Title = filenameParts(1)
-                                                   End If
-                                               End With
-                                               t.Save()
-                                           End Using
-                                       End Function, trackNames.Keys)
+                                                   End With
+                                                   t.Save()
+                                               End Using
+                                           End Function, trackNames.Keys)
+                    End Using
                 End If
             Next
             'PluginHelper.SetLoadingStatusFinished()
