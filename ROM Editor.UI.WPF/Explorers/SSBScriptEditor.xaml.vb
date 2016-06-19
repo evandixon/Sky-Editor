@@ -2,8 +2,8 @@
 Imports System.ComponentModel
 Imports System.Windows.Controls
 Imports System.Windows.Input
-Imports ROMEditor.FileFormats.Explorers.Script
-Imports ROMEditor.FileFormats.Explorers.Script.Commands
+Imports SkyEditor.ROMEditor.Windows.FileFormats.Explorers.Script
+Imports SkyEditor.ROMEditor.Windows.FileFormats.Explorers.Script.Commands
 Imports SkyEditor.UI.WPF
 Imports WPF.JoshSmith.ServiceProviders.UI
 

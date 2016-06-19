@@ -48,8 +48,20 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Id3, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ID3.0.3.0\lib\net40\Id3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Id3.Files, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ID3.Files.0.3.0\lib\net40\Id3.Files.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orthogonal.NTagLite, Version=1.0.5.0, Culture=neutral, PublicKeyToken=6811f57591873a69, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orthogonal.NTagLite.1.0.5.0\lib\net40-Client\Orthogonal.NTagLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SkyEditor.Core, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
@@ -60,6 +72,14 @@
       <HintPath>..\packages\SkyEditor.Core.Windows.1.0.15\lib\net46\SkyEditor.Core.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SkyEditor.ROMEditor.Windows, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.ROMEditor.Windows.1.0.1\lib\net46\SkyEditor.ROMEditor.Windows.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkyEditor.SaveEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkyEditor.SaveEditor.1.0.0\lib\portable45-net45+win8\SkyEditor.SaveEditor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -67,6 +87,10 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="TagLib.Portable, Version=2.2.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <HintPath>..\packages\TagLib.Portable.1.0.4\lib\portable-net45+win+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10\TagLib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -134,12 +158,37 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="ROMEditor\lua\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ROM Editor\ROM Editor.vbproj">
-      <Project>{f05c12e8-eab7-4b9e-a8d2-d21b80c1a646}</Project>
-      <Name>ROM Editor</Name>
-    </ProjectReference>
+    <Content Include="App.ico" />
+    <Content Include="Resources\ctrtool.exe" />
+    <Content Include="Resources\ffmpeg.exe" />
+    <Content Include="ROMEditor\3DS Builder.exe" />
+    <Content Include="ROMEditor\dsicontool.exe" />
+    <Content Include="ROMEditor\facenames.txt" />
+    <Content Include="ROMEditor\lua\bin2c5.1.exe" />
+    <Content Include="ROMEditor\lua\lua5.1.dll" />
+    <Content Include="ROMEditor\lua\lua5.1.exe" />
+    <Content Include="ROMEditor\lua\lua51.dll" />
+    <Content Include="ROMEditor\lua\luac5.1.exe" />
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcm80.dll" />
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcp80.dll" />
+    <Content Include="ROMEditor\lua\Microsoft.VC80.CRT\msvcr80.dll" />
+    <Content Include="ROMEditor\lua\wlua5.1.exe" />
+    <Content Include="ROMEditor\makerom.exe" />
+    <Content Include="ROMEditor\ndstool.exe" />
+    <Content Include="ROMEditor\pk3DS.exe" />
+    <Content Include="ROMEditor\pokenames.txt" />
+    <Content Include="ROMEditor\ppmd_kaoutil.exe" />
+    <Content Include="ROMEditor\ppmd_kaoutil.txt" />
+    <Content Include="ROMEditor\ppmd_pxcomp.exe" />
+    <Content Include="ROMEditor\ppmd_unpx.exe" />
+    <Content Include="ROMEditor\PSMD English Soundtrack.txt" />
+    <Content Include="ROMEditor\PSMD Pokemon Name Hashes.txt" />
+    <Content Include="ROMEditor\rom_tool.exe" />
+    <Content Include="ROMEditor\unluac.jar" />
+    <Content Include="ROMEditor\xdelta\xdelta3.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

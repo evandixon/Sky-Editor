@@ -1,4 +1,5 @@
 ﻿Imports ROMEditor.Projects
+Imports SkyEditor.ROMEditor.Windows.Projects
 Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls

@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Windows.Controls
+Imports SkyEditor.ROMEditor.Windows
 
 Namespace Explorers
     Public Class SsbScriptToolbar

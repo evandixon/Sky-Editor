@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ROMEditor.UI.WPF"
              xmlns:skyWPF="clr-namespace:SkyEditor.UI.WPF;assembly=SkyEditor.UI.WPF"
-             xmlns:commands="clr-namespace:ROMEditor.FileFormats.Explorers.Script.Commands;assembly=ROMEditor"
+             xmlns:commands="clr-namespace:SkyEditor.ROMEditor.Windows.FileFormats.Explorers.Script.Commands;assembly=SkyEditor.ROMEditor.Windows"
              mc:Ignorable="d" 
              TargetType="{x:Type commands:ISingleStringParamCommand}"
              d:DesignHeight="300" d:DesignWidth="300">

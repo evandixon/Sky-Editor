@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Controls
+Imports SkyEditor.ROMEditor.Windows
 Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls

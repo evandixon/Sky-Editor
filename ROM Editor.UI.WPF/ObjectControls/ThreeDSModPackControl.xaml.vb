@@ -1,4 +1,5 @@
-﻿Imports SkyEditor.UI.WPF
+﻿Imports SkyEditor.ROMEditor.Windows
+Imports SkyEditor.UI.WPF
 
 Namespace ObjectControls
     Public Class ThreeDSModPackControl

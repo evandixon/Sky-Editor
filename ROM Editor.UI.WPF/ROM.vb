@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Media.Imaging
 Imports SkyEditor.Core.Windows
+Imports SkyEditor.ROMEditor.Windows
 
 Public Class ROM
     Public Property Name As String
@@ -17,7 +18,7 @@ Public Class ROM
                     If Not IO.Directory.Exists(IO.Path.GetDirectoryName(newpath)) Then
                         IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(newpath))
                     End If
-                    ROMEditor.DSIconTool.ExtractIcon(Filename, newpath)
+                    DSIconTool.ExtractIcon(Filename, newpath)
                 End If
                 Return New Uri(newpath)
             Else

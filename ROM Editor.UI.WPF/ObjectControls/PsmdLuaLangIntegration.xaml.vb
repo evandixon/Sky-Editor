@@ -1,5 +1,7 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.PSMD
+Imports SkyEditor.ROMEditor.Windows
+Imports SkyEditor.ROMEditor.Windows.FileFormats.PSMD
 Imports SkyEditor.UI.WPF
 
 Public Class PsmdLuaLangIntegration

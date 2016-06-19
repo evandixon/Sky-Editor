@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Controls
 Imports ROMEditor.FileFormats.Explorers
 Imports SkyEditor.Core.IO
+Imports SkyEditor.ROMEditor.Windows.FileFormats.Explorers
 Imports SkyEditor.UI.WPF
 
 Namespace Explorers
