@@ -1,13 +1,12 @@
-﻿Imports SkyEditor.Core.Interfaces
-Imports SkyEditor.Core.IO
+﻿Imports SkyEditor.Core.IO
+Imports SkyEditor.Core.Utilities
 
 Public Class TextFile
     Implements ICreatableFile
     Implements IOpenableFile
     Implements IOnDisk
-    Implements iGenericFile
     Implements ISavableAs
-    Implements iNamed
+    Implements INamed
     Implements INotifyModified
     Implements ITextFile
     Implements IContainer(Of String)
@@ -18,7 +17,7 @@ Public Class TextFile
 
     Public Property Filename As String Implements IOnDisk.Filename
 
-    Public ReadOnly Property Name As String Implements iNamed.Name
+    Public ReadOnly Property Name As String Implements INamed.Name
         Get
             If Filename Is Nothing Then
                 Return _name

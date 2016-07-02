@@ -1,4 +1,0 @@
-﻿Namespace Interfaces
-
-
-End Namespace

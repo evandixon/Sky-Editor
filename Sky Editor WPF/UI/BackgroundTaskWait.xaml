@@ -1,9 +1,0 @@
-﻿<Window x:Class="UI.BackgroundTaskWait"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Background Task" Height="122" Width="375" ResizeMode="NoResize">
-    <Grid>
-        <Label x:Name="lblMessage" Content="Loading..." HorizontalAlignment="Left" Width="351" Height="29" VerticalAlignment="Top" Margin="0,10,0,0" />
-        <ProgressBar Margin="10,0,10,10" Height="28" VerticalAlignment="Bottom" IsIndeterminate="True" />
-    </Grid>
-</Window>
