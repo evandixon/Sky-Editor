@@ -1,3 +1,5 @@
+This is an old repository kept around for legacy support.  If you want the save editor, look [here](https://github.com/evandixon/SkyEditor.SaveEditor).
+
 # Sky Editor #
 
 Sky Editor is a plugin-based editor for Pokemon Mystery Dungeon saves and ROMs, but because it is plugin based, the sky is the limit to what it can do.
